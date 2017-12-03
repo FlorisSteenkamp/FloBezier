@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "alwaysStrict": true,
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "target": "es2015",
+        "declaration": true,
+        "noEmitOnError": true
+    },
+    "files": [
+        "index.ts"
+    ],
+    "include": [
+        "index.ts",
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
