@@ -23,11 +23,11 @@
     "intersection"
   ],
   "dependencies": {
-    "flo-gauss-quadrature": "^0.0.1",
-    "flo-graham-scan": "^0.0.1",
-    "flo-memoize": "0.x",
-    "flo-poly": "^1.0.1",
-    "flo-vector2d": "^0.0.1"
+    "flo-gauss-quadrature": "*",
+    "flo-graham-scan": "*",
+    "flo-memoize": "*",
+    "flo-poly": "*",
+    "flo-vector2d": "*"
   },
   "devDependencies": {
     "babel-cli": "^6.22.2",
