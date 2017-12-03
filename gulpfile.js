@@ -14,7 +14,7 @@ var tsify      = require("tsify");
 
 var tsProject  = ts.createProject("./tsconfig.json");
 
-gulp.task('default', browserTask);
+gulp.task('default', nodeTask);
 gulp.task('node',    nodeTask);
 gulp.task('browser', browserTask);
 
@@ -50,8 +50,8 @@ function browserTask() {
 	}
 	
     browserify({
-    		entries: '../index.ts',
-    		standalone: 'FloMat',
+    		entries: 'index.ts',
+    		standalone: 'FloBezier3',
    	})
 	.plugin(tsify)
 	.bundle(showOnError)
