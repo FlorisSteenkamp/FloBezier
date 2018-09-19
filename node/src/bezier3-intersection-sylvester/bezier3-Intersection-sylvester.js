@@ -5,20 +5,15 @@ const flo_vector2d_1 = require("flo-vector2d");
 const get_x_1 = require("../get-x");
 const get_y_1 = require("../get-y");
 let DELTA = 10 - 6;
-// Belongs in graveyard because it is not numerically stable enough, e.g. if
-// the cubic bezier resembles a quadratic no intersection can be found.
 /**
+ * TODO - unfinished
  * Returns the intersection points between two cubic beziers. This function is
- * not numerically stable and thus not publically exposed. It can not, for
- * instance, handle cases where one or both beziers degenerate into a quadratic
- * bezier. Use for experimentation and comparison only.
- * @ignore
+ * not numerically stable. Use for experimentation and comparison only. The
+ * algorithm may be enhanced to use exact arithmetic in degenerate cases.
+ * T-value pairs at intersection of the first and second beziers respectively.
  * @param ps1 - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param ps2 - Another cubic bezier
- * @returns The t-value pairs at intersection of the first
- * and second beziers respectively.
- * See <a href="http://mat.polsl.pl/sjpam/zeszyty/z6/Silesian_J_Pure_Appl_Math_v6_i1_str_155-176.pdf">
- * this paper</a>
+ * See http://mat.polsl.pl/sjpam/zeszyty/z6/Silesian_J_Pure_Appl_Math_v6_i1_str_155-176.pdf
  */
 function bezier3IntersectionSylvester(ps1, ps2) {
     let [x1, y1] = ps1[0];
@@ -78,9 +73,6 @@ function bezier3IntersectionSylvester(ps1, ps2) {
     let bΔy = b * Δy;
     let bΔy2 = b * Δy2;
     let bΔy3 = b * Δy3;
-    // Rotate both beziers so that delta-x = 0, i.e. so that the x-coordinate of 
-    // both beziers are equal. This reduces the complexity of calculating the 
-    // determinant of the Sylvester matrix.
     let k9 = -b2 * Δy * f * s2 + bdΔy * f * q * s + 2 * bΔy * f2 * n * s - d2 * Δy * f * n * s -
         b2 * dΔy2 * s - bΔy * f2 * q2 + dΔy * f2 * n * q - 2 * b2 * Δy2 * f * q +
         d2 * bΔy2 * q - Δy * f3 * n2 + 3 * bdΔy2 * f * n - d3 * Δy2 * n - b3 * Δy3;

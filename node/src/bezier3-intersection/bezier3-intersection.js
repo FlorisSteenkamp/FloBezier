@@ -9,19 +9,18 @@ const center_1 = require("./center");
 const evaluate_1 = require("../evaluate");
 const fat_line_1 = require("../debug/fat-line");
 /**
- * Extremely accurate and extremely fast (cubically convergent in general with
- * fast iteration steps) algorithm that returns the intersections between two
- * cubic beziers.
+ * Aaccurate, fast (cubically convergent) algorithm that returns the
+ * intersections between two cubic beziers.
  *
  * At stretches where the two curves run extremely close to (or on top of) each
  * other and curve the same direction an interval is returned instead of a
  * point. This tolerance can be set by the Δ parameter.
  *
- * The algorithm is based on a <a href="http://scholarsarchive.byu.edu/cgi/viewcontent.cgi?article=2206&context=etd">paper</a>
+ * The algorithm is based on a paper at http://scholarsarchive.byu.edu/cgi/viewcontent.cgi?article=2206&context=etd
  * that finds the intersection of a fat line and a so-called geometric interval
- * making it faster and more accurate than the standard fat-line intersection
- * algorithm. The algorithm has been modified to prevent run-away recursion
- * by checking for coincident pieces at subdivision steps.
+ * making it faster than the standard fat-line intersection algorithm. The
+ * algorithm has been modified to prevent run-away recursion by checking for
+ * coincident pieces at subdivision steps.
  *
  * @param ps1 - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param ps2 - Another cubic bezier
@@ -55,7 +54,6 @@ function bezier3Intersection(ps1, ps2, δ, Δ) {
     // A bound is given by |δP| = 2n*max_k(|b_k|)η, where n = 3 (cubic), b_k
     // are the control points indexed by k=0,1,2,3 and η is machine epsilon, 
     // i.e. Number.EPSILON. We quadruple the bound to be sure.
-    //const δMin = 6*4*Number.EPSILON; 
     const δMin = 6 * 4 * 8 * Number.EPSILON;
     // Maximum error - limited to take rounding error into account.
     if (δ === undefined) {
@@ -69,20 +67,32 @@ function bezier3Intersection(ps1, ps2, δ, Δ) {
     let flip = 0;
     // Intersection t values for both beziers
     let tss = [];
-    let kk = 0;
     if (typeof _bez_debug_ !== 'undefined') {
         _bez_debug_.generated.elems.beziers.push([ps1, ps2]);
         _bez_debug_.generated.elems.fatLine.push(new fat_line_1.FatLine([[0, 0], [1e-10, 1e-10]], 0, 0) // unused
         );
     }
+    let iteration = {
+        ps1,
+        ps2,
+        tRange1: [0, 1],
+        tRange2: [0, 1],
+        idx: 1
+    };
+    /*
+    let tree: IterationTree = {
+        parent: undefined,
+        iteration,
+        children: []
+    };
+    */
     let stack = [];
-    stack.push({ ps1, ps2, tRange1: [0, 1], tRange2: [0, 1], idx: 1 });
+    stack.push(iteration);
     while (stack.length !== 0) {
         let toCheck = stack.pop();
         let { ps1, ps2, tRange1, tRange2, idx } = toCheck;
         f(ps1, ps2, tRange1, tRange2, idx);
     }
-    //f(ps1, ps2, [0,1], [0,1], 1);
     if (typeof _bez_debug_ !== 'undefined') {
         for (let ts of tss) {
             _bez_debug_.generated.elems.intersection.push(evaluate_1.evaluate(ps1, ts[0]));
@@ -210,7 +220,6 @@ function bezier3Intersection(ps1, ps2, δ, Δ) {
         }
         // Swap Q and P and iterate.
         stack.push({ ps1: P_, ps2: Q_, tRange1: [tMin_, tMax_], tRange2: qRange, idx: cidx });
-        //f(P_, Q_, [tMin_,tMax_], qRange, cidx);
     }
 }
 exports.bezier3Intersection = bezier3Intersection;

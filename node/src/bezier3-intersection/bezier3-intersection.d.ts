@@ -1,17 +1,16 @@
 /**
- * Extremely accurate and extremely fast (cubically convergent in general with
- * fast iteration steps) algorithm that returns the intersections between two
- * cubic beziers.
+ * Aaccurate, fast (cubically convergent) algorithm that returns the
+ * intersections between two cubic beziers.
  *
  * At stretches where the two curves run extremely close to (or on top of) each
  * other and curve the same direction an interval is returned instead of a
  * point. This tolerance can be set by the Δ parameter.
  *
- * The algorithm is based on a <a href="http://scholarsarchive.byu.edu/cgi/viewcontent.cgi?article=2206&context=etd">paper</a>
+ * The algorithm is based on a paper at http://scholarsarchive.byu.edu/cgi/viewcontent.cgi?article=2206&context=etd
  * that finds the intersection of a fat line and a so-called geometric interval
- * making it faster and more accurate than the standard fat-line intersection
- * algorithm. The algorithm has been modified to prevent run-away recursion
- * by checking for coincident pieces at subdivision steps.
+ * making it faster than the standard fat-line intersection algorithm. The
+ * algorithm has been modified to prevent run-away recursion by checking for
+ * coincident pieces at subdivision steps.
  *
  * @param ps1 - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param ps2 - Another cubic bezier
