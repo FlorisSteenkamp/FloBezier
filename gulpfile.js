@@ -33,6 +33,8 @@ function nodeTask() {
 
 	return tsProject.src()
 		.pipe(tsProject())
+		.pipe(sourcemaps.init())
+		.pipe(sourcemaps.write('./'))
 		.pipe(gulp.dest("node"));
 }
 

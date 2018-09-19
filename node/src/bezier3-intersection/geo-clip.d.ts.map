@@ -1,0 +1,1 @@
+{"version":3,"names":[],"mappings":"","sources":["src/bezier3-intersection/geo-clip.d.ts"],"sourcesContent":["/**\n * @param P\n * @param dQ\n * @param dMin\n * @param dMax\n */\ndeclare function geoClip(P: number[][], dQ: (p: number[]) => number, dMin: number, dMax: number): {\n    tMin: number;\n    tMax: number;\n};\nexport { geoClip };\n"],"file":"geo-clip.d.ts"}

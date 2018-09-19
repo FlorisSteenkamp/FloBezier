@@ -2,11 +2,13 @@
     "compilerOptions": {
         "alwaysStrict": true,
         "module": "commonjs",
+        //"module": "umd",
         "noImplicitAny": true,
         "noImplicitThis": true,
         "target": "es2015",
         "declaration": true,
-        "noEmitOnError": true
+        "noEmitOnError": true,
+        "sourceMap": true
     },
     "files": [
         "index.ts"

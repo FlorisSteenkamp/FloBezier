@@ -1,0 +1,1 @@
+{"version":3,"names":[],"mappings":"","sources":["src/debug/fat-line.js"],"sourcesContent":["\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { value: true });\nclass FatLine {\n    constructor(l, minD, maxD) {\n        this.l = l;\n        this.minD = minD;\n        this.maxD = maxD;\n    }\n}\nexports.FatLine = FatLine;\n"],"file":"fat-line.js"}

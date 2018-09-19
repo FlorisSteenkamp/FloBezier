@@ -1,0 +1,1 @@
+{"version":3,"names":[],"mappings":"","sources":["src/debug/i-bez-config-draw.d.ts"],"sourcesContent":["export interface IBezConfigDraw {\n    beziers: boolean;\n    intersections: boolean;\n    extremes: boolean;\n    looseBoundingBoxes: boolean;\n    tightBoundingBoxes: boolean;\n    boundingHulls: boolean;\n}\n"],"file":"i-bez-config-draw.d.ts"}

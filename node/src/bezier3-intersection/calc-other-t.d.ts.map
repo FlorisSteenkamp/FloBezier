@@ -1,0 +1,1 @@
+{"version":3,"names":[],"mappings":"","sources":["src/bezier3-intersection/calc-other-t.d.ts"],"sourcesContent":["/**\n * Calculates the t-value of the closest point on Q to P(t).\n * @param δ\n * @param t\n * @param P\n * @param Q\n */\ndeclare function calcOtherT(t: number, P: number[][], Q: number[][]): number;\nexport { calcOtherT };\n"],"file":"calc-other-t.d.ts"}

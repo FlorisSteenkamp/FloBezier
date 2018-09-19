@@ -1,0 +1,1 @@
+{"version":3,"names":[],"mappings":"","sources":["src/curry2.d.ts"],"sourcesContent":["export interface ICurriedFunction2<T, U, V> {\n    (t: T): (u: U) => V;\n    (t: T, u: U): V;\n}\n/**\n * Curry the given arity two function.\n * @param f - A function\n */\nexport default function curry2<T, U, V>(f: (t: T, u: U) => V): ICurriedFunction2<T, U, V>;\n"],"file":"curry2.d.ts"}

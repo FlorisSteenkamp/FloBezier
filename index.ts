@@ -1,6 +1,6 @@
 
 import Poly            from 'flo-poly';
-import Vector          from 'flo-vector2d';
+import * as Vector     from 'flo-vector2d';
 import Memoize         from 'flo-memoize';
 import gaussQuadrature from 'flo-gauss-quadrature';
 import grahamScan      from 'flo-graham-scan';
@@ -8,66 +8,42 @@ import grahamScan      from 'flo-graham-scan';
 import { ICurriedMapFunction2       } from 'flo-vector2d';
 import { ICurriedMapFunctionSpecial } from 'flo-vector2d';
 
-const DELTA = 1e-10;
+import { getX       } from './src/get-x';
+import { getY       } from './src/get-y';
+import { getDx      } from './src/get-dx';
+import { getDy      } from './src/get-dy';
+import { evaluateX  } from './src/evaluate-x';
+import { evaluateY  } from './src/evaluate-y';
+import { evaluate   } from './src/evaluate';
+import { evaluateDx } from './src/evaluate-dx';
+import { evaluateDy } from './src/evaluate-dy';
+import { tangent    } from './src/tangent';
+import { normal     } from './src/normal';
+import { from0ToT   } from './src/from-0-to-T';
+import { fromTTo1   } from './src/from-T-to-1';
+import { fromTo     } from './src/from-to';
+import { toHybridQuadratic }  from './src/to-hybrid-quadratic';
+import { coincident } from './src/coincident';
+import { lineIntersection } from './src/line-intersection';
+import { bezier3Intersection } from './src/bezier3-intersection/bezier3-intersection';
+import { bezier3IntersectionSylvester } from './src/bezier3-intersection-sylvester/bezier3-intersection-sylvester';
+import { tsAtX } from './src/ts-at-x';
+import { tsAtY } from './src/ts-at-y';
+
+import { BezDebug } from './src/debug/debug';
+import { IDrawFunctions } from './src/debug/draw-functions';
+import { DebugElemType } from './src/debug/debug';
+import { FatLine } from './src/debug/fat-line';
+import { deCasteljau } from './src/de-casteljau';
+import { evalDeCasteljau } from './src/eval-de-casteljau';
 
 
-const { rotatePs: rotate, translatePs: translate } = Vector;
+// Possibly typescript bug? Below line does not work
+//const { rotatePs: rotate, translatePs: translate } = Vector;
+let rotate: ICurriedMapFunctionSpecial<number, number, number[], number[]> = Vector.rotatePs;
+let translate: ICurriedMapFunction2<number[], number[], number[]> = Vector.translatePs;
+
 const memoize = Memoize.m1;
-
-
-
-/**
- * Returns the power basis representation of the bezier's x-coordinates.
- * This function is memoized on its points parameter by object reference.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @returns The power basis polynomial from highest power to lowest, 
- * e.g. at^3 + bt^2 + ct + d is returned as [a,b,c,d]
- */
-let getX = memoize(function(ps: number[][]): number[] {
-	let [[x0,], [x1,], [x2,], [x3,]] = ps;
-	return [
-	    x3 - 3*x2 + 3*x1 - x0, // t^3
-	    3*x2 - 6*x1 + 3*x0,    // t^2
-	    3*x1 - 3*x0,           // t^1
-	    x0,                    // t^0
-	];
-});
-
-
-/**
- * Returns the power basis representation of the bezier's y-coordinates.
- * This function is memoized on its points parameter by object reference.
- * @param ps - A bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- */
-let getY = memoize(function(ps: number[][]): number[] {
-	let [[,y0], [,y1], [,y2], [,y3]] = ps;
-	return [
-	    y3 - 3*y2 + 3*y1 - y0, // t^3
-	    3*y2 - 6*y1 + 3*y0,    // t^2
-	    3*y1 - 3*y0,           // t^1
-	    y0,                    // t^0
-	];
-});
-
-
-/**
- * Returns the derivative of the power basis representation of the bezier's 
- * x-coordinates. This function is memoized on its points parameter by object 
- * reference.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- */
-let getDx = memoize((ps: number[][]) => Poly.differentiate(getX(ps)));
-
-
-/**
- * Returns the derivative of the power basis representation of the bezier's 
- * y-coordinates. This function is memoized on its points parameter by object 
- * reference.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @returns The differentiated power basis polynomial from highest
- * power to lowest, e.g. at^2 + bt + c is returned as [a,b,c]
- */
-let getDy = memoize((ps: number[][]) => Poly.differentiate(getY(ps)));
 
 
 /**
@@ -131,7 +107,7 @@ let getBoundingHull = memoize(grahamScan);
  * @param l - a 2d line represented by two points
  * @returns Control points of the cubic bezier.
  */
-function fromLine(l: number[][]): number[][] {
+function fromLine(l: number[][]) {
 	let [[x0,y0],[x1,y1]] = l;
 	
 	let xInterval = (x1 - x0)/3;
@@ -147,37 +123,9 @@ function fromLine(l: number[][]): number[][] {
 
 
 /** 
- * Evaluates the given bezier curve at the parameter t. This function is 
- * curried.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param t - The parameter value where the bezier should be evaluated
- * @returns The resultant point. 
- **/
-function evaluate(ps: number[][]): (t: number) => number[];
-function evaluate(ps: number[][], t: number): number[];
-function evaluate(ps: number[][], t?: number) {
-	const [[x0, y0],,, [x3, y3]] = ps;
-	const evX = evaluateX(ps);
-	const evY = evaluateY(ps);
-	
-	function f(t: number): number[] {
-		if (t === 0) {
-			return [x0, y0];
-		} else if (t === 1) {
-			return [x3, y3];
-		}
-		
-		return [evX(t), evY(t)];		
-	}
-
-	return t === undefined ? f : f(t);
-}
-
-
-/** 
  * Returns the given bezier's inflection points. 
  **/
-function findBezierInflectionPoints(ps: number[][]): number[][] {
+function findInflectionPoints(ps: number[][]) {
 	
 	let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
 	
@@ -193,11 +141,11 @@ function findBezierInflectionPoints(ps: number[][]): number[][] {
 	let b = ax*cy - ay*cx;
 	let c = ax*by - ay*bx;
 	
-	let inflectionTimes = Poly.allRoots([a,b,c],0,1);
+	let inflectionTs = Poly.allRoots([a,b,c],0,1);
 	
 	const evPs = evaluate(ps);
 
-	return inflectionTimes.map(evPs);
+	return inflectionTs.map(evPs);
 }
 
 
@@ -207,7 +155,6 @@ function findBezierInflectionPoints(ps: number[][]): number[][] {
  * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param t - The parameter value where the curvature should be 
  * evaluated
- * @returns {number}
  */
 function κ(ps: number[][], t: number): number;
 function κ(ps: number[][]): (t: number) => number;
@@ -242,7 +189,7 @@ let curvature = κ;
 
 /**
  * Helper function. This function is curried.
- * @ignore
+ * @private
  */
 function κds(ps: number[][], t: number): number;
 function κds(ps: number[][]): (t: number) => number;
@@ -299,9 +246,9 @@ function dκMod(ps: number[][], t?: number) {
 		let i = 6 * (t*x3-(3*t-1)*x2 + (3*t-2)*x1 + omt*x0);
 		let j = Math.sqrt(f*f+g*g);
 
-		return 4*(f*(y3-3*y2+3*y1-y0) - 
+	   	return 4*(f*(y3-3*y2+3*y1-y0) - 
 			   g*(x3-3*x2+3*x1-x0)) * j**3 - 
-			   (f*h-b*g)*(2*h*g+2*b*f) * j;		
+			   (f*h-i*g)*(2*h*g+2*i*f) * j;
 	}
 
 	return t === undefined ? f : f(t);	
@@ -309,65 +256,14 @@ function dκMod(ps: number[][], t?: number) {
 
 
 /**
- * Returns the tangent unit vector of a cubic bezier curve at a specific t. This 
- * function is curried.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param t - The parameter value where the tangent should be evaluated
- * @returns {number[]}
- */
-function tangent(ps: number[][], t: number): number[];
-function tangent(ps: number[][]): (t: number) => number[];
-function tangent(ps: number[][], t?: number) {
-	const evDx = evaluateDx(ps);
-	const evDy = evaluateDy(ps);
-
-	function f(t: number): number[] {
-		let dx = evDx(t);
-		let dy = evDy(t);
-		let d = Math.sqrt(dx*dx + dy*dy);
-
-		return [dx/d, dy/d];
-	}
-
-	// Curry
-	return t === undefined ? f : f(t);
-}
-
-
-/**
- * Returns the normal unit vector of a cubic bezier curve at a specific t. This
- * function is curried.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param t - The parameter value where the normal should be evaluated
- * @returns {number[]}
- */
-function normal(ps: number[][], t: number): number[];
-function normal(ps: number[][]): (t: number) => number[];
-function normal(ps: number[][], t?: number) {
-	const tanPs = tangent(ps);
-
-	function f(t: number): number[] {
-		let v = tanPs(t);
-		return [v[1], -v[0]];
-	}
-
-	// Curry
-	return t === undefined ? f : f(t);
-}
-
-
-/**
- * <p>
  * Categorizes the given cubic bezier curve according to whether it has a loop,
  * a cusp, or zero, one or two inflection points all of which are mutually 
  * exclusive. 
- * </p>
- * <p>
+ *
  * See <a href="http://graphics.pixar.com/people/derose/publications/CubicClassification/paper.pdf">
  * this</a> paper.
- * </p>
  * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @returns {string} A value of 'L', 'C', '0', '1', or '2' depending on whether
+ * @returns A value of 'L', 'C', '0', '1', or '2' depending on whether
  * the curve has a loop, a cusp, or zero, one or two inflection points.
  */
 function categorize(ps: number[][]) {
@@ -510,80 +406,6 @@ function ds(ps: number[][], t?: number) {
 
 
 /**
- * Returns the x value of the given cubic bezier when evaluated at t. This
- * function is curried.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param t - The t parameter
- * @returns 
- */
-function evaluateX(ps: number[][]): (t: number) => number;
-function evaluateX(ps: number[][], t: number): number;
-function evaluateX(ps: number[][], t?: number) {
-	const xPs = getX(ps); // Speed optimizing cache
-	const evPs = Poly.evaluate(xPs);
-	function f(t: number): number {
-		if (t === 0) { return ps[0][0]; }
-		if (t === 1) { return ps[3][0]; }
-		return evPs(t);
-	} 
-	return t === undefined ? f : f(t); // Curry
-}
-
-
-/**
- * Returns the y value of the given cubic bezier when evaluated at t. This
- * function is curried.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param t - The t parameter
- * @returns 
- */
-function evaluateY(ps: number[][]): (t: number) => number;
-function evaluateY(ps: number[][], t: number): number;
-function evaluateY(ps: number[][], t?: number) {
-	const yPs = getY(ps); // Speed optimizing cache
-	const evPs = Poly.evaluate(yPs);
-	function f(t: number): number {
-		if (t === 0) { return ps[0][1]; }
-		if (t === 1) { return ps[3][1]; }
-		return evPs(t);
-	} 
-	return t === undefined ? f : f(t); // Curry
-}
-
-
-/**
- * Returns the x value of the once differentiated (with respect to t) cubic 
- * bezier when evaluated at t. This function is curried.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param t - The t parameter
-  */
-function evaluateDx(ps: number[][], t: number): number;
-function evaluateDx(ps: number[][]): (t: number) => number;
-function evaluateDx(ps: number[][], t?: number)  {
-	const dPs = getDx(ps); // Speed optimizing cache
-	const f = Poly.evaluate(dPs);
-	
-	return t === undefined ? f : f(t); // Curry
-}
-
-
-/**
- * Returns the y value of the once differentiated (with respect to t) cubic 
- * bezier when evaluated at t. This function is curried.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param t - The t parameter
-  */
-function evaluateDy(ps: number[][], t: number): number;
-function evaluateDy(ps: number[][]): (t: number) => number;
-function evaluateDy(ps: number[][], t?: number)  {
-	const dPs = getDy(ps); // Speed optimizing cache
-	const f = Poly.evaluate(dPs);
-
-	return t === undefined ? f : f(t); // Curry
-}
-
-
-/**
  * Returns the x value of the twice differentiated (with respect to t) cubic 
  * bezier when evaluated at t. This function is curried.
  * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
@@ -721,7 +543,7 @@ let getBoundingBox = memoize(function(ps: number[][]) {
 
 /**
  * Calculates and returns general bezier bounds.
- * @returns {object} The axis-aligned bounding box together with the t values
+ * @returns The axis-aligned bounding box together with the t values
  * where the bounds on the bezier are reached.
  */
 let getBounds = memoize(function(ps: number[][]) {
@@ -766,112 +588,14 @@ let getBounds = memoize(function(ps: number[][]) {
 
 
 /**
- * <p>
- * Returns a cubic bezier curve that starts at the given curve and ends at the
- * given t parameter. Uses de Casteljau's algorithm. 
- * </p>
- * <p>
- * A loose bound on the accuracy of the resultant points is given by: 
- * |δP| = 2*2n*max_k(|b_k|)η, where n = 3 (cubic), b_k are the control points
- * abd η is Number.EPSILON.
- * </p>
- * @param ps - A cubic bezier curve
- * @param t1 - The t parameter where the resultant bezier should start
- * @param t2 - The t parameter where the resultant bezier should end
- * @returns {number[][]}
- */
-function fromTo(ps: number[][]) {
-
-	return function(t1: number, t2: number) {
-		if (t1 === t2) {
-			// Degenerate case
-			let p = evaluate(ps, t1);
-			return [p,p,p,p];
-		}
-		let t = fromTTo1(ps, t1);
-		return from0ToT(t, (t2-t1)/(1-t1));
-	}
-
-};
-
-
-/**
- * <p>
- * Returns a cubic bezier curve that starts at the given curve's t=0 and ends 
- * at the given t parameter. Uses de Casteljau's algorithm. 
- * </p>
- * <p>
- * A loose bound on the accuracy of the resultant points is given by: 
- * |δP| = 2n*max_k(|b_k|)η, where n = 3 (cubic), b_k are the control points
- * abd η is Number.EPSILON.
- * </p>
- * @param ps - A cubic bezier curve
- * @param t - The t parameter where the resultant bezier should end
- */
-function from0ToT(ps: number[][], t: number): number[][] {
-	let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
-	
-	let s  = 1  - t;
-	let t2 = t  * t;
-	let t3 = t2 * t;
-	let s2 = s  * s;
-	let s3 = s2 * s;
-
-	return [
-		[x0, y0],
-		[t*x1  + s*x0, t*y1 + s*y0],
-		[t2*x2 + 2*s*t*x1 + s2*x0, t2*y2 + 2*s*t*y1 + s2*y0],
-		[t3*x3 + 3*s*t2*x2 + 3*s2*t*x1 + s3*x0, 
-		 t3*y3 + 3*s*t2*y2 + 3*s2*t*y1 + s3*y0]
-	];
-}
-
-
-/**
- * <p>
- * Returns a cubic bezier curve that starts at the given t parameter and 
- * ends at t=1. Uses de Casteljau's algorithm.
- * </p>
- * <p>
- * A loose bound on the accuracy of the resultant points is given by: 
- * |δP| = 2n*max_k(|b_k|)η, where n = 3 (cubic), b_k are the control points
- * abd η is Number.EPSILON.
- * </p>
- * @param ps - A cubic bezier curve
- * @param t - The t parameter where the resultant bezier should start
- */
-function fromTTo1(ps: number[][], t: number): number[][] {
-	let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
-	
-	let s  = 1  - t;
-	let t2 = t  * t;
-	let t3 = t2 * t;
-	let s2 = s  * s;
-	let s3 = s2 * s;
-
-	return [
-		[t3*x3 + 3*s*t2*x2 + 3*s2*t*x1 + s3*x0, 
-		 t3*y3 + 3*s*t2*y2 + 3*s2*t*y1 + s3*y0],
-		[t2*x3 + 2*t*s*x2 + s2*x1, t2*y3 + 2*t*s*y2 + s2*y1],
-		[t*x3 + s*x2, t*y3 + s*y2],
-		[x3, y3]
-	];
-}
-
-
-/**
- * <p>
  * Returns 2 new beziers split at the given t parameter, i.e. for the ranges 
  * [0,t] and [t,1]. Uses de Casteljau's algorithm. 
- * </p>
- * <p>
+ * 
  * A loose bound on the accuracy of the resultant points is given by: 
  * |δP| = 2n*max_k(|b_k|)η, where n = 3 (cubic), b_k are the control points
  * abd η is Number.EPSILON.
- * </p>
  * @param ps - A cubic bezier curve
  * @param t - The t parameter where the curve should be split
- * @returns {number[][]}
  */
 function splitAt(ps: number[][], t: number): number[][][] {
 	let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
@@ -902,11 +626,48 @@ function splitAt(ps: number[][], t: number): number[][][] {
 
 
 /**
+ * Returns a new bezier from the given bezier by limiting its t range. 
+ * 
+ * Uses de Casteljau's algorithm.
+ * 
+ * @param ps A bezier
+ * @param tRange A t range
+ */
+function bezierFromBezierPiece(ps: number[][], tRange: number[]) {
+
+	// If tRange = [0,1] then return original bezier.
+	if (tRange[0] === 0 && tRange[1] === 1) {
+		return ps;
+	}
+
+	// If tRange[0] === tRange[1] then return a single point degenerated bezier.
+	if (tRange[0] === tRange[1]) {
+		let p = evaluate(ps)(tRange[0]);
+		return [p,p,p,p];
+	}
+
+	if (tRange[0] === 0) {
+		return from0ToT(ps, tRange[1]);
+	} 
+
+	if (tRange[1] === 1) {
+		return fromTTo1(ps, tRange[0]);
+	} 
+
+	// At this stage we know the t range is not degenerate and tRange[0] !== 0 
+	// and tRange[1] !== 1
+	return from0ToT(
+		fromTTo1(ps, tRange[0]), 
+		(tRange[1]-tRange[0]) / (1-tRange[0])
+	);
+}
+
+
+/**
  * Returns a human readable string representation of the given bezier.
  * @param ps - A bezier curve
- * @returns {string}
  */
-function toString(ps: number[][]): string {
+function toString(ps: number[][]) {
 	let [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
 	return `[[${x0},${y0}],[${x1},${y1}],[${x2},${y2}],[${x3},${y3}]]`;
 }
@@ -915,69 +676,10 @@ function toString(ps: number[][]): string {
 /**
  * Scales all control points of the given bezier by the given factor.
  * @param ps - A bezier curve
- * @param factor - The scale factor
- * @returns {number[][]}
+ * @param c - The scale factor
  */
-function scale(ps: number[][], factor: number): number[][] {
-	return ps.map(x => [x[0]*factor, x[1]*factor]);
-}
-
-
-/**
- * Returns the bezier t values of the intersection between the given cubic 
- * bezier and the given line.
- * @param ps - The bezier curve
- * @param l - The line given as a start and end point
- * @returns {number[]}
- */
-function lineIntersection(ps: number[][], l: number[][]) {
-	let [[x0,y0],[x1,y1]] = l;
-	let [x,y] = [x1-x0, y1-y0];
-
-	if (x === 0 && y === 0) { return []; } 
-
-	// Move the line and the bezier together so the line's first point is on the
-	// origin.
-	ps = translate([-x0, -y0], ps);
-
-	// Rotate the bezier and line together so the line is y=0.
-	let len = Math.sqrt(x*x + y*y);
-	let sinθ = y/len;
-	let cosθ = x/len;
-	ps = rotate(-sinθ, cosθ, ps);
-
-	// Find the intersection t values
-	return Poly.allRoots(getY(ps),0,1);
-}
-
-
-/**
- * Returns the bezier t values of the intersection between the given cubic 
- * bezier and the given horizontal line.
- * @param ps - The bezier curve
- * @param y - The y value of the horizontal line
- */
-function tsAtY(ps: number[][], y: number): number[] {
-	// Translate ps so that y = 0.
-	ps = ps.map(p => [p[0],p[1]-y]);
-
-	// Find the intersection t values
-	return Poly.allRoots(getY(ps),0,1);
-}
-
-
-/**
- * Returns the bezier t values of the intersection between the given cubic 
- * bezier and the given vertical line.
- * @param ps - The bezier curve
- * @param y - The y value of the horizontal line
- */
-function tsAtX(ps: number[][], x: number): number[] {
-	// Translate ps so that x = 0.
-	ps = ps.map(p => [p[0]-x,p[1]]);
-
-	// Find the intersection t values
-	return Poly.allRoots(getX(ps),0,1);
+function scale(ps: number[][], c: number) {
+	return ps.map(x => [x[0]*c, x[1]*c]);
 }
 
 
@@ -985,9 +687,8 @@ function tsAtX(ps: number[][], x: number): number[] {
  * Returns the best least squares quadratic bezier approximation to the given
  * cubic bezier. Note that the two bezier endpoints differ in general.
  * @param ps - A cubic bezier curve.
- * @returns {number[][]}
  */
-function toQuadratic(ps: number[][]): number[][] {
+function toQuadratic(ps: number[][]) {
 	let [[x0,y0],[x1,y1],[x2,y2],[x3,y3]] = ps;
 
 	return [
@@ -1002,33 +703,6 @@ function toQuadratic(ps: number[][]): number[][] {
 
 
 /**
- * Returns the hybrid quadratic version of the given cubic bezier. For a 
- * definition of hybrid quadratic bezier curves see <a href="http://scholarsarchive.byu.edu/cgi/viewcontent.cgi?article=2206&context=etd">
- * this paper</a>.
- * @param ps - A cubic bezier curve.
- * @returns {object[]} An array of three quadratic bezier points where the 
- * middle point is a 'hybrid' point represented as a line (itself represented
- * by two points (a linear bezier curve)) which can be evaluated at a different 
- * t value (call it th). If evaluated at the same t value the result is the same 
- * as evaluating the original cubic bezier at t. The set generated by evaluating 
- * the hybrid quadratic curve for all (t,th) value pairs forms a geometric area
- * bound around the orginal cubic bezier curve. The length of the linear bezier
- * curve mentioned above is a measure of how closely the cubic can be
- * represented as a quadratic bezier curve.
- */
-function toHybridQuadratic(ps: number[][]) {
-	let [[x0,y0],[x1,y1],[x2,y2],[x3,y3]] = ps;
-
-	return [
-		[x0,y0], 					  	  // evaluated at t
-		[[(3*x1 - x0)/2, (3*y1 - y0)/2],  // evaluated at (1-t)
-		 [(3*x2 - x3)/2, (3*y2 - y3)/2]], // evaluated at t
-		[x3,y3] 						  // evaluated at t
-	]
-}
-
-
-/**
  * Evaluates the given hybrid quadratic at the given t and th parameters. (see 
  * toHybridQuadratic for details).
  * @param hq - A hybrid quadratic 
@@ -1037,8 +711,7 @@ function toHybridQuadratic(ps: number[][]) {
  */
 function evaluateHybridQuadratic(
 		hq: (number[] | number[][])[], 
-		t: number, 
-		th: number): number[] {
+		t: number, th: number) {
 
 	let P0  = <number[]>  hq[0];
 	let P1_ = <number[][]>hq[1];
@@ -1055,7 +728,7 @@ function evaluateHybridQuadratic(
  * @param ps - A linear bezier curve.
  * @param t - The value where the bezier should be evaluated
  */
-function evaluateLinear(ps: number[][], t: number): number[] {
+function evaluateLinear(ps: number[][], t: number) {
 	let [[x0,y0],[x1,y1]] = ps;
 
 	let x = x0*(1-t) + x1*t;
@@ -1070,7 +743,7 @@ function evaluateLinear(ps: number[][], t: number): number[] {
  * spirit of functional programming.
  * @param ps - A cubic bezier given by its array of control points
  */
-function clone(ps: number[][]): number[][] {
+function clone(ps: number[][]) {
 	let [[x0,y0],[x1,y1],[x2,y2],[x3,y3]] = ps;
 
 	return [[x0,y0],[x1,y1],[x2,y2],[x3,y3]];
@@ -1081,9 +754,8 @@ function clone(ps: number[][]): number[][] {
  * Evaluates the given quadratic bezier at a specific t value.
  * @param ps - A quadratic bezier curve.
  * @param t - The value where the bezier should be evaluated
- * @returns {number[]}
  */
-function evaluateQuadratic(ps: number[][], t: number): number[] {
+function evaluateQuadratic(ps: number[][], t: number) {
 	let [[x0,y0],[x1,y1],[x2,y2]] = ps;
 
 	let x = x0*(1-t)**2 + x1*2*(1-t)*t + x2*t**2;
@@ -1097,9 +769,8 @@ function evaluateQuadratic(ps: number[][], t: number): number[] {
  * Returns the cubic version of the given quadratic bezier curve. Quadratic 
  * bezier curves can always be represented by cubics - the converse is false.
  * @param ps - A quadratic bezier curve.
- * @returns {number[][]}
  */
-function toCubic(ps: number[][]): number[][] {
+function toCubic(ps: number[][]) {
 	let [[x0,y0],[x1,y1],[x2,y2]] = ps;
 
 	return [
@@ -1112,479 +783,26 @@ function toCubic(ps: number[][]): number[][] {
 
 
 /**
- * Check if the two given cubic beziers are nearly coincident everywhere and
- * returns the coincident stretch (if any), otherwise returns undefined.
- * @param P - A cubic bezier curve.
- * @param Q - Another cubic bezier curve.
- * @param δ - An indication of how closely the curves should stay to
- * each other before considered coincident.
- * @returns 
- */
-function coincident(
-		P: number[][], 
-		Q: number[][], 
-		δ: number = 1e-6): { p: number[], q: number[] } {
-
-	let [P0, P1, P2, P3] = P; 
-	let [Q0, Q1, Q2, Q3] = Q; 
-
-	let { pp: pP0, t: tPQ0, p: pPQ0, d: dPQ0 } = calcPointAndNeighbor(P,Q,0);
-	let { pp: pP1, t: tPQ1, p: pPQ1, d: dPQ1 } = calcPointAndNeighbor(P,Q,1);
-	let { pp: pQ0, t: tQP0, p: pQP0, d: dQP0 } = calcPointAndNeighbor(Q,P,0);
-	let { pp: pQ1, t: tQP1, p: pQP1, d: dQP1 } = calcPointAndNeighbor(Q,P,1);
-
-	// Check for start and end points coincident.
-	let tStartQ = 0;
-	let tEndQ   = 1;
-	let tStartP = 0;
-	let tEndP   = 1;
-
-	let count = 0;
-	if (dPQ0 <= δ) { tStartQ = tPQ0;  count++; } 
-	if (dPQ1 <= δ) { tEndQ   = tPQ1;  count++; }
-	if (dQP0 <= δ) { tStartP = tQP0;  count++; } 
-	if (dQP1 <= δ) { tEndP   = tQP1;  count++; }
-
-	// At least 2 endpoints must be coincident.
-	if (count < 2) { return undefined; }
-
-	if (tStartP > tEndP) { [tStartP, tEndP] = [tEndP, tStartP]; }
-	if (tStartQ > tEndQ) { [tStartQ, tEndQ] = [tEndQ, tStartQ];	}
-
-	let tSpanP = tEndP - tStartP;
-	let tSpanQ = tEndQ - tStartQ;
-
-	// We must check at least 8 additional points to ensure entire curve
-	// is coincident, otherwise we may simply have found intersection 
-	// points.
-	// TODO - Change so that we cut the curves to be about equal and check the
-	// other two control points for closeness.
-	let res = true;
-	for (let i=1; i<10; i++) {
-		let t = tStartP + tSpanP*(i/10);
-		let { pp, t: tt, p: pq, d } = calcPointAndNeighbor(P,Q,t);
-		if (d > δ) {
-			return undefined;
-		}
-	}
-	
-	return { p: [tStartP, tEndP], q: [tStartQ, tEndQ] };
-
-
-	function calcPointAndNeighbor(P: number[][], Q: number[][] ,t: number) {
-		// TODO - must also check crossing of normals - for if two curves open
-		// at endpoints and stop essentially at same point.
-		let pp1 = evaluate(P)(t);
-		let normalVector = normal(P)(0);
-		let pp2 = Vector.translate(pp1,normalVector);
-		let ts = lineIntersection(Q, [pp1,pp2]);
-
-		let bestT = undefined;
-		let bestP = undefined;
-		let bestD = Number.POSITIVE_INFINITY;
-		for (let t of ts) {
-			let p = evaluate(Q)(t);
-			let d = Vector.distanceBetween(p,pp1);
-			if (d < bestD) {
-				bestT = t;
-				bestP = p;
-				bestD = d;
-			}
-		}
-		return { pp: pp1, t: bestT, p: bestP, d: bestD };
-	}
-}
-
-
-/**
- * Robust, extremely accurate and extremely fast (cubically convergent in 
- * general with fast iteration steps) algorithm that returns the intersections 
- * between two cubic beziers.
- *
- * At stretches where the two curves run extremely close to (or on top of) each 
- * other and curve the same direction an interval is returned instead of a 
- * point.
- *
- * The algorithm is based on a <a href="http://scholarsarchive.byu.edu/cgi/viewcontent.cgi?article=2206&context=etd">paper</a>
- * that finds the intersection of a fat line and a so-called geometric interval
- * making it faster and more accurate than the standard fat-line intersection
- * algorithm. The algorithm has been modified to prevent run-away recursion
- * by checking for coincident pieces at subdivision steps.
- * 
- * @param ps1 - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param ps2 - Another cubic bezier
- * @param [δ] - An optional tolerance to within which the t parameter
- * should be calculated - defaults to the minimum value of 24*Number.EPSILON or 
- * approximately 5e-15. Note that it might not make sense to set this to as 
- * large as say 1e-5 since only a single iteration later the maximum accuracy 
- * will be attained and not much speed will be gained anyway. Similarly if δ is 
- * set to 1e-2 only two iterations will be saved. This is due to the algorithm 
- * being cubically convergent (usually converging in about 4 to 8 iterations for 
- * typical intersections).
- * @param [Δ] - A tolerance that indicates how closely a stretch of the 
- * beziers can run together before being considered coincident. Defaults to the
- * minimum possible value of 1e-6 if not specified.
- * @returns An array that contains the t-value pairs at intersection 
- * of the first and second beziers respectively. The array can also contain t
- * range pairs for coincident pieces that can be either used or ignored
- * depending on the application, e.g. the return value might be [[0.1,0.2],
- * [0.3,0.5],[[0.4,0.5],[0.6,0.7]]] that indicates intersection points at t 
- * values of t1=0.1 and t2=0.2 for the first and second bezier respectively as 
- * well as at t1=0.3 and t2=0.5 and finally indicates the curves to be nearly 
- * coincident from t1=0.4 to t1=0.5 for the first bezier and t2=0.6 to t=0.7 for
- * the second bezier.
- */
-function bezier3Intersection(
-		ps1: number[][], 
-		ps2: number[][], 
-		δ: number, 
-		Δ: number) {
-
-	const dst  = Vector.distanceBetween;
-	const sdst = Vector.squaredDistanceBetween;
-
-	// The minimum value Δ can be. If it is too small the algorithm may take too
-	// long in cases where the two curves run extremely close to each other for
-	// their entire length and curve the same direction.
-	const ΔMin = 1e-6;
-
-	// This is an estimate of the relative floating point error during clipping.
-	// A bound is given by |δP| = 2n*max_k(|b_k|)η, where n = 3 (cubic), b_k
-	// are the control points indexed by k=0,1,2,3 and η is machine epsilon, 
-	// i.e. Number.EPSILON. We quadruple the bound to be sure.
-	const δMin = 24*Number.EPSILON; 
-
-	// Maximum error - limited to take rounding error into account.
-	if (δ === undefined) { δ = 0; }
-	δ = Math.max(δ, δMin);
-	if (Δ === undefined) { Δ = ΔMin; }
-	Δ = Math.max(Δ, ΔMin);
-
-	// Intersection t values for both beziers
-	let tss: number[][] = []; 	
-	//let iterations = 0;
-	intersection(ps1, ps2, [0,1], [0,1], 1);
-	//console.log(iterations);
-	return tss;
-
-
-	// Helper function
-	function intersection(
-			Q_: number[][], 
-			P_: number[][], 
-			qRange: number[], 
-			pRange: number[], 
-			idx: number): void {
-
-		//iterations++;
-		let cidx = idx === 0 ? 1 : 0; // Counter flip-flop index
-
-		// Move intersection toward the origin to prevent serious floating point 
-		// issues that are introduced specifically by the getLineEquation 
-		// function. This allows us to get a relative error in the final 
-		// result usually in the 10 ULPS or less range.
-		[P_, Q_] = center(P_, Q_);
-
-		let [Q0, Q1, Q2, Q3] = Q_; 
-		let [P0, P1, P2, P3] = P_; 
-
-		// Get the implict line equation for the line from the first to the last
-		// control point of Q. This equation gives the distance between any 
-		// point and the line.
-		let dQ = getDistanceToLineFunction([Q0,Q3]);
-
-		// Calculate the distance from the control points of Q to the line 
-		// [Q0,Q3].
-		let dQi = (i: number) => dQ(Q_[i]);
-		let dQs = [1,2].map(dQi);
-		let [dQ1,dQ2] = dQs;
-
-		// Calculate the fat line of Q.
-		let C = (dQ1*dQ2 > 0) ? 3/4 : 4/9;
-		let dMin = C * Math.min(0,dQ1,dQ2);
-		let dMax = C * Math.max(0,dQ1,dQ2);
-
-		let {tMin, tMax} = geoClip(P_, dQ, dMin, dMax);
-
-		if (tMin === Number.POSITIVE_INFINITY) {
-			return; // No intersection
-		}
-		
-
-		// The paper calls for a heuristic that if less than 30% will be
-		// clipped, rather split the longest curve and find intersections in the
-		// two halfs seperately.
-		if (tMax - tMin > 0.7) {
-			// Some length measure
-			let pSpan = pRange[1] - pRange[0];
-			let qSpan = qRange[1] - qRange[0];
-
-			if (coincident(P_,Q_) !== undefined) {
-				return;
-			}
-
-			// Split the curve in half
-			if (pSpan <= qSpan) {
-				cidx = idx;
-				[P_,Q_] = [Q_,P_];
-				[pRange,qRange] = [qRange,pRange];
-			}
-
-			// Update t range.
-			let span = pRange[1] - pRange[0];
-			
-			// 1st half
-			let tMinA = pRange[0];
-			let tMaxA = tMinA + span/2;
-
-			// 2nd half
-			let tMinB = tMaxA;
-			let tMaxB = pRange[1];
-
-			let A = fromTo(P_)(0, 0.5); 
-			let B = fromTo(P_)(0.5, 1); 
-			intersection(A, Q_, [tMinA, tMaxA], qRange, cidx);
-			intersection(B, Q_, [tMinB, tMaxB], qRange, cidx);
-			return;
-		}
-
-
-		// Update t range.
-		let span = pRange[1] - pRange[0];
-		let tMin_ = (tMin*span + pRange[0]);
-		let tMax_ = (tMax*span + pRange[0]);
-
-		// Clip
-		P_ = fromTo(P_)(tMin, tMax); 
-		
-
-		if (Math.abs(tMax_ - tMin_) < δ) {
-			let t1 = (tMax_ + tMin_) / 2;
-			let pq = idx === 0 ? [ps1,ps2] : [ps2,ps1];
-			let t2 = calcOtherT(t1, pq[0], pq[1]);
-			if (t2 === undefined) {	return undefined; }
-			let ts = idx === 0 ? [t2,t1] : [t1,t2];
-			tss.push(ts);	
-			return;
-		}
-
-		// Swap Q and P and iterate.
-		intersection(P_, Q_, [tMin_,tMax_], qRange, cidx);
-	}
-
-
-	function geoClip(
-			P: number[][], 
-			dQ: (p: number[]) => number, 
-			dMin: number, 
-			dMax: number) {
-
-		let dPi = (i: number) => dQ(P[i]);
-		let dPs = [0,1,2,3].map(dPi);
-		let [dP0,dP1,dP2,dP3] = dPs;
-
-		let hq = toHybridQuadratic(P);
-		let dH0   = dQ(<number[]>hq[0]);
-		let dH2   = dQ(<number[]>hq[2]);
-		let dH10  = dQ(<number[]>hq[1][0]);
-		let dH11  = dQ(<number[]>hq[1][1]);
-		let dHmin = Math.min(dH10,dH11);
-		let dHmax = Math.max(dH10,dH11);
-
-		let DyMin = [
-			dH0 - 2*dHmin + dH2,
-			-2*dH0 + 2*dHmin,
-			dH0
-		];
-
-		let DyMax = [
-			dH0 - 2*dHmax + dH2,
-			-2*dH0 + 2*dHmax,
-			dH0
-		]
-
-		let errorBound = 2*Math.max(
-			Poly.hornerErrorBound(DyMin, 1),
-			Poly.hornerErrorBound(DyMax, 1),
-		);
-		dMin = dMin - errorBound;
-		dMax = dMax + errorBound;
-
-		let DyMinMin = DyMin.slice();
-		DyMinMin[2] = DyMinMin[2] - dMin; 
-		let DyMinMax = DyMin.slice();
-		DyMinMax[2] = DyMinMax[2] - dMax; 
-
-		let DyMaxMin = DyMax.slice();
-		DyMaxMin[2] = DyMaxMin[2] - dMin; 
-		let DyMaxMax = DyMax.slice();
-		DyMaxMax[2] = DyMaxMax[2] - dMax; 
-
-
-		let tMin = Number.POSITIVE_INFINITY;
-		let tMax = Number.NEGATIVE_INFINITY;
-
-		let rootsMinMin = Poly.allRoots(DyMinMin,0,1);
-		let rootsMinMax = Poly.allRoots(DyMinMax,0,1);
-		let rootsMaxMin = Poly.allRoots(DyMaxMin,0,1);
-		let rootsMaxMax = Poly.allRoots(DyMaxMax,0,1);
-		tMin = Math.min(...rootsMinMin, ...rootsMinMax, ...rootsMaxMin, ...rootsMaxMax);
-		tMax = Math.max(...rootsMinMin, ...rootsMinMax, ...rootsMaxMin, ...rootsMaxMax);
-
-		if (dH0 >= dMin && dH0 <= dMax) {
-			tMin = 0;
-		}
-		if (dH2 >= dMin && dH2 <= dMax) {
-			tMax = 1;
-		}
-
-		if (tMin < 0) { tMin = 0; }
-		if (tMax > 1) { tMax = 1; }
-
-		return {tMin, tMax};
-	}
-
-
-	/**
-	 * Return the given two beziers but translated such that the shorter (by
-	 * some length measure) is closer to the origin.
-	 * @private
-	 * @param P 
-	 * @param Q 
-	 */
-	function center(P: number[][], Q: number[][]): number[][][] {
-		let [P0, P1, P2, P3] = P; 
-		let [Q0, Q1, Q2, Q3] = Q; 
-
-		let lengthP = sdst(P0,P1) + sdst(P1,P2) + sdst(P2,P3);
-		let lengthQ = sdst(Q0,Q1) + sdst(Q1,Q2) + sdst(Q2,Q3);
-
-		let moveX: number;
-		let moveY: number;
-		if (lengthQ < lengthP) {
-			moveX = (Q0[0] + Q1[0] + Q2[0] + Q3[0]) / 4;
-			moveY = (Q0[1] + Q1[1] + Q2[1] + Q3[1]) / 4;
-		} else {
-			moveX = (P0[0] + P1[0] + P2[0] + P3[0]) / 4;
-			moveY = (P0[1] + P1[1] + P2[1] + P3[1]) / 4;
-		}
-		P = P.map(x => [x[0]-moveX, x[1]-moveY]);
-		Q = Q.map(x => [x[0]-moveX, x[1]-moveY]);
-
-		return [P, Q];
-	}
-
-
-	/**
-	 * Calculates the t-value of the closest point on Q to P(t).
-	 * @ignore
-	 * @param {number}
-	 * @param Q 
-	 * @param P 
-	 */
-	function calcOtherT(t: number, P: number[][], Q: number[][]): number {
-		let pp = evaluate(P)(t);
-		let [x,y] = pp;
-
-		let tqsh = tsAtY(Q,y);
-		let tqsv = tsAtX(Q,x);
-		if (!tqsh.length && !tqsv.length) { return undefined; }
-
-		let tqs = [...tqsh, ...tqsv];
-
-		let bestT: number = undefined;
-		let bestD = Number.POSITIVE_INFINITY;
-		for (let tq of tqs) {
-			let pq = evaluate(Q)(tq);
-			let d = sdst(pp,pq);
-			if (d < bestD) {
-				bestD = d;
-				bestT = tq;
-			}
-		}
-
-		return bestT;
-	}
-}
-
-
-/**
- * Get the implicit line equation from two 2d points in the form f(x,y) ax + by + c = 0
- * returned as the array [a,b,c].
- * @ignore
- * @param l - A line given by two points, e.g. [[2,0],[3,3]]
- * @returns {number[]}
- */
-function getLineEquation(l: number[][]): number[] {
-	let [[x1,y1],[x2,y2]] = l;
-	
-	let a = y1-y2;
-	let b = x2-x1;
-	let c = x1*y2 - x2*y1;
-
-	return [a,b,c];
-}
-
-
-/**
- * @private
- * @param l 
- */
-function getDistanceToLineFunction(l: number[][]): (p: number[]) => number {
-	let [a,b,c] = getLineEquation(l);
-
-	return function(p: number[]) {
-		return a*p[0] + b*p[1] + c;
-	}
-}
-
-
-/**
- * Get the implicit line equation from two 2d points in the form f(x,y) ax + by + c = 0
- * where a^2 + b^2 = 1 returned as the array [a,b,c].
- * @param l - A line given by two points, e.g. [[2,0],[3,3]]
- * @example
- * getNormalizedLineEquation([[1,0],[5,3]]); //=> [-0.6, 0.8, 0.6]
- */
-function getNormalizedLineEquation(l: number[][]) {
-	let [[x1,y1],[x2,y2]] = l;
-	
-	let a = y1-y2;
-	let b = x2-x1;
-	let c = x1*y2 - x2*y1;
-
-	let norm = Math.sqrt(a**2 + b**2);
-
-	// Normalize it
-	a = a/norm;
-	b = b/norm;
-	c = c/norm;
-
-	return [a,b,c];
-}
-
-
-/**
  * Returns the given points (e.g. bezier) in reverse order.
  * @param ps
- * @returns {number[][]}
  */
 function reverse(ps: number[][]) {
 	return ps.slice().reverse();
 }
 
-/**
- * <p>
- * Purely functional cubic bezier library, including robust 
- * cubic-cubic bezier intersection.
- * </p>
- * <p> 
- * A cubic bezier is represented as an array of points, i.e. 
- * [p0, p1, p2, p3] where each point is an ordered pair, e.g. 
- * [[0,0],[1,1],[2,1],[3,0]].
- * </p>
- */
-const Bezier3 = {
+
+function equal(psA: number[][], psB: number[][]) {
+	let [[ax0, ay0], [ax1, ay1], [ax2, ay2], [ax3, ay3]] = psA;
+	let [[bx0, by0], [bx1, by1], [bx2, by2], [bx3, by3]] = psB;
+
+	return (
+		ax0 === bx0 && ax1 === bx1 && ax2 === bx2 && ax3 === bx3 &&
+		ay0 === by0 && ay1 === by1 && ay2 === by2 && ay3 === by3
+	)
+}
+
+
+export {
 	rotate,
 	getX,
 	getY,
@@ -1596,6 +814,7 @@ const Bezier3 = {
 	getDddy,
 	getBounds,
 	bezier3Intersection,
+	bezier3IntersectionSylvester,
 	lineIntersection,
 	tsAtX,
 	tsAtY,
@@ -1634,9 +853,21 @@ const Bezier3 = {
 	coincident,
 	from0ToT,
 	fromTTo1,
+	bezierFromBezierPiece,
 	clone,
-	reverse
-};
+	reverse,
+	equal,
+	deCasteljau,
+	evalDeCasteljau,
+}
+
+
+export { 
+	BezDebug, 
+	IDrawFunctions,
+	DebugElemType,
+	FatLine
+}
 
 
 export interface BezierPoint {
@@ -1644,4 +875,4 @@ export interface BezierPoint {
 	t: number
 }
 
-export default Bezier3;
+
