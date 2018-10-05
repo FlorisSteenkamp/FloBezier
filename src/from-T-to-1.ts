@@ -10,7 +10,6 @@ import { deCasteljau } from "./de-casteljau";
  * @param ps - A cubic bezier curve
  * @param t - The t parameter where the resultant bezier should start
  */
-/*
 function fromTTo1(ps: number[][], t: number): number[][] {
 	let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
 	
@@ -28,7 +27,7 @@ function fromTTo1(ps: number[][], t: number): number[][] {
 		[x3, y3]
 	];
 }
-*/
+/*
 function fromTTo1(ps: number[][], t: number): number[][] {
 	let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
 	
@@ -40,6 +39,6 @@ function fromTTo1(ps: number[][], t: number): number[][] {
 
 	return [[x0_, y0_], [x1_, y1_], [x2_, y2_], [x3_, y3_]];
 }
-
+*/
 
 export { fromTTo1 }

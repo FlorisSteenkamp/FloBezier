@@ -8,20 +8,26 @@ import grahamScan      from 'flo-graham-scan';
 import { ICurriedMapFunction2       } from 'flo-vector2d';
 import { ICurriedMapFunctionSpecial } from 'flo-vector2d';
 
-import { getX       } from './src/get-x';
-import { getY       } from './src/get-y';
-import { getDx      } from './src/get-dx';
-import { getDy      } from './src/get-dy';
-import { evaluateX  } from './src/evaluate-x';
-import { evaluateY  } from './src/evaluate-y';
-import { evaluate   } from './src/evaluate';
-import { evaluateDx } from './src/evaluate-dx';
-import { evaluateDy } from './src/evaluate-dy';
-import { tangent    } from './src/tangent';
-import { normal     } from './src/normal';
-import { from0ToT   } from './src/from-0-to-T';
-import { fromTTo1   } from './src/from-T-to-1';
-import { fromTo     } from './src/from-to';
+import { getX        } from './src/get-x';
+import { getY        } from './src/get-y';
+import { getX2       } from './src/get-x2';
+import { getY2       } from './src/get-y2';
+import { getDx       } from './src/get-dx';
+import { getDy       } from './src/get-dy';
+import { getDx2      } from './src/get-dx2';
+import { getDy2      } from './src/get-dy2';
+import { evaluateX   } from './src/evaluate-x';
+import { evaluateY   } from './src/evaluate-y';
+import { evaluate    } from './src/evaluate';
+import { evaluateDx  } from './src/evaluate-dx';
+import { evaluateDy  } from './src/evaluate-dy';
+import { evaluateDx2 } from './src/evaluate-dx2';
+import { evaluateDy2 } from './src/evaluate-dy2';
+import { tangent     } from './src/tangent';
+import { normal      } from './src/normal';
+import { from0ToT    } from './src/from-0-to-T';
+import { fromTTo1    } from './src/from-T-to-1';
+import { fromTo      } from './src/from-to';
 import { toHybridQuadratic }  from './src/to-hybrid-quadratic';
 import { coincident } from './src/coincident';
 import { lineIntersection } from './src/line-intersection';
@@ -333,9 +339,10 @@ function totalAbsoluteCurvature(ps: number[][], interval?: number[]) {
 
 
 /**
- * Returns the curve length in the specified interval. This function is curried.
+ * Returns the curve (linear, quadratic or cubic bezier) length in the specified 
+ * interval. This function is curried.
  * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param interval - The paramter interval over which the lenght is 
+ * @param interval - The paramter interval over which the length is 
  * to be calculated (often === [0,1]).
  */
 function len(interval: number[], ps: number[][]): number;
@@ -343,20 +350,104 @@ function len(interval: number[]): (ps: number[][]) => number;
 function len(interval: number[], ps?: number[][]) {
 
 	function f(ps: number[][]) {
-		if (interval[0] === interval[1]) { return 0; }
-		let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
-		// Keep line below to ensure zero length curve returns zero!
-		if (x0 === x1 && x1 === x2 && x2 === x3 &&
-			y0 === y1 && y1 === y2 && y2 === y3) {
-			return 0;
-		}
-		const evDs = ds(ps);
-		return gaussQuadrature(evDs, interval);
+		let fs = [,,length1,length2,length3];
+
+		return fs[ps.length](interval, ps);
 	}
 
 	// Curry
 	return ps === undefined ? f : f(ps);
 }
+
+
+/**
+ * Returns the curve length in the specified interval. This function is curried.
+ * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ * @param interval - The paramter interval over which the length is 
+ * to be calculated (often === [0,1]).
+ */
+function length3(interval: number[], ps: number[][]) {
+	if (interval[0] === interval[1]) { return 0; }
+
+	let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
+	// Keep line below to ensure zero length curve returns zero!
+	if (x0 === x1 && x1 === x2 && x2 === x3 &&
+		y0 === y1 && y1 === y2 && y2 === y3) {
+		return 0;
+	}
+	const evDs = ds(ps);
+	return gaussQuadrature(evDs, interval);
+}
+
+
+/**
+ * Returns the curve length in the specified interval. This function is curried.
+ * Unused because it is not numerically stable in its current form.
+ * See https://gist.github.com/tunght13488/6744e77c242cc7a94859
+ * @param ps - A quadratic bezier, e.g. [[0,0],[1,1],[2,1]]
+ * @param interval - The paramter interval over which the length is 
+ * to be calculated (often === [0,1]).
+ */
+/*
+function length2(interval: number[], ps: number[][]) {
+	if (interval[0] === interval[1]) { return 0; }
+
+	let [[x0_, y0_], [x1_, y1_], [x2_, y2_]] = ps;
+	// Keep line below to ensure zero length curve returns zero!
+	if (x0_ === x1_ && x1_ === x2_ && y0_ === y1_ && y1_ === y2_) {
+		return 0;
+	} 
+
+	let [[x0, y0], [x1, y1], [x2, y2]] = 
+			fromTo(ps)(interval[0], interval[1]);
+
+	let ax = x0 - 2*x1 + x2;
+	let ay = y0 - 2*y1 + y2;
+	let bx = 2*x1 - 2*x0;
+	let by = 2*y1 - 2*y0;
+
+	let A = 4 * (ax*ax + ay*ay);
+	let B = 4 * (ax*bx + ay*by);
+	let C = bx*bx + by*by;
+
+	let Sabc = 2*Math.sqrt(A+B+C);
+	let A_2 = Math.sqrt(A);
+	let A_32 = 2*A*A_2;
+	let C_2 = 2*Math.sqrt(C);
+	let BA = B/A_2;
+
+	return (
+		A_32*Sabc + A_2*B*(Sabc - C_2) + 
+		(4*C*A - B*B)*Math.log((2*A_2 + BA + Sabc) / (BA + C_2))
+	) / (4*A_32);
+}
+*/
+function length2(interval: number[], ps: number[][]) {
+	if (interval[0] === interval[1]) { return 0; }
+
+	let [[x0, y0], [x1, y1], [x2, y2]] = ps;
+	// Keep line below to ensure zero length curve returns zero!
+	if (x0 === x1 && x1 === x2 && y0 === y1 && y1 === y2) { return 0; }
+
+	const evDs = ds2(ps); 
+	return gaussQuadrature(evDs, interval);
+}
+
+
+function length1(interval: number[], ps: number[][]) {
+	let [t1, t2] = interval;
+	if (t1 === t2) { return 0; }
+
+	let [[x0, y0], [x1, y1]] = ps;
+	// Keep line below to ensure zero length curve returns zero!
+	if (x0 === x1 && y0 === y1) { return 0; } 
+
+	let p1 = [x0 + t1*(x1-x0), y0 + t1*(y1-y0)];
+	let p2 = [x0 + t2*(x1-x0), y0 + t2*(y1-y0)];
+
+	return Vector.distanceBetween(p1,p2);
+}
+
 
 
 /**
@@ -381,17 +472,38 @@ function getTAtLength(ps: number[][], s?: number) {
 
 
 /**
- * Returns ds. This function is curried.
- * @ignore
+ * Returns ds for a cubic bezier curve. This function is curried.
  * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param t - The parameter value
- * @returns {number}
  */
 function ds(ps: number[][], t: number): number;
 function ds(ps: number[][]): (t: number) => number;
 function ds(ps: number[][], t?: number) {
 	const evDx = evaluateDx(ps);
 	const evDy = evaluateDy(ps);
+
+	function f(t: number): number {
+		let dx = evDx(t);
+		let dy = evDy(t);
+		
+		return Math.sqrt(dx*dx + dy*dy);	
+	}
+
+	// Curry
+	return t === undefined ? f : f(t);	
+}
+
+
+/**
+ * Returns ds for a quadratic bezier curve. This function is curried.
+ * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ * @param t - The parameter value
+ */
+function ds2(ps: number[][], t: number): number;
+function ds2(ps: number[][]): (t: number) => number;
+function ds2(ps: number[][], t?: number) {
+	const evDx = evaluateDx2(ps);
+	const evDy = evaluateDy2(ps);
 
 	function f(t: number): number {
 		let dx = evDx(t);

@@ -1,1 +1,0 @@
-{"version":3,"names":[],"mappings":"","sources":["src/get-distance-to-line-function.d.ts"],"sourcesContent":["/**\n * @private\n * @param l\n */\ndeclare function getDistanceToLineFunction(l: number[][]): (p: number[]) => number;\nexport { getDistanceToLineFunction };\n"],"file":"get-distance-to-line-function.d.ts"}

@@ -130,9 +130,10 @@ declare function totalCurvature(ps: number[][]): (interval: number[]) => number;
 declare function totalAbsoluteCurvature(ps: number[][], interval: number[]): number;
 declare function totalAbsoluteCurvature(ps: number[][]): (interval: number[]) => number;
 /**
- * Returns the curve length in the specified interval. This function is curried.
+ * Returns the curve (linear, quadratic or cubic bezier) length in the specified
+ * interval. This function is curried.
  * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param interval - The paramter interval over which the lenght is
+ * @param interval - The paramter interval over which the length is
  * to be calculated (often === [0,1]).
  */
 declare function len(interval: number[], ps: number[][]): number;
