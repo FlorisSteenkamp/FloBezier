@@ -1,13 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const flo_memoize_1 = require("flo-memoize");
-const memoize = flo_memoize_1.default.m1;
 /**
  * Returns the power basis representation of the bezier's y-coordinates.
  * This function is memoized on its points parameter by object reference.
  * @param ps - A quadratic bezier, e.g. [[0,0],[1,1],[2,1]]
  */
-let getY2 = memoize(function (ps) {
+let getY2 = flo_memoize_1.memoize(function (ps) {
     let [[, y0], [, y1], [, y2]] = ps;
     return [
         y2 - 2 * y1 + y0,

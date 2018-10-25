@@ -24,7 +24,7 @@
   "dependencies": {
     "flo-gauss-quadrature": "*",
     "flo-graham-scan": "*",
-    "flo-memoize": "*",
+    "flo-memoize": "^0.1.0",
     "flo-poly": "*",
     "flo-vector2d": "*"
   },
@@ -46,7 +46,7 @@
   },
   "scripts": {
     "clean": "rimraf browser && rimraf node",
-    "build": "tsc && webpack",
+    "build": "npm run clean && tsc && webpack",
     "coverage": "nyc --reporter=html --reporter=text mocha --compilers js:babel-core/register ./test/js",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
     "test": "npm run build && npm run test-only",

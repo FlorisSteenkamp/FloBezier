@@ -1,8 +1,5 @@
 
-import Memoize from 'flo-memoize';
-
-
-const memoize = Memoize.m1;
+import { memoize } from 'flo-memoize';
 
 
 /**

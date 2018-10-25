@@ -1,7 +1,7 @@
 
 import Poly            from 'flo-poly';
 import * as Vector     from 'flo-vector2d';
-import Memoize         from 'flo-memoize';
+import { memoize }     from 'flo-memoize';
 import gaussQuadrature from 'flo-gauss-quadrature';
 import grahamScan      from 'flo-graham-scan';
 
@@ -48,8 +48,6 @@ import { evalDeCasteljau } from './src/eval-de-casteljau';
 //const { rotatePs: rotate, translatePs: translate } = Vector;
 let rotate: ICurriedMapFunctionSpecial<number, number, number[], number[]> = Vector.rotatePs;
 let translate: ICurriedMapFunction2<number[], number[], number[]> = Vector.translatePs;
-
-const memoize = Memoize.m1;
 
 
 /**

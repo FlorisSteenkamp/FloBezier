@@ -1,10 +1,8 @@
 
 import Poly from 'flo-poly';
-import Memoize from 'flo-memoize';
+import { memoize } from 'flo-memoize';
 
 import { getY2 } from './get-y2';
-
-const memoize = Memoize.m1;
 
 
 /**

@@ -63,7 +63,6 @@ let rotate = Vector.rotatePs;
 exports.rotate = rotate;
 let translate = Vector.translatePs;
 exports.translate = translate;
-const memoize = flo_memoize_1.default.m1;
 /**
  * Returns the second derivative of the power basis representation of the
  * bezier's x-coordinates. This function is memoized on its points parameter by
@@ -72,7 +71,7 @@ const memoize = flo_memoize_1.default.m1;
  * @returns The twice differentiated power basis polynomial from
  * highest power to lowest, e.g. at + b is returned as [a,b]
  */
-let getDdx = memoize((ps) => flo_poly_1.default.differentiate(get_dx_1.getDx(ps)));
+let getDdx = flo_memoize_1.memoize((ps) => flo_poly_1.default.differentiate(get_dx_1.getDx(ps)));
 exports.getDdx = getDdx;
 /**
  * Returns the second derivative of the power basis representation of the
@@ -82,7 +81,7 @@ exports.getDdx = getDdx;
  * @returns The twice differentiated power basis polynomial from
  * highest power to lowest, e.g. at + b is returned as [a,b]
  */
-let getDdy = memoize((ps) => flo_poly_1.default.differentiate(get_dy_1.getDy(ps)));
+let getDdy = flo_memoize_1.memoize((ps) => flo_poly_1.default.differentiate(get_dy_1.getDy(ps)));
 exports.getDdy = getDdy;
 /**
  * Returns the third derivative of the power basis representation of the
@@ -92,7 +91,7 @@ exports.getDdy = getDdy;
  * @returns The thrice differentiated power basis polynomial (a
  * constant in array from), e.g. a is returned as [a]
  */
-let getDddx = memoize((ps) => flo_poly_1.default.differentiate(getDdx(ps)));
+let getDddx = flo_memoize_1.memoize((ps) => flo_poly_1.default.differentiate(getDdx(ps)));
 exports.getDddx = getDddx;
 /**
  * Returns the third derivative of the power basis representation of the
@@ -102,7 +101,7 @@ exports.getDddx = getDddx;
  * @returns The thrice differentiated power basis polynomial (a
  * constant in array from), e.g. a is returned as [a]
  */
-let getDddy = memoize((ps) => flo_poly_1.default.differentiate(getDdy(ps)));
+let getDddy = flo_memoize_1.memoize((ps) => flo_poly_1.default.differentiate(getDdy(ps)));
 exports.getDddy = getDddy;
 /**
  * Returns the convex hull of a bezier's control points. This hull bounds the
@@ -113,7 +112,7 @@ exports.getDddy = getDddy;
  * @param ps - A bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @returns An ordered array of convex hull points.
  */
-let getBoundingHull = memoize(flo_graham_scan_1.default);
+let getBoundingHull = flo_memoize_1.memoize(flo_graham_scan_1.default);
 exports.getBoundingHull = getBoundingHull;
 /**
  * Returns a cubic bezier from the given line with evenly spaced control points.
@@ -431,7 +430,7 @@ function getNormalizedBoundingBox(ps, sinθ, cosθ) {
  * points of a rotated rectangle.
  * TODO - test case of baseLength === 0
  */
-let getBoundingBoxTight = memoize(function (ps) {
+let getBoundingBoxTight = flo_memoize_1.memoize(function (ps) {
     let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
     let baseLength = Math.sqrt((x3 - x0) * (x3 - x0) + (y3 - y0) * (y3 - y0));
     let sinθ = (y3 - y0) / baseLength;
@@ -451,7 +450,7 @@ exports.getBoundingBoxTight = getBoundingBoxTight;
  * @returns the axis-aligned bounding box in the form
  * [[minx, miny], [maxx,maxy]
  */
-let getBoundingBox = memoize(function (ps) {
+let getBoundingBox = flo_memoize_1.memoize(function (ps) {
     return getBounds(ps).box;
 });
 exports.getBoundingBox = getBoundingBox;
@@ -460,7 +459,7 @@ exports.getBoundingBox = getBoundingBox;
  * @returns The axis-aligned bounding box together with the t values
  * where the bounds on the bezier are reached.
  */
-let getBounds = memoize(function (ps) {
+let getBounds = flo_memoize_1.memoize(function (ps) {
     // Roots of derivative
     let roots = [get_dx_1.getDx(ps), get_dy_1.getDy(ps)]
         .map(poly => flo_poly_1.default.allRoots(poly, 0, 1));

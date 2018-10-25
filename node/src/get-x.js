@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const flo_memoize_1 = require("flo-memoize");
-const memoize = flo_memoize_1.default.m1;
 /**
  * Returns the power basis representation of the bezier's x-coordinates.
  * This function is memoized on its points parameter by object reference.
@@ -9,7 +8,7 @@ const memoize = flo_memoize_1.default.m1;
  * @returns The power basis polynomial from highest power to lowest,
  * e.g. at^3 + bt^2 + ct + d is returned as [a,b,c,d]
  */
-let getX = memoize(function (ps) {
+let getX = flo_memoize_1.memoize(function (ps) {
     let [[x0,], [x1,], [x2,], [x3,]] = ps;
     return [
         x3 - 3 * x2 + 3 * x1 - x0,
