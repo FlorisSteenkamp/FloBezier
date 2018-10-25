@@ -167,5 +167,4 @@ function bezier3IntersectionSylvester(ps1, ps2) {
     return tPairs;
 }
 exports.bezier3IntersectionSylvester = bezier3IntersectionSylvester;
-
-//# sourceMappingURL=bezier3-Intersection-sylvester.js.map
+//# sourceMappingURL=bezier3-intersection-sylvester_.js.map

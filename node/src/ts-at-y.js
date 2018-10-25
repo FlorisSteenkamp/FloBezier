@@ -15,5 +15,4 @@ function tsAtY(ps, y) {
     return flo_poly_1.default.allRoots(get_y_1.getY(ps), 0, 1);
 }
 exports.tsAtY = tsAtY;
-
 //# sourceMappingURL=ts-at-y.js.map

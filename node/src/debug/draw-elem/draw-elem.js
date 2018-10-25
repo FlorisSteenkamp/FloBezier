@@ -94,5 +94,4 @@ let drawElemFunctions = {
     fatLine
 };
 exports.drawElemFunctions = drawElemFunctions;
-
 //# sourceMappingURL=draw-elem.js.map

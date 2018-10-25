@@ -34,5 +34,4 @@ class BezDebug {
     }
 }
 exports.BezDebug = BezDebug;
-
 //# sourceMappingURL=debug.js.map

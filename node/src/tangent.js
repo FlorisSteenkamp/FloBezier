@@ -15,5 +15,4 @@ function tangent(ps, t) {
     return t === undefined ? f : f(t);
 }
 exports.tangent = tangent;
-
 //# sourceMappingURL=tangent.js.map

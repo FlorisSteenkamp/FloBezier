@@ -1,1 +1,1 @@
-{"version":3,"names":[],"mappings":"","sources":["src/debug/draw-functions.js"],"sourcesContent":["\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { value: true });\n"],"file":"draw-functions.js"}
+{"version":3,"file":"draw-functions.js","sourceRoot":"","sources":["../../../src/debug/draw-functions.ts"],"names":[],"mappings":""}

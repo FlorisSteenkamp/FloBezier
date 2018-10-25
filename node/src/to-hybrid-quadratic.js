@@ -25,5 +25,4 @@ function toHybridQuadratic(ps) {
     ];
 }
 exports.toHybridQuadratic = toHybridQuadratic;
-
 //# sourceMappingURL=to-hybrid-quadratic.js.map

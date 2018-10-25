@@ -15,5 +15,4 @@ function tsAtX(ps, x) {
     return flo_poly_1.default.allRoots(get_x_1.getX(ps), 0, 1);
 }
 exports.tsAtX = tsAtX;
-
 //# sourceMappingURL=ts-at-x.js.map

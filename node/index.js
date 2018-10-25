@@ -43,7 +43,7 @@ const line_intersection_1 = require("./src/line-intersection");
 exports.lineIntersection = line_intersection_1.lineIntersection;
 const bezier3_intersection_1 = require("./src/bezier3-intersection/bezier3-intersection");
 exports.bezier3Intersection = bezier3_intersection_1.bezier3Intersection;
-const bezier3_intersection_sylvester_1 = require("./src/bezier3-intersection-sylvester/bezier3-intersection-sylvester");
+const bezier3_intersection_sylvester_1 = require("./src/bezier3-intersection-sylvester/bezier3-intersection-sylvester_");
 exports.bezier3IntersectionSylvester = bezier3_intersection_sylvester_1.bezier3IntersectionSylvester;
 const ts_at_x_1 = require("./src/ts-at-x");
 exports.tsAtX = ts_at_x_1.tsAtX;
@@ -680,5 +680,4 @@ function equal(psA, psB) {
         ay0 === by0 && ay1 === by1 && ay2 === by2 && ay3 === by3);
 }
 exports.equal = equal;
-
 //# sourceMappingURL=index.js.map

@@ -14,5 +14,4 @@ const memoize = flo_memoize_1.default.m1;
  */
 let getDy2 = memoize((ps) => flo_poly_1.default.differentiate(get_y2_1.getY2(ps)));
 exports.getDy2 = getDy2;
-
 //# sourceMappingURL=get-dy2.js.map

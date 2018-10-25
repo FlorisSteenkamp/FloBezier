@@ -223,5 +223,4 @@ function bezier3Intersection(ps1, ps2, δ, Δ) {
     }
 }
 exports.bezier3Intersection = bezier3Intersection;
-
 //# sourceMappingURL=bezier3-intersection.js.map

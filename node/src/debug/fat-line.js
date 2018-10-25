@@ -8,5 +8,4 @@ class FatLine {
     }
 }
 exports.FatLine = FatLine;
-
 //# sourceMappingURL=fat-line.js.map

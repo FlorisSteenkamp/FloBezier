@@ -17,5 +17,4 @@ function evaluateY(ps, t) {
     return t === undefined ? f : f(t); // Curry
 }
 exports.evaluateY = evaluateY;
-
 //# sourceMappingURL=evaluate-y.js.map

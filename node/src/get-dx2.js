@@ -12,5 +12,4 @@ const memoize = flo_memoize_1.default.m1;
  */
 let getDx2 = memoize((ps) => flo_poly_1.default.differentiate(get_x2_1.getX2(ps)));
 exports.getDx2 = getDx2;
-
 //# sourceMappingURL=get-dx2.js.map

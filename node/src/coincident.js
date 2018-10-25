@@ -82,5 +82,4 @@ function calcPointAndNeighbor(P, Q, t) {
     }
     return { t: bestT, p: bestQ, d: bestD };
 }
-
 //# sourceMappingURL=coincident.js.map

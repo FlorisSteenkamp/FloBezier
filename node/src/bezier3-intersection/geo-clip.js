@@ -60,5 +60,4 @@ function geoClip(P, dQ, dMin, dMax) {
     return { tMin, tMax };
 }
 exports.geoClip = geoClip;
-
 //# sourceMappingURL=geo-clip.js.map

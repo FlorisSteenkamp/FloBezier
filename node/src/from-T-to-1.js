@@ -26,5 +26,4 @@ function fromTTo1(ps, t) {
     ];
 }
 exports.fromTTo1 = fromTTo1;
-
 //# sourceMappingURL=from-T-to-1.js.map

@@ -13,5 +13,4 @@ function curry2(f) {
     return g;
 }
 exports.default = curry2;
-
 //# sourceMappingURL=curry2.js.map

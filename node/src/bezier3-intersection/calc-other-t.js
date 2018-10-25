@@ -42,5 +42,4 @@ function calcOtherT(t, P, Q) {
     return bestT;
 }
 exports.calcOtherT = calcOtherT;
-
 //# sourceMappingURL=calc-other-t.js.map

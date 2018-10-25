@@ -27,5 +27,4 @@ function lineIntersection(ps, l) {
     return flo_poly_1.default.allRoots(get_y_1.getY(ps), 0, 1);
 }
 exports.lineIntersection = lineIntersection;
-
 //# sourceMappingURL=line-intersection.js.map

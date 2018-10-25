@@ -12,5 +12,4 @@ function getDistanceToLineFunction(l) {
     };
 }
 exports.getDistanceToLineFunction = getDistanceToLineFunction;
-
 //# sourceMappingURL=get-distance-to-line-function.js.map

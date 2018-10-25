@@ -17,5 +17,4 @@ let getY = memoize(function (ps) {
     ];
 });
 exports.getY = getY;
-
 //# sourceMappingURL=get-y.js.map

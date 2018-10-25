@@ -39,5 +39,4 @@ class Circle {
     }
 }
 exports.Circle = Circle;
-
 //# sourceMappingURL=circle.js.map

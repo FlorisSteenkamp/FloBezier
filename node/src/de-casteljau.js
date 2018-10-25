@@ -29,5 +29,4 @@ function deCasteljau(cs, t) {
     return t === undefined ? f : f(t); // Curry
 }
 exports.deCasteljau = deCasteljau;
-
 //# sourceMappingURL=de-casteljau.js.map

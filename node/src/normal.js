@@ -11,5 +11,4 @@ function normal(ps, t) {
     return t === undefined ? f : f(t);
 }
 exports.normal = normal;
-
 //# sourceMappingURL=normal.js.map

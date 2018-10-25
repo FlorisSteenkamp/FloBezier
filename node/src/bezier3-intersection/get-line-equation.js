@@ -14,5 +14,4 @@ function getLineEquation(l) {
     return [a / d, b / d, c / d];
 }
 exports.getLineEquation = getLineEquation;
-
 //# sourceMappingURL=get-line-equation.js.map

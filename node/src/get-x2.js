@@ -18,5 +18,4 @@ let getX2 = memoize(function (ps) {
     ];
 });
 exports.getX2 = getX2;
-
 //# sourceMappingURL=get-x2.js.map

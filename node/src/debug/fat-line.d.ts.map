@@ -1,1 +1,0 @@
-{"version":3,"names":[],"mappings":"","sources":["src/debug/fat-line.d.ts"],"sourcesContent":["declare class FatLine {\n    l: number[][];\n    minD: number;\n    maxD: number;\n    constructor(l: number[][], minD: number, maxD: number);\n}\nexport { FatLine };\n"],"file":"fat-line.d.ts"}

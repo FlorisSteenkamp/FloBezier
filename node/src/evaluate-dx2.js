@@ -8,5 +8,4 @@ function evaluateDx2(ps, t) {
     return t === undefined ? f : f(t); // Curry
 }
 exports.evaluateDx2 = evaluateDx2;
-
 //# sourceMappingURL=evaluate-dx2.js.map

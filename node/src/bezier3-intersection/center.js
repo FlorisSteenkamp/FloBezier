@@ -28,5 +28,4 @@ function center(P, Q) {
     return [P, Q];
 }
 exports.center = center;
-
 //# sourceMappingURL=center.js.map

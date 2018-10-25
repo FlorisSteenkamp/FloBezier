@@ -8,5 +8,4 @@ function evaluateDy(ps, t) {
     return t === undefined ? f : f(t); // Curry
 }
 exports.evaluateDy = evaluateDy;
-
 //# sourceMappingURL=evaluate-dy.js.map

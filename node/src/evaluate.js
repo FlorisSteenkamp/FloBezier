@@ -18,5 +18,4 @@ function evaluate(ps, t) {
     return t === undefined ? f : f(t);
 }
 exports.evaluate = evaluate;
-
 //# sourceMappingURL=evaluate.js.map

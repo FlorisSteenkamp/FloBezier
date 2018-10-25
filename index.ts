@@ -32,7 +32,7 @@ import { toHybridQuadratic }  from './src/to-hybrid-quadratic';
 import { coincident } from './src/coincident';
 import { lineIntersection } from './src/line-intersection';
 import { bezier3Intersection } from './src/bezier3-intersection/bezier3-intersection';
-import { bezier3IntersectionSylvester } from './src/bezier3-intersection-sylvester/bezier3-intersection-sylvester';
+import { bezier3IntersectionSylvester } from './src/bezier3-intersection-sylvester/bezier3-intersection-sylvester_';
 import { tsAtX } from './src/ts-at-x';
 import { tsAtY } from './src/ts-at-y';
 

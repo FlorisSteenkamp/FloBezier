@@ -18,7 +18,7 @@ import { toHybridQuadratic } from './src/to-hybrid-quadratic';
 import { coincident } from './src/coincident';
 import { lineIntersection } from './src/line-intersection';
 import { bezier3Intersection } from './src/bezier3-intersection/bezier3-intersection';
-import { bezier3IntersectionSylvester } from './src/bezier3-intersection-sylvester/bezier3-intersection-sylvester';
+import { bezier3IntersectionSylvester } from './src/bezier3-intersection-sylvester/bezier3-intersection-sylvester_';
 import { tsAtX } from './src/ts-at-x';
 import { tsAtY } from './src/ts-at-y';
 import { BezDebug } from './src/debug/debug';
@@ -274,7 +274,7 @@ declare function toCubic(ps: number[][]): number[][];
  */
 declare function reverse(ps: number[][]): number[][];
 declare function equal(psA: number[][], psB: number[][]): boolean;
-export { rotate, getX, getY, getDx, getDy, getDdx, getDdy, getDddx, getDddy, getBounds, bezier3Intersection, bezier3IntersectionSylvester, lineIntersection, tsAtX, tsAtY, getBoundingHull, fromLine, translate, evaluate, κ, dκMod, curvature, tangent, normal, totalCurvature, totalAbsoluteCurvature, len, getTAtLength, evaluateX, evaluateY, evaluateDx, evaluateDy, evaluateDdx, evaluateDdy, evaluateDddx, evaluateDddy, getBoundingBoxTight, getBoundingBox, fromTo, splitAt, scale, toCubic, toQuadratic, toHybridQuadratic, evaluateHybridQuadratic, evaluateQuadratic, evaluateLinear, coincident, from0ToT, fromTTo1, bezierFromBezierPiece, clone, reverse, equal, deCasteljau, evalDeCasteljau };
+export { rotate, getX, getY, getDx, getDy, getDdx, getDdy, getDddx, getDddy, getBounds, bezier3Intersection, bezier3IntersectionSylvester, lineIntersection, tsAtX, tsAtY, getBoundingHull, fromLine, translate, evaluate, κ, dκMod, curvature, tangent, normal, totalCurvature, totalAbsoluteCurvature, len, getTAtLength, evaluateX, evaluateY, evaluateDx, evaluateDy, evaluateDdx, evaluateDdy, evaluateDddx, evaluateDddy, getBoundingBoxTight, getBoundingBox, fromTo, splitAt, scale, toCubic, toQuadratic, toHybridQuadratic, evaluateHybridQuadratic, evaluateQuadratic, evaluateLinear, coincident, from0ToT, fromTTo1, bezierFromBezierPiece, clone, reverse, equal, deCasteljau, evalDeCasteljau, };
 export { BezDebug, IDrawFunctions, DebugElemType, FatLine };
 export interface BezierPoint {
     p: number[];

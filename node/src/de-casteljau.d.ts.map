@@ -1,1 +1,0 @@
-{"version":3,"names":[],"mappings":"","sources":["src/de-casteljau.d.ts"],"sourcesContent":["/**\n */\ndeclare function deCasteljau(cs: number[]): (t: number) => number[][];\ndeclare function deCasteljau(cs: number[], t: number): number[][];\nexport { deCasteljau };\n"],"file":"de-casteljau.d.ts"}

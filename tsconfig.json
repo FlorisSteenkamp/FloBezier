@@ -1,18 +1,16 @@
 {
     "compilerOptions": {
+        "charset": "utf8",
         "alwaysStrict": true,
         "module": "commonjs",
-        //"module": "umd",
         "noImplicitAny": true,
         "noImplicitThis": true,
         "target": "es2015",
         "declaration": true,
         "noEmitOnError": true,
-        "sourceMap": true
+        "sourceMap": true,
+        "outDir": "node"
     },
-    "files": [
-        "index.ts"
-    ],
     "include": [
         "index.ts",
         "src/**/*"

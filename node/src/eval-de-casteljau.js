@@ -17,5 +17,4 @@ function evalDeCasteljau(ps, t) {
     return t === undefined ? f : f(t);
 }
 exports.evalDeCasteljau = evalDeCasteljau;
-
 //# sourceMappingURL=eval-de-casteljau.js.map
