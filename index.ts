@@ -343,13 +343,13 @@ function totalAbsoluteCurvature(ps: number[][], interval?: number[]) {
  * @param interval - The paramter interval over which the length is 
  * to be calculated (often === [0,1]).
  */
-function len(interval: number[], ps: number[][]): number;
-function len(interval: number[]): (ps: number[][]) => number;
-function len(interval: number[], ps?: number[][]) {
+function length(interval: number[], ps: number[][]): number;
+function length(interval: number[]): (ps: number[][]) => number;
+function length(interval: number[], ps?: number[][]) {
+
+	let fs = [,,length1,length2,length3];
 
 	function f(ps: number[][]) {
-		let fs = [,,length1,length2,length3];
-
 		return fs[ps.length](interval, ps);
 	}
 
@@ -420,11 +420,17 @@ function length2(interval: number[], ps: number[][]) {
 	) / (4*A_32);
 }
 */
+/**
+ * Returns the curve length in the specified interval. This function is curried.
+ * @param ps - A quadratic bezier, e.g. [[0,0],[1,1],[2,1]]
+ * @param interval - The paramter interval over which the length is 
+ * to be calculated (often === [0,1]).
+ */
 function length2(interval: number[], ps: number[][]) {
 	if (interval[0] === interval[1]) { return 0; }
 
 	let [[x0, y0], [x1, y1], [x2, y2]] = ps;
-	// Keep line below to ensure zero length curve returns zero!
+	// Ensure zero length curve returns zero!
 	if (x0 === x1 && x1 === x2 && y0 === y1 && y1 === y2) { return 0; }
 
 	const evDs = ds2(ps); 
@@ -453,12 +459,12 @@ function length1(interval: number[], ps: number[][]) {
  * length, s, starting from t = 0. This function is curried.
  * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param s - The length
- * @returns {number}
  */
 function getTAtLength(ps: number[][], s: number): number;
 function getTAtLength(ps: number[][]): (s: number) => number;
 function getTAtLength(ps: number[][], s?: number) {
-	const lenAtT = (t: number) => len([0,t], ps); 
+	let ps_ = toCubic(ps);
+	const lenAtT = (t: number) => length([0,t], ps_); 
 
 	function f(s: number): number {
 		return Poly.brent(t => (lenAtT(t) - s), 0, 1);
@@ -880,7 +886,7 @@ function evaluateQuadratic(ps: number[][], t: number) {
  * bezier curves can always be represented by cubics - the converse is false.
  * @param ps - A quadratic bezier curve.
  */
-function toCubic(ps: number[][]) {
+function quadraticToCubic(ps: number[][]) {
 	let [[x0,y0],[x1,y1],[x2,y2]] = ps;
 
 	return [
@@ -889,6 +895,32 @@ function toCubic(ps: number[][]) {
 		[(2/3)*x1+(1/3)*x2, (2/3)*y1+(1/3)*y2],
 		[x2,y2]
 	];
+}
+
+
+function linearToCubic(ps: number[][]) {
+	let [[x0,y0],[x1,y1]] = ps;
+
+	let xInterval = (x1-x0)/3;
+    let yInterval = (y1-y0)/3;
+
+	return [
+		[x0,y0],
+		[x0 + xInterval*1, y0 + yInterval*1],
+		[x0 + xInterval*2, y0 + yInterval*2],
+		[x1,y1]
+	];
+}
+
+
+function toCubic(ps: number[][]) {
+	if (ps.length === 2) { // Linear
+		return linearToCubic(ps); 
+	} else if (ps.length === 3) { // Quadratic
+		return quadraticToCubic(ps); 
+	} else if (ps.length === 4) { // Cubic
+		return ps;
+	}
 }
 
 
@@ -939,7 +971,7 @@ export {
 	normal,
 	totalCurvature,
 	totalAbsoluteCurvature,
-	len,
+	length,
 	getTAtLength,
 	evaluateX,
 	evaluateY,
@@ -954,7 +986,7 @@ export {
 	fromTo,
 	splitAt,
 	scale,
-	toCubic,
+	quadraticToCubic,
 	toQuadratic,
 	toHybridQuadratic,
 	evaluateHybridQuadratic,
@@ -969,6 +1001,8 @@ export {
 	equal,
 	deCasteljau,
 	evalDeCasteljau,
+	linearToCubic,
+	toCubic
 }
 
 

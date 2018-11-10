@@ -136,14 +136,13 @@ declare function totalAbsoluteCurvature(ps: number[][]): (interval: number[]) =>
  * @param interval - The paramter interval over which the length is
  * to be calculated (often === [0,1]).
  */
-declare function len(interval: number[], ps: number[][]): number;
-declare function len(interval: number[]): (ps: number[][]) => number;
+declare function length(interval: number[], ps: number[][]): number;
+declare function length(interval: number[]): (ps: number[][]) => number;
 /**
  * Returns the t parameter value where the given cubic bezier reaches the given
  * length, s, starting from t = 0. This function is curried.
  * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param s - The length
- * @returns {number}
  */
 declare function getTAtLength(ps: number[][], s: number): number;
 declare function getTAtLength(ps: number[][]): (s: number) => number;
@@ -267,6 +266,8 @@ declare function evaluateQuadratic(ps: number[][], t: number): number[];
  * bezier curves can always be represented by cubics - the converse is false.
  * @param ps - A quadratic bezier curve.
  */
+declare function quadraticToCubic(ps: number[][]): number[][];
+declare function linearToCubic(ps: number[][]): number[][];
 declare function toCubic(ps: number[][]): number[][];
 /**
  * Returns the given points (e.g. bezier) in reverse order.
@@ -274,7 +275,7 @@ declare function toCubic(ps: number[][]): number[][];
  */
 declare function reverse(ps: number[][]): number[][];
 declare function equal(psA: number[][], psB: number[][]): boolean;
-export { rotate, getX, getY, getDx, getDy, getDdx, getDdy, getDddx, getDddy, getBounds, bezier3Intersection, bezier3IntersectionSylvester, lineIntersection, tsAtX, tsAtY, getBoundingHull, fromLine, translate, evaluate, κ, dκMod, curvature, tangent, normal, totalCurvature, totalAbsoluteCurvature, len, getTAtLength, evaluateX, evaluateY, evaluateDx, evaluateDy, evaluateDdx, evaluateDdy, evaluateDddx, evaluateDddy, getBoundingBoxTight, getBoundingBox, fromTo, splitAt, scale, toCubic, toQuadratic, toHybridQuadratic, evaluateHybridQuadratic, evaluateQuadratic, evaluateLinear, coincident, from0ToT, fromTTo1, bezierFromBezierPiece, clone, reverse, equal, deCasteljau, evalDeCasteljau, };
+export { rotate, getX, getY, getDx, getDy, getDdx, getDdy, getDddx, getDddy, getBounds, bezier3Intersection, bezier3IntersectionSylvester, lineIntersection, tsAtX, tsAtY, getBoundingHull, fromLine, translate, evaluate, κ, dκMod, curvature, tangent, normal, totalCurvature, totalAbsoluteCurvature, length, getTAtLength, evaluateX, evaluateY, evaluateDx, evaluateDy, evaluateDdx, evaluateDdy, evaluateDddx, evaluateDddy, getBoundingBoxTight, getBoundingBox, fromTo, splitAt, scale, quadraticToCubic, toQuadratic, toHybridQuadratic, evaluateHybridQuadratic, evaluateQuadratic, evaluateLinear, coincident, from0ToT, fromTTo1, bezierFromBezierPiece, clone, reverse, equal, deCasteljau, evalDeCasteljau, linearToCubic, toCubic };
 export { BezDebug, IDrawFunctions, DebugElemType, FatLine };
 export interface BezierPoint {
     p: number[];
