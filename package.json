@@ -1,7 +1,7 @@
 {
     "name": "flo-bezier3",
     "description": "Purely functional cubic bezier library, including robust cubic-cubic bezier intersection.",
-    "version": "0.1.4",
+    "version": "1.0.0",
     "author": {
         "name": "Floris Steenkamp"
     },
