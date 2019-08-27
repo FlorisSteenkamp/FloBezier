@@ -1,7 +1,6 @@
 .nyc_output
-.npm-debug.log
-.coveralls.yml
-coverage
+npm-debug.log
+papers
+research
 node_modules
-\research papers
 c.bat

@@ -1,8 +1,10 @@
 
 import { squaredDistanceBetween } from 'flo-vector2d';
-import { evaluate } from '../evaluate';
+import { evaluate } from '../evaluate/evaluate';
 import { tsAtX } from '../ts-at-x';
 import { tsAtY } from '../ts-at-y';
+import { closestPointOnBezier } from '../closest-point-on-bezier';
+import { distanceBetween } from 'flo-vector2d';
 
 
 /**
@@ -11,13 +13,28 @@ import { tsAtY } from '../ts-at-y';
  * @param t
  * @param P 
  * @param Q 
- */
+ *//*
 function calcOtherT(t: number, P: number[][], Q: number[][]) {
 
     // Get some length measure on P and Q
+    // Get some length measure on P and Q
     let max = Math.max(
-        P[0][0], P[0][1], P[1][0], P[1][1], P[2][0], P[2][1], P[3][0], P[3][1],
-        Q[0][0], Q[0][1], Q[1][0], Q[1][1], Q[2][0], Q[2][1], Q[3][0], Q[3][1]
+        Math.abs(P[0][0]), 
+        Math.abs(P[0][1]), 
+        Math.abs(P[1][0]), 
+        Math.abs(P[1][1]), 
+        Math.abs(P[2][0]), 
+        Math.abs(P[2][1]), 
+        Math.abs(P[3][0]), 
+        Math.abs(P[3][1]),
+        Math.abs(Q[0][0]), 
+        Math.abs(Q[0][1]), 
+        Math.abs(Q[1][0]), 
+        Math.abs(Q[1][1]), 
+        Math.abs(Q[2][0]), 
+        Math.abs(Q[2][1]), 
+        Math.abs(Q[3][0]), 
+        Math.abs(Q[3][1])
     );
 
     let pp = evaluate(P)(t);
@@ -49,6 +66,33 @@ function calcOtherT(t: number, P: number[][], Q: number[][]) {
     }
 
     return bestT;
+}*/
+
+
+function calcOtherT(t: number, P: number[][], Q: number[][]) {
+
+    // Get some length measure on P and Q
+    let max = 0;
+    for (let p of P) {
+        if (max < Math.abs(p[0])) { max = Math.abs(p[0]); }
+        if (max < Math.abs(p[1])) { max = Math.abs(p[1]); }
+    }
+    for (let p of Q) {
+        if (max < Math.abs(p[0])) { max = Math.abs(p[0]); }
+        if (max < Math.abs(p[1])) { max = Math.abs(p[1]); }
+    }
+
+    let p = evaluate(P)(t);
+    let p_ = closestPointOnBezier(Q, p);
+    
+    let d = squaredDistanceBetween(p, p_.p);
+    let maxTolerance = 4 * 16 * 24*Number.EPSILON * max;
+    //console.log(Math.sqrt(d), maxTolerance);
+    if (d > maxTolerance*maxTolerance) {
+        return undefined;
+    }
+
+    return p_.t;
 }
 
 

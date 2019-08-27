@@ -1,55 +1,55 @@
 {
-  "name": "flo-bezier3",
-  "description": "Purely functional cubic bezier library, including robust cubic-cubic bezier intersection.",
-  "version": "0.1.4",
-  "author": {
-    "name": "Floris Steenkamp"
-  },
-  "license": "MIT",
-  "main": "node/index.js",
-  "private": false,
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/FlorisSteenkamp/FloBezier3.git"
-  },
-  "bugs": {
-    "url": "https://github.com/FlorisSteenkamp/FloBezier3/issues"
-  },
-  "keywords": [
-    "bezier",
-    "beziers",
-    "cubic",
-    "intersection"
-  ],
-  "dependencies": {
-    "flo-gauss-quadrature": "*",
-    "flo-graham-scan": "*",
-    "flo-memoize": "^0.1.0",
-    "flo-poly": "*",
-    "flo-vector2d": "*"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.22.2",
-    "babel-core": "^6.26.3",
-    "babelify": "^7.3.0",
-    "chai": "^4.2.0",
-    "coveralls": "^3.0.2",
-    "istanbul": "^0.4.5",
-    "mocha": "^4.1.0",
-    "nyc": "^11.9.0",
-    "ts-loader": "^5.2.2",
-    "tsify": "^3.0.4",
-    "typescript": "^2.9.2",
-    "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.2",
-    "rimraf": "latest"
-  },
-  "scripts": {
-    "clean": "rimraf browser && rimraf node",
-    "build": "npm run clean && tsc && webpack",
-    "coverage": "nyc --reporter=html --reporter=text mocha --compilers js:babel-core/register ./test/js",
-    "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
-    "test": "npm run build && npm run test-only",
-    "test-only": "mocha --compilers js:babel-core/register ./test/js"
-  }
+    "name": "flo-bezier3",
+    "description": "Purely functional cubic bezier library, including robust cubic-cubic bezier intersection.",
+    "version": "0.1.4",
+    "author": {
+        "name": "Floris Steenkamp"
+    },
+    "license": "MIT",
+    "main": "node/index",
+    "private": false,
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/FlorisSteenkamp/FloBezier3.git"
+    },
+    "bugs": {
+        "url": "https://github.com/FlorisSteenkamp/FloBezier3/issues"
+    },
+    "keywords": [
+        "bezier",
+        "beziers",
+        "cubic",
+        "intersection"
+    ],
+    "dependencies": {
+        "flo-draw": "^0.0.1",
+        "flo-gauss-quadrature": "^0.0.7",
+        "flo-graham-scan": "^1.0.0",
+        "flo-memoize": "^0.1.0",
+        "flo-numerical": "^0.0.9",
+        "flo-poly": "^3.0.0",
+        "flo-vector2d": "^1.0.0"
+    },
+    "devDependencies": {
+        "@istanbuljs/nyc-config-typescript": "^0.1.3",
+        "@types/chai": "^4.2.0",
+        "@types/mocha": "^5.2.7",
+        "chai": "^4.2.0",
+        "mocha": "^6.2.0",
+        "nyc": "^14.1.1",
+        "rimraf": "^2.7.1",
+        "source-map-support": "^0.5.13",
+        "ts-loader": "^6.0.4",
+        "ts-node": "^8.3.0",
+        "typedoc": "^0.15.0",
+        "typescript": "^3.5.3",
+        "webpack": "^4.39.3",
+        "webpack-cli": "^3.3.7"
+    },
+    "scripts": {
+        "build": "npm run build-node && npm run build-browser",
+        "build-node": "rimraf node && tsc",
+        "build-browser": "rimraf browser && webpack",
+        "test": "nyc mocha"
+    }
 }

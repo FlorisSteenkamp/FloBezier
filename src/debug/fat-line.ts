@@ -1,10 +1,8 @@
 
-class FatLine {
-    constructor(
-            public l: number[][],
-            public minD: number,
-            public maxD: number) {
-    }
+interface FatLine {
+    l: number[][];
+    minD: number;
+    maxD: number;
 }
 
 

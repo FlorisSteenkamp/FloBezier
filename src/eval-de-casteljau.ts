@@ -1,17 +1,13 @@
 
-import { deCasteljau }  from './de-casteljau';
-
-
-import { evaluateX } from './evaluate-x';
-import { evaluateY } from './evaluate-y';
+//import { deCasteljau }  from './de-casteljau';
 
 
 /** 
  * Evaluates the given bezier curve at the parameter t. This function is 
  * curried.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param t - The parameter value where the bezier should be evaluated
- **/
+ * @param ps A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ * @param t The parameter value where the bezier should be evaluated
+ **//* TODO - re-implement maybe
 function evalDeCasteljau(ps: number[][]): (t: number) => number[];
 function evalDeCasteljau(ps: number[][], t: number): number[];
 function evalDeCasteljau(ps: number[][], t?: number) {
@@ -34,3 +30,4 @@ function evalDeCasteljau(ps: number[][], t?: number) {
 
 
 export { evalDeCasteljau }
+*/

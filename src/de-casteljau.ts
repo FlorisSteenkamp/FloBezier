@@ -1,11 +1,8 @@
 
-import Poly from 'flo-poly';
-
-import { getX } from './get-x';
-
 
 /**
  */
+/* TODO - re-implement maybe
 function deCasteljau(cs: number[]): (t: number) => number[][];
 function deCasteljau(cs: number[], t: number): number[][];
 function deCasteljau(cs: number[], t?: number) {
@@ -42,4 +39,4 @@ function deCasteljau(cs: number[], t?: number) {
 }
 
 
-export { deCasteljau }
+export { deCasteljau }*/

@@ -1,5 +1,5 @@
 
-import Poly from 'flo-poly';
+import { allRoots, subtract } from 'flo-poly';
 import { rotatePs } from 'flo-vector2d';
 import { getX } from '../get-x';
 import { getY } from '../get-y';
@@ -157,7 +157,7 @@ function bezier3IntersectionSylvester(ps1: number[][], ps2: number[][]) {
 	
 	let poly = [k9,k8,k7,k6,k5,k4,k3,k2,k1,k0];
 	
-	let roots = Poly.allRoots(poly, 0);
+	let roots = allRoots(poly, 0);
 
 	let tPairs = [];
 	
@@ -175,11 +175,11 @@ function bezier3IntersectionSylvester(ps1: number[][], ps2: number[][]) {
 				y: [d_3y*k3, d_2y*k2, d_1y*k, d_0y]
 		}
 		
-		let xx = Poly.subtract(getX(rotatedPs2), ps1k.x);
-		let yy = Poly.subtract(getY(rotatedPs2), ps1k.y);
+		let xx = subtract(getX(rotatedPs2), ps1k.x);
+		let yy = subtract(getY(rotatedPs2), ps1k.y);
 		
-		let rootsx = Poly.allRoots(xx,0,1);
-		let rootsy = Poly.allRoots(yy,0,1);
+		let rootsx = allRoots(xx,0,1);
+		let rootsy = allRoots(yy,0,1);
 		
 		for (let j=0; j<rootsx.length; j++) {
 			let rootx = rootsx[j];

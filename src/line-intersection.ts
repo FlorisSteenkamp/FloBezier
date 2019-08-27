@@ -1,5 +1,5 @@
 
-import Poly from 'flo-poly';
+import { allRoots } from 'flo-poly';
 
 import { rotatePs as rotate, translatePs as translate } from 'flo-vector2d';
 
@@ -29,7 +29,7 @@ function lineIntersection(ps: number[][], l: number[][]) {
 	ps = rotate(-sinθ, cosθ, ps);
 
 	// Find the intersection t values
-	return Poly.allRoots(getY(ps),0,1);
+	return allRoots(getY(ps),0,1);
 }
 
 

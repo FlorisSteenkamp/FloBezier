@@ -1,12 +1,9 @@
 
-//import * as Vector from 'flo-vector2d';
-
-import { IDrawFunctions } from './draw-functions';
 import { drawElemFunctions, IDrawElemFunctions } from './draw-elem/draw-elem';
 import { FatLine } from './fat-line';
 
 
-export type DebugElemType =
+type DebugElemType =
     | 'beziers'  
     | 'intersection'  
     | 'looseBoundingBox' 
@@ -16,12 +13,12 @@ export type DebugElemType =
     | 'fatLine'
 
 
-export type GeneratedElemTypes = {
+type GeneratedElemTypes = {
     [T in DebugElemType]: any;
 }
 
 
-export interface GeneratedElems extends GeneratedElemTypes {
+interface GeneratedElems extends GeneratedElemTypes {
     beziers          : number[][][][],
     intersection     : number[][],
     looseBoundingBox : number[][][],
@@ -32,18 +29,17 @@ export interface GeneratedElems extends GeneratedElemTypes {
 }
 
 
-export interface IGenerated {
+interface IGenerated {
     elems: GeneratedElems;
 }
 
 
-export interface IDebugFunctions {
-    draw     : IDrawFunctions,
+interface IDebugFunctions {
     drawElem : IDrawElemFunctions,
 }
 
 
-export class BezDebug implements BezDebug {
+class BezDebug implements BezDebug {
     generated  : IGenerated;
     fs         : IDebugFunctions;
 
@@ -54,7 +50,6 @@ export class BezDebug implements BezDebug {
      * @private
      */
     constructor(
-            public draw: IDrawFunctions, 
             public g: SVGGElement) {
 
         //(this as any).Bezier3 = Bezier3; // Included only for quick debugging from console
@@ -77,9 +72,17 @@ export class BezDebug implements BezDebug {
         
         
         this.fs = { 
-            draw,
             drawElem: drawElemFunctions,
         };
     }
 }
 
+
+export { 
+    DebugElemType, 
+    GeneratedElemTypes, 
+    GeneratedElems, 
+    IGenerated,
+    IDebugFunctions,
+    BezDebug
+}

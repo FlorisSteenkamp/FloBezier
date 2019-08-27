@@ -1,16 +1,15 @@
 
-import { evaluate } from './evaluate';
-import { from0ToT } from './from-0-to-T';
-import { fromTTo1 } from './from-T-to-1';
+import { evaluate } from './evaluate/evaluate';
+import { splitAt, splitAtPrecise } from './split-at';
 
 
 /**
- * Returns a cubic bezier curve that starts at the given curve and ends at the
+ * Returns a bezier curve that starts at the given curve and ends at the
  * given t parameter. Uses de Casteljau's algorithm. 
  * 
  * A loose bound on the accuracy of the resultant points is given by: 
- * |δP| = 2*2n*max_k(|b_k|)η, where n = 3 (cubic), b_k are the control points
- * abd η is Number.EPSILON.
+ * |δP| = 2*2n*max_k(|b_k|)η, where n = 3 (for a cubic), b_k are the control 
+ * points and η is Number.EPSILON.
  * @param ps - A cubic bezier curve
  * @param t1 - The t parameter where the resultant bezier should start
  * @param t2 - The t parameter where the resultant bezier should end
@@ -18,21 +17,70 @@ import { fromTTo1 } from './from-T-to-1';
 
 function fromTo(ps: number[][]) {
 	return function(t1: number, t2: number) {
-		if (t1 === t2) {
+		let reverse = t1 > t2;
+		if (t1 > t2) { [t1,t2] = [t2,t1]; }
+
+		let ps_: number[][];
+
+		if (t1 === 0 && t2 === 1) { 
+			ps_ = ps; 
+		} else if (t1 === 0) { 
+			ps_ = splitAt(ps, t2)[0];
+		} else if (t2 === 1) { 
+			ps_ = splitAt(ps, t1)[1]; 
+		} else if (t1 === t2) {
 			// Degenerate case
 			let p = evaluate(ps, t1);
-			return [p,p,p,p];
-		} else if (t1 === 0 && t2 === 1) { 
-			return ps;
-		} else if (t1 === 0) {
-			return from0ToT(ps, t2);
-		} else if (t2 === 1) {
-			return fromTTo1(ps, t1);
+			if (ps.length === 2) { return [p,p]; }
+			if (ps.length === 3) { return [p,p,p]; }
+			if (ps.length === 4) { return [p,p,p,p]; }
+		} else {
+			ps_ = splitAt(splitAt(ps, t1)[1], (t2-t1)/(1-t1))[0];
 		}
-		let t = fromTTo1(ps, t1);
-		return from0ToT(t, (t2-t1)/(1-t1));
+
+		return reverse ? ps_.slice().reverse() : ps_;
 	}
 }
 
 
-export { fromTo }
+/**
+ * Returns a bezier curve that starts at the given curve and ends at the
+ * given t parameter. Uses de Casteljau's algorithm. 
+ * 
+ * A loose bound on the accuracy of the resultant points is given by: 
+ * |δP| = 2*2n*max_k(|b_k|)η, where n = 3 (for a cubic), b_k are the control 
+ * points and η is Number.EPSILON.
+ * @param ps - A cubic bezier curve
+ * @param t1 - The t parameter where the resultant bezier should start
+ * @param t2 - The t parameter where the resultant bezier should end
+ */
+
+function fromToPrecise(ps: number[][]) {
+	return function(t1: number, t2: number) {
+		let reverse = t1 > t2;
+		if (t1 > t2) { [t1,t2] = [t2,t1]; }
+
+		let ps_: number[][];
+
+		if (t1 === 0 && t2 === 1) { 
+			ps_ = ps; 
+		} else if (t1 === 0) { 
+			ps_ = splitAtPrecise(ps, t2)[0];
+		} else if (t2 === 1) { 
+			ps_ = splitAtPrecise(ps, t1)[1]; 
+		} else if (t1 === t2) {
+			// Degenerate case
+			let p = evaluate(ps, t1);
+			if (ps.length === 2) { return [p,p]; }
+			if (ps.length === 3) { return [p,p,p]; }
+			if (ps.length === 4) { return [p,p,p,p]; }
+		} else {
+			ps_ = splitAtPrecise(splitAtPrecise(ps, t1)[1], (t2-t1)/(1-t1))[0];
+		}
+
+		return reverse ? ps_.slice().reverse() : ps_;
+	}
+}
+
+
+export { fromTo, fromToPrecise }

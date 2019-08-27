@@ -1,5 +1,5 @@
 
-import Poly from 'flo-poly';
+import { allRoots } from 'flo-poly';
 
 import { getY } from './get-y';
 
@@ -15,7 +15,7 @@ function tsAtY(ps: number[][], y: number): number[] {
 	ps = ps.map(p => [p[0],p[1]-y]);
 
 	// Find the intersection t values
-	return Poly.allRoots(getY(ps),0,1);
+	return allRoots(getY(ps),0,1);
 }
 
 

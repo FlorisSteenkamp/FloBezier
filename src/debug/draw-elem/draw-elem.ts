@@ -1,10 +1,8 @@
 
-declare let _bez_debug_: BezDebug; 
-
 import { fromTo, translate, toLength } from 'flo-vector2d';
 
-import { BezDebug, DebugElemType } from '../debug';
-import { FatLine } from '../fat-line';
+import { DebugElemType } from '../debug';
+import { drawFs } from 'flo-draw';
 
 
 export type TDrawElemFunctions = {
@@ -18,13 +16,11 @@ export interface IDrawElemFunctions extends TDrawElemFunctions {
 	looseBoundingBox : (g: SVGGElement, box: number[][]) => SVGElement[];
 	tightBoundingBox : (g: SVGGElement, box: number[][]) => SVGElement[];
 	boundingHull     : (g: SVGGElement, hull: number[][]) => SVGElement[];
-	fatLine          : (g: SVGGElement, fatLine: FatLine) => SVGElement[];
+	fatLine          : (g: SVGGElement, fatLine: { l: number[][]; minD: number; maxD: number; }) => SVGElement[];
 }
 
 
-function fatLine(g: SVGGElement, fatLine: FatLine) {
-	let draw = _bez_debug_.fs.draw;
-
+function fatLine(g: SVGGElement, fatLine: { l: number[][]; minD: number; maxD: number; }) {
 	let { l, minD, maxD } = fatLine;
 
 	let [lp1, lp2] = l;
@@ -50,35 +46,43 @@ function fatLine(g: SVGGElement, fatLine: FatLine) {
 	let nl1 = [nl11, nl12];
 	let nl2 = [nl21, nl22];
 
-	let $line1 = draw.line(g, nl1);
-	let $line2 = draw.line(g, nl2);
+	let $line1 = drawFs.line(g, nl1);
+	let $line2 = drawFs.line(g, nl2);
 
 	return [...$line1, ...$line2];
 }
 
 
 function beziers(g: SVGGElement, beziers: number[][][]) {
-	let draw = _bez_debug_.fs.draw;
-
-    let $bezier1 = draw.bezier( 
+    let $bezier1 = drawFs.bezier( 
         g, beziers[0], 'blue thin5 nofill'
 	);
-	let $bezier2 = draw.bezier( 
+	let $bezier2 = drawFs.bezier( 
 		g, beziers[1], 'green thin5 nofill'
 	);
 
 	let size = getSize([...beziers[0], ...beziers[1]]) / 400;
 	
+	let $dots: SVGCircleElement[] = [];
+	for (let i=0; i<beziers.length; i++) {
+		let bezier = beziers[i];
+		for (let j=0; j<bezier.length; j++) {
+			let p = bezier[j];
+			$dots.push(...drawFs.dot(g, p, size, i === 0 ? 'blue' : 'green'));
+		}
+	}
+	/*
 	let $dots = [
-		...draw.dot(g, beziers[0][0], size, 'blue'),
-		...draw.dot(g, beziers[0][1], size, 'blue'),
-		...draw.dot(g, beziers[0][2], size, 'blue'),
-		...draw.dot(g, beziers[0][3], size, 'blue'),
-		...draw.dot(g, beziers[1][0], size, 'green'),
-		...draw.dot(g, beziers[1][1], size, 'green'),
-		...draw.dot(g, beziers[1][2], size, 'green'),
-		...draw.dot(g, beziers[1][3], size, 'green'),
+		...drawFs.dot(g, beziers[0][0], size, 'blue'),
+		...drawFs.dot(g, beziers[0][1], size, 'blue'),
+		...drawFs.dot(g, beziers[0][2], size, 'blue'),
+		...drawFs.dot(g, beziers[0][3], size, 'blue'),
+		...drawFs.dot(g, beziers[1][0], size, 'green'),
+		...drawFs.dot(g, beziers[1][1], size, 'green'),
+		...drawFs.dot(g, beziers[1][2], size, 'green'),
+		...drawFs.dot(g, beziers[1][3], size, 'green'),
 	]
+	*/
 
     return [...$bezier1, ...$bezier2, ...$dots];
 }
@@ -108,8 +112,8 @@ function intersection(
 		g: SVGGElement,
 		p: number[]) {
 
-    let $elems = _bez_debug_.fs.draw.crossHair( 
-        	g, p, 'red thin5 nofill', 0.05
+    let $elems = drawFs.crossHair( 
+        	g, p, 'red thin5 nofill', 0.5
 	);  
 	
     return $elems;
@@ -120,7 +124,7 @@ function extreme(
 		g: SVGGElement, 
 		extreme: {p: number[], t: number}) {	
 
-    let $elems = _bez_debug_.fs.draw.crossHair( 
+    let $elems = drawFs.crossHair( 
             g, extreme.p, 'red thin10 nofill', 0.05
 	);  
 	
@@ -132,7 +136,7 @@ function boundingHull(
 			g: SVGGElement,
 			hull: number[][]) {
 
-	let $polygon = _bez_debug_.fs.draw.polygon(g, hull, 'thin5 black nofill');
+	let $polygon = drawFs.polygon(g, hull, 'thin5 black nofill');
 
 	return $polygon;
 }
@@ -142,7 +146,7 @@ function looseBoundingBox(
 		g: SVGGElement,
 		box: number[][]) {
 
-	let $box = _bez_debug_.fs.draw.rect(
+	let $box = drawFs.rect(
 		g, box, 'thin5 brown nofill'
 	);
 	
@@ -154,7 +158,7 @@ function tightBoundingBox(
 		g: SVGGElement,
 		box: number[][]) {
 
-	let $box = _bez_debug_.fs.draw.polygon(
+	let $box = drawFs.polygon(
 		g, box, 'thin5 black nofill'
 	);
 
@@ -173,4 +177,4 @@ let drawElemFunctions: IDrawElemFunctions = {
 }
 
 
-export { drawElemFunctions };
+export { drawElemFunctions }

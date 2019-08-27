@@ -1,7 +1,7 @@
 
 import * as Vector from 'flo-vector2d';
 
-import { evaluate } from './evaluate';
+import { evaluate } from './evaluate/evaluate';
 import { lineIntersection } from './line-intersection';
 import { normal   } from './normal';
 
