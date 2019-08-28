@@ -56,38 +56,6 @@ import { getBounds } from './get-bounds';
 import { getBoundingBoxTight } from './get-bounding-box-tight';
 import { getBoundingBox } from './get-bounding-box';
 /**
- * Returns the second derivative of the power basis representation of the
- * bezier's x-coordinates. This function is memoized on its points parameter by
- * object reference.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @returns The twice differentiated power basis polynomial from
- * highest power to lowest, e.g. at + b is returned as [a,b]
- */
-/**
- * Returns the second derivative of the power basis representation of the
- * bezier's y-coordinates. This function is memoized on its points parameter by
- * object reference.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @returns The twice differentiated power basis polynomial from
- * highest power to lowest, e.g. at + b is returned as [a,b]
- */
-/**
- * Returns the third derivative of the power basis representation of the
- * bezier's x-coordinates. This function is memoized on its points parameter by
- * object reference.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @returns The thrice differentiated power basis polynomial (a
- * constant in array from), e.g. a is returned as [a]
- */
-/**
- * Returns the third derivative of the power basis representation of the
- * bezier's y-coordinates. This function is memoized on its points parameter by
- * object reference.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @returns The thrice differentiated power basis polynomial (a
- * constant in array from), e.g. a is returned as [a]
- */
-/**
  * Returns the convex hull of a bezier's control points. This hull bounds the
  * bezier curve. This function is memoized.
  *
@@ -99,7 +67,7 @@ import { getBoundingBox } from './get-bounding-box';
 declare let getBoundingHull: (a: number[][]) => number[][];
 /**
  * Returns a cubic bezier from the given line with evenly spaced control points.
- * @param l - a 2d line represented by two points
+ * @param l a 2d line represented by two points
  * @returns Control points of the cubic bezier.
  */
 declare function fromLine(l: number[][]): number[][];

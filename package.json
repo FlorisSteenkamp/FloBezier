@@ -23,12 +23,12 @@
     ],
     "dependencies": {
         "flo-draw": "^0.0.1",
-        "flo-gauss-quadrature": "^0.0.7",
+        "flo-gauss-quadrature": "^1.0.0",
         "flo-graham-scan": "^1.0.0",
         "flo-memoize": "^0.1.0",
         "flo-numerical": "^0.0.9",
         "flo-poly": "^3.0.0",
-        "flo-vector2d": "^1.0.0"
+        "flo-vector2d": "^1.0.1"
     },
     "devDependencies": {
         "@istanbuljs/nyc-config-typescript": "^0.1.3",
@@ -42,7 +42,7 @@
         "ts-loader": "^6.0.4",
         "ts-node": "^8.3.0",
         "typedoc": "^0.15.0",
-        "typescript": "^3.5.3",
+        "typescript": "^3.6.2",
         "webpack": "^4.39.3",
         "webpack-cli": "^3.3.7"
     },

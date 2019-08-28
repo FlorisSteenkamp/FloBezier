@@ -54,7 +54,6 @@ exports.fromTTo1 = from_T_to_1_1.fromTTo1;
 const from_to_1 = require("./from-to");
 exports.fromTo = from_to_1.fromTo;
 exports.fromToPrecise = from_to_1.fromToPrecise;
-//import { toHybridQuadratic }  from './bezier3-intersection/clip/to-hybrid-quadratic';
 const coincident_1 = require("./coincident");
 exports.coincident = coincident_1.coincident;
 const line_intersection_1 = require("./line-intersection");
@@ -69,8 +68,6 @@ const ts_at_y_1 = require("./ts-at-y");
 exports.tsAtY = ts_at_y_1.tsAtY;
 const debug_1 = require("./debug/debug");
 exports.BezDebug = debug_1.BezDebug;
-//import { deCasteljau } from './de-casteljau';
-//import { evalDeCasteljau } from './eval-de-casteljau';
 const curvature_1 = require("./curvature");
 exports.κ = curvature_1.κ;
 const quad_to_polyline_1 = require("./quad-to-polyline");
@@ -122,42 +119,6 @@ exports.getBoundingBoxTight = get_bounding_box_tight_1.getBoundingBoxTight;
 const get_bounding_box_1 = require("./get-bounding-box");
 exports.getBoundingBox = get_bounding_box_1.getBoundingBox;
 /**
- * Returns the second derivative of the power basis representation of the
- * bezier's x-coordinates. This function is memoized on its points parameter by
- * object reference.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @returns The twice differentiated power basis polynomial from
- * highest power to lowest, e.g. at + b is returned as [a,b]
- */
-//let getDdx = /*memoize*/((ps: number[][]) => differentiate(getDx(ps)));
-/**
- * Returns the second derivative of the power basis representation of the
- * bezier's y-coordinates. This function is memoized on its points parameter by
- * object reference.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @returns The twice differentiated power basis polynomial from
- * highest power to lowest, e.g. at + b is returned as [a,b]
- */
-//let getDdy = /*memoize*/((ps: number[][]) => differentiate(getDy(ps)));
-/**
- * Returns the third derivative of the power basis representation of the
- * bezier's x-coordinates. This function is memoized on its points parameter by
- * object reference.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @returns The thrice differentiated power basis polynomial (a
- * constant in array from), e.g. a is returned as [a]
- */
-//let getDddx = /*memoize*/((ps: number[][]) => differentiate(getDdx(ps)));
-/**
- * Returns the third derivative of the power basis representation of the
- * bezier's y-coordinates. This function is memoized on its points parameter by
- * object reference.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @returns The thrice differentiated power basis polynomial (a
- * constant in array from), e.g. a is returned as [a]
- */
-//let getDddy = /*memoize*/((ps: number[][]) => differentiate(getDdy(ps)));
-/**
  * Returns the convex hull of a bezier's control points. This hull bounds the
  * bezier curve. This function is memoized.
  *
@@ -170,7 +131,7 @@ let getBoundingHull = flo_memoize_1.memoize(flo_graham_scan_1.grahamScan);
 exports.getBoundingHull = getBoundingHull;
 /**
  * Returns a cubic bezier from the given line with evenly spaced control points.
- * @param l - a 2d line represented by two points
+ * @param l a 2d line represented by two points
  * @returns Control points of the cubic bezier.
  */
 function fromLine(l) {
@@ -268,7 +229,7 @@ function categorize(ps) {
 function totalCurvature(ps, interval) {
     const tanPs = tangent_1.tangent(ps);
     function f(interval) {
-        return flo_gauss_quadrature_1.default(κds(ps), interval);
+        return flo_gauss_quadrature_1.gaussQuadrature(κds(ps), interval);
         // TODO
         /*
         let [a,b] = interval;
@@ -284,7 +245,7 @@ exports.totalCurvature = totalCurvature;
 function totalAbsoluteCurvature(ps, interval) {
     function f(interval = [0, 1]) {
         // Numerically integrate the absolute curvature
-        let result = flo_gauss_quadrature_1.default(t => Math.abs(κds(ps)(t)), interval);
+        let result = flo_gauss_quadrature_1.gaussQuadrature(t => Math.abs(κds(ps)(t)), interval);
         return result;
     }
     // Curry
@@ -317,7 +278,7 @@ function length3(interval, ps) {
         return 0;
     }
     const evDs = ds(ps);
-    return flo_gauss_quadrature_1.default(evDs, interval);
+    return flo_gauss_quadrature_1.gaussQuadrature(evDs, interval);
 }
 /**
  * Returns the curve length in the specified interval. This function is curried.
@@ -377,7 +338,7 @@ function length2(interval, ps) {
         return 0;
     }
     const evDs = ds(ps);
-    return flo_gauss_quadrature_1.default(evDs, interval);
+    return flo_gauss_quadrature_1.gaussQuadrature(evDs, interval);
 }
 function length1(interval, ps) {
     let [t1, t2] = interval;

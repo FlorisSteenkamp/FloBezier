@@ -2,7 +2,7 @@
 import { brent, allRoots } from 'flo-poly';
 import { rotatePs as rotate, translatePs as translate, distanceBetween } from 'flo-vector2d';
 import { memoize }     from 'flo-memoize';
-import gaussQuadrature from 'flo-gauss-quadrature';
+import { gaussQuadrature } from 'flo-gauss-quadrature';
 import { grahamScan }  from 'flo-graham-scan';
 
 import { getX        } from './get-x';
