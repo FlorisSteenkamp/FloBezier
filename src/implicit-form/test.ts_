@@ -1,0 +1,404 @@
+
+function t1(
+        coeffsX: number[],
+        coeffsY: number[]) {
+
+    // The implicit form is given by:
+    // vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0
+
+    let [a3, a2, a1, a0] = coeffsX;
+    let [b3, b2, b1, b0] = coeffsY;
+
+    // n === the number of terms, 
+    // m === the max number of multiplicands per term (thats not a power of 2)
+    // m,n above has been modified ( -> ) to take pairwise addition and 
+    // multiplication into account, i.e. n -> ceil(log2(n)), m -> ceil(log2(m))
+    let vₓₓₓ =   b3*b3*b3; // n,m = 1,3 -> no improvement possible
+    let vₓₓᵧ = 3*a3*b3*b3; // n,m = 1,4 -> 1,3
+    let vₓᵧᵧ = 3*b3*a3*a3; // n,m = 1,4 -> 1,3
+    let vᵧᵧᵧ =   a3*a3*a3; // n,m = 1,3 -> no improvement possible
+
+    let vₓₓ = // 31 => 25*, 6+
+        3*a3*b1*b2*b3 + 
+          a1*b2*b3*b3 + 
+          a2*b3*b2*b2 + 
+        2*a2*b1*b3*b3 + 
+        3*a3*b0*b3*b3 + 
+          a3*b2*b2*b2 + 
+        3*a0*b3*b3*b3;
+
+    let vₓᵧ = // 37 => 30*, 7+
+          a1*a3*b2*b3 + 
+          a2*a3*b1*b3 + 
+        6*b0*b3*a3*a3 + 
+        3*a1*a2*b3*b3 + 
+        2*a2*a3*b2*b2 + 
+        2*b2*b3*a2*a2 + 
+        3*b1*b2*a3*a3 + 
+        6*a0*a3*b3*b3;
+
+    let vᵧᵧ = 
+        3*a1*a2*a3*b3 + 
+        a3*b2*a2*a2 + 
+        a2*b1*a3*a3 + 
+        3*a0*b3*a3*a3 + 
+        2*a1*b2*a3*a3 + 
+        b3*a2*a2*a2 + 
+        3*b0*a3*a3*a3;
+
+    let vₓ = 
+        a2*a3*b0*b1*b3 + 
+        a1*a2*b1*b2*b3 + 
+        a1*a3*b0*b2*b3 + 
+        6*a0*a3*b1*b2*b3 + 
+        b1*a1*a1*b3*b3 + 
+        b3*a2*a2*b1*b1 + 
+        3*b3*a3*a3*b0*b0 + 
+        a1*a3*b1*b2*b2 + 
+        a2*a3*b2*b1*b1 + 
+        6*a0*a3*b0*b3*b3 + 
+        4*a0*a2*b1*b3*b3 + 
+        3*b0*b1*b2*a3*a3 +
+        2*a0*a1*b2*b3*b3 + 
+        2*a1*a3*b3*b1*b1 + 
+        2*b0*b2*b3*a2*a2 + 
+        2*a0*a2*b3*b2*b2 + 
+        2*a2*a3*b0*b2*b2 + 
+        3*a1*a2*b0*b3*b3 + 
+        a3*a3*b1*b1*b1 + 
+        3*a0*a0*b3*b3*b3 + 
+        2*a0*a3*b2*b2*b2;
+
+    let vᵧ = 
+        a0*a2*a3*b1*b3 + 
+        a1*a2*a3*b1*b2 + 
+        a0*a1*a3*b2*b3 + 
+        6*a1*a2*a3*b0*b3 + 
+        a1*a1*a1*b3*b3 + 
+        3*a3*a3*a3*b0*b0 + 
+        a1*a3*a3*b1*b1 + 
+        a3*a1*a1*b2*b2 + 
+        3*a3*a0*a0*b3*b3 + 
+        a2*b2*b3*a1*a1 + 
+        a1*b1*b3*a2*a2 + 
+        3*a0*b1*b2*a3*a3 + 
+        2*a0*b2*b3*a2*a2 + 
+        2*a3*b0*b2*a2*a2 + 
+        2*a0*a2*a3*b2*b2 + 
+        2*a2*b0*b1*a3*a3 + 
+        2*a3*b1*b3*a1*a1 + 
+        3*a0*a1*a2*b3*b3 + 
+        4*a1*b0*b2*a3*a3 + 
+        6*a0*b0*b3*a3 + 
+        2*b0*b3*a2*a2;
+
+    let v = 
+        a0*a1*a2*b1*b2*b3 + 
+        a0*a1*a3*b0*b2*b3 + 
+        a0*a2*a3*b0*b1*b3 + 
+        a1*a2*a3*b0*b1*b2 + 
+        b0*a1*a1*a1*b3*b3 + 
+        b3*a2*a2*a2*b0*b0 + 
+        a1*b0*a3*a3*b1*b1 + 
+        a1*b2*a0*a0*b3*b3 + 
+        a3*b0*a1*a1*b2*b2 + 
+        a3*b2*a2*a2*b0*b0 + 
+        a0*b1*a1*a1*b3*b3 + 
+        a0*b3*a2*a2*b1*b1 + 
+        a2*b1*a3*a3*b0*b0 + 
+        a2*b3*a0*a0*b2*b2 + 
+        3*a0*b3*a3*a3*b0*b0 + 
+        2*a1*b2*a3*a3*b0*b0 + 
+        2*a2*b1*a0*a0*b3*b3 + 
+        3*a3*b0*a0*a0*b3*b3 + 
+        a0*a2*a3*b2*b1*b1 + 
+        a1*b0*b1*b3*a2*a2 + 
+        a0*a1*a3*b1*b2*b2 + 
+        a2*b0*b2*b3*a1*a1 + 
+        3*a0*a1*a2*b0*b3*b3 + 
+        3*a3*b1*b2*b3*a0*a0 + 
+        2*a0*a2*a3*b0*b2*b2 + 
+        2*a3*b0*b1*b3*a1*a1 + 
+        2*a0*a1*a3*b3*b1*b1 + 
+        2*a0*b0*b2*b3*a2*a2 + 
+        3*a0*b0*b1*b2*a3*a3 + 
+        3*a1*a2*a3*b3*b0*b0 + 
+        a3*a3*a3*b0*b0*b0 + 
+        a0*a0*a0*b3*b3*b3 + 
+        a3*a0*a0*b2*b2*b2 + 
+        a0*a3*a3*b1*b1*b1;
+
+    return { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v }
+}
+
+
+function t2(
+        coeffsX: number[],
+        coeffsY: number[]) {
+
+    // The implicit form is given by:
+    // vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0
+
+    let [a3, a2, a1, a0] = coeffsX;
+    let [b3, b2, b1, b0] = coeffsY;
+
+    // n === the number of terms, 
+    // m === the max number of multiplicands per term (thats not a power of 2)
+    // m,n above has been modified ( -> ) to take pairwise addition and 
+    // multiplication into account, i.e. n -> ceil(log2(n)), m -> ceil(log2(m))
+    let vₓₓₓ =   b3*b3*b3; // n,m = 1,3 -> no improvement possible
+    let vₓₓᵧ = 3*a3*b3*b3; // n,m = 1,4 -> 1,3
+    let vₓᵧᵧ = 3*b3*a3*a3; // n,m = 1,4 -> 1,3
+    let vᵧᵧᵧ =   a3*a3*a3; // n,m = 1,3 -> no improvement possible
+
+    let vₓₓ = // 21 => 15*, 6+    (was 31)
+        b3*(
+            b2*(3*a3*b1 + a1*b3 + a2*b2) + 
+            b3*(2*a2*b1 + 3*(a3*b0 + a0*b3))) +
+        a3*b2*b2*b2;
+
+    let vᵧᵧ = // 21 => 15*, 6+    (was 31)
+        a3*(
+            a2*(3*a1*b3 + b1*a3 + b2*a2) + 
+            a3*(2*a1*b2 + 3*(a0*b3 + b0*a3))) +
+        b3*a2*a2*a2;
+
+    let vₓᵧ = // 25 => 18*, 7+    (was 37)
+        b3*(
+            a3*(a1*b2 + a2*b1 + 6*(b0*a3 + a0*b3)) +
+            a2*(3*a1*b3 + 2*b2*a2)
+        ) +
+        a3*b2*(2*a2*b2 + 3*b1*a3);        
+
+    let vₓ = 
+          a2*a3*b0*b1*b3 + 
+          a1*a2*b1*b2*b3 + 
+          a1*a3*b0*b2*b3 + 
+        6*a0*a3*b1*b2*b3 + 
+          b1*a1*a1*b3*b3 + 
+          b3*a2*a2*b1*b1 + 
+        3*b3*a3*a3*b0*b0 + 
+          a1*a3*b1*b2*b2 + 
+          a2*a3*b2*b1*b1 + 
+        6*a0*a3*b0*b3*b3 + 
+        4*a0*a2*b1*b3*b3 + 
+        3*b0*b1*b2*a3*a3 +
+        2*a0*a1*b2*b3*b3 + 
+        2*a1*a3*b3*b1*b1 + 
+        2*b0*b2*b3*a2*a2 + 
+        2*a0*a2*b3*b2*b2 + 
+        2*a2*a3*b0*b2*b2 + 
+        3*a1*a2*b0*b3*b3 + 
+          a3*a3*b1*b1*b1 + 
+        3*a0*a0*b3*b3*b3 + 
+        2*a0*a3*b2*b2*b2;
+
+    let vᵧ = 
+        a0*a2*a3*b1*b3 + 
+        a1*a2*a3*b1*b2 + 
+        a0*a1*a3*b2*b3 + 
+        6*a1*a2*a3*b0*b3 + 
+        a1*a1*a1*b3*b3 + 
+        3*a3*a3*a3*b0*b0 + 
+        a1*a3*a3*b1*b1 + 
+        a3*a1*a1*b2*b2 + 
+        3*a3*a0*a0*b3*b3 + 
+        a2*b2*b3*a1*a1 + 
+        a1*b1*b3*a2*a2 + 
+        3*a0*b1*b2*a3*a3 + 
+        2*a0*b2*b3*a2*a2 + 
+        2*a3*b0*b2*a2*a2 + 
+        2*a0*a2*a3*b2*b2 + 
+        2*a2*b0*b1*a3*a3 + 
+        2*a3*b1*b3*a1*a1 + 
+        3*a0*a1*a2*b3*b3 + 
+        4*a1*b0*b2*a3*a3 + 
+        6*a0*b0*b3*a3 + 
+        2*b0*b3*a2*a2;
+
+    let v = 
+        a0*a1*a2*b1*b2*b3 + 
+        a0*a1*a3*b0*b2*b3 + 
+        a0*a2*a3*b0*b1*b3 + 
+        a1*a2*a3*b0*b1*b2 + 
+        b0*a1*a1*a1*b3*b3 + 
+        b3*a2*a2*a2*b0*b0 + 
+        a1*b0*a3*a3*b1*b1 + 
+        a1*b2*a0*a0*b3*b3 + 
+        a3*b0*a1*a1*b2*b2 + 
+        a3*b2*a2*a2*b0*b0 + 
+        a0*b1*a1*a1*b3*b3 + 
+        a0*b3*a2*a2*b1*b1 + 
+        a2*b1*a3*a3*b0*b0 + 
+        a2*b3*a0*a0*b2*b2 + 
+        3*a0*b3*a3*a3*b0*b0 + 
+        2*a1*b2*a3*a3*b0*b0 + 
+        2*a2*b1*a0*a0*b3*b3 + 
+        3*a3*b0*a0*a0*b3*b3 + 
+        a0*a2*a3*b2*b1*b1 + 
+        a1*b0*b1*b3*a2*a2 + 
+        a0*a1*a3*b1*b2*b2 + 
+        a2*b0*b2*b3*a1*a1 + 
+        3*a0*a1*a2*b0*b3*b3 + 
+        3*a3*b1*b2*b3*a0*a0 + 
+        2*a0*a2*a3*b0*b2*b2 + 
+        2*a3*b0*b1*b3*a1*a1 + 
+        2*a0*a1*a3*b3*b1*b1 + 
+        2*a0*b0*b2*b3*a2*a2 + 
+        3*a0*b0*b1*b2*a3*a3 + 
+        3*a1*a2*a3*b3*b0*b0 + 
+        a3*a3*a3*b0*b0*b0 + 
+        a0*a0*a0*b3*b3*b3 + 
+        a3*a0*a0*b2*b2*b2 + 
+        a0*a3*a3*b1*b1*b1;
+
+    return { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v }
+}
+
+
+function t3_(
+        coeffsX: number[],
+        coeffsY: number[]) {
+
+    // The implicit form is given by:
+    // vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0
+
+    let [a3, a2, a1, a0] = coeffsX;
+    let [b3, b2, b1, b0] = coeffsY;
+
+    // raw:
+    // -q2**2*(q6 + r6) + 2*q2*(q1 + r1)*(q4 + r4) - q3*(q4 + r4)**2 + 
+    // q3*(q6 + r6)*(q1 + q5 + r1) - (q1 + r1)**2*(q1 + q5 + r1)
+
+    // expanded:
+    // -q1**3 - q1**2*q5 - 3*q1**2*r1 + 2*q1*q2*q4 + 2*q1*q2*r4 + q1*q3*q6 + 
+    // q1*q3*r6 - 2*q1*q5*r1 - 3*q1*r1**2 - q2**2*q6 - q2**2*r6 + 2*q2*q4*r1 + 
+    // 2*q2*r1*r4 - q3*q4**2 - 2*q3*q4*r4 + q3*q5*q6 + q3*q5*r6 + q3*q6*r1 + 
+    // q3*r1*r6 - q3*r4**2 - q5*r1**2 - r1**3
+
+    //let a3b0 = a3*b0;  let a0b3 = a0*b3;
+    //let a3b1 = a3*b1;  let a1b3 = a1*b3;
+    //let a3b2 = a3*b2;  let a2b3 = a2*b3;
+    //let a2b0 = a2*b0;  let a0b2 = a0*b2;
+    //let a2b1 = a2*b1;  let a1b2 = a1*b2;
+    //let a1b0 = a1*b0;  let a0b1 = a0*b1;
+
+    let q1 = a3*b0 - a0*b3
+    let q2 = a3*b1 - a1*b3
+    let q3 = a3*b2 - a2*b3
+    let q4 = a2*b0 - a0*b2
+    let q5 = a2*b1 - a1*b2
+    let q6 = a1*b0 - a0*b1
+    //let r1 = b3*x - a3*y
+    //let r4 = b2*x - a2*y
+    //let r6 = b1*x - a1*y
+
+    //let q11 = q1*q1;
+    //let q36 = q3*q6;
+
+    // (-3*q1 - q5)*(-a3*y + b3*x)**2 + 
+    // -q3*(-a2*y + b2*x)**2 + 
+    // 2*q2*(-a2*y + b2*x)*(-a3*y + b3*x) + 
+    // q3*(-a1*y + b1*x)*(-a3*y + b3*x) + 
+
+    // r1r1 = a3*a3*y**2 - 2*a3*b3*x*y + b3*b3*x**2
+    // r4r4 = a2*a2*y**2 - 2*a2*b2*x*y + b2*b2*x**2
+    // r1r4 = a2*a3*y**2 - (a2*b3 + a3*b2)*x*y + b2*b3*x**2
+    // r1r6 = a1*a3*y**2 - (a1*b3 + a3*b1)*x*y + b1*b3*x**2
+
+    let u1 = -3*q1 - q5;
+
+    let p1 = a2*b3 + a3*b2;
+    let p2 = a1*b3 + a3*b1;
+
+    let vₓₓₓ =   -b3*b3*b3;
+    let vₓₓᵧ =  3*a3*b3*b3;
+    let vₓᵧᵧ = -3*b3*a3*a3;
+    let vᵧᵧᵧ =    a3*a3*a3;
+
+    let vₓₓ = u1*(b3*b3) - q3*(b2*b2) + 2*q2*(b2*b3) + q3*(b1*b3);
+    let vₓᵧ = -2*u1*(a3*b3) + 2*q3*(a2*b2) - 2*q2*p1 - q3*p2;
+    let vᵧᵧ = u1*(a3*a3) - q3*(a2*a2) + 2*q2*(a2*a3) + q3*(a1*a3);
+
+    let s1 = -3*q1*q1 - 2*q1*q5 + 2*q2*q4 + q3*q6;
+    let s2 = 2*q1*q2 - 2*q3*q4;
+    let s3 = q1*q3 - q2*q2 + q3*q5;
+
+    let vₓ = s1*b3 + s2*b2 + s3*b1;
+    let vᵧ = -(s1*a3 + s2*a2 + s3*a1);
+
+    let v = 
+         (-q1*q1 - q1*q5 + 2*q2*q4)*q1 + 
+          s3*q6 +
+         -q3*q4*q4;
+    
+    return { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v }
+}
+
+
+function t3(
+        coeffsX: number[],
+        coeffsY: number[]) {
+
+    // The implicit form is given by:
+    // vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0
+
+    let [a3, a2, a1, a0] = coeffsX;
+    let [b3, b2, b1, b0] = coeffsY;
+
+    let a3b0 = a3*b0;  
+    let a0b3 = a0*b3;
+    let a3b1 = a3*b1;  
+    let a1b3 = a1*b3;
+    let a3b2 = a3*b2;  
+    let a2b3 = a2*b3;
+    let a2b0 = a2*b0;  
+    let a0b2 = a0*b2;
+    let a2b1 = a2*b1;  
+    let a1b2 = a1*b2;
+    let a1b0 = a1*b0;  
+    let a0b1 = a0*b1;
+
+    let a3a3 = a3*a3;
+    let b3b3 = b3*b3;
+
+    let q1 = a3*b0 - a0*b3
+    let q2 = a3b1 - a1b3
+    let q3 = a3b2 - a2b3
+    let q4 = a2*b0 - a0*b2
+    let q5 = a2*b1 - a1*b2
+    let q6 = a1*b0 - a0*b1
+
+    let u1 = -3*q1 - q5;
+
+    let p1 = a2b3 + a3b2;
+    let p2 = a1b3 + a3b1;
+
+    let vₓₓₓ =   -b3*b3b3;
+    let vₓₓᵧ =  3*a3*b3b3;
+    let vₓᵧᵧ = -3*b3*a3a3;
+    let vᵧᵧᵧ =    a3*a3a3;
+
+    let vₓₓ = u1*(b3b3) - q3*(b2*b2) + 2*q2*(b2*b3) + q3*(b1*b3);
+    let vₓᵧ = -2*u1*(a3*b3) + 2*q3*(a2*b2) - 2*q2*p1 - q3*p2;
+    let vᵧᵧ = u1*(a3*a3) - q3*(a2*a2) + 2*q2*(a2*a3) + q3*(a1*a3);
+
+    let s1 = -3*q1*q1 - 2*q1*q5 + 2*q2*q4 + q3*q6;
+    let s2 = 2*q1*q2 - 2*q3*q4;
+    let s3 = q1*q3 - q2*q2 + q3*q5;
+
+    let vₓ = s1*b3 + s2*b2 + s3*b1;
+    let vᵧ = -(s1*a3 + s2*a2 + s3*a1);
+
+    let v = 
+        (-q1*q1 - q1*q5 + 2*q2*q4)*q1 + 
+        s3*q6 +
+        -q3*q4*q4;
+
+    return { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v }
+}
+
+
+export { t3 }
+
+

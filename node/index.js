@@ -1,123 +1,304 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const flo_poly_1 = require("flo-poly");
 const flo_vector2d_1 = require("flo-vector2d");
 exports.rotate = flo_vector2d_1.rotatePs;
 exports.translate = flo_vector2d_1.translatePs;
 const flo_memoize_1 = require("flo-memoize");
-const flo_gauss_quadrature_1 = require("flo-gauss-quadrature");
 const flo_graham_scan_1 = require("flo-graham-scan");
-const get_x_1 = require("./get-x");
+const length_1 = require("./global-properties/length/length");
+exports.length = length_1.length;
+const clone_1 = require("./transformation/clone");
+exports.clone = clone_1.clone;
+const get_t_at_length_1 = require("./local-properties-to-t/get-t-at-length");
+exports.getTAtLength = get_t_at_length_1.getTAtLength;
+const equal_1 = require("./simultaneous-properties/equal");
+exports.equal = equal_1.equal;
+const cubic_to_quadratic_1 = require("./transformation/cubic-to-quadratic");
+exports.cubicToQuadratic = cubic_to_quadratic_1.cubicToQuadratic;
+const from_bezier_piece_1 = require("./transformation/from-bezier-piece");
+exports.bezierFromBezierPiece = from_bezier_piece_1.bezierFromBezierPiece;
+const evaluate_hybrid_quadratic_1 = require("./local-properties-at-t/t-to-xy/evaluate-hybrid-quadratic");
+exports.evaluateHybridQuadratic = evaluate_hybrid_quadratic_1.evaluateHybridQuadratic;
+const closest_point_on_bezier_1 = require("./simultaneous-properties/closest-point-on-bezier/closest-point-on-bezier");
+exports.closestPointOnBezier = closest_point_on_bezier_1.closestPointOnBezier;
+const intersect_boxes_1 = require("./geometry/intersect-boxes");
+exports.intersectBoxes = intersect_boxes_1.intersectBoxes;
+const eval_de_casteljau_1 = require("./local-properties-at-t/t-to-xy/eval-de-casteljau");
+exports.evalDeCasteljau = eval_de_casteljau_1.evalDeCasteljau;
+exports.evalDeCasteljauX = eval_de_casteljau_1.evalDeCasteljauX;
+exports.evalDeCasteljauY = eval_de_casteljau_1.evalDeCasteljauY;
+const eval_de_casteljau_with_err_1 = require("./local-properties-at-t/t-to-xy/eval-de-casteljau-with-err");
+exports.evalDeCasteljauWithErr = eval_de_casteljau_with_err_1.evalDeCasteljauWithErr;
+exports.evalDeCasteljauWithErrQuad = eval_de_casteljau_with_err_1.evalDeCasteljauWithErrQuad;
+const is_point_on_bezier_extension_1 = require("./simultaneous-properties/is-point-on-bezier-extension");
+exports.isPointOnBezierExtension = is_point_on_bezier_extension_1.isPointOnBezierExtension;
+const total_curvature_1 = require("./global-properties/total-curvature");
+exports.totalCurvature = total_curvature_1.totalCurvature;
+exports.totalAbsoluteCurvature = total_curvature_1.totalAbsoluteCurvature;
+const reverse_1 = require("./transformation/reverse");
+exports.reverse = reverse_1.reverse;
+const get_inflection_points_1 = require("./global-properties/get-inflection-points");
+exports.getInflectionPoints = get_inflection_points_1.getInflectionPoints;
+const bezier_bezier_intersection_implicit_1 = require("./intersection/bezier-intersection-implicit/bezier-bezier-intersection-implicit");
+exports.getIntersectionCoeffs = bezier_bezier_intersection_implicit_1.getIntersectionCoeffs;
+const get_implicit_form3_1 = require("./implicit-form/naive/get-implicit-form3");
+exports.getImplicitForm3 = get_implicit_form3_1.getImplicitForm3;
+const get_implicit_form3_2 = require("./implicit-form/quad/get-implicit-form3");
+exports.getImplicitForm3Quad = get_implicit_form3_2.getImplicitForm3Quad;
+const get_implicit_form3_3 = require("./implicit-form/exact/get-implicit-form3");
+exports.getImplicitForm3Exact = get_implicit_form3_3.getImplicitForm3Exact;
+const get_implicit_form3_4 = require("./implicit-form/exact/get-implicit-form3-");
+exports.getImplicitForm3Exact_ = get_implicit_form3_4.getImplicitForm3Exact_;
+const get_implicit_form2_1 = require("./implicit-form/naive/get-implicit-form2");
+exports.getImplicitForm2 = get_implicit_form2_1.getImplicitForm2;
+const get_implicit_form2_2 = require("./implicit-form/quad/get-implicit-form2");
+exports.getImplicitForm2Quad = get_implicit_form2_2.getImplicitForm2Quad;
+const get_implicit_form2_3 = require("./implicit-form/exact/get-implicit-form2");
+exports.getImplicitForm2Exact = get_implicit_form2_3.getImplicitForm2Exact;
+const get_implicit_form2_4 = require("./implicit-form/exact/get-implicit-form2-");
+exports.getImplicitForm2Exact_ = get_implicit_form2_4.getImplicitForm2Exact_;
+const get_implicit_form1_1 = require("./implicit-form/naive/get-implicit-form1");
+exports.getImplicitForm1 = get_implicit_form1_1.getImplicitForm1;
+const get_implicit_form1_2 = require("./implicit-form/quad/get-implicit-form1");
+exports.getImplicitForm1Quad = get_implicit_form1_2.getImplicitForm1Quad;
+const get_implicit_form1_3 = require("./implicit-form/exact/get-implicit-form1");
+exports.getImplicitForm1Exact = get_implicit_form1_3.getImplicitForm1Exact;
+const get_implicit_form1_4 = require("./implicit-form/exact/get-implicit-form1-");
+exports.getImplicitForm1Exact_ = get_implicit_form1_4.getImplicitForm1Exact_;
+const get_coefficients_3x3_1 = require("./intersection/bezier-intersection-implicit/naive/get-coefficients-3x3");
+exports.getCoeffs3x3 = get_coefficients_3x3_1.getCoeffs3x3;
+const get_coefficients_3x3_2 = require("./intersection/bezier-intersection-implicit/quad/get-coefficients-3x3");
+exports.getCoeffs3x3Quad = get_coefficients_3x3_2.getCoeffs3x3Quad;
+const get_coefficients_3x3_3 = require("./intersection/bezier-intersection-implicit/exact/get-coefficients-3x3");
+exports.getCoeffs3x3Exact = get_coefficients_3x3_3.getCoeffs3x3Exact;
+const get_coefficients_3x3_4 = require("./intersection/bezier-intersection-implicit/exact/get-coefficients-3x3-");
+exports.getCoeffs3x3Exact_ = get_coefficients_3x3_4.getCoeffs3x3Exact_;
+const get_coefficients_3x2_1 = require("./intersection/bezier-intersection-implicit/naive/get-coefficients-3x2");
+exports.getCoeffs3x2 = get_coefficients_3x2_1.getCoeffs3x2;
+const get_coefficients_3x2_2 = require("./intersection/bezier-intersection-implicit/quad/get-coefficients-3x2");
+exports.getCoeffs3x2Quad = get_coefficients_3x2_2.getCoeffs3x2Quad;
+const get_coefficients_3x2_3 = require("./intersection/bezier-intersection-implicit/exact/get-coefficients-3x2");
+exports.getCoeffs3x2Exact = get_coefficients_3x2_3.getCoeffs3x2Exact;
+const get_coefficients_3x2_4 = require("./intersection/bezier-intersection-implicit/exact/get-coefficients-3x2-");
+exports.getCoeffs3x2Exact_ = get_coefficients_3x2_4.getCoeffs3x2Exact_;
+const get_coefficients_3x1_1 = require("./intersection/bezier-intersection-implicit/naive/get-coefficients-3x1");
+exports.getCoeffs3x1 = get_coefficients_3x1_1.getCoeffs3x1;
+const get_coefficients_3x1_2 = require("./intersection/bezier-intersection-implicit/quad/get-coefficients-3x1");
+exports.getCoeffs3x1Quad = get_coefficients_3x1_2.getCoeffs3x1Quad;
+const get_coefficients_3x1_3 = require("./intersection/bezier-intersection-implicit/exact/get-coefficients-3x1");
+exports.getCoeffs3x1Exact = get_coefficients_3x1_3.getCoeffs3x1Exact;
+const get_coefficients_3x1_4 = require("./intersection/bezier-intersection-implicit/exact/get-coefficients-3x1-");
+exports.getCoeffs3x1Exact_ = get_coefficients_3x1_4.getCoeffs3x1Exact_;
+const get_coefficients_2x3_1 = require("./intersection/bezier-intersection-implicit/naive/get-coefficients-2x3");
+exports.getCoeffs2x3 = get_coefficients_2x3_1.getCoeffs2x3;
+const get_coefficients_2x3_2 = require("./intersection/bezier-intersection-implicit/quad/get-coefficients-2x3");
+exports.getCoeffs2x3Quad = get_coefficients_2x3_2.getCoeffs2x3Quad;
+const get_coefficients_2x3_3 = require("./intersection/bezier-intersection-implicit/exact/get-coefficients-2x3");
+exports.getCoeffs2x3Exact = get_coefficients_2x3_3.getCoeffs2x3Exact;
+const get_coefficients_2x3_4 = require("./intersection/bezier-intersection-implicit/exact/get-coefficients-2x3-");
+exports.getCoeffs2x3Exact_ = get_coefficients_2x3_4.getCoeffs2x3Exact_;
+const get_coefficients_2x2_1 = require("./intersection/bezier-intersection-implicit/naive/get-coefficients-2x2");
+exports.getCoeffs2x2 = get_coefficients_2x2_1.getCoeffs2x2;
+const get_coefficients_2x2_2 = require("./intersection/bezier-intersection-implicit/quad/get-coefficients-2x2");
+exports.getCoeffs2x2Quad = get_coefficients_2x2_2.getCoeffs2x2Quad;
+const get_coefficients_2x2_3 = require("./intersection/bezier-intersection-implicit/exact/get-coefficients-2x2");
+exports.getCoeffs2x2Exact = get_coefficients_2x2_3.getCoeffs2x2Exact;
+const get_coefficients_2x2_4 = require("./intersection/bezier-intersection-implicit/exact/get-coefficients-2x2-");
+exports.getCoeffs2x2Exact_ = get_coefficients_2x2_4.getCoeffs2x2Exact_;
+const get_coefficients_2x1_1 = require("./intersection/bezier-intersection-implicit/naive/get-coefficients-2x1");
+exports.getCoeffs2x1 = get_coefficients_2x1_1.getCoeffs2x1;
+const get_coefficients_2x1_2 = require("./intersection/bezier-intersection-implicit/quad/get-coefficients-2x1");
+exports.getCoeffs2x1Quad = get_coefficients_2x1_2.getCoeffs2x1Quad;
+const get_coefficients_2x1_3 = require("./intersection/bezier-intersection-implicit/exact/get-coefficients-2x1");
+exports.getCoeffs2x1Exact = get_coefficients_2x1_3.getCoeffs2x1Exact;
+const get_coefficients_2x1_4 = require("./intersection/bezier-intersection-implicit/exact/get-coefficients-2x1-");
+exports.getCoeffs2x1Exact_ = get_coefficients_2x1_4.getCoeffs2x1Exact_;
+const get_coefficients_1x3_1 = require("./intersection/bezier-intersection-implicit/naive/get-coefficients-1x3");
+exports.getCoeffs1x3 = get_coefficients_1x3_1.getCoeffs1x3;
+const get_coefficients_1x3_2 = require("./intersection/bezier-intersection-implicit/quad/get-coefficients-1x3");
+exports.getCoeffs1x3Quad = get_coefficients_1x3_2.getCoeffs1x3Quad;
+const get_coefficients_1x3_3 = require("./intersection/bezier-intersection-implicit/exact/get-coefficients-1x3");
+exports.getCoeffs1x3Exact = get_coefficients_1x3_3.getCoeffs1x3Exact;
+const get_coefficients_1x3_4 = require("./intersection/bezier-intersection-implicit/exact/get-coefficients-1x3-");
+exports.getCoeffs1x3Exact_ = get_coefficients_1x3_4.getCoeffs1x3Exact_;
+const get_coefficients_1x2_1 = require("./intersection/bezier-intersection-implicit/naive/get-coefficients-1x2");
+exports.getCoeffs1x2 = get_coefficients_1x2_1.getCoeffs1x2;
+const get_coefficients_1x2_2 = require("./intersection/bezier-intersection-implicit/quad/get-coefficients-1x2");
+exports.getCoeffs1x2Quad = get_coefficients_1x2_2.getCoeffs1x2Quad;
+const get_coefficients_1x2_3 = require("./intersection/bezier-intersection-implicit/exact/get-coefficients-1x2");
+exports.getCoeffs1x2Exact = get_coefficients_1x2_3.getCoeffs1x2Exact;
+const get_coefficients_1x2_4 = require("./intersection/bezier-intersection-implicit/exact/get-coefficients-1x2-");
+exports.getCoeffs1x2Exact_ = get_coefficients_1x2_4.getCoeffs1x2Exact_;
+const get_coefficients_1x1_1 = require("./intersection/bezier-intersection-implicit/naive/get-coefficients-1x1");
+exports.getCoeffs1x1 = get_coefficients_1x1_1.getCoeffs1x1;
+const get_coefficients_1x1_2 = require("./intersection/bezier-intersection-implicit/quad/get-coefficients-1x1");
+exports.getCoeffs1x1Quad = get_coefficients_1x1_2.getCoeffs1x1Quad;
+const get_coefficients_1x1_3 = require("./intersection/bezier-intersection-implicit/exact/get-coefficients-1x1");
+exports.getCoeffs1x1Exact = get_coefficients_1x1_3.getCoeffs1x1Exact;
+const get_coefficients_1x1_4 = require("./intersection/bezier-intersection-implicit/exact/get-coefficients-1x1-");
+exports.getCoeffs1x1Exact_ = get_coefficients_1x1_4.getCoeffs1x1Exact_;
+const get_coeffs_3_1 = require("./intersection/self-intersection/naive/get-coeffs-3");
+exports.getCoeffs3 = get_coeffs_3_1.getCoeffs3;
+const get_coeffs_3_2 = require("./intersection/self-intersection/quad/get-coeffs-3");
+exports.getCoeffs3Quad = get_coeffs_3_2.getCoeffs3Quad;
+const get_coeffs_3_3 = require("./intersection/self-intersection/exact/get-coeffs-3");
+exports.getCoeffs3Exact = get_coeffs_3_3.getCoeffs3Exact;
+const to_expansion_1 = require("./transformation/to-expansion");
+exports.toExpansion = to_expansion_1.toExpansion;
+const to_estimation_1 = require("./transformation/to-estimation");
+exports.toEstimation = to_estimation_1.toEstimation;
+const from_power_bases_1 = require("./from-power-basis/from-power-bases");
+exports.fromPowerBases = from_power_bases_1.fromPowerBases;
+const get_hodograph_1 = require("./transformation/get-hodograph");
+exports.getHodograph = get_hodograph_1.getHodograph;
+const generate_cusp_at_half_t_1 = require("./create/generate-cusp-at-half-t");
+exports.generateCuspAtHalf3 = generate_cusp_at_half_t_1.generateCuspAtHalf3;
+const cubic_through_point_1 = require("./create/cubic-through-point");
+exports.cubicThroughPointGiven013 = cubic_through_point_1.cubicThroughPointGiven013;
+const self_intersection_1 = require("./intersection/self-intersection/self-intersection");
+exports.bezierSelfIntersection = self_intersection_1.bezierSelfIntersection;
+const get_endpoint_intersections_1 = require("./intersection/get-endpoint-intersections");
+exports.getEndpointIntersections = get_endpoint_intersections_1.getEndpointIntersections;
+const inversion_01_1 = require("./intersection/inversion-01");
+exports.inversion01Precise = inversion_01_1.inversion01Precise;
+const inversion_old_1 = require("./intersection/bezier-intersection-implicit/inversion-old");
+exports.inversion1_BL52_1ULP = inversion_old_1.inversion1_BL52_1ULP;
+const get_xy_1 = require("./to-power-basis/get-xy");
+exports.getXY = get_xy_1.getXY;
+const get_dxy_1 = require("./to-power-basis/get-dxy");
+exports.getDxy = get_dxy_1.getDxy;
+const get_ddxy_1 = require("./to-power-basis/get-ddxy");
+exports.getDdxy = get_ddxy_1.getDdxy;
+const get_x_1 = require("./to-power-basis/get-x");
 exports.getX = get_x_1.getX;
-const get_y_1 = require("./get-y");
+const get_y_1 = require("./to-power-basis/get-y");
 exports.getY = get_y_1.getY;
-const get_dx_1 = require("./get-dx");
+const get_dx_1 = require("./to-power-basis/get-dx");
 exports.getDx = get_dx_1.getDx;
-const get_dy_1 = require("./get-dy");
+const get_dy_1 = require("./to-power-basis/get-dy");
 exports.getDy = get_dy_1.getDy;
-const get_ddx_1 = require("./get-ddx");
+const get_ddx_1 = require("./to-power-basis/get-ddx");
 exports.getDdx = get_ddx_1.getDdx;
-const get_ddy_1 = require("./get-ddy");
+const get_ddy_1 = require("./to-power-basis/get-ddy");
 exports.getDdy = get_ddy_1.getDdy;
-const get_dxy_at_1_1 = require("./get-dxy-at-1");
+const get_dxy_at_1_1 = require("./local-properties-at-t/t-to-dxy/get-dxy-at-1");
 exports.getDxyAt1 = get_dxy_at_1_1.getDxyAt1;
-const get_ddxy_at_1_1 = require("./get-ddxy-at-1");
+const get_ddxy_at_1_1 = require("./local-properties-at-t/t-to-ddxy/get-ddxy-at-1");
 exports.getDdxyAt1 = get_ddxy_at_1_1.getDdxyAt1;
-const get_dxy_at_0_1 = require("./get-dxy-at-0");
+const get_dxy_at_0_1 = require("./local-properties-at-t/t-to-dxy/get-dxy-at-0");
 exports.getDxyAt0 = get_dxy_at_0_1.getDxyAt0;
-const get_ddxy_at_0_1 = require("./get-ddxy-at-0");
+const get_ddxy_at_0_1 = require("./local-properties-at-t/t-to-ddxy/get-ddxy-at-0");
 exports.getDdxyAt0 = get_ddxy_at_0_1.getDdxyAt0;
-const get_dddxy_1 = require("./get-dddxy");
+const get_dddxy_1 = require("./to-power-basis/get-dddxy");
 exports.getDddxy = get_dddxy_1.getDddxy;
-const evaluate_x_1 = require("./evaluate-x/evaluate-x");
+const evaluate_x_1 = require("./local-properties-at-t/t-to-xy/evaluate-x");
 exports.evaluateX = evaluate_x_1.evaluateX;
-const evaluate_y_1 = require("./evaluate-y/evaluate-y");
+const evaluate_y_1 = require("./local-properties-at-t/t-to-xy/evaluate-y");
 exports.evaluateY = evaluate_y_1.evaluateY;
-const evaluate_1 = require("./evaluate/evaluate");
+const evaluate_1 = require("./local-properties-at-t/t-to-xy/evaluate");
 exports.evaluate = evaluate_1.evaluate;
-const evaluate_dx_1 = require("./evaluate-dx");
+const evaluate_2 = require("./local-properties-at-t/t-to-xy/evaluate");
+exports.evaluateExact = evaluate_2.evaluateExact;
+const evaluate_dx_1 = require("./local-properties-at-t/t-to-dxy/evaluate-dx");
 exports.evaluateDx = evaluate_dx_1.evaluateDx;
-const evaluate_ddx_1 = require("./evaluate-ddx");
+const evaluate_ddx_1 = require("./local-properties-at-t/t-to-ddxy/evaluate-ddx");
 exports.evaluateDdx = evaluate_ddx_1.evaluateDdx;
-const evaluate_dy_1 = require("./evaluate-dy");
+const evaluate_dy_1 = require("./local-properties-at-t/t-to-dxy/evaluate-dy");
 exports.evaluateDy = evaluate_dy_1.evaluateDy;
-const evaluate_ddy_1 = require("./evaluate-ddy");
+const evaluate_ddy_1 = require("./local-properties-at-t/t-to-ddxy/evaluate-ddy");
 exports.evaluateDdy = evaluate_ddy_1.evaluateDdy;
-const tangent_1 = require("./tangent");
+const tangent_1 = require("./local-properties-at-t/tangent");
 exports.tangent = tangent_1.tangent;
-const normal_1 = require("./normal");
+const normal_1 = require("./local-properties-at-t/normal");
 exports.normal = normal_1.normal;
-const from_0_to_T_1 = require("./from-0-to-T");
+const from_0_to_T_1 = require("./transformation/split-merge-clone/from-0-to-T");
 exports.from0ToT = from_0_to_T_1.from0ToT;
-const from_T_to_1_1 = require("./from-T-to-1");
+const from_T_to_1_1 = require("./transformation/split-merge-clone/from-T-to-1");
 exports.fromTTo1 = from_T_to_1_1.fromTTo1;
-const from_to_1 = require("./from-to");
+const from_to_1 = require("./transformation/split-merge-clone/from-to");
 exports.fromTo = from_to_1.fromTo;
 exports.fromToPrecise = from_to_1.fromToPrecise;
-const coincident_1 = require("./coincident");
-exports.coincident = coincident_1.coincident;
-const line_intersection_1 = require("./line-intersection");
-exports.lineIntersection = line_intersection_1.lineIntersection;
-const bezier3_intersection_1 = require("./bezier3-intersection/bezier3-intersection");
-exports.bezier3Intersection = bezier3_intersection_1.bezier3Intersection;
-const bezier3_intersection_sylvester_1 = require("./bezier3-intersection-sylvester/bezier3-intersection-sylvester_");
-exports.bezier3IntersectionSylvester = bezier3_intersection_sylvester_1.bezier3IntersectionSylvester;
-const ts_at_x_1 = require("./ts-at-x");
-exports.tsAtX = ts_at_x_1.tsAtX;
-const ts_at_y_1 = require("./ts-at-y");
-exports.tsAtY = ts_at_y_1.tsAtY;
+const bezier_bezier_intersection_implicit_2 = require("./intersection/bezier-intersection-implicit/bezier-bezier-intersection-implicit");
+exports.getOtherTs = bezier_bezier_intersection_implicit_2.getOtherTs;
+const bezier_bezier_intersection_implicit_3 = require("./intersection/bezier-intersection-implicit/bezier-bezier-intersection-implicit");
+exports.bezierBezierIntersectionImplicit = bezier_bezier_intersection_implicit_3.bezierBezierIntersectionImplicit;
+const to_cubic_1 = require("./transformation/degree-or-type/to-cubic");
+exports.toCubic = to_cubic_1.toCubic;
 const debug_1 = require("./debug/debug");
 exports.BezDebug = debug_1.BezDebug;
-const curvature_1 = require("./curvature");
+const curvature_1 = require("./local-properties-at-t/curvature");
 exports.κ = curvature_1.κ;
-const quad_to_polyline_1 = require("./quad-to-polyline");
+const quad_to_polyline_1 = require("./transformation/quad-to-polyline");
 exports.quadToPolyline = quad_to_polyline_1.quadToPolyline;
-const is_quad_obtuse_1 = require("./is-quad-obtuse");
+const is_quad_obtuse_1 = require("./global-properties/type/is-quad-obtuse");
 exports.isQuadObtuse = is_quad_obtuse_1.isQuadObtuse;
-const split_at_1 = require("./split-at");
+const get_interval_box_1 = require("./global-properties/bounds/get-interval-box/get-interval-box");
+exports.getIntervalBox = get_interval_box_1.getIntervalBox;
+exports.getIntervalBox1 = get_interval_box_1.getIntervalBox1;
+exports.getIntervalBox2 = get_interval_box_1.getIntervalBox2;
+exports.getIntervalBox3 = get_interval_box_1.getIntervalBox3;
+const get_interval_box_quad_1 = require("./global-properties/bounds/get-interval-box/get-interval-box-quad");
+exports.getIntervalBoxQuad = get_interval_box_quad_1.getIntervalBoxQuad;
+exports.getIntervalBox1Quad = get_interval_box_quad_1.getIntervalBox1Quad;
+exports.getIntervalBox2Quad = get_interval_box_quad_1.getIntervalBox2Quad;
+exports.getIntervalBox3Quad = get_interval_box_quad_1.getIntervalBox3Quad;
+const split_at_1 = require("./transformation/split-merge-clone/split-at");
 exports.splitAt = split_at_1.splitAt;
 exports.splitAtPrecise = split_at_1.splitAtPrecise;
-const closest_point_on_bezier_1 = require("./closest-point-on-bezier");
-exports.closestPointOnBezier = closest_point_on_bezier_1.closestPointOnBezier;
-const hausdorff_distance_1 = require("./hausdorff-distance");
+const closest_point_on_bezier_2 = require("./simultaneous-properties/closest-point-on-bezier/closest-point-on-bezier");
+exports.closestPointOnBezierPrecise = closest_point_on_bezier_2.closestPointOnBezierPrecise;
+const hausdorff_distance_1 = require("./simultaneous-properties/hausdorff-distance");
 exports.hausdorffDistance = hausdorff_distance_1.hausdorffDistance;
 exports.hausdorffDistanceCandidates = hausdorff_distance_1.hausdorffDistanceCandidates;
-const length_upper_bound_1 = require("./length-upper-bound");
+const length_upper_bound_1 = require("./global-properties/length/length-upper-bound");
 exports.lengthUpperBound = length_upper_bound_1.lengthUpperBound;
-const length_squared_upper_bound_1 = require("./length-squared-upper-bound");
+const length_squared_upper_bound_1 = require("./global-properties/length/length-squared-upper-bound");
 exports.lengthSquaredUpperBound = length_squared_upper_bound_1.lengthSquaredUpperBound;
-const split_by_max_curve_length_1 = require("./split-by-max-curve-length");
+const split_by_max_curve_length_1 = require("./transformation/split-merge-clone/split-by-max-curve-length");
 exports.splitByMaxCurveLength = split_by_max_curve_length_1.splitByMaxCurveLength;
 const get_curvature_extrema_1 = require("./get-curvature-extrema/get-curvature-extrema");
 exports.getCurvatureExtrema = get_curvature_extrema_1.getCurvatureExtrema;
-const get_inflections_1 = require("./get-inflections");
+const get_inflections_1 = require("./local-properties-to-t/get-inflections");
 exports.getInflections = get_inflections_1.getInflections;
-const flatness_1 = require("./flatness");
+const flatness_1 = require("./global-properties/flatness");
 exports.flatness = flatness_1.flatness;
-const split_by_max_curvature_1 = require("./split-by-max-curvature");
+const split_by_max_curvature_1 = require("./transformation/split-merge-clone/split-by-max-curvature");
 exports.splitByMaxCurvature = split_by_max_curvature_1.splitByMaxCurvature;
-const split_by_curvature_and_length_1 = require("./split-by-curvature-and-length");
+const split_by_curvature_and_length_1 = require("./transformation/split-merge-clone/split-by-curvature-and-length");
 exports.splitByCurvatureAndLength = split_by_curvature_and_length_1.splitByCurvatureAndLength;
-const is_point_on_bezier_extension_1 = require("./is-point-on-bezier-extension");
-exports.isPointOnBezierExtension = is_point_on_bezier_extension_1.isPointOnBezierExtension;
-const are_beziers_in_same_k_family_1 = require("./are-beziers-in-same-k-family");
+const are_beziers_in_same_k_family_1 = require("./simultaneous-properties/are-beziers-in-same-k-family");
 exports.areBeziersInSameKFamily = are_beziers_in_same_k_family_1.areBeziersInSameKFamily;
-const get_interface_ccw_1 = require("./get-interface-ccw");
+const get_interface_ccw_1 = require("./simultaneous-properties/get-interface-ccw");
 exports.getInterfaceCcw = get_interface_ccw_1.getInterfaceCcw;
-const is_line_1 = require("./is-line");
+const is_line_1 = require("./global-properties/type/is-line");
 exports.isLine = is_line_1.isLine;
 exports.isHorizontalLine = is_line_1.isHorizontalLine;
 exports.isVerticalLine = is_line_1.isVerticalLine;
-const is_self_overlapping_1 = require("./is-self-overlapping");
+const is_self_overlapping_1 = require("./global-properties/type/is-self-overlapping");
 exports.isSelfOverlapping = is_self_overlapping_1.isSelfOverlapping;
-const get_tangent_poly_from_point_1 = require("./get-tangent-poly-from-point");
+const get_tangent_poly_from_point_1 = require("./simultaneous-properties/get-tangent-poly-from-point/naive/get-tangent-poly-from-point");
 exports.getTangentPolyFromPoint = get_tangent_poly_from_point_1.getTangentPolyFromPoint;
-const get_bounds_1 = require("./get-bounds");
-exports.getBounds = get_bounds_1.getBounds;
-const get_bounding_box_tight_1 = require("./get-bounding-box-tight");
+const get_tangent_poly_from_point_2 = require("./simultaneous-properties/get-tangent-poly-from-point/exact/get-tangent-poly-from-point");
+exports.getTangentPolyFromPointExact = get_tangent_poly_from_point_2.getTangentPolyFromPointExact;
+const get_bounds_1 = require("./global-properties/bounds/get-bounds");
+exports.getXBoundsTight = get_bounds_1.getXBoundsTight;
+exports.getYBoundsTight = get_bounds_1.getYBoundsTight;
+const get_bounds_2 = require("./global-properties/bounds/get-bounds");
+exports.getBounds = get_bounds_2.getBounds;
+const get_bounding_box_tight_1 = require("./global-properties/bounds/get-bounding-box-tight");
 exports.getBoundingBoxTight = get_bounding_box_tight_1.getBoundingBoxTight;
-const get_bounding_box_1 = require("./get-bounding-box");
+const get_bounding_box_1 = require("./global-properties/bounds/get-bounding-box");
 exports.getBoundingBox = get_bounding_box_1.getBoundingBox;
+const to_hybrid_quadratic_1 = require("./transformation/degree-or-type/to-hybrid-quadratic");
+exports.toHybridQuadratic = to_hybrid_quadratic_1.toHybridQuadratic;
+const is_cubic_really_quad_1 = require("./global-properties/type/is-cubic-really-quad");
+exports.isCubicReallyQuad = is_cubic_really_quad_1.isCubicReallyQuad;
+const to_quad_from_cubic_1 = require("./transformation/degree-or-type/to-quad-from-cubic");
+exports.toQuadraticFromCubic = to_quad_from_cubic_1.toQuadraticFromCubic;
+const circle_bezier_intersection_1 = require("./intersection/circle-bezier-intersection/naive/circle-bezier-intersection");
+exports.circleBezierIntersection = circle_bezier_intersection_1.circleBezierIntersection;
+const circle_bezier_intersection_precise_1 = require("./intersection/circle-bezier-intersection/circle-bezier-intersection-precise");
+exports.circleBezierIntersectionPrecise = circle_bezier_intersection_precise_1.circleBezierIntersectionPrecise;
 /**
  * Returns the convex hull of a bezier's control points. This hull bounds the
  * bezier curve. This function is memoized.
@@ -129,282 +310,9 @@ exports.getBoundingBox = get_bounding_box_1.getBoundingBox;
  */
 let getBoundingHull = flo_memoize_1.memoize(flo_graham_scan_1.grahamScan);
 exports.getBoundingHull = getBoundingHull;
-/**
- * Returns a cubic bezier from the given line with evenly spaced control points.
- * @param l a 2d line represented by two points
- * @returns Control points of the cubic bezier.
- */
-function fromLine(l) {
-    let [[x0, y0], [x1, y1]] = l;
-    let xInterval = (x1 - x0) / 3;
-    let yInterval = (y1 - y0) / 3;
-    return [
-        [x0, y0],
-        [x0 + xInterval, y0 + yInterval],
-        [x0 + xInterval * 2, y0 + yInterval * 2],
-        [x1, y1]
-    ];
-}
-exports.fromLine = fromLine;
-/**
- * Returns the given bezier's inflection points.
- **/
-function findInflectionPoints(ps) {
-    let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
-    // From http://www.caffeineowl.com/graphics/2d/vectorial/cubic-inflexion.html eq. 4
-    let ax = x1 - x0;
-    let ay = y1 - y0;
-    let bx = x2 - x1 - ax;
-    let by = y2 - y1 - ay;
-    let cx = x3 - x2 - ax - (2 * bx);
-    let cy = y3 - y2 - ay - (2 * by);
-    // From http://www.caffeineowl.com/graphics/2d/vectorial/cubic-inflexion.html eq. 6:
-    //   infl(t) := ax*by - ay*bx + t*(ax*cy - ay*cx) + t^2*(bx*cy - by*cx);
-    // We find the roots of the quadratic - a,b,c are the quadratic coefficients
-    let a = bx * cy - by * cx;
-    let b = ax * cy - ay * cx;
-    let c = ax * by - ay * bx;
-    let inflectionTs = flo_poly_1.allRoots([a, b, c], 0, 1);
-    const evPs = evaluate_1.evaluate(ps);
-    return inflectionTs.map(evPs);
-}
-/**
- * Alias of κ.
- */
+/** Alias of κ. */
 let curvature = curvature_1.κ;
 exports.curvature = curvature;
-function κds(ps, t) {
-    const evDx = evaluate_dx_1.evaluateDx(ps);
-    const evDy = evaluate_dy_1.evaluateDy(ps);
-    const evDdx = evaluate_ddx_1.evaluateDdx(ps);
-    const evDdy = evaluate_ddy_1.evaluateDdy(ps);
-    function f(t) {
-        let dx = evDx(t);
-        let dy = evDy(t);
-        let ddx = evDdx(t);
-        let ddy = evDdy(t);
-        let a = dx * ddy - dy * ddx;
-        let b = dx * dx + dy * dy;
-        return a / b;
-    }
-    // Curry
-    return t === undefined ? f : f(t);
-}
-function dκMod(ps, t) {
-    let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
-    function f(t) {
-        let ts = t * t;
-        let omt = 1 - t;
-        let a = ts * x3;
-        let b = ts * y3;
-        let c = 2 * t - 3 * ts;
-        let d = (3 * t - 1) * omt;
-        let e = omt * omt;
-        let f = 3 * (a + c * x2 - d * x1 - e * x0);
-        let g = 3 * (b + c * y2 - d * y1 - e * y0);
-        let h = 6 * (t * y3 - (3 * t - 1) * y2 + (3 * t - 2) * y1 + omt * y0);
-        let i = 6 * (t * x3 - (3 * t - 1) * x2 + (3 * t - 2) * x1 + omt * x0);
-        let j = Math.sqrt(f * f + g * g);
-        return 4 * (f * (y3 - 3 * y2 + 3 * y1 - y0) -
-            g * (x3 - 3 * x2 + 3 * x1 - x0)) * Math.pow(j, 3) -
-            (f * h - i * g) * (2 * h * g + 2 * i * f) * j;
-    }
-    return t === undefined ? f : f(t);
-}
-exports.dκMod = dκMod;
-/**
- * Categorizes the given cubic bezier curve according to whether it has a loop,
- * a cusp, or zero, one or two inflection points all of which are mutually
- * exclusive.
- *
- * See <a href="http://graphics.pixar.com/people/derose/publications/CubicClassification/paper.pdf">
- * this</a> paper.
- * @param ps A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @returns A value of 'L', 'C', '0', '1', or '2' depending on whether
- * the curve has a loop, a cusp, or zero, one or two inflection points.
- */
-function categorize(ps) {
-    // TODO - finish
-}
-function totalCurvature(ps, interval) {
-    const tanPs = tangent_1.tangent(ps);
-    function f(interval) {
-        return flo_gauss_quadrature_1.gaussQuadrature(κds(ps), interval);
-        // TODO
-        /*
-        let [a,b] = interval;
-        let tangentA = tanPs(a);
-        let tangentB = tanPs(b);
-        let sinθ = Vector.cross(tanA, tanB)
-        */
-    }
-    // Curry
-    return interval === undefined ? f : f(interval);
-}
-exports.totalCurvature = totalCurvature;
-function totalAbsoluteCurvature(ps, interval) {
-    function f(interval = [0, 1]) {
-        // Numerically integrate the absolute curvature
-        let result = flo_gauss_quadrature_1.gaussQuadrature(t => Math.abs(κds(ps)(t)), interval);
-        return result;
-    }
-    // Curry
-    return interval === undefined ? f : f(interval);
-}
-exports.totalAbsoluteCurvature = totalAbsoluteCurvature;
-function length(interval, ps) {
-    let fs = [, , length1, length2, length3];
-    function f(ps) {
-        return fs[ps.length](interval, ps);
-    }
-    // Curry
-    return ps === undefined ? f : f(ps);
-}
-exports.length = length;
-/**
- * Returns the curve length in the specified interval. This function is curried.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param interval - The paramter interval over which the length is
- * to be calculated (often === [0,1]).
- */
-function length3(interval, ps) {
-    if (interval[0] === interval[1]) {
-        return 0;
-    }
-    let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
-    // Keep line below to ensure zero length curve returns zero!
-    if (x0 === x1 && x1 === x2 && x2 === x3 &&
-        y0 === y1 && y1 === y2 && y2 === y3) {
-        return 0;
-    }
-    const evDs = ds(ps);
-    return flo_gauss_quadrature_1.gaussQuadrature(evDs, interval);
-}
-/**
- * Returns the curve length in the specified interval. This function is curried.
- * Unused because it is not numerically stable in its current form.
- * See https://gist.github.com/tunght13488/6744e77c242cc7a94859
- * @param ps - A quadratic bezier, e.g. [[0,0],[1,1],[2,1]]
- * @param interval - The paramter interval over which the length is
- * to be calculated (often === [0,1]).
- */
-/*
-function length2(interval: number[], ps: number[][]) {
-    if (interval[0] === interval[1]) { return 0; }
-
-    let [[x0_, y0_], [x1_, y1_], [x2_, y2_]] = ps;
-    // Keep line below to ensure zero length curve returns zero!
-    if (x0_ === x1_ && x1_ === x2_ && y0_ === y1_ && y1_ === y2_) {
-        return 0;
-    }
-
-    let [[x0, y0], [x1, y1], [x2, y2]] =
-            fromTo(ps)(interval[0], interval[1]);
-
-    let ax = x0 - 2*x1 + x2;
-    let ay = y0 - 2*y1 + y2;
-    let bx = 2*x1 - 2*x0;
-    let by = 2*y1 - 2*y0;
-
-    let A = 4 * (ax*ax + ay*ay);
-    let B = 4 * (ax*bx + ay*by);
-    let C = bx*bx + by*by;
-
-    let Sabc = 2*Math.sqrt(A+B+C);
-    let A_2 = Math.sqrt(A);
-    let A_32 = 2*A*A_2;
-    let C_2 = 2*Math.sqrt(C);
-    let BA = B/A_2;
-
-    return (
-        A_32*Sabc + A_2*B*(Sabc - C_2) +
-        (4*C*A - B*B)*Math.log((2*A_2 + BA + Sabc) / (BA + C_2))
-    ) / (4*A_32);
-}
-*/
-/**
- * Returns the curve length in the specified interval. This function is curried.
- * @param ps A quadratic bezier, e.g. [[0,0],[1,1],[2,1]]
- * @param interval The paramter interval over which the length is
- * to be calculated (often === [0,1]).
- */
-function length2(interval, ps) {
-    if (interval[0] === interval[1]) {
-        return 0;
-    }
-    let [[x0, y0], [x1, y1], [x2, y2]] = ps;
-    // Ensure zero length curve returns zero!
-    if (x0 === x1 && x1 === x2 && y0 === y1 && y1 === y2) {
-        return 0;
-    }
-    const evDs = ds(ps);
-    return flo_gauss_quadrature_1.gaussQuadrature(evDs, interval);
-}
-function length1(interval, ps) {
-    let [t1, t2] = interval;
-    if (t1 === t2) {
-        return 0;
-    }
-    let [[x0, y0], [x1, y1]] = ps;
-    // Keep line below to ensure zero length curve returns zero!
-    if (x0 === x1 && y0 === y1) {
-        return 0;
-    }
-    let p1 = [x0 + t1 * (x1 - x0), y0 + t1 * (y1 - y0)];
-    let p2 = [x0 + t2 * (x1 - x0), y0 + t2 * (y1 - y0)];
-    return flo_vector2d_1.distanceBetween(p1, p2);
-}
-function getTAtLength(ps, s) {
-    let ps_ = toCubic(ps);
-    const lenAtT = (t) => length([0, t], ps_);
-    function f(s) {
-        return flo_poly_1.brent(t => (lenAtT(t) - s), -0.1, 1.1);
-    }
-    // Curry
-    return s === undefined ? f : f(s);
-}
-exports.getTAtLength = getTAtLength;
-function ds(ps, t) {
-    const evDx = evaluate_dx_1.evaluateDx(ps);
-    const evDy = evaluate_dy_1.evaluateDy(ps);
-    function f(t) {
-        let dx = evDx(t);
-        let dy = evDy(t);
-        return Math.sqrt(dx * dx + dy * dy);
-    }
-    // Curry
-    return t === undefined ? f : f(t);
-}
-exports.ds = ds;
-/**
- * Returns a new bezier from the given bezier by limiting its t range.
- *
- * Uses de Casteljau's algorithm.
- *
- * @param ps A bezier
- * @param tRange A t range
- */
-function bezierFromBezierPiece(ps, tRange) {
-    // If tRange = [0,1] then return original bezier.
-    if (tRange[0] === 0 && tRange[1] === 1) {
-        return ps;
-    }
-    // If tRange[0] === tRange[1] then return a single point degenerated bezier.
-    if (tRange[0] === tRange[1]) {
-        let p = evaluate_1.evaluate(ps)(tRange[0]);
-        return [p, p, p, p];
-    }
-    if (tRange[0] === 0) {
-        return from_0_to_T_1.from0ToT(ps, tRange[1]);
-    }
-    if (tRange[1] === 1) {
-        return from_T_to_1_1.fromTTo1(ps, tRange[0]);
-    }
-    // At this stage we know the t range is not degenerate and tRange[0] !== 0 
-    // and tRange[1] !== 1
-    return from_0_to_T_1.from0ToT(from_T_to_1_1.fromTTo1(ps, tRange[0]), (tRange[1] - tRange[0]) / (1 - tRange[0]));
-}
-exports.bezierFromBezierPiece = bezierFromBezierPiece;
 /**
  * Returns a human readable string representation of the given bezier.
  * @param ps - A bezier curve
@@ -414,144 +322,4 @@ function toString(ps) {
     return `[[${x0},${y0}],[${x1},${y1}],[${x2},${y2}],[${x3},${y3}]]`;
 }
 exports.toString = toString;
-/**
- * Scales all control points of the given bezier by the given factor.
- * @param ps - A bezier curve
- * @param c - The scale factor
- */
-function scale(ps, c) {
-    return ps.map(x => [x[0] * c, x[1] * c]);
-}
-exports.scale = scale;
-/**
- * Returns the best least squares quadratic bezier approximation to the given
- * cubic bezier. Note that the two bezier endpoints differ in general.
- * @param ps - A cubic bezier curve.
- */
-function toQuadratic(ps) {
-    let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
-    return [
-        [(19 / 20) * x0 + (3 / 20) * x1 + (-3 / 20) * x2 + (1 / 20) * x3,
-            (19 / 20) * y0 + (3 / 20) * y1 + (-3 / 20) * y2 + (1 / 20) * y3],
-        [(-1 / 4) * x0 + (3 / 4) * x1 + (3 / 4) * x2 + (-1 / 4) * x3,
-            (-1 / 4) * y0 + (3 / 4) * y1 + (3 / 4) * y2 + (-1 / 4) * y3],
-        [(1 / 20) * x0 + (-3 / 20) * x1 + (3 / 20) * x2 + (19 / 20) * x3,
-            (1 / 20) * y0 + (-3 / 20) * y1 + (3 / 20) * y2 + (19 / 20) * y3]
-    ];
-}
-exports.toQuadratic = toQuadratic;
-/**
- * Evaluates the given hybrid quadratic at the given t and th parameters. (see
- * toHybridQuadratic for details).
- * @param hq - A hybrid quadratic
- * @param t - The bezier parameter value
- * @param th - The parameter value for the hybrid quadratic point.
- */
-function evaluateHybridQuadratic(
-//hq: (number[] | number[][])[],
-hq, t, th) {
-    let P0 = hq[0];
-    let P1 = evaluate_1.evaluate(hq[1], th);
-    let P2 = hq[2];
-    //let P1 = evaluateLinear(<number[][]>hq[1], th);
-    //	let P1 = evaluate(hq[1], th);
-    //return evaluateQuadratic([P0, P1, P2], t);
-    return evaluate_1.evaluate([P0, P1, P2], t);
-}
-exports.evaluateHybridQuadratic = evaluateHybridQuadratic;
-/**
- * Evaluates the given linear bezier (line) at a specific t value.
- * @param ps - A linear bezier curve.
- * @param t - The value where the bezier should be evaluated
- */ /*
-function evaluateLinear(ps: number[][], t: number) {
-   let [[x0,y0],[x1,y1]] = ps;
-
-   let x = x0*(1-t) + x1*t;
-   let y = y0*(1-t) + y1*t;
-
-   return [x,y];
-}*/
-/**
- * Returns a clone of the given cubic bezier (with a different reference).
- * @param ps A cubic bezier given by its array of control points
- */
-function clone(ps) {
-    let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
-    return [[x0, y0], [x1, y1], [x2, y2], [x3, y3]];
-}
-exports.clone = clone;
-/**
- * Evaluates the given quadratic bezier at a specific t value.
- * @param ps - A quadratic bezier curve.
- * @param t - The value where the bezier should be evaluated
- */ /*
-function evaluateQuadratic(ps: number[][], t: number) {
-   let [[x0,y0],[x1,y1],[x2,y2]] = ps;
-
-   let x = x0*(1-t)**2 + x1*2*(1-t)*t + x2*t**2;
-   let y = y0*(1-t)**2 + y1*2*(1-t)*t + y2*t**2;
-
-   return [x,y];
-}
-*/
-/**
- * Returns the cubic version of the given quadratic bezier curve. Quadratic
- * bezier curves can always be represented by cubics - the converse is false.
- * @param ps - A quadratic bezier curve.
- */
-function quadraticToCubic(ps) {
-    let [[x0, y0], [x1, y1], [x2, y2]] = ps;
-    return [
-        [x0, y0],
-        [(1 / 3) * x0 + (2 / 3) * x1, (1 / 3) * y0 + (2 / 3) * y1],
-        [(2 / 3) * x1 + (1 / 3) * x2, (2 / 3) * y1 + (1 / 3) * y2],
-        [x2, y2]
-    ];
-}
-exports.quadraticToCubic = quadraticToCubic;
-function linearToCubic(ps) {
-    let [[x0, y0], [x1, y1]] = ps;
-    let xInterval = (x1 - x0) / 3;
-    let yInterval = (y1 - y0) / 3;
-    return [
-        [x0, y0],
-        [x0 + xInterval * 1, y0 + yInterval * 1],
-        [x0 + xInterval * 2, y0 + yInterval * 2],
-        [x1, y1]
-    ];
-}
-exports.linearToCubic = linearToCubic;
-/**
- * Returns a cubic bezier curve that is equivalent to the given linear or
- * quadratic bezier curve. Cubics are just returned unaltered.
- * @param ps An order 1, 2 or 3 bezier curve
- */
-function toCubic(ps) {
-    if (ps.length === 2) { // Linear
-        return linearToCubic(ps);
-    }
-    else if (ps.length === 3) { // Quadratic
-        return quadraticToCubic(ps);
-    }
-    else if (ps.length === 4) { // Cubic
-        return ps;
-    }
-}
-exports.toCubic = toCubic;
-/**
- * Returns the given points (e.g. bezier) in reverse order.
- * @param ps
- */
-function reverse(ps) {
-    return ps.slice().reverse();
-}
-exports.reverse = reverse;
-function equal(psA, psB) {
-    let [[ax0, ay0], [ax1, ay1], [ax2, ay2], [ax3, ay3]] = psA;
-    let [[bx0, by0], [bx1, by1], [bx2, by2], [bx3, by3]] = psB;
-    return (ax0 === bx0 && ax1 === bx1 && ax2 === bx2 && ax3 === bx3 &&
-        ay0 === by0 && ay1 === by1 && ay2 === by2 && ay3 === by3);
-}
-exports.equal = equal;
 //# sourceMappingURL=index.js.map

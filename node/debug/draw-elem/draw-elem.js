@@ -9,9 +9,9 @@ function fatLine(g, fatLine) {
     let lv = flo_vector2d_1.fromTo(lp1, lp2);
     let lvTimes10 = [+E * lv[0], +E * lv[1]];
     let reverseLvTimes10 = [-E * lv[0], -E * lv[1]];
-    let normal = [-lv[1], lv[0]]; // Rotate by -90 degrees
-    let normMin = flo_vector2d_1.toLength(normal, minD);
-    let normMax = flo_vector2d_1.toLength(normal, maxD);
+    let norm = [-lv[1], lv[0]]; // Rotate by -90 degrees
+    let normMin = flo_vector2d_1.toLength(norm, minD);
+    let normMax = flo_vector2d_1.toLength(norm, maxD);
     let extLp1 = flo_vector2d_1.translate(lp1, reverseLvTimes10);
     let extLp2 = flo_vector2d_1.translate(lp2, lvTimes10);
     let nl11 = flo_vector2d_1.translate(extLp1, normMin);
@@ -74,7 +74,7 @@ function getSize(ps) {
     return Math.max(width, height);
 }
 function intersection(g, p) {
-    let $elems = flo_draw_1.drawFs.crossHair(g, p, 'red thin5 nofill', 0.5);
+    let $elems = flo_draw_1.drawFs.crossHair(g, p, 'red thin5 nofill', 0.1);
     return $elems;
 }
 function extreme(g, extreme) {

@@ -1,0 +1,29 @@
+
+import { getX } from "../../../to-power-basis/get-x";
+import { getY } from "../../../to-power-basis/get-y";
+import { getImplicitForm1 } from "../../../implicit-form/naive/get-implicit-form1_";
+
+
+function getCoeffs1x3(ps1: number[][], ps2: number[][]) {
+    let { vₓ, vᵧ, v } = getImplicitForm1(ps1);
+
+    let [c3, c2, c1, c0] = getX(ps2);
+    let [d3, d2, d1, d0] = getY(ps2);
+
+    // a3*v_x + b3*v_y
+    let v3 = c3*vₓ + d3*vᵧ;
+
+    // a2*v_x + b2*v_y
+    let v2 = c2*vₓ + d2*vᵧ;
+
+    // a1*v_x + b1*v_y
+    let v1 = c1*vₓ + d1*vᵧ;
+
+    // a0*v_x + b0*v_y + v_0
+    let v0 = c0*vₓ + d0*vᵧ + v;    
+
+    return [v3, v2, v1, v0];
+}
+
+
+export { getCoeffs1x3 }

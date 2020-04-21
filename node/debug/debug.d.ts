@@ -22,7 +22,7 @@ interface IGenerated {
 interface IDebugFunctions {
     drawElem: IDrawElemFunctions;
 }
-declare class BezDebug implements BezDebug {
+declare class BezDebug {
     g: SVGGElement;
     generated: IGenerated;
     fs: IDebugFunctions;

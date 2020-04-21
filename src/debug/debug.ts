@@ -39,7 +39,7 @@ interface IDebugFunctions {
 }
 
 
-class BezDebug implements BezDebug {
+class BezDebug {
     generated  : IGenerated;
     fs         : IDebugFunctions;
 

@@ -1,0 +1,26 @@
+
+import { getX } from '../../to-power-basis/get-x';
+import { getY } from '../../to-power-basis/get-y';
+
+
+/**
+ * Returns an approximate implicit form of the given linear bezier.
+ * Adapted from http://www.mare.ee/indrek/misc/2d.pdf
+ * @param ps 
+ */
+function getImplicitForm1(ps: number[][]) {
+    // The implicit form is given by:
+    // vₓx + vᵧy + v = 0
+
+    let [a1, a0] = getX(ps);
+    let [b1, b0] = getY(ps);
+
+    let vₓ = b1;
+    let vᵧ = -a1;
+    let v = a1*b0 - a0*b1;
+
+    return { vₓ, vᵧ, v }
+}
+
+
+export { getImplicitForm1 }

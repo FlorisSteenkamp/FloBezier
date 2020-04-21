@@ -30,9 +30,9 @@ function fatLine(g: SVGGElement, fatLine: { l: number[][]; minD: number; maxD: n
 	let lvTimes10 = [+E*lv[0], +E*lv[1]];
 	let reverseLvTimes10 = [-E*lv[0], -E*lv[1]];
 
-	let normal = [-lv[1], lv[0]]; // Rotate by -90 degrees
-	let normMin = toLength(normal, minD);
-	let normMax = toLength(normal, maxD);
+	let norm = [-lv[1], lv[0]]; // Rotate by -90 degrees
+	let normMin = toLength(norm, minD);
+	let normMax = toLength(norm, maxD);
 
 	let extLp1 = translate(lp1, reverseLvTimes10);
 	let extLp2 = translate(lp2, lvTimes10);
@@ -113,7 +113,7 @@ function intersection(
 		p: number[]) {
 
     let $elems = drawFs.crossHair( 
-        	g, p, 'red thin5 nofill', 0.5
+        	g, p, 'red thin5 nofill', 0.1
 	);  
 	
     return $elems;

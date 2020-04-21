@@ -1,60 +1,146 @@
 import { rotatePs as rotate, translatePs as translate } from 'flo-vector2d';
-import { getX } from './get-x';
-import { getY } from './get-y';
-import { getDx } from './get-dx';
-import { getDy } from './get-dy';
-import { getDdx } from './get-ddx';
-import { getDdy } from './get-ddy';
-import { getDxyAt1 } from './get-dxy-at-1';
-import { getDdxyAt1 } from './get-ddxy-at-1';
-import { getDxyAt0 } from './get-dxy-at-0';
-import { getDdxyAt0 } from './get-ddxy-at-0';
-import { getDddxy } from './get-dddxy';
-import { evaluateX } from './evaluate-x/evaluate-x';
-import { evaluateY } from './evaluate-y/evaluate-y';
-import { evaluate } from './evaluate/evaluate';
-import { evaluateDx } from './evaluate-dx';
-import { evaluateDdx } from './evaluate-ddx';
-import { evaluateDy } from './evaluate-dy';
-import { evaluateDdy } from './evaluate-ddy';
-import { tangent } from './tangent';
-import { normal } from './normal';
-import { from0ToT } from './from-0-to-T';
-import { fromTTo1 } from './from-T-to-1';
-import { fromTo, fromToPrecise } from './from-to';
-import { coincident } from './coincident';
-import { lineIntersection } from './line-intersection';
-import { bezier3Intersection } from './bezier3-intersection/bezier3-intersection';
-import { bezier3IntersectionSylvester } from './bezier3-intersection-sylvester/bezier3-intersection-sylvester_';
-import { tsAtX } from './ts-at-x';
-import { tsAtY } from './ts-at-y';
+import { length } from './global-properties/length/length';
+import { clone } from './transformation/clone';
+import { getTAtLength } from './local-properties-to-t/get-t-at-length';
+import { equal } from './simultaneous-properties/equal';
+import { cubicToQuadratic } from './transformation/cubic-to-quadratic';
+import { bezierFromBezierPiece } from './transformation/from-bezier-piece';
+import { evaluateHybridQuadratic } from './local-properties-at-t/t-to-xy/evaluate-hybrid-quadratic';
+import { closestPointOnBezier } from './simultaneous-properties/closest-point-on-bezier/closest-point-on-bezier';
+import { intersectBoxes } from './geometry/intersect-boxes';
+import { evalDeCasteljau, evalDeCasteljauX, evalDeCasteljauY } from './local-properties-at-t/t-to-xy/eval-de-casteljau';
+import { evalDeCasteljauWithErr, evalDeCasteljauWithErrQuad } from './local-properties-at-t/t-to-xy/eval-de-casteljau-with-err';
+import { isPointOnBezierExtension } from './simultaneous-properties/is-point-on-bezier-extension';
+import { totalCurvature, totalAbsoluteCurvature } from './global-properties/total-curvature';
+import { reverse } from './transformation/reverse';
+import { X } from './intersection/bezier-intersection-implicit/x';
+import { getInflectionPoints } from './global-properties/get-inflection-points';
+import { getIntersectionCoeffs } from './intersection/bezier-intersection-implicit/bezier-bezier-intersection-implicit';
+import { getImplicitForm3 } from './implicit-form/naive/get-implicit-form3';
+import { getImplicitForm3Quad } from './implicit-form/quad/get-implicit-form3';
+import { getImplicitForm3Exact } from './implicit-form/exact/get-implicit-form3';
+import { getImplicitForm3Exact_ } from './implicit-form/exact/get-implicit-form3-';
+import { getImplicitForm2 } from './implicit-form/naive/get-implicit-form2';
+import { getImplicitForm2Quad } from './implicit-form/quad/get-implicit-form2';
+import { getImplicitForm2Exact } from './implicit-form/exact/get-implicit-form2';
+import { getImplicitForm2Exact_ } from './implicit-form/exact/get-implicit-form2-';
+import { getImplicitForm1 } from './implicit-form/naive/get-implicit-form1';
+import { getImplicitForm1Quad } from './implicit-form/quad/get-implicit-form1';
+import { getImplicitForm1Exact } from './implicit-form/exact/get-implicit-form1';
+import { getImplicitForm1Exact_ } from './implicit-form/exact/get-implicit-form1-';
+import { getCoeffs3x3 } from './intersection/bezier-intersection-implicit/naive/get-coefficients-3x3';
+import { getCoeffs3x3Quad } from './intersection/bezier-intersection-implicit/quad/get-coefficients-3x3';
+import { getCoeffs3x3Exact } from './intersection/bezier-intersection-implicit/exact/get-coefficients-3x3';
+import { getCoeffs3x3Exact_ } from './intersection/bezier-intersection-implicit/exact/get-coefficients-3x3-';
+import { getCoeffs3x2 } from './intersection/bezier-intersection-implicit/naive/get-coefficients-3x2';
+import { getCoeffs3x2Quad } from './intersection/bezier-intersection-implicit/quad/get-coefficients-3x2';
+import { getCoeffs3x2Exact } from './intersection/bezier-intersection-implicit/exact/get-coefficients-3x2';
+import { getCoeffs3x2Exact_ } from './intersection/bezier-intersection-implicit/exact/get-coefficients-3x2-';
+import { getCoeffs3x1 } from './intersection/bezier-intersection-implicit/naive/get-coefficients-3x1';
+import { getCoeffs3x1Quad } from './intersection/bezier-intersection-implicit/quad/get-coefficients-3x1';
+import { getCoeffs3x1Exact } from './intersection/bezier-intersection-implicit/exact/get-coefficients-3x1';
+import { getCoeffs3x1Exact_ } from './intersection/bezier-intersection-implicit/exact/get-coefficients-3x1-';
+import { getCoeffs2x3 } from './intersection/bezier-intersection-implicit/naive/get-coefficients-2x3';
+import { getCoeffs2x3Quad } from './intersection/bezier-intersection-implicit/quad/get-coefficients-2x3';
+import { getCoeffs2x3Exact } from './intersection/bezier-intersection-implicit/exact/get-coefficients-2x3';
+import { getCoeffs2x3Exact_ } from './intersection/bezier-intersection-implicit/exact/get-coefficients-2x3-';
+import { getCoeffs2x2 } from './intersection/bezier-intersection-implicit/naive/get-coefficients-2x2';
+import { getCoeffs2x2Quad } from './intersection/bezier-intersection-implicit/quad/get-coefficients-2x2';
+import { getCoeffs2x2Exact } from './intersection/bezier-intersection-implicit/exact/get-coefficients-2x2';
+import { getCoeffs2x2Exact_ } from './intersection/bezier-intersection-implicit/exact/get-coefficients-2x2-';
+import { getCoeffs2x1 } from './intersection/bezier-intersection-implicit/naive/get-coefficients-2x1';
+import { getCoeffs2x1Quad } from './intersection/bezier-intersection-implicit/quad/get-coefficients-2x1';
+import { getCoeffs2x1Exact } from './intersection/bezier-intersection-implicit/exact/get-coefficients-2x1';
+import { getCoeffs2x1Exact_ } from './intersection/bezier-intersection-implicit/exact/get-coefficients-2x1-';
+import { getCoeffs1x3 } from './intersection/bezier-intersection-implicit/naive/get-coefficients-1x3';
+import { getCoeffs1x3Quad } from './intersection/bezier-intersection-implicit/quad/get-coefficients-1x3';
+import { getCoeffs1x3Exact } from './intersection/bezier-intersection-implicit/exact/get-coefficients-1x3';
+import { getCoeffs1x3Exact_ } from './intersection/bezier-intersection-implicit/exact/get-coefficients-1x3-';
+import { getCoeffs1x2 } from './intersection/bezier-intersection-implicit/naive/get-coefficients-1x2';
+import { getCoeffs1x2Quad } from './intersection/bezier-intersection-implicit/quad/get-coefficients-1x2';
+import { getCoeffs1x2Exact } from './intersection/bezier-intersection-implicit/exact/get-coefficients-1x2';
+import { getCoeffs1x2Exact_ } from './intersection/bezier-intersection-implicit/exact/get-coefficients-1x2-';
+import { getCoeffs1x1 } from './intersection/bezier-intersection-implicit/naive/get-coefficients-1x1';
+import { getCoeffs1x1Quad } from './intersection/bezier-intersection-implicit/quad/get-coefficients-1x1';
+import { getCoeffs1x1Exact } from './intersection/bezier-intersection-implicit/exact/get-coefficients-1x1';
+import { getCoeffs1x1Exact_ } from './intersection/bezier-intersection-implicit/exact/get-coefficients-1x1-';
+import { getCoeffs3 } from './intersection/self-intersection/naive/get-coeffs-3';
+import { getCoeffs3Quad } from './intersection/self-intersection/quad/get-coeffs-3';
+import { getCoeffs3Exact } from './intersection/self-intersection/exact/get-coeffs-3';
+import { toExpansion } from './transformation/to-expansion';
+import { toEstimation } from './transformation/to-estimation';
+import { fromPowerBases } from './from-power-basis/from-power-bases';
+import { getHodograph } from './transformation/get-hodograph';
+import { generateCuspAtHalf3 } from './create/generate-cusp-at-half-t';
+import { cubicThroughPointGiven013 } from './create/cubic-through-point';
+import { bezierSelfIntersection } from './intersection/self-intersection/self-intersection';
+import { getEndpointIntersections } from './intersection/get-endpoint-intersections';
+import { inversion01Precise } from './intersection/inversion-01';
+import { inversion1_BL52_1ULP } from './intersection/bezier-intersection-implicit/inversion-old';
+import { getXY } from './to-power-basis/get-xy';
+import { getDxy } from './to-power-basis/get-dxy';
+import { getDdxy } from './to-power-basis/get-ddxy';
+import { getX } from './to-power-basis/get-x';
+import { getY } from './to-power-basis/get-y';
+import { getDx } from './to-power-basis/get-dx';
+import { getDy } from './to-power-basis/get-dy';
+import { getDdx } from './to-power-basis/get-ddx';
+import { getDdy } from './to-power-basis/get-ddy';
+import { getDxyAt1 } from './local-properties-at-t/t-to-dxy/get-dxy-at-1';
+import { getDdxyAt1 } from './local-properties-at-t/t-to-ddxy/get-ddxy-at-1';
+import { getDxyAt0 } from './local-properties-at-t/t-to-dxy/get-dxy-at-0';
+import { getDdxyAt0 } from './local-properties-at-t/t-to-ddxy/get-ddxy-at-0';
+import { getDddxy } from './to-power-basis/get-dddxy';
+import { evaluateX } from './local-properties-at-t/t-to-xy/evaluate-x';
+import { evaluateY } from './local-properties-at-t/t-to-xy/evaluate-y';
+import { evaluate } from './local-properties-at-t/t-to-xy/evaluate';
+import { evaluateExact } from './local-properties-at-t/t-to-xy/evaluate';
+import { evaluateDx } from './local-properties-at-t/t-to-dxy/evaluate-dx';
+import { evaluateDdx } from './local-properties-at-t/t-to-ddxy/evaluate-ddx';
+import { evaluateDy } from './local-properties-at-t/t-to-dxy/evaluate-dy';
+import { evaluateDdy } from './local-properties-at-t/t-to-ddxy/evaluate-ddy';
+import { tangent } from './local-properties-at-t/tangent';
+import { normal } from './local-properties-at-t/normal';
+import { from0ToT } from './transformation/split-merge-clone/from-0-to-T';
+import { fromTTo1 } from './transformation/split-merge-clone/from-T-to-1';
+import { fromTo, fromToPrecise } from './transformation/split-merge-clone/from-to';
+import { getOtherTs } from './intersection/bezier-intersection-implicit/bezier-bezier-intersection-implicit';
+import { bezierBezierIntersectionImplicit } from './intersection/bezier-intersection-implicit/bezier-bezier-intersection-implicit';
+import { toCubic } from './transformation/degree-or-type/to-cubic';
 import { BezDebug } from './debug/debug';
-import { IDrawFunctions } from './debug/draw-functions';
 import { DebugElemType } from './debug/debug';
 import { FatLine } from './debug/fat-line';
-import { κ } from './curvature';
-import { quadToPolyline } from './quad-to-polyline';
-import { isQuadObtuse } from './is-quad-obtuse';
-import { splitAt, splitAtPrecise } from './split-at';
-import { closestPointOnBezier } from './closest-point-on-bezier';
-import { hausdorffDistance, hausdorffDistanceCandidates } from './hausdorff-distance';
-import { lengthUpperBound } from './length-upper-bound';
-import { lengthSquaredUpperBound } from './length-squared-upper-bound';
-import { splitByMaxCurveLength } from './split-by-max-curve-length';
+import { κ } from './local-properties-at-t/curvature';
+import { quadToPolyline } from './transformation/quad-to-polyline';
+import { isQuadObtuse } from './global-properties/type/is-quad-obtuse';
+import { getIntervalBox, getIntervalBox1, getIntervalBox2, getIntervalBox3 } from './global-properties/bounds/get-interval-box/get-interval-box';
+import { getIntervalBoxQuad, getIntervalBox1Quad, getIntervalBox2Quad, getIntervalBox3Quad } from './global-properties/bounds/get-interval-box/get-interval-box-quad';
+import { splitAt, splitAtPrecise } from './transformation/split-merge-clone/split-at';
+import { closestPointOnBezierPrecise } from './simultaneous-properties/closest-point-on-bezier/closest-point-on-bezier';
+import { hausdorffDistance, hausdorffDistanceCandidates } from './simultaneous-properties/hausdorff-distance';
+import { lengthUpperBound } from './global-properties/length/length-upper-bound';
+import { lengthSquaredUpperBound } from './global-properties/length/length-squared-upper-bound';
+import { splitByMaxCurveLength } from './transformation/split-merge-clone/split-by-max-curve-length';
 import { getCurvatureExtrema } from './get-curvature-extrema/get-curvature-extrema';
-import { getInflections } from './get-inflections';
-import { flatness } from './flatness';
-import { splitByMaxCurvature } from './split-by-max-curvature';
-import { splitByCurvatureAndLength } from './split-by-curvature-and-length';
-import { isPointOnBezierExtension } from './is-point-on-bezier-extension';
-import { areBeziersInSameKFamily } from './are-beziers-in-same-k-family';
-import { getInterfaceCcw } from './get-interface-ccw';
-import { isLine, isHorizontalLine, isVerticalLine } from './is-line';
-import { isSelfOverlapping } from './is-self-overlapping';
-import { getTangentPolyFromPoint } from './get-tangent-poly-from-point';
-import { getBounds } from './get-bounds';
-import { getBoundingBoxTight } from './get-bounding-box-tight';
-import { getBoundingBox } from './get-bounding-box';
+import { getInflections } from './local-properties-to-t/get-inflections';
+import { flatness } from './global-properties/flatness';
+import { splitByMaxCurvature } from './transformation/split-merge-clone/split-by-max-curvature';
+import { splitByCurvatureAndLength } from './transformation/split-merge-clone/split-by-curvature-and-length';
+import { areBeziersInSameKFamily } from './simultaneous-properties/are-beziers-in-same-k-family';
+import { getInterfaceCcw } from './simultaneous-properties/get-interface-ccw';
+import { isLine, isHorizontalLine, isVerticalLine } from './global-properties/type/is-line';
+import { isSelfOverlapping } from './global-properties/type/is-self-overlapping';
+import { getTangentPolyFromPoint } from './simultaneous-properties/get-tangent-poly-from-point/naive/get-tangent-poly-from-point';
+import { getTangentPolyFromPointExact } from './simultaneous-properties/get-tangent-poly-from-point/exact/get-tangent-poly-from-point';
+import { getXBoundsTight, getYBoundsTight } from './global-properties/bounds/get-bounds';
+import { getBounds } from './global-properties/bounds/get-bounds';
+import { getBoundingBoxTight } from './global-properties/bounds/get-bounding-box-tight';
+import { getBoundingBox } from './global-properties/bounds/get-bounding-box';
+import { toHybridQuadratic } from './transformation/degree-or-type/to-hybrid-quadratic';
+import { isCubicReallyQuad } from './global-properties/type/is-cubic-really-quad';
+import { toQuadraticFromCubic } from './transformation/degree-or-type/to-quad-from-cubic';
+import { circleBezierIntersection } from './intersection/circle-bezier-intersection/naive/circle-bezier-intersection';
+import { circleBezierIntersectionPrecise } from './intersection/circle-bezier-intersection/circle-bezier-intersection-precise';
 /**
  * Returns the convex hull of a bezier's control points. This hull bounds the
  * bezier curve. This function is memoized.
@@ -65,143 +151,12 @@ import { getBoundingBox } from './get-bounding-box';
  * @returns An ordered array of convex hull points.
  */
 declare let getBoundingHull: (a: number[][]) => number[][];
-/**
- * Returns a cubic bezier from the given line with evenly spaced control points.
- * @param l a 2d line represented by two points
- * @returns Control points of the cubic bezier.
- */
-declare function fromLine(l: number[][]): number[][];
-/**
- * Alias of κ.
- */
+/** Alias of κ. */
 declare let curvature: typeof κ;
-/**
- * Helper function. This function is curried.
- * A modified version of the differential of κ (use quotient rule, ignore
- * denominator and multiply by 2/3). We need to find the zeros of this function
- * to get the min/max curvature.
- * See <a href="http://math.info/Calculus/Curvature_Parametric/">this</a> for
- * more details.
- * @ignore
-**/
-declare function dκMod(ps: number[][], t: number): number;
-declare function dκMod(ps: number[][]): (t: number) => number;
-/**
- * Returns the total curvature of the bezier over the given interval using
- * Gaussian Quadrature integration with 16 wieghts and abscissas which is
- * generally very accurate and fast. This function is curried.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param interval - The interval of integration (often === [0,1])
- * @returns The total curvature.
- */
-declare function totalCurvature(ps: number[][], interval: number[]): number;
-declare function totalCurvature(ps: number[][]): (interval: number[]) => number;
-/**
- * TODO - replace this function with a more sane version where total curvature
- * is tallied by looking for inflection points and adding curvature over those
- * pieces by looking at tangent at beginning and end of the pieces.
- * Returns the total absolute curvature of the bezier over [0,1] using Gaussian
- * Quadrature integration with 16 wieghts and abscissas which is generally very
- * accurate and fast. Returns the result in radians.
- * @param ps - A cubic bezier
- * @param interval
- */
-declare function totalAbsoluteCurvature(ps: number[][], interval: number[]): number;
-declare function totalAbsoluteCurvature(ps: number[][]): (interval: number[]) => number;
-/**
- * Returns the curve (linear, quadratic or cubic bezier) length in the specified
- * interval. This function is curried.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param interval - The paramter interval over which the length is
- * to be calculated (often === [0,1]).
- */
-declare function length(interval: number[], ps: number[][]): number;
-declare function length(interval: number[]): (ps: number[][]) => number;
-/**
- * Returns the t parameter value where the given cubic bezier reaches the given
- * length, s, starting from t = 0. This function is curried.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param s - The length
- */
-declare function getTAtLength(ps: number[][], s: number): number;
-declare function getTAtLength(ps: number[][]): (s: number) => number;
-/**
- * Returns ds for a linear, quadratic or cubic bezier curve. This function is
- * curried.
- * @param ps An order 1, 2 or 3 bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param t The parameter value
- */
-declare function ds(ps: number[][], t: number): number;
-declare function ds(ps: number[][]): (t: number) => number;
-/**
- * Returns a new bezier from the given bezier by limiting its t range.
- *
- * Uses de Casteljau's algorithm.
- *
- * @param ps A bezier
- * @param tRange A t range
- */
-declare function bezierFromBezierPiece(ps: number[][], tRange: number[]): number[][];
 /**
  * Returns a human readable string representation of the given bezier.
  * @param ps - A bezier curve
  */
 declare function toString(ps: number[][]): string;
-/**
- * Scales all control points of the given bezier by the given factor.
- * @param ps - A bezier curve
- * @param c - The scale factor
- */
-declare function scale(ps: number[][], c: number): number[][];
-/**
- * Returns the best least squares quadratic bezier approximation to the given
- * cubic bezier. Note that the two bezier endpoints differ in general.
- * @param ps - A cubic bezier curve.
- */
-declare function toQuadratic(ps: number[][]): number[][];
-/**
- * Evaluates the given hybrid quadratic at the given t and th parameters. (see
- * toHybridQuadratic for details).
- * @param hq - A hybrid quadratic
- * @param t - The bezier parameter value
- * @param th - The parameter value for the hybrid quadratic point.
- */
-declare function evaluateHybridQuadratic(hq: [number[], number[][], number[]], t: number, th: number): number[];
-/**
- * Evaluates the given linear bezier (line) at a specific t value.
- * @param ps - A linear bezier curve.
- * @param t - The value where the bezier should be evaluated
- */ /**
- * Returns a clone of the given cubic bezier (with a different reference).
- * @param ps A cubic bezier given by its array of control points
- */
-declare function clone(ps: number[][]): number[][];
-/**
- * Evaluates the given quadratic bezier at a specific t value.
- * @param ps - A quadratic bezier curve.
- * @param t - The value where the bezier should be evaluated
- */ /**
- * Returns the cubic version of the given quadratic bezier curve. Quadratic
- * bezier curves can always be represented by cubics - the converse is false.
- * @param ps - A quadratic bezier curve.
- */
-declare function quadraticToCubic(ps: number[][]): number[][];
-declare function linearToCubic(ps: number[][]): number[][];
-/**
- * Returns a cubic bezier curve that is equivalent to the given linear or
- * quadratic bezier curve. Cubics are just returned unaltered.
- * @param ps An order 1, 2 or 3 bezier curve
- */
-declare function toCubic(ps: number[][]): number[][];
-/**
- * Returns the given points (e.g. bezier) in reverse order.
- * @param ps
- */
-declare function reverse(ps: number[][]): number[][];
-declare function equal(psA: number[][], psB: number[][]): boolean;
-export { getX, getY, getDx, getDy, getDdx, getDdy, getDddxy, getDxyAt1, getDdxyAt1, getDxyAt0, getDdxyAt0, evaluateX, evaluateY, evaluateDx, evaluateDy, evaluateDdx, evaluateDdy, evaluate, evaluateHybridQuadratic, κ, curvature, tangent, normal, ds, dκMod, tsAtX, tsAtY, getTAtLength, rotate, translate, scale, linearToCubic, fromLine, toCubic, quadraticToCubic, toQuadratic, reverse, from0ToT, fromTTo1, fromTo, fromToPrecise, splitAt, splitAtPrecise, splitByMaxCurveLength, splitByMaxCurvature, splitByCurvatureAndLength, clone, quadToPolyline, getBounds, getBoundingHull, getBoundingBoxTight, getBoundingBox, lengthUpperBound, lengthSquaredUpperBound, getCurvatureExtrema, getInflections, totalCurvature, totalAbsoluteCurvature, length, isQuadObtuse, flatness, isLine, isHorizontalLine, isVerticalLine, isSelfOverlapping, equal, getInterfaceCcw, areBeziersInSameKFamily, closestPointOnBezier, getTangentPolyFromPoint, hausdorffDistance, hausdorffDistanceCandidates, bezier3Intersection, bezier3IntersectionSylvester, lineIntersection, coincident, isPointOnBezierExtension, bezierFromBezierPiece, toString };
-export { BezDebug, IDrawFunctions, DebugElemType, FatLine };
-export interface BezierPoint {
-    p: number[];
-    t: number;
-}
+export { getXY, getDxy, getDdxy, getX, getY, getDx, getDy, getDdx, getDdy, getDddxy, getDxyAt1, getDdxyAt1, getDxyAt0, getDdxyAt0, evaluateX, evaluateY, evaluateDx, evaluateDy, evaluateDdx, evaluateDdy, evaluate, evaluateExact, evaluateHybridQuadratic, κ, curvature, tangent, normal, getTAtLength, rotate, translate, toCubic, cubicToQuadratic, fromPowerBases, toHybridQuadratic, reverse, from0ToT, fromTTo1, fromTo, fromToPrecise, splitAt, splitAtPrecise, splitByMaxCurveLength, splitByMaxCurvature, splitByCurvatureAndLength, clone, toString, quadToPolyline, toExpansion, toEstimation, getImplicitForm3, getImplicitForm3Quad, getImplicitForm3Exact, getImplicitForm3Exact_, getImplicitForm2, getImplicitForm2Quad, getImplicitForm2Exact, getImplicitForm2Exact_, getImplicitForm1, getImplicitForm1Quad, getImplicitForm1Exact, getImplicitForm1Exact_, getBounds, getXBoundsTight, getYBoundsTight, getBoundingHull, getBoundingBoxTight, getBoundingBox, lengthUpperBound, lengthSquaredUpperBound, getIntervalBox, getIntervalBox1, getIntervalBox2, getIntervalBox3, getCurvatureExtrema, getInflections, totalCurvature, totalAbsoluteCurvature, length, isQuadObtuse, flatness, isLine, isHorizontalLine, isVerticalLine, isSelfOverlapping, getHodograph, isCubicReallyQuad, toQuadraticFromCubic, getInflectionPoints, equal, getInterfaceCcw, areBeziersInSameKFamily, closestPointOnBezierPrecise, getTangentPolyFromPoint, getTangentPolyFromPointExact, hausdorffDistance, hausdorffDistanceCandidates, getEndpointIntersections, inversion01Precise, inversion1_BL52_1ULP, bezierBezierIntersectionImplicit, getIntersectionCoeffs, getOtherTs, intersectBoxes, circleBezierIntersection, circleBezierIntersectionPrecise, bezierSelfIntersection, bezierFromBezierPiece, generateCuspAtHalf3, cubicThroughPointGiven013, getIntervalBoxQuad, getIntervalBox1Quad, getIntervalBox2Quad, getIntervalBox3Quad, evalDeCasteljau, evalDeCasteljauX, evalDeCasteljauY, evalDeCasteljauWithErr, evalDeCasteljauWithErrQuad, isPointOnBezierExtension, getCoeffs3x3, getCoeffs3x3Quad, getCoeffs3x3Exact, getCoeffs3x3Exact_, getCoeffs3x2, getCoeffs3x2Quad, getCoeffs3x2Exact, getCoeffs3x2Exact_, getCoeffs3x1, getCoeffs3x1Quad, getCoeffs3x1Exact, getCoeffs3x1Exact_, getCoeffs2x3, getCoeffs2x3Quad, getCoeffs2x3Exact, getCoeffs2x3Exact_, getCoeffs2x2, getCoeffs2x2Quad, getCoeffs2x2Exact, getCoeffs2x2Exact_, getCoeffs2x1, getCoeffs2x1Quad, getCoeffs2x1Exact, getCoeffs2x1Exact_, getCoeffs1x3, getCoeffs1x3Quad, getCoeffs1x3Exact, getCoeffs1x3Exact_, getCoeffs1x2, getCoeffs1x2Quad, getCoeffs1x2Exact, getCoeffs1x2Exact_, getCoeffs1x1, getCoeffs1x1Quad, getCoeffs1x1Exact, getCoeffs1x1Exact_, getCoeffs3, getCoeffs3Quad, getCoeffs3Exact, closestPointOnBezier };
+export { BezDebug, DebugElemType, FatLine, X };

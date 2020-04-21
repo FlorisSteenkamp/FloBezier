@@ -2,10 +2,9 @@
 import { expect, assert } from 'chai';
 //import { describe } from 'mocha';
 import 'mocha';
-import { getInterfaceCcw } from '../src/get-interface-ccw';
-import { splitAt } from '../src/split-at';
+import { getInterfaceCcw } from '../src/simultaneous-properties/get-interface-ccw';
+import { splitAt } from '../src/transformation/split-merge-clone/split-at';
 
-(this as any)._bez_debug = true;
 
 describe('get interface ccw', function() {
 	it('it should work correctly for a variety of bezier curve pairs', 

@@ -1,0 +1,630 @@
+
+import { getX } from "../../../to-power-basis/get-x";
+import { getY } from "../../../to-power-basis/get-y";
+import { 
+    getImplicitForm3Parametric
+} from "../../../implicit-form/naive/get-implicit-form3";
+import { 
+    γ, γ2, γ3, γ4, γ5, γ6, γ7, γ8, γ9,
+    γ10, γ11, γ12, γ13, γ14
+} from '../../../error-analysis/error-analysis';
+
+
+let abs = Math.abs;
+
+
+/**
+ * Returns an approximate implicit form of the given cubic bezier.
+ * @param ps 
+ */
+function getCoeffs3x3(
+        ps1: number[][], 
+        ps2: number[][]) {
+
+    let coeffsX1 = getX(ps1);
+    let coeffsY1 = getY(ps1);
+    let coeffsX2 = getX(ps2);
+    let coeffsY2 = getY(ps2);
+
+    return getCoeffs3x3Parametric(
+        coeffsX1,
+        coeffsY1,
+        coeffsX2,
+        coeffsY2
+    );
+}
+
+
+function getCoeffs3x3ErrorBound_(
+        coeffsX1: number[],
+        coeffsY1: number[],
+        coeffsX2: number[],
+        coeffsY2: number[]) {
+
+    let [v9, v8, v7, v6, v5, v4, v3, v2, v1, v0] =
+        getCeoffs3x3ParametricAbs(
+            coeffsX1, 
+            coeffsY1,
+            coeffsX2, 
+            coeffsY2
+        );
+
+    return [
+        γ(8)* v9, // γ6
+        γ9  * v8, // γ6?
+        γ(10)* v7, // γ6?
+        γ10 * v6, // γ6?
+        γ10 * v5, // γ6?
+        γ11 * v4, // γ6?
+        γ13 * v3, // γ6?
+        γ13 * v2, // γ6?
+        γ13 * v1, // γ6?
+        γ14 * v0, // γ6?
+    ]
+}
+
+
+function getCeoffs3x3ParametricAbs(
+        coeffsX1: number[],
+        coeffsY1: number[],
+        coeffsX2: number[],
+        coeffsY2: number[]) {
+
+    let { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
+        getImplicitForm3ParametricAbs(
+            coeffsX1, 
+            coeffsY1
+        );
+
+    let [a3, a2, a1, a0] = coeffsX2; // Assume exact -> max bitlength = 49
+    let [b3, b2, b1, b0] = coeffsY2; // Assume exact -> max bitlength = 49
+
+    let v9 =
+        abs(a3*b3*b3*vₓᵧᵧ) + 
+        abs(b3*a3*a3*vₓₓᵧ) + 
+        abs(a3*a3*a3*vₓₓₓ) + 
+        abs(b3*b3*b3*vᵧᵧᵧ);  
+
+    let v8 =
+        abs(2*a2*a3*b3*vₓₓᵧ) + 
+        abs(2*a3*b2*b3*vₓᵧᵧ) + 
+        abs(  a2*b3*b3*vₓᵧᵧ) + 
+        abs(  b2*a3*a3*vₓₓᵧ) + 
+        abs(3*a2*a3*a3*vₓₓₓ) + 
+        abs(3*b2*b3*b3*vᵧᵧᵧ);  
+
+    let v7 =
+        abs(2*a1*a3*b3*vₓₓᵧ) + 
+        abs(2*a2*a3*b2*vₓₓᵧ) + 
+        abs(2*a2*b2*b3*vₓᵧᵧ) + 
+        abs(2*a3*b1*b3*vₓᵧᵧ) + 
+        abs(  a1*b3*b3*vₓᵧᵧ) + 
+        abs(  a3*b2*b2*vₓᵧᵧ) + 
+        abs(  b1*a3*a3*vₓₓᵧ) + 
+        abs(  b3*a2*a2*vₓₓᵧ) + 
+        abs(3*a1*a3*a3*vₓₓₓ) + 
+        abs(3*a3*a2*a2*vₓₓₓ) + 
+        abs(3*b1*b3*b3*vᵧᵧᵧ) + 
+        abs(3*b3*b2*b2*vᵧᵧᵧ);  
+
+    let v6 =
+        abs(2*a0*a3*b3*vₓₓᵧ) + 
+        abs(2*a1*a2*b3*vₓₓᵧ) + 
+        abs(2*a1*a3*b2*vₓₓᵧ) + 
+        abs(2*a1*b2*b3*vₓᵧᵧ) + 
+        abs(2*a2*a3*b1*vₓₓᵧ) + 
+        abs(2*a2*b1*b3*vₓᵧᵧ) + 
+        abs(2*a3*b0*b3*vₓᵧᵧ) + 
+        abs(2*a3*b1*b2*vₓᵧᵧ) + 
+        abs(  a0*b3*b3*vₓᵧᵧ) + 
+        abs(  b0*a3*a3*vₓₓᵧ) + 
+        abs(  a2*b2*b2*vₓᵧᵧ) + 
+        abs(  b2*a2*a2*vₓₓᵧ) + 
+        abs(6*a1*a2*a3*vₓₓₓ) + 
+        abs(6*b1*b2*b3*vᵧᵧᵧ) + 
+        abs(3*a0*a3*a3*vₓₓₓ) + 
+        abs(3*b0*b3*b3*vᵧᵧᵧ) + 
+        abs(  a2*a2*a2*vₓₓₓ) + 
+        abs(  b2*b2*b2*vᵧᵧᵧ) + 
+        abs(  a3*a3   *vₓₓ ) + 
+        abs(  b3*b3   *vᵧᵧ ) + 
+        abs(  a3*b3   *vₓᵧ);   
+
+    let v5 =
+        abs(  a2*b3   *vₓᵧ ) + 
+        abs(  a3*b2   *vₓᵧ ) + 
+        abs(2*a2*a3   *vₓₓ ) + 
+        abs(2*b2*b3   *vᵧᵧ ) + 
+        abs(2*a0*a2*b3*vₓₓᵧ) + 
+        abs(2*a0*a3*b2*vₓₓᵧ) + 
+        abs(2*a0*b2*b3*vₓᵧᵧ) + 
+        abs(2*a1*a2*b2*vₓₓᵧ) + 
+        abs(2*a1*a3*b1*vₓₓᵧ) + 
+        abs(2*a1*b1*b3*vₓᵧᵧ) + 
+        abs(2*a2*a3*b0*vₓₓᵧ) + 
+        abs(2*a2*b0*b3*vₓᵧᵧ) + 
+        abs(2*a2*b1*b2*vₓᵧᵧ) + 
+        abs(2*a3*b0*b2*vₓᵧᵧ) + 
+        abs(  a1*b2*b2*vₓᵧᵧ) + 
+        abs(  a3*b1*b1*vₓᵧᵧ) + 
+        abs(  b1*a2*a2*vₓₓᵧ) + 
+        abs(  b3*a1*a1*vₓₓᵧ) + 
+        abs(6*a0*a2*a3*vₓₓₓ) + 
+        abs(6*b0*b2*b3*vᵧᵧᵧ) + 
+        abs(3*a3*a1*a1*vₓₓₓ) + 
+        abs(3*b3*b1*b1*vᵧᵧᵧ) + 
+        abs(3*a1*a2*a2*vₓₓₓ) + 
+        abs(3*b1*b2*b2*vᵧᵧᵧ);  
+
+    let v4 =
+        abs(2*a0*a1*b3*vₓₓᵧ) + 
+        abs(2*a0*a2*b2*vₓₓᵧ) + 
+        abs(2*a0*a3*b1*vₓₓᵧ) + 
+        abs(2*a0*b1*b3*vₓᵧᵧ) + 
+        abs(2*a1*a2*b1*vₓₓᵧ) + 
+        abs(2*a1*a3*b0*vₓₓᵧ) + 
+        abs(2*a1*b0*b3*vₓᵧᵧ) + 
+        abs(2*a1*b1*b2*vₓᵧᵧ) + 
+        abs(2*a2*b0*b2*vₓᵧᵧ) + 
+        abs(2*a3*b0*b1*vₓᵧᵧ) + 
+        abs(  a0*b2*b2*vₓᵧᵧ) + 
+        abs(  a2*b1*b1*vₓᵧᵧ) + 
+        abs(  b0*a2*a2*vₓₓᵧ) + 
+        abs(  b2*a1*a1*vₓₓᵧ) + 
+        abs(6*a0*a1*a3*vₓₓₓ) + 
+        abs(6*b0*b1*b3*vᵧᵧᵧ) + 
+        abs(3*a0*a2*a2*vₓₓₓ) + 
+        abs(3*a2*a1*a1*vₓₓₓ) + 
+        abs(3*b0*b2*b2*vᵧᵧᵧ) + 
+        abs(3*b2*b1*b1*vᵧᵧᵧ) + 
+        abs(  a1*b3   *vₓᵧ ) + 
+        abs(  a2*b2   *vₓᵧ ) + 
+        abs(  a3*b1   *vₓᵧ ) + 
+        abs(2*a1*a3   *vₓₓ ) + 
+        abs(2*b1*b3   *vᵧᵧ ) + 
+        abs(  a2*a2   *vₓₓ ) + 
+        abs(  b2*b2   *vᵧᵧ );  
+
+    let v3 =
+        abs(2*a0*a1*b2*vₓₓᵧ) + 
+        abs(2*a0*a2*b1*vₓₓᵧ) + 
+        abs(2*a0*a3*b0*vₓₓᵧ) + 
+        abs(2*a0*b0*b3*vₓᵧᵧ) + 
+        abs(2*a0*b1*b2*vₓᵧᵧ) + 
+        abs(2*a1*a2*b0*vₓₓᵧ) + 
+        abs(2*a1*b0*b2*vₓᵧᵧ) + 
+        abs(2*a2*b0*b1*vₓᵧᵧ) + 
+        abs(  a1*b1*b1*vₓᵧᵧ) + 
+        abs(  a3*b0*b0*vₓᵧᵧ) + 
+        abs(  b1*a1*a1*vₓₓᵧ) + 
+        abs(  b3*a0*a0*vₓₓᵧ) + 
+        abs(6*a0*a1*a2*vₓₓₓ) + 
+        abs(6*b0*b1*b2*vᵧᵧᵧ) + 
+        abs(3*a3*a0*a0*vₓₓₓ) + 
+        abs(3*b3*b0*b0*vᵧᵧᵧ) + 
+        abs(  a1*a1*a1*vₓₓₓ) + 
+        abs(  b1*b1*b1*vᵧᵧᵧ) + 
+        abs(  a0*b3   *vₓᵧ ) + 
+        abs(  a1*b2   *vₓᵧ ) + 
+        abs(  a2*b1   *vₓᵧ ) + 
+        abs(  a3*b0   *vₓᵧ ) + 
+        abs(2*a0*a3   *vₓₓ ) + 
+        abs(2*a1*a2   *vₓₓ ) + 
+        abs(2*b0*b3   *vᵧᵧ ) + 
+        abs(2*b1*b2   *vᵧᵧ ) + 
+        abs(  a3      *vₓ  ) + 
+        abs(  b3      *vᵧ  );  
+
+    let v2 =
+        abs(2*a0*a1*b1*vₓₓᵧ) + 
+        abs(2*a0*a2*b0*vₓₓᵧ) + 
+        abs(2*a0*b0*b2*vₓᵧᵧ) + 
+        abs(2*a1*b0*b1*vₓᵧᵧ) + 
+        abs(  a0*b1*b1*vₓᵧᵧ) + 
+        abs(  a2*b0*b0*vₓᵧᵧ) + 
+        abs(  b0*a1*a1*vₓₓᵧ) + 
+        abs(  b2*a0*a0*vₓₓᵧ) + 
+        abs(3*a0*a1*a1*vₓₓₓ) + 
+        abs(3*a2*a0*a0*vₓₓₓ) + 
+        abs(3*b0*b1*b1*vᵧᵧᵧ) + 
+        abs(3*b2*b0*b0*vᵧᵧᵧ) + 
+        abs(  a0*b2   *vₓᵧ ) + 
+        abs(  a1*b1   *vₓᵧ ) + 
+        abs(  a2*b0   *vₓᵧ ) + 
+        abs(2*a0*a2   *vₓₓ ) + 
+        abs(2*b0*b2   *vᵧᵧ ) + 
+        abs(  a1*a1   *vₓₓ ) + 
+        abs(  b1*b1   *vᵧᵧ ) + 
+        abs(  a2      *vₓ  ) + 
+        abs(  b2      *vᵧ  );  
+
+    let v1 =
+        abs(2*a0*a1*b0*vₓₓᵧ) + 
+        abs(2*a0*b0*b1*vₓᵧᵧ) + 
+        abs(  a1*b0*b0*vₓᵧᵧ) + 
+        abs(  b1*a0*a0*vₓₓᵧ) + 
+        abs(3*a1*a0*a0*vₓₓₓ) + 
+        abs(3*b1*b0*b0*vᵧᵧᵧ) + 
+        abs(  a0*b1   *vₓᵧ ) + 
+        abs(  a1*b0   *vₓᵧ ) + 
+        abs(2*a0*a1   *vₓₓ ) + 
+        abs(2*b0*b1   *vᵧᵧ ) + 
+        abs(  a1      *vₓ  ) + 
+        abs(  b1      *vᵧ  );  
+
+    let v0 =
+        abs(a0*b0*b0*vₓᵧᵧ) + // γ6 = γ1 + γ2 + γ3
+        abs(b0*a0*a0*vₓₓᵧ) + // γ6 = γ1 + γ2 + γ3
+        abs(a0*a0*a0*vₓₓₓ) + // γ5 = γ1 + γ2 + γ2
+        abs(b0*b0*b0*vᵧᵧᵧ) + // γ5 = γ1 + γ2 + γ2
+        abs(a0*b0   *vₓᵧ ) + // γ13 = γ1 + γ1 + γ11
+        abs(a0*a0   *vₓₓ ) + // γ12 = γ1 + γ1 + γ10
+        abs(b0*b0   *vᵧᵧ ) + // γ12 = γ1 + γ1 + γ10
+        abs(a0      *vₓ  ) + // γ26 = γ1 + γ25
+        abs(b0      *vᵧ  ) + // γ26 = γ1 + γ25
+        abs(v);              // γ11 = γ11
+
+    return [v9, v8, v7, v6, v5, v4, v3, v2, v1, v0];
+}
+
+
+
+/**
+ * @param ps1 
+ * @param ps2 
+ */
+function getCoeffs3x3Parametric(
+        coeffsX1: number[],
+        coeffsY1: number[],
+        coeffsX2: number[],
+        coeffsY2: number[]) {
+
+    let { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
+        getImplicitForm3Parametric(coeffsX1, coeffsY1);
+
+    let [c3, c2, c1, c0] = coeffsX2; // Assume exact -> max bitlength = 49
+    let [d3, d2, d1, d0] = coeffsY2; // Assume exact -> max bitlength = 49
+
+    let v9 = // γ = γ5 = γ2+γ1 +γ2
+        ((c3*d3*d3)*vₓᵧᵧ + // γ2+γ1
+         (d3*c3*c3)*vₓₓᵧ) +
+        ((c3*c3*c3)*vₓₓₓ +
+         (d3*d3*d3)*vᵧᵧᵧ);
+
+    let v8 = // γ = γ6 = γ2+γ1 +γ3
+      ((((2*c2)*(c3*d3))*vₓₓᵧ + // γ2+γ1
+        ((2*c3)*(d2*d3))*vₓᵧᵧ) +
+       ((    c2*(d3*d3))*vₓᵧᵧ +
+        (    d2*(c3*c3))*vₓₓᵧ)) +
+       (((3*c2)*(c3*c3))*vₓₓₓ +
+        ((3*d2)*(d3*d3))*vᵧᵧᵧ);
+
+    let v7 = // γ = γ7 = γ2+γ1 +γ4
+     (((((2*c1)*(c3*d3))*vₓₓᵧ + // γ2+γ1
+        ((2*c2)*(c3*d2))*vₓₓᵧ) +
+       (((2*c2)*(d2*d3))*vₓᵧᵧ +
+        ((2*c3)*(d1*d3))*vₓᵧᵧ)) +
+      ((((  c1)*(d3*d3))*vₓᵧᵧ +
+        ((  c3)*(d2*d2))*vₓᵧᵧ) +
+       (((  d1)*(c3*c3))*vₓₓᵧ +
+        ((  d3)*(c2*c2))*vₓₓᵧ))) +
+      ((((3*c1)*(c3*c3))*vₓₓₓ +
+        ((3*c3)*(c2*c2))*vₓₓₓ) +
+       (((3*d1)*(d3*d3))*vᵧᵧᵧ +
+        ((3*d3)*(d2*d2))*vᵧᵧᵧ));
+
+    let v6 = // γ = γ10 = max(γ2+γ1 +γ5, γ7 +γ2) + γ1
+   (((((((2*c0)*(c3*d3))*vₓₓᵧ + // γ2+γ1
+        ((2*c1)*(c2*d3))*vₓₓᵧ) +
+       (((2*c1)*(c3*d2))*vₓₓᵧ +
+        ((2*c1)*(d2*d3))*vₓᵧᵧ)) +
+      ((((2*c2)*(c3*d1))*vₓₓᵧ +
+        ((2*c2)*(d1*d3))*vₓᵧᵧ) +
+       (((2*c3)*(d0*d3))*vₓᵧᵧ +
+        ((2*c3)*(d1*d2))*vₓᵧᵧ))) +
+     (((((  c0)*(d3*d3))*vₓᵧᵧ +
+        ((  d0)*(c3*c3))*vₓₓᵧ) +
+       (((  c2)*(d2*d2))*vₓᵧᵧ +
+        ((  d2)*(c2*c2))*vₓₓᵧ)) +
+      ((((  c2)*(c2*c2))*vₓₓₓ +
+        ((  d2)*(d2*d2))*vᵧᵧᵧ) +
+       (((6*c1)*(c2*c3))*vₓₓₓ +
+        ((6*d1)*(d2*d3))*vᵧᵧᵧ)))) +
+       (((3*c0)*(c3*c3))*vₓₓₓ +
+        ((3*d0)*(d3*d3))*vᵧᵧᵧ)) +
+        // γ9 = γ7 +γ2
+         ((c3*c3)       *vₓₓ  + // γ6+γ1
+          (d3*d3)       *vᵧᵧ  +
+          (c3*d3)       *vₓᵧ);
+
+    let v5 = // γ = γ10 = max(γ2+γ1 +γ5, γ7 +γ2) + γ1
+    // γ8 = γ2+γ1 +γ5
+   (((((((2*c0)*(c2*d3))*vₓₓᵧ + // γ3 = γ2+γ1
+        ((2*c0)*(c3*d2))*vₓₓᵧ) +
+       (((2*c0)*(d2*d3))*vₓᵧᵧ +
+        ((2*c1)*(c2*d2))*vₓₓᵧ)) +
+      ((((2*c1)*(c3*d1))*vₓₓᵧ +
+        ((2*c1)*(d1*d3))*vₓᵧᵧ) +
+       (((2*c2)*(c3*d0))*vₓₓᵧ +
+        ((2*c2)*(d0*d3))*vₓᵧᵧ))) +
+     (((((2*c2)*(d1*d2))*vₓᵧᵧ +
+        ((2*c3)*(d0*d2))*vₓᵧᵧ) +
+       (((  c1)*(d2*d2))*vₓᵧᵧ +
+        ((  c3)*(d1*d1))*vₓᵧᵧ)) +
+      ((((  d1)*(c2*c2))*vₓₓᵧ +
+        ((  d3)*(c1*c1))*vₓₓᵧ) +
+       (((6*c0)*(c2*c3))*vₓₓₓ +
+        ((6*d0)*(d2*d3))*vᵧᵧᵧ)))) +
+      ((((3*c3)*(c1*c1))*vₓₓₓ +
+        ((3*d3)*(d1*d1))*vᵧᵧᵧ) +
+       (((3*c1)*(c2*c2))*vₓₓₓ +
+        ((3*d1)*(d2*d2))*vᵧᵧᵧ))) +
+        // γ9 = γ7 +γ2
+      (((  c2*d3)   *vₓᵧ + // γ6+γ1
+        (  c3*d2)   *vₓᵧ) +
+       ((2*c2*c3)   *vₓₓ +
+        (2*d2*d3)   *vᵧᵧ));
+
+    let v4 = // γ = γ11 = max(γ8,γ10) +γ1
+    // γ8 = γ2+γ1 +γ5
+   (((((((2*c0)*(c1*d3))*vₓₓᵧ + // γ3 = γ2+γ1
+        ((2*c0)*(c2*d2))*vₓₓᵧ) +
+       (((2*c0)*(c3*d1))*vₓₓᵧ +
+        ((2*c0)*(d1*d3))*vₓᵧᵧ)) +
+      ((((2*c1)*(c2*d1))*vₓₓᵧ +
+        ((2*c1)*(c3*d0))*vₓₓᵧ) +
+       (((2*c1)*(d0*d3))*vₓᵧᵧ +
+        ((2*c1)*(d1*d2))*vₓᵧᵧ))) +
+     (((((2*c2)*(d0*d2))*vₓᵧᵧ +
+        ((2*c3)*(d0*d1))*vₓᵧᵧ) +
+       (((6*c0)*(c1*c3))*vₓₓₓ +
+        ((6*d0)*(d1*d3))*vᵧᵧᵧ)) +
+      ((((  c0)*(d2*d2))*vₓᵧᵧ +
+        ((  c2)*(d1*d1))*vₓᵧᵧ) +
+       (((  d0)*(c2*c2))*vₓₓᵧ +
+        ((  d2)*(c1*c1))*vₓₓᵧ)))) +
+      ((((3*c0)*(c2*c2))*vₓₓₓ +
+        ((3*c2)*(c1*c1))*vₓₓₓ) +
+       (((3*d0)*(d2*d2))*vᵧᵧᵧ +
+        ((3*d2)*(d1*d1))*vᵧᵧᵧ))) +
+        // γ10 = γ6+γ1 + γ3
+     ((((  c1*d3)   *vₓᵧ  + // γ7 = γ6+γ1
+        (  c2*d2)   *vₓᵧ)  +
+       ((  c3*d1)   *vₓᵧ  +
+        (2*c1*c3)   *vₓₓ))  +
+      (((2*d1*d3)   *vᵧᵧ  +
+        (  c2*c2)   *vₓₓ)  +
+        (  d2*d2)   *vᵧᵧ));
+
+    let v3 = // γ = γ13 = max(max(γ8,γ10) + γ1), γ12) + γ1
+        // γ8 = γ3 +γ5
+  ((((((((2*c0)*(c1*d2))*vₓₓᵧ + // γ3 = γ2+γ1
+        ((2*c0)*(c2*d1))*vₓₓᵧ) +
+       (((2*c0)*(c3*d0))*vₓₓᵧ +
+        ((2*c0)*(d0*d3))*vₓᵧᵧ)) +
+      ((((2*c0)*(d1*d2))*vₓᵧᵧ +
+        ((2*c1)*(c2*d0))*vₓₓᵧ) +
+       (((2*c1)*(d0*d2))*vₓᵧᵧ +
+        ((2*c2)*(d0*d1))*vₓᵧᵧ))) +
+     (((((6*c0)*(c1*c2))*vₓₓₓ +
+        ((6*d0)*(d1*d2))*vᵧᵧᵧ) +
+       (((  c1)*(d1*d1))*vₓᵧᵧ +
+        ((  c3)*(d0*d0))*vₓᵧᵧ)) +
+      ((((  d1)*(c1*c1))*vₓₓᵧ +
+        ((  d3)*(c0*c0))*vₓₓᵧ) +
+       (((3*c3)*(c0*c0))*vₓₓₓ +
+        ((3*d3)*(d0*d0))*vᵧᵧᵧ)))) +
+       (((  c1)*(c1*c1))*vₓₓₓ +
+        ((  d1)*(d1*d1))*vᵧᵧᵧ)) +
+      // γ10 = γ7 + γ3
+     ((((  c0*d3)*vₓᵧ + // γ7 = γ6+γ1
+        (  c1*d2)*vₓᵧ) +
+       ((  c2*d1)*vₓᵧ +
+        (  c3*d0)*vₓᵧ)) +
+      (((2*c0*c3)*vₓₓ +
+        (2*c1*c2)*vₓₓ) +
+       ((2*d0*d3)*vᵧᵧ +
+        (2*d1*d2)*vᵧᵧ)))) +
+        // γ12 = γ11+γ1
+        (vₓ *  c3    + // γ11 = γ10+γ1
+         vᵧ *  d3)    ;
+
+    let v2 = // γ = γ13 = max(max(γ7,γ10) + γ1), γ12) + γ1
+    // γ7 = γ3 +γ4
+   (((((((2*c0)*(c1*d1))*vₓₓᵧ + // γ3 = γ2+γ1
+        ((2*c0)*(c2*d0))*vₓₓᵧ) +
+       (((2*c0)*(d0*d2))*vₓᵧᵧ +
+        ((2*c1)*(d0*d1))*vₓᵧᵧ)) +
+      ((((  c0)*(d1*d1))*vₓᵧᵧ +
+        ((  c2)*(d0*d0))*vₓᵧᵧ) +
+       (((  d0)*(c1*c1))*vₓₓᵧ +
+        ((  d2)*(c0*c0))*vₓₓᵧ))) +
+      ((((3*c0)*(c1*c1))*vₓₓₓ +
+        ((3*c2)*(c0*c0))*vₓₓₓ) +
+       (((3*d0)*(d1*d1))*vᵧᵧᵧ +
+        ((3*d2)*(d0*d0))*vᵧᵧᵧ))) +
+        // γ10 = γ7 + γ3
+     ((((  c0*d2)*vₓᵧ + // γ7 = γ6+γ1
+        (  c1*d1)*vₓᵧ) +
+       ((  c2*d0)*vₓᵧ +
+        (2*c0*c2)*vₓₓ)) +
+      (((2*d0*d2)*vᵧᵧ +
+        (  c1*c1)*vₓₓ) +
+        (  d1*d1)*vᵧᵧ))) +
+        // γ12 = γ11+γ1
+          (c2 *  vₓ    + // γ11 = γ10+γ1
+           d2 *  vᵧ)    ;
+
+    let v1 = // γ = γ13 = max(max(γ7,γ9) + γ1), γ12) + γ1
+      // γ7 = γ3 +γ4
+    ((((((2*c0)*(c1*d0))*vₓₓᵧ + // γ3 = γ2+γ1
+        ((2*c0)*(d0*d1))*vₓᵧᵧ) +
+       (((  c1)*(d0*d0))*vₓᵧᵧ +
+        ((  d1)*(c0*c0))*vₓₓᵧ)) +
+       (((3*c1)*(c0*c0))*vₓₓₓ +
+        ((3*d1)*(d0*d0))*vᵧᵧᵧ)) +
+        // γ9 = γ7 + γ2
+      (((  c0*d1)*vₓᵧ + // γ7 = γ6+γ1
+        (  c1*d0)*vₓᵧ) +
+       ((2*c0*c1)*vₓₓ +
+        (2*d0*d1)*vᵧᵧ))) +
+        // γ12 = γ11+γ1
+        (c1*vₓ + // γ11 = γ10+γ1
+         d1*vᵧ) ;
+
+    let v0 = // γ = γ14 = max((max(γ5,γ9) + γ1), γ13) + γ1
+      // γ5 = γ2+γ1 +γ2
+     ((((c0*d0*d0)*vₓᵧᵧ + // γ3 = γ2+γ1
+        (d0*c0*c0)*vₓₓᵧ) +
+       ((c0*c0*c0)*vₓₓₓ +
+        (d0*d0*d0)*vᵧᵧᵧ)) +
+        // γ9 = γ6+γ1 +γ2
+       (vₓᵧ*(c0*d0) + // γ6+γ1
+        vₓₓ*(c0*c0) +
+        vᵧᵧ*(d0*d0))) +
+        // γ13 = γ11 + γ2
+      ((vₓ *c0)   + // γ10+γ1
+       (vᵧ *d0)   +
+        v); // γ11
+
+    return [v9, v8, v7, v6, v5, v4, v3, v2, v1, v0];
+}
+
+
+/**
+ * Returns an approximate implicit form error bound coefficients of the given 
+ * cubic bezier given as a parametric equation (as opposed to control points).
+ * Taken from http://www.mare.ee/indrek/misc/2d.pdf
+ */
+function getImplicitForm3ParametricAbs(
+    coeffsX: number[],
+    coeffsY: number[]) {
+
+  // The implicit form is given by:
+  // vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0
+
+  let [a3, a2, a1, a0] = coeffsX;
+  let [b3, b2, b1, b0] = coeffsY;
+
+  // n === the number of terms, 
+  // m === the max number of multiplicands per term (thats not a power of 2)
+  // m,n above has been modified ( -> ) to take pairwise addition and 
+  // multiplication into account, i.e. n -> ceil(log2(n)), m -> ceil(log2(m))
+  let vₓₓₓ = abs(  b3*b3*b3); // n,m = 1,3 -> no improvement possible
+  let vₓₓᵧ = abs(3*a3*b3*b3); // n,m = 1,4 -> 1,3
+  let vₓᵧᵧ = abs(3*b3*a3*a3); // n,m = 1,4 -> 1,3
+  let vᵧᵧᵧ = abs(  a3*a3*a3); // n,m = 1,3 -> no improvement possible
+
+  let vₓₓ = // n,m = 7,5 -> 3,3
+    abs(3*a3*b1*b2*b3) + 
+    abs(  a1*b2*b3*b3) + 
+    abs(  a2*b3*b2*b2) + 
+    abs(2*a2*b1*b3*b3) + 
+    abs(3*a3*b0*b3*b3) + 
+    abs(  a3*b2*b2*b2) + 
+    abs(3*a0*b3*b3*b3);
+
+  let vₓᵧ = // n,m = 8,5 -> 3,3
+    abs(  a1*a3*b2*b3) + 
+    abs(  a2*a3*b1*b3) + 
+    abs(6*b0*b3*a3*a3) + 
+    abs(3*a1*a2*b3*b3) + 
+    abs(2*a2*a3*b2*b2) + 
+    abs(2*b2*b3*a2*a2) + 
+    abs(3*b1*b2*a3*a3) + 
+    abs(6*a0*a3*b3*b3);
+
+  let vᵧᵧ = // n,m = 7,5 -> 3,3
+    abs(3*a1*a2*a3*b3) + 
+    abs(  a3*b2*a2*a2) + 
+    abs(  a2*b1*a3*a3) + 
+    abs(3*a0*b3*a3*a3) + 
+    abs(2*a1*b2*a3*a3) + 
+    abs(  b3*a2*a2*a2) + 
+    abs(3*b0*a3*a3*a3);
+
+  let vₓ = // n,m = 21,6 -> 5,5
+    abs(  a2*a3*b0*b1*b3) + 
+    abs(  a1*a2*b1*b2*b3) + 
+    abs(  a1*a3*b0*b2*b3) + 
+    abs(6*a0*a3*b1*b2*b3) + 
+    abs(  b1*a1*a1*b3*b3) + 
+    abs(  b3*a2*a2*b1*b1) + 
+    abs(3*b3*a3*a3*b0*b0) + 
+    abs(  a1*a3*b1*b2*b2) + 
+    abs(  a2*a3*b2*b1*b1) + 
+    abs(6*a0*a3*b0*b3*b3) + 
+    abs(4*a0*a2*b1*b3*b3) + 
+    abs(3*b0*b1*b2*a3*a3) +
+    abs(2*a0*a1*b2*b3*b3) + 
+    abs(2*a1*a3*b3*b1*b1) + 
+    abs(2*b0*b2*b3*a2*a2) + 
+    abs(2*a0*a2*b3*b2*b2) + 
+    abs(2*a2*a3*b0*b2*b2) + 
+    abs(3*a1*a2*b0*b3*b3) + 
+    abs(  a3*a3*b1*b1*b1) + 
+    abs(3*a0*a0*b3*b3*b3) + 
+    abs(2*a0*a3*b2*b2*b2);
+
+  let vᵧ = // n,m = 21,6 -> 5,5
+    abs(  a0*a2*a3*b1*b3) + 
+    abs(  a1*a2*a3*b1*b2) + 
+    abs(  a0*a1*a3*b2*b3) + 
+    abs(6*a1*a2*a3*b0*b3) + 
+    abs(  a1*a1*a1*b3*b3) + 
+    abs(3*a3*a3*a3*b0*b0) + 
+    abs(  a1*a3*a3*b1*b1) + 
+    abs(  a3*a1*a1*b2*b2) + 
+    abs(3*a3*a0*a0*b3*b3) + 
+    abs(  a2*b2*b3*a1*a1) + 
+    abs(  a1*b1*b3*a2*a2) + 
+    abs(3*a0*b1*b2*a3*a3) + 
+    abs(2*a0*b2*b3*a2*a2) + 
+    abs(2*a3*b0*b2*a2*a2) + 
+    abs(2*a0*a2*a3*b2*b2) + 
+    abs(2*a2*b0*b1*a3*a3) + 
+    abs(2*a3*b1*b3*a1*a1) + 
+    abs(3*a0*a1*a2*b3*b3) + 
+    abs(4*a1*b0*b2*a3*a3) + 
+    abs(6*a0*b0*b3*a3*a3) + 
+    abs(2*b0*b3*a2*a2*a2);
+
+  let v = // n,m = 34,7 -> 6,5
+    abs(  a0*a1*a2*b1*b2*b3) + 
+    abs(  a0*a1*a3*b0*b2*b3) + 
+    abs(  a0*a2*a3*b0*b1*b3) + 
+    abs(  a1*a2*a3*b0*b1*b2) + 
+    abs(  b0*a1*a1*a1*b3*b3) + 
+    abs(  b3*a2*a2*a2*b0*b0) + 
+    abs(  a1*b0*a3*a3*b1*b1) + 
+    abs(  a1*b2*a0*a0*b3*b3) + 
+    abs(  a3*b0*a1*a1*b2*b2) + 
+    abs(  a3*b2*a2*a2*b0*b0) + 
+    abs(  a0*b1*a1*a1*b3*b3) + 
+    abs(  a0*b3*a2*a2*b1*b1) + 
+    abs(  a2*b1*a3*a3*b0*b0) + 
+    abs(  a2*b3*a0*a0*b2*b2) + 
+    abs(3*a0*b3*a3*a3*b0*b0) + 
+    abs(2*a1*b2*a3*a3*b0*b0) + 
+    abs(2*a2*b1*a0*a0*b3*b3) + 
+    abs(3*a3*b0*a0*a0*b3*b3) + 
+    abs(  a0*a2*a3*b2*b1*b1) + 
+    abs(  a1*b0*b1*b3*a2*a2) + 
+    abs(  a0*a1*a3*b1*b2*b2) + 
+    abs(  a2*b0*b2*b3*a1*a1) + 
+    abs(3*a0*a1*a2*b0*b3*b3) + 
+    abs(3*a3*b1*b2*b3*a0*a0) + 
+    abs(2*a0*a2*a3*b0*b2*b2) + 
+    abs(2*a3*b0*b1*b3*a1*a1) + 
+    abs(2*a0*a1*a3*b3*b1*b1) + 
+    abs(2*a0*b0*b2*b3*a2*a2) + 
+    abs(3*a0*b0*b1*b2*a3*a3) + 
+    abs(3*a1*a2*a3*b3*b0*b0) + 
+    abs(  a3*a3*a3*b0*b0*b0) + 
+    abs(  a0*a0*a0*b3*b3*b3) + 
+    abs(  a3*a0*a0*b2*b2*b2) + 
+    abs(  a0*a3*a3*b1*b1*b1);
+
+  return { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v }
+}
+export { getCoeffs3x3ErrorBound_ }
