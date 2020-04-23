@@ -1,5 +1,13 @@
 import { RootInterval } from 'flo-poly/node/roots/multi-with-err-bound/root-interval';
 import { X } from './x';
+/**
+ * Returns the intersection polynomial coefficients between two bezier curves
+ * unless all coefficients are exactly zero in which case undefined is returned
+ * so that is easy to check if the two curves are actually identical
+ * algebraically, i.e. if we ignore endpoints.
+ * @param ps1
+ * @param ps2
+ */
 declare function getIntersectionCoeffs(ps1: number[][], ps2: number[][]): {
     coeffs: number[][];
     errBound: number[];
@@ -24,7 +32,10 @@ declare function getIntersectionCoeffs(ps1: number[][], ps2: number[][]): {
 declare function bezierBezierIntersectionImplicit(ps1: number[][], ps2: number[][]): RootInterval[];
 /**
  * Returns the ordered (first ps1, then ps2) intersection pairs given the two
- * curves that intersect and the t values of the **second** curve.
+ * curves that intersect and the t values of the **second** curve. If the t
+ * values given is undefined, undefined is returned; if it is an empty array,
+ * an empty array is returned. If the t values given is not an empty array and
+ * it turns out the curves are in the same k family then undefined is returned.
  * @param ps1 the first bezier
  * @param ps2 the second bezier
  * @param ts2 the t values of the second bezier

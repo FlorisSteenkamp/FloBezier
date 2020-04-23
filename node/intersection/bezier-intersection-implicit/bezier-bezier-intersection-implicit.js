@@ -24,20 +24,28 @@ const differentiate_1 = require("flo-poly/node/calculus/differentiate");
 const get_interval_box_1 = require("../../global-properties/bounds/get-interval-box/get-interval-box");
 const intersect_boxes_1 = require("../../geometry/intersect-boxes");
 const abs = Math.abs;
+const coeffFunctionsQuad = [
+    [get_coefficients_1x1_1.getCoeffs1x1Quad, get_coefficients_1x2_1.getCoeffs1x2Quad, get_coefficients_1x3_1.getCoeffs1x3Quad],
+    [get_coefficients_2x1_1.getCoeffs2x1Quad, get_coefficients_2x2_1.getCoeffs2x2Quad, get_coefficients_2x3_1.getCoeffs2x3Quad],
+    [get_coefficients_3x1_1.getCoeffs3x1Quad, get_coefficients_3x2_1.getCoeffs3x2Quad, get_coefficients_3x3_1.getCoeffs3x3Quad]
+];
+const coeffFunctionsExact = [
+    [get_coefficients_1x1_2.getCoeffs1x1Exact_, get_coefficients_1x2_2.getCoeffs1x2Exact_, get_coefficients_1x3_2.getCoeffs1x3Exact_],
+    [get_coefficients_2x1_2.getCoeffs2x1Exact_, get_coefficients_2x2_2.getCoeffs2x2Exact_, get_coefficients_2x3_2.getCoeffs2x3Exact_],
+    [get_coefficients_3x1_2.getCoeffs3x1Exact_, get_coefficients_3x2_2.getCoeffs3x2Exact_, get_coefficients_3x3_2.getCoeffs3x3Exact_]
+];
+/**
+ * Returns the intersection polynomial coefficients between two bezier curves
+ * unless all coefficients are exactly zero in which case undefined is returned
+ * so that is easy to check if the two curves are actually identical
+ * algebraically, i.e. if we ignore endpoints.
+ * @param ps1
+ * @param ps2
+ */
 function getIntersectionCoeffs(ps1, ps2) {
-    let { coeffs, errBound } = [
-        [get_coefficients_1x1_1.getCoeffs1x1Quad, get_coefficients_1x2_1.getCoeffs1x2Quad, get_coefficients_1x3_1.getCoeffs1x3Quad],
-        [get_coefficients_2x1_1.getCoeffs2x1Quad, get_coefficients_2x2_1.getCoeffs2x2Quad, get_coefficients_2x3_1.getCoeffs2x3Quad],
-        [get_coefficients_3x1_1.getCoeffs3x1Quad, get_coefficients_3x2_1.getCoeffs3x2Quad, get_coefficients_3x3_1.getCoeffs3x3Quad]
-    ][ps1.length - 2][ps2.length - 2](ps1, ps2);
-    function getPExact() {
-        return [
-            [get_coefficients_1x1_2.getCoeffs1x1Exact_, get_coefficients_1x2_2.getCoeffs1x2Exact_, get_coefficients_1x3_2.getCoeffs1x3Exact_],
-            [get_coefficients_2x1_2.getCoeffs2x1Exact_, get_coefficients_2x2_2.getCoeffs2x2Exact_, get_coefficients_2x3_2.getCoeffs2x3Exact_],
-            [get_coefficients_3x1_2.getCoeffs3x1Exact_, get_coefficients_3x2_2.getCoeffs3x2Exact_, get_coefficients_3x3_2.getCoeffs3x3Exact_]
-        ][ps1.length - 2][ps2.length - 2](ps1, ps2);
-    }
-    function getPsExact() {
+    let { coeffs, errBound } = coeffFunctionsQuad[ps1.length - 2][ps2.length - 2](ps1, ps2);
+    let getPExact = () => coeffFunctionsExact[ps1.length - 2][ps2.length - 2](ps1, ps2);
+    let getPsExact = () => {
         let poly = getPExact();
         let psExact = [poly];
         while (poly.length > 1) {
@@ -45,7 +53,7 @@ function getIntersectionCoeffs(ps1, ps2) {
             psExact.push(poly);
         }
         return psExact;
-    }
+    };
     // check if all coefficients are zero, 
     // i.e. the two curves are possibly in the same k-family
     let possiblySameKFamily = true;
@@ -69,13 +77,6 @@ function getIntersectionCoeffs(ps1, ps2) {
     if (sameKFamily) {
         return undefined;
     }
-    //if (ps1.length === 4 && ps2.length === 2 &&
-    //    ps2[0][0] > 376 && ps2[0][0] < 377) {
-    //    console.log(ps1,ps2)
-    //    console.log(coeffs);
-    //    console.log(errBound);
-    //    console.log('------');
-    //}
     return { coeffs, errBound, getPsExact };
 }
 exports.getIntersectionCoeffs = getIntersectionCoeffs;
@@ -106,16 +107,25 @@ function bezierBezierIntersectionImplicit(ps1, ps2) {
 exports.bezierBezierIntersectionImplicit = bezierBezierIntersectionImplicit;
 /**
  * Returns the ordered (first ps1, then ps2) intersection pairs given the two
- * curves that intersect and the t values of the **second** curve.
+ * curves that intersect and the t values of the **second** curve. If the t
+ * values given is undefined, undefined is returned; if it is an empty array,
+ * an empty array is returned. If the t values given is not an empty array and
+ * it turns out the curves are in the same k family then undefined is returned.
  * @param ps1 the first bezier
  * @param ps2 the second bezier
  * @param ts2 the t values of the second bezier
  */
 function getOtherTs(ps1, ps2, ts2) {
-    if (ts2 === undefined || ts2.length === 0) {
+    if (ts2 === undefined) {
+        return undefined;
+    }
+    if (ts2.length === 0) {
         return [];
     }
     let ts1 = bezierBezierIntersectionImplicit(ps2, ps1);
+    if (ts1 === undefined) {
+        return undefined;
+    }
     if (ts1.length === 0) {
         return [];
     }
