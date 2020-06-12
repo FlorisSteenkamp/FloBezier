@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.evalDeCasteljauY = exports.evalDeCasteljauX = exports.evalDeCasteljau = void 0;
 /**
  * Evaluates the given bezier curve at the parameter t.
  * @param ps An order 1, 2 or 3 bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]]

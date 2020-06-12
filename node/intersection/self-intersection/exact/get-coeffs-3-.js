@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getCoeffs3Exact_ = void 0;
 const flo_numerical_1 = require("flo-numerical");
 const get_xy_1 = require("../../../to-power-basis/get-xy");
 const tp = flo_numerical_1.twoProduct;

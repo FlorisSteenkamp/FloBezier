@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getEndpointIntersections = void 0;
 const inversion_01_1 = require("./inversion-01");
 const root_interval_1 = require("flo-poly/node/roots/multi-with-err-bound/root-interval");
 /**

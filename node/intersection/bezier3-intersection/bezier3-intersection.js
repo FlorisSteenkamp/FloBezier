@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.bezier3Intersection = void 0;
 const check_intersection_in_ranges_1 = require("./check-intersection-in-ranges");
 const calc_other_t_1 = require("./calc-other-t");
 /**

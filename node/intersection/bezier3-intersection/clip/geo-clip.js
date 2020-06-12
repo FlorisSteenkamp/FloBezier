@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.geoClip = void 0;
 const flo_poly_1 = require("flo-poly");
 const to_hybrid_quadratic_1 = require("./to-hybrid-quadratic");
 /**

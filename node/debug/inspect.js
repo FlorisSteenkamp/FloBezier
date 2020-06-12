@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.inspect = void 0;
 const log_1 = require("./log");
 /**
  * Debug inspection function returning the same value it is fed.

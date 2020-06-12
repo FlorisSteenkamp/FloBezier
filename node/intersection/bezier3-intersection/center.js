@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.center = void 0;
 const flo_vector2d_1 = require("flo-vector2d");
 /**
  * Return the given two beziers but translated such that the shorter (by

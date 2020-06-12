@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getDxy = void 0;
 /**
  * Returns the derivative of the power basis representation of a line, quadratic
  * or cubic bezier's.

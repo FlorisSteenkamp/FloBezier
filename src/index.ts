@@ -1,13 +1,14 @@
 
-import { rotatePs as rotate, translatePs as translate } from 'flo-vector2d';
+//import { rotatePs as rotate, translatePs as translate } from 'flo-vector2d';
 import { memoize } from 'flo-memoize';
 import { grahamScan }  from 'flo-graham-scan';
+import { BezierPart } from './bezier-part';
 import { length } from './global-properties/length/length';
 import { clone } from './transformation/clone';
 import { getTAtLength } from './local-properties-to-t/get-t-at-length';
 import { equal } from './simultaneous-properties/equal';
 import { cubicToQuadratic } from './transformation/cubic-to-quadratic';
-import { bezierFromBezierPiece } from './transformation/from-bezier-piece';
+import { bezierFromPart } from './transformation/from-bezier-piece';
 import { evaluateHybridQuadratic } from './local-properties-at-t/t-to-xy/evaluate-hybrid-quadratic';
 
 import { closestPointOnBezier } from './simultaneous-properties/closest-point-on-bezier/closest-point-on-bezier';
@@ -234,8 +235,8 @@ export {
 	// ---------------------------------------------------------
 
 	// Affine transformations
-	rotate,
-	translate,
+	//rotate,
+	//translate,
 
 	// Order & type transformation
 	toCubic,
@@ -334,7 +335,7 @@ export {
 	// --------------------
 	// -- Create beziers --
 	// --------------------
-	bezierFromBezierPiece,
+	bezierFromPart,
 	generateCuspAtHalf3,
 	cubicThroughPointGiven013,
 
@@ -400,6 +401,7 @@ export {
 }
 
 export { 
+	BezierPart,
 	BezDebug, 
 	DebugElemType,
 	FatLine,

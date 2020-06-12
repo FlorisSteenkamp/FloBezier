@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.isSelfOverlapping = void 0;
 const is_line_1 = require("./is-line");
 /**
  * Returns true if the given bezier is a line and self-overlapping, i.e. if it

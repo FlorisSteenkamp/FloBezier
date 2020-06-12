@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.cubicToQuadratic = void 0;
 /**
  * Returns the best least squares quadratic bezier approximation to the given
  * cubic bezier.

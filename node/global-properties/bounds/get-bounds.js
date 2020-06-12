@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getYBoundsTight = exports.getXBoundsTight = exports.getBounds = void 0;
 const flo_memoize_1 = require("flo-memoize");
 const get_dx_1 = require("../../to-power-basis/get-dx");
 const get_dy_1 = require("../../to-power-basis/get-dy");

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.areBeziersInSameKFamily = void 0;
 const is_point_on_bezier_extension_1 = require("./is-point-on-bezier-extension");
 const eval_de_casteljau_1 = require("../local-properties-at-t/t-to-xy/eval-de-casteljau");
 /**

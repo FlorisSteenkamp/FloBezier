@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getIntervalBoxExactT = exports.getIntervalBox3 = exports.getIntervalBox2 = exports.getIntervalBox1 = exports.getIntervalBox = void 0;
 const eval_de_casteljau_with_err_1 = require("../../../local-properties-at-t/t-to-xy/eval-de-casteljau-with-err");
 const u = Number.EPSILON / 2;
 const abs = Math.abs;

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getTAtLength = void 0;
 const to_cubic_1 = require("../transformation/degree-or-type/to-cubic");
 const length_1 = require("../global-properties/length/length");
 const flo_poly_1 = require("flo-poly");

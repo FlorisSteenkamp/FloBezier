@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.tangent = void 0;
 const evaluate_dx_1 = require("./t-to-dxy/evaluate-dx");
 const evaluate_dy_1 = require("./t-to-dxy/evaluate-dy");
 function tangent(ps, t) {

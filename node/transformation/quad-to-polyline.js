@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.quadToPolyline = void 0;
 const is_quad_flat_1 = require("../global-properties/type/is-quad-flat");
 const split_at_1 = require("./split-merge-clone/split-at");
 /**

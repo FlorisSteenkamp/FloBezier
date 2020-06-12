@@ -1,6 +1,6 @@
 
 import { memoize } from "flo-memoize";
-import { translateThenRotatePs, rotateThenTranslatePs, squaredDistanceBetween } from "flo-vector2d";
+import { squaredDistanceBetween, translate, rotate } from "flo-vector2d";
 import { getBoundingBox } from "./get-bounding-box";
 import { lengthSquaredUpperBound } from "../length/length-squared-upper-bound";
 import { evalDeCasteljau } from "../../local-properties-at-t/t-to-xy/eval-de-casteljau";
@@ -39,14 +39,8 @@ let getBoundingBoxTight = memoize(function(ps: number[][]) {
 		box[1], [p0x, p1y]
 	];
 
-	let bb = rotateThenTranslatePs(
-		sinθ, 
-		cosθ,
-		ps[0],
-		axisAlignedBox
-	);
-
-	return bb;
+	let rotate_ = rotate(sinθ, cosθ);
+	return axisAlignedBox.map(p => translate(ps[0], rotate_(p)));
 });
 
 
@@ -65,12 +59,8 @@ let getBoundingBoxTight = memoize(function(ps: number[][]) {
 function getNormalizedBoundingBox(ps: number[][], sinθ: number, cosθ: number) {
 	let vectorToOrigin = ps[0].map(x => -x);
 	
-	let boundingPs = translateThenRotatePs(
-			vectorToOrigin, 
-			-sinθ, 
-			cosθ,
-			ps 
-	);
+	const f = translate(vectorToOrigin);
+	let boundingPs = ps.map(p => rotate(-sinθ, cosθ, f(p)));
 	
 	return getBoundingBox(boundingPs);
 }

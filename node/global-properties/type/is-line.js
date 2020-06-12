@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.isVerticalLine = exports.isHorizontalLine = exports.isLine = void 0;
 const flo_numerical_1 = require("flo-numerical");
 /**
  * Returns true if the given bezier is a line or a line in diguise, i.e. if all

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.totalAbsoluteCurvature = exports.totalCurvature = void 0;
 const flo_gauss_quadrature_1 = require("flo-gauss-quadrature");
 const evaluate_dx_1 = require("../local-properties-at-t/t-to-dxy/evaluate-dx");
 const evaluate_dy_1 = require("../local-properties-at-t/t-to-dxy/evaluate-dy");

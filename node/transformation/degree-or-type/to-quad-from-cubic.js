@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.toQuadraticFromCubic = void 0;
 const flo_numerical_1 = require("flo-numerical");
 /**
  * Returns a quadratic closest to the given cubic bezier by taking the midpoint

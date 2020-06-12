@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getCoeffs1x1Exact = void 0;
 const get_x_1 = require("../../../to-power-basis/get-x");
 const get_y_1 = require("../../../to-power-basis/get-y");
 const get_implicit_form1_1 = require("../../../implicit-form/exact/get-implicit-form1");

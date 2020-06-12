@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.maxDs = void 0;
 const flo_poly_1 = require("flo-poly");
 const get_dx_1 = require("../to-power-basis/get-dx");
 const index_1 = require("../index");

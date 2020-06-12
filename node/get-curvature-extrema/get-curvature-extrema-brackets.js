@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getCurvatureExtremaBrackets = void 0;
 const DELTA = 1e-6;
 /**
  * Calculates the curvature extrema brackets of the given cubic bezier.

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getOtherTs = exports.bezierBezierIntersectionImplicit = exports.getIntersectionCoeffs = void 0;
 const flo_numerical_1 = require("flo-numerical");
 const flo_poly_1 = require("flo-poly");
 const get_coefficients_1x1_1 = require("./quad/get-coefficients-1x1");

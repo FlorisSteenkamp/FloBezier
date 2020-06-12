@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getTangentPolyFromPoint = void 0;
 /**
  * Returns the polynomial whose roots are all the t values on the given bezier
  * curve such that the line from the given point to the point on the bezier

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.coincident = void 0;
 const Vector = require("flo-vector2d");
 const normal_1 = require("../../local-properties-at-t/normal");
 const line_intersection_1 = require("./line-intersection");

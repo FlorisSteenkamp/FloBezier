@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.splitByMaxCurveLength = void 0;
 const length_upper_bound_1 = require("../../global-properties/length/length-upper-bound");
 const from_to_1 = require("./from-to");
 /**

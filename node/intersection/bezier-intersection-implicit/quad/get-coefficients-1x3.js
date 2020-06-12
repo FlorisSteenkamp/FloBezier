@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getCoeffs1x3Quad = void 0;
 const flo_numerical_1 = require("flo-numerical");
 const get_implicit_form1_1 = require("../../../implicit-form/quad/get-implicit-form1");
 const get_xy_1 = require("../../../to-power-basis/get-xy");

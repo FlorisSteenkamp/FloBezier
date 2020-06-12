@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getXY = void 0;
 /**
  * Returns the approximate power basis representation of a line, quadratic or
  * cubic bezier.

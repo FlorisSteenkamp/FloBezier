@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.splitAtExact = exports.splitAtPrecise = exports.splitAt = void 0;
 const flo_numerical_1 = require("flo-numerical");
 let splitAtFs = [splitLineAt, splitQuadAt, splitCubicAt];
 /**

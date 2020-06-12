@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.isQuadFlat = void 0;
 const vector = require("flo-vector2d");
 const is_quad_obtuse_1 = require("./is-quad-obtuse");
 const eval_de_casteljau_1 = require("../../local-properties-at-t/t-to-xy/eval-de-casteljau");

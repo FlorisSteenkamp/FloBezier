@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.cubicThroughPointGiven013 = void 0;
 /**
  * Generates a cubic going through a specific point given control points 0,1
  * and 3.

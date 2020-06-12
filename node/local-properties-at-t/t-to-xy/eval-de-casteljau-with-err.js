@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.evalDeCasteljauWithErrQuad = exports.evalDeCasteljauWithErr = void 0;
 const error_analysis_1 = require("../../error-analysis/error-analysis");
 const flo_numerical_1 = require("flo-numerical");
 const abs = Math.abs;

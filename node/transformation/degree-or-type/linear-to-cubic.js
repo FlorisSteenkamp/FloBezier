@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.linearToCubic = void 0;
 /**
  * Returns a cubic bezier from the given line with evenly spaced control points.
  * @param l a 2d line represented by two points

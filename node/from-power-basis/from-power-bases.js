@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.fromPowerBases = void 0;
 /**
  * Returns the approximate Bernstein basis representation of a line, quadratic
  * or cubic bezier's power bases.

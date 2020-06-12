@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.isCubicReallyQuad = void 0;
 const flo_numerical_1 = require("flo-numerical");
 const u = Number.EPSILON / 2;
 const abs = Math.abs;

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.quadraticToCubic = void 0;
 /**
  * Returns the cubic version of the given quadratic bezier curve. Quadratic
  * bezier curves can always be represented by cubics - the converse is false.

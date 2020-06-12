@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.evaluateY = void 0;
 const flo_poly_1 = require("flo-poly");
 const get_y_1 = require("../../to-power-basis/get-y");
 function evaluateY(ps, t) {

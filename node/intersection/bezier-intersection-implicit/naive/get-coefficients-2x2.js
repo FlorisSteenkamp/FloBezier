@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getCoeffs2x2 = void 0;
 const get_implicit_form2_1 = require("../../../implicit-form/naive/get-implicit-form2");
 const error_analysis_1 = require("../../../error-analysis/error-analysis");
 const get_xy_1 = require("../../../to-power-basis/get-xy");

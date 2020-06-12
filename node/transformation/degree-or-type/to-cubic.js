@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.toCubic = void 0;
 const linear_to_cubic_1 = require("./linear-to-cubic");
 const quadratic_to_cubic_1 = require("./quadratic-to-cubic");
 /**

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.circleBezierIntersection = void 0;
 const flo_poly_1 = require("flo-poly");
 const get_coeffs_1 = require("./get-coeffs");
 const eval_de_casteljau_1 = require("../../../local-properties-at-t/t-to-xy/eval-de-casteljau");

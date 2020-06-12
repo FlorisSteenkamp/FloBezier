@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.intersectBoxes = void 0;
 const min = Math.min;
 const max = Math.max;
 /**

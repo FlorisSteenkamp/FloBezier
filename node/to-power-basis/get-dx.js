@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getDxExact = exports.getDx = void 0;
 const flo_numerical_1 = require("flo-numerical");
 /**
  * Returns the derivative of the power basis representation of a line, quadratic

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getImplicitForm1 = void 0;
 const get_xy_1 = require("../../to-power-basis/get-xy");
 /**
  * Returns an approximate implicit form of the given linear bezier and a

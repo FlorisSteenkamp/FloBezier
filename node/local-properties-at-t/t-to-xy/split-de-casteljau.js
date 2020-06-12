@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.splitDeCasteljau3 = void 0;
 /**
  * * see https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm
  */

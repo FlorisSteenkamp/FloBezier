@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.hausdorffDistanceCandidates = exports.hausdorffDistance = void 0;
 const closest_point_on_bezier_1 = require("./closest-point-on-bezier/closest-point-on-bezier");
 const split_by_max_curve_length_1 = require("../transformation/split-merge-clone/split-by-max-curve-length");
 const flo_vector2d_1 = require("flo-vector2d");

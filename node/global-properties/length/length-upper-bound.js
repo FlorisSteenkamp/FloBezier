@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.lengthUpperBound = void 0;
 const flo_vector2d_1 = require("flo-vector2d");
 /**
  * Returns an upper bound for the length of the given bezier curve - this bound

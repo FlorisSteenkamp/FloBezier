@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.fromToExact = exports.fromToPrecise = exports.fromTo = void 0;
 const evaluate_1 = require("../../local-properties-at-t/t-to-xy/evaluate");
 const split_at_1 = require("./split-at");
 const eval_de_casteljau_1 = require("../../local-properties-at-t/t-to-xy/eval-de-casteljau");

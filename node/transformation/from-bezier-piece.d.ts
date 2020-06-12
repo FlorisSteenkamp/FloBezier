@@ -1,10 +1,10 @@
+import { BezierPart } from "../bezier-part";
 /**
  * Returns a new bezier from the given bezier by limiting its t range.
  *
  * Uses de Casteljau's algorithm.
  *
- * @param ps A bezier
- * @param tRange A t range
+ * @param bezierPart A partial bezier
  */
-declare function bezierFromBezierPiece(ps: number[][], tRange: number[]): number[][];
-export { bezierFromBezierPiece };
+declare function bezierFromPart(bezierPart: BezierPart): number[][];
+export { bezierFromPart };

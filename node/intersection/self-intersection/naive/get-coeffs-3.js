@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getCoeffs3 = void 0;
 const error_analysis_1 = require("../../../error-analysis/error-analysis");
 const get_xy_1 = require("../../../to-power-basis/get-xy");
 const abs = Math.abs;

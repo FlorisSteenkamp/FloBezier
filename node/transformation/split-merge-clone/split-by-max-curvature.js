@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.splitByMaxCurvature = void 0;
 const from_to_1 = require("./from-to");
 const flatness_1 = require("../../global-properties/flatness");
 /**

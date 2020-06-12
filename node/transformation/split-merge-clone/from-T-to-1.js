@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.fromTTo1 = void 0;
 const split_at_1 = require("./split-at");
 /**
  * Returns an order 1, 2 or 3 bezier curve that starts at the given t parameter

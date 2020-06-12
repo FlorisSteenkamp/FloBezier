@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getDdy = void 0;
 /**
  * Returns the 2nd derivative of the power basis representation of a line,
  * quadratic or cubic bezier's y-coordinates.

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getBoundingBoxTight = void 0;
 const flo_memoize_1 = require("flo-memoize");
 const flo_vector2d_1 = require("flo-vector2d");
 const get_bounding_box_1 = require("./get-bounding-box");
@@ -33,8 +34,8 @@ let getBoundingBoxTight = flo_memoize_1.memoize(function (ps) {
         box[0], [p1x, p0y],
         box[1], [p0x, p1y]
     ];
-    let bb = flo_vector2d_1.rotateThenTranslatePs(sinθ, cosθ, ps[0], axisAlignedBox);
-    return bb;
+    let rotate_ = flo_vector2d_1.rotate(sinθ, cosθ);
+    return axisAlignedBox.map(p => flo_vector2d_1.translate(ps[0], rotate_(p)));
 });
 exports.getBoundingBoxTight = getBoundingBoxTight;
 /**
@@ -51,7 +52,8 @@ exports.getBoundingBoxTight = getBoundingBoxTight;
  */
 function getNormalizedBoundingBox(ps, sinθ, cosθ) {
     let vectorToOrigin = ps[0].map(x => -x);
-    let boundingPs = flo_vector2d_1.translateThenRotatePs(vectorToOrigin, -sinθ, cosθ, ps);
+    const f = flo_vector2d_1.translate(vectorToOrigin);
+    let boundingPs = ps.map(p => flo_vector2d_1.rotate(-sinθ, cosθ, f(p)));
     return get_bounding_box_1.getBoundingBox(boundingPs);
 }
 //# sourceMappingURL=get-bounding-box-tight.js.map

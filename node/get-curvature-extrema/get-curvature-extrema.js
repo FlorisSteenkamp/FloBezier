@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getCurvatureExtrema = void 0;
 const flo_poly_1 = require("flo-poly");
 const get_curvature_extrema_brackets_1 = require("./get-curvature-extrema-brackets");
 const curvature_1 = require("../local-properties-at-t/curvature");

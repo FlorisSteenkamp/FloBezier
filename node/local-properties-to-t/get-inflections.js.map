@@ -1,1 +1,1 @@
-{"version":3,"file":"get-inflections.js","sourceRoot":"","sources":["../../src/local-properties-to-t/get-inflections.ts"],"names":[],"mappings":";;AACA,4GAAsG;AAGtG,SAAS,cAAc,CAAC,EAAc;IAClC,OAAO,4DAA2B,CAAC,EAAE,CAAC,CAAC,WAAW,CAAC;AACvD,CAAC;AAGQ,wCAAc"}
+{"version":3,"file":"get-inflections.js","sourceRoot":"","sources":["../../src/local-properties-to-t/get-inflections.ts"],"names":[],"mappings":";;;AACA,4GAAsG;AAGtG,SAAS,cAAc,CAAC,EAAc;IAClC,OAAO,4DAA2B,CAAC,EAAE,CAAC,CAAC,WAAW,CAAC;AACvD,CAAC;AAGQ,wCAAc"}

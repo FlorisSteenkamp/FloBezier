@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.bezierSelfIntersection = void 0;
 const get_coeffs_3_1 = require("./naive/get-coeffs-3");
 const get_coeffs_3_2 = require("./exact/get-coeffs-3-");
 const flo_numerical_1 = require("flo-numerical");

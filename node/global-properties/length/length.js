@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.length = void 0;
 const ds_1 = require("../../local-properties-at-t/ds");
 const flo_gauss_quadrature_1 = require("flo-gauss-quadrature");
 const flo_vector2d_1 = require("flo-vector2d");

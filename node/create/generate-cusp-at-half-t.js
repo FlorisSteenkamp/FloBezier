@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.generateCuspAtHalf3 = void 0;
 /**
  * Returns a cubic bezier curve of the given order with a zero tangent (as a
  * vector) at t = 0.5 (i.e. a 'cusp').

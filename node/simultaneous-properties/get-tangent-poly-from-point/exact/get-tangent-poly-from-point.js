@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getTangentPolyFromPointExact = void 0;
 const flo_numerical_1 = require("flo-numerical");
 const tp = flo_numerical_1.twoProduct;
 const qaq = flo_numerical_1.qAddQuad;

@@ -1,7 +1,8 @@
 
 import { allRoots } from 'flo-poly';
 
-import { rotatePs as rotate, translatePs as translate } from 'flo-vector2d';
+//import { rotatePs as rotate, translatePs as translate } from 'flo-vector2d';
+import { rotate, translate } from 'flo-vector2d';
 import { getY } from '../../to-power-basis/get-y';
 
 //import { getY } from './get-y';
@@ -21,13 +22,13 @@ function lineIntersection(ps: number[][], l: number[][]) {
 
 	// Move the line and the bezier together so the line's first point is on the
 	// origin.
-	ps = translate([-x0,-y0], ps);
+	ps = ps.map(translate([-x0,-y0]));
 
 	// Rotate the bezier and line together so the line is y=0.
 	let len = Math.sqrt(x*x + y*y);
 	let sinθ = y/len;
 	let cosθ = x/len;
-	ps = rotate(-sinθ, cosθ, ps);
+	ps = ps.map(rotate(-sinθ, cosθ));
 
 	// Find the intersection t values
 	return allRoots(getY(ps),0,1);

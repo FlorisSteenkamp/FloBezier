@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.inversion1_BL52_1ULP = exports.inversion = void 0;
 const flo_numerical_1 = require("flo-numerical");
 /**
  * Returns the t parameter value of the point closest to the given point of the

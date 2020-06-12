@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.isQuadObtuse = void 0;
 const flo_vector2d_1 = require("flo-vector2d");
 /**
  * Returns true if the given quadratic bezier is obtuse, false otherwise (i.e.

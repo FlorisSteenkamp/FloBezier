@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.evaluateHybridQuadratic = void 0;
 const eval_de_casteljau_1 = require("./eval-de-casteljau");
 /**
  * Evaluates the given hybrid quadratic at the given t and th parameters. (see

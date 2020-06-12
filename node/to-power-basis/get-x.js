@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getXExact = exports.getX = void 0;
 const flo_numerical_1 = require("flo-numerical");
 /**
  * Returns the approximate power basis representation of a line, quadratic or

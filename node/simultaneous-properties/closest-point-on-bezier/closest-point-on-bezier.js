@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.closestPointOnBezierPrecise = exports.closestPointOnBezier = void 0;
 const get_tangent_poly_from_point_1 = require("../get-tangent-poly-from-point/naive/get-tangent-poly-from-point");
 const get_tangent_poly_from_point_2 = require("../get-tangent-poly-from-point/exact/get-tangent-poly-from-point");
 const evaluate_1 = require("../../local-properties-at-t/t-to-xy/evaluate");

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.calcOtherT = void 0;
 const flo_vector2d_1 = require("flo-vector2d");
 //import { evaluate } from '../../local-properties-at-t/t-to-xy/evaluate';
 const closest_point_on_bezier_1 = require("../../simultaneous-properties/closest-point-on-bezier/closest-point-on-bezier");

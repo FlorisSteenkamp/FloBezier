@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.inversion01Precise = void 0;
 const evaluate_1 = require("../local-properties-at-t/t-to-xy/evaluate");
 const flo_vector2d_1 = require("flo-vector2d");
 const flo_poly_1 = require("flo-poly");

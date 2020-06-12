@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.checkIntersectionInRanges = void 0;
 const center_1 = require("./center");
 const get_distance_to_line_function_1 = require("./get-distance-to-line-function");
 const geo_clip_1 = require("./clip/geo-clip");

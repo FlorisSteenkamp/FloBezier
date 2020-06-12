@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getInterfaceCcw = void 0;
 const flo_numerical_1 = require("flo-numerical");
 const flo_vector2d_1 = require("flo-vector2d");
 const curvature_1 = require("../local-properties-at-t/curvature");

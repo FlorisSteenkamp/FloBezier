@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.isPointOnBezierExtension = void 0;
 const get_implicit_form3_1 = require("../implicit-form/naive/get-implicit-form3");
 const get_implicit_form3_2 = require("../implicit-form/quad/get-implicit-form3");
 const error_analysis_1 = require("../error-analysis/error-analysis");

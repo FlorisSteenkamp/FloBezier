@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.expEvaluateExact = exports.evaluateExact = exports.evaluate = void 0;
 const flo_numerical_1 = require("flo-numerical");
 function evaluate(ps, t) {
     const len = ps.length;

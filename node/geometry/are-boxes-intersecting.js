@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.areBoxesIntersecting = void 0;
 /**
  * Returns true if the 2 given axis-aligned rectangular boxes intersect.
  * @param a An axis-aligned rectangular box

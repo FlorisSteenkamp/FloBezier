@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getCeoffsLine = exports.getCeoffsQuadratic = exports.getCoeffsCubic = void 0;
 const get_xy_1 = require("../../../to-power-basis/get-xy");
 /**
  *

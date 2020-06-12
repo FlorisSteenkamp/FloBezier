@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getHodograph = void 0;
 /**
  * Returns an approximation of the hodograph of the given bezier curve.
  * * **bitlength**: If the coordinates of the control points are bit-aligned then

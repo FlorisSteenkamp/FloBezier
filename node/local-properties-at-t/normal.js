@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.normal = void 0;
 const tangent_1 = require("./tangent");
 function normal(ps, t) {
     const tan_ = tangent_1.tangent(ps);

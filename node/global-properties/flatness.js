@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.flatness = void 0;
 const length_upper_bound_1 = require("./length/length-upper-bound");
 const flo_vector2d_1 = require("flo-vector2d");
 /**

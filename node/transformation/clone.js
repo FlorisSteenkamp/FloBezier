@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.clone = void 0;
 /**
  * Returns a clone of the given cubic bezier (with a different reference).
  * @param ps A cubic bezier given by its array of control points
