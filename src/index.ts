@@ -13,16 +13,17 @@ import { evaluateHybridQuadratic } from './local-properties-at-t/t-to-xy/evaluat
 
 import { closestPointOnBezier } from './simultaneous-properties/closest-point-on-bezier/closest-point-on-bezier';
 
-import { intersectBoxes } from './geometry/intersect-boxes';
+import { intersectBoxes } from './boxes/intersect-boxes';
+import { areBoxesIntersecting } from './boxes/are-boxes-intersecting';
 import { evalDeCasteljau, evalDeCasteljauX, evalDeCasteljauY } from './local-properties-at-t/t-to-xy/eval-de-casteljau';
 import { evalDeCasteljauWithErr, evalDeCasteljauWithErrQuad } from './local-properties-at-t/t-to-xy/eval-de-casteljau-with-err';
 
 import { isPointOnBezierExtension } from './simultaneous-properties/is-point-on-bezier-extension';
 import { totalCurvature, totalAbsoluteCurvature } from './global-properties/total-curvature';
 import { reverse } from './transformation/reverse';
-import { X } from './intersection/bezier-intersection-implicit/x';
-import { getInflectionPoints } from './global-properties/get-inflection-points';
-import { getIntersectionCoeffs } from './intersection/bezier-intersection-implicit/bezier-bezier-intersection-implicit';
+import { X } from './intersection/bezier-bezier-intersection/x';
+import { getInflectionTs } from './global-properties/get-inflection-ts';
+import { getIntersectionCoeffs } from './intersection/bezier-bezier-intersection/bezier-bezier-intersection-implicit';
 import { getImplicitForm3 } from './implicit-form/naive/get-implicit-form3';
 import { getImplicitForm3Quad } from './implicit-form/quad/get-implicit-form3';
 import { getImplicitForm3Exact } from './implicit-form/exact/get-implicit-form3';
@@ -38,50 +39,50 @@ import { getImplicitForm1Quad } from './implicit-form/quad/get-implicit-form1';
 import { getImplicitForm1Exact } from './implicit-form/exact/get-implicit-form1';
 import { getImplicitForm1Exact_ } from './implicit-form/exact/get-implicit-form1-';
 
-import { getCoeffs3x3 } from './intersection/bezier-intersection-implicit/naive/get-coefficients-3x3';
-import { getCoeffs3x3Quad } from './intersection/bezier-intersection-implicit/quad/get-coefficients-3x3';
-import { getCoeffs3x3Exact } from './intersection/bezier-intersection-implicit/exact/get-coefficients-3x3';
-import { getCoeffs3x3Exact_ } from './intersection/bezier-intersection-implicit/exact/get-coefficients-3x3-';
+import { getCoeffs3x3 } from './intersection/bezier-bezier-intersection/naive/get-coefficients-3x3';
+import { getCoeffs3x3Quad } from './intersection/bezier-bezier-intersection/quad/get-coefficients-3x3';
+import { getCoeffs3x3Exact } from './intersection/bezier-bezier-intersection/exact/get-coefficients-3x3';
+import { getCoeffs3x3Exact_ } from './intersection/bezier-bezier-intersection/exact/get-coefficients-3x3-';
 
-import { getCoeffs3x2 } from './intersection/bezier-intersection-implicit/naive/get-coefficients-3x2';
-import { getCoeffs3x2Quad } from './intersection/bezier-intersection-implicit/quad/get-coefficients-3x2';
-import { getCoeffs3x2Exact } from './intersection/bezier-intersection-implicit/exact/get-coefficients-3x2';
-import { getCoeffs3x2Exact_ } from './intersection/bezier-intersection-implicit/exact/get-coefficients-3x2-';
+import { getCoeffs3x2 } from './intersection/bezier-bezier-intersection/naive/get-coefficients-3x2';
+import { getCoeffs3x2Quad } from './intersection/bezier-bezier-intersection/quad/get-coefficients-3x2';
+import { getCoeffs3x2Exact } from './intersection/bezier-bezier-intersection/exact/get-coefficients-3x2';
+import { getCoeffs3x2Exact_ } from './intersection/bezier-bezier-intersection/exact/get-coefficients-3x2-';
 
-import { getCoeffs3x1 } from './intersection/bezier-intersection-implicit/naive/get-coefficients-3x1';
-import { getCoeffs3x1Quad } from './intersection/bezier-intersection-implicit/quad/get-coefficients-3x1';
-import { getCoeffs3x1Exact } from './intersection/bezier-intersection-implicit/exact/get-coefficients-3x1';
-import { getCoeffs3x1Exact_ } from './intersection/bezier-intersection-implicit/exact/get-coefficients-3x1-';
+import { getCoeffs3x1 } from './intersection/bezier-bezier-intersection/naive/get-coefficients-3x1';
+import { getCoeffs3x1Quad } from './intersection/bezier-bezier-intersection/quad/get-coefficients-3x1';
+import { getCoeffs3x1Exact } from './intersection/bezier-bezier-intersection/exact/get-coefficients-3x1';
+import { getCoeffs3x1Exact_ } from './intersection/bezier-bezier-intersection/exact/get-coefficients-3x1-';
 
-import { getCoeffs2x3 } from './intersection/bezier-intersection-implicit/naive/get-coefficients-2x3';
-import { getCoeffs2x3Quad } from './intersection/bezier-intersection-implicit/quad/get-coefficients-2x3';
-import { getCoeffs2x3Exact } from './intersection/bezier-intersection-implicit/exact/get-coefficients-2x3';
-import { getCoeffs2x3Exact_ } from './intersection/bezier-intersection-implicit/exact/get-coefficients-2x3-';
+import { getCoeffs2x3 } from './intersection/bezier-bezier-intersection/naive/get-coefficients-2x3';
+import { getCoeffs2x3Quad } from './intersection/bezier-bezier-intersection/quad/get-coefficients-2x3';
+import { getCoeffs2x3Exact } from './intersection/bezier-bezier-intersection/exact/get-coefficients-2x3';
+import { getCoeffs2x3Exact_ } from './intersection/bezier-bezier-intersection/exact/get-coefficients-2x3-';
 
-import { getCoeffs2x2 } from './intersection/bezier-intersection-implicit/naive/get-coefficients-2x2';
-import { getCoeffs2x2Quad } from './intersection/bezier-intersection-implicit/quad/get-coefficients-2x2';
-import { getCoeffs2x2Exact } from './intersection/bezier-intersection-implicit/exact/get-coefficients-2x2';
-import { getCoeffs2x2Exact_ } from './intersection/bezier-intersection-implicit/exact/get-coefficients-2x2-';
+import { getCoeffs2x2 } from './intersection/bezier-bezier-intersection/naive/get-coefficients-2x2';
+import { getCoeffs2x2Quad } from './intersection/bezier-bezier-intersection/quad/get-coefficients-2x2';
+import { getCoeffs2x2Exact } from './intersection/bezier-bezier-intersection/exact/get-coefficients-2x2';
+import { getCoeffs2x2Exact_ } from './intersection/bezier-bezier-intersection/exact/get-coefficients-2x2-';
 
-import { getCoeffs2x1 } from './intersection/bezier-intersection-implicit/naive/get-coefficients-2x1';
-import { getCoeffs2x1Quad } from './intersection/bezier-intersection-implicit/quad/get-coefficients-2x1';
-import { getCoeffs2x1Exact } from './intersection/bezier-intersection-implicit/exact/get-coefficients-2x1';
-import { getCoeffs2x1Exact_ } from './intersection/bezier-intersection-implicit/exact/get-coefficients-2x1-';
+import { getCoeffs2x1 } from './intersection/bezier-bezier-intersection/naive/get-coefficients-2x1';
+import { getCoeffs2x1Quad } from './intersection/bezier-bezier-intersection/quad/get-coefficients-2x1';
+import { getCoeffs2x1Exact } from './intersection/bezier-bezier-intersection/exact/get-coefficients-2x1';
+import { getCoeffs2x1Exact_ } from './intersection/bezier-bezier-intersection/exact/get-coefficients-2x1-';
 
-import { getCoeffs1x3 } from './intersection/bezier-intersection-implicit/naive/get-coefficients-1x3';
-import { getCoeffs1x3Quad } from './intersection/bezier-intersection-implicit/quad/get-coefficients-1x3';
-import { getCoeffs1x3Exact } from './intersection/bezier-intersection-implicit/exact/get-coefficients-1x3';
-import { getCoeffs1x3Exact_ } from './intersection/bezier-intersection-implicit/exact/get-coefficients-1x3-';
+import { getCoeffs1x3 } from './intersection/bezier-bezier-intersection/naive/get-coefficients-1x3';
+import { getCoeffs1x3Quad } from './intersection/bezier-bezier-intersection/quad/get-coefficients-1x3';
+import { getCoeffs1x3Exact } from './intersection/bezier-bezier-intersection/exact/get-coefficients-1x3';
+import { getCoeffs1x3Exact_ } from './intersection/bezier-bezier-intersection/exact/get-coefficients-1x3-';
 
-import { getCoeffs1x2 } from './intersection/bezier-intersection-implicit/naive/get-coefficients-1x2';
-import { getCoeffs1x2Quad } from './intersection/bezier-intersection-implicit/quad/get-coefficients-1x2';
-import { getCoeffs1x2Exact } from './intersection/bezier-intersection-implicit/exact/get-coefficients-1x2';
-import { getCoeffs1x2Exact_ } from './intersection/bezier-intersection-implicit/exact/get-coefficients-1x2-';
+import { getCoeffs1x2 } from './intersection/bezier-bezier-intersection/naive/get-coefficients-1x2';
+import { getCoeffs1x2Quad } from './intersection/bezier-bezier-intersection/quad/get-coefficients-1x2';
+import { getCoeffs1x2Exact } from './intersection/bezier-bezier-intersection/exact/get-coefficients-1x2';
+import { getCoeffs1x2Exact_ } from './intersection/bezier-bezier-intersection/exact/get-coefficients-1x2-';
 
-import { getCoeffs1x1 } from './intersection/bezier-intersection-implicit/naive/get-coefficients-1x1';
-import { getCoeffs1x1Quad } from './intersection/bezier-intersection-implicit/quad/get-coefficients-1x1';
-import { getCoeffs1x1Exact } from './intersection/bezier-intersection-implicit/exact/get-coefficients-1x1';
-import { getCoeffs1x1Exact_ } from './intersection/bezier-intersection-implicit/exact/get-coefficients-1x1-';
+import { getCoeffs1x1 } from './intersection/bezier-bezier-intersection/naive/get-coefficients-1x1';
+import { getCoeffs1x1Quad } from './intersection/bezier-bezier-intersection/quad/get-coefficients-1x1';
+import { getCoeffs1x1Exact } from './intersection/bezier-bezier-intersection/exact/get-coefficients-1x1';
+import { getCoeffs1x1Exact_ } from './intersection/bezier-bezier-intersection/exact/get-coefficients-1x1-';
 
 import { getCoeffs3 } from './intersection/self-intersection/naive/get-coeffs-3';
 import { getCoeffs3Quad } from './intersection/self-intersection/quad/get-coeffs-3';
@@ -96,7 +97,7 @@ import { cubicThroughPointGiven013 } from './create/cubic-through-point';
 import { bezierSelfIntersection } from './intersection/self-intersection/self-intersection';
 import { getEndpointIntersections } from './intersection/get-endpoint-intersections';
 import { inversion01Precise } from './intersection/inversion-01';
-import { inversion1_BL52_1ULP } from './intersection/bezier-intersection-implicit/inversion-old';
+//import { inversion1_BL52_1ULP } from './graveyard/inversion-old';
 
 import { getXY       } from './to-power-basis/get-xy';
 import { getDxy      } from './to-power-basis/get-dxy';
@@ -125,13 +126,10 @@ import { normal      } from './local-properties-at-t/normal';
 import { from0ToT    } from './transformation/split-merge-clone/from-0-to-T';
 import { fromTTo1    } from './transformation/split-merge-clone/from-T-to-1';
 import { fromTo, fromToPrecise } from './transformation/split-merge-clone/from-to';
-import { getOtherTs } from './intersection/bezier-intersection-implicit/bezier-bezier-intersection-implicit';
-import { bezierBezierIntersectionImplicit } from './intersection/bezier-intersection-implicit/bezier-bezier-intersection-implicit';
+import { getOtherTs } from './intersection/bezier-bezier-intersection/bezier-bezier-intersection-implicit';
+import { bezierBezierIntersectionImplicit } from './intersection/bezier-bezier-intersection/bezier-bezier-intersection-implicit';
 import { toCubic } from './transformation/degree-or-type/to-cubic';
-import { BezDebug } from './debug/debug';
-import { DebugElemType } from './debug/debug';
-import { FatLine } from './debug/fat-line';
-import { κ } from './local-properties-at-t/curvature';
+import { κ, curvature } from './local-properties-at-t/curvature';
 import { quadToPolyline } from './transformation/quad-to-polyline';
 import { isQuadObtuse } from './global-properties/type/is-quad-obtuse';
 import { getIntervalBox, getIntervalBox1, getIntervalBox2, getIntervalBox3 } from './global-properties/bounds/get-interval-box/get-interval-box';
@@ -142,8 +140,8 @@ import { hausdorffDistance, hausdorffDistanceCandidates } from './simultaneous-p
 import { lengthUpperBound } from './global-properties/length/length-upper-bound';
 import { lengthSquaredUpperBound } from './global-properties/length/length-squared-upper-bound';
 import { splitByMaxCurveLength } from './transformation/split-merge-clone/split-by-max-curve-length';
+//import { getCurvatureExtrema } from './get-curvature-extrema/get-curvature-extrema';
 import { getCurvatureExtrema } from './get-curvature-extrema/get-curvature-extrema';
-import { getInflections } from './local-properties-to-t/get-inflections';
 import { flatness } from './global-properties/flatness';
 import { splitByMaxCurvature } from './transformation/split-merge-clone/split-by-max-curvature';
 import { splitByCurvatureAndLength } from './transformation/split-merge-clone/split-by-curvature-and-length';
@@ -177,7 +175,7 @@ let getBoundingHull = memoize(grahamScan);
 
 
 /** Alias of κ. */
-let curvature = κ;
+//let curvature = κ;
 
 
 /**
@@ -292,7 +290,6 @@ export {
 
 	// Curvature
 	getCurvatureExtrema,
-	getInflections,
 	totalCurvature,
 	totalAbsoluteCurvature,
 
@@ -304,7 +301,7 @@ export {
 	getHodograph,
 	isCubicReallyQuad,
 	toQuadraticFromCubic,
-	getInflectionPoints,
+	getInflectionTs as getInflectionPoints,
 
 	// ------------------------------------------
 	// -- Simultaneous multi-bezier properties --
@@ -320,13 +317,14 @@ export {
 	hausdorffDistanceCandidates,
 	getEndpointIntersections,
 	inversion01Precise,	
-	inversion1_BL52_1ULP,
+	//inversion1_BL52_1ULP,
 
 	// Intersections
 	bezierBezierIntersectionImplicit, 
 	getIntersectionCoeffs,
 	getOtherTs,
 	intersectBoxes,
+	areBoxesIntersecting,
 	
 	circleBezierIntersection,
 	circleBezierIntersectionPrecise,
@@ -402,8 +400,5 @@ export {
 
 export { 
 	BezierPart,
-	BezDebug, 
-	DebugElemType,
-	FatLine,
 	X
 }

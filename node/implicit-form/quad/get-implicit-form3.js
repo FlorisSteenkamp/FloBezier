@@ -1,18 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getImplicitForm3Quad = void 0;
-const flo_numerical_1 = require("flo-numerical");
+const double_double_1 = require("double-double");
 const get_xy_1 = require("../../to-power-basis/get-xy");
 const abs = Math.abs;
-const tp = flo_numerical_1.twoProduct; // error -> 0
-const qno = flo_numerical_1.qNegativeOf; // error -> 0
-const qm2 = flo_numerical_1.qMultBy2; // error -> 0 
-const qd2 = flo_numerical_1.qDivBy2; // error -> 0 
+const tp = double_double_1.twoProduct; // error -> 0
+const qno = double_double_1.ddNegativeOf; // error -> 0
+const qm2 = double_double_1.ddMultBy2; // error -> 0 
+const qd2 = double_double_1.ddDivBy2; // error -> 0 
 //const qmd2 = qMultDouble1;  // error -> 1.5*γ²
-const qmd = flo_numerical_1.qMultDouble2; // error -> 3*γ²
-const qmq = flo_numerical_1.qMultQuad; // error -> 5*γ² (theoretical), 7*γ² (worst found), we use 6*γ²
-const qdq = flo_numerical_1.qDiffQuad; // error -> 3*γ²
-const qaq = flo_numerical_1.qAddQuad; // error -> 3*γ²
+const qmd = double_double_1.ddMultDouble2; // error -> 3*γ²
+const qmq = double_double_1.ddMultDd; // error -> 5*γ² (theoretical), 7*γ² (worst found), we use 6*γ²
+const qdq = double_double_1.ddDiffDd; // error -> 3*γ²
+const qaq = double_double_1.ddAddDd; // error -> 3*γ²
 // TODO - document better
 /**
  * Returns an approximate (quad precision) implicit form of the given cubic

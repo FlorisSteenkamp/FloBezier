@@ -1,24 +1,30 @@
 
 import { getCoeffs3 } from "./naive/get-coeffs-3";
 import { getCoeffs3Exact_ } from "./exact/get-coeffs-3-";
-import { 
-    sign, expansionDiff, expansionProduct, scaleExpansion2, 
-    estimate, compare, twoProduct, sqrtWithErr, divWithErr, qSqrt, 
-    qNegativeOf, qAddQuad, qMultBy2, qDivQuad, eMultByNeg2,
-    abs as eAbs
-} from "flo-numerical";
-import { γ1 } from "../../error-analysis/error-analysis";
+import { γ } from "../../error-analysis/error-analysis";
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+import { operators as bigFloatOperators } from "big-float-ts";
+import { operators as ddOperators } from "double-double";
+const { eSign, eAbs, eToDd, eMultByNeg2, eEstimate, eCompare } = bigFloatOperators;
+import { twoProduct, expansionProduct, eDiff, scaleExpansion2 } from 'big-float-ts';
+import { ddNegativeOf, ddAddDd, ddMultBy2, ddDivDd } from 'double-double';
+const { sqrtWithErr, divWithErr, ddSqrt } = ddOperators;
+
+
+const edif = eDiff;
+const epr = expansionProduct;
+const sce = scaleExpansion2;
+const tp = twoProduct;
+const qno = ddNegativeOf;
+const qaq = ddAddDd;
+const qm2 = ddMultBy2;
+const qdivq = ddDivDd;
 
 
 const eps = Number.EPSILON;
 const abs = Math.abs;
-const edif = expansionDiff;
-const epr = expansionProduct;
-const sce = scaleExpansion2;
-const qno = qNegativeOf;
-const qaq = qAddQuad;
-const qm2 = qMultBy2;
-const qdivq = qDivQuad;
+const γ1 = γ(1);
 
 
 /**
@@ -52,8 +58,8 @@ function bezierSelfIntersection(ps: number[][]): number[] {
         let a2 = 3*x2 - 6*x1 + 3*x0;     // <= exact if max bit-aligned bitlength <= 49
         let b3 = y3 - 3*y2 + 3*y1 - y0;  // <= exact if max bit-aligned bitlength <= 50
         let b2 = 3*y2 - 6*y1 + 3*y0;     // <= exact if max bit-aligned bitlength <= 49
-        let a2b3 = twoProduct(a2,b3);
-        let a3b2 = twoProduct(a3,b2);
+        let a2b3 = tp(a2,b3);
+        let a3b2 = tp(a3,b2);
 
         if (a2b3[0] === a3b2[0] && a2b3[1] === a3b2[1]) {
             return undefined;  // a === 0 => no roots possible
@@ -116,7 +122,7 @@ function bezierSelfIntersection(ps: number[][]): number[] {
 
     // exact - DD = b^2 - 4ac
     let eDD = edif(epr(B,B), sce(4,epr(A,C)));
-    let sgn = sign(eDD);
+    let sgn = eSign(eDD);
 
     if (sgn < 0) {
         // sgn < 0 => no real roots => no cusp or double point for t in [0,1]
@@ -125,13 +131,13 @@ function bezierSelfIntersection(ps: number[][]): number[] {
 
 
     if (sgn > 0) {
-        let D = qSqrt(toQuad(eDD));
-        A = toQuad(A);
-        B = toQuad(B);
-        C = toQuad(C);
+        let D = ddSqrt(eToDd(eDD));
+        A = eToDd(A);
+        B = eToDd(B);
+        C = eToDd(C);
 
         let nBD: number[];
-        if (sign(B) >= 0) {
+        if (eSign(B) >= 0) {
             nBD = qno(qaq(B,D));
             //t1 = (-B - D) / (2*A);
             //t2 = (2*C) / (-B - D);
@@ -140,8 +146,8 @@ function bezierSelfIntersection(ps: number[][]): number[] {
             //t1 = (2*C) / (-B + D);
             //t2 = (-B + D) / (2*A);
         }
-        let t1 = estimate(qdivq(nBD, qm2(A)));  // max 1 ulps out
-        let t2 = estimate(qdivq(qm2(C), nBD));  // max 1 ulps out
+        let t1 = eEstimate(qdivq(nBD, qm2(A)));  // max 1 ulps out
+        let t2 = eEstimate(qdivq(qm2(C), nBD));  // max 1 ulps out
 
         // if any root is outside the range => no double point for t in [0,1]
         if (t1 < -eps || t1 > 1 + eps ||
@@ -166,18 +172,18 @@ function bezierSelfIntersection(ps: number[][]): number[] {
 
     // set t = b/d = b/-2a
     let d = eMultByNeg2(A);
-    let sgnB = sign(B);
-    let sgnD = sign(d);
+    let sgnB = eSign(B);
+    let sgnD = eSign(d);
 
     // if result is negative the cusp is outside the bezier endpoints
     let sgn_ = sgnB * sgnD;
     if (sgn_ < 0) { return undefined; }
 
     // if result is > 1 the cusp is outside the bezier endpoints
-    if (compare(eAbs(B), eAbs(d)) > 0) { return undefined; }
+    if (eCompare(eAbs(B), eAbs(d)) > 0) { return undefined; }
 
-    let qB = toQuad(B);
-    let qd = toQuad(d);
+    let qB = eToDd(B);
+    let qd = eToDd(d);
     let qt = qdivq(qB,qd);
     let t = qt[1];
 
@@ -189,8 +195,8 @@ function bezierSelfIntersection(ps: number[][]): number[] {
  * Returns the result of converting a floating point expansion to a 
  * double-double.
  */
-function toQuad(e: number[]) { 
-    // TODO - there's already a toQuad in flo-numerical ??
+/*function toQuad(e: number[]) { 
+    // TODO - there's already a toQuad in flo-numerica ??
     // investigate when to compress and when not to
     // e = compress(e);
 
@@ -202,7 +208,7 @@ function toQuad(e: number[]) {
     } else {
         return [e[len-2],e[len-1]];
     }
-}
+}*/
 
 
 export { bezierSelfIntersection }

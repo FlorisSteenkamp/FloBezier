@@ -1,16 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCoeffs3x3Quad = void 0;
-const flo_numerical_1 = require("flo-numerical");
 const get_implicit_form3_1 = require("../../../implicit-form/quad/get-implicit-form3");
 const error_analysis_1 = require("../../../error-analysis/error-analysis");
 const get_xy_1 = require("../../../to-power-basis/get-xy");
+const double_double_1 = require("double-double");
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const tp = double_double_1.twoProduct;
+const qm2 = double_double_1.ddMultBy2;
+const qmd = double_double_1.ddMultDouble2;
+const qmq = double_double_1.ddMultDd;
+const qaq = double_double_1.ddAddDd;
 let abs = Math.abs;
-const tp = flo_numerical_1.twoProduct;
-const qm2 = flo_numerical_1.qMultBy2;
-const qmd = flo_numerical_1.qMultDouble2;
-const qmq = flo_numerical_1.qMultQuad;
-const qaq = flo_numerical_1.qAddQuad;
 // TODO - better docs
 /**
  * * the returned errors still need to be multiplied by 3*γ1*γ1

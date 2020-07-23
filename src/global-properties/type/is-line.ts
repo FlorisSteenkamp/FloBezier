@@ -1,12 +1,16 @@
 
-import { orient2d } from "flo-numerical";
+import { operators } from "big-float-ts";
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
+const { orient2d } = operators;
 
 
 /**
  * Returns true if the given bezier is a line or a line in diguise, i.e. if all
  * control points are collinear.
  * 
- * Robust: Robust for any bitlength of the given coordinates.
+ * * **exact:** for any bitlength of the given coordinates.
+ * 
  * @param ps An order 1, 2 or 3 bezier curve.
  */
 function isLine(ps: number[][]) {

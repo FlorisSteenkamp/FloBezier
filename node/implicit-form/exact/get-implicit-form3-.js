@@ -1,20 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getImplicitForm3Exact_ = void 0;
-const flo_numerical_1 = require("flo-numerical");
+const double_double_1 = require("double-double");
 const get_xy_1 = require("../../to-power-basis/get-xy");
-const tp = flo_numerical_1.twoProduct; // error -> 0
-const qm2 = flo_numerical_1.qMultBy2; // error -> 0 
-//const qmd2 = qMultDouble1;  // error -> 1.5*γ²
-const qdq = flo_numerical_1.qDiffQuad; // error -> 3*γ²
-const qaq = flo_numerical_1.qAddQuad; // error -> 3*γ²
-const sce = flo_numerical_1.scaleExpansion2;
-const epr = flo_numerical_1.expansionProduct;
-const fes = flo_numerical_1.fastExpansionSum;
-const edif = flo_numerical_1.expansionDiff;
-const eno = flo_numerical_1.negativeOf;
-const em2 = flo_numerical_1.eMultBy2;
-const ed2 = flo_numerical_1.eDivBy2;
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const big_float_ts_1 = require("big-float-ts");
+const tp = big_float_ts_1.twoProduct; // error -> 0
+const qm2 = double_double_1.ddMultBy2; // error -> 0 
+const qdq = double_double_1.ddDiffDd; // error -> 3*γ²
+const qaq = double_double_1.ddAddDd; // error -> 3*γ²
+const sce = big_float_ts_1.scaleExpansion2;
+const epr = big_float_ts_1.expansionProduct;
+const fes = big_float_ts_1.fastExpansionSum;
+const edif = big_float_ts_1.eDiff;
+const eno = big_float_ts_1.eNegativeOf;
+const em2 = big_float_ts_1.eMultBy2;
+const ed2 = big_float_ts_1.eDivBy2;
 // TODO - document better
 /**
  * * precondition: max 47 coefficient bitlength

@@ -4,8 +4,10 @@ exports.inversion01Precise = void 0;
 const evaluate_1 = require("../local-properties-at-t/t-to-xy/evaluate");
 const flo_vector2d_1 = require("flo-vector2d");
 const flo_poly_1 = require("flo-poly");
-const flo_numerical_1 = require("flo-numerical");
 const get_tangent_poly_from_point_1 = require("../simultaneous-properties/get-tangent-poly-from-point/exact/get-tangent-poly-from-point");
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const big_float_ts_1 = require("big-float-ts");
+const { eEstimate } = big_float_ts_1.operators;
 /**
  * Returns the closest point t value on the bezier to the given point - only
  * returns t values in the range [0,1]. Also returns the minimum distance found.
@@ -29,7 +31,7 @@ function inversion01Precise(ps, p) {
     let ps_ = ts.map(t => ({
         //t: t.tM,
         t: flo_poly_1.mid(t),
-        p: evaluate_1.evaluateExact(ps, flo_poly_1.mid(t)).map(flo_numerical_1.estimate)
+        p: evaluate_1.evaluateExact(ps, flo_poly_1.mid(t)).map(eEstimate)
     }));
     // Get point with minimum distance
     let minD = Number.POSITIVE_INFINITY;

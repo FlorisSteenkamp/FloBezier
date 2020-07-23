@@ -1,22 +1,22 @@
 
 import { 
-    twoProduct, qNegativeOf, qMultBy2, 
-    qMultDouble2, qMultQuad, qDiffQuad, qAddQuad, qDivBy2
-} from 'flo-numerical';
+    twoProduct, ddNegativeOf, ddMultBy2, 
+    ddMultDouble2, ddMultDd, ddDiffDd, ddAddDd, ddDivBy2
+} from 'double-double';
 import { getXY } from '../../to-power-basis/get-xy';
 
 
 const abs = Math.abs;
 
 const tp  = twoProduct;     // error -> 0
-const qno = qNegativeOf;    // error -> 0
-const qm2 = qMultBy2;       // error -> 0 
-const qd2 = qDivBy2;        // error -> 0 
+const qno = ddNegativeOf;    // error -> 0
+const qm2 = ddMultBy2;       // error -> 0 
+const qd2 = ddDivBy2;        // error -> 0 
 //const qmd2 = qMultDouble1;  // error -> 1.5*γ²
-const qmd = qMultDouble2;   // error -> 3*γ²
-const qmq = qMultQuad;      // error -> 5*γ² (theoretical), 7*γ² (worst found), we use 6*γ²
-const qdq = qDiffQuad;      // error -> 3*γ²
-const qaq = qAddQuad;       // error -> 3*γ²
+const qmd = ddMultDouble2;   // error -> 3*γ²
+const qmq = ddMultDd;      // error -> 5*γ² (theoretical), 7*γ² (worst found), we use 6*γ²
+const qdq = ddDiffDd;      // error -> 3*γ²
+const qaq = ddAddDd;       // error -> 3*γ²
 
 
 // TODO - document better

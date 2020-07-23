@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getOtherTs = exports.bezierBezierIntersectionImplicit = exports.getIntersectionCoeffs = void 0;
-const flo_numerical_1 = require("flo-numerical");
 const flo_poly_1 = require("flo-poly");
 const get_coefficients_1x1_1 = require("./quad/get-coefficients-1x1");
 const get_coefficients_2x1_1 = require("./quad/get-coefficients-2x1");
@@ -24,6 +23,9 @@ const get_coefficients_3x3_2 = require("./exact/get-coefficients-3x3-");
 const differentiate_1 = require("flo-poly/node/calculus/differentiate");
 const get_interval_box_1 = require("../../global-properties/bounds/get-interval-box/get-interval-box");
 const intersect_boxes_1 = require("../../geometry/intersect-boxes");
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const big_float_ts_1 = require("big-float-ts");
+const { eSign } = big_float_ts_1.operators;
 const abs = Math.abs;
 const coeffFunctionsQuad = [
     [get_coefficients_1x1_1.getCoeffs1x1Quad, get_coefficients_1x2_1.getCoeffs1x2Quad, get_coefficients_1x3_1.getCoeffs1x3Quad],
@@ -69,7 +71,7 @@ function getIntersectionCoeffs(ps1, ps2) {
         sameKFamily = true;
         let poly = getPExact();
         for (let i = 0; i < poly.length; i++) {
-            if (flo_numerical_1.sign(poly[i]) !== 0) {
+            if (eSign(poly[i]) !== 0) {
                 sameKFamily = false;
                 break;
             }

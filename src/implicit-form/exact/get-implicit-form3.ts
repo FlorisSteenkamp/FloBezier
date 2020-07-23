@@ -1,7 +1,10 @@
 
 import { getXExact } from '../../to-power-basis/get-x';
 import { getYExact } from '../../to-power-basis/get-y';
-import { calculateProduct, negativeOf, calculate, scaleExpansion, expansionDiff } from 'flo-numerical';
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+import { operators as bigFloatOperators } from "big-float-ts";
+const { eProduct, eNegativeOf, eCalculate } = bigFloatOperators;
 
 
 /**
@@ -17,17 +20,17 @@ function getImplicitForm3Exact(ps: number[][]) {
     let [b3, b2, b1, b0] = getYExact(ps);
 
     // let vₓₓₓ = b3*b3*b3;
-    let vₓₓₓ = calculateProduct([b3,b3,b3]);
+    let vₓₓₓ = eProduct([b3,b3,b3]);
     // let vₓₓᵧ = -3*a3*b3*b3;
-    let vₓₓᵧ = calculateProduct([[-3],a3,b3,b3]);
+    let vₓₓᵧ = eProduct([[-3],a3,b3,b3]);
     // let vₓᵧᵧ = 3*b3*a3*a3;
-    let vₓᵧᵧ = calculateProduct([[3],b3,a3,a3]);
+    let vₓᵧᵧ = eProduct([[3],b3,a3,a3]);
     // let vᵧᵧᵧ = -a3*a3*a3;
-    let vᵧᵧᵧ = negativeOf(calculateProduct([a3,a3,a3]));
+    let vᵧᵧᵧ = eNegativeOf(eProduct([a3,a3,a3]));
 
     // let vₓₓ = -3*a3*b1*b2*b3 + a1*b2*b3*b3 - a2*b3*b2*b2 + 2*a2*b1*b3*b3 + 
     //           3*a3*b0*b3*b3 + a3*b2*b2*b2 - 3*a0*b3*b3*b3;
-    let vₓₓ = calculate([
+    let vₓₓ = eCalculate([
         [[-3],a3,b1,b2,b3], [a1,b2,b3,b3],     [[-1],a2,b3,b2,b2], 
         [[2],a2,b1,b3,b3],  [[3],a3,b0,b3,b3], [a3,b2,b2,b2], 
         [[-3],a0,b3,b3,b3]
@@ -35,7 +38,7 @@ function getImplicitForm3Exact(ps: number[][]) {
     
     // let vₓᵧ = a1*a3*b2*b3 - a2*a3*b1*b3 - 6*b0*b3*a3*a3 - 3*a1*a2*b3*b3 - 
     //           2*a2*a3*b2*b2 + 2*b2*b3*a2*a2 + 3*b1*b2*a3*a3 + 6*a0*a3*b3*b3;
-    let vₓᵧ = calculate([
+    let vₓᵧ = eCalculate([
         [a1,a3,b2,b3],      [[-1],a2,a3,b1,b3], [[-6],b0,b3,a3,a3], 
         [[-3],a1,a2,b3,b3], [[-2],a2,a3,b2,b2], [[2],b2,b3,a2,a2],
         [[3],b1,b2,a3,a3],  [[6],a0,a3,b3,b3]
@@ -43,7 +46,7 @@ function getImplicitForm3Exact(ps: number[][]) {
 
     // let vᵧᵧ = 3*a1*a2*a3*b3 + a3*b2*a2*a2 - a2*b1*a3*a3 - 3*a0*b3*a3*a3 - 
     //           2*a1*b2*a3*a3 - b3*a2*a2*a2 + 3*b0*a3*a3*a3;
-    let vᵧᵧ = calculate([
+    let vᵧᵧ = eCalculate([
         [[3],a1,a2,a3,b3],  [a3,b2,a2,a2],      [[-1],a2,b1,a3,a3], 
         [[-3],a0,b3,a3,a3], [[-2],a1,b2,a3,a3], [[-1],b3,a2,a2,a2],
         [[3],b0,a3,a3,a3]
@@ -56,7 +59,7 @@ function getImplicitForm3Exact(ps: number[][]) {
     //          2*a0*a1*b2*b3*b3 - 2*a1*a3*b3*b1*b1 - 2*b0*b2*b3*a2*a2 + 
     //          2*a0*a2*b3*b2*b2 + 2*a2*a3*b0*b2*b2 + 3*a1*a2*b0*b3*b3 + 
     //          a3*a3*b1*b1*b1 + 3*a0*a0*b3*b3*b3 - 2*a0*a3*b2*b2*b2;
-    let vₓ = calculate([
+    let vₓ = eCalculate([
         [a2,a3,b0,b1,b3],      [[-1],a1,a2,b1,b2,b3], [[-1],a1,a3,b0,b2,b3],
         [[6],a0,a3,b1,b2,b3],  [b1,a1,a1,b3,b3],      [b3,a2,a2,b1,b1],
         [[3],b3,a3,a3,b0,b0],  [a1,a3,b1,b2,b2],      [[-1],a2,a3,b2,b1,b1],
@@ -73,7 +76,7 @@ function getImplicitForm3Exact(ps: number[][]) {
     //          2*a0*b2*b3*a2*a2 - 2*a3*b0*b2*a2*a2 + 2*a0*a2*a3*b2*b2 + 
     //          2*a2*b0*b1*a3*a3 + 2*a3*b1*b3*a1*a1 + 3*a0*a1*a2*b3*b3 + 
     //          4*a1*b0*b2*a3*a3 + 6*a0*b0*b3*a3*a3 + 2*b0*b3*a2*a2*a2;
-    let vᵧ = calculate([
+    let vᵧ = eCalculate([
         [a0,a2,a3,b1,b3],      [a1,a2,a3,b1,b2],      [[-1],a0,a1,a3,b2,b3],
         [[-6],a1,a2,a3,b0,b3], [[-1],a1,a1,a1,b3,b3], [[-3],a3,a3,a3,b0,b0],
         [[-1],a1,a3,a3,b1,b1], [[-1],a3,a1,a1,b2,b2], [[-3],a3,a0,a0,b3,b3],
@@ -96,7 +99,7 @@ function getImplicitForm3Exact(ps: number[][]) {
     //          2*a0*b0*b2*b3*a2*a2 + 3*a0*b0*b1*b2*a3*a3 + 3*a1*a2*a3*b3*b0*b0 + 
     //          a3*a3*a3*b0*b0*b0 - a0*a0*a0*b3*b3*b3 + a3*a0*a0*b2*b2*b2 - 
     //          a0*a3*a3*b1*b1*b1;
-    let v = calculate([ // 34 terms, each with 6 multiplicants
+    let v = eCalculate([ // 34 terms, each with 6 multiplicants
         [a0,a1,a2,b1,b2,b3],      [a0,a1,a3,b0,b2,b3],      [[-1],a0,a2,a3,b0,b1,b3],
         [[-1],a1,a2,a3,b0,b1,b2], [b0,a1,a1,a1,b3,b3],      [[-1],b3,a2,a2,a2,b0,b0],
         [a1,b0,a3,a3,b1,b1],      [a1,b2,a0,a0,b3,b3],      [a3,b0,a1,a1,b2,b2],

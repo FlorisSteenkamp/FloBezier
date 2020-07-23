@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isCubicReallyQuad = void 0;
-const flo_numerical_1 = require("flo-numerical");
+const big_float_ts_1 = require("big-float-ts");
+const { twoProduct, eDiff, fastExpansionSum, eSign } = big_float_ts_1.operators;
 const u = Number.EPSILON / 2;
 const abs = Math.abs;
 /**
@@ -46,8 +47,8 @@ function isCubicReallyQuad(ps) {
         return false;
     }
     //console.log('unable to filter - go slow and exact')
-    return (flo_numerical_1.sign(flo_numerical_1.expansionDiff(flo_numerical_1.fastExpansionSum([x3], flo_numerical_1.twoProduct(3, x1)), flo_numerical_1.fastExpansionSum([x0], flo_numerical_1.twoProduct(3, x2)))) === 0 &&
-        flo_numerical_1.sign(flo_numerical_1.expansionDiff(flo_numerical_1.fastExpansionSum([y3], flo_numerical_1.twoProduct(3, y1)), flo_numerical_1.fastExpansionSum([y0], flo_numerical_1.twoProduct(3, y2)))) === 0);
+    return (eSign(eDiff(fastExpansionSum([x3], twoProduct(3, x1)), fastExpansionSum([x0], twoProduct(3, x2)))) === 0 &&
+        eSign(eDiff(fastExpansionSum([y3], twoProduct(3, y1)), fastExpansionSum([y0], twoProduct(3, y2)))) === 0);
 }
 exports.isCubicReallyQuad = isCubicReallyQuad;
 //# sourceMappingURL=is-cubic-really-quad.js.map

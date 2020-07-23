@@ -4,8 +4,11 @@ import { getTangentPolyFromPointExact } from "../get-tangent-poly-from-point/exa
 import { evaluateExact } from "../../local-properties-at-t/t-to-xy/evaluate";
 import { squaredDistanceBetween } from "flo-vector2d";
 import { allRoots, allRootsMultiWithErrBounds, mid } from "flo-poly";
-import { estimate } from "flo-numerical";
 import { evalDeCasteljau } from "../../local-properties-at-t/t-to-xy/eval-de-casteljau";
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+import { eEstimate } from 'big-float-ts';
+const estimate = eEstimate;
 
 
 /**
@@ -17,8 +20,9 @@ import { evalDeCasteljau } from "../../local-properties-at-t/t-to-xy/eval-de-cas
  */
 function closestPointOnBezierPrecise(
         ps: number[][], 
-        p: number[]) {
+        p: number[]): { p: number[]; t: number; } {
 
+    //let poly = getTangentPolyFromPointExact(ps, p);
     let poly = getTangentPolyFromPointExact(ps, p);
 
     // we give ample leeway for roots outside [0,1] since roots can be some 
@@ -31,7 +35,6 @@ function closestPointOnBezierPrecise(
         poly, 
         poly.map(c => 0),  // because all coefficients are exact
         undefined          // ...
-    //).map(t => t.tM);
     ).map(mid);
 
     ts.push(0);

@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getImplicitForm1Quad = void 0;
-const flo_numerical_1 = require("flo-numerical");
+const double_double_1 = require("double-double");
 const get_xy_1 = require("../../to-power-basis/get-xy");
-const tp = flo_numerical_1.twoProduct; // error -> 0
-const qdq = flo_numerical_1.qDiffQuad; // error -> 3*γ²
+const tp = double_double_1.twoProduct; // error -> 0
+const qdq = double_double_1.ddDiffDd; // error -> 3*γ²
 /**
  * Returns the quad precision implicit form of the given linear bezier.
  * * precondition: the input coefficients must be 48-bit-aligned

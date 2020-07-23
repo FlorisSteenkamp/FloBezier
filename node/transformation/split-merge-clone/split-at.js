@@ -1,7 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.splitAtExact = exports.splitAtPrecise = exports.splitAt = void 0;
-const flo_numerical_1 = require("flo-numerical");
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const big_float_ts_1 = require("big-float-ts");
+const tp = big_float_ts_1.twoProduct;
+const sum = big_float_ts_1.eSum;
+const estimate = big_float_ts_1.eEstimate;
+const epr = big_float_ts_1.expansionProduct;
+const fes = big_float_ts_1.fastExpansionSum;
+const sce = big_float_ts_1.scaleExpansion;
 let splitAtFs = [splitLineAt, splitQuadAt, splitCubicAt];
 /**
  * Returns 2 new beziers split at the given t parameter, i.e. for the ranges
@@ -82,28 +89,28 @@ function splitCubicAt(ps, t) {
 function splitCubicAtExact(ps, t) {
     let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
     let s = 1 - t;
-    let s2 = flo_numerical_1.twoProduct(s, s);
-    let s3 = flo_numerical_1.scaleExpansion(s2, s);
-    let t2 = flo_numerical_1.twoProduct(t, t);
-    let t3 = flo_numerical_1.scaleExpansion(t2, t);
-    let st = flo_numerical_1.twoProduct(s, t);
-    let st2 = flo_numerical_1.scaleExpansion(t2, s);
-    let s2t = flo_numerical_1.scaleExpansion(s2, t);
+    let s2 = tp(s, s);
+    let s3 = sce(s2, s);
+    let t2 = tp(t, t);
+    let t3 = sce(t2, t);
+    let st = tp(s, t);
+    let st2 = sce(t2, s);
+    let s2t = sce(s2, t);
     /** The split point */
     let p = [
         //x3*t**3 + 3*x2*s*t**2 + 3*x1*s**2*t + x0*s**3,
         //y3*t**3 + 3*y2*s*t**2 + 3*y1*s**2*t + y0*s**3
-        flo_numerical_1.calculateSum([
-            flo_numerical_1.expansionProduct(t3, x3),
-            flo_numerical_1.expansionProduct(st2, flo_numerical_1.scaleExpansion(x2, 3)),
-            flo_numerical_1.expansionProduct(s2t, flo_numerical_1.scaleExpansion(x1, 3)),
-            flo_numerical_1.expansionProduct(s3, x0)
+        sum([
+            epr(t3, x3),
+            epr(st2, sce(x2, 3)),
+            epr(s2t, sce(x1, 3)),
+            epr(s3, x0)
         ]),
-        flo_numerical_1.calculateSum([
-            flo_numerical_1.expansionProduct(t3, y3),
-            flo_numerical_1.expansionProduct(st2, flo_numerical_1.scaleExpansion(y2, 3)),
-            flo_numerical_1.expansionProduct(s2t, flo_numerical_1.scaleExpansion(y1, 3)),
-            flo_numerical_1.expansionProduct(s3, y0)
+        sum([
+            epr(t3, y3),
+            epr(st2, sce(y2, 3)),
+            epr(s2t, sce(y1, 3)),
+            epr(s3, y0)
         ])
     ];
     let ps1 = [
@@ -111,21 +118,21 @@ function splitCubicAtExact(ps, t) {
         [
             //x1*t + x0*s,
             //y1*t + y0*s
-            flo_numerical_1.fastExpansionSum(flo_numerical_1.scaleExpansion(x1, t), flo_numerical_1.scaleExpansion(x0, s)),
-            flo_numerical_1.fastExpansionSum(flo_numerical_1.scaleExpansion(y1, t), flo_numerical_1.scaleExpansion(y0, s))
+            fes(sce(x1, t), sce(x0, s)),
+            fes(sce(y1, t), sce(y0, s))
         ],
         [
             //x2*t**2 + 2*x1*s*t + x0*s**2, 
             //y2*t**2 + 2*y1*s*t + y0*s**2
-            flo_numerical_1.calculateSum([
-                flo_numerical_1.expansionProduct(t2, x2),
-                flo_numerical_1.expansionProduct(st, flo_numerical_1.scaleExpansion(x1, 2)),
-                flo_numerical_1.expansionProduct(s2, x0)
+            sum([
+                epr(t2, x2),
+                epr(st, sce(x1, 2)),
+                epr(s2, x0)
             ]),
-            flo_numerical_1.calculateSum([
-                flo_numerical_1.expansionProduct(t2, y2),
-                flo_numerical_1.expansionProduct(st, flo_numerical_1.scaleExpansion(y1, 2)),
-                flo_numerical_1.expansionProduct(s2, y0)
+            sum([
+                epr(t2, y2),
+                epr(st, sce(y1, 2)),
+                epr(s2, y0)
             ])
         ],
         p
@@ -135,22 +142,22 @@ function splitCubicAtExact(ps, t) {
         [
             //x3*t**2 + 2*x2*t*s + x1*s**2, 
             //y3*t**2 + 2*y2*t*s + y1*s**2
-            flo_numerical_1.calculateSum([
-                flo_numerical_1.expansionProduct(t2, x3),
-                flo_numerical_1.expansionProduct(st, flo_numerical_1.scaleExpansion(x2, 2)),
-                flo_numerical_1.expansionProduct(s2, x1)
+            sum([
+                epr(t2, x3),
+                epr(st, sce(x2, 2)),
+                epr(s2, x1)
             ]),
-            flo_numerical_1.calculateSum([
-                flo_numerical_1.expansionProduct(t2, y3),
-                flo_numerical_1.expansionProduct(st, flo_numerical_1.scaleExpansion(y2, 2)),
-                flo_numerical_1.expansionProduct(s2, y1)
+            sum([
+                epr(t2, y3),
+                epr(st, sce(y2, 2)),
+                epr(s2, y1)
             ])
         ],
         [
             //x3*t + x2*s, 
             //y3*t + y2*s
-            flo_numerical_1.fastExpansionSum(flo_numerical_1.scaleExpansion(x3, t), flo_numerical_1.scaleExpansion(x2, s)),
-            flo_numerical_1.fastExpansionSum(flo_numerical_1.scaleExpansion(y3, t), flo_numerical_1.scaleExpansion(y2, s)),
+            fes(sce(x3, t), sce(x2, s)),
+            fes(sce(y3, t), sce(y2, s)),
         ],
         [x3, y3]
     ];
@@ -168,28 +175,28 @@ function splitCubicAtExact(ps, t) {
 function splitCubicAtPrecise(ps, t) {
     let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
     let s = 1 - t;
-    let s2 = flo_numerical_1.twoProduct(s, s);
-    let s3 = flo_numerical_1.scaleExpansion(s2, s);
-    let t2 = flo_numerical_1.twoProduct(t, t);
-    let t3 = flo_numerical_1.scaleExpansion(t2, t);
-    let st = flo_numerical_1.twoProduct(s, t);
-    let st2 = flo_numerical_1.scaleExpansion(t2, s);
-    let s2t = flo_numerical_1.scaleExpansion(s2, t);
+    let s2 = tp(s, s);
+    let s3 = sce(s2, s);
+    let t2 = tp(t, t);
+    let t3 = sce(t2, t);
+    let st = tp(s, t);
+    let st2 = sce(t2, s);
+    let s2t = sce(s2, t);
     /** The split point */
     let p = [
         //x3*t**3 + 3*x2*s*t**2 + 3*x1*s**2*t + x0*s**3,
         //y3*t**3 + 3*y2*s*t**2 + 3*y1*s**2*t + y0*s**3
-        flo_numerical_1.estimate(flo_numerical_1.calculateSum([
-            flo_numerical_1.scaleExpansion(t3, x3),
-            flo_numerical_1.scaleExpansion(st2, 3 * x2),
-            flo_numerical_1.scaleExpansion(s2t, 3 * x1),
-            flo_numerical_1.scaleExpansion(s3, x0)
+        estimate(sum([
+            sce(t3, x3),
+            sce(st2, 3 * x2),
+            sce(s2t, 3 * x1),
+            sce(s3, x0)
         ])),
-        flo_numerical_1.estimate(flo_numerical_1.calculateSum([
-            flo_numerical_1.scaleExpansion(t3, y3),
-            flo_numerical_1.scaleExpansion(st2, 3 * y2),
-            flo_numerical_1.scaleExpansion(s2t, 3 * y1),
-            flo_numerical_1.scaleExpansion(s3, y0)
+        estimate(sum([
+            sce(t3, y3),
+            sce(st2, 3 * y2),
+            sce(s2t, 3 * y1),
+            sce(s3, y0)
         ]))
     ];
     let ps1 = [
@@ -197,21 +204,21 @@ function splitCubicAtPrecise(ps, t) {
         [
             //x1*t + x0*s,
             //y1*t + y0*s
-            flo_numerical_1.estimate(flo_numerical_1.fastExpansionSum(flo_numerical_1.twoProduct(x1, t), flo_numerical_1.twoProduct(x0, s))),
-            flo_numerical_1.estimate(flo_numerical_1.fastExpansionSum(flo_numerical_1.twoProduct(y1, t), flo_numerical_1.twoProduct(y0, s)))
+            estimate(fes(tp(x1, t), tp(x0, s))),
+            estimate(fes(tp(y1, t), tp(y0, s)))
         ],
         [
             //x2*t**2 + 2*x1*s*t + x0*s**2, 
             //y2*t**2 + 2*y1*s*t + y0*s**2
-            flo_numerical_1.estimate(flo_numerical_1.calculateSum([
-                flo_numerical_1.scaleExpansion(t2, x2),
-                flo_numerical_1.scaleExpansion(st, 2 * x1),
-                flo_numerical_1.scaleExpansion(s2, x0)
+            estimate(sum([
+                sce(t2, x2),
+                sce(st, 2 * x1),
+                sce(s2, x0)
             ])),
-            flo_numerical_1.estimate(flo_numerical_1.calculateSum([
-                flo_numerical_1.scaleExpansion(t2, y2),
-                flo_numerical_1.scaleExpansion(st, 2 * y1),
-                flo_numerical_1.scaleExpansion(s2, y0)
+            estimate(sum([
+                sce(t2, y2),
+                sce(st, 2 * y1),
+                sce(s2, y0)
             ]))
         ],
         p
@@ -221,22 +228,22 @@ function splitCubicAtPrecise(ps, t) {
         [
             //x3*t**2 + 2*x2*t*s + x1*s**2, 
             //y3*t**2 + 2*y2*t*s + y1*s**2
-            flo_numerical_1.estimate(flo_numerical_1.calculateSum([
-                flo_numerical_1.scaleExpansion(t2, x3),
-                flo_numerical_1.scaleExpansion(st, 2 * x2),
-                flo_numerical_1.scaleExpansion(s2, x1)
+            estimate(sum([
+                sce(t2, x3),
+                sce(st, 2 * x2),
+                sce(s2, x1)
             ])),
-            flo_numerical_1.estimate(flo_numerical_1.calculateSum([
-                flo_numerical_1.scaleExpansion(t2, y3),
-                flo_numerical_1.scaleExpansion(st, 2 * y2),
-                flo_numerical_1.scaleExpansion(s2, y1)
+            estimate(sum([
+                sce(t2, y3),
+                sce(st, 2 * y2),
+                sce(s2, y1)
             ]))
         ],
         [
             //x3*t + x2*s, 
             //y3*t + y2*s
-            flo_numerical_1.estimate(flo_numerical_1.fastExpansionSum(flo_numerical_1.twoProduct(x3, t), flo_numerical_1.twoProduct(x2, s))),
-            flo_numerical_1.estimate(flo_numerical_1.fastExpansionSum(flo_numerical_1.twoProduct(y3, t), flo_numerical_1.twoProduct(y2, s))),
+            estimate(fes(tp(x3, t), tp(x2, s))),
+            estimate(fes(tp(y3, t), tp(y2, s))),
         ],
         [x3, y3]
     ];
@@ -267,22 +274,22 @@ function splitQuadAt(ps, t) {
 function splitQuadAtExact(ps, t) {
     let [[x0, y0], [x1, y1], [x2, y2]] = ps;
     let s = 1 - t;
-    let t2 = flo_numerical_1.twoProduct(t, t);
-    let s2 = flo_numerical_1.twoProduct(s, s);
-    let st = flo_numerical_1.twoProduct(s, t);
+    let t2 = tp(t, t);
+    let s2 = tp(s, s);
+    let st = tp(s, t);
     /** The split point */
     let p = [
         //x0*s**2 + 2*x1*s*t + x2*t**2,
         //y0*s**2 + 2*y1*s*t + y2*t**2
-        flo_numerical_1.calculateSum([
-            flo_numerical_1.expansionProduct(s2, x0),
-            flo_numerical_1.expansionProduct(st, flo_numerical_1.scaleExpansion(x1, 2)),
-            flo_numerical_1.expansionProduct(t2, x2)
+        sum([
+            epr(s2, x0),
+            epr(st, sce(x1, 2)),
+            epr(t2, x2)
         ]),
-        flo_numerical_1.calculateSum([
-            flo_numerical_1.expansionProduct(s2, y0),
-            flo_numerical_1.expansionProduct(st, flo_numerical_1.scaleExpansion(y1, 2)),
-            flo_numerical_1.expansionProduct(t2, y2)
+        sum([
+            epr(s2, y0),
+            epr(st, sce(y1, 2)),
+            epr(t2, y2)
         ])
     ];
     let ps1 = [
@@ -290,8 +297,8 @@ function splitQuadAtExact(ps, t) {
         [
             //x0*s + x1*t, 
             //y0*s + y1*t
-            flo_numerical_1.fastExpansionSum(flo_numerical_1.scaleExpansion(x0, s), flo_numerical_1.scaleExpansion(x1, t)),
-            flo_numerical_1.fastExpansionSum(flo_numerical_1.scaleExpansion(y0, s), flo_numerical_1.scaleExpansion(y1, t)),
+            fes(sce(x0, s), sce(x1, t)),
+            fes(sce(y0, s), sce(y1, t)),
         ],
         p
     ];
@@ -300,8 +307,8 @@ function splitQuadAtExact(ps, t) {
         [
             //x1*s + x2*t, 
             //y1*s + y2*t
-            flo_numerical_1.fastExpansionSum(flo_numerical_1.scaleExpansion(x1, s), flo_numerical_1.scaleExpansion(x2, t)),
-            flo_numerical_1.fastExpansionSum(flo_numerical_1.scaleExpansion(y1, s), flo_numerical_1.scaleExpansion(y2, t)),
+            fes(sce(x1, s), sce(x2, t)),
+            fes(sce(y1, s), sce(y2, t)),
         ],
         [x2, y2]
     ];
@@ -315,22 +322,22 @@ function splitQuadAtExact(ps, t) {
 function splitQuadAtPrecise(ps, t) {
     let [[x0, y0], [x1, y1], [x2, y2]] = ps;
     let s = 1 - t;
-    let t2 = flo_numerical_1.twoProduct(t, t);
-    let s2 = flo_numerical_1.twoProduct(s, s);
-    let st = flo_numerical_1.twoProduct(s, t);
+    let t2 = tp(t, t);
+    let s2 = tp(s, s);
+    let st = tp(s, t);
     /** The split point */
     let p = [
         //x0*s**2 + 2*x1*s*t + x2*t**2,
         //y0*s**2 + 2*y1*s*t + y2*t**2
-        flo_numerical_1.estimate(flo_numerical_1.calculateSum([
-            flo_numerical_1.scaleExpansion(s2, x0),
-            flo_numerical_1.scaleExpansion(st, 2 * x1),
-            flo_numerical_1.scaleExpansion(t2, x2)
+        estimate(sum([
+            sce(s2, x0),
+            sce(st, 2 * x1),
+            sce(t2, x2)
         ])),
-        flo_numerical_1.estimate(flo_numerical_1.calculateSum([
-            flo_numerical_1.scaleExpansion(s2, y0),
-            flo_numerical_1.scaleExpansion(st, 2 * y1),
-            flo_numerical_1.scaleExpansion(t2, y2)
+        estimate(sum([
+            sce(s2, y0),
+            sce(st, 2 * y1),
+            sce(t2, y2)
         ]))
     ];
     let ps1 = [
@@ -338,8 +345,8 @@ function splitQuadAtPrecise(ps, t) {
         [
             //x0*s + x1*t, 
             //y0*s + y1*t
-            flo_numerical_1.estimate(flo_numerical_1.fastExpansionSum(flo_numerical_1.twoProduct(x0, s), flo_numerical_1.twoProduct(x1, t))),
-            flo_numerical_1.estimate(flo_numerical_1.fastExpansionSum(flo_numerical_1.twoProduct(y0, s), flo_numerical_1.twoProduct(y1, t))),
+            estimate(fes(tp(x0, s), tp(x1, t))),
+            estimate(fes(tp(y0, s), tp(y1, t))),
         ],
         p
     ];
@@ -348,8 +355,8 @@ function splitQuadAtPrecise(ps, t) {
         [
             //x1*s + x2*t, 
             //y1*s + y2*t
-            flo_numerical_1.estimate(flo_numerical_1.fastExpansionSum(flo_numerical_1.twoProduct(x1, s), flo_numerical_1.twoProduct(x2, t))),
-            flo_numerical_1.estimate(flo_numerical_1.fastExpansionSum(flo_numerical_1.twoProduct(y1, s), flo_numerical_1.twoProduct(y2, t))),
+            estimate(fes(tp(x1, s), tp(x2, t))),
+            estimate(fes(tp(y1, s), tp(y2, t))),
         ],
         [x2, y2]
     ];
@@ -380,8 +387,8 @@ function splitLineAtExact(ps, t) {
     let p = [
         //s*x0 + t*x1,
         //s*y0 + t*y1
-        flo_numerical_1.fastExpansionSum(flo_numerical_1.scaleExpansion(x0, s), flo_numerical_1.scaleExpansion(x1, t)),
-        flo_numerical_1.fastExpansionSum(flo_numerical_1.scaleExpansion(y0, s), flo_numerical_1.scaleExpansion(y1, t))
+        fes(sce(x0, s), sce(x1, t)),
+        fes(sce(y0, s), sce(y1, t))
     ];
     let ps1 = [
         [x0, y0],
@@ -405,8 +412,8 @@ function splitLineAtPrecise(ps, t) {
     let p = [
         //s*x0 + t*x1,
         //s*y0 + t*y1
-        flo_numerical_1.estimate(flo_numerical_1.fastExpansionSum(flo_numerical_1.twoProduct(s, x0), flo_numerical_1.twoProduct(t, x1))),
-        flo_numerical_1.estimate(flo_numerical_1.fastExpansionSum(flo_numerical_1.twoProduct(s, y0), flo_numerical_1.twoProduct(t, y1)))
+        estimate(fes(tp(s, x0), tp(t, x1))),
+        estimate(fes(tp(s, y0), tp(t, y1)))
     ];
     let ps1 = [
         [x0, y0],

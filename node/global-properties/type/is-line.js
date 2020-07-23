@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isVerticalLine = exports.isHorizontalLine = exports.isLine = void 0;
-const flo_numerical_1 = require("flo-numerical");
+const big_float_ts_1 = require("big-float-ts");
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
+const { orient2d } = big_float_ts_1.operators;
 /**
  * Returns true if the given bezier is a line or a line in diguise, i.e. if all
  * control points are collinear.
@@ -16,14 +18,14 @@ function isLine(ps) {
     }
     if (ps.length === 3) {
         // Quadratic bezier
-        return flo_numerical_1.orient2d(ps[0], ps[1], ps[2]) === 0;
+        return orient2d(ps[0], ps[1], ps[2]) === 0;
     }
     if (ps.length === 4) {
         // Cubic bezier
-        return (flo_numerical_1.orient2d(ps[0], ps[1], ps[2]) === 0 &&
-            flo_numerical_1.orient2d(ps[1], ps[2], ps[3]) === 0 &&
+        return (orient2d(ps[0], ps[1], ps[2]) === 0 &&
+            orient2d(ps[1], ps[2], ps[3]) === 0 &&
             // The below check is necessary for if ps[1] === ps[2]
-            flo_numerical_1.orient2d(ps[0], ps[2], ps[3]) === 0);
+            orient2d(ps[0], ps[2], ps[3]) === 0);
     }
 }
 exports.isLine = isLine;

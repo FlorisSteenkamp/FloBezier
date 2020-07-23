@@ -1,7 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getXExact = exports.getX = void 0;
-const flo_numerical_1 = require("flo-numerical");
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const double_double_1 = require("double-double");
+const big_float_ts_1 = require("big-float-ts");
+const sum = big_float_ts_1.eSum;
+const td = big_float_ts_1.twoDiff;
+const ts = double_double_1.twoSum;
 /**
  * Returns the approximate power basis representation of a line, quadratic or
  * cubic bezier's x-coordinates.
@@ -53,22 +58,22 @@ function getXExact(ps) {
         let [[x0,], [x1,], [x2,], [x3,]] = ps;
         return [
             //x3 - 3*x2 + 3*x1 - x0,
-            flo_numerical_1.calculateSum([
+            sum([
                 [x3],
-                flo_numerical_1.twoSum(-2 * x2, -x2),
-                flo_numerical_1.twoSum(2 * x1, x1),
+                ts(-2 * x2, -x2),
+                ts(2 * x1, x1),
                 [-x0]
             ]),
             //3*x2 - 6*x1 + 3*x0,
-            flo_numerical_1.calculateSum([
-                flo_numerical_1.twoSum(2 * x2, x2),
-                flo_numerical_1.twoSum(-4 * x1, -2 * x1),
-                flo_numerical_1.twoSum(2 * x0, x0),
+            sum([
+                ts(2 * x2, x2),
+                ts(-4 * x1, -2 * x1),
+                ts(2 * x0, x0),
             ]),
             //3*x1 - 3*x0,
-            flo_numerical_1.calculateSum([
-                flo_numerical_1.twoSum(2 * x1, x1),
-                flo_numerical_1.twoSum(-2 * x0, -x0),
+            sum([
+                ts(2 * x1, x1),
+                ts(-2 * x0, -x0),
             ]),
             //x0
             [x0]
@@ -78,9 +83,9 @@ function getXExact(ps) {
         let [[x0,], [x1,], [x2,]] = ps;
         return [
             //x2 - 2*x1 + x0,
-            flo_numerical_1.calculateSum([[x2], [-2 * x1], [x0]]),
+            sum([[x2], [-2 * x1], [x0]]),
             //2*x1 - 2*x0,
-            flo_numerical_1.twoDiff(2 * x1, 2 * x0),
+            td(2 * x1, 2 * x0),
             //x0
             [x0]
         ];
@@ -89,7 +94,7 @@ function getXExact(ps) {
         let [[x0,], [x1,]] = ps;
         return [
             //x1 - x0,
-            flo_numerical_1.twoDiff(x1, x0),
+            td(x1, x0),
             //x0
             [x0]
         ];

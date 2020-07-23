@@ -1,13 +1,13 @@
 
-import { twoProduct, qAddQuad, qMultByNeg2, qMultBy2, qDiffQuad } from "flo-numerical";
 import { getXY } from "../../../to-power-basis/get-xy";
+import { twoProduct, ddAddDd, ddMultByNeg2, ddMultBy2, ddDiffDd } from "double-double";
 
-
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const tp = twoProduct;
-const qaq = qAddQuad;
-const qm2 = qMultBy2;
-const qmn2 = qMultByNeg2;
-const qdifq = qDiffQuad;
+const qaq = ddAddDd;
+const qm2 = ddMultBy2;
+const qmn2 = ddMultByNeg2;
+const qdifq = ddDiffDd;
 
 
 /**

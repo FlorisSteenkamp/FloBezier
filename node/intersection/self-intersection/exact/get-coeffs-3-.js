@@ -1,12 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCoeffs3Exact_ = void 0;
-const flo_numerical_1 = require("flo-numerical");
 const get_xy_1 = require("../../../to-power-basis/get-xy");
-const tp = flo_numerical_1.twoProduct;
-const qdq = flo_numerical_1.qDiffQuad;
-const epr = flo_numerical_1.expansionProduct;
-const fes = flo_numerical_1.fastExpansionSum;
+const double_double_1 = require("double-double");
+const big_float_ts_1 = require("big-float-ts");
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const tp = double_double_1.twoProduct;
+const qdq = double_double_1.ddDiffDd;
+const epr = big_float_ts_1.expansionProduct;
+const fes = big_float_ts_1.fastExpansionSum;
 /**
  * Returns the self-intersection poly to solve of the given cubic bezier curve.
  * see http://www.mare.ee/indrek/misc/2d.pdf

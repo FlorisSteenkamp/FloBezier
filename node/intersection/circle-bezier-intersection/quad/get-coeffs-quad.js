@@ -1,13 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCoeffsLinearQuad = exports.getCoeffsQuadraticQuad = exports.getCoeffsCubicQuad = void 0;
-const flo_numerical_1 = require("flo-numerical");
 const get_xy_1 = require("../../../to-power-basis/get-xy");
-const tp = flo_numerical_1.twoProduct;
-const qaq = flo_numerical_1.qAddQuad;
-const qm2 = flo_numerical_1.qMultBy2;
-const qmn2 = flo_numerical_1.qMultByNeg2;
-const qdifq = flo_numerical_1.qDiffQuad;
+const double_double_1 = require("double-double");
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const tp = double_double_1.twoProduct;
+const qaq = double_double_1.ddAddDd;
+const qm2 = double_double_1.ddMultBy2;
+const qmn2 = double_double_1.ddMultByNeg2;
+const qdifq = double_double_1.ddDiffDd;
 /**
  * * **precondition** bit-algined bitlength of coefficients <= 47
  * @param circle a circle

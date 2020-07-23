@@ -1,18 +1,16 @@
 
-import { 
-    expansionProduct, twoProduct, qNegativeOf, qMultBy2, qDiffQuad, 
-    scaleExpansion2, eMultBy2, expansionDiff } from 'flo-numerical';
+import { expansionProduct, twoProduct, scaleExpansion2, eMultBy2, eDiff } from 'big-float-ts';
+import { ddNegativeOf, ddMultBy2, ddDiffDd } from 'double-double';
 import { getXY } from '../../to-power-basis/get-xy';
 
-
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const tp  = twoProduct;     // error -> 0
-const qno = qNegativeOf;    // error -> 0
-const qm2 = qMultBy2;       // error -> 0 
-//const qmd2 = qMultDouble1;  // error -> 1.5*γ²
+const qno = ddNegativeOf;    // error -> 0
+const qm2 = ddMultBy2;       // error -> 0 
 const sce = scaleExpansion2;
-const qdq = qDiffQuad;      // error -> 3*γ²
+const qdq = ddDiffDd;      // error -> 3*γ²
 const em2 = eMultBy2;
-const edif = expansionDiff;
+const edif = eDiff;
 const epr = expansionProduct;
 
 

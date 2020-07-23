@@ -2,17 +2,20 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getIntervalBoxExactTQuad = exports.getIntervalBox3Quad = exports.getIntervalBox2Quad = exports.getIntervalBox1Quad = exports.getIntervalBoxQuad = void 0;
 const eval_de_casteljau_with_err_1 = require("../../../local-properties-at-t/t-to-xy/eval-de-casteljau-with-err");
-const flo_numerical_1 = require("flo-numerical");
+const double_double_1 = require("double-double");
+const { ddDiffDd, ddDivDdWithError, ddAddDouble, ddMultDd, ddMultDouble2, ddAddDd, ddMultBy2, ddMin, ddMax } = double_double_1.operators;
 const u = Number.EPSILON / 2;
 const abs = Math.abs;
-const qdq = flo_numerical_1.qDiffQuad;
+const qdq = ddDiffDd;
 const qOne = [0, 1];
-const qdivq = flo_numerical_1.qDivQuad;
-const qad = flo_numerical_1.qAddDouble;
-const qaq = flo_numerical_1.qAddQuad;
-const qmq = flo_numerical_1.qMultQuad;
-const qmd = flo_numerical_1.qMultDouble2;
-const qm2 = flo_numerical_1.qMultBy2;
+const qad = ddAddDouble;
+const qaq = ddAddDd;
+const qmq = ddMultDd;
+const qmd = ddMultDouble2;
+const qm2 = ddMultBy2;
+const qDivQuadWithError = ddDivDdWithError;
+const qMin = ddMin;
+const qMax = ddMax;
 /**
  * Returns the approximate bezier curve that is the curve from t1 to t2 in such
  * a way that the control points axis-aligned-box of the newly returned curve is
@@ -46,7 +49,7 @@ function getIntervalBox3Quad([[x0, y0], [x1, y1], [x2, y2], [x3, y3]], [t1, t2])
     let oMt1 = qdq(qOne, t1);
     let oMt1_ = 3 * u * u * abs(oMt1[1]); // max absolute error in oMt1
     //t2 = qdivq(t2m1,omt1) //* (1 + Number.EPSILON); // <= fl(t2) > t2
-    let $t2 = flo_numerical_1.qDivQuadWithError(tDel, oMt1, tDel_, oMt1_);
+    let $t2 = qDivQuadWithError(tDel, oMt1, tDel_, oMt1_);
     t2 = qad($t2.est, $t2.err); // the max t2 can possibly be
     //let s1 = (1 - t1);  // <= exact by precondition - not anymore
     let s1 = qdq(qOne, t1); // <1>s1
@@ -144,10 +147,10 @@ function getIntervalBox3Quad([[x0, y0], [x1, y1], [x2, y2], [x3, y3]], [t1, t2])
     _y1 = 15 * u * u * _y1;
     _y2 = 20 * u * u * _y2;
     _y3 = 22 * u * u * _y3;
-    let minX = flo_numerical_1.qMin(flo_numerical_1.qMin(qad(qx0, -_x0), qad(qx1, -_x1)), flo_numerical_1.qMin(qad(qx2, -_x2), qad(qx3, -_x3)));
-    let maxX = flo_numerical_1.qMax(flo_numerical_1.qMax(qad(qx0, +_x0), qad(qx1, +_x1)), flo_numerical_1.qMax(qad(qx2, +_x2), qad(qx3, +_x3)));
-    let minY = flo_numerical_1.qMin(flo_numerical_1.qMin(qad(qy0, -_y0), qad(qy1, -_y1)), flo_numerical_1.qMin(qad(qy2, -_y2), qad(qy3, -_y3)));
-    let maxY = flo_numerical_1.qMax(flo_numerical_1.qMax(qad(qy0, +_y0), qad(qy1, +_y1)), flo_numerical_1.qMax(qad(qy2, +_y2), qad(qy3, +_y3)));
+    let minX = qMin(qMin(qad(qx0, -_x0), qad(qx1, -_x1)), qMin(qad(qx2, -_x2), qad(qx3, -_x3)));
+    let maxX = qMax(qMax(qad(qx0, +_x0), qad(qx1, +_x1)), qMax(qad(qx2, +_x2), qad(qx3, +_x3)));
+    let minY = qMin(qMin(qad(qy0, -_y0), qad(qy1, -_y1)), qMin(qad(qy2, -_y2), qad(qy3, -_y3)));
+    let maxY = qMax(qMax(qad(qy0, +_y0), qad(qy1, +_y1)), qMax(qad(qy2, +_y2), qad(qy3, +_y3)));
     //return [[x0,y0],[x1,y1],[x2,y2],[x3,y3]];
     //console.log(qx0, _x0, qx1, _x1, qx2, _x2, qx3, _x3);
     //console.log(qy0, _y0, qy1, _y1, qy2, _y2, qy3, _y3);
@@ -161,7 +164,7 @@ function getIntervalBox2Quad([[x0, y0], [x1, y1], [x2, y2]], [t1, t2]) {
     let oMt1 = qdq(qOne, t1);
     let oMt1_ = 3 * u * u * abs(oMt1[1]); // max absolute error in oMt1
     //t2 = qdivq(t2m1,omt1) //* (1 + Number.EPSILON); // <= fl(t2) > t2
-    let $t2 = flo_numerical_1.qDivQuadWithError(tDel, oMt1, tDel_, oMt1_);
+    let $t2 = qDivQuadWithError(tDel, oMt1, tDel_, oMt1_);
     t2 = qad($t2.est, $t2.err); // the max t2 can possibly be
     //let s1 = (1 - t1);  // <= exact by precondition - not anymore
     let s1 = qdq(qOne, t1); // <1>s1
@@ -235,10 +238,10 @@ function getIntervalBox2Quad([[x0, y0], [x1, y1], [x2, y2]], [t1, t2]) {
     _y0 = 7 * u * u * _y0;
     _y1 = 11 * u * u * _y1;
     _y2 = 14 * u * u * _y2;
-    let minX = flo_numerical_1.qMin(flo_numerical_1.qMin(qad(qx0, -_x0), qad(qx1, -_x1)), qad(qx2, -_x2));
-    let maxX = flo_numerical_1.qMax(flo_numerical_1.qMax(qad(qx0, +_x0), qad(qx1, +_x1)), qad(qx2, +_x2));
-    let minY = flo_numerical_1.qMin(flo_numerical_1.qMin(qad(qy0, -_y0), qad(qy1, -_y1)), qad(qy2, -_y2));
-    let maxY = flo_numerical_1.qMax(flo_numerical_1.qMax(qad(qy0, +_y0), qad(qy1, +_y1)), qad(qy2, +_y2));
+    let minX = qMin(qMin(qad(qx0, -_x0), qad(qx1, -_x1)), qad(qx2, -_x2));
+    let maxX = qMax(qMax(qad(qx0, +_x0), qad(qx1, +_x1)), qad(qx2, +_x2));
+    let minY = qMin(qMin(qad(qy0, -_y0), qad(qy1, -_y1)), qad(qy2, -_y2));
+    let maxY = qMax(qMax(qad(qy0, +_y0), qad(qy1, +_y1)), qad(qy2, +_y2));
     return [[minX, minY], [maxX, maxY]];
 }
 exports.getIntervalBox2Quad = getIntervalBox2Quad;
@@ -255,7 +258,7 @@ function getIntervalBox1Quad([[x0, y0], [x1, y1]], [t1, t2]) {
     let oMt1 = qdq(qOne, t1);
     let oMt1_ = 3 * u * u * abs(oMt1[1]); // max absolute error in oMt1
     //t2 = qdivq(t2m1,omt1) //* (1 + Number.EPSILON); // <= fl(t2) > t2
-    let $t2 = flo_numerical_1.qDivQuadWithError(tDel, oMt1, tDel_, oMt1_);
+    let $t2 = qDivQuadWithError(tDel, oMt1, tDel_, oMt1_);
     t2 = qad($t2.est, $t2.err); // the max t2 can possibly be
     let s1 = qdq(qOne, t1); // <1>s1
     let s2 = qdq(qOne, t2); // <1>s2 <= relative error bounded by u*(1 - t2)
@@ -289,10 +292,10 @@ function getIntervalBox1Quad([[x0, y0], [x1, y1]], [t1, t2]) {
     // max errors: 
     _y0 = 3 * u * _y0;
     _y1 = 7 * u * _y1;
-    let minX = flo_numerical_1.qMin(qad(qx0, -_x0), qad(qx1, -_x1));
-    let maxX = flo_numerical_1.qMax(qad(qx0, +_x0), qad(qx1, +_x1));
-    let minY = flo_numerical_1.qMin(qad(qy0, -_y0), qad(qy1, -_y1));
-    let maxY = flo_numerical_1.qMax(qad(qy0, +_y0), qad(qy1, +_y1));
+    let minX = qMin(qad(qx0, -_x0), qad(qx1, -_x1));
+    let maxX = qMax(qad(qx0, +_x0), qad(qx1, +_x1));
+    let minY = qMin(qad(qy0, -_y0), qad(qy1, -_y1));
+    let maxY = qMax(qad(qy0, +_y0), qad(qy1, +_y1));
     //return [[x0,y0],[x1,y1]];
     return [[minX, minY], [maxX, maxY]];
 }

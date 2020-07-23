@@ -1,8 +1,13 @@
 
-import { 
-    twoProduct, scaleExpansion, fastExpansionSum, estimate, 
-    calculateSum, expansionProduct, 
-} from "flo-numerical";
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+import { twoProduct, eEstimate, eSum, expansionProduct, fastExpansionSum, scaleExpansion } from 'big-float-ts';
+
+const tp = twoProduct;
+const sum = eSum;
+const estimate = eEstimate;
+const epr = expansionProduct;
+const fes = fastExpansionSum;
+const sce = scaleExpansion;
 
 
 let splitAtFs = [splitLineAt, splitQuadAt, splitCubicAt];
@@ -97,31 +102,31 @@ function splitCubicAtExact(ps: number[][][], t: number): number[][][][] {
 	let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
 		
 	let s = 1-t;
-    let s2 = twoProduct(s,s);
-    let s3 = scaleExpansion(s2, s);
-    let t2 = twoProduct(t,t);
-    let t3 = scaleExpansion(t2,t);
-    let st = twoProduct(s, t);
-    let st2 = scaleExpansion(t2, s);
-    let s2t = scaleExpansion(s2, t);
+    let s2 = tp(s,s);
+    let s3 = sce(s2, s);
+    let t2 = tp(t,t);
+    let t3 = sce(t2,t);
+    let st = tp(s, t);
+    let st2 = sce(t2, s);
+    let s2t = sce(s2, t);
 
 
     /** The split point */
     let p = [
         //x3*t**3 + 3*x2*s*t**2 + 3*x1*s**2*t + x0*s**3,
         //y3*t**3 + 3*y2*s*t**2 + 3*y1*s**2*t + y0*s**3
-        calculateSum([
-            expansionProduct(t3, x3),    
-            expansionProduct(st2, scaleExpansion(x2, 3)),
-            expansionProduct(s2t, scaleExpansion(x1, 3)), 
-            expansionProduct(s3, x0)
+        sum([
+            epr(t3, x3),    
+            epr(st2, sce(x2, 3)),
+            epr(s2t, sce(x1, 3)), 
+            epr(s3, x0)
         ]),
 
-        calculateSum([
-            expansionProduct(t3, y3),
-            expansionProduct(st2, scaleExpansion(y2, 3)),
-            expansionProduct(s2t, scaleExpansion(y1, 3)),
-            expansionProduct(s3, y0)
+        sum([
+            epr(t3, y3),
+            epr(st2, sce(y2, 3)),
+            epr(s2t, sce(y1, 3)),
+            epr(s3, y0)
         ])
     ];
 
@@ -131,27 +136,27 @@ function splitCubicAtExact(ps: number[][][], t: number): number[][][][] {
         [   
             //x1*t + x0*s,
             //y1*t + y0*s
-            fastExpansionSum(
-                scaleExpansion(x1, t),
-                scaleExpansion(x0, s)
+            fes(
+                sce(x1, t),
+                sce(x0, s)
             ),
-            fastExpansionSum(
-                scaleExpansion(y1, t),
-                scaleExpansion(y0, s)
+            fes(
+                sce(y1, t),
+                sce(y0, s)
             )
         ],
         [
             //x2*t**2 + 2*x1*s*t + x0*s**2, 
             //y2*t**2 + 2*y1*s*t + y0*s**2
-            calculateSum([
-                expansionProduct(t2, x2),
-                expansionProduct(st, scaleExpansion(x1, 2)),
-                expansionProduct(s2, x0)
+            sum([
+                epr(t2, x2),
+                epr(st, sce(x1, 2)),
+                epr(s2, x0)
             ]),
-            calculateSum([
-                expansionProduct(t2, y2),
-                expansionProduct(st, scaleExpansion(y1,2)),
-                expansionProduct(s2, y0)
+            sum([
+                epr(t2, y2),
+                epr(st, sce(y1,2)),
+                epr(s2, y0)
             ])
         ],
 		p
@@ -162,27 +167,27 @@ function splitCubicAtExact(ps: number[][][], t: number): number[][][][] {
         [
             //x3*t**2 + 2*x2*t*s + x1*s**2, 
             //y3*t**2 + 2*y2*t*s + y1*s**2
-            calculateSum([
-                expansionProduct(t2, x3),
-                expansionProduct(st, scaleExpansion(x2,2)),
-                expansionProduct(s2, x1)
+            sum([
+                epr(t2, x3),
+                epr(st, sce(x2,2)),
+                epr(s2, x1)
             ]),
-            calculateSum([
-                expansionProduct(t2, y3),
-                expansionProduct(st, scaleExpansion(y2,2)),
-                expansionProduct(s2, y1)
+            sum([
+                epr(t2, y3),
+                epr(st, sce(y2,2)),
+                epr(s2, y1)
             ])
         ],
         [
             //x3*t + x2*s, 
             //y3*t + y2*s
-            fastExpansionSum(
-                scaleExpansion(x3, t),
-                scaleExpansion(x2, s)
+            fes(
+                sce(x3, t),
+                sce(x2, s)
             ),
-            fastExpansionSum(
-                scaleExpansion(y3, t),
-                scaleExpansion(y2, s)
+            fes(
+                sce(y3, t),
+                sce(y2, s)
             ),
         ],
 		[x3, y3]
@@ -205,31 +210,31 @@ function splitCubicAtPrecise(ps: number[][], t: number): number[][][] {
 	let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
 		
 	let s = 1-t;
-    let s2 = twoProduct(s,s);
-    let s3 = scaleExpansion(s2, s);
-    let t2 = twoProduct(t,t);
-    let t3 = scaleExpansion(t2,t);
-    let st = twoProduct(s, t);
-    let st2 = scaleExpansion(t2, s);
-    let s2t = scaleExpansion(s2, t);
+    let s2 = tp(s,s);
+    let s3 = sce(s2, s);
+    let t2 = tp(t,t);
+    let t3 = sce(t2,t);
+    let st = tp(s, t);
+    let st2 = sce(t2, s);
+    let s2t = sce(s2, t);
 
 
     /** The split point */
     let p = [
         //x3*t**3 + 3*x2*s*t**2 + 3*x1*s**2*t + x0*s**3,
         //y3*t**3 + 3*y2*s*t**2 + 3*y1*s**2*t + y0*s**3
-        estimate(calculateSum([
-            scaleExpansion(t3, x3),    
-            scaleExpansion(st2, 3*x2),
-            scaleExpansion(s2t, 3*x1), 
-            scaleExpansion(s3, x0)
+        estimate(sum([
+            sce(t3, x3),    
+            sce(st2, 3*x2),
+            sce(s2t, 3*x1), 
+            sce(s3, x0)
         ])),
 
-        estimate(calculateSum([
-            scaleExpansion(t3, y3),
-            scaleExpansion(st2, 3*y2),
-            scaleExpansion(s2t, 3*y1),
-            scaleExpansion(s3, y0)
+        estimate(sum([
+            sce(t3, y3),
+            sce(st2, 3*y2),
+            sce(s2t, 3*y1),
+            sce(s3, y0)
         ]))
     ];
 
@@ -239,27 +244,27 @@ function splitCubicAtPrecise(ps: number[][], t: number): number[][][] {
         [   
             //x1*t + x0*s,
             //y1*t + y0*s
-            estimate(fastExpansionSum(
-                twoProduct(x1, t),
-                twoProduct(x0, s)
+            estimate(fes(
+                tp(x1, t),
+                tp(x0, s)
             )),
-            estimate(fastExpansionSum(
-                twoProduct(y1, t),
-                twoProduct(y0, s)
+            estimate(fes(
+                tp(y1, t),
+                tp(y0, s)
             ))
         ],
         [
             //x2*t**2 + 2*x1*s*t + x0*s**2, 
             //y2*t**2 + 2*y1*s*t + y0*s**2
-            estimate(calculateSum([
-                scaleExpansion(t2, x2),
-                scaleExpansion(st, 2*x1),
-                scaleExpansion(s2, x0)
+            estimate(sum([
+                sce(t2, x2),
+                sce(st, 2*x1),
+                sce(s2, x0)
             ])),
-            estimate(calculateSum([
-                scaleExpansion(t2, y2),
-                scaleExpansion(st, 2*y1),
-                scaleExpansion(s2, y0)
+            estimate(sum([
+                sce(t2, y2),
+                sce(st, 2*y1),
+                sce(s2, y0)
             ]))
         ],
 		p
@@ -270,27 +275,27 @@ function splitCubicAtPrecise(ps: number[][], t: number): number[][][] {
         [
             //x3*t**2 + 2*x2*t*s + x1*s**2, 
             //y3*t**2 + 2*y2*t*s + y1*s**2
-            estimate(calculateSum([
-                scaleExpansion(t2, x3),
-                scaleExpansion(st, 2*x2),
-                scaleExpansion(s2, x1)
+            estimate(sum([
+                sce(t2, x3),
+                sce(st, 2*x2),
+                sce(s2, x1)
             ])),
-            estimate(calculateSum([
-                scaleExpansion(t2, y3),
-                scaleExpansion(st, 2*y2),
-                scaleExpansion(s2, y1)
+            estimate(sum([
+                sce(t2, y3),
+                sce(st, 2*y2),
+                sce(s2, y1)
             ]))
         ],
         [
             //x3*t + x2*s, 
             //y3*t + y2*s
-            estimate(fastExpansionSum(
-                twoProduct(x3, t),
-                twoProduct(x2, s)
+            estimate(fes(
+                tp(x3, t),
+                tp(x2, s)
             )),
-            estimate(fastExpansionSum(
-                twoProduct(y3, t),
-                twoProduct(y2, s)
+            estimate(fes(
+                tp(y3, t),
+                tp(y2, s)
             )),
         ],
 		[x3, y3]
@@ -339,23 +344,23 @@ function splitQuadAtExact(
     let [[x0, y0], [x1, y1], [x2, y2]] = ps; 
         
     let s = 1-t;
-    let t2 = twoProduct(t,t);
-    let s2 = twoProduct(s,s);
-    let st = twoProduct(s,t);
+    let t2 = tp(t,t);
+    let s2 = tp(s,s);
+    let st = tp(s,t);
 
     /** The split point */
     let p = [
         //x0*s**2 + 2*x1*s*t + x2*t**2,
         //y0*s**2 + 2*y1*s*t + y2*t**2
-        calculateSum([
-            expansionProduct(s2, x0),
-            expansionProduct(st, scaleExpansion(x1,2)),
-            expansionProduct(t2, x2)
+        sum([
+            epr(s2, x0),
+            epr(st, sce(x1,2)),
+            epr(t2, x2)
         ]),
-        calculateSum([
-            expansionProduct(s2, y0),
-            expansionProduct(st, scaleExpansion(y1, 2)),
-            expansionProduct(t2, y2)
+        sum([
+            epr(s2, y0),
+            epr(st, sce(y1, 2)),
+            epr(t2, y2)
         ])
     ];
 
@@ -364,8 +369,8 @@ function splitQuadAtExact(
         [
             //x0*s + x1*t, 
             //y0*s + y1*t
-            fastExpansionSum(scaleExpansion(x0,s), scaleExpansion(x1,t)),
-            fastExpansionSum(scaleExpansion(y0,s), scaleExpansion(y1,t)),
+            fes(sce(x0,s), sce(x1,t)),
+            fes(sce(y0,s), sce(y1,t)),
         ],
         p
     ];
@@ -375,8 +380,8 @@ function splitQuadAtExact(
         [
             //x1*s + x2*t, 
             //y1*s + y2*t
-            fastExpansionSum(scaleExpansion(x1,s), scaleExpansion(x2,t)),
-            fastExpansionSum(scaleExpansion(y1,s), scaleExpansion(y2,t)),
+            fes(sce(x1,s), sce(x2,t)),
+            fes(sce(y1,s), sce(y2,t)),
         ],
         [x2, y2]
     ];
@@ -397,23 +402,23 @@ function splitQuadAtPrecise(
     let [[x0, y0], [x1, y1], [x2, y2]] = ps; 
         
     let s = 1-t;
-    let t2 = twoProduct(t,t);
-    let s2 = twoProduct(s,s);
-    let st = twoProduct(s,t);
+    let t2 = tp(t,t);
+    let s2 = tp(s,s);
+    let st = tp(s,t);
 
     /** The split point */
     let p = [
         //x0*s**2 + 2*x1*s*t + x2*t**2,
         //y0*s**2 + 2*y1*s*t + y2*t**2
-        estimate(calculateSum([
-            scaleExpansion(s2,x0),
-            scaleExpansion(st,2*x1),
-            scaleExpansion(t2, x2)
+        estimate(sum([
+            sce(s2,x0),
+            sce(st,2*x1),
+            sce(t2, x2)
         ])),
-        estimate(calculateSum([
-            scaleExpansion(s2,y0),
-            scaleExpansion(st,2*y1),
-            scaleExpansion(t2, y2)
+        estimate(sum([
+            sce(s2,y0),
+            sce(st,2*y1),
+            sce(t2, y2)
         ]))
     ];
 
@@ -422,8 +427,8 @@ function splitQuadAtPrecise(
         [
             //x0*s + x1*t, 
             //y0*s + y1*t
-            estimate(fastExpansionSum(twoProduct(x0,s), twoProduct(x1,t))),
-            estimate(fastExpansionSum(twoProduct(y0,s), twoProduct(y1,t))),
+            estimate(fes(tp(x0,s), tp(x1,t))),
+            estimate(fes(tp(y0,s), tp(y1,t))),
         ],
         p
     ];
@@ -433,8 +438,8 @@ function splitQuadAtPrecise(
         [
             //x1*s + x2*t, 
             //y1*s + y2*t
-            estimate(fastExpansionSum(twoProduct(x1,s), twoProduct(x2,t))),
-            estimate(fastExpansionSum(twoProduct(y1,s), twoProduct(y2,t))),
+            estimate(fes(tp(x1,s), tp(x2,t))),
+            estimate(fes(tp(y1,s), tp(y2,t))),
         ],
         [x2, y2]
     ];
@@ -483,8 +488,8 @@ function splitLineAtExact(
     let p = [
         //s*x0 + t*x1,
         //s*y0 + t*y1
-        fastExpansionSum(scaleExpansion(x0, s), scaleExpansion(x1, t)),
-        fastExpansionSum(scaleExpansion(y0, s), scaleExpansion(y1, t))
+        fes(sce(x0, s), sce(x1, t)),
+        fes(sce(y0, s), sce(y1, t))
     ];
 
     let ps1 = [
@@ -518,8 +523,8 @@ function splitLineAtPrecise(
     let p = [
         //s*x0 + t*x1,
         //s*y0 + t*y1
-        estimate(fastExpansionSum(twoProduct(s,x0), twoProduct(t,x1))),
-        estimate(fastExpansionSum(twoProduct(s,y0), twoProduct(t,y1)))
+        estimate(fes(tp(s,x0), tp(t,x1))),
+        estimate(fes(tp(s,y0), tp(t,y1)))
     ];
 
     let ps1 = [

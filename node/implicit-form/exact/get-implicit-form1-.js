@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getImplicitForm1Exact_ = void 0;
-const flo_numerical_1 = require("flo-numerical");
+const double_double_1 = require("double-double");
 const get_xy_1 = require("../../to-power-basis/get-xy");
-const tp = flo_numerical_1.twoProduct;
-const qdq = flo_numerical_1.qDiffQuad;
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const tp = double_double_1.twoProduct;
+const qdq = double_double_1.ddDiffDd;
 /**
  * Returns the exact implicit form of the given linear bezier.
  * Adapted from http://www.mare.ee/indrek/misc/2d.pdf

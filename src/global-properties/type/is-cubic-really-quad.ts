@@ -1,6 +1,8 @@
 
-import { twoProduct, expansionDiff, compare, fastExpansionSum, sign } from "flo-numerical";
+import { operators } from "big-float-ts";
 
+
+const { twoProduct, eDiff, fastExpansionSum, eSign } = operators;
 
 const u = Number.EPSILON / 2;
 const abs = Math.abs;
@@ -8,7 +10,9 @@ const abs = Math.abs;
 
 /**
  * Returns true if the given bezier curve is really a quadratic curve.
- * * there is no limit on the bitlength of the coefficients
+ * 
+ * * **exact:** for any bitlength of the coefficients
+ * 
  * @param ps a cubic bezier curve
  */
 function isCubicReallyQuad(ps: number[][]) {
@@ -56,11 +60,11 @@ function isCubicReallyQuad(ps: number[][]) {
     //console.log('unable to filter - go slow and exact')
 
     return (
-        sign(expansionDiff(
+        eSign(eDiff(
             fastExpansionSum([x3], twoProduct(3,x1)),
             fastExpansionSum([x0], twoProduct(3,x2))
         )) === 0 &&
-        sign(expansionDiff(
+        eSign(eDiff(
             fastExpansionSum([y3], twoProduct(3,y1)),
             fastExpansionSum([y0], twoProduct(3,y2))
         )) === 0

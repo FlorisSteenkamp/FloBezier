@@ -1,0 +1,30 @@
+---
+id: "_create_cubic_through_point_"
+title: "cubicThroughPoint"
+sidebar_label: "cubicThroughPoint"
+---
+
+**cubicThroughPointGiven013**(`ps`: number[][], `p`: number[], `t`: number): *number[][]*
+
+*Defined in [src/create/cubic-through-point.ts:13](https://github.com/FlorisSteenkamp/FloBezier/blob/6f79660/src/create/cubic-through-point.ts#L13)*
+
+Generates a cubic bezier curve going through a specific point given control
+points 0, 1 and 3.
+
+**Parameters:**
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | cubic bezier points given as `[[x0,y0], [x1,y1], [,], [x3,y3]]`, e.g. `[[1,2], [3,4], ,[5,6]]` (note the 3rd point is not given) |
+`p` | number[] | a point through which the bezier should go |
+`t` | number | a t parameter value at which the bezier should go through the point - this is necessary due to a degree of freedom still left * **non-exact:** the returned bezier does not necessarily go through the point *exactly*.  |
+
+**Returns:** *number[][]*
+
+import { BezierCanvas } from '../components/bezier-canvas';
+
+
+<BezierCanvas width={600} height={400} />
+
+
+

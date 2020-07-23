@@ -3,8 +3,11 @@
 import { evaluateExact } from "../local-properties-at-t/t-to-xy/evaluate";
 import { squaredDistanceBetween } from "flo-vector2d";
 import { allRootsMultiWithErrBounds, mid } from "flo-poly";
-import { estimate } from "flo-numerical";
 import { getTangentPolyFromPointExact } from "../simultaneous-properties/get-tangent-poly-from-point/exact/get-tangent-poly-from-point";
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+import { operators as bigFloatOperators } from "big-float-ts";
+const { eEstimate } = bigFloatOperators;
 
 
 /**
@@ -33,7 +36,7 @@ function inversion01Precise(
     let ps_ = ts.map(t => ({ 
         //t: t.tM,
         t: mid(t),
-        p: evaluateExact(ps, mid(t)).map(estimate)
+        p: evaluateExact(ps, mid(t)).map(eEstimate)
     }));
 
     // Get point with minimum distance

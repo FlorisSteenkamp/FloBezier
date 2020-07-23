@@ -1,11 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCoeffs1x1Quad = void 0;
-const flo_numerical_1 = require("flo-numerical");
+const double_double_1 = require("double-double");
 const get_implicit_form1_1 = require("../../../implicit-form/quad/get-implicit-form1");
 const get_xy_1 = require("../../../to-power-basis/get-xy");
-const tp = flo_numerical_1.twoProduct;
-const qaq = flo_numerical_1.qAddQuad;
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const tp = double_double_1.twoProduct;
+const qaq = double_double_1.ddAddDd;
 // TODO - better docs
 function getCoeffs1x1Quad(ps1, ps2) {
     let { coeffs: { vₓ, vᵧ, v } // vₓ, vᵧ, v:  48-bit aligned => error free

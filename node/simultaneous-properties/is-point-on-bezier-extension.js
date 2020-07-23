@@ -4,20 +4,24 @@ exports.isPointOnBezierExtension = void 0;
 const get_implicit_form3_1 = require("../implicit-form/naive/get-implicit-form3");
 const get_implicit_form3_2 = require("../implicit-form/quad/get-implicit-form3");
 const error_analysis_1 = require("../error-analysis/error-analysis");
-const flo_numerical_1 = require("flo-numerical");
 const get_implicit_form3_3 = require("../implicit-form/exact/get-implicit-form3-");
 const get_implicit_form2_1 = require("../implicit-form/naive/get-implicit-form2");
 const get_implicit_form2_2 = require("../implicit-form/quad/get-implicit-form2");
 const get_implicit_form2_3 = require("../implicit-form/exact/get-implicit-form2-");
 const get_implicit_form1_1 = require("../implicit-form/quad/get-implicit-form1");
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const double_double_1 = require("double-double");
+const big_float_ts_1 = require("big-float-ts");
+const tp = double_double_1.twoProduct;
+const qmq = double_double_1.ddMultDd;
+const qaq = double_double_1.ddAddDd;
+const qmd = double_double_1.ddMultDouble2;
+const sce = big_float_ts_1.scaleExpansion2;
+const epr = big_float_ts_1.expansionProduct;
+const fes = big_float_ts_1.fastExpansionSum;
+const sign = big_float_ts_1.eSign;
+const estimate = big_float_ts_1.eEstimate;
 const abs = Math.abs;
-const tp = flo_numerical_1.twoProduct;
-const qmd = flo_numerical_1.qMultDouble2;
-const qmq = flo_numerical_1.qMultQuad;
-const qaq = flo_numerical_1.qAddQuad;
-const sce = flo_numerical_1.scaleExpansion2;
-const epr = flo_numerical_1.expansionProduct;
-const fes = flo_numerical_1.fastExpansionSum;
 /**
  * Returns true if the given point is on the given cubic bezier curve where the
  * parameter t is allowed to extend to +-infinity, i.e. t is an element of
@@ -198,7 +202,7 @@ function isPointOnBezierExtension3(ps, p) {
         let h = qaq(q6, q8);
         let h_ = q6_ + q8_ + abs(h[1]);
         // if the error is not too high too discern h away from zero
-        if (error_analysis_1.γγ3 * h_ < abs(flo_numerical_1.estimate(h))) {
+        if (error_analysis_1.γγ3 * h_ < abs(estimate(h))) {
             return false; // <-- prefilter applied
         }
     }
@@ -236,7 +240,7 @@ function isPointOnBezierExtension3(ps, p) {
         let q7 = fes(vₓx, vᵧy);
         let q8 = fes(q7, v);
         let h = fes(q6, q8);
-        return flo_numerical_1.sign(h) === 0; // <= calculation was exact
+        return sign(h) === 0; // <= calculation was exact
     }
 }
 /**
@@ -343,7 +347,7 @@ function isPointOnBezierExtension2(ps, p) {
         let h = qaq(q8, v);
         let h_ = q8_ + v_ + abs(h[1]);
         // if the error is not too high too discern h away from zero
-        if (error_analysis_1.γγ3 * h_ < abs(flo_numerical_1.estimate(h))) {
+        if (error_analysis_1.γγ3 * h_ < abs(estimate(h))) {
             return false; // <-- prefilter applied
         }
     }
@@ -367,7 +371,7 @@ function isPointOnBezierExtension2(ps, p) {
         let q7 = fes(vₓx, vᵧy);
         let q8 = fes(q7, v);
         let h = fes(q5, q8);
-        return flo_numerical_1.sign(h) === 0; // <= calculation was exact
+        return sign(h) === 0; // <= calculation was exact
     }
 }
 /**
@@ -399,12 +403,12 @@ function isPointOnBezierExtension1(ps, p) {
     let h = qaq(q7, v);
     let h_ = q7_ + abs(h[1]);
     // if the error is not too high too discern h away from zero
-    if (error_analysis_1.γγ3 * h_ < abs(flo_numerical_1.estimate(h))) {
+    if (error_analysis_1.γγ3 * h_ < abs(estimate(h))) {
         return false; // <-- prefilter applied
     }
     q7 = epr(vₓx, vᵧy);
     h = fes(q7, v);
-    return flo_numerical_1.sign(h) === 0; // <= calculation was exact
+    return sign(h) === 0; // <= calculation was exact
 }
 /**
  * Returns true if the given point is on the given bezier curve where the

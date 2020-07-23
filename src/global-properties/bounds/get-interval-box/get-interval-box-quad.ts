@@ -1,20 +1,25 @@
 
 import { evalDeCasteljauWithErrQuad } from "../../../local-properties-at-t/t-to-xy/eval-de-casteljau-with-err";
-import { 
-    qDiffQuad, qDivQuad, qDivQuadWithError, qAddDouble, qMultQuad, qMultDouble2, 
-    qAddQuad, qMultBy2, qMin, qMax } from "flo-numerical";
+import { operators } from "double-double";
+
+const { 
+    ddDiffDd, ddDivDdWithError, ddAddDouble, ddMultDd, ddMultDouble2, 
+    ddAddDd, ddMultBy2, ddMin, ddMax 
+} = operators;
 
 
 const u = Number.EPSILON / 2;
 const abs = Math.abs;
-const qdq = qDiffQuad;
+const qdq = ddDiffDd;
 const qOne = [0,1];
-const qdivq = qDivQuad;
-const qad = qAddDouble;
-const qaq = qAddQuad;
-const qmq = qMultQuad;
-const qmd = qMultDouble2;
-const qm2 = qMultBy2;
+const qad = ddAddDouble;
+const qaq = ddAddDd;
+const qmq = ddMultDd;
+const qmd = ddMultDouble2;
+const qm2 = ddMultBy2;
+const qDivQuadWithError = ddDivDdWithError;
+const qMin = ddMin;
+const qMax  = ddMax;
 
 
 /**

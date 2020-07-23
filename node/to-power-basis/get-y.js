@@ -1,7 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getYExact = exports.getY = void 0;
-const flo_numerical_1 = require("flo-numerical");
+const big_float_ts_1 = require("big-float-ts");
+const sum = big_float_ts_1.eSum;
+const ts = big_float_ts_1.twoSum;
+const td = big_float_ts_1.twoDiff;
 /**
  * Returns the approximate power basis representation of a line, quadratic or
  * cubic bezier's y-coordinates.
@@ -55,22 +58,22 @@ function getYExact(ps) {
         let [[, y0], [, y1], [, y2], [, y3]] = ps;
         return [
             //y3 - 3*y2 + 3*y1 - y0,
-            flo_numerical_1.calculateSum([
+            sum([
                 [y3],
-                flo_numerical_1.twoSum(-2 * y2, -y2),
-                flo_numerical_1.twoSum(2 * y1, y1),
+                ts(-2 * y2, -y2),
+                ts(2 * y1, y1),
                 [-y0]
             ]),
             //3*y2 - 6*y1 + 3*y0,
-            flo_numerical_1.calculateSum([
-                flo_numerical_1.twoSum(2 * y2, y2),
-                flo_numerical_1.twoSum(-4 * y1, -2 * y1),
-                flo_numerical_1.twoSum(2 * y0, y0),
+            sum([
+                ts(2 * y2, y2),
+                ts(-4 * y1, -2 * y1),
+                ts(2 * y0, y0),
             ]),
             //3*y1 - 3*y0,
-            flo_numerical_1.calculateSum([
-                flo_numerical_1.twoSum(2 * y1, y1),
-                flo_numerical_1.twoSum(-2 * y0, -y0),
+            sum([
+                ts(2 * y1, y1),
+                ts(-2 * y0, -y0),
             ]),
             //y0
             [y0]
@@ -80,9 +83,9 @@ function getYExact(ps) {
         let [[, y0], [, y1], [, y2]] = ps;
         return [
             //y2 - 2*y1 + y0,
-            flo_numerical_1.calculateSum([[y2], [-2 * y1], [y0]]),
+            sum([[y2], [-2 * y1], [y0]]),
             //2*y1 - 2*y0,
-            flo_numerical_1.twoDiff(2 * y1, 2 * y0),
+            td(2 * y1, 2 * y0),
             //y0
             [y0]
         ];
@@ -91,7 +94,7 @@ function getYExact(ps) {
         let [[, y0], [, y1]] = ps;
         return [
             //y1 - y0,
-            flo_numerical_1.twoDiff(y1, y0),
+            td(y1, y0),
             //y0
             [y0]
         ];

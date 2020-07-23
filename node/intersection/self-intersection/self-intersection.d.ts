@@ -8,4 +8,8 @@
  * @param ps A cubic bezier curve.
  */
 declare function bezierSelfIntersection(ps: number[][]): number[];
+/**
+ * Returns the result of converting a floating point expansion to a
+ * double-double.
+ */
 export { bezierSelfIntersection };

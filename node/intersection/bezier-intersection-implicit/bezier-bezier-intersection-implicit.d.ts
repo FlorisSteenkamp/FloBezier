@@ -1,4 +1,4 @@
-import { RootInterval } from 'flo-poly/node/roots/multi-with-err-bound/root-interval';
+import { RootInterval } from 'flo-poly';
 import { X } from './x';
 /**
  * Returns the intersection polynomial coefficients between two bezier curves

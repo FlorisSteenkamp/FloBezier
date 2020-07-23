@@ -1,10 +1,10 @@
 
-declare let _bez_debug_: BezDebug;
-
-import { isBitAligned, msbExponent, lsbExponent, orient2d } from 'flo-numerical';
+import { orient2d as orient2d_ } from 'big-float-ts';
 import { toUnitVector, cross, dot } from "flo-vector2d";
 import { compareCurvaturesAtInterface } from "../local-properties-at-t/curvature";
-import { BezDebug } from "../debug/debug";
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const orient2d = orient2d_;
 
 
 /** 

@@ -1,19 +1,23 @@
 
-import { γ1 } from "../../error-analysis/error-analysis";
-import { qDiffQuad, qDivQuad, qAddDouble, qAddQuad, qMultQuad, qMultDouble2, qMultBy2 } from "flo-numerical";
+import { γ } from "../../error-analysis/error-analysis";
+import { ddMultDd, ddAddDd, ddDiffDd, ddMultDouble2 } from "double-double";
 
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const qmq = ddMultDd;
+const qaq = ddAddDd;
+const qdq = ddDiffDd;
+const qmd = ddMultDouble2;
 
 const abs = Math.abs;
 const u = Number.EPSILON / 2;
-const qdq = qDiffQuad;
-const qaq = qAddQuad;
-const qmq = qMultQuad;
-const qmd = qMultDouble2;
+const γ1 = γ(1);
 
 
 /** 
  * Evaluates the given bezier curve at the parameter t, including error.
+ * 
  * * **precondition**: 49-bit aligned coordinates
+ * 
  * @param ps An order 1, 2 or 3 bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param t The parameter value where the bezier should be evaluated
  **/
@@ -27,8 +31,8 @@ function evalDeCasteljauWithErr(
 		return { p: ps[ps.length-1], pE: [0,0] };
 	}
 
-	//let s = 1-t;  // <= exact if eps | t, but not a precondition here
-	//let s = 1 - t;  // <1>s1
+	// let s = 1 - t;  // <= exact if eps | t, but not a precondition here
+	// let s = 1 - t;  // <1>s1
 	
 
 	if (ps.length === 4) {

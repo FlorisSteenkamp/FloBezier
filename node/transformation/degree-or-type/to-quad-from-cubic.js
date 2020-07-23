@@ -1,7 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.toQuadraticFromCubic = void 0;
-const flo_numerical_1 = require("flo-numerical");
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const big_float_ts_1 = require("big-float-ts");
+const sce = big_float_ts_1.scaleExpansion;
+const edif = big_float_ts_1.eDiff;
+const estimate = big_float_ts_1.eEstimate;
+const ts = big_float_ts_1.twoSum;
 /**
  * Returns a quadratic closest to the given cubic bezier by taking the midpoint
  * of the moving line of the hybrid quadratic version of the cubic as the
@@ -18,8 +23,8 @@ function toQuadraticFromCubic(ps) {
         [
             //[(3*(x1+x2) - (x0+x3)) / 4, 
             //(3*(y1+y2) - (y0+y3)) / 4]
-            flo_numerical_1.estimate(flo_numerical_1.expansionDiff(flo_numerical_1.scaleExpansion(flo_numerical_1.twoSum(x1 / 4, x2 / 4), 3), flo_numerical_1.twoSum(x0 / 4, x3 / 4))),
-            flo_numerical_1.estimate(flo_numerical_1.expansionDiff(flo_numerical_1.scaleExpansion(flo_numerical_1.twoSum(y1 / 4, y2 / 4), 3), flo_numerical_1.twoSum(y0 / 4, y3 / 4)))
+            estimate(edif(sce(ts(x1 / 4, x2 / 4), 3), ts(x0 / 4, x3 / 4))),
+            estimate(edif(sce(ts(y1 / 4, y2 / 4), 3), ts(y0 / 4, y3 / 4)))
         ],
         [x3, y3]
     ];

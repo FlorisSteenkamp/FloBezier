@@ -1,9 +1,10 @@
 
-import { γ1 } from "../../../error-analysis/error-analysis";
+import { γ } from "../../../error-analysis/error-analysis";
 import { getXY } from "../../../to-power-basis/get-xy";
 
 
 const abs = Math.abs;
+const γ1 = γ(1);
 
 
 /** 

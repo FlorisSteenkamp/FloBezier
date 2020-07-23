@@ -5,10 +5,17 @@ const evaluate_dx_1 = require("./t-to-dxy/evaluate-dx");
 const evaluate_dy_1 = require("./t-to-dxy/evaluate-dy");
 const evaluate_ddx_1 = require("./t-to-ddxy/evaluate-ddx");
 const evaluate_ddy_1 = require("./t-to-ddxy/evaluate-ddy");
-const flo_numerical_1 = require("flo-numerical");
 const get_dxy_at_0_1 = require("./t-to-dxy/get-dxy-at-0");
 const get_ddxy_at_0_1 = require("./t-to-ddxy/get-ddxy-at-0");
 const get_dddxy_1 = require("../to-power-basis/get-dddxy");
+const double_double_1 = require("double-double");
+const big_float_ts_1 = require("big-float-ts");
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const tp = double_double_1.twoProduct;
+const epr = big_float_ts_1.expansionProduct;
+const fes = big_float_ts_1.fastExpansionSum;
+const edif = big_float_ts_1.eDiff;
+const sign = big_float_ts_1.eSign;
 function κ(ps, t) {
     let evDx = evaluate_dx_1.evaluateDx(ps);
     let evDy = evaluate_dy_1.evaluateDy(ps);
@@ -74,32 +81,32 @@ function compareCurvaturesAtInterface(psI, psO) {
     // d -> 3 x ((p+3) + 1) === 3p + 12
     //let d = (dxI*dxI  + dyI*dyI )**3;
     // We need to resort to exact floating point arithmetic at this point
-    let a = flo_numerical_1.expansionDiff(flo_numerical_1.twoProduct(dxI, ddyI), flo_numerical_1.twoProduct(dyI, ddxI));
-    let c = flo_numerical_1.expansionDiff(flo_numerical_1.twoProduct(dxO, ddyO), flo_numerical_1.twoProduct(dyO, ddxO));
-    let signA = flo_numerical_1.sign(a);
-    let signC = flo_numerical_1.sign(c);
+    let a = edif(tp(dxI, ddyI), tp(dyI, ddxI));
+    let c = edif(tp(dxO, ddyO), tp(dyO, ddxO));
+    let signA = sign(a);
+    let signC = sign(c);
     if (signA !== signC) {
         //console.log('branch 3');
         return signA - signC;
     }
-    let b = flo_numerical_1.fastExpansionSum(flo_numerical_1.twoProduct(dxO, dxO), flo_numerical_1.twoProduct(dyO, dyO));
-    let d = flo_numerical_1.fastExpansionSum(flo_numerical_1.twoProduct(dxI, dxI), flo_numerical_1.twoProduct(dyI, dyI));
-    let b2 = flo_numerical_1.expansionProduct(b, b);
-    let b3 = flo_numerical_1.expansionProduct(b2, b);
-    let d2 = flo_numerical_1.expansionProduct(d, d);
-    let d3 = flo_numerical_1.expansionProduct(d2, d);
+    let b = fes(tp(dxO, dxO), tp(dyO, dyO));
+    let d = fes(tp(dxI, dxI), tp(dyI, dyI));
+    let b2 = epr(b, b);
+    let b3 = epr(b2, b);
+    let d2 = epr(d, d);
+    let d3 = epr(d2, d);
     if (signA !== 0 || signC !== 0) {
         //console.log('branch 4');
-        let a2 = flo_numerical_1.expansionProduct(a, a);
-        let c2 = flo_numerical_1.expansionProduct(c, c);
+        let a2 = epr(a, a);
+        let c2 = epr(c, c);
         // max aggregate bitlength increase (let original bitlength === p):
         // κ -> (2 x ((p+3)+(p+5) + 1)) + (3 x ((p+3) + 1)) === 7p + 30
         // e.g. for bit-aligned input bitlength p of 10 we get output bitlength 
         // of 100, or for p === 3 (the max exact bitlength allowed to have exact
         // results without resorting to infinite precision) we get 51 bits.
-        let κI = flo_numerical_1.expansionProduct(a2, b3);
-        let κO = flo_numerical_1.expansionProduct(c2, d3);
-        let δκ = flo_numerical_1.sign(flo_numerical_1.expansionDiff(κI, κO));
+        let κI = epr(a2, b3);
+        let κO = epr(c2, d3);
+        let δκ = sign(edif(κI, κO));
         if (δκ !== 0) {
             //console.log('branch 5');
             // At this point signA === signC, both +tive or -tive
@@ -119,16 +126,16 @@ function compareCurvaturesAtInterface(psI, psO) {
     // Get x′′′ and y′′′ for incoming curve evaluated at 1
     let [dddxI, dddyI] = get_dddxy_1.getDddxy(psI); // max bitlength increase === max shift === 6
     let [dddxO, dddyO] = get_dddxy_1.getDddxy(psO); // max bitlength increase === max shift === 6
-    let e = flo_numerical_1.expansionDiff(flo_numerical_1.twoProduct(dxI, dddyI), flo_numerical_1.twoProduct(dyI, dddxI));
-    let f = flo_numerical_1.fastExpansionSum(flo_numerical_1.twoProduct(dxI, ddxI), flo_numerical_1.twoProduct(dyI, ddyI));
-    let g = flo_numerical_1.expansionDiff(flo_numerical_1.twoProduct(dxO, dddyO), flo_numerical_1.twoProduct(dyO, dddxO));
-    let h = flo_numerical_1.fastExpansionSum(flo_numerical_1.twoProduct(dxO, ddxO), flo_numerical_1.twoProduct(dyO, ddyO));
+    let e = edif(tp(dxI, dddyI), tp(dyI, dddxI));
+    let f = fes(tp(dxI, ddxI), tp(dyI, ddyI));
+    let g = edif(tp(dxO, dddyO), tp(dyO, dddxO));
+    let h = fes(tp(dxO, ddxO), tp(dyO, ddyO));
     // (de - 3af)²b⁵ > (bg - 3ch)²d⁵
     // i²b⁵ > j²d⁵
-    let i = flo_numerical_1.expansionDiff(flo_numerical_1.expansionProduct(d, e), flo_numerical_1.scaleExpansion(flo_numerical_1.expansionProduct(a, f), 3));
-    let j = flo_numerical_1.expansionDiff(flo_numerical_1.expansionProduct(b, g), flo_numerical_1.scaleExpansion(flo_numerical_1.expansionProduct(c, h), 3));
-    let signI = flo_numerical_1.sign(i);
-    let signJ = flo_numerical_1.sign(j);
+    let i = edif(epr(d, e), big_float_ts_1.scaleExpansion(epr(a, f), 3));
+    let j = edif(epr(b, g), big_float_ts_1.scaleExpansion(epr(c, h), 3));
+    let signI = sign(i);
+    let signJ = sign(j);
     if (signA !== signC) {
         return signI - signJ;
     }
@@ -136,13 +143,13 @@ function compareCurvaturesAtInterface(psI, psO) {
         // Both curve extensions are identical, i.e. in the same K-family
         return 0;
     }
-    let i2 = flo_numerical_1.expansionProduct(i, i);
-    let b5 = flo_numerical_1.expansionProduct(b2, b3);
-    let j2 = flo_numerical_1.expansionProduct(j, j);
-    let d5 = flo_numerical_1.expansionProduct(d2, d3);
-    let dκI = flo_numerical_1.expansionProduct(i2, b5);
-    let dκO = flo_numerical_1.expansionProduct(j2, d5);
-    let sgn = flo_numerical_1.sign(flo_numerical_1.expansionDiff(dκI, dκO));
+    let i2 = epr(i, i);
+    let b5 = epr(b2, b3);
+    let j2 = epr(j, j);
+    let d5 = epr(d2, d3);
+    let dκI = epr(i2, b5);
+    let dκO = epr(j2, d5);
+    let sgn = sign(edif(dκI, dκO));
     return signI > 0 ? sgn : -sgn;
     // If the above returned value is still zero then the two curve extensions 
     // are identical, i.e. in the same K-family

@@ -1,24 +1,30 @@
 
 import { getImplicitForm3 } from "../implicit-form/naive/get-implicit-form3";
 import { getImplicitForm3Quad } from "../implicit-form/quad/get-implicit-form3";
-import { γ1, γγ3 } from '../error-analysis/error-analysis';
-import { twoProduct, qMultDouble2, qMultQuad, qAddQuad, estimate, sign, scaleExpansion2, expansionProduct, fastExpansionSum } from "flo-numerical";
+import { γ, γγ } from '../error-analysis/error-analysis';
 import { getImplicitForm3Exact_ } from "../implicit-form/exact/get-implicit-form3-";
 import { getImplicitForm2 } from "../implicit-form/naive/get-implicit-form2";
 import { getImplicitForm2Quad } from "../implicit-form/quad/get-implicit-form2";
 import { getImplicitForm2Exact_ } from "../implicit-form/exact/get-implicit-form2-";
-import { getImplicitForm1 } from "../implicit-form/naive/get-implicit-form1";
 import { getImplicitForm1Quad } from "../implicit-form/quad/get-implicit-form1";
 
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+import { twoProduct, ddMultDd, ddAddDd, ddMultDouble2 } from "double-double";
+import { expansionProduct, fastExpansionSum, eSign, scaleExpansion2, eEstimate } from 'big-float-ts';
 
-const abs = Math.abs;
-const tp = twoProduct;
-const qmd = qMultDouble2;
-const qmq = qMultQuad;
-const qaq = qAddQuad;
+const tp  = twoProduct;
+const qmq = ddMultDd;
+const qaq = ddAddDd;
+const qmd = ddMultDouble2;
 const sce = scaleExpansion2;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
+const sign = eSign;
+const estimate = eEstimate;
+
+const abs = Math.abs;
+const γ1 = γ(1);
+const γγ3 = γγ(3);
 
 
 /**

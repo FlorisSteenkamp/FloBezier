@@ -1,5 +1,17 @@
 
-import { twoProduct, scaleExpansion, calculate, fastExpansionSum, calculateSum, expansionProduct } from "flo-numerical";
+import { twoProduct } from "double-double";
+import { eSum, eCalculate, expansionProduct, fastExpansionSum, scaleExpansion } from 'big-float-ts';
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const tp  = twoProduct;
+const epr = expansionProduct;
+const fes = fastExpansionSum;
+const calculate = eCalculate;
+const sum = eSum;
+
+const abs = Math.abs;
+const u = Number.EPSILON / 2;
+
 
 
 /** 
@@ -62,9 +74,9 @@ function evaluateExact(ps: number[][], t: number): number[][] {
 	}
 
 	let s = 1-t;
-    let s2 = twoProduct(s,s);
+    let s2 = tp(s,s);
     let s3 = scaleExpansion(s2, s);
-    let t2 = twoProduct(t,t);
+    let t2 = tp(t,t);
     let t3 = scaleExpansion(t2,t);
 
 	if (ps.length === 4) {
@@ -72,16 +84,16 @@ function evaluateExact(ps: number[][], t: number): number[][] {
 		let [[x0,y0],[x1,y1],[x2,y2],[x3,y3]] = ps;
 		//let x = x0*s3 + 3*x1*s2*t + 3*x2*s*t2 + x3*t3;
 		//let y = y0*s3 + 3*y1*s2*t + 3*y2*s*t2 + y3*t3;
-		let x = calculateSum([ 
+		let x = sum([ 
 			scaleExpansion(s3,x0), 
-			expansionProduct(scaleExpansion(twoProduct(3,x1),t), s2),
-			expansionProduct(scaleExpansion(twoProduct(3,x2),s), t2),
+			epr(scaleExpansion(tp(3,x1),t), s2),
+			epr(scaleExpansion(tp(3,x2),s), t2),
 			scaleExpansion(t3,x3)
 		]);
-		let y = calculateSum([ 
+		let y = sum([ 
 			scaleExpansion(s3,y0), 
-			expansionProduct(scaleExpansion(twoProduct(3,y1),t), s2),
-			expansionProduct(scaleExpansion(twoProduct(3,y2),s), t2),
+			epr(scaleExpansion(tp(3,y1),t), s2),
+			epr(scaleExpansion(tp(3,y2),s), t2),
 			scaleExpansion(t3,y3)
 		]);
 
@@ -93,14 +105,14 @@ function evaluateExact(ps: number[][], t: number): number[][] {
 		let [[x0,y0],[x1,y1],[x2,y2]] = ps;
 		//let x = x0*s**2 + 2*x1*s*t + x2*t**2;
 		//let y = y0*s**2 + 2*y1*s*t + y2*t**2;
-		let x = calculateSum([ 
+		let x = sum([ 
 			scaleExpansion(s2,x0),
-			scaleExpansion(twoProduct(2*x1,s), t),
+			scaleExpansion(tp(2*x1,s), t),
 			scaleExpansion(t2,x2)
 		]);
-		let y = calculateSum([ 
+		let y = sum([ 
 			scaleExpansion(s2,y0),
-			scaleExpansion(twoProduct(2*y1,s), t),
+			scaleExpansion(tp(2*y1,s), t),
 			scaleExpansion(t2,y2)
 		]);
 
@@ -110,8 +122,8 @@ function evaluateExact(ps: number[][], t: number): number[][] {
 	if (ps.length === 2) {
 		// line
 		let [[x0,y0],[x1,y1]] = ps;
-		let x = fastExpansionSum(twoProduct(x0,s), twoProduct(x1,t));
-		let y = fastExpansionSum(twoProduct(y0,s), twoProduct(y1,t));;
+		let x = fes(tp(x0,s), tp(x1,t));
+		let y = fes(tp(y0,s), tp(y1,t));;
 
 		return [x,y];
 	}
@@ -128,11 +140,11 @@ function expEvaluateExact(ps: number[][][], t: number): number[][] {
 	}
 
 	let s = 1-t;
-    let s2 = twoProduct(s,s);
+    let s2 = tp(s,s);
     let s3 = scaleExpansion(s2, s);
-    let t2 = twoProduct(t,t);
+    let t2 = tp(t,t);
     let t3 = scaleExpansion(t2,t);
-    let st = twoProduct(s, t);
+    let st = tp(s, t);
     let st2 = scaleExpansion(t2, s);
     let s2t = scaleExpansion(s2, t);
 
@@ -160,8 +172,8 @@ function expEvaluateExact(ps: number[][][], t: number): number[][] {
 	if (ps.length === 2) {
 		// line
 		let [[x0,y0],[x1,y1]] = ps;
-		let x = fastExpansionSum(scaleExpansion(x0,s), scaleExpansion(x1,t));
-		let y = fastExpansionSum(scaleExpansion(y0,s), scaleExpansion(y1,t));;
+		let x = fes(scaleExpansion(x0,s), scaleExpansion(x1,t));
+		let y = fes(scaleExpansion(y0,s), scaleExpansion(y1,t));;
 
 		return [x,y];
 	}

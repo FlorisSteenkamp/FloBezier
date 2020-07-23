@@ -1,5 +1,11 @@
 
-import { twoSum, scaleExpansion, expansionDiff, estimate } from "flo-numerical";
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+import { eEstimate, eDiff, scaleExpansion, twoSum } from 'big-float-ts';
+
+const sce = scaleExpansion;
+const edif = eDiff;
+const estimate = eEstimate;
+const ts = twoSum;
 
 
 /**
@@ -19,13 +25,13 @@ function toQuadraticFromCubic(ps: number[][]) {
         [
             //[(3*(x1+x2) - (x0+x3)) / 4, 
              //(3*(y1+y2) - (y0+y3)) / 4]
-            estimate(expansionDiff(
-                scaleExpansion(twoSum(x1/4, x2/4), 3),
-                twoSum(x0/4, x3/4)
+            estimate(edif(
+                sce(ts(x1/4, x2/4), 3),
+                ts(x0/4, x3/4)
             )),
-            estimate(expansionDiff(
-                scaleExpansion(twoSum(y1/4, y2/4), 3),
-                twoSum(y0/4, y3/4)
+            estimate(edif(
+                sce(ts(y1/4, y2/4), 3),
+                ts(y0/4, y3/4)
             ))
         ],
         [x3,y3]

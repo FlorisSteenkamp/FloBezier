@@ -1,9 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getInterfaceCcw = void 0;
-const flo_numerical_1 = require("flo-numerical");
+const big_float_ts_1 = require("big-float-ts");
 const flo_vector2d_1 = require("flo-vector2d");
 const curvature_1 = require("../local-properties-at-t/curvature");
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const orient2d = big_float_ts_1.orient2d;
 /**
  * Angle in degrees to radians.
  * @hidden
@@ -95,7 +97,7 @@ function getInterfaceCcw(psI, psO) {
     // If the preconditions are met it is exact
     //let crossTangents = cross(tangentAtEnd, tangentAtStart);
     // The cross below is exact by adaptive infinite precision
-    let crossTangents = flo_numerical_1.orient2d(p0, p1, p2);
+    let crossTangents = orient2d(p0, p1, p2);
     if (crossTangents !== 0) {
         return crossTangents;
     }

@@ -1,10 +1,11 @@
 
-import { twoProduct, qDiffQuad, expansionProduct, fastExpansionSum } from "flo-numerical";
 import { getXY } from "../../../to-power-basis/get-xy";
+import { twoProduct, ddDiffDd } from "double-double";
+import { expansionProduct, fastExpansionSum } from 'big-float-ts';
 
-
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const tp  = twoProduct;
-const qdq = qDiffQuad;
+const qdq = ddDiffDd;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
 

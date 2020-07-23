@@ -3,17 +3,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.bezierSelfIntersection = void 0;
 const get_coeffs_3_1 = require("./naive/get-coeffs-3");
 const get_coeffs_3_2 = require("./exact/get-coeffs-3-");
-const flo_numerical_1 = require("flo-numerical");
 const error_analysis_1 = require("../../error-analysis/error-analysis");
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const big_float_ts_1 = require("big-float-ts");
+const double_double_1 = require("double-double");
+const { eSign, eAbs, eToDd, eMultByNeg2, eEstimate, eCompare } = big_float_ts_1.operators;
+const big_float_ts_2 = require("big-float-ts");
+const double_double_2 = require("double-double");
+const { sqrtWithErr, divWithErr, ddSqrt } = double_double_1.operators;
+const edif = big_float_ts_2.eDiff;
+const epr = big_float_ts_2.expansionProduct;
+const sce = big_float_ts_2.scaleExpansion2;
+const tp = big_float_ts_2.twoProduct;
+const qno = double_double_2.ddNegativeOf;
+const qaq = double_double_2.ddAddDd;
+const qm2 = double_double_2.ddMultBy2;
+const qdivq = double_double_2.ddDivDd;
 const eps = Number.EPSILON;
 const abs = Math.abs;
-const edif = flo_numerical_1.expansionDiff;
-const epr = flo_numerical_1.expansionProduct;
-const sce = flo_numerical_1.scaleExpansion2;
-const qno = flo_numerical_1.qNegativeOf;
-const qaq = flo_numerical_1.qAddQuad;
-const qm2 = flo_numerical_1.qMultBy2;
-const qdivq = flo_numerical_1.qDivQuad;
 /**
  * Returns the self-intersection t values of the given bezier curve if it
  * exists and if both t-values are in [0,1], else returns undefined.
@@ -42,8 +49,8 @@ function bezierSelfIntersection(ps) {
         let a2 = 3 * x2 - 6 * x1 + 3 * x0; // <= exact if max bit-aligned bitlength <= 49
         let b3 = y3 - 3 * y2 + 3 * y1 - y0; // <= exact if max bit-aligned bitlength <= 50
         let b2 = 3 * y2 - 6 * y1 + 3 * y0; // <= exact if max bit-aligned bitlength <= 49
-        let a2b3 = flo_numerical_1.twoProduct(a2, b3);
-        let a3b2 = flo_numerical_1.twoProduct(a3, b2);
+        let a2b3 = tp(a2, b3);
+        let a3b2 = tp(a3, b2);
         if (a2b3[0] === a3b2[0] && a2b3[1] === a3b2[1]) {
             return undefined; // a === 0 => no roots possible
         }
@@ -65,7 +72,7 @@ function bezierSelfIntersection(ps) {
     // if the discriminant is definitely positive
     if (DD > DD_) {
         // calculate roots naively as a fast pre-filter
-        let { est: D, err: D_ } = flo_numerical_1.sqrtWithErr(DD, DD_);
+        let { est: D, err: D_ } = sqrtWithErr(DD, DD_);
         let q1;
         if (b >= 0) {
             // let r1 = (-b - D) / 2*a;
@@ -78,8 +85,8 @@ function bezierSelfIntersection(ps) {
             q1 = -b + D;
         }
         let q1_ = b_ + D_ + error_analysis_1.γ1 * abs(q1);
-        let { est: r1, err: r1_ } = flo_numerical_1.divWithErr(q1, 2 * a, q1_, 2 * a_);
-        let { est: r2, err: r2_ } = flo_numerical_1.divWithErr(2 * c, q1, 2 * c_, q1_);
+        let { est: r1, err: r1_ } = divWithErr(q1, 2 * a, q1_, 2 * a_);
+        let { est: r2, err: r2_ } = divWithErr(2 * c, q1, 2 * c_, q1_);
         //console.log(r1,r2);
         // the actual 'filter' follows
         // IF
@@ -95,18 +102,18 @@ function bezierSelfIntersection(ps) {
     let [A, B, C] = get_coeffs_3_2.getCoeffs3Exact_(ps);
     // exact - DD = b^2 - 4ac
     let eDD = edif(epr(B, B), sce(4, epr(A, C)));
-    let sgn = flo_numerical_1.sign(eDD);
+    let sgn = eSign(eDD);
     if (sgn < 0) {
         // sgn < 0 => no real roots => no cusp or double point for t in [0,1]
         return undefined;
     }
     if (sgn > 0) {
-        let D = flo_numerical_1.qSqrt(toQuad(eDD));
-        A = toQuad(A);
-        B = toQuad(B);
-        C = toQuad(C);
+        let D = ddSqrt(eToDd(eDD));
+        A = eToDd(A);
+        B = eToDd(B);
+        C = eToDd(C);
         let nBD;
-        if (flo_numerical_1.sign(B) >= 0) {
+        if (eSign(B) >= 0) {
             nBD = qno(qaq(B, D));
             //t1 = (-B - D) / (2*A);
             //t2 = (2*C) / (-B - D);
@@ -116,8 +123,8 @@ function bezierSelfIntersection(ps) {
             //t1 = (2*C) / (-B + D);
             //t2 = (-B + D) / (2*A);
         }
-        let t1 = flo_numerical_1.estimate(qdivq(nBD, qm2(A))); // max 1 ulps out
-        let t2 = flo_numerical_1.estimate(qdivq(qm2(C), nBD)); // max 1 ulps out
+        let t1 = eEstimate(qdivq(nBD, qm2(A))); // max 1 ulps out
+        let t2 = eEstimate(qdivq(qm2(C), nBD)); // max 1 ulps out
         // if any root is outside the range => no double point for t in [0,1]
         if (t1 < -eps || t1 > 1 + eps ||
             t2 < -eps || t2 > 1 + eps) {
@@ -133,42 +140,23 @@ function bezierSelfIntersection(ps) {
     }
     // sign === 0 => cusp
     // set t = b/d = b/-2a
-    let d = flo_numerical_1.eMultByNeg2(A);
-    let sgnB = flo_numerical_1.sign(B);
-    let sgnD = flo_numerical_1.sign(d);
+    let d = eMultByNeg2(A);
+    let sgnB = eSign(B);
+    let sgnD = eSign(d);
     // if result is negative the cusp is outside the bezier endpoints
     let sgn_ = sgnB * sgnD;
     if (sgn_ < 0) {
         return undefined;
     }
     // if result is > 1 the cusp is outside the bezier endpoints
-    if (flo_numerical_1.compare(flo_numerical_1.abs(B), flo_numerical_1.abs(d)) > 0) {
+    if (eCompare(eAbs(B), eAbs(d)) > 0) {
         return undefined;
     }
-    let qB = toQuad(B);
-    let qd = toQuad(d);
+    let qB = eToDd(B);
+    let qd = eToDd(d);
     let qt = qdivq(qB, qd);
     let t = qt[1];
     return [t, t];
 }
 exports.bezierSelfIntersection = bezierSelfIntersection;
-/**
- * Returns the result of converting a floating point expansion to a
- * double-double.
- */
-function toQuad(e) {
-    // TODO - there's already a toQuad in flo-numerical ??
-    // investigate when to compress and when not to
-    // e = compress(e);
-    let len = e.length;
-    if (len === 2) {
-        return e; // already a quad
-    }
-    else if (len === 1) {
-        return [0, e[0]];
-    }
-    else {
-        return [e[len - 2], e[len - 1]];
-    }
-}
 //# sourceMappingURL=self-intersection.js.map

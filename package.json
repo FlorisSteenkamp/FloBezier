@@ -23,13 +23,17 @@
         "intersection"
     ],
     "dependencies": {
+        "@types/node": "^14.0.24",
+        "big-float-ts": "^1.0.1",
+        "circular-dependency-plugin": "^5.2.0",
+        "double-double": "^1.0.4",
         "flo-draw": "^1.0.0",
         "flo-gauss-quadrature": "^1.0.1",
-        "flo-graham-scan": "^1.0.1",
+        "flo-graham-scan": "^1.0.2",
         "flo-memoize": "^0.1.2",
-        "flo-numerical": "^1.0.1",
-        "flo-poly": "^4.0.0",
-        "flo-vector2d": "^3.0.0"
+        "flo-poly": "^4.0.1",
+        "flo-vector2d": "^3.0.0",
+        "typedoc-plugin-markdown": "^2.3.1"
     },
     "devDependencies": {
         "@istanbuljs/nyc-config-typescript": "^1.0.1",
@@ -42,16 +46,17 @@
         "source-map-support": "^0.5.19",
         "ts-loader": "^7.0.5",
         "ts-node": "^8.10.2",
-        "typedoc": "^0.17.7",
-        "typescript": "^3.9.5",
+        "typedoc": "^0.17.8",
+        "typescript": "^3.9.7",
         "webpack": "^4.43.0",
-        "webpack-cli": "^3.3.11"
+        "webpack-cli": "^3.3.12"
     },
     "scripts": {
         "build": "npm run build-browser && npm run build-node",
         "build-node": "rimraf node && tsc",
         "build-browser": "rimraf browser && webpack",
         "test": "nyc mocha",
-        "a": "mocha --require ts-node/register --require source-map-support/register ./test/implicit-form.spec.ts"
+        "docs": "npx typedoc --options typedoc-ds.json",
+        "a": "mocha --timeout 6000 --require ts-node/register --require source-map-support/register ./test/get-curvature-extrema/get-curvature-extrema.spec.ts"
     }
 }

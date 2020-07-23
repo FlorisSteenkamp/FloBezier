@@ -1,14 +1,17 @@
 
-import { γγ3 } from "../../../error-analysis/error-analysis";
-import { twoProduct, qMultQuad, qAddQuad, qMultByNeg2, qNegativeOf, qDiffQuad } from "flo-numerical";
+import { γγ } from "../../../error-analysis/error-analysis";
 import { getXY } from "../../../to-power-basis/get-xy";
 
+import { twoProduct, ddMultDd, ddAddDd, ddDiffDd } from "double-double";
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const tp  = twoProduct;
+const qmq = ddMultDd;
+const qaq = ddAddDd;
+const qdq = ddDiffDd;
 
 const abs = Math.abs;
-const tp  = twoProduct;
-const qmq = qMultQuad;
-const qaq = qAddQuad;
-const qdq = qDiffQuad;
+const γγ3 = γγ(3);
 
 
 /** 
@@ -69,7 +72,7 @@ function getCoeffs3Quad(ps: number[][]) {
     // Solve: u2*t**2 + u1*t + u0 = 0
     return {
         coeffs:   [u2, u1, u0],
-        errBound: [u2_, u1_, u0_].map(c => γγ3*c)
+        errBound: [γγ3*u2_, γγ3*u1_, γγ3*u0_]
     };
 }
 

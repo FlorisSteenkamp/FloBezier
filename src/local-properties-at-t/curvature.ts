@@ -3,10 +3,18 @@ import { evaluateDx } from "./t-to-dxy/evaluate-dx";
 import { evaluateDy } from "./t-to-dxy/evaluate-dy";
 import { evaluateDdx } from "./t-to-ddxy/evaluate-ddx";
 import { evaluateDdy } from "./t-to-ddxy/evaluate-ddy";
-import { sign, twoProduct, expansionDiff, estimate, expansionProduct, fastExpansionSum, scaleExpansion } from "flo-numerical";
 import { getDxyAt0 } from "./t-to-dxy/get-dxy-at-0";
 import { getDdxyAt0 } from "./t-to-ddxy/get-ddxy-at-0";
 import { getDddxy } from "../to-power-basis/get-dddxy";
+import { twoProduct } from "double-double";
+import { expansionProduct, fastExpansionSum, eSign, eDiff, scaleExpansion } from 'big-float-ts';
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const tp  = twoProduct;
+const epr = expansionProduct;
+const fes = fastExpansionSum;
+const edif = eDiff;
+const sign = eSign;
 
 
 /**
@@ -99,13 +107,13 @@ function compareCurvaturesAtInterface(
     //let d = (dxI*dxI  + dyI*dyI )**3;
 
     // We need to resort to exact floating point arithmetic at this point
-    let a = expansionDiff(
-        twoProduct(dxI, ddyI), 
-        twoProduct(dyI, ddxI)
+    let a = edif(
+        tp(dxI, ddyI), 
+        tp(dyI, ddxI)
     );
-    let c = expansionDiff(
-        twoProduct(dxO, ddyO),
-        twoProduct(dyO, ddxO)
+    let c = edif(
+        tp(dxO, ddyO),
+        tp(dyO, ddxO)
     );
 
     let signA = sign(a);
@@ -115,24 +123,24 @@ function compareCurvaturesAtInterface(
         return signA - signC;
     }
 
-    let b = fastExpansionSum(
-        twoProduct(dxO, dxO),
-        twoProduct(dyO, dyO)
+    let b = fes(
+        tp(dxO, dxO),
+        tp(dyO, dyO)
     );
-    let d = fastExpansionSum(
-        twoProduct(dxI, dxI),
-        twoProduct(dyI, dyI)
+    let d = fes(
+        tp(dxI, dxI),
+        tp(dyI, dyI)
     );
 
-    let b2 = expansionProduct(b, b);
-    let b3 = expansionProduct(b2, b);
-    let d2 = expansionProduct(d, d);
-    let d3 = expansionProduct(d2, d);
+    let b2 = epr(b, b);
+    let b3 = epr(b2, b);
+    let d2 = epr(d, d);
+    let d3 = epr(d2, d);
 
     if (signA !== 0 || signC !== 0) {
         //console.log('branch 4');
-        let a2 = expansionProduct(a, a);
-        let c2 = expansionProduct(c, c);
+        let a2 = epr(a, a);
+        let c2 = epr(c, c);
 
         // max aggregate bitlength increase (let original bitlength === p):
         // κ -> (2 x ((p+3)+(p+5) + 1)) + (3 x ((p+3) + 1)) === 7p + 30
@@ -141,9 +149,9 @@ function compareCurvaturesAtInterface(
         // results without resorting to infinite precision) we get 51 bits.
 
         
-        let κI = expansionProduct(a2,b3);
-        let κO = expansionProduct(c2,d3);
-        let δκ = sign(expansionDiff(κI, κO));
+        let κI = epr(a2,b3);
+        let κO = epr(c2,d3);
+        let δκ = sign(edif(κI, κO));
 
         if (δκ !== 0) {
             //console.log('branch 5');
@@ -168,40 +176,40 @@ function compareCurvaturesAtInterface(
     let [dddxI, dddyI] = getDddxy(psI); // max bitlength increase === max shift === 6
     let [dddxO, dddyO] = getDddxy(psO); // max bitlength increase === max shift === 6
 
-    let e = expansionDiff(
-        twoProduct(dxI, dddyI),
-        twoProduct(dyI, dddxI)
+    let e = edif(
+        tp(dxI, dddyI),
+        tp(dyI, dddxI)
     );
 
-    let f = fastExpansionSum(
-        twoProduct(dxI, ddxI),
-        twoProduct(dyI, ddyI)
+    let f = fes(
+        tp(dxI, ddxI),
+        tp(dyI, ddyI)
     );
 
-    let g = expansionDiff(
-        twoProduct(dxO, dddyO),
-        twoProduct(dyO, dddxO)
+    let g = edif(
+        tp(dxO, dddyO),
+        tp(dyO, dddxO)
     );
 
-    let h = fastExpansionSum(
-        twoProduct(dxO, ddxO),
-        twoProduct(dyO, ddyO)
+    let h = fes(
+        tp(dxO, ddxO),
+        tp(dyO, ddyO)
     );
 
     // (de - 3af)²b⁵ > (bg - 3ch)²d⁵
     // i²b⁵ > j²d⁵
-    let i = expansionDiff(
-        expansionProduct(d, e),
+    let i = edif(
+        epr(d, e),
         scaleExpansion(
-            expansionProduct(a, f),
+            epr(a, f),
             3
         )
     );
 
-    let j = expansionDiff(
-        expansionProduct(b, g),
+    let j = edif(
+        epr(b, g),
         scaleExpansion(
-            expansionProduct(c, h),
+            epr(c, h),
             3
         )
     );
@@ -217,15 +225,15 @@ function compareCurvaturesAtInterface(
         return 0;
     }
 
-    let i2 = expansionProduct(i,i);
-    let b5 = expansionProduct(b2,b3);
-    let j2 = expansionProduct(j,j);
-    let d5 = expansionProduct(d2,d3);
+    let i2 = epr(i,i);
+    let b5 = epr(b2,b3);
+    let j2 = epr(j,j);
+    let d5 = epr(d2,d3);
 
-    let dκI = expansionProduct(i2,b5);
-    let dκO = expansionProduct(j2,d5);
+    let dκI = epr(i2,b5);
+    let dκO = epr(j2,d5);
 
-    let sgn = sign(expansionDiff(dκI, dκO));
+    let sgn = sign(edif(dκI, dκO));
 
     return signI > 0 ? sgn : -sgn;
 
@@ -234,4 +242,4 @@ function compareCurvaturesAtInterface(
 }
 
 
-export { κ, compareCurvaturesAtInterface }
+export { κ, κ as curvature, compareCurvaturesAtInterface }

@@ -2,13 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCoeffs3Quad = void 0;
 const error_analysis_1 = require("../../../error-analysis/error-analysis");
-const flo_numerical_1 = require("flo-numerical");
 const get_xy_1 = require("../../../to-power-basis/get-xy");
+const double_double_1 = require("double-double");
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const tp = double_double_1.twoProduct;
+const qmq = double_double_1.ddMultDd;
+const qaq = double_double_1.ddAddDd;
+const qdq = double_double_1.ddDiffDd;
 const abs = Math.abs;
-const tp = flo_numerical_1.twoProduct;
-const qmq = flo_numerical_1.qMultQuad;
-const qaq = flo_numerical_1.qAddQuad;
-const qdq = flo_numerical_1.qDiffQuad;
 /**
  * Get self-intersection coefficients
  * * **precondition**: max bit-aligned bitlength: 47

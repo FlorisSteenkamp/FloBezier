@@ -1,3 +1,4 @@
+
 import { evalDeCasteljauWithErr } from "../../../local-properties-at-t/t-to-xy/eval-de-casteljau-with-err";
 
 
@@ -17,7 +18,7 @@ const abs = Math.abs;
  */
 function getIntervalBox(
         ps: number[][], 
-        ts: number[]) {
+        ts: number[]): number[][] {
 
     if (ts[0] !== ts[1]) {
         if (ps.length === 4) {
@@ -34,8 +35,11 @@ function getIntervalBox(
 
 
 function getIntervalBox3(
-        [[x0,y0],[x1,y1],[x2,y2],[x3,y3]]: number[][], 
-        [t1, t2]: number[]) {
+        ps: number[][], 
+        ts: number[]): number[][] {
+
+    let [[x0,y0],[x1,y1],[x2,y2],[x3,y3]] = ps;
+    let [t1, t2] = ts;
 
     /* from split.py (Python - Sympy)
     let t2 = (t2-t1)/(1-t1);

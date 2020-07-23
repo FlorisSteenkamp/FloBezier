@@ -1,7 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDxExact = exports.getDx = void 0;
-const flo_numerical_1 = require("flo-numerical");
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const big_float_ts_1 = require("big-float-ts");
+const sum = big_float_ts_1.eSum;
+const tp = big_float_ts_1.twoProduct;
+const td = big_float_ts_1.twoDiff;
 /**
  * Returns the derivative of the power basis representation of a line, quadratic
  * or cubic bezier's x-coordinates.
@@ -57,22 +61,22 @@ function getDxExact(ps) {
         let [[x0,], [x1,], [x2,], [x3,]] = ps;
         return [
             //3*x3 - 9*x2 + 9*x1 - 3*x0,
-            flo_numerical_1.calculateSum([
-                flo_numerical_1.twoProduct(3, x3),
-                flo_numerical_1.twoProduct(-9, x2),
-                flo_numerical_1.twoProduct(9, x1),
-                flo_numerical_1.twoProduct(-3, x0)
+            sum([
+                tp(3, x3),
+                tp(-9, x2),
+                tp(9, x1),
+                tp(-3, x0)
             ]),
             //6*x2 - 12*x1 + 6*x0,
-            flo_numerical_1.calculateSum([
-                flo_numerical_1.twoProduct(6, x2),
-                flo_numerical_1.twoProduct(-12, x1),
-                flo_numerical_1.twoProduct(6, x0)
+            sum([
+                tp(6, x2),
+                tp(-12, x1),
+                tp(6, x0)
             ]),
             //3*x1 - 3*x0
-            flo_numerical_1.calculateSum([
-                flo_numerical_1.twoProduct(3, x1),
-                flo_numerical_1.twoProduct(-3, x0)
+            sum([
+                tp(3, x1),
+                tp(-3, x0)
             ])
         ];
     }
@@ -80,18 +84,18 @@ function getDxExact(ps) {
         let [[x0,], [x1,], [x2,]] = ps;
         return [
             //2*x2 - 4*x1 + 2*x0,
-            flo_numerical_1.calculateSum([
+            sum([
                 [2 * x2], [-4, x1], [2 * x0]
             ]),
             //2*x1 - 2*x0,
-            flo_numerical_1.fastExpansionSum([2 * x1], [-2, x0])
+            big_float_ts_1.fastExpansionSum([2 * x1], [-2, x0])
         ];
     }
     if (ps.length === 2) {
         let [[x0,], [x1,]] = ps;
         return [
             //x1 - x0,
-            flo_numerical_1.twoDiff(x1, x0)
+            td(x1, x0)
         ];
     }
     throw new Error('The bezier curve must be of order 1, 2 or 3.');

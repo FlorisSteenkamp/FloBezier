@@ -7,8 +7,9 @@ const get_dy_1 = require("../../to-power-basis/get-dy");
 const flo_poly_1 = require("flo-poly");
 const get_interval_box_1 = require("./get-interval-box/get-interval-box");
 const error_analysis_1 = require("../../error-analysis/error-analysis");
-const flo_numerical_1 = require("flo-numerical");
+const double_double_1 = require("double-double");
 const eval_de_casteljau_1 = require("../../local-properties-at-t/t-to-xy/eval-de-casteljau");
+const { sqrtWithErr, divWithErr } = double_double_1.operators;
 const abs = Math.abs;
 const u = Number.EPSILON / 2;
 /**
@@ -133,7 +134,7 @@ function quadRoots([a, b, c]) {
         return [];
     }
     // discriminant is definitely positive
-    let { est: D, err: D_ } = flo_numerical_1.sqrtWithErr(DD, DD_);
+    let { est: D, err: D_ } = sqrtWithErr(DD, DD_);
     let q1;
     if (b >= 0) {
         // let r1 = (-b - D) / 2*a;
@@ -146,8 +147,8 @@ function quadRoots([a, b, c]) {
         q1 = -b + D;
     }
     let q1_ = D_ + error_analysis_1.γ1 * abs(q1);
-    let { est: r1, err: r1_ } = flo_numerical_1.divWithErr(q1, 2 * a, q1_, 0);
-    let { est: r2, err: r2_ } = flo_numerical_1.divWithErr(2 * c, q1, 0, q1_);
+    let { est: r1, err: r1_ } = divWithErr(q1, 2 * a, q1_, 0);
+    let { est: r2, err: r2_ } = divWithErr(2 * c, q1, 0, q1_);
     let res = [];
     if (r1 + r1_ > 0 && r1 - r1_ < 1) {
         res.push({ r: r1, rE: r1_ });

@@ -2,13 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.evalDeCasteljauWithErrQuad = exports.evalDeCasteljauWithErr = void 0;
 const error_analysis_1 = require("../../error-analysis/error-analysis");
-const flo_numerical_1 = require("flo-numerical");
+const double_double_1 = require("double-double");
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const qmq = double_double_1.ddMultDd;
+const qaq = double_double_1.ddAddDd;
+const qdq = double_double_1.ddDiffDd;
+const qmd = double_double_1.ddMultDouble2;
 const abs = Math.abs;
 const u = Number.EPSILON / 2;
-const qdq = flo_numerical_1.qDiffQuad;
-const qaq = flo_numerical_1.qAddQuad;
-const qmq = flo_numerical_1.qMultQuad;
-const qmd = flo_numerical_1.qMultDouble2;
 /**
  * Evaluates the given bezier curve at the parameter t, including error.
  * * **precondition**: 49-bit aligned coordinates

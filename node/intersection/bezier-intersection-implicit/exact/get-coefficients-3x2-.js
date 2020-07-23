@@ -1,17 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCoeffs3x2Exact_ = void 0;
-const flo_numerical_1 = require("flo-numerical");
+const big_float_ts_1 = require("big-float-ts");
+const double_double_1 = require("double-double");
 const get_implicit_form3_1 = require("../../../implicit-form/exact/get-implicit-form3-");
 const get_xy_1 = require("../../../to-power-basis/get-xy");
-const qm2 = flo_numerical_1.qMultBy2;
-const qmd = flo_numerical_1.qMultDouble2;
-const qaq = flo_numerical_1.qAddQuad;
-const sce = flo_numerical_1.scaleExpansion2;
-const epr = flo_numerical_1.expansionProduct;
-const fes = flo_numerical_1.fastExpansionSum;
-const em2 = flo_numerical_1.eMultBy2;
-const tp = flo_numerical_1.twoProduct;
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const qm2 = double_double_1.ddMultBy2;
+const qmd = double_double_1.ddMultDouble2;
+const qaq = double_double_1.ddAddDd;
+const sce = big_float_ts_1.scaleExpansion2;
+const epr = big_float_ts_1.expansionProduct;
+const fes = big_float_ts_1.fastExpansionSum;
+const em2 = big_float_ts_1.eMultBy2;
+const tp = big_float_ts_1.twoProduct;
 function getCoeffs3x2Exact_(ps1, ps2) {
     let { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = get_implicit_form3_1.getImplicitForm3Exact_(ps1);
     let [[c2, c1, c0], [d2, d1, d0]] = get_xy_1.getXY(ps2);

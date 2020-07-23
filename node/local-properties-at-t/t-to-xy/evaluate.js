@@ -1,7 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.expEvaluateExact = exports.evaluateExact = exports.evaluate = void 0;
-const flo_numerical_1 = require("flo-numerical");
+const double_double_1 = require("double-double");
+const big_float_ts_1 = require("big-float-ts");
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const tp = double_double_1.twoProduct;
+const epr = big_float_ts_1.expansionProduct;
+const fes = big_float_ts_1.fastExpansionSum;
+const calculate = big_float_ts_1.eCalculate;
+const sum = big_float_ts_1.eSum;
+const abs = Math.abs;
+const u = Number.EPSILON / 2;
 function evaluate(ps, t) {
     const len = ps.length;
     return t === undefined ? f : f(t);
@@ -46,26 +55,26 @@ function evaluateExact(ps, t) {
         return ps[len - 1].map(c => [c]);
     }
     let s = 1 - t;
-    let s2 = flo_numerical_1.twoProduct(s, s);
-    let s3 = flo_numerical_1.scaleExpansion(s2, s);
-    let t2 = flo_numerical_1.twoProduct(t, t);
-    let t3 = flo_numerical_1.scaleExpansion(t2, t);
+    let s2 = tp(s, s);
+    let s3 = big_float_ts_1.scaleExpansion(s2, s);
+    let t2 = tp(t, t);
+    let t3 = big_float_ts_1.scaleExpansion(t2, t);
     if (ps.length === 4) {
         // cubic
         let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
         //let x = x0*s3 + 3*x1*s2*t + 3*x2*s*t2 + x3*t3;
         //let y = y0*s3 + 3*y1*s2*t + 3*y2*s*t2 + y3*t3;
-        let x = flo_numerical_1.calculateSum([
-            flo_numerical_1.scaleExpansion(s3, x0),
-            flo_numerical_1.expansionProduct(flo_numerical_1.scaleExpansion(flo_numerical_1.twoProduct(3, x1), t), s2),
-            flo_numerical_1.expansionProduct(flo_numerical_1.scaleExpansion(flo_numerical_1.twoProduct(3, x2), s), t2),
-            flo_numerical_1.scaleExpansion(t3, x3)
+        let x = sum([
+            big_float_ts_1.scaleExpansion(s3, x0),
+            epr(big_float_ts_1.scaleExpansion(tp(3, x1), t), s2),
+            epr(big_float_ts_1.scaleExpansion(tp(3, x2), s), t2),
+            big_float_ts_1.scaleExpansion(t3, x3)
         ]);
-        let y = flo_numerical_1.calculateSum([
-            flo_numerical_1.scaleExpansion(s3, y0),
-            flo_numerical_1.expansionProduct(flo_numerical_1.scaleExpansion(flo_numerical_1.twoProduct(3, y1), t), s2),
-            flo_numerical_1.expansionProduct(flo_numerical_1.scaleExpansion(flo_numerical_1.twoProduct(3, y2), s), t2),
-            flo_numerical_1.scaleExpansion(t3, y3)
+        let y = sum([
+            big_float_ts_1.scaleExpansion(s3, y0),
+            epr(big_float_ts_1.scaleExpansion(tp(3, y1), t), s2),
+            epr(big_float_ts_1.scaleExpansion(tp(3, y2), s), t2),
+            big_float_ts_1.scaleExpansion(t3, y3)
         ]);
         return [x, y];
     }
@@ -74,23 +83,23 @@ function evaluateExact(ps, t) {
         let [[x0, y0], [x1, y1], [x2, y2]] = ps;
         //let x = x0*s**2 + 2*x1*s*t + x2*t**2;
         //let y = y0*s**2 + 2*y1*s*t + y2*t**2;
-        let x = flo_numerical_1.calculateSum([
-            flo_numerical_1.scaleExpansion(s2, x0),
-            flo_numerical_1.scaleExpansion(flo_numerical_1.twoProduct(2 * x1, s), t),
-            flo_numerical_1.scaleExpansion(t2, x2)
+        let x = sum([
+            big_float_ts_1.scaleExpansion(s2, x0),
+            big_float_ts_1.scaleExpansion(tp(2 * x1, s), t),
+            big_float_ts_1.scaleExpansion(t2, x2)
         ]);
-        let y = flo_numerical_1.calculateSum([
-            flo_numerical_1.scaleExpansion(s2, y0),
-            flo_numerical_1.scaleExpansion(flo_numerical_1.twoProduct(2 * y1, s), t),
-            flo_numerical_1.scaleExpansion(t2, y2)
+        let y = sum([
+            big_float_ts_1.scaleExpansion(s2, y0),
+            big_float_ts_1.scaleExpansion(tp(2 * y1, s), t),
+            big_float_ts_1.scaleExpansion(t2, y2)
         ]);
         return [x, y];
     }
     if (ps.length === 2) {
         // line
         let [[x0, y0], [x1, y1]] = ps;
-        let x = flo_numerical_1.fastExpansionSum(flo_numerical_1.twoProduct(x0, s), flo_numerical_1.twoProduct(x1, t));
-        let y = flo_numerical_1.fastExpansionSum(flo_numerical_1.twoProduct(y0, s), flo_numerical_1.twoProduct(y1, t));
+        let x = fes(tp(x0, s), tp(x1, t));
+        let y = fes(tp(y0, s), tp(y1, t));
         ;
         return [x, y];
     }
@@ -105,20 +114,20 @@ function expEvaluateExact(ps, t) {
         return ps[len - 1];
     }
     let s = 1 - t;
-    let s2 = flo_numerical_1.twoProduct(s, s);
-    let s3 = flo_numerical_1.scaleExpansion(s2, s);
-    let t2 = flo_numerical_1.twoProduct(t, t);
-    let t3 = flo_numerical_1.scaleExpansion(t2, t);
-    let st = flo_numerical_1.twoProduct(s, t);
-    let st2 = flo_numerical_1.scaleExpansion(t2, s);
-    let s2t = flo_numerical_1.scaleExpansion(s2, t);
+    let s2 = tp(s, s);
+    let s3 = big_float_ts_1.scaleExpansion(s2, s);
+    let t2 = tp(t, t);
+    let t3 = big_float_ts_1.scaleExpansion(t2, t);
+    let st = tp(s, t);
+    let st2 = big_float_ts_1.scaleExpansion(t2, s);
+    let s2t = big_float_ts_1.scaleExpansion(s2, t);
     if (ps.length === 4) {
         // cubic
         let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
         //let x = x0*s3 + 3*x1*s2*t + 3*x2*s*t2 + x3*t3;
         //let y = y0*s3 + 3*y1*s2*t + 3*y2*s*t2 + y3*t3;
-        let x = flo_numerical_1.calculate([[x0, s3], [[3], x1, s2, [t]], [[3], x2, [s], t2], [x3, t3]]);
-        let y = flo_numerical_1.calculate([[y0, s3], [[3], y1, s2, [t]], [[3], y2, [s], t2], [y3, t3]]);
+        let x = calculate([[x0, s3], [[3], x1, s2, [t]], [[3], x2, [s], t2], [x3, t3]]);
+        let y = calculate([[y0, s3], [[3], y1, s2, [t]], [[3], y2, [s], t2], [y3, t3]]);
         return [x, y];
     }
     if (ps.length === 3) {
@@ -126,15 +135,15 @@ function expEvaluateExact(ps, t) {
         let [[x0, y0], [x1, y1], [x2, y2]] = ps;
         //let x = x0*s**2 + 2*x1*s*t + x2*t**2;
         //let y = y0*s**2 + 2*y1*s*t + y2*t**2;
-        let x = flo_numerical_1.calculate([[x0, s2], [x1, [2 * s], [t]], [x2, t2]]);
-        let y = flo_numerical_1.calculate([[y0, s2], [y1, [2 * s], [t]], [y2, t2]]);
+        let x = calculate([[x0, s2], [x1, [2 * s], [t]], [x2, t2]]);
+        let y = calculate([[y0, s2], [y1, [2 * s], [t]], [y2, t2]]);
         return [x, y];
     }
     if (ps.length === 2) {
         // line
         let [[x0, y0], [x1, y1]] = ps;
-        let x = flo_numerical_1.fastExpansionSum(flo_numerical_1.scaleExpansion(x0, s), flo_numerical_1.scaleExpansion(x1, t));
-        let y = flo_numerical_1.fastExpansionSum(flo_numerical_1.scaleExpansion(y0, s), flo_numerical_1.scaleExpansion(y1, t));
+        let x = fes(big_float_ts_1.scaleExpansion(x0, s), big_float_ts_1.scaleExpansion(x1, t));
+        let y = fes(big_float_ts_1.scaleExpansion(y0, s), big_float_ts_1.scaleExpansion(y1, t));
         ;
         return [x, y];
     }

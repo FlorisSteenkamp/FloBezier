@@ -2,7 +2,10 @@
 
 import { getXExact } from "../../../to-power-basis/get-x";
 import { getYExact } from "../../../to-power-basis/get-y";
-import { calculate, scaleExpansion, twoProduct } from "flo-numerical";
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+import { operators as bigFloatOperators } from "big-float-ts";
+const { twoProduct, eCalculate, scaleExpansion } = bigFloatOperators;
 
 
 /**
@@ -20,40 +23,40 @@ function getCoeffsCubicExact(
     let [b3,b2,b1,b0] = getYExact(ps);
 
     // (a3**2 + b3**2)*t**6 + 
-    let t6 = calculate([
+    let t6 = eCalculate([
         [a3,a3], 
         [b3,b3]
     ]);
 
     // (2*a2*a3 + 2*b2*b3)*t**5 + 
-    let t5 = scaleExpansion(calculate([
+    let t5 = scaleExpansion(eCalculate([
         [a2,a3], 
         [b2,b3]
     ]), 2);
 
     // (2*a1*a3 + a2**2 + 2*b1*b3 + b2**2)*t**4 + 
-    let t4 = calculate([
+    let t4 = eCalculate([
         [[2],a1,a3], [a2,a2], [[2],b1,b3], [b2,b2]
     ]);
 
     // (2*a0*a3 + 2*a1*a2 - 2*a3*cx + 2*b0*b3 + 2*b1*b2 - 2*b3*cy)*t**3 + 
-    let t3 = scaleExpansion(calculate([
+    let t3 = scaleExpansion(eCalculate([
         [a0,a3], [a1,a2], [[-1],a3,[cx]], [b0,b3], [b1,b2], [[-1],b3,[cy]]
     ]), 2);
     
 
     // (2*a0*a2 + a1**2 - 2*a2*cx + 2*b0*b2 + b1**2 - 2*b2*cy)*t**2 + 
-    let t2 = calculate([
+    let t2 = eCalculate([
         [[2],a0,a2], [a1,a1], [[-2],a2,[cx]], [[2],b0,b2], [b1,b1], [[-2],b2,[cy]]
     ]);
 
     // (2*a0*a1 - 2*a1*cx + 2*b0*b1 - 2*b1*cy)*t + 
-    let t1 = scaleExpansion(calculate([
+    let t1 = scaleExpansion(eCalculate([
         [a0,a1], [[-1],a1,[cx]], [b0,b1], [[-1],b1,[cy]]
     ]), 2);
 
     // a0**2 - 2*a0*cx + b0**2 - 2*b0*cy + cx**2 + cy**2 - r**2
-    let t0 = calculate([
+    let t0 = eCalculate([
         [a0,a0], [[-2],a0,[cx]], [b0,b0], [[-2],b0,[cy]], 
         [twoProduct(cx,cx)], [twoProduct(cy,cy)], [twoProduct(-r,r)]
     ]);
@@ -77,29 +80,29 @@ function getCoeffsQuadraticExact(
     let [b2,b1,b0] = getYExact(ps);
 
     // (a2**2 + b2**2)*t**4 + 
-    let t4 = calculate([
+    let t4 = eCalculate([
         [a2,a2], 
         [b2,b2]
     ]);
 
     // (2*a1*a2 + 2*b1*b2)*t**3 + 
-    let t3 = scaleExpansion(calculate([
+    let t3 = scaleExpansion(eCalculate([
         [a1,a2], 
         [b1,b2]
     ]), 2);
 
     // (2*a0*a2 + a1**2 - 2*a2*cx + 2*b0*b2 + b1**2 - 2*b2*cy)*t**2 + 
-    let t2 = calculate([
+    let t2 = eCalculate([
         [[2],a0,a2], [a1,a1], [[-2],a2,[cx]], [[2],b0,b2], [b1,b1], [[-2],b2,[cy]]
     ]);
 
     // (2*a0*a1 - 2*a1*cx + 2*b0*b1 - 2*b1*cy)*t + 
-    let t1 = scaleExpansion(calculate([
+    let t1 = scaleExpansion(eCalculate([
         [a0,a1], [[-1],a1,[cx]], [b0,b1], [[-1],b1,[cy]]
     ]), 2);
 
     // a0**2 - 2*a0*cx + b0**2 - 2*b0*cy + cx**2 + cy**2 - r**2
-    let t0 = calculate([
+    let t0 = eCalculate([
         [a0,a0], [[-2],a0,[cx]], [b0,b0], [[-2],b0,[cy]], 
         [twoProduct(cx,cx)], [twoProduct(cy,cy)], [twoProduct(-r,r)]
     ]);
@@ -124,18 +127,18 @@ function getCoeffsLinearExact(
 
 
     // (a1**2 + b1**2)*t**2 +
-    let t2 = calculate([
+    let t2 = eCalculate([
         [a1,a1], 
         [b1,b1]
     ]);
 
     // (2*a0*a1 - 2*a1*cx + 2*b0*b1 - 2*b1*cy)*t + 
-    let t1 = scaleExpansion(calculate([
+    let t1 = scaleExpansion(eCalculate([
         [a0,a1], [[-1],a1,[cx]], [b0,b1], [[-1],b1,[cy]]
     ]), 2);
 
     // a0**2 - 2*a0*cx + b0**2 - 2*b0*cy + cx**2 + cy**2 - r**2
-    let t0 = calculate([
+    let t0 = eCalculate([
         [a0,a0], [[-2],a0,[cx]], [b0,b0], [[-2],b0,[cy]], 
         [twoProduct(cx,cx)], [twoProduct(cy,cy)], [twoProduct(-r,r)]
     ]);

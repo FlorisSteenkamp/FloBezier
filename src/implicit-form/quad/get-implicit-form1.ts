@@ -1,10 +1,10 @@
 
-import { twoProduct, qDiffQuad } from 'flo-numerical';
+import { twoProduct, ddDiffDd } from 'double-double';
 import { getXY } from '../../to-power-basis/get-xy';
 
 
 const tp  = twoProduct;     // error -> 0
-const qdq = qDiffQuad;      // error -> 3*γ²
+const qdq = ddDiffDd;      // error -> 3*γ²
 
 
 /**

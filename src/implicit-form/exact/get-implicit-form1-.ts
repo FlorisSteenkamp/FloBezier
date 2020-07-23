@@ -1,10 +1,10 @@
 
-import { twoProduct, qDiffQuad } from 'flo-numerical';
+import { twoProduct, ddDiffDd } from 'double-double';
 import { getXY } from '../../to-power-basis/get-xy';
 
-
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const tp = twoProduct;
-const qdq = qDiffQuad;
+const qdq = ddDiffDd;
 
 
 /**

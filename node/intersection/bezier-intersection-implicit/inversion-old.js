@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.inversion1_BL52_1ULP = exports.inversion = void 0;
-const flo_numerical_1 = require("flo-numerical");
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const big_float_ts_1 = require("big-float-ts");
+const { twoProduct, eSum, eEstimate, eDiv, expansionProduct, eDiff, eNegativeOf, scaleExpansion, fastExpansionSum, twoDiff, eSign, eCompare, eAbs } = big_float_ts_1.operators;
 /**
  * Returns the t parameter value of the point closest to the given point of the
  * given bezier curve.
@@ -47,141 +49,141 @@ function inversion3(ps, p) {
     //let t12 = 
     // -x*y0 + 3*x*y1 - 3*x*y2 + x*y3 + x0*y - x0*y3 - 3*x1*y + 3*x1*y3 + 
     // 3*x2*y - 3*x2*y3 - x3*y + x3*y0 - 3*x3*y1 + 3*x3*y2;
-    let t12 = flo_numerical_1.calculateSum([
-        flo_numerical_1.scaleExpansion(x, -y0),
-        flo_numerical_1.scaleExpansion(x, 3 * y1),
-        flo_numerical_1.scaleExpansion(x, -3 * y2),
-        flo_numerical_1.scaleExpansion(x, y3),
-        flo_numerical_1.scaleExpansion(y, x0),
-        flo_numerical_1.twoProduct(-x0, y3),
-        flo_numerical_1.scaleExpansion(y, -3 * x1),
-        flo_numerical_1.twoProduct(3 * x1, y3),
-        flo_numerical_1.scaleExpansion(y, 3 * x2),
-        flo_numerical_1.twoProduct(-3 * x2, y3),
-        flo_numerical_1.scaleExpansion(y, -x3),
-        flo_numerical_1.twoProduct(x3, y0),
-        flo_numerical_1.twoProduct(-3 * x3, y1),
-        flo_numerical_1.twoProduct(3 * x3, y2)
+    let t12 = eSum([
+        scaleExpansion(x, -y0),
+        scaleExpansion(x, 3 * y1),
+        scaleExpansion(x, -3 * y2),
+        scaleExpansion(x, y3),
+        scaleExpansion(y, x0),
+        twoProduct(-x0, y3),
+        scaleExpansion(y, -3 * x1),
+        twoProduct(3 * x1, y3),
+        scaleExpansion(y, 3 * x2),
+        twoProduct(-3 * x2, y3),
+        scaleExpansion(y, -x3),
+        twoProduct(x3, y0),
+        twoProduct(-3 * x3, y1),
+        twoProduct(3 * x3, y2)
     ]);
     //let t11 = 
     // 2*x*y0 - 3*x*y1 + x*y3 - 2*x0*y + 2*x0*y3 + 3*x1*y - 
     // 3*x1*y3 - x3*y - 2*x3*y0 + 3*x3*y1;
-    let t11 = flo_numerical_1.calculateSum([
-        flo_numerical_1.scaleExpansion(x, 2 * y0),
-        flo_numerical_1.scaleExpansion(x, -3 * y1),
-        flo_numerical_1.scaleExpansion(x, y3),
-        flo_numerical_1.scaleExpansion(y, -2 * x0),
-        flo_numerical_1.twoProduct(2 * x0, y3),
-        flo_numerical_1.scaleExpansion(y, 3 * x1),
-        flo_numerical_1.twoProduct(-3 * x1, y3),
-        flo_numerical_1.scaleExpansion(y, -x3),
-        flo_numerical_1.twoProduct(-2 * x3, y0),
-        flo_numerical_1.twoProduct(+3 * x3, y1)
+    let t11 = eSum([
+        scaleExpansion(x, 2 * y0),
+        scaleExpansion(x, -3 * y1),
+        scaleExpansion(x, y3),
+        scaleExpansion(y, -2 * x0),
+        twoProduct(2 * x0, y3),
+        scaleExpansion(y, 3 * x1),
+        twoProduct(-3 * x1, y3),
+        scaleExpansion(y, -x3),
+        twoProduct(-2 * x3, y0),
+        twoProduct(+3 * x3, y1)
     ]);
     //let t10 = -x*y0 + x*y3 + x0*y - x0*y3 - x3*y + x3*y0;
-    let t10 = flo_numerical_1.calculateSum([
-        flo_numerical_1.scaleExpansion(x, -y0),
-        flo_numerical_1.scaleExpansion(x, y3),
-        flo_numerical_1.scaleExpansion(y, x0),
-        flo_numerical_1.twoProduct(-x0, y3),
-        flo_numerical_1.scaleExpansion(y, -x3),
-        flo_numerical_1.twoProduct(x3, y0)
+    let t10 = eSum([
+        scaleExpansion(x, -y0),
+        scaleExpansion(x, y3),
+        scaleExpansion(y, x0),
+        twoProduct(-x0, y3),
+        scaleExpansion(y, -x3),
+        twoProduct(x3, y0)
     ]);
     //---- Matrix middle row
     //let t22 = 
     // -2*x*y0 + 6*x*y1 - 6*x*y2 + 2*x*y3 + 2*x0*y - 3*x0*y2 + 
     // x0*y3 - 6*x1*y + 9*x1*y2 - 3*x1*y3 + 6*x2*y + 3*x2*y0 - 9*x2*y1
     // -2*x3*y - x3*y0 + 3*x3*y1;
-    let t22 = flo_numerical_1.calculateSum([
-        flo_numerical_1.scaleExpansion(x, -2 * y0),
-        flo_numerical_1.scaleExpansion(x, 6 * y1),
-        flo_numerical_1.scaleExpansion(x, -6 * y2),
-        flo_numerical_1.scaleExpansion(x, 2 * y3),
-        flo_numerical_1.scaleExpansion(y, 2 * x0),
-        flo_numerical_1.twoProduct(-3 * x0, y2),
-        flo_numerical_1.twoProduct(x0, y3),
-        flo_numerical_1.scaleExpansion(y, -6 * x1),
-        flo_numerical_1.twoProduct(9 * x1, y2),
-        flo_numerical_1.twoProduct(-3 * x1, y3),
-        flo_numerical_1.scaleExpansion(y, 6 * x2),
-        flo_numerical_1.twoProduct(3 * x2, y0),
-        flo_numerical_1.twoProduct(-9 * x2, y1),
-        flo_numerical_1.scaleExpansion(y, -2 * x3),
-        flo_numerical_1.twoProduct(-x3, y0),
-        flo_numerical_1.twoProduct(3 * x3, y1)
+    let t22 = eSum([
+        scaleExpansion(x, -2 * y0),
+        scaleExpansion(x, 6 * y1),
+        scaleExpansion(x, -6 * y2),
+        scaleExpansion(x, 2 * y3),
+        scaleExpansion(y, 2 * x0),
+        twoProduct(-3 * x0, y2),
+        twoProduct(x0, y3),
+        scaleExpansion(y, -6 * x1),
+        twoProduct(9 * x1, y2),
+        twoProduct(-3 * x1, y3),
+        scaleExpansion(y, 6 * x2),
+        twoProduct(3 * x2, y0),
+        twoProduct(-9 * x2, y1),
+        scaleExpansion(y, -2 * x3),
+        twoProduct(-x3, y0),
+        twoProduct(3 * x3, y1)
     ]);
     //let t21 = 
     // 5*x*y0 - 9*x*y1 + 3*x*y2 + x*y3 - 5*x0*y + 6*x0*y2 - x0*y3 + 
     // 9*x1*y - 9*x1*y2 - 3*x2*y - 6*x2*y0 + 9*x2*y1 - x3*y + x3*y0;
-    let t21 = flo_numerical_1.calculateSum([
-        flo_numerical_1.scaleExpansion(x, 5 * y0),
-        flo_numerical_1.scaleExpansion(x, -9 * y1),
-        flo_numerical_1.scaleExpansion(x, 3 * y2),
-        flo_numerical_1.scaleExpansion(x, y3),
-        flo_numerical_1.scaleExpansion(y, -5 * x0),
-        flo_numerical_1.twoProduct(6 * x0, y2),
-        flo_numerical_1.twoProduct(-x0, y3),
-        flo_numerical_1.scaleExpansion(y, 9 * x1),
-        flo_numerical_1.twoProduct(-9 * x1, y2),
-        flo_numerical_1.scaleExpansion(y, -3 * x2),
-        flo_numerical_1.twoProduct(-6 * x2, y0),
-        flo_numerical_1.twoProduct(9 * x2, y1),
-        flo_numerical_1.scaleExpansion(y, -x3),
-        flo_numerical_1.twoProduct(x3, y0)
+    let t21 = eSum([
+        scaleExpansion(x, 5 * y0),
+        scaleExpansion(x, -9 * y1),
+        scaleExpansion(x, 3 * y2),
+        scaleExpansion(x, y3),
+        scaleExpansion(y, -5 * x0),
+        twoProduct(6 * x0, y2),
+        twoProduct(-x0, y3),
+        scaleExpansion(y, 9 * x1),
+        twoProduct(-9 * x1, y2),
+        scaleExpansion(y, -3 * x2),
+        twoProduct(-6 * x2, y0),
+        twoProduct(9 * x2, y1),
+        scaleExpansion(y, -x3),
+        twoProduct(x3, y0)
     ]);
     //let t20 = -3*x*y0 + 3*x*y2 + 3*x0*y - 3*x0*y2 - 3*x2*y + 3*x2*y0;
-    let t20 = flo_numerical_1.calculateSum([
-        flo_numerical_1.scaleExpansion(x, -3 * y0),
-        flo_numerical_1.scaleExpansion(x, 3 * y2),
-        flo_numerical_1.scaleExpansion(y, 3 * x0),
-        flo_numerical_1.twoProduct(-3 * x0, y2),
-        flo_numerical_1.scaleExpansion(y, -3 * x2),
-        flo_numerical_1.twoProduct(3 * x2, y0)
+    let t20 = eSum([
+        scaleExpansion(x, -3 * y0),
+        scaleExpansion(x, 3 * y2),
+        scaleExpansion(y, 3 * x0),
+        twoProduct(-3 * x0, y2),
+        scaleExpansion(y, -3 * x2),
+        twoProduct(3 * x2, y0)
     ]);
     //---- Matrix bottom row
     //let t32 = 
     // -x*y0 + 3*x*y1 - 3*x*y2 + x*y3 + x0*y - 3*x0*y1 + 3*x0*y2 - 
     // x0*y3 - 3*x1*y + 3*x1*y0 + 3*x2*y - 3*x2*y0 - x3*y + x3*y0;
-    let t32 = flo_numerical_1.calculateSum([
-        flo_numerical_1.scaleExpansion(x, -y0),
-        flo_numerical_1.scaleExpansion(x, 3 * y1),
-        flo_numerical_1.scaleExpansion(x, -3 * y2),
-        flo_numerical_1.scaleExpansion(x, y3),
-        flo_numerical_1.scaleExpansion(y, x0),
-        flo_numerical_1.twoProduct(-3 * x0, y1),
-        flo_numerical_1.twoProduct(3 * x0, y2),
-        flo_numerical_1.twoProduct(-x0, y3),
-        flo_numerical_1.scaleExpansion(y, -3 * x1),
-        flo_numerical_1.twoProduct(3 * x1, y0),
-        flo_numerical_1.scaleExpansion(y, 3 * x2),
-        flo_numerical_1.twoProduct(-3 * x2, y0),
-        flo_numerical_1.scaleExpansion(y, -x3),
-        flo_numerical_1.twoProduct(x3, y0)
+    let t32 = eSum([
+        scaleExpansion(x, -y0),
+        scaleExpansion(x, 3 * y1),
+        scaleExpansion(x, -3 * y2),
+        scaleExpansion(x, y3),
+        scaleExpansion(y, x0),
+        twoProduct(-3 * x0, y1),
+        twoProduct(3 * x0, y2),
+        twoProduct(-x0, y3),
+        scaleExpansion(y, -3 * x1),
+        twoProduct(3 * x1, y0),
+        scaleExpansion(y, 3 * x2),
+        twoProduct(-3 * x2, y0),
+        scaleExpansion(y, -x3),
+        twoProduct(x3, y0)
     ]);
     //let t31 = 
     // 3*x*y0 - 6*x*y1 + 3*x*y2 - 3*x0*y + 6*x0*y1 - 3*x0*y2 + 
     // 6*x1*y - 6*x1*y0 - 3*x2*y + 3*x2*y0;
-    let t31 = flo_numerical_1.calculateSum([
-        flo_numerical_1.scaleExpansion(x, 3 * y0),
-        flo_numerical_1.scaleExpansion(x, -6 * y1),
-        flo_numerical_1.scaleExpansion(x, 3 * y2),
-        flo_numerical_1.scaleExpansion(y, -3 * x0),
-        flo_numerical_1.twoProduct(6 * x0, y1),
-        flo_numerical_1.twoProduct(-3 * x0, y2),
-        flo_numerical_1.scaleExpansion(y, 6 * x1),
-        flo_numerical_1.twoProduct(-6 * x1, y0),
-        flo_numerical_1.scaleExpansion(y, -3 * x2),
-        flo_numerical_1.twoProduct(3 * x2, y0)
+    let t31 = eSum([
+        scaleExpansion(x, 3 * y0),
+        scaleExpansion(x, -6 * y1),
+        scaleExpansion(x, 3 * y2),
+        scaleExpansion(y, -3 * x0),
+        twoProduct(6 * x0, y1),
+        twoProduct(-3 * x0, y2),
+        scaleExpansion(y, 6 * x1),
+        twoProduct(-6 * x1, y0),
+        scaleExpansion(y, -3 * x2),
+        twoProduct(3 * x2, y0)
     ]);
     //let t30 = 
     // -3*x*y0 + 3*x*y1 + 3*x0*y - 3*x0*y1 - 3*x1*y + 3*x1*y0;
-    let t30 = flo_numerical_1.calculateSum([
-        flo_numerical_1.scaleExpansion(x, -3 * y0),
-        flo_numerical_1.scaleExpansion(x, 3 * y1),
-        flo_numerical_1.scaleExpansion(y, 3 * x0),
-        flo_numerical_1.twoProduct(-3 * x0, y1),
-        flo_numerical_1.scaleExpansion(y, -3 * x1),
-        flo_numerical_1.twoProduct(3 * x1, y0)
+    let t30 = eSum([
+        scaleExpansion(x, -3 * y0),
+        scaleExpansion(x, 3 * y1),
+        scaleExpansion(y, 3 * x0),
+        twoProduct(-3 * x0, y1),
+        scaleExpansion(y, -3 * x1),
+        twoProduct(3 * x1, y0)
     ]);
     // Inversion formulae are in the form f(x,y) / g(x,y).
     // These formulae come from the rows of a 3x3 matrix with each row an
@@ -201,54 +203,54 @@ function inversion3(ps, p) {
     let b2;
     let a3;
     let b3;
-    if (flo_numerical_1.sign(t12) === 0) {
+    if (eSign(t12) === 0) {
         // the top row equation is already linear
-        if (flo_numerical_1.sign(t11) !== 0) {
+        if (eSign(t11) !== 0) {
             a1 = t11;
             b1 = t10;
         } // else the top row reads 0t^2 + 0t + 0 = 0, i.e. the row is already
         // eliminated
     }
-    if (flo_numerical_1.sign(t22) === 0) {
+    if (eSign(t22) === 0) {
         // the middle row equation is already linear
-        if (flo_numerical_1.sign(t21) !== 0) {
+        if (eSign(t21) !== 0) {
             a2 = t21;
             b2 = t20;
         } // else the middle row reads 0t^2 + 0t + 0 = 0, i.e. the row is already
         // eliminated
     }
-    if (flo_numerical_1.sign(t32) === 0) {
+    if (eSign(t32) === 0) {
         // the bottom row equation is already linear
-        if (flo_numerical_1.sign(t31) !== 0) {
+        if (eSign(t31) !== 0) {
             a3 = t31;
             b3 = t30;
         } // else the bottom row reads 0t^2 + 0t + 0 = 0, i.e. the row is already
         // eliminated
     }
     // eliminate the coefficient of t^2 from the first row (using the second)
-    if (flo_numerical_1.sign(t22) !== 0 && flo_numerical_1.sign(t12) !== 0) {
-        let d = flo_numerical_1.expansionDiv(t12, t22, 4);
-        a1 = flo_numerical_1.expansionDiff(t11, flo_numerical_1.expansionProduct(d, t21));
-        b1 = flo_numerical_1.expansionDiff(t10, flo_numerical_1.expansionProduct(d, t20));
+    if (eSign(t22) !== 0 && eSign(t12) !== 0) {
+        let d = eDiv(t12, t22, 4);
+        a1 = eDiff(t11, expansionProduct(d, t21));
+        b1 = eDiff(t10, expansionProduct(d, t20));
     }
     // eliminate the coefficient of t^2 from the second row (using the 3rd)
-    if (flo_numerical_1.sign(t32) !== 0 && flo_numerical_1.sign(t22) !== 0) {
-        let d = flo_numerical_1.expansionDiv(t22, t32, 4);
-        a2 = flo_numerical_1.expansionDiff(t21, flo_numerical_1.expansionProduct(d, t31));
-        b2 = flo_numerical_1.expansionDiff(t20, flo_numerical_1.expansionProduct(d, t30));
+    if (eSign(t32) !== 0 && eSign(t22) !== 0) {
+        let d = eDiv(t22, t32, 4);
+        a2 = eDiff(t21, expansionProduct(d, t31));
+        b2 = eDiff(t20, expansionProduct(d, t30));
     }
     // eliminate the coefficient of t^2 from the third row (using the 1st)
-    if (flo_numerical_1.sign(t12) !== 0 && flo_numerical_1.sign(t32) !== 0) {
-        let d = flo_numerical_1.expansionDiv(t32, t12, 4);
-        a3 = flo_numerical_1.expansionDiff(t31, flo_numerical_1.expansionProduct(d, t11));
-        b3 = flo_numerical_1.expansionDiff(t30, flo_numerical_1.expansionProduct(d, t10));
+    if (eSign(t12) !== 0 && eSign(t32) !== 0) {
+        let d = eDiv(t32, t12, 4);
+        a3 = eDiff(t31, expansionProduct(d, t11));
+        b3 = eDiff(t30, expansionProduct(d, t10));
     }
     let useRow;
     a1 = a1 || [0];
     a2 = a2 || [0];
     a3 = a3 || [0];
-    if (flo_numerical_1.compare(flo_numerical_1.abs(a1), flo_numerical_1.abs(a2)) > 0) {
-        if (flo_numerical_1.compare(flo_numerical_1.abs(a1), flo_numerical_1.abs(a3)) > 0) {
+    if (eCompare(eAbs(a1), eAbs(a2)) > 0) {
+        if (eCompare(eAbs(a1), eAbs(a3)) > 0) {
             useRow = 1;
         }
         else {
@@ -256,7 +258,7 @@ function inversion3(ps, p) {
         }
     }
     else {
-        if (flo_numerical_1.compare(flo_numerical_1.abs(a2), flo_numerical_1.abs(a3)) > 0) {
+        if (eCompare(eAbs(a2), eAbs(a3)) > 0) {
             useRow = 2;
         }
         else {
@@ -265,8 +267,8 @@ function inversion3(ps, p) {
     }
     let a = useRow === 1 ? a1 : useRow === 2 ? a2 : a3;
     let b = useRow === 1 ? b1 : useRow === 2 ? b2 : b3;
-    let t = flo_numerical_1.expansionDiv(flo_numerical_1.negativeOf(b), a, 4);
-    return flo_numerical_1.estimate(t);
+    let t = eDiv(eNegativeOf(b), a, 4);
+    return eEstimate(t);
 }
 /**
  * Returns the t parameter value of the point closest to the given point of the
@@ -282,51 +284,51 @@ function inversion2(ps, p) {
     // Each matrix row below is an inversion formula.
     //---- Matrix top row
     //let t11 = x*y0 - 2*x*y1 + x*y2 - x0*y + x0*y2 + 2*x1*y - 2*x1*y2 - x2*y - x2*y0 + 2*x2*y1
-    let t11 = flo_numerical_1.calculateSum([
-        flo_numerical_1.scaleExpansion(x, y0),
-        flo_numerical_1.scaleExpansion(x, -2 * y1),
-        flo_numerical_1.scaleExpansion(x, y2),
-        flo_numerical_1.scaleExpansion(y, -x0),
-        flo_numerical_1.twoProduct(x0, y2),
-        flo_numerical_1.scaleExpansion(y, 2 * x1),
-        flo_numerical_1.twoProduct(-2 * x1, y2),
-        flo_numerical_1.scaleExpansion(y, -x2),
-        flo_numerical_1.twoProduct(-x2, y0),
-        flo_numerical_1.twoProduct(2 * x2, y1)
+    let t11 = eSum([
+        scaleExpansion(x, y0),
+        scaleExpansion(x, -2 * y1),
+        scaleExpansion(x, y2),
+        scaleExpansion(y, -x0),
+        twoProduct(x0, y2),
+        scaleExpansion(y, 2 * x1),
+        twoProduct(-2 * x1, y2),
+        scaleExpansion(y, -x2),
+        twoProduct(-x2, y0),
+        twoProduct(2 * x2, y1)
     ]);
     //let t10 = - x*y0 + x*y2 + x0*y - x0*y2 - x2*y + x2*y0
-    let t10 = flo_numerical_1.calculateSum([
-        flo_numerical_1.scaleExpansion(x, -y0),
-        flo_numerical_1.scaleExpansion(x, y2),
-        flo_numerical_1.scaleExpansion(y, x0),
-        flo_numerical_1.twoProduct(-x0, y2),
-        flo_numerical_1.scaleExpansion(y, -x2),
-        flo_numerical_1.twoProduct(x2, y0)
+    let t10 = eSum([
+        scaleExpansion(x, -y0),
+        scaleExpansion(x, y2),
+        scaleExpansion(y, x0),
+        twoProduct(-x0, y2),
+        scaleExpansion(y, -x2),
+        twoProduct(x2, y0)
     ]);
-    let t = flo_numerical_1.expansionDiv(flo_numerical_1.negativeOf(t10), t11, 4);
-    return flo_numerical_1.estimate(t);
+    let t = eDiv(eNegativeOf(t10), t11, 4);
+    return eEstimate(t);
     //---- Matrix bottom row
     //let t22 = 
-    let t21 = flo_numerical_1.calculateSum([
-        flo_numerical_1.scaleExpansion(x, y0),
-        flo_numerical_1.scaleExpansion(x, -2 * y1),
-        flo_numerical_1.scaleExpansion(x, y2),
-        flo_numerical_1.scaleExpansion(y, -x0),
-        flo_numerical_1.twoProduct(2 * x0, y1),
-        flo_numerical_1.twoProduct(-x0, y2),
-        flo_numerical_1.scaleExpansion(y, 2 * x1),
-        flo_numerical_1.twoProduct(-2 * x1, y0),
-        flo_numerical_1.scaleExpansion(y, -x2),
-        flo_numerical_1.twoProduct(x2, y0)
+    let t21 = eSum([
+        scaleExpansion(x, y0),
+        scaleExpansion(x, -2 * y1),
+        scaleExpansion(x, y2),
+        scaleExpansion(y, -x0),
+        twoProduct(2 * x0, y1),
+        twoProduct(-x0, y2),
+        scaleExpansion(y, 2 * x1),
+        twoProduct(-2 * x1, y0),
+        scaleExpansion(y, -x2),
+        twoProduct(x2, y0)
     ]);
     //let t21 = 
-    let t20 = flo_numerical_1.calculateSum([
-        flo_numerical_1.scaleExpansion(x, -2 * y0),
-        flo_numerical_1.scaleExpansion(x, 2 * y1),
-        flo_numerical_1.scaleExpansion(y, 2 * x0),
-        flo_numerical_1.twoProduct(-2 * x0, y1),
-        flo_numerical_1.scaleExpansion(y, -2 * x1),
-        flo_numerical_1.twoProduct(2 * x1, y0)
+    let t20 = eSum([
+        scaleExpansion(x, -2 * y0),
+        scaleExpansion(x, 2 * y1),
+        scaleExpansion(y, 2 * x0),
+        twoProduct(-2 * x0, y1),
+        scaleExpansion(y, -2 * x1),
+        twoProduct(2 * x1, y0)
     ]);
 }
 /**
@@ -339,15 +341,15 @@ function inversion2(ps, p) {
 function inversion1(ps, p) {
     let [[x0, y0], [x1, y1]] = ps;
     let [x, y] = p;
-    let x1_x0 = flo_numerical_1.twoDiff(x1, x0);
-    let y1_y0 = flo_numerical_1.twoDiff(y1, y0);
-    // the compare below ensures numerical stability
-    if (flo_numerical_1.compare(x1_x0, y1_y0) > 0) {
-        let t = flo_numerical_1.expansionDiv(flo_numerical_1.fastExpansionSum(x, [-x0]), x1_x0, 4);
-        return flo_numerical_1.estimate(t);
+    let x1_x0 = twoDiff(x1, x0);
+    let y1_y0 = twoDiff(y1, y0);
+    // the eCompare below ensures numerical stability
+    if (eCompare(x1_x0, y1_y0) > 0) {
+        let t = eDiv(fastExpansionSum(x, [-x0]), x1_x0, 4);
+        return eEstimate(t);
     }
-    let t = flo_numerical_1.expansionDiv(flo_numerical_1.fastExpansionSum(y, [-y0]), flo_numerical_1.twoDiff(y1, y0), 4);
-    return flo_numerical_1.estimate(t);
+    let t = eDiv(fastExpansionSum(y, [-y0]), twoDiff(y1, y0), 4);
+    return eEstimate(t);
 }
 /**
  * Returns the t parameter value of the point closest to the given point of the
@@ -363,7 +365,7 @@ function inversion1_BL52_1ULP(ps, p) {
     let [x, y] = p;
     let x1_x0 = x1 - x0;
     let y1_y0 = y1 - y0;
-    // the compare below ensures numerical stability
+    // the eCompare below ensures numerical stability
     return Math.abs(x1_x0) > Math.abs(y1_y0)
         ? (x - x0) / x1_x0
         : (y - y0) / y1_y0;

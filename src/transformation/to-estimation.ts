@@ -1,5 +1,7 @@
 
-import { estimate } from "flo-numerical";
+import { eEstimate } from "big-float-ts";
+
+const estimate = eEstimate;
 
 
 function toEstimation(ps: number[][][]): number[][] {

@@ -4,13 +4,16 @@ import { getDx } from "../../to-power-basis/get-dx";
 import { getDy } from "../../to-power-basis/get-dy";
 import { allRoots } from "flo-poly";
 import { getIntervalBox } from "./get-interval-box/get-interval-box";
-import { γ1 } from "../../error-analysis/error-analysis";
-import { sqrtWithErr, divWithErr } from "flo-numerical";
+import { γ } from "../../error-analysis/error-analysis";
+import { operators } from "double-double";
 import { evalDeCasteljauX, evalDeCasteljauY } from "../../local-properties-at-t/t-to-xy/eval-de-casteljau";
 
 
+const { sqrtWithErr, divWithErr } = operators;
+
 const abs = Math.abs;
 const u = Number.EPSILON/2;
+const γ1 = γ(1);
 
 
 /**

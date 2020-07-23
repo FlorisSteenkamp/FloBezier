@@ -1,5 +1,11 @@
 
-import { fastExpansionSum, calculateSum, twoProduct, twoDiff } from "flo-numerical";
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+import { twoDiff, eSum, fastExpansionSum, twoProduct } from 'big-float-ts';
+
+const sum = eSum;
+const tp = twoProduct;
+const td = twoDiff;
+
 
 
 /**
@@ -61,22 +67,22 @@ function getDxExact(ps: number[][]): number[][] {
 		let [[x0,], [x1,], [x2,], [x3,]] = ps;
 		return [
 			//3*x3 - 9*x2 + 9*x1 - 3*x0,
-			calculateSum([
-				twoProduct(3,x3), 
-				twoProduct(-9,x2), 
-				twoProduct(9,x1), 
-				twoProduct(-3,x0)
+			sum([
+				tp(3,x3), 
+				tp(-9,x2), 
+				tp(9,x1), 
+				tp(-3,x0)
 			]),
 			//6*x2 - 12*x1 + 6*x0,
-			calculateSum([
-				twoProduct(6,x2), 
-				twoProduct(-12,x1), 
-				twoProduct(6,x0)
+			sum([
+				tp(6,x2), 
+				tp(-12,x1), 
+				tp(6,x0)
 			]),
 			//3*x1 - 3*x0
-			calculateSum([
-				twoProduct(3,x1), 
-				twoProduct(-3,x0)
+			sum([
+				tp(3,x1), 
+				tp(-3,x0)
 			])
 		];
 	} 
@@ -85,7 +91,7 @@ function getDxExact(ps: number[][]): number[][] {
 		let [[x0,], [x1,], [x2,]] = ps;
 		return [
 			//2*x2 - 4*x1 + 2*x0,
-			calculateSum([
+			sum([
 				[2*x2], [-4,x1], [2*x0]
 			]),
 			//2*x1 - 2*x0,
@@ -97,7 +103,7 @@ function getDxExact(ps: number[][]): number[][] {
 		let [[x0,], [x1,]] = ps;
 		return [
 			//x1 - x0,
-			twoDiff(x1, x0)
+			td(x1, x0)
 		];
 	}
 

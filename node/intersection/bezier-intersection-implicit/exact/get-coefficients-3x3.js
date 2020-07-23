@@ -3,8 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCoeffs3x3Exact = void 0;
 const get_x_1 = require("../../../to-power-basis/get-x");
 const get_y_1 = require("../../../to-power-basis/get-y");
-const flo_numerical_1 = require("flo-numerical");
 const get_implicit_form3_1 = require("../../../implicit-form/exact/get-implicit-form3");
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const big_float_ts_1 = require("big-float-ts");
+const { eCalculate } = big_float_ts_1.operators;
 /**
  * @param ps1
  * @param ps2
@@ -13,13 +15,13 @@ function getCoeffs3x3Exact(ps1, ps2) {
     let { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = get_implicit_form3_1.getImplicitForm3Exact(ps1);
     let [c3, c2, c1, c0] = get_x_1.getXExact(ps2);
     let [d3, d2, d1, d0] = get_y_1.getYExact(ps2);
-    let v9 = flo_numerical_1.calculate([
+    let v9 = eCalculate([
         [c3, d3, d3, vₓᵧᵧ],
         [d3, c3, c3, vₓₓᵧ],
         [c3, c3, c3, vₓₓₓ],
         [d3, d3, d3, vᵧᵧᵧ]
     ]);
-    let v8 = flo_numerical_1.calculate([
+    let v8 = eCalculate([
         [[2], c2, c3, d3, vₓₓᵧ],
         [[2], c3, d2, d3, vₓᵧᵧ],
         [c2, d3, d3, vₓᵧᵧ],
@@ -27,7 +29,7 @@ function getCoeffs3x3Exact(ps1, ps2) {
         [[3], c2, c3, c3, vₓₓₓ],
         [[3], d2, d3, d3, vᵧᵧᵧ]
     ]);
-    let v7 = flo_numerical_1.calculate([
+    let v7 = eCalculate([
         [[2], c1, c3, d3, vₓₓᵧ],
         [[2], c2, c3, d2, vₓₓᵧ],
         [[2], c2, d2, d3, vₓᵧᵧ],
@@ -41,7 +43,7 @@ function getCoeffs3x3Exact(ps1, ps2) {
         [[3], d1, d3, d3, vᵧᵧᵧ],
         [[3], d3, d2, d2, vᵧᵧᵧ]
     ]);
-    let v6 = flo_numerical_1.calculate([
+    let v6 = eCalculate([
         [[2], c0, c3, d3, vₓₓᵧ],
         [[2], c1, c2, d3, vₓₓᵧ],
         [[2], c1, c3, d2, vₓₓᵧ],
@@ -64,7 +66,7 @@ function getCoeffs3x3Exact(ps1, ps2) {
         [d3, d3, vᵧᵧ],
         [c3, d3, vₓᵧ]
     ]);
-    let v5 = flo_numerical_1.calculate([
+    let v5 = eCalculate([
         [[2], c0, c2, d3, vₓₓᵧ],
         [[2], c0, c3, d2, vₓₓᵧ],
         [[2], c0, d2, d3, vₓᵧᵧ],
@@ -90,7 +92,7 @@ function getCoeffs3x3Exact(ps1, ps2) {
         [[2], c2, c3, vₓₓ],
         [[2], d2, d3, vᵧᵧ]
     ]);
-    let v4 = flo_numerical_1.calculate([
+    let v4 = eCalculate([
         [[2], c0, c1, d3, vₓₓᵧ],
         [[2], c0, c2, d2, vₓₓᵧ],
         [[2], c0, c3, d1, vₓₓᵧ],
@@ -119,7 +121,7 @@ function getCoeffs3x3Exact(ps1, ps2) {
         [[2], c1, c3, vₓₓ],
         [[2], d1, d3, vᵧᵧ]
     ]);
-    let v3 = flo_numerical_1.calculate([
+    let v3 = eCalculate([
         [[2], c0, c1, d2, vₓₓᵧ],
         [[2], c0, c2, d1, vₓₓᵧ],
         [[2], c0, c3, d0, vₓₓᵧ],
@@ -149,7 +151,7 @@ function getCoeffs3x3Exact(ps1, ps2) {
         [c3, vₓ],
         [d3, vᵧ],
     ]);
-    let v2 = flo_numerical_1.calculate([
+    let v2 = eCalculate([
         [[2], c0, c1, d1, vₓₓᵧ],
         [[2], c0, c2, d0, vₓₓᵧ],
         [[2], c0, d0, d2, vₓᵧᵧ],
@@ -172,7 +174,7 @@ function getCoeffs3x3Exact(ps1, ps2) {
         [c2, vₓ],
         [d2, vᵧ]
     ]);
-    let v1 = flo_numerical_1.calculate([
+    let v1 = eCalculate([
         [[2], c0, c1, d0, vₓₓᵧ],
         [[2], c0, d0, d1, vₓᵧᵧ],
         [c1, d0, d0, vₓᵧᵧ],
@@ -186,7 +188,7 @@ function getCoeffs3x3Exact(ps1, ps2) {
         [c1, vₓ],
         [d1, vᵧ],
     ]);
-    let v0 = flo_numerical_1.calculate([
+    let v0 = eCalculate([
         [c0, d0, d0, vₓᵧᵧ],
         [d0, c0, c0, vₓₓᵧ],
         [c0, c0, c0, vₓₓₓ],
