@@ -1,72 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.γγ14 = exports.γγ13 = exports.γγ12 = exports.γγ11 = exports.γγ10 = exports.γγ9 = exports.γγ8 = exports.γγ7 = exports.γγ6 = exports.γγ5 = exports.γγ4 = exports.γγ3 = exports.γγ2 = exports.γγ1 = exports.γγ = exports.γ14 = exports.γ13 = exports.γ12 = exports.γ11 = exports.γ10 = exports.γ9 = exports.γ8 = exports.γ7 = exports.γ6 = exports.γ5 = exports.γ4 = exports.γ3 = exports.γ2 = exports.γ1 = exports.γ = void 0;
+exports.γγ = exports.γ = void 0;
 const u = Number.EPSILON / 2;
-const uu = Math.pow((Number.EPSILON / 2), 2);
+const uu = u * u;
+/** @internal */
 function γ(n) {
     let nu = n * u;
     return nu / (1 - nu);
 }
 exports.γ = γ;
+/** @internal */
 function γγ(n) {
     let nuu = n * uu;
     return nuu / (1 - nuu);
 }
 exports.γγ = γγ;
-const γ1 = γ(1);
-exports.γ1 = γ1;
-const γ2 = γ(2);
-exports.γ2 = γ2;
-const γ3 = γ(3);
-exports.γ3 = γ3;
-const γ4 = γ(4);
-exports.γ4 = γ4;
-const γ5 = γ(5);
-exports.γ5 = γ5;
-const γ6 = γ(6);
-exports.γ6 = γ6;
-const γ7 = γ(7);
-exports.γ7 = γ7;
-const γ8 = γ(8);
-exports.γ8 = γ8;
-const γ9 = γ(9);
-exports.γ9 = γ9;
-const γ10 = γ(10);
-exports.γ10 = γ10;
-const γ11 = γ(11);
-exports.γ11 = γ11;
-const γ12 = γ(12);
-exports.γ12 = γ12;
-const γ13 = γ(13);
-exports.γ13 = γ13;
-const γ14 = γ(14);
-exports.γ14 = γ14;
-const γγ1 = γγ(1);
-exports.γγ1 = γγ1;
-const γγ2 = γγ(2);
-exports.γγ2 = γγ2;
-const γγ3 = γγ(3);
-exports.γγ3 = γγ3;
-const γγ4 = γγ(4);
-exports.γγ4 = γγ4;
-const γγ5 = γγ(5);
-exports.γγ5 = γγ5;
-const γγ6 = γγ(6);
-exports.γγ6 = γγ6;
-const γγ7 = γγ(7);
-exports.γγ7 = γγ7;
-const γγ8 = γγ(8);
-exports.γγ8 = γγ8;
-const γγ9 = γγ(9);
-exports.γγ9 = γγ9;
-const γγ10 = γγ(10);
-exports.γγ10 = γγ10;
-const γγ11 = γγ(11);
-exports.γγ11 = γγ11;
-const γγ12 = γγ(12);
-exports.γγ12 = γγ12;
-const γγ13 = γγ(13);
-exports.γγ13 = γγ13;
-const γγ14 = γγ(14);
-exports.γγ14 = γγ14;
 //# sourceMappingURL=error-analysis.js.map

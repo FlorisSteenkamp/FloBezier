@@ -2,25 +2,39 @@
 import { expect, assert } from 'chai';
 //import { describe } from 'mocha';
 import 'mocha';
-import { evalDeCasteljau } from '../src/local-properties-at-t/t-to-xy/eval-de-casteljau';
-import { evaluate } from '../src/local-properties-at-t/t-to-xy/evaluate';
+import { evaluate, evalDeCasteljau } from '../../../src/index';
 
 
 describe('eval decasteljau', function() {
-	it('it should eval decasteljau', 
+	it('it should evaluate some beziers correctly at some t values using Decasteljau\'s algorithm', 
 	function() {
 		{
-			let ps = [[3,-1],[2,-1],[1,1],[0,0]];
-			//let ps = [[0,0],[1,1],[1,2],[3,2]];
-			//let ps = [[3,-1],[2,-1],[1,1]];
-			//let ps = [[0,0],[1,1],[1.54,2]];
-			//let ps = [[3.33,-1.1221],[2.542234,-1]];
-			//let ps = [[1.1111,1.2222],[1.54,2]];
-			let r1 = evalDeCasteljau(ps, 0.1);
-			let r2 = evaluate(ps, 0.1);
+			const pss = [
+				[[3,-1],[2,-1],[1,1],[0,0]],
+				[[0,0],[1,1],[1,2],[3,2]],
+				[[3,-1],[2,-1],[1,1]],
+				[[0,0],[1,1],[1.54,2]],
+				[[3.33,-1.1221],[2.542234,-1]],
+				[[1.1111,1.2222],[1.54,2]],
+			];
+
+			let ts = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
 			
-			console.log(r1,r2);
-			//assert(r < 0);
+			for (let ps of pss) {
+				for (let t of ts) {
+					let r1 = evalDeCasteljau(ps, t);
+					let r2 = evaluate(ps, t);
+
+					// We check that evaluation using two different methods
+					// (de Casteljau and power basis evaluation) yields roughly 
+					// the same result
+					let rX = Math.abs(r1[0] - r2[0]);
+					let rY = Math.abs(r1[1] - r2[1]);
+
+					assert(rX < Number.EPSILON * 2**5);
+					assert(rY < Number.EPSILON * 2**5);
+				}
+			}
 		}
 	});
 });

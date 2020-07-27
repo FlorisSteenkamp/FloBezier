@@ -1,7 +1,7 @@
 
 
-import { getXExact } from "../../../to-power-basis/get-x";
-import { getYExact } from "../../../to-power-basis/get-y";
+import { getXYExact } from "../../../to-power-basis/any-bitlength/exact/get-xy-any-bitlength-exact";
+
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { operators as bigFloatOperators } from "big-float-ts";
@@ -19,8 +19,7 @@ function getCoeffsCubicExact(
 
     let { radius: r, center: c } = circle;
     let [cx, cy] = c;
-    let [a3,a2,a1,a0] = getXExact(ps);
-    let [b3,b2,b1,b0] = getYExact(ps);
+    let [[a3,a2,a1,a0], [b3,b2,b1,b0]] = getXYExact(ps);
 
     // (a3**2 + b3**2)*t**6 + 
     let t6 = eCalculate([
@@ -76,8 +75,7 @@ function getCoeffsQuadraticExact(
 
     let { radius: r, center: c } = circle;
     let [cx, cy] = c;
-    let [a2,a1,a0] = getXExact(ps);
-    let [b2,b1,b0] = getYExact(ps);
+    let [[a2,a1,a0], [b2,b1,b0]] = getXYExact(ps);
 
     // (a2**2 + b2**2)*t**4 + 
     let t4 = eCalculate([
@@ -122,8 +120,7 @@ function getCoeffsLinearExact(
 
     let { radius: r, center: c } = circle;
     let [cx, cy] = c;
-    let [a1,a0] = getXExact(ps);
-    let [b1,b0] = getYExact(ps);
+    let [[a1,a0], [b1,b0]] = getXYExact(ps);
 
 
     // (a1**2 + b1**2)*t**2 +

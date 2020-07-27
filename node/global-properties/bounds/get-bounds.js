@@ -12,6 +12,7 @@ const eval_de_casteljau_1 = require("../../local-properties-at-t/t-to-xy/eval-de
 const { sqrtWithErr, divWithErr } = double_double_1.operators;
 const abs = Math.abs;
 const u = Number.EPSILON / 2;
+const γ1 = error_analysis_1.γ(1);
 /**
  * Returns a tight axis-aligned bounding box bound of the given bezier curve.
  * @param ps
@@ -126,7 +127,7 @@ function quadRoots([a, b, c]) {
     let ac4 = 4 * a * c;
     let ac4_ = 4 * u * abs(a * c);
     let DD = bb - ac4;
-    let DD_ = bb_ + ac4_ + error_analysis_1.γ1 * abs(DD);
+    let DD_ = bb_ + ac4_ + γ1 * abs(DD);
     // If the discriminant is smaller than negative the error bound then
     // certainly there are no roots.
     if (DD <= -DD_) {
@@ -146,7 +147,7 @@ function quadRoots([a, b, c]) {
         // let r1 = (2*c) / (-b + D);
         q1 = -b + D;
     }
-    let q1_ = D_ + error_analysis_1.γ1 * abs(q1);
+    let q1_ = D_ + γ1 * abs(q1);
     let { est: r1, err: r1_ } = divWithErr(q1, 2 * a, q1_, 0);
     let { est: r2, err: r2_ } = divWithErr(2 * c, q1, 0, q1_);
     let res = [];

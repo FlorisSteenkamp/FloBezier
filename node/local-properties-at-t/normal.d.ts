@@ -2,7 +2,7 @@
  * Returns the normal vector of a cubic bezier curve at a specific t. This
  * function is curried.
  * @param ps a cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param t - The parameter value where the normal should be evaluated
+ * @param t the parameter value where the normal should be evaluated
  */
 declare function normal(ps: number[][], t: number): number[];
 declare function normal(ps: number[][]): (t: number) => number[];

@@ -1,23 +1,23 @@
 
 import { allRootsMultiWithErrBounds } from "flo-poly";
-import { getCoeffs1x1Quad } from './quad/get-coefficients-1x1';
-import { getCoeffs2x1Quad } from './quad/get-coefficients-2x1';
-import { getCoeffs3x1Quad } from './quad/get-coefficients-3x1';
-import { getCoeffs1x2Quad } from './quad/get-coefficients-1x2';
-import { getCoeffs2x2Quad } from './quad/get-coefficients-2x2';
-import { getCoeffs3x2Quad } from './quad/get-coefficients-3x2';
-import { getCoeffs1x3Quad } from './quad/get-coefficients-1x3';
-import { getCoeffs2x3Quad } from './quad/get-coefficients-2x3';
-import { getCoeffs3x3Quad } from './quad/get-coefficients-3x3';
-import { getCoeffs1x1Exact_ } from './exact/get-coefficients-1x1-';
-import { getCoeffs2x1Exact_ } from './exact/get-coefficients-2x1-';
-import { getCoeffs3x1Exact_ } from './exact/get-coefficients-3x1-';
-import { getCoeffs1x2Exact_ } from './exact/get-coefficients-1x2-';
-import { getCoeffs2x2Exact_ } from './exact/get-coefficients-2x2-';
-import { getCoeffs3x2Exact_ } from './exact/get-coefficients-3x2-';
-import { getCoeffs1x3Exact_ } from './exact/get-coefficients-1x3-';
-import { getCoeffs2x3Exact_ } from './exact/get-coefficients-2x3-';
-import { getCoeffs3x3Exact_ } from './exact/get-coefficients-3x3-';
+import { getCoeffs1x1Quad } from './inp-bitlength45/double-double/get-coefficients-1x1';
+import { getCoeffs2x1Quad } from './inp-bitlength45/double-double/get-coefficients-2x1';
+import { getCoeffs3x1Quad } from './inp-bitlength45/double-double/get-coefficients-3x1';
+import { getCoeffs1x2Quad } from './inp-bitlength45/double-double/get-coefficients-1x2';
+import { getCoeffs2x2Quad } from './inp-bitlength45/double-double/get-coefficients-2x2';
+import { getCoeffs3x2Quad } from './inp-bitlength45/double-double/get-coefficients-3x2';
+import { getCoeffs1x3Quad } from './inp-bitlength45/double-double/get-coefficients-1x3';
+import { getCoeffs2x3Quad } from './inp-bitlength45/double-double/get-coefficients-2x3';
+import { getCoeffs3x3Quad } from './inp-bitlength45/double-double/get-coefficients-3x3';
+import { getCoeffs1x1Exact } from './inp-bitlength45/exact/get-coefficients-1x1';
+import { getCoeffs2x1Exact } from './inp-bitlength45/exact/get-coefficients-2x1';
+import { getCoeffs3x1Exact } from './inp-bitlength45/exact/get-coefficients-3x1';
+import { getCoeffs1x2Exact } from './inp-bitlength45/exact/get-coefficients-1x2';
+import { getCoeffs2x2Exact } from './inp-bitlength45/exact/get-coefficients-2x2';
+import { getCoeffs3x2Exact } from './inp-bitlength45/exact/get-coefficients-3x2';
+import { getCoeffs1x3Exact } from './inp-bitlength45/exact/get-coefficients-1x3';
+import { getCoeffs2x3Exact } from './inp-bitlength45/exact/get-coefficients-2x3';
+import { getCoeffs3x3Exact } from './inp-bitlength45/exact/get-coefficients-3x3';
 import { differentiateExact } from 'flo-poly/node/calculus/differentiate';
 import { RootInterval } from 'flo-poly';
 import { getIntervalBox } from '../../global-properties/bounds/get-interval-box/get-interval-box';
@@ -37,9 +37,9 @@ const coeffFunctionsQuad = [
     [getCoeffs3x1Quad, getCoeffs3x2Quad, getCoeffs3x3Quad]
 ];
 const coeffFunctionsExact = [
-    [getCoeffs1x1Exact_, getCoeffs1x2Exact_, getCoeffs1x3Exact_],
-    [getCoeffs2x1Exact_, getCoeffs2x2Exact_, getCoeffs2x3Exact_],
-    [getCoeffs3x1Exact_, getCoeffs3x2Exact_, getCoeffs3x3Exact_]
+    [getCoeffs1x1Exact, getCoeffs1x2Exact, getCoeffs1x3Exact],
+    [getCoeffs2x1Exact, getCoeffs2x2Exact, getCoeffs2x3Exact],
+    [getCoeffs3x1Exact, getCoeffs3x2Exact, getCoeffs3x3Exact]
 ];
 
 

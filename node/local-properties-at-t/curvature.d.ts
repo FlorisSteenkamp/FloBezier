@@ -26,4 +26,4 @@ declare function κ(ps: number[][]): (t: number) => number;
  * @param psO Another bezier representing the outgoing curve
  */
 declare function compareCurvaturesAtInterface(psI: number[][], psO: number[][]): number;
-export { κ, compareCurvaturesAtInterface };
+export { κ, κ as curvature, compareCurvaturesAtInterface };

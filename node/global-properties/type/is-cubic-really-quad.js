@@ -7,7 +7,9 @@ const u = Number.EPSILON / 2;
 const abs = Math.abs;
 /**
  * Returns true if the given bezier curve is really a quadratic curve.
- * * there is no limit on the bitlength of the coefficients
+ *
+ * * **exact:** for any bitlength of the coefficients
+ *
  * @param ps a cubic bezier curve
  */
 function isCubicReallyQuad(ps) {

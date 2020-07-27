@@ -10,6 +10,7 @@ const qmq = double_double_1.ddMultDd;
 const qaq = double_double_1.ddAddDd;
 const qdq = double_double_1.ddDiffDd;
 const abs = Math.abs;
+const γγ3 = error_analysis_1.γγ(3);
 /**
  * Get self-intersection coefficients
  * * **precondition**: max bit-aligned bitlength: 47
@@ -58,7 +59,7 @@ function getCoeffs3Quad(ps) {
     // Solve: u2*t**2 + u1*t + u0 = 0
     return {
         coeffs: [u2, u1, u0],
-        errBound: [u2_, u1_, u0_].map(c => error_analysis_1.γγ3 * c)
+        errBound: [γγ3 * u2_, γγ3 * u1_, γγ3 * u0_]
     };
 }
 exports.getCoeffs3Quad = getCoeffs3Quad;

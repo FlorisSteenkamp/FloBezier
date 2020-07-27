@@ -39,7 +39,10 @@ function getCoeffsCubicQuad(
     let t3 = qm2(qdifq(qaq(qaq(tp(a0,a3),tp(a1,a2)),qaq(tp(b0,b3),tp(b1,b2))),(qaq(tp(a3,cx),tp(b3,cy)))));  // exact if bitlength <= 47 - 6 summands
 
     // (2*a0*a2 + a1**2 - 2*a2*cx + 2*b0*b2 + b1**2 - 2*b2*cy)*t**2 + 
-    let t2 = qaq(qm2(qdifq(qaq(tp(a0,a2),tp(b0,b2)),(qaq(tp(a2,cx),tp(b2,cy))))),qaq(tp(a1,a1),tp(b1,b1)));  // exact if bitlength <= 47 - 10 summands
+    let t2 = qaq(
+        qm2(qdifq(qaq(tp(a0,a2),tp(b0,b2)),(qaq(tp(a2,cx),tp(b2,cy))))),
+        qaq(tp(a1,a1),tp(b1,b1))
+    );  // exact if bitlength <= 47 - 10 summands
 
     // (2*a0*a1 - 2*a1*cx + 2*b0*b1 - 2*b1*cy)*t + 
     let t1 = qm2(qdifq(qaq(tp(a0,a1),tp(b0,b1)),(qaq(tp(a1,cx),tp(b1,cy)))));  // exact if bitlength <= 48 - 4 summands

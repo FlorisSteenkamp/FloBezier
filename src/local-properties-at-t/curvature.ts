@@ -1,13 +1,14 @@
 
-import { evaluateDx } from "./t-to-dxy/evaluate-dx";
-import { evaluateDy } from "./t-to-dxy/evaluate-dy";
-import { evaluateDdx } from "./t-to-ddxy/evaluate-ddx";
-import { evaluateDdy } from "./t-to-ddxy/evaluate-ddy";
+import { evaluate as evaluatePoly } from 'flo-poly';
+import { getXY } from '../to-power-basis/get-xy';
 import { getDxyAt0 } from "./t-to-dxy/get-dxy-at-0";
 import { getDdxyAt0 } from "./t-to-ddxy/get-ddxy-at-0";
 import { getDddxy } from "../to-power-basis/get-dddxy";
 import { twoProduct } from "double-double";
 import { expansionProduct, fastExpansionSum, eSign, eDiff, scaleExpansion } from 'big-float-ts';
+import { getDxy } from "../to-power-basis/get-dxy";
+import { getDdxy } from "../to-power-basis/get-ddxy";
+
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const tp  = twoProduct;
@@ -15,30 +16,30 @@ const epr = expansionProduct;
 const fes = fastExpansionSum;
 const edif = eDiff;
 const sign = eSign;
+const sce = scaleExpansion;
 
 
 /**
  * Returns the curvature, κ, at a specific t. 
  * 
- * This function is curried. 
+ * * this function is curried.
+ * * **alias**: curvature
  * 
- * Alias of curvature.
- * @param ps An order 1, 2 or 3 bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ * @param ps An order 1, 2 or 3 bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param t The parameter value where the curvature should be evaluated
  */
 function κ(ps: number[][], t: number): number;
 function κ(ps: number[][]): (t: number) => number;
 function κ(ps: number[][], t?: number) {
-	let evDx  = evaluateDx (ps); 
-	let evDy  = evaluateDy (ps);
-	let evDdx = evaluateDdx(ps);
-    let evDdy = evaluateDdy(ps);
+    const [X,Y] = getXY(ps);
+    const [dX,dY] = getDxy(ps);
+    const [ddX,ddY] = getDdxy(ps);
 
 	function f(t: number): number {
-		let dx  = evDx (t); 
-		let dy  = evDy (t);
-		let ddx = evDdx(t);
-		let ddy = evDdy(t);
+		let dx  = evaluatePoly(dX, t); 
+		let dy  = evaluatePoly(dY, t); 
+		let ddx = evaluatePoly(ddX, t); 
+		let ddy = evaluatePoly(ddY, t); 
 		
 		let a = dx*ddy - dy*ddx;
 		let b = Math.sqrt((dx*dx + dy*dy)**3);
@@ -200,7 +201,7 @@ function compareCurvaturesAtInterface(
     // i²b⁵ > j²d⁵
     let i = edif(
         epr(d, e),
-        scaleExpansion(
+        sce(
             epr(a, f),
             3
         )
@@ -208,7 +209,7 @@ function compareCurvaturesAtInterface(
 
     let j = edif(
         epr(b, g),
-        scaleExpansion(
+        sce(
             epr(c, h),
             3
         )

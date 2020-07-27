@@ -1,6 +1,7 @@
 
 const path = require('path');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
+const projectRoot = '../';
 
 
 module.exports = {
@@ -16,7 +17,13 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: [ '.tsx', '.ts', '.js', '.d.ts' ]
+        extensions: [ '.tsx', '.ts', '.js', '.d.ts' ],
+        alias: {
+            'flo-poly$':                path.resolve(__dirname, projectRoot + 'poly/src/index.ts'),
+            //'flo-vector2d$':            path.resolve(__dirname, projectRoot + 'vector/src/index.ts'),
+            //'double-double$':           path.resolve(__dirname, projectRoot + 'double-double/src/index.ts'),
+            //'big-float-ts$':            path.resolve(__dirname, projectRoot + 'big-float/src/index.ts'),
+        }
     },
     output: {
         filename: 'index.min.js',

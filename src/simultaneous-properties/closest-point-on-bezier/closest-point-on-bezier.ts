@@ -1,7 +1,7 @@
 
 import { getTangentPolyFromPoint } from "../get-tangent-poly-from-point/naive/get-tangent-poly-from-point";
 import { getTangentPolyFromPointExact } from "../get-tangent-poly-from-point/exact/get-tangent-poly-from-point";
-import { evaluateExact } from "../../local-properties-at-t/t-to-xy/evaluate";
+import { evaluate_anyBitlength_exact } from "../../local-properties-at-t/t-to-xy/any-bitlength/exact/evaluate-any-bitlength-exact";
 import { squaredDistanceBetween } from "flo-vector2d";
 import { allRoots, allRootsMultiWithErrBounds, mid } from "flo-poly";
 import { evalDeCasteljau } from "../../local-properties-at-t/t-to-xy/eval-de-casteljau";
@@ -22,7 +22,6 @@ function closestPointOnBezierPrecise(
         ps: number[][], 
         p: number[]): { p: number[]; t: number; } {
 
-    //let poly = getTangentPolyFromPointExact(ps, p);
     let poly = getTangentPolyFromPointExact(ps, p);
 
     // we give ample leeway for roots outside [0,1] since roots can be some 
@@ -40,9 +39,10 @@ function closestPointOnBezierPrecise(
     ts.push(0);
     ts.push(1);
 
-    let ps_ = ts.map(t => ({ p: evaluateExact(ps, t).map(estimate), t }));
+    let ps_ = ts.map(t => ({ p: evaluate_anyBitlength_exact(ps, t).map(estimate), t }));
     //let ps_ = ts.map(t => ({ p: evalDeCasteljau(ps, t), t }));
 
+    
     // Get point with minimum distance
     let minD = Number.POSITIVE_INFINITY;
     let minT: { p: number[], t: number } = undefined;

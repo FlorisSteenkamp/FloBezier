@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.compareCurvaturesAtInterface = exports.κ = void 0;
+exports.compareCurvaturesAtInterface = exports.curvature = exports.κ = void 0;
 const evaluate_dx_1 = require("./t-to-dxy/evaluate-dx");
 const evaluate_dy_1 = require("./t-to-dxy/evaluate-dy");
 const evaluate_ddx_1 = require("./t-to-ddxy/evaluate-ddx");
@@ -16,6 +16,7 @@ const epr = big_float_ts_1.expansionProduct;
 const fes = big_float_ts_1.fastExpansionSum;
 const edif = big_float_ts_1.eDiff;
 const sign = big_float_ts_1.eSign;
+const sce = big_float_ts_1.scaleExpansion;
 function κ(ps, t) {
     let evDx = evaluate_dx_1.evaluateDx(ps);
     let evDy = evaluate_dy_1.evaluateDy(ps);
@@ -34,6 +35,7 @@ function κ(ps, t) {
     return t === undefined ? f : f(t);
 }
 exports.κ = κ;
+exports.curvature = κ;
 /**
  * Compare the curvature, κ, between two curves at t === 0.
  *
@@ -132,8 +134,8 @@ function compareCurvaturesAtInterface(psI, psO) {
     let h = fes(tp(dxO, ddxO), tp(dyO, ddyO));
     // (de - 3af)²b⁵ > (bg - 3ch)²d⁵
     // i²b⁵ > j²d⁵
-    let i = edif(epr(d, e), big_float_ts_1.scaleExpansion(epr(a, f), 3));
-    let j = edif(epr(b, g), big_float_ts_1.scaleExpansion(epr(c, h), 3));
+    let i = edif(epr(d, e), sce(epr(a, f), 3));
+    let j = edif(epr(b, g), sce(epr(c, h), 3));
     let signI = sign(i);
     let signJ = sign(j);
     if (signA !== signC) {

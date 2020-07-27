@@ -10,7 +10,8 @@ import { evalDeCasteljau } from "../../local-properties-at-t/t-to-xy/eval-de-cas
  * Returns a **non-certified**, **rotated**, **tight** bounding box of the given 
  * order 1, 2 or 3 bezier curve as four ordered points of a rotated rectangle.
  */
-let getBoundingBoxTight = memoize(function(ps: number[][]) {
+const getBoundingBoxTight = memoize(
+function getBoundingBoxTight(ps: number[][]) {
     let [xS, yS] = ps[0];
 	let [xE, yE] = ps[ps.length-1];
 	

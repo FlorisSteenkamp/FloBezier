@@ -94,32 +94,32 @@ function getPolyForCubicExact(ps, p) {
     const r2 = qaq(y03, y12); // (bitlength <= 49) => exact (20 summands)
     const r3 = qaq(y02, y11); // (bitlength <= 50) => exact (15 summands)
     //const t5 = 6*((x33 - x23 + q1 - q2 + q3 - x01 + x00) + 
-    //            (y33 - y23 + r1 - r2 + r3 - y01 + y00));
+    //              (y33 - y23 + r1 - r2 + r3 - y01 + y00));
     const t5a = qdifq(qaq(qaq(x33, x00), qaq(q1, q3)), (qaq(qaq(q2, x23), x01))); // (bitlength <= 49) => exact (64 summands)
     const t5b = qdifq(qaq(qaq(y33, y00), qaq(r1, r3)), (qaq(qaq(r2, y23), y01))); // (bitlength <= 49) => exact (64 summands)
     const t5 = qmd(6, qaq(t5a, t5b)); // (bitlength <= 47) => exact (768 summands)
     //const t4 = 5*((x23 - 2*(q1 + 2*q3 + 3*x00) + 3*q2 + 5*x01) +
-    //            (y23 - 2*(r1 + 2*r3 + 3*y00) + 3*r2 + 5*y01));
+    //              (y23 - 2*(r1 + 2*r3 + 3*y00) + 3*r2 + 5*y01));
     const t4a = qaq(qmn2(qaq(qaq(q1, qm2(q3)), qmd(3, x00))), qaq(qaq(x23, qmd(3, q2)), qmd(5, x01))); // (bitlength <= 48) => exact (192 summands)
     const t4b = qaq(qmn2(qaq(qaq(r1, qm2(r3)), qmd(3, y00))), qaq(qaq(y23, qmd(3, r2)), qmd(5, y01))); // (bitlength <= 48) => exact (192 summands)
     const t4 = qmd(5, qaq(t4a, t4b)); // (bitlength <= 46) => exact (1920 summands)
     //const t3 = 4*((q1 - 3*(q2 - 2*q3) - 5*(2*x01 - 3*x00)) +
-    //            (r1 - 3*(r2 - 2*r3) - 5*(2*y01 - 3*y00)));
+    //              (r1 - 3*(r2 - 2*r3) - 5*(2*y01 - 3*y00)));
     const t3a = qaq(qaq(q1, qmd(3, (qdifq(qm2(q3), q2)))), qmd(5, (qdifq(qmd(3, x00), qm2(x01))))); // (bitlength <= 48) => exact (210 summands)
     const t3b = qaq(qaq(r1, qmd(3, (qdifq(qm2(r3), r2)))), qmd(5, (qdifq(qmd(3, y00), qm2(y01))))); // (bitlength <= 48) => exact (210 summands)
     const t3 = qmd(4, qaq(t3a, t3b)); // (bitlength <= 47) => exact (4*420 summands)
     //const t2 = 3*((q2 - 2*(2*q3 - 5*(x01 - 2*x00))) +
-    //            (r2 - 2*(2*r3 - 5*(y01 - 2*y00))));
+    //              (r2 - 2*(2*r3 - 5*(y01 - 2*y00))));
     const t2a = qdifq(q2, qm2(qdifq(qm2(q3), qmd(5, (qdifq(x01, qm2(x00))))))); // (bitlength <= 48) => exact (160 summands)
     const t2b = qdifq(r2, qm2(qdifq(qm2(r3), qmd(5, (qdifq(y01, qm2(y00))))))); // (bitlength <= 48) => exact (160 summands)
     const t2 = qmd(3, qaq(t2a, t2b)); // (bitlength <= 47) => exact (960 summands)
     //const t1 = 2*((q3 - 5*(x01 - 3*x00)) +
-    //            (r3 - 5*(y01 - 3*y00)));
+    //              (r3 - 5*(y01 - 3*y00)));
     const t1a = qdifq(q3, qmd(5, (qdifq(x01, qmd(3, x00))))); // (bitlength <= 49) => exact (60 summands)
     const t1b = qdifq(r3, qmd(5, (qdifq(y01, qmd(3, y00))))); // (bitlength <= 49) => exact (60 summands)
     const t1 = qm2(qaq(t1a, t1b)); // (bitlength <= 48) => exact (240 summands)
     //const t0 = ((x01 - 6*x00) +
-    //          (y01 - 6*y00));
+    //            (y01 - 6*y00));
     const t0a = qdifq(x01, qmd(6, x00)); // (bitlength <= 50) => exact (12 summands)
     const t0b = qdifq(y01, qmd(6, y00)); // (bitlength <= 50) => exact (12 summands)
     const t0 = qaq(t0a, t0b); // (bitlength <= 49) => exact (24 summands)
@@ -154,22 +154,22 @@ function getPolyForQuadraticExact(ps, p) {
     const q1 = qaq(y02, qm2(y11)); // (bitlength <= 51) => exact (3  summand)
     const r1 = qaq(x02, qm2(x11)); // (bitlength <= 51) => exact (3  summand)
     //const t3 = y22 + 2*q1 - 4*(y12 + y01) + y00 + 
-    //         x22 + 2*r1 - 4*(x12 + x01) + x00;
+    //           x22 + 2*r1 - 4*(x12 + x01) + x00;
     const t3a = qaq(qdifq(qaq(x22, qm2(r1)), qm4(qaq(x12, x01))), x00); // (bitlength <= 50) => exact (13  summand)
     const t3b = qaq(qdifq(qaq(y22, qm2(q1)), qm4(qaq(y12, y01))), y00); // (bitlength <= 50) => exact (13  summand)
     const t3 = qaq(t3a, t3b); // (bitlength <= 49) => exact (26  summand)
     //const t2 = 3*(y12 - q1 + 3*y01 - y00 + 
-    //            x12 - r1 + 3*x01 - x00);
+    //              x12 - r1 + 3*x01 - x00);
     const t2a = qaq(qdifq(x12, r1), qdifq(qmd(3, x01), x00)); // (bitlength <= 49) => exact (24  summand)
     const t2b = qaq(qdifq(y12, q1), qdifq(qmd(3, y01), y00)); // (bitlength <= 49) => exact (24  summand)
     const t2 = qmd(3, qaq(t2a, t2b)); // (bitlength <= 48) => exact (144  summand)
     //const t1 = q1 - 3*(2*y01 - y00) + 
-    //         r1 - 3*(2*x01 - x00);
+    //           r1 - 3*(2*x01 - x00);
     const t1a = qdifq(q1, qmd(3, qdifq(qm2(y01), y00))); // (bitlength <= 50) => exact (12  summand)
     const t1b = qdifq(r1, qmd(3, qdifq(qm2(x01), x00))); // (bitlength <= 50) => exact (12  summand)
     const t1 = qaq(t1a, t1b); // (bitlength <= 49) => exact (24  summand)
     //const t0 = y01 - y00 + 
-    //         x01 - x00;
+    //           x01 - x00;
     const t0a = qdifq(y01, y00); // (bitlength <= 51) => exact (2  summand)
     const t0b = qdifq(x01, x00); // (bitlength <= 51) => exact (2  summand)
     const t0 = qaq(t0a, t0b); // (bitlength <= 51) => exact (4  summand)

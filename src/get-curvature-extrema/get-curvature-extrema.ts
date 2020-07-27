@@ -1,5 +1,5 @@
 
-import { allRoots, differentiate, evaluate } from "flo-poly";
+import { allRoots, differentiate, evaluate as evaluatePoly } from "flo-poly";
 import { getAbsCurvatureExtremaPolys } from "./get-abs-curvature-extrema-polys";
 import { curvature } from "../local-properties-at-t/curvature";
 import { isLine } from "../global-properties/type/is-line";
@@ -67,8 +67,8 @@ function getCurvatureExtrema(ps: number[][]): Extrema {
     for (let i=0; i<ts.length; i++) {
         const t = ts[i];
         
-        const dp2_ = evaluate(dp2, t);
-        const p1_ = evaluate(p1, t);
+        const dp2_ = evaluatePoly(dp2, t);
+        const p1_ = evaluatePoly(p1, t);
         
         const secondDerivative = p1_*dp2_;
 

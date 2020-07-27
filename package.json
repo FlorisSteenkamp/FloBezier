@@ -23,7 +23,6 @@
         "intersection"
     ],
     "dependencies": {
-        "@types/node": "^14.0.24",
         "big-float-ts": "^1.0.1",
         "circular-dependency-plugin": "^5.2.0",
         "double-double": "^1.0.4",
@@ -31,14 +30,15 @@
         "flo-gauss-quadrature": "^1.0.1",
         "flo-graham-scan": "^1.0.2",
         "flo-memoize": "^0.1.2",
-        "flo-poly": "^4.0.1",
+        "flo-poly": "^4.0.2",
         "flo-vector2d": "^3.0.0",
         "typedoc-plugin-markdown": "^2.3.1"
     },
     "devDependencies": {
         "@istanbuljs/nyc-config-typescript": "^1.0.1",
-        "@types/chai": "^4.2.11",
+        "@types/chai": "^4.2.12",
         "@types/mocha": "^7.0.2",
+        "@types/node": "^14.0.26",
         "chai": "^4.2.0",
         "mocha": "^7.2.0",
         "nyc": "^15.1.0",
@@ -48,7 +48,7 @@
         "ts-node": "^8.10.2",
         "typedoc": "^0.17.8",
         "typescript": "^3.9.7",
-        "webpack": "^4.43.0",
+        "webpack": "^4.44.0",
         "webpack-cli": "^3.3.12"
     },
     "scripts": {
@@ -57,6 +57,6 @@
         "build-browser": "rimraf browser && webpack",
         "test": "nyc mocha",
         "docs": "npx typedoc --options typedoc-ds.json",
-        "a": "mocha --timeout 6000 --require ts-node/register --require source-map-support/register ./test/get-curvature-extrema/get-curvature-extrema.spec.ts"
+        "a": "mocha ./test/implicit-form/bitlength-16/implicit-form.spec.ts --timeout 6000 --require ts-node/register --require source-map-support/register" 
     }
 }

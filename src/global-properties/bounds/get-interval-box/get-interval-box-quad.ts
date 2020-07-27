@@ -1,5 +1,5 @@
 
-import { evalDeCasteljauWithErrQuad } from "../../../local-properties-at-t/t-to-xy/eval-de-casteljau-with-err";
+import { evalDeCasteljauWithErrQuad } from "../../../local-properties-at-t/t-to-xy/dd-eval-de-casteljau-with-err";
 import { operators } from "double-double";
 
 const { 
@@ -9,6 +9,7 @@ const {
 
 
 const u = Number.EPSILON / 2;
+const uu = u*u;
 const abs = Math.abs;
 const qdq = ddDiffDd;
 const qOne = [0,1];
@@ -57,9 +58,9 @@ function getIntervalBox3Quad(
 
     //t2 = ((t2-t1) / (1-t1)) * (1 + Number.EPSILON); // <= fl(t2) > t2
     let tDel = qdq(t2,t1);
-    let tDel_ = 3*u*u*abs(tDel[1]);  // max absolute error in tDel
+    let tDel_ = 3*uu*abs(tDel[1]);  // max absolute error in tDel
     let oMt1 = qdq(qOne,t1);
-    let oMt1_ = 3*u*u*abs(oMt1[1]);  // max absolute error in oMt1
+    let oMt1_ = 3*uu*abs(oMt1[1]);  // max absolute error in oMt1
     //t2 = qdivq(t2m1,omt1) //* (1 + Number.EPSILON); // <= fl(t2) > t2
     let $t2 = qDivQuadWithError(tDel,oMt1,tDel_,oMt1_);
     t2 = qad($t2.est,$t2.err);  // the max t2 can possibly be
@@ -143,10 +144,10 @@ function getIntervalBox3Quad(
     // x3: <22>(<21>(<5>(x3*<4>ttt2) + <20>(<11>x0*<7>sss2)) + <16>(3*<15>(<10>(<3>q8*<5>tts2) + <14>(<6>q7*<6>tss2)))));
 
     // max errors: 
-    _x0 = 11* u*u*_x0;
-    _x1 = 15* u*u*_x1;
-    _x2 = 20* u*u*_x2;
-    _x3 = 22* u*u*_x3;
+    _x0 = 11* uu*_x0;
+    _x1 = 15* uu*_x1;
+    _x2 = 20* uu*_x2;
+    _x3 = 22* uu*_x3;
 
     //---- y - calculation
     let r8 = qaq(qmd(y3,t1),qmd(y2,s1));
@@ -167,20 +168,15 @@ function getIntervalBox3Quad(
     _y3 = _y3*_ttt2 + _qy0*_sss2 + 3*(_r8*_tts2 + _r7*_tss2);  // <= <22>
 
     // max errors: 
-    _y0 = 11* u*u*_y0;
-    _y1 = 15* u*u*_y1;
-    _y2 = 20* u*u*_y2;
-    _y3 = 22* u*u*_y3;
+    _y0 = 11* uu*_y0;
+    _y1 = 15* uu*_y1;
+    _y2 = 20* uu*_y2;
+    _y3 = 22* uu*_y3;
 
     let minX = qMin(qMin(qad(qx0,-_x0), qad(qx1,-_x1)), qMin(qad(qx2,-_x2), qad(qx3,-_x3)));
     let maxX = qMax(qMax(qad(qx0,+_x0), qad(qx1,+_x1)), qMax(qad(qx2,+_x2), qad(qx3,+_x3)));
     let minY = qMin(qMin(qad(qy0,-_y0), qad(qy1,-_y1)), qMin(qad(qy2,-_y2), qad(qy3,-_y3)));
     let maxY = qMax(qMax(qad(qy0,+_y0), qad(qy1,+_y1)), qMax(qad(qy2,+_y2), qad(qy3,+_y3)));
-
-    //return [[x0,y0],[x1,y1],[x2,y2],[x3,y3]];
-
-    //console.log(qx0, _x0, qx1, _x1, qx2, _x2, qx3, _x3);
-    //console.log(qy0, _y0, qy1, _y1, qy2, _y2, qy3, _y3);
 
     return [[minX,minY],[maxX,maxY]];
 }
@@ -192,9 +188,9 @@ function getIntervalBox2Quad(
 
     //t2 = ((t2-t1) / (1-t1)) * (1 + Number.EPSILON); // <= fl(t2) > t2
     let tDel = qdq(t2,t1);
-    let tDel_ = 3*u*u*abs(tDel[1]);  // max absolute error in tDel
+    let tDel_ = 3*uu*abs(tDel[1]);  // max absolute error in tDel
     let oMt1 = qdq(qOne,t1);
-    let oMt1_ = 3*u*u*abs(oMt1[1]);  // max absolute error in oMt1
+    let oMt1_ = 3*uu*abs(oMt1[1]);  // max absolute error in oMt1
     //t2 = qdivq(t2m1,omt1) //* (1 + Number.EPSILON); // <= fl(t2) > t2
     let $t2 = qDivQuadWithError(tDel,oMt1,tDel_,oMt1_);
     t2 = qad($t2.est,$t2.err);  // the max t2 can possibly be
@@ -256,9 +252,9 @@ function getIntervalBox2Quad(
     // x2: <14>(<9>(<3>(<2>tt2*x2) + <8>(2*<3>ts2*<3>q2)) + <13>(<4>ss2*<7>q1));
 
     // max errors: 
-    _x0 = 7*  u*u*_x0;
-    _x1 = 11* u*u*_x1;
-    _x2 = 14* u*u*_x2;
+    _x0 = 7*  uu*_x0;
+    _x1 = 11* uu*_x1;
+    _x2 = 14* uu*_x2;
 
 
     //---- y - calculation
@@ -280,9 +276,9 @@ function getIntervalBox2Quad(
     // y2: <14>(<9>(<3>(<2>tt2*y2) + <8>(2*<3>ts2*<3>r2)) + <13>(<4>ss2*<7>r1));
 
     // max errors: 
-    _y0 = 7*  u*u*_y0;
-    _y1 = 11* u*u*_y1;
-    _y2 = 14* u*u*_y2;    
+    _y0 = 7*  uu*_y0;
+    _y1 = 11* uu*_y1;
+    _y2 = 14* uu*_y2;    
 
 
     let minX = qMin(qMin(qad(qx0,-_x0), qad(qx1,-_x1)), qad(qx2,-_x2));
@@ -308,9 +304,9 @@ function getIntervalBox1Quad(
 
     //t2 = ((t2-t1) / (1-t1)) * (1 + Number.EPSILON); // <= fl(t2) > t2
     let tDel = qdq(t2,t1);
-    let tDel_ = 3*u*u*abs(tDel[1]);  // max absolute error in tDel
+    let tDel_ = 3*uu*abs(tDel[1]);  // max absolute error in tDel
     let oMt1 = qdq(qOne,t1);
-    let oMt1_ = 3*u*u*abs(oMt1[1]);  // max absolute error in oMt1
+    let oMt1_ = 3*uu*abs(oMt1[1]);  // max absolute error in oMt1
     //t2 = qdivq(t2m1,omt1) //* (1 + Number.EPSILON); // <= fl(t2) > t2
     let $t2 = qDivQuadWithError(tDel,oMt1,tDel_,oMt1_);
     t2 = qad($t2.est,$t2.err);  // the max t2 can possibly be

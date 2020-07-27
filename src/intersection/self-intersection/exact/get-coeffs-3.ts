@@ -1,6 +1,5 @@
 
-import { getXExact } from "../../../to-power-basis/get-x";
-import { getYExact } from "../../../to-power-basis/get-y";
+import { getXYExact } from "../../../to-power-basis/any-bitlength/exact/get-xy-any-bitlength-exact";
 import { eCalculate } from "big-float-ts";
 
 
@@ -10,21 +9,20 @@ import { eCalculate } from "big-float-ts";
  * @param ps An order 3 bezier curve.
  */
 function getCoeffs3Exact(ps: number[][]) {
-    let [a3, a2, a1] = getXExact(ps);
-    let [b3, b2, b1] = getYExact(ps);
+    const [[a3, a2, a1], [b3, b2, b1]] = getXYExact(ps);
 
-    //let u2 = -2*a2*a3*b2*b3 + a2*a2*b3*b3 + a3*a3*b2*b2
-    let u2 = eCalculate([ 
+    //const u2 = -2*a2*a3*b2*b3 + a2*a2*b3*b3 + a3*a3*b2*b2
+    const u2 = eCalculate([ 
         [[-2],a2,a3,b2,b3], [a2,a2,b3,b3], [a3,a3,b2,b2] 
     ]);
 
-    //let u1 = -a1*a3*b2*b3 - a2*a3*b1*b3 + a1*a2*b3*b3 + b1*b2*a3*a3
-    let u1 = eCalculate([ 
+    //const u1 = -a1*a3*b2*b3 - a2*a3*b1*b3 + a1*a2*b3*b3 + b1*b2*a3*a3
+    const u1 = eCalculate([ 
         [[-1],a1,a3,b2,b3], [[-1],a2,a3,b1,b3], [a1,a2,b3,b3], [b1,b2,a3,a3] 
     ]);
 
-    //let u0 = -a1*a2*b2*b3 - a2*a3*b1*b2 - 2*a1*a3*b1*b3 + a1*a1*b3*b3 + a3*a3*b1*b1 + a1*a3*b2*b2 + b1*b3*a2*a2
-    let u0 = eCalculate([ 
+    //const u0 = -a1*a2*b2*b3 - a2*a3*b1*b2 - 2*a1*a3*b1*b3 + a1*a1*b3*b3 + a3*a3*b1*b1 + a1*a3*b2*b2 + b1*b3*a2*a2
+    const u0 = eCalculate([ 
         [[-1],a1,a2,b2,b3], [[-1],a2,a3,b1,b2], [[-2],a1,a3,b1,b3], 
         [     a1,a1,b3,b3], [     a3,a3,b1,b1], [     a1,a3,b2,b2], 
         [     b1,b3,a2,a2] 

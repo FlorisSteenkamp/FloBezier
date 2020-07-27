@@ -1,12 +1,14 @@
 
-import { getImplicitForm3 } from "../implicit-form/naive/get-implicit-form3";
-import { getImplicitForm3Quad } from "../implicit-form/quad/get-implicit-form3";
+import { getImplicitForm3_bitlength45_double } from "../implicit-form/inp-bitlength45/double/get-implicit-form3-bitlength45-double";
+import { getImplicitForm3_bitlength45_doubleDouble } from "../implicit-form/inp-bitlength45/double-double/get-implicit-form3-bitlength45-double-double";
+import { getImplicitForm3_bitlength45_exact } from "../implicit-form/inp-bitlength45/exact/get-implicit-form3-bitlength45-exact";
+import { getImplicitForm2_bitlength45_double } from "../implicit-form/inp-bitlength45/double/get-implicit-form2-bitlength45-double";
+import { getImplicitForm2_bitlength45_doubleDouble } from "../implicit-form/inp-bitlength45/double-double/get-implicit-form2-bitlength45-double-double";
+import { getImplicitForm2_bitlength45_exact } from "../implicit-form/inp-bitlength45/exact/get-implicit-form2-bitlength45-exact";
 import { γ, γγ } from '../error-analysis/error-analysis';
-import { getImplicitForm3Exact_ } from "../implicit-form/exact/get-implicit-form3-";
-import { getImplicitForm2 } from "../implicit-form/naive/get-implicit-form2";
-import { getImplicitForm2Quad } from "../implicit-form/quad/get-implicit-form2";
-import { getImplicitForm2Exact_ } from "../implicit-form/exact/get-implicit-form2-";
-import { getImplicitForm1Quad } from "../implicit-form/quad/get-implicit-form1";
+
+
+import { getImplicitForm1_bitlength45_doubleDouble } from "../implicit-form/inp-bitlength45/double-double/get-implicit-form1-bitlength45-double-double";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { twoProduct, ddMultDd, ddAddDd, ddMultDouble2 } from "double-double";
@@ -44,7 +46,7 @@ function isPointOnBezierExtension3(ps: number[][], p: number[]): boolean {
         let { 
             coeffs: { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v },
             errorBound: { vₓₓₓ_, vₓₓᵧ_, vₓᵧᵧ_, vᵧᵧᵧ_, vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ }
-        } = getImplicitForm3(ps);
+        } = getImplicitForm3_bitlength45_double(ps);
         
         let _vₓₓₓ = abs(vₓₓₓ);
         let _vₓₓᵧ = abs(vₓₓᵧ);
@@ -144,7 +146,7 @@ function isPointOnBezierExtension3(ps: number[][], p: number[]): boolean {
         let { 
             coeffs: { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v },
             errorBound: { vₓₓₓ_, vₓₓᵧ_, vₓᵧᵧ_, vᵧᵧᵧ_, vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ }
-        } = getImplicitForm3Quad(ps);
+        } = getImplicitForm3_bitlength45_doubleDouble(ps);
         
         let _vₓₓₓ = abs(vₓₓₓ[1]);
         let _vₓₓᵧ = abs(vₓₓᵧ[1]);
@@ -238,7 +240,7 @@ function isPointOnBezierExtension3(ps: number[][], p: number[]): boolean {
     {
         // The below takes about 155 micro-seconds on a 1st gen i7 and Chrome 79
         let { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
-            getImplicitForm3Exact_(ps);
+        getImplicitForm3_bitlength45_exact(ps);
         
         // h (say height) is the the result of evaluating the implicit equation; if
         // it is 0 we are on the curve, else we're not.
@@ -294,7 +296,7 @@ function isPointOnBezierExtension2(ps: number[][], p: number[]): boolean {
         let { 
             coeffs: { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v },
             errorBound: { vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ }
-        } = getImplicitForm2(ps);
+        } = getImplicitForm2_bitlength45_double(ps);
         
         let _vₓₓ = abs(vₓₓ);
         let _vₓᵧ = abs(vₓᵧ);
@@ -357,7 +359,7 @@ function isPointOnBezierExtension2(ps: number[][], p: number[]): boolean {
         let { 
             coeffs: { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v },
             errorBound: { vₓ_, vᵧ_, v_ }
-        } = getImplicitForm2Quad(ps);
+        } = getImplicitForm2_bitlength45_doubleDouble(ps);
         
         // In the below a prefix underscore on a variable means absolute value, 
         // a postfix underscore means error bound (before multiplication by gamma).
@@ -411,7 +413,7 @@ function isPointOnBezierExtension2(ps: number[][], p: number[]): boolean {
     // error still too high - let's go exact
     {
         let { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
-            getImplicitForm2Exact_(ps);
+            getImplicitForm2_bitlength45_exact(ps);
         
         // h (say height) is the the result of evaluating the implicit equation; 
         // if it is 0 we are on the curve, else we're not.
@@ -454,7 +456,7 @@ function isPointOnBezierExtension1(ps: number[][], p: number[]): boolean {
 
     //---- pre-filter - note all coefficients below vₓ, vᵧ, v are exact
     let { coeffs: { vₓ, vᵧ, v } } = 
-        getImplicitForm1Quad(ps);
+        getImplicitForm1_bitlength45_doubleDouble(ps);
     
     // In the below a prefix underscore on a variable means absolute value, 
     // a postfix underscore means error bound (before multiplication by gamma).

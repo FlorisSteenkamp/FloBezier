@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getImplicitForm1Exact = void 0;
-const get_x_1 = require("../../to-power-basis/get-x");
-const get_y_1 = require("../../to-power-basis/get-y");
+const double_double_1 = require("double-double");
+const get_xy_1 = require("../../to-power-basis/get-xy");
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const big_float_ts_1 = require("big-float-ts");
-const { eNegativeOf, eDiff, expansionProduct } = big_float_ts_1.operators;
+const tp = double_double_1.twoProduct;
+const qdq = double_double_1.ddDiffDd;
 /**
  * Returns the exact implicit form of the given linear bezier.
  * Adapted from http://www.mare.ee/indrek/misc/2d.pdf
@@ -14,11 +14,10 @@ const { eNegativeOf, eDiff, expansionProduct } = big_float_ts_1.operators;
 function getImplicitForm1Exact(ps) {
     // The implicit form is given by:
     // vₓx + vᵧy + v = 0
-    let [a1, a0] = get_x_1.getXExact(ps);
-    let [b1, b0] = get_y_1.getYExact(ps);
-    let vₓ = b1;
-    let vᵧ = eNegativeOf(a1);
-    let v = eDiff(expansionProduct(a1, b0), expansionProduct(a0, b1));
+    let [[a1, a0], [b1, b0]] = get_xy_1.getXY(ps);
+    let vₓ = -b1;
+    let vᵧ = a1;
+    let v = qdq(tp(a0, b1), tp(a1, b0));
     return { vₓ, vᵧ, v };
 }
 exports.getImplicitForm1Exact = getImplicitForm1Exact;

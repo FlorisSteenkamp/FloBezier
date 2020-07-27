@@ -4,8 +4,8 @@
  * @param ps
  */
 declare function getImplicitForm1Exact(ps: number[][]): {
-    vₓ: number[];
-    vᵧ: number[];
+    vₓ: number;
+    vᵧ: number;
     v: number[];
 };
 export { getImplicitForm1Exact };

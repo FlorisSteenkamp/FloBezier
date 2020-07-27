@@ -21,6 +21,7 @@ const qm2 = double_double_2.ddMultBy2;
 const qdivq = double_double_2.ddDivDd;
 const eps = Number.EPSILON;
 const abs = Math.abs;
+const γ1 = error_analysis_1.γ(1);
 /**
  * Returns the self-intersection t values of the given bezier curve if it
  * exists and if both t-values are in [0,1], else returns undefined.
@@ -58,11 +59,11 @@ function bezierSelfIntersection(ps) {
     // DD = discriminant = b^2 - 4ac
     // calculate DD and its absolute error DD_
     let bb = b * b;
-    let bb_ = 2 * b_ * abs(b) + error_analysis_1.γ1 * bb; // the error in b**2
+    let bb_ = 2 * b_ * abs(b) + γ1 * bb; // the error in b**2
     let ac4 = 4 * a * c;
-    let ac4_ = 4 * (a_ * abs(c) + abs(a) * c_) + error_analysis_1.γ1 * abs(ac4);
+    let ac4_ = 4 * (a_ * abs(c) + abs(a) * c_) + γ1 * abs(ac4);
     let DD = bb - ac4;
-    let DD_ = bb_ + ac4_ + error_analysis_1.γ1 * abs(DD);
+    let DD_ = bb_ + ac4_ + γ1 * abs(DD);
     // if the discriminant is smaller than negative the error bound then
     // certainly there are no roots, i.e. no cusp and no self-intersections
     if (DD < -DD_) {
@@ -84,7 +85,7 @@ function bezierSelfIntersection(ps) {
             // let r1 = (2*c) / (-b + D);
             q1 = -b + D;
         }
-        let q1_ = b_ + D_ + error_analysis_1.γ1 * abs(q1);
+        let q1_ = b_ + D_ + γ1 * abs(q1);
         let { est: r1, err: r1_ } = divWithErr(q1, 2 * a, q1_, 2 * a_);
         let { est: r2, err: r2_ } = divWithErr(2 * c, q1, 2 * c_, q1_);
         //console.log(r1,r2);

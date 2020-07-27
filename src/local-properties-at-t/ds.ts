@@ -1,6 +1,7 @@
 
-import { evaluateDx } from "./t-to-dxy/evaluate-dx";
-import { evaluateDy } from "./t-to-dxy/evaluate-dy";
+import { evaluateDxy } from "./t-to-dxy/evaluate-dxy";
+import { getDxy } from "../to-power-basis/get-dxy";
+import { evaluate as evaluatePoly } from 'flo-poly';
 
 
 /**
@@ -12,12 +13,11 @@ import { evaluateDy } from "./t-to-dxy/evaluate-dy";
 function ds(ps: number[][], t: number): number;
 function ds(ps: number[][]): (t: number) => number;
 function ds(ps: number[][], t?: number) {
-	const evDx = evaluateDx(ps);
-	const evDy = evaluateDy(ps);
+	const [dX, dY] = getDxy(ps);
 
 	function f(t: number): number {
-		let dx = evDx(t);
-		let dy = evDy(t);
+		let dx = evaluatePoly(dX, t);
+		let dy = evaluatePoly(dY, t);
 		
 		return Math.sqrt(dx*dx + dy*dy);	
 	}

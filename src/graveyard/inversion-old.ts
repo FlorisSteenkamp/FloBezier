@@ -386,7 +386,7 @@ function inversion1(ps: number[][], p: number[][]) {
     let x1_x0 = twoDiff(x1, x0);
     let y1_y0 = twoDiff(y1, y0);
 
-    // the eCompare below ensures numerical stability
+    // the compare below ensures numerical stability
     if (eCompare(x1_x0, y1_y0) > 0) {
         let t = eDiv(
             fastExpansionSum(x, [-x0]),
@@ -408,7 +408,7 @@ function inversion1(ps: number[][], p: number[][]) {
 
 
 /**
- * Returns the t parameter value of the point closest to the given point of the
+ * Returns the t parameter value of the point closest to the given point on the
  * given line.
  * * The bit-aligned bitlength of the control point coordinates of the line and 
  * the given point must <= 52
@@ -426,7 +426,7 @@ function inversion1_BL52_1ULP(
     let x1_x0 = x1 - x0;
     let y1_y0 = y1 - y0;
 
-    // the eCompare below ensures numerical stability
+    // the compare below ensures numerical stability
     return Math.abs(x1_x0) > Math.abs(y1_y0)
         ? (x - x0) / x1_x0
         : (y - y0) / y1_y0;

@@ -1,11 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDxExact = exports.getDx = void 0;
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const big_float_ts_1 = require("big-float-ts");
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure 
+// function❗ Otherwise code is too slow❗
 const sum = big_float_ts_1.eSum;
 const tp = big_float_ts_1.twoProduct;
 const td = big_float_ts_1.twoDiff;
+const fes = big_float_ts_1.fastExpansionSum;
 /**
  * Returns the derivative of the power basis representation of a line, quadratic
  * or cubic bezier's x-coordinates.
@@ -20,10 +22,17 @@ const td = big_float_ts_1.twoDiff;
 function getDx(ps) {
     if (ps.length === 4) {
         let [[x0,], [x1,], [x2,], [x3,]] = ps;
+        // error counter rules: (see [Higham](http://ftp.demec.ufpr.br/CFD/bibliografia/Higham_2002_Accuracy%20and%20Stability%20of%20Numerical%20Algorithms.pdf))
+        //   <k>a + <l>b = <max(k,l) + 1>(a + b)
+        //   <k>a<l>b = <k + l + 1>ab
+        //   fl(a) === <1>a
         return [
-            3 * (x3 + 3 * (x1 - x2) - x0),
+            3 * ((x3 - x0) + 3 * (x1 - x2)),
+            // <4>3*<3>(<1>(x3 - x0) + <2>3*<1>(x1 - x2))
             6 * (x2 - 2 * x1 + x0),
+            // <3>6*<2>(<1>(x2 - 2*x1) + x0)
             3 * (x1 - x0) // t^0 - max bitlength increase 3
+            // <2>3*<1>(x1 - x0)
         ];
         // if x0,x1,x2,x3 <= X (for some X) and t is an element of [0,1], then
         // max(dx)(t) <= 6*X for all t.
@@ -88,7 +97,7 @@ function getDxExact(ps) {
                 [2 * x2], [-4, x1], [2 * x0]
             ]),
             //2*x1 - 2*x0,
-            big_float_ts_1.fastExpansionSum([2 * x1], [-2, x0])
+            fes([2 * x1], [-2, x0])
         ];
     }
     if (ps.length === 2) {

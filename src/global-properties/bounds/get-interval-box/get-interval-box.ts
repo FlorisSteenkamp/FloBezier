@@ -2,19 +2,22 @@
 import { evalDeCasteljauWithErr } from "../../../local-properties-at-t/t-to-xy/eval-de-casteljau-with-err";
 
 
-const u = Number.EPSILON / 2;
+const eps = Number.EPSILON;
+const u = eps/2;
 const abs = Math.abs;
 
 
 /**
- * Returns the approximate bezier curve that is the curve from t1 to t2 in such 
- * a way that the control points axis-aligned-box of the newly returned curve is 
- * guaranteed to engulf the true (numerically exact) curve control points 
- * axis-aligned box.
- * * **precondition** t1 < t2
+ * Returns an axis-aligned-box that is guaranteed to engulf the entire given 
+ * bezier curve from t1 to t2.
+ * 
+ * * **precondition:** t1 < t2
+ * * **precondition:** t1,t2 >= 0 && t1,t2 <= 1
+ * * **precondition**: 49-bit aligned coordinates (inherited from 
+ * evalDeCasteljauWithErr - can easily be relaxed)
+ * 
  * @param ps an order 1,2 or 3 bezier curve
- * @param t1 first parameter value
- * @param t2 second parameter value
+ * @param ts [first, second] parameter values, e.g. [0.11, 0.12]
  */
 function getIntervalBox(
         ps: number[][], 
@@ -28,12 +31,25 @@ function getIntervalBox(
             return getIntervalBox2(ps, ts);
         }
         return getIntervalBox1(ps, ts);
-    } else {  // ts[0] === ts[1]
-        return getIntervalBoxExactT(ps, ts[0]);
-    }
+    } 
+    
+    // ts[0] === ts[1]
+    return getIntervalBoxExactT(ps, ts[0]);
 }
 
 
+/**
+ * Returns an axis-aligned-box that is guaranteed to engulf the entire given 
+ * bezier curve from t1 to t2.
+ * 
+ * This is achievied by calculating the error bounds of a new curve calculated
+ * form t1 to t2 using a splitting algorithm and then taking its extreme 
+ * control points and finally finding a box that engulfs the control points
+ * @internal
+ * 
+ * @param ps 
+ * @param ts 
+ */
 function getIntervalBox3(
         ps: number[][], 
         ts: number[]): number[][] {
@@ -60,12 +76,11 @@ function getIntervalBox3(
     let y3_ = t2**3*y3 + t2**2*(1 - t2)*(3*t1*y3 + 3*y2*(1 - t1)) + t2*(1 - t2)**2*(3*t1**2*y3 + 
             6*t1*y2*(1 - t1) + 3*y1*(1 - t1)**2) + (1 - t2)**3*(t1**3*y3 + 3*t1**2*y2*(1 - t1) + 
             3*t1*y1*(1 - t1)**2 + y0*(1 - t1)**3);            
-        */
+    */
 
 
-    t2 = ((t2-t1) / (1-t1)) * (1 + Number.EPSILON); // <= fl(t2) > t2
+    t2 = ((t2-t1) / (1-t1)) * (1 + eps); // <= fl(t2) > t2
 
-    //let s1 = (1 - t1);  // <= exact by precondition
     let s1 = (1 - t1);  // <1>s1
     let tt1 = t1*t1;    // <1>tt1  <- error by counters
     let ts1 = t1*s1;    // <2>(<0>t1<1>s1)
@@ -154,17 +169,23 @@ function getIntervalBox3(
     let minY = Math.min(y0 - _y0, y1 - _y1, y2 - _y2, y3 - _y3);
     let maxY = Math.max(y0 + _y0, y1 + _y1, y2 + _y2, y3 + _y3);
 
-    //return [[x0,y0],[x1,y1],[x2,y2],[x3,y3]];
-
-    //console.log(x0, _x0, x1, _x1, x2, _x2, x3, _x3);
-    //console.log(x0, _x0, x1, _x1, x2, _x2, x3, _x3);
-    //console.log(y0, _y0, y1, _y1, y2, _y2, y3, _y3);
-    //console.log(y0, _y0, y1, _y1, y2, _y2, y3, _y3);
-
     return [[minX,minY],[maxX,maxY]];
 }
 
 
+/**
+ * Returns an axis-aligned-box that is guaranteed to engulf the entire given 
+ * bezier curve from t1 to t2.
+ * 
+ * This is achievied by calculating the error bounds of a new curve calculated
+ * form t1 to t2 using a splitting algorithm and then taking its extreme 
+ * control points and finally finding a box that engulfs the control points
+ *
+ * @param param0 
+ * @param param1 
+ * 
+ * @internal
+ */
 function getIntervalBox2(
         [[x0,y0],[x1,y1],[x2,y2]]: number[][], 
         [t1, t2]: number[]) {
@@ -182,9 +203,8 @@ function getIntervalBox2(
     */
 
 
-    t2 = ((t2-t1) / (1-t1)) * (1 + Number.EPSILON); // <= fl(t2) > t2
+    t2 = ((t2-t1) / (1-t1)) * (1 + eps); // <= fl(t2) > t2
 
-    //let s1 = (1 - t1);  // <= exact by precondition
     let s1 = (1 - t1);  // <1>s1
     let tt1 = t1*t1;    // <1>tt1  <- error by counters
     let ts1 = t1*s1;    // <2>(<0>t1<1>s1)
@@ -259,15 +279,22 @@ function getIntervalBox2(
     let minY = Math.min(y0 - _y0, y1 - _y1, y2 - _y2);
     let maxY = Math.max(y0 + _y0, y1 + _y1, y2 + _y2);
 
-    //return [[x0,y0],[x1,y1],[x2,y2]];
-
     return [[minX,minY],[maxX,maxY]];
 }
 
 
 /**
+ * Returns an axis-aligned-box that is guaranteed to engulf the entire given 
+ * bezier curve from t1 to t2.
+ * 
+ * This is achievied by calculating the error bounds of a new curve calculated
+ * form t1 to t2 using a splitting algorithm and then taking its extreme 
+ * control points and finally finding a box that engulfs the control points
+ *
  * @param param0 
  * @param param1 
+ * 
+ * @internal
  */
 function getIntervalBox1(
         [[x0,y0],[x1,y1]]: number[][], 
@@ -287,7 +314,7 @@ function getIntervalBox1(
     */
 
 
-    t2 = ((t2-t1) / (1-t1)) * (1 + Number.EPSILON); // <= fl(t2) > t2
+    t2 = ((t2-t1) / (1-t1)) * (1 + eps); // <= fl(t2) > t2
 
     let s1 = (1 - t1);  // <1>s1
     let s2 = (1 - t2);  // <1>s2 <= relative error bounded by u*(1 - t2)
@@ -336,15 +363,19 @@ function getIntervalBox1(
     let minY = Math.min(y0 - _y0, y1 - _y1);
     let maxY = Math.max(y0 + _y0, y1 + _y1);
 
-    //return [[x0,y0],[x1,y1]];
-
     return [[minX,minY],[maxX,maxY]];
 }
 
 
+/**
+ * @internal
+ * 
+ * @param ps 
+ * @param t 
+ */
 function getIntervalBoxExactT(
         ps: number[][], 
-        t: number) {
+        t: number): number[][] {
 
     let _pS = ps[0];
     let _pE = ps[ps.length-1];
@@ -365,6 +396,5 @@ function getIntervalBoxExactT(
 
 export { 
     getIntervalBox, 
-    getIntervalBox1, getIntervalBox2, getIntervalBox3,
-    getIntervalBoxExactT 
+    getIntervalBox1, getIntervalBox2, getIntervalBox3
 }

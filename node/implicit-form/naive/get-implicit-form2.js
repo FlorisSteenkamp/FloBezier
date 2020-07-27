@@ -3,12 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getImplicitForm2 = void 0;
 const get_xy_1 = require("../../to-power-basis/get-xy");
 /**
- * Returns an approximate implicit form of the given quadratic bezier and a
+ * Returns the implicit form of the given quadratic bezier and a
  * coefficientwise error bound.
- * * the error bound needs to be multiplied by γ === nu/(1-nu), where
- * u === Number.EPSILON / 2
- * * the coordinates of the given bezier must be 47-bit aligned
- * * Adapted from http://www.mare.ee/indrek/misc/2d.pdf
+ *
+ * * the error bound returned first needs to be multiplied by γ === nu/(1-nu),
+ * where u === Number.EPSILON / 2 before use
+ * * **precondition:** the coordinates of the given bezier must be 47-bit aligned
+ * * Adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
+ *
  * @param ps
  */
 function getImplicitForm2(ps) {

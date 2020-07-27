@@ -23,7 +23,7 @@ function getDy(ps) {
     if (ps.length === 4) {
         let [[, y0], [, y1], [, y2], [, y3]] = ps;
         return [
-            3 * (y3 + 3 * (y1 - y2) - y0),
+            3 * ((y3 - y0) + 3 * (y1 - y2)),
             6 * (y2 - 2 * y1 + y0),
             3 * (y1 - y0) // t^0 - max bitlength increase 3
         ];

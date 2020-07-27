@@ -1,6 +1,8 @@
+
 import { ds } from "../../local-properties-at-t/ds";
 import { gaussQuadrature } from "flo-gauss-quadrature";
 import { distanceBetween } from "flo-vector2d";
+
 
 /**
  * Returns the curve (linear, quadratic or cubic bezier) length in the specified 
@@ -25,10 +27,11 @@ function length(interval: number[], ps?: number[][]) {
 
 
 /**
- * Returns the curve length in the specified interval. This function is curried.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param interval - The paramter interval over which the length is 
- * to be calculated (often === [0,1]).
+ * Returns the curve length in the specified interval.
+ * 
+ * @param ps a cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ * @param interval the paramter interval over which the length is to be 
+ * calculated (often === [0,1]).
  */
 function length3(interval: number[], ps: number[][]) {
 	if (interval[0] === interval[1]) { return 0; }

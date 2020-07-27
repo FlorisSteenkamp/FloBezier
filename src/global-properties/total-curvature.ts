@@ -1,9 +1,7 @@
 
 import { gaussQuadrature } from "flo-gauss-quadrature";
-import { evaluateDx } from "../local-properties-at-t/t-to-dxy/evaluate-dx";
-import { evaluateDy } from "../local-properties-at-t/t-to-dxy/evaluate-dy";
-import { evaluateDdx } from "../local-properties-at-t/t-to-ddxy/evaluate-ddx";
-import { evaluateDdy } from "../local-properties-at-t/t-to-ddxy/evaluate-ddy";
+import { evaluateDxy } from "../local-properties-at-t/t-to-dxy/evaluate-dxy";
+import { evaluateDdxy } from "../local-properties-at-t/t-to-ddxy/evaluate-ddxy";
 
 
 /**
@@ -23,7 +21,7 @@ function totalAbsoluteCurvature(ps: number[][], interval?: number[]) {
 	function f(interval: number[] = [0,1]) {
 		// Numerically integrate the absolute curvature
 		let result = gaussQuadrature(
-				t => Math.abs(κds(ps)(t)),
+				t => Math.abs(κds(ps, t)),
 				interval
 		);
 		
@@ -51,7 +49,7 @@ function totalCurvature(ps: number[][], interval?: number[]) {
 	//const tanPs = tangent(ps);
 
 	function f(interval: number[]): number {
-		return gaussQuadrature(κds(ps), interval);
+		return gaussQuadrature(t => κds(ps,t), interval);
 		// TODO
 		/*
 		let [a,b] = interval;
@@ -67,31 +65,18 @@ function totalCurvature(ps: number[][], interval?: number[]) {
 
 
 /**
- * Helper function. This function is curried.
- * @private
+ * Helper function.
+ * 
+ * @internal
  */
-function κds(ps: number[][], t: number): number;
-function κds(ps: number[][]): (t: number) => number;
-function κds(ps: number[][], t?: number) {
-	const evDx  = evaluateDx (ps); 
-	const evDy  = evaluateDy (ps);
-	const evDdx = evaluateDdx(ps);
-	const evDdy = evaluateDdy(ps);
+function κds(ps: number[][], t: number): number {
+	const [dx, dy] = evaluateDxy(ps, t); 
+	const [ddx, ddy] = evaluateDdxy(ps, t);
 
-	function f(t: number): number {
-		let dx    = evDx (t); 
-		let dy    = evDy (t);
-		let ddx   = evDdx(t);
-		let ddy   = evDdy(t);
-		
-		let a = dx*ddy - dy*ddx;
-		let b = dx*dx + dy*dy;
-		
-		return a/b;
-	}
-
-	// Curry
-	return t === undefined ? f : f(t);
+	let a = dx*ddy - dy*ddx;
+	let b = dx*dx + dy*dy;
+	
+	return a/b;
 }
 
 

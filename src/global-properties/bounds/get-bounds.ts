@@ -1,12 +1,11 @@
 
 import { memoize } from "flo-memoize";
-import { getDx } from "../../to-power-basis/get-dx";
-import { getDy } from "../../to-power-basis/get-dy";
+import { getDxy } from "../../to-power-basis/get-dxy";
 import { allRoots } from "flo-poly";
 import { getIntervalBox } from "./get-interval-box/get-interval-box";
 import { γ } from "../../error-analysis/error-analysis";
 import { operators } from "double-double";
-import { evalDeCasteljauX, evalDeCasteljauY } from "../../local-properties-at-t/t-to-xy/eval-de-casteljau";
+import { evalDeCasteljau } from "../../local-properties-at-t/t-to-xy/eval-de-casteljau";
 
 
 const { sqrtWithErr, divWithErr } = operators;
@@ -20,7 +19,8 @@ const γ1 = γ(1);
  * Returns a tight axis-aligned bounding box bound of the given bezier curve.
  * @param ps 
  */
-let getXBoundsTight = memoize(function getXBoundsTight(ps: number[][]) {
+const getXBoundsTight = memoize(
+function getXBoundsTight(ps: number[][]) {
 	let pS = ps[0];
 	let pE = ps[ps.length-1];
 
@@ -36,7 +36,7 @@ let getXBoundsTight = memoize(function getXBoundsTight(ps: number[][]) {
 
 	if (ps.length === 2) { return { minX, maxX }; }
 
-	let dx = getDx(ps);  // <= exact if 48-bit aligned
+	let [dx,] = getDxy(ps);  // <= exact if 48-bit aligned
 
 	// Roots of derivative
 	let rootsX: { r: number; rE: number; }[];
@@ -57,7 +57,8 @@ let getXBoundsTight = memoize(function getXBoundsTight(ps: number[][]) {
 	}
 
 	return { minX, maxX };
-});
+}
+);
 
 
 // TODO - move this another library
@@ -77,7 +78,8 @@ function getLinearRoots([a,b]: number[]): { r: number; rE: number }[] {
  * Returns a tight axis-aligned bounding box bound of the given bezier curve.
  * @param ps 
  */
-let getYBoundsTight = memoize(function getYBoundsTight(ps: number[][]) {
+const getYBoundsTight = memoize(
+function getYBoundsTight(ps: number[][]) {
 	let pS = ps[0];
 	let pE = ps[ps.length-1];
 
@@ -93,7 +95,7 @@ let getYBoundsTight = memoize(function getYBoundsTight(ps: number[][]) {
 
 	if (ps.length === 2) { return { minY, maxY }; }
 
-	let dy = getDy(ps);  // <= exact if 48-bit aligned
+	let [,dy] = getDxy(ps);  // <= exact if 48-bit aligned
 	// Roots of derivative
 	let rootsY: { r: number; rE: number; }[];
 	if (ps.length === 4) {
@@ -114,7 +116,8 @@ let getYBoundsTight = memoize(function getYBoundsTight(ps: number[][]) {
 	}
 
 	return { minY, maxY };
-});
+}
+);
 
 
 
@@ -179,10 +182,12 @@ function quadRoots([a,b,c]: number[]): { r: number; rE: number }[] {
  * Returns the approximate axis-aligned bounding box together with the t values 
  * where the bounds on the bezier are reached.
  */
-let getBounds = memoize(function(ps: number[][]) {
+const getBounds = memoize(
+function getBounds(ps: number[][]) {
 	// Roots of derivative
-	let rootsX = allRoots(getDx(ps),0,1);
-	let rootsY = allRoots(getDy(ps),0,1);
+	const dxy = getDxy(ps);
+	let rootsX = allRoots(dxy[0],0,1);
+	let rootsY = allRoots(dxy[1],0,1);
 		
 	// Endpoints
 	rootsX.push(0, 1); 
@@ -201,13 +206,13 @@ let getBounds = memoize(function(ps: number[][]) {
 	// Test points
 	for (let i=0; i<rootsX.length; i++) {
 		let t = rootsX[i];
-		let x = evalDeCasteljauX(ps, t);
+		let [x] = evalDeCasteljau(ps, t);
 		if (x < minX) { minX = x;  tMinX = t; }
 		if (x > maxX) { maxX = x;  tMaxX = t; }
 	}
 	for (let i=0; i<rootsY.length; i++) {
 		let t = rootsY[i]; 
-		let y = evalDeCasteljauY(ps, t);  
+		let [,y] = evalDeCasteljau(ps, t);  
 		if (y < minY) { minY = y;  tMinY = t; }
 		if (y > maxY) { maxY = y;  tMaxY = t; }
 	}
@@ -216,7 +221,8 @@ let getBounds = memoize(function(ps: number[][]) {
 	let box = [[minX,  minY ], [maxX,  maxY ]];
 	
 	return { ts, box };
-});
+}
+);
 
 
 export { getBounds, getXBoundsTight, getYBoundsTight }

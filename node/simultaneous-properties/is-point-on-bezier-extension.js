@@ -4,10 +4,10 @@ exports.isPointOnBezierExtension = void 0;
 const get_implicit_form3_1 = require("../implicit-form/naive/get-implicit-form3");
 const get_implicit_form3_2 = require("../implicit-form/quad/get-implicit-form3");
 const error_analysis_1 = require("../error-analysis/error-analysis");
-const get_implicit_form3_3 = require("../implicit-form/exact/get-implicit-form3-");
+const get_implicit_form3_3 = require("../implicit-form/exact/get-implicit-form3");
 const get_implicit_form2_1 = require("../implicit-form/naive/get-implicit-form2");
 const get_implicit_form2_2 = require("../implicit-form/quad/get-implicit-form2");
-const get_implicit_form2_3 = require("../implicit-form/exact/get-implicit-form2-");
+const get_implicit_form2_3 = require("../implicit-form/exact/get-implicit-form2");
 const get_implicit_form1_1 = require("../implicit-form/quad/get-implicit-form1");
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const double_double_1 = require("double-double");
@@ -22,6 +22,8 @@ const fes = big_float_ts_1.fastExpansionSum;
 const sign = big_float_ts_1.eSign;
 const estimate = big_float_ts_1.eEstimate;
 const abs = Math.abs;
+const γ1 = error_analysis_1.γ(1);
+const γγ3 = error_analysis_1.γγ(3);
 /**
  * Returns true if the given point is on the given cubic bezier curve where the
  * parameter t is allowed to extend to +-infinity, i.e. t is an element of
@@ -117,7 +119,7 @@ function isPointOnBezierExtension3(ps, p) {
         let h = q6 + q8;
         let h_ = q6_ + q8_ + abs(h);
         // if the error is not too high too discern h away from zero
-        if (error_analysis_1.γ1 * h_ < abs(h)) {
+        if (γ1 * h_ < abs(h)) {
             return false; // <-- prefilter applied
         }
     }
@@ -202,14 +204,14 @@ function isPointOnBezierExtension3(ps, p) {
         let h = qaq(q6, q8);
         let h_ = q6_ + q8_ + abs(h[1]);
         // if the error is not too high too discern h away from zero
-        if (error_analysis_1.γγ3 * h_ < abs(estimate(h))) {
+        if (γγ3 * h_ < abs(estimate(h))) {
             return false; // <-- prefilter applied
         }
     }
     // error still too high - let's go exact
     {
         // The below takes about 155 micro-seconds on a 1st gen i7 and Chrome 79
-        let { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = get_implicit_form3_3.getImplicitForm3Exact_(ps);
+        let { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = get_implicit_form3_3.getImplicitForm3Exact(ps);
         // h (say height) is the the result of evaluating the implicit equation; if
         // it is 0 we are on the curve, else we're not.
         // let h =
@@ -301,7 +303,7 @@ function isPointOnBezierExtension2(ps, p) {
         let h = q8 + v;
         let h_ = q8_ + v_ + abs(h);
         // if the error is not too high too discern h away from zero
-        if (error_analysis_1.γ1 * h_ < abs(h)) {
+        if (γ1 * h_ < abs(h)) {
             return false; // <-- prefilter applied
         }
     }
@@ -347,13 +349,13 @@ function isPointOnBezierExtension2(ps, p) {
         let h = qaq(q8, v);
         let h_ = q8_ + v_ + abs(h[1]);
         // if the error is not too high too discern h away from zero
-        if (error_analysis_1.γγ3 * h_ < abs(estimate(h))) {
+        if (γγ3 * h_ < abs(estimate(h))) {
             return false; // <-- prefilter applied
         }
     }
     // error still too high - let's go exact
     {
-        let { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = get_implicit_form2_3.getImplicitForm2Exact_(ps);
+        let { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = get_implicit_form2_3.getImplicitForm2Exact(ps);
         // h (say height) is the the result of evaluating the implicit equation; 
         // if it is 0 we are on the curve, else we're not.
         // let h =
@@ -403,7 +405,7 @@ function isPointOnBezierExtension1(ps, p) {
     let h = qaq(q7, v);
     let h_ = q7_ + abs(h[1]);
     // if the error is not too high too discern h away from zero
-    if (error_analysis_1.γγ3 * h_ < abs(estimate(h))) {
+    if (γγ3 * h_ < abs(estimate(h))) {
         return false; // <-- prefilter applied
     }
     q7 = epr(vₓx, vᵧy);

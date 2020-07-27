@@ -10,9 +10,12 @@ const qdq = double_double_1.ddDiffDd;
 const qmd = double_double_1.ddMultDouble2;
 const abs = Math.abs;
 const u = Number.EPSILON / 2;
+const γ1 = error_analysis_1.γ(1);
 /**
  * Evaluates the given bezier curve at the parameter t, including error.
+ *
  * * **precondition**: 49-bit aligned coordinates
+ *
  * @param ps An order 1, 2 or 3 bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param t The parameter value where the bezier should be evaluated
  **/
@@ -23,8 +26,8 @@ function evalDeCasteljauWithErr(ps, t) {
     else if (t === 1) {
         return { p: ps[ps.length - 1], pE: [0, 0] };
     }
-    //let s = 1-t;  // <= exact if eps | t, but not a precondition here
-    //let s = 1 - t;  // <1>s1
+    // let s = 1 - t;  // <= exact if eps | t, but not a precondition here
+    // let s = 1 - t;  // <1>s1
     if (ps.length === 4) {
         const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
         let _x0 = abs(x0);
@@ -53,7 +56,7 @@ function evalDeCasteljauWithErr(ps, t) {
         //let _a12 = <5>(<2>_a11 + <4>(<3>(<2>_a21 + <2>_a11)*t));
         let _x = _a02 + (_a12 + _a02) * t;
         //let _x = <8>(<5>_a02 + <7>(<6>(<5>_a12 + <5>_a02)*t));
-        _x = 8 * error_analysis_1.γ1 * _x;
+        _x = 8 * γ1 * _x;
         let b01 = y0 + (y1 - y0) * t;
         let b11 = y1 + (y2 - y1) * t;
         let b21 = y2 + (y3 - y2) * t;
@@ -66,7 +69,7 @@ function evalDeCasteljauWithErr(ps, t) {
         let _b02 = _b01 + (_b11 + _b01) * t;
         let _b12 = _b11 + (_b21 + _b11) * t;
         let _y = _b02 + (_b12 + _b02) * t;
-        _y = 8 * error_analysis_1.γ1 * _y;
+        _y = 8 * γ1 * _y;
         return { p: [x, y], pE: [_x, _y] };
     }
     else if (ps.length === 3) {
@@ -86,14 +89,14 @@ function evalDeCasteljauWithErr(ps, t) {
         //let _a11 = <2>(_x1 + <1>((_x2 + _x1)*t));
         let _x = _a01 + (_a11 + _a01) * t;
         //let _x = <5>(<2>_a01 + <4>((<3>(<2>_a11 + <2>_a01))*t));
-        _x = 5 * error_analysis_1.γ1 * _x;
+        _x = 5 * γ1 * _x;
         let b01 = y0 + (y1 - y0) * t;
         let b11 = y1 + (y2 - y1) * t;
         let y = b01 + (b11 - b01) * t;
         let _b01 = _y0 + (_y1 + _y0) * t;
         let _b11 = _y1 + (_y2 + _y1) * t;
         let _y = _b01 + (_b11 + _b01) * t;
-        _y = 5 * error_analysis_1.γ1 * _y;
+        _y = 5 * γ1 * _y;
         return { p: [x, y], pE: [_x, _y] };
     }
     else if (ps.length === 2) {
@@ -106,10 +109,10 @@ function evalDeCasteljauWithErr(ps, t) {
         let y = y0 + (y1 - y0) * t;
         let _x = _x0 + (_x1 + _x0) * t;
         //let _x = <2>(_x0 + <1>((_x1 + _x0)*t));
-        _x = 2 * error_analysis_1.γ1 * _x;
+        _x = 2 * γ1 * _x;
         let _y = _y0 + (_y1 + _y0) * t;
         //let _y = <2>(_y0 + <1>((_y1 + _y0)*t));
-        _y = 2 * error_analysis_1.γ1 * _y;
+        _y = 2 * γ1 * _y;
         return { p: [x, y], pE: [_x, _y] };
     }
 }
@@ -159,7 +162,7 @@ function evalDeCasteljauWithErrQuad(ps, t) {
         let _x = _a02 + (_a12 + _a02) * _t;
         //let _x = <10>(<6>_a02 + <9>(<7>(<6>_a12 + <6>_a02)*t));
         // Note: using γ1 or u doesn't really make any practical difference
-        _x = 10 * error_analysis_1.γ1 * error_analysis_1.γ1 * _x;
+        _x = 10 * γ1 * γ1 * _x;
         let b01 = qaq([0, y0], qmd(y1 - y0, t)); // 49-bit aligned => y1 - y0 exact
         let b11 = qaq([0, y1], qmd(y2 - y1, t)); // 49-bit aligned => y2 - y1 exact
         let b21 = qaq([0, y2], qmd(y3 - y2, t)); // 49-bit aligned => y3 - y2 exact
@@ -172,7 +175,7 @@ function evalDeCasteljauWithErrQuad(ps, t) {
         let _b02 = _b01 + (_b11 + _b01) * _t;
         let _b12 = _b11 + (_b21 + _b11) * _t;
         let _y = _b02 + (_b12 + _b02) * _t;
-        _y = 10 * error_analysis_1.γ1 * error_analysis_1.γ1 * _y;
+        _y = 10 * γ1 * γ1 * _y;
         return { p: [x, y], pE: [_x, _y] };
     }
     else if (ps.length === 3) {
@@ -192,7 +195,7 @@ function evalDeCasteljauWithErrQuad(ps, t) {
         //let _a11 = <2>(_x1 + <1>((_x2 + _x1)*_t));
         let _x = _a01 + (_a11 + _a01) * _t; // <6>
         //let _x = <6>(<2>_a01 + <5>(<3>(<2>_a11 + <2>_a01)*_t));
-        _x = 6 * error_analysis_1.γ1 * error_analysis_1.γ1 * _x;
+        _x = 6 * γ1 * γ1 * _x;
         let b01 = qaq([0, y0], qmd(y1 - y0, t)); // 49-bit aligned => y1 - y0 exact
         let b11 = qaq([0, y1], qmd(y2 - y1, t)); // 49-bit aligned => y2 - y1 exact
         let y = qaq(b01, qmq(qdq(b11, b01), t));
@@ -202,7 +205,7 @@ function evalDeCasteljauWithErrQuad(ps, t) {
         //let _b11 = <2>(_y1 + <1>((_y2 + _y1)*_t));
         let _y = _b01 + (_b11 + _b01) * _t; // <6>
         //let _y = <6>(<2>_b01 + <5>(<3>(<2>_b11 + <2>_b01)*_t));
-        _y = 6 * error_analysis_1.γ1 * error_analysis_1.γ1 * _y;
+        _y = 6 * γ1 * γ1 * _y;
         return { p: [x, y], pE: [_x, _y] };
     }
     else if (ps.length === 2) {
@@ -215,10 +218,10 @@ function evalDeCasteljauWithErrQuad(ps, t) {
         let y = qaq([0, y0], qmd(y1 - y0, t)); // 49-bit aligned => y1 - y0 exact
         let _x = _x0 + (_x1 + _x0) * _t; // <2>
         //let _x = <2>(_x0 + <1>((_x1 + _x0)*_t));
-        _x = 2 * error_analysis_1.γ1 * error_analysis_1.γ1 * _x;
+        _x = 2 * γ1 * γ1 * _x;
         let _y = _y0 + (_y1 + _y0) * _t; // <2>
         //let _y = <2>(_y0 + <1>((_y1 + _y0)*_t));
-        _y = 2 * error_analysis_1.γ1 * error_analysis_1.γ1 * _y;
+        _y = 2 * γ1 * γ1 * _y;
         return { p: [x, y], pE: [_x, _y] };
     }
 }

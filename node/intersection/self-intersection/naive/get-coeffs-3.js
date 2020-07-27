@@ -4,6 +4,7 @@ exports.getCoeffs3 = void 0;
 const error_analysis_1 = require("../../../error-analysis/error-analysis");
 const get_xy_1 = require("../../../to-power-basis/get-xy");
 const abs = Math.abs;
+const γ1 = error_analysis_1.γ(1);
 /**
  * Get self-intersection coefficients
  * * **precondition**: max bit-aligned bitlength: 47
@@ -63,7 +64,7 @@ function getCoeffs3(ps) {
     // Solve: u2*t**2 + u1*t + u0 = 0
     return {
         coeffs: [u2, u1, u0],
-        errBound: [u2_, u1_, u0_].map(c => error_analysis_1.γ1 * c)
+        errBound: [u2_, u1_, u0_].map(c => γ1 * c)
     };
 }
 exports.getCoeffs3 = getCoeffs3;

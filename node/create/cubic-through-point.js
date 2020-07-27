@@ -9,6 +9,7 @@ exports.cubicThroughPointGiven013 = void 0;
  * @param p a point through which the bezier should go
  * @param t a t parameter value at which the bezier should go through the
  * point - this is necessary due to a degree of freedom still left
+ *
  * * **non-exact:** the returned bezier does not necessarily go through the
  * point *exactly*.
  */

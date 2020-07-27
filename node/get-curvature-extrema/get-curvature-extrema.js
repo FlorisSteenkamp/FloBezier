@@ -2,87 +2,96 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCurvatureExtrema = void 0;
 const flo_poly_1 = require("flo-poly");
-const get_curvature_extrema_brackets_1 = require("./get-curvature-extrema-brackets");
-const curvature_1 = require("../local-properties-at-t/curvature");
+const get_abs_curvature_extrema_polys_1 = require("./get-abs-curvature-extrema-polys");
+const is_line_1 = require("../global-properties/type/is-line");
+const is_cubic_really_quad_1 = require("../global-properties/type/is-cubic-really-quad");
+const to_quad_from_cubic_1 = require("../transformation/degree-or-type/to-quad-from-cubic");
 /**
- * Finds the osculating circles and inflection points for the given bezier.
- * @param ps
+ * Returns the parameter t values (in [0,1]) of local minimum / maximum absolute
+ * curvature for the given bezier curve.
+ *
+ * If there are an infinite number of such t values (such as is the case for a
+ * line), an empty array is returned.
+ *
+ * * see [MvG](https://math.stackexchange.com/a/1956264/130809)'s excellent
+ * answer on math.stackexchange
+ * * endpoints are not considered by default
+ * * **non-exact:** the resulting t values may not be the exact t values of the
+ * extrema due to floating point roundof during calculation
+ *
+ * @param ps an order 1, 2 or 3 bezier curve given as an array of control
+ * points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  */
 function getCurvatureExtrema(ps) {
-    if (ps.length === 2) {
-        return { maxCurvatureTs: [], maxNegativeCurvatureTs: [] };
+    if (is_line_1.isLine(ps)) {
+        return { minima: [], maxima: [], inflections: [] };
     }
-    else if (ps.length === 3) {
-        // See e.g. https://math.stackexchange.com/a/2971112
-        // TODO
-        return { maxCurvatureTs: [], maxNegativeCurvatureTs: [] };
+    if (ps.length === 4 && is_cubic_really_quad_1.isCubicReallyQuad(ps)) {
+        ps = to_quad_from_cubic_1.toQuadraticFromCubic(ps);
     }
-    let maxCurvatureTs = [];
-    let maxNegativeCurvatureTs = [];
-    let brackets = get_curvature_extrema_brackets_1.getCurvatureExtremaBrackets(ps).brackets;
-    let κPs = curvature_1.κ(ps); // The curvature function
-    let lenb = brackets.length;
-    for (let k = 0; k < lenb; k++) {
-        let bracket = brackets[k];
-        if (!bracket) {
-            continue;
+    if (ps.length === 3) {
+        const poly = getCurvatureExtremaQuadraticPoly(ps);
+        const maxima = flo_poly_1.allRoots(poly, 0, 1);
+        return {
+            minima: [],
+            maxima,
+            inflections: []
+        };
+    }
+    const polys = get_abs_curvature_extrema_polys_1.getAbsCurvatureExtremaPolys(ps);
+    const p1 = polys.inflectionPoly;
+    const p2 = polys.otherExtremaPoly;
+    const ts = flo_poly_1.allRoots(p2, 0, 1);
+    // get second derivative (using product rule) to see if it is a local 
+    // minimum or maximum, i.e. diff(p1*p2) = p1'*p2 + p1*p2' = dp1*p2 + p1*dp2
+    // = p1*dp2 (since dp1*p2 === 0)
+    const dp2 = flo_poly_1.differentiate(p2);
+    const minima = [];
+    const maxima = [];
+    for (let i = 0; i < ts.length; i++) {
+        const t = ts[i];
+        const dp2_ = flo_poly_1.evaluate(dp2, t);
+        const p1_ = flo_poly_1.evaluate(p1, t);
+        const secondDerivative = p1_ * dp2_;
+        //let κ = curvature(ps, t);
+        if (secondDerivative >= 0) {
+            minima.push(t);
         }
-        let root = lookForRoot(ps, bracket);
-        if (!root) {
-            continue;
-        }
-        let κ_ = -κPs(root);
-        // Check if local extrema is a maximum or minimum.
-        let κAtMinsd = -κPs(bracket[0]);
-        let κAtMaxsd = -κPs(bracket[1]);
-        if (κ_ > κAtMinsd && κ_ > κAtMaxsd) {
-            // maximum
-            if (κ_ > 0) {
-                maxCurvatureTs.push(root);
-            }
-        }
-        else if (κ_ <= κAtMinsd && κ_ <= κAtMaxsd) {
-            // minimum
-            if (κ_ < 0) {
-                maxNegativeCurvatureTs.push(root);
-            }
+        else {
+            maxima.push(t);
         }
     }
-    return { maxCurvatureTs, maxNegativeCurvatureTs };
+    const inflections = flo_poly_1.allRoots(p1, 0, 1);
+    return { minima, maxima, inflections };
 }
 exports.getCurvatureExtrema = getCurvatureExtrema;
-function lookForRoot(ps, [minsd, maxsd]) {
-    // At this point there can be exactly 0 or 1 roots within 
-    // [minsd, maxsd]
-    let dκMod_ = dκMod(ps);
-    let c0 = dκMod_(minsd);
-    let c1 = dκMod_(maxsd);
-    if (c0 * c1 >= 0) {
-        return;
-    }
-    // There is exactly one root in the interval.
-    let root = flo_poly_1.brent(dκMod_, minsd, maxsd);
-    return root;
-}
-function dκMod(ps, t) {
-    let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
-    function f(t) {
-        let ts = t * t;
-        let omt = 1 - t;
-        let a = ts * x3;
-        let b = ts * y3;
-        let c = 2 * t - 3 * ts;
-        let d = (3 * t - 1) * omt;
-        let e = omt * omt;
-        let f = 3 * (a + c * x2 - d * x1 - e * x0);
-        let g = 3 * (b + c * y2 - d * y1 - e * y0);
-        let h = 6 * (t * y3 - (3 * t - 1) * y2 + (3 * t - 2) * y1 + omt * y0);
-        let i = 6 * (t * x3 - (3 * t - 1) * x2 + (3 * t - 2) * x1 + omt * x0);
-        let j = Math.sqrt(f * f + g * g);
-        return 4 * (f * (y3 - 3 * y2 + 3 * y1 - y0) -
-            g * (x3 - 3 * x2 + 3 * x1 - x0)) * Math.pow(j, 3) -
-            (f * h - i * g) * (2 * h * g + 2 * i * f) * j;
-    }
-    return t === undefined ? f : f(t);
+/**
+ * Returns the polynomial whose zero is the t value of maximum absolute
+ * curvature for the given *quadratic* bezier curve.
+ *
+ * * **precondition:** the given parabola is not degenerate to a line
+ * * **non-exact:** there is floating point roundof during calculation
+ * * see e.g. [math.stackexchange](https://math.stackexchange.com/a/2971112)'s
+ * answer by [KeithWM](https://math.stackexchange.com/a/2971112/130809)
+ *
+ * @param ps an order 2 bezier curve given as an array of control points,
+ * e.g. `[[0,0],[1,1],[2,1]]`
+ *
+ * @internal
+ */
+function getCurvatureExtremaQuadraticPoly(ps) {
+    // Find the point of max curvature (of the parabola)
+    // calculate t*
+    const [[x0, y0], [x1, y1], [x2, y2]] = ps;
+    const x10 = x1 - x0;
+    const x21 = x2 - x1;
+    const wx = x21 - x10;
+    const y10 = y1 - y0;
+    const y21 = y2 - y1;
+    const wy = y21 - y10;
+    const n = x0 * (wx - x1) - x1 * (x21 - x1) +
+        y0 * (wy - y1) - y1 * (y21 - y1);
+    const d = wx * wx + wy * wy;
+    return [d, -n];
 }
 //# sourceMappingURL=get-curvature-extrema.js.map

@@ -8,7 +8,8 @@ const { orient2d } = big_float_ts_1.operators;
  * Returns true if the given bezier is a line or a line in diguise, i.e. if all
  * control points are collinear.
  *
- * Robust: Robust for any bitlength of the given coordinates.
+ * * **exact:** for any bitlength of the given coordinates.
+ *
  * @param ps An order 1, 2 or 3 bezier curve.
  */
 function isLine(ps) {

@@ -6,10 +6,11 @@ const abs = Math.abs;
 /**
  * Returns an approximate implicit form of the given cubic bezier and a
  * coefficientwise error bound.
- * * the error bound needs to be multiplied by γ === nu/(1-nu), where
- * u === Number.EPSILON / 2
- * * the coordinates of the given bezier must be 47-bit aligned
- * * Adapted from http://www.mare.ee/indrek/misc/2d.pdf
+ *
+ * * the error bound returned needs first to be multiplied by γ === nu/(1-nu),
+ * where u === Number.EPSILON / 2 before use
+ * * **precondition:** the coordinates of the given bezier must be 47-bit aligned
+ * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * * takes about 1.2 micro-seconds on a 1st gen i7 and Chrome 79
  * @param ps
  */
