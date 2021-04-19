@@ -1,4 +1,3 @@
-
 import { γ } from "../../error-analysis/error-analysis";
 import { ddMultDd, ddAddDd, ddDiffDd, ddMultDouble2 } from "double-double";
 
@@ -17,8 +16,11 @@ const γ1 = γ(1);
  * Evaluates the given bezier curve at the parameter t given as a double-doulbe, 
  * including error.
  * * **precondition**: 49-bit aligned coordinates
+ * 
  * @param ps An order 1, 2 or 3 bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param t The parameter value where the bezier should be evaluated
+ * 
+ * @doc
  **/
 function evalDeCasteljauWithErrQuad(
 		ps: number[][], 

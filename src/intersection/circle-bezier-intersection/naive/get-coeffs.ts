@@ -6,6 +6,8 @@ import { getXY } from "../../../to-power-basis/get-xy";
  * 
  * @param circle a circle
  * @param ps a cubic bezier curve
+ * 
+ * @doc
  */
 function getCoeffsCubic(
         circle: { center: number[], radius: number}, 

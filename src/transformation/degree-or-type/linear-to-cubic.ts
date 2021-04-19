@@ -1,7 +1,10 @@
 
 /**
  * Returns a cubic bezier from the given line with evenly spaced control points.
+ * 
  * @param l a 2d line represented by two points
+ * 
+ * @doc
  */
 function linearToCubic(ps: number[][]) {
 	let [[x0,y0],[x1,y1]] = ps;

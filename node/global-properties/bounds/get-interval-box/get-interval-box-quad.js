@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getIntervalBoxExactTQuad = exports.getIntervalBox3Quad = exports.getIntervalBox2Quad = exports.getIntervalBox1Quad = exports.getIntervalBoxQuad = void 0;
-const eval_de_casteljau_with_err_1 = require("../../../local-properties-at-t/t-to-xy/eval-de-casteljau-with-err");
+const dd_eval_de_casteljau_with_err_1 = require("../../../local-properties-at-t/t-to-xy/dd-eval-de-casteljau-with-err");
 const double_double_1 = require("double-double");
 const { ddDiffDd, ddDivDdWithError, ddAddDouble, ddMultDd, ddMultDouble2, ddAddDd, ddMultBy2, ddMin, ddMax } = double_double_1.operators;
 const u = Number.EPSILON / 2;
@@ -317,7 +317,7 @@ function getIntervalBoxExactTQuad(ps, t) {
             [pEx, pEy]
         ];
     }
-    let { p, pE } = eval_de_casteljau_with_err_1.evalDeCasteljauWithErrQuad(ps, t);
+    let { p, pE } = dd_eval_de_casteljau_with_err_1.evalDeCasteljauWithErrQuad(ps, t);
     return [
         [qad(p[0], -pE[0]), qad(p[1], -pE[1])],
         [qad(p[0], +pE[0]), qad(p[1], +pE[1])]

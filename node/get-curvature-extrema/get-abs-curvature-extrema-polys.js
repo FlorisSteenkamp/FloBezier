@@ -1,10 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAbsCurvatureExtremaPolys = void 0;
-const get_dx_1 = require("../to-power-basis/get-dx");
-const get_ddx_1 = require("../to-power-basis/get-ddx");
-const get_dy_1 = require("../to-power-basis/get-dy");
-const get_ddy_1 = require("../to-power-basis/get-ddy");
+const get_dxy_1 = require("../to-power-basis/get-dxy");
+const get_ddxy_1 = require("../to-power-basis/get-ddxy");
 const get_dddxy_1 = require("../to-power-basis/get-dddxy");
 /**
  * Returns the polynomials whose zeros are the t values of the local
@@ -29,10 +27,8 @@ function getAbsCurvatureExtremaPolys(ps) {
     // dd(kappa^2)/dt === (x′′y′ − x′y′′)*((x′′′y′ − x′y′′′)(x′2 + y′2) − 3(x′x′′ + y′y′′)(x′′y′ − x′y′′))
     // Inflection points at: (x′′y′ − x′y′′) === 0
     // Max abs curvature at: ((x′′′y′ − x′y′′′)(x′2 + y′2) − 3(x′x′′ + y′y′′)(x′′y′ − x′y′′)) === 0
-    const [dx2, dx1, dx0] = get_dx_1.getDx(ps); // max bitlength increase === 5
-    const [ddx1, ddx0] = get_ddx_1.getDdx(ps); // max bitlength increase === 6
-    const [dy2, dy1, dy0] = get_dy_1.getDy(ps); // max bitlength increase === 5
-    const [ddy1, ddy0] = get_ddy_1.getDdy(ps); // max bitlength increase === 6
+    const [[dx2, dx1, dx0], [dy2, dy1, dy0]] = get_dxy_1.getDxy(ps); // max bitlength increase === 5
+    const [[ddx1, ddx0], [ddy1, ddy0]] = get_ddxy_1.getDdxy(ps); // max bitlength increase === 6
     const [dddx, dddy] = get_dddxy_1.getDddxy(ps); // max bitlength increase === 6
     // ((x′′′y′ − x′y′′′)(x′2 + y′2) − 3(x′x′′ + y′y′′)(x′′y′ − x′y′′))
     // or 

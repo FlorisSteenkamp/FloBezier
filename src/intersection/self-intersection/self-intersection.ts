@@ -1,4 +1,3 @@
-
 import { getCoeffs3 } from "./naive/get-coeffs-3";
 import { getCoeffs3Exact_ } from "./exact/get-coeffs-3-";
 import { γ } from "../../error-analysis/error-analysis";
@@ -34,7 +33,10 @@ const γ1 = γ(1);
  * * only cubic (or higher order) bezier curves have self-intersections
  * * see http://www.mare.ee/indrek/misc/2d.pdf
  * * the returned t values are within 1 ulp accurate
+ * 
  * @param ps A cubic bezier curve.
+ * 
+ * @doc
  */
 function bezierSelfIntersection(ps: number[][]): number[] {
     if (ps.length < 4) {

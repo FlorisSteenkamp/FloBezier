@@ -57,7 +57,7 @@ describe('getCurvatureExtrema', function() {
             // simple quadratic
             const ps = [[1,10],[6,3],[15,7]];
             const extrema = getCurvatureExtrema(ps);
-            expect(extrema).to.deep.eq({ minima: [], maxima: [0.41605839416058393], inflections: [] });
+            expect(extrema).to.deep.eq({ minima: [], maxima: [0.416058394160584], inflections: [] });
         }
         {
             // simple quadratic (rotated)
@@ -78,7 +78,7 @@ describe('getCurvatureExtrema', function() {
             const extrema = getCurvatureExtrema(ps);
             expect(extrema).to.deep.eq({ 
                 minima: [], 
-                maxima: [0.4160583941605839], 
+                maxima: [0.4160583941605838],
                 inflections: [] 
             });
         }
@@ -130,8 +130,8 @@ describe('getCurvatureExtrema', function() {
             //console.log('extrema: ', extrema);
             expect(extrema).to.deep.eq({ 
                 minima: [], 
-                maxima: [0.1561714717143775, 0.8457091576527147], 
-                inflections: [0.4937495103040197] 
+                maxima: [0.15617147171437754, 0.8457091576527159], 
+                inflections: [0.49374951030401965] 
             });
         }
         {
@@ -149,8 +149,8 @@ describe('getCurvatureExtrema', function() {
             //console.log('extrema: ', extrema);
             expect(extrema).to.deep.eq({ 
                 minima: [], 
-                maxima: [0.1491637417271294, 0.8508362582728728],
-                inflections: [0.4999999999999998] 
+                maxima: [0.14916374172712937, 0.8508362582728706],
+                inflections: [0.5] 
             });
         }
         {
@@ -161,16 +161,16 @@ describe('getCurvatureExtrema', function() {
             const extrema = getCurvatureExtrema(ps);
             //console.log('extrema: ', extrema);
             expect(extrema).to.deep.eq({
-                minima: [0.32569954793752887],
+                minima: [0.3256995479375282],
                 maxima: [
-                    0.21061248315673772,
-                    0.5083891656903232,
-                    0.7339044004159316,
-                    0.9196664453338176
+                    0.21061248315673686,
+                    0.5083891656903233,
+                    0.7339044004159357,
+                    0.9196664453338146
                 ],
                 inflections: [
-                    0.6342938142121818,
-                    0.8521926722743047
+                    0.6342938142121816,
+                    0.8521926722743046
                 ] 
             });
         }
@@ -223,11 +223,11 @@ describe('getCurvatureExtrema', function() {
             //console.log('extrema: ', extrema);
             expect(extrema).to.deep.eq({
                 minima: [
-                    0.4999231476896653
+                    0.49992314768993035
                 ],
                 maxima: [
-                    0.3729890092838631, 
-                    0.626878156038763
+                    0.37298900928385187,
+                    0.6268781560382795
                 ],
                 inflections: [] 
             });

@@ -1,10 +1,10 @@
 /**
  * Returns the curvature, κ, at a specific t.
  *
- * This function is curried.
+ * * this function is curried.
+ * * **alias**: curvature
  *
- * Alias of curvature.
- * @param ps An order 1, 2 or 3 bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ * @param ps An order 1, 2 or 3 bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param t The parameter value where the curvature should be evaluated
  */
 declare function κ(ps: number[][], t: number): number;

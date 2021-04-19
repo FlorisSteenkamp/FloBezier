@@ -1,14 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ds = void 0;
-const evaluate_dx_1 = require("./t-to-dxy/evaluate-dx");
-const evaluate_dy_1 = require("./t-to-dxy/evaluate-dy");
+const get_dxy_1 = require("../to-power-basis/get-dxy");
+const flo_poly_1 = require("flo-poly");
 function ds(ps, t) {
-    const evDx = evaluate_dx_1.evaluateDx(ps);
-    const evDy = evaluate_dy_1.evaluateDy(ps);
+    const [dX, dY] = get_dxy_1.getDxy(ps);
     function f(t) {
-        let dx = evDx(t);
-        let dy = evDy(t);
+        let dx = flo_poly_1.Horner(dX, t);
+        let dy = flo_poly_1.Horner(dY, t);
         return Math.sqrt(dx * dx + dy * dy);
     }
     // Curry

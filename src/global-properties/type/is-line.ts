@@ -1,4 +1,3 @@
-
 import { operators } from "big-float-ts";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
@@ -12,6 +11,8 @@ const { orient2d } = operators;
  * * **exact:** for any bitlength of the given coordinates.
  * 
  * @param ps An order 1, 2 or 3 bezier curve.
+ * 
+ * @doc
  */
 function isLine(ps: number[][]) {
     if (ps.length === 2) {

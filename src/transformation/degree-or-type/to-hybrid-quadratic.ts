@@ -1,10 +1,9 @@
-
 /**
  * Returns the hybrid quadratic version of the given cubic bezier. For a 
  * definition of hybrid quadratic bezier curves see this paper:
  * http://scholarsarchive.byu.edu/cgi/viewcontent.cgi?article=2206&context=etd
- * @param ps a cubic bezier curve.
- * @returns An array of three quadratic bezier points where the 
+ * 
+ * * returns An array of three quadratic bezier points where the 
  * middle point is a 'hybrid' point represented as a line (itself represented
  * by two points (a linear bezier curve)) which can be evaluated at a different 
  * t value (call it th). If evaluated at the same t value the result is the same 
@@ -13,6 +12,10 @@
  * bound around the orginal cubic bezier curve. The length of the linear bezier
  * curve mentioned above is a measure of how closely the cubic can be
  * represented as a quadratic bezier curve.
+ * 
+ * @param ps a cubic bezier curve.
+ * 
+ * @doc
  */
 function toHybridQuadratic(ps: number[][]): [
         [number, number], 

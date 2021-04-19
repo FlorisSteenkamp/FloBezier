@@ -1,4 +1,3 @@
-
 import { 
     twoProduct, ddNegativeOf, ddMultBy2, 
     ddMultDouble2, ddMultDd, ddDiffDd, ddAddDd, ddDivBy2
@@ -39,6 +38,8 @@ const qaq = ddAddDd;       // error -> 3*γ²
  * 
  * @param coeffsX 
  * @param coeffsY 
+ * 
+ * @doc
  */
 function getImplicitForm3_bitlength45_doubleDouble(ps: number[][]) {
     let [[a3,a2,a1,a0],[b3,b2,b1,b0]] = getXY(ps);

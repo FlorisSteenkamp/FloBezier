@@ -1,7 +1,6 @@
-
 import { operators } from "big-float-ts";
 
-
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
 const { twoProduct, eDiff, fastExpansionSum, eSign } = operators;
 
 const u = Number.EPSILON / 2;
@@ -14,6 +13,8 @@ const abs = Math.abs;
  * * **exact:** for any bitlength of the coefficients
  * 
  * @param ps a cubic bezier curve
+ * 
+ * @doc
  */
 function isCubicReallyQuad(ps: number[][]) {
     let [[x0,y0],[x1,y1],[x2,y2],[x3,y3]] = ps;

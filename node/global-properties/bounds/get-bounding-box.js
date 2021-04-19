@@ -11,9 +11,9 @@ const get_bounds_1 = require("./get-bounds");
  * @returns the axis-aligned bounding box in the form
  * [[minx, miny], [maxx,maxy]
  */
-let getBoundingBox = flo_memoize_1.memoize(function (ps) {
-    let xBounds = get_bounds_1.getXBoundsTight(ps);
-    let yBounds = get_bounds_1.getYBoundsTight(ps);
+const getBoundingBox = flo_memoize_1.memoize(function getBoundingBox(ps) {
+    const xBounds = get_bounds_1.getXBoundsTight(ps);
+    const yBounds = get_bounds_1.getYBoundsTight(ps);
     return [
         [xBounds.minX.box[0][0], yBounds.minY.box[0][1]],
         [xBounds.maxX.box[1][0], yBounds.maxY.box[1][1]]

@@ -65,21 +65,21 @@ function splitCubicAt(ps, t) {
     let s = 1 - t;
     /** The split point */
     let p = [
-        x3 * Math.pow(t, 3) + 3 * x2 * s * Math.pow(t, 2) + 3 * x1 * Math.pow(s, 2) * t + x0 * Math.pow(s, 3),
-        y3 * Math.pow(t, 3) + 3 * y2 * s * Math.pow(t, 2) + 3 * y1 * Math.pow(s, 2) * t + y0 * Math.pow(s, 3)
+        x3 * t ** 3 + 3 * x2 * s * t ** 2 + 3 * x1 * s ** 2 * t + x0 * s ** 3,
+        y3 * t ** 3 + 3 * y2 * s * t ** 2 + 3 * y1 * s ** 2 * t + y0 * s ** 3
     ];
     let ps1 = [
         [x0, y0],
         [x1 * t + x0 * s,
             y1 * t + y0 * s],
-        [x2 * Math.pow(t, 2) + 2 * x1 * s * t + x0 * Math.pow(s, 2),
-            y2 * Math.pow(t, 2) + 2 * y1 * s * t + y0 * Math.pow(s, 2)],
+        [x2 * t ** 2 + 2 * x1 * s * t + x0 * s ** 2,
+            y2 * t ** 2 + 2 * y1 * s * t + y0 * s ** 2],
         p
     ];
     let ps2 = [
         p,
-        [x3 * Math.pow(t, 2) + 2 * x2 * t * s + x1 * Math.pow(s, 2),
-            y3 * Math.pow(t, 2) + 2 * y2 * t * s + y1 * Math.pow(s, 2)],
+        [x3 * t ** 2 + 2 * x2 * t * s + x1 * s ** 2,
+            y3 * t ** 2 + 2 * y2 * t * s + y1 * s ** 2],
         [x3 * t + x2 * s,
             y3 * t + y2 * s],
         [x3, y3]
@@ -254,8 +254,8 @@ function splitQuadAt(ps, t) {
     let s = 1 - t;
     /** The split point */
     let p = [
-        x0 * Math.pow(s, 2) + 2 * x1 * s * t + x2 * Math.pow(t, 2),
-        y0 * Math.pow(s, 2) + 2 * y1 * s * t + y2 * Math.pow(t, 2)
+        x0 * s ** 2 + 2 * x1 * s * t + x2 * t ** 2,
+        y0 * s ** 2 + 2 * y1 * s * t + y2 * t ** 2
     ];
     let ps1 = [
         [x0, y0],

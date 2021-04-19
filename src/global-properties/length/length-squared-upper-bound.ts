@@ -1,5 +1,4 @@
-
-import { distanceBetween, squaredDistanceBetween } from "flo-vector2d";
+import { squaredDistanceBetween } from "flo-vector2d";
 
 
 /**
@@ -8,9 +7,11 @@ import { distanceBetween, squaredDistanceBetween } from "flo-vector2d";
  * 
  * The curve has lenhth 0 iff this bound is zero.
  * 
- * This bound is a bit loose as it uses the sum of the straight-line distances
+ * This bound is quite loose as it uses the sum of the straight-line distances
  * between control points as a measure. 
- * @param ps 
+ * @param ps
+ * 
+ * @doc
  */
 function lengthSquaredUpperBound(ps: number[][]): number {
     let totalLength = 0;

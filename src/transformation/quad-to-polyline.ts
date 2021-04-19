@@ -1,11 +1,14 @@
-
 import { isQuadFlat } from "../global-properties/type/is-quad-flat";
 import { splitAt } from "./split-merge-clone/split-at";
+
 
 /**
  * Transforms the given quadratic bezier into a polyline approximation to within 
  * a given tolerance.
+ * 
  * @param ps A quadratic bezier curve given as an array of points.
+ * 
+ * @doc
  */
 function quadToPolyline(
         ps: number[][],

@@ -12,6 +12,8 @@ const γ1 = γ(1);
  * 
  * @param ps An order 1, 2 or 3 bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param t The parameter value where the bezier should be evaluated
+ * 
+ * @doc
  **/
 function evalDeCasteljauWithErr(
 		ps: number[][], 

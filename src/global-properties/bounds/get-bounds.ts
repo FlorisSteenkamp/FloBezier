@@ -1,7 +1,6 @@
-
 import { memoize } from "flo-memoize";
 import { getDxy } from "../../to-power-basis/get-dxy";
-import { allRoots } from "flo-poly";
+import { allRoots, allRootsCertified } from "flo-poly";
 import { getIntervalBox } from "./get-interval-box/get-interval-box";
 import { γ } from "../../error-analysis/error-analysis";
 import { operators } from "double-double";
@@ -14,6 +13,63 @@ const abs = Math.abs;
 const u = Number.EPSILON/2;
 const γ1 = γ(1);
 
+
+// TODO - remove!!! testing!!!
+testing();
+function testing() {
+	{
+		// coefficients in double-double precision
+		let p = [
+			[ 0.1580350755837278, 3770986809251668.5 ],
+			[ -0.437621888289444, -11611163849314706 ],
+			[ 0.37925906415346655, 13622867559528270 ],
+			[ -0.18215364304839451, -6015675011409949 ],
+			[ -0.2113068076998193, -2535765899677980.5 ],
+			[ -0.03234301695064162, 1004670324427690 ],
+			[ -0.13228935570003014, 5119556864733271 ],
+			[ 0.46839905715354696, -5283583821747902 ],
+			[ -0.0020342528097285484, 1955103350624411 ],
+			[ -0.004629837980953938, -252827841312240.88 ]
+		];
+
+		// coefficients in double precision
+		let pD = [
+			3770986809251668.5,
+			-11611163849314706,
+			13622867559528270,
+			-6015675011409949,
+			-2535765899677980.5,
+			1004670324427690,
+			5119556864733271,
+			-5283583821747902,
+			1955103350624411,
+			-252827841312240.88
+		];
+
+		// coefficient-wise error bound of double-double precision 
+		// coefficients
+		let pE = [
+			5.973763369817942e-16,
+			3.154260190691488e-15,
+			1.0432584785199789e-14,
+			2.0265321429548282e-14,
+			3.236053769569458e-14,
+			3.1173345325629133e-14,
+			2.228376621708172e-14,
+			1.2374462883419778e-14,
+			3.82255386973334e-15,
+			5.160968273258298e-16
+		];
+
+		//getPsExact
+
+		const ts = allRootsCertified(p, -50, 100, pE, undefined);
+		//console.log(ts);
+
+		//const tsf = allRoots()
+		//assert(isThereRootAt(0, 2, ts));
+	}
+}
 
 /**
  * Returns a tight axis-aligned bounding box bound of the given bezier curve.

@@ -1,12 +1,13 @@
-
 import { getXYExact } from "../../../../to-power-basis/any-bitlength/exact/get-xy-any-bitlength-exact";
-import { HornerExact } from 'flo-poly';
+import { eHorner } from 'flo-poly';
 
 
 /**
  * 
  * @param ps 
  * @param t 
+ * 
+ * @doc
  */
 function evaluate_anyBitlength_exact(
         ps: number[][], t: number): number[][] {
@@ -20,8 +21,8 @@ function evaluate_anyBitlength_exact(
     const [X,Y] = getXYExact(ps);
     
     return [
-        HornerExact(X,t),
-        HornerExact(Y,t)
+        eHorner(X,t),
+        eHorner(Y,t)
     ];
 }
 

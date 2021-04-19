@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.compareCurvaturesAtInterface = exports.curvature = exports.κ = void 0;
-const evaluate_dx_1 = require("./t-to-dxy/evaluate-dx");
-const evaluate_dy_1 = require("./t-to-dxy/evaluate-dy");
-const evaluate_ddx_1 = require("./t-to-ddxy/evaluate-ddx");
-const evaluate_ddy_1 = require("./t-to-ddxy/evaluate-ddy");
+const flo_poly_1 = require("flo-poly");
+const get_xy_1 = require("../to-power-basis/get-xy");
 const get_dxy_at_0_1 = require("./t-to-dxy/get-dxy-at-0");
 const get_ddxy_at_0_1 = require("./t-to-ddxy/get-ddxy-at-0");
 const get_dddxy_1 = require("../to-power-basis/get-dddxy");
 const double_double_1 = require("double-double");
 const big_float_ts_1 = require("big-float-ts");
+const get_dxy_1 = require("../to-power-basis/get-dxy");
+const get_ddxy_1 = require("../to-power-basis/get-ddxy");
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const tp = double_double_1.twoProduct;
 const epr = big_float_ts_1.expansionProduct;
@@ -18,17 +18,16 @@ const edif = big_float_ts_1.eDiff;
 const sign = big_float_ts_1.eSign;
 const sce = big_float_ts_1.scaleExpansion;
 function κ(ps, t) {
-    let evDx = evaluate_dx_1.evaluateDx(ps);
-    let evDy = evaluate_dy_1.evaluateDy(ps);
-    let evDdx = evaluate_ddx_1.evaluateDdx(ps);
-    let evDdy = evaluate_ddy_1.evaluateDdy(ps);
+    const [X, Y] = get_xy_1.getXY(ps);
+    const [dX, dY] = get_dxy_1.getDxy(ps);
+    const [ddX, ddY] = get_ddxy_1.getDdxy(ps);
     function f(t) {
-        let dx = evDx(t);
-        let dy = evDy(t);
-        let ddx = evDdx(t);
-        let ddy = evDdy(t);
+        let dx = flo_poly_1.Horner(dX, t);
+        let dy = flo_poly_1.Horner(dY, t);
+        let ddx = flo_poly_1.Horner(ddX, t);
+        let ddy = flo_poly_1.Horner(ddY, t);
         let a = dx * ddy - dy * ddx;
-        let b = Math.sqrt(Math.pow((dx * dx + dy * dy), 3));
+        let b = Math.sqrt((dx * dx + dy * dy) ** 3);
         return a / b;
     }
     // Curry

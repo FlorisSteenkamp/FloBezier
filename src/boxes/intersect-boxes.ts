@@ -1,4 +1,3 @@
-
 const min = Math.min;
 const max = Math.max;
 
@@ -10,7 +9,9 @@ const max = Math.max;
  * * **closed**:  interpret boxes as being closed (i.e. they contain their border).
  * 
  * @param a an axis-aligned rectangular box
- * @param a another axis-aligned rectangular box
+ * @param b another axis-aligned rectangular box
+ * 
+ * @doc
  */
 function intersectBoxes(a: number[][], b: number[][]) {
     let [[ax0, ay0],[ax1, ay1]] = a;

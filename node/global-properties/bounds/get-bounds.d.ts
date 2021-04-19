@@ -2,7 +2,7 @@
  * Returns a tight axis-aligned bounding box bound of the given bezier curve.
  * @param ps
  */
-declare let getXBoundsTight: (a: number[][]) => {
+declare const getXBoundsTight: (a: number[][]) => {
     minX: {
         ts: number[];
         box: number[][];
@@ -16,7 +16,7 @@ declare let getXBoundsTight: (a: number[][]) => {
  * Returns a tight axis-aligned bounding box bound of the given bezier curve.
  * @param ps
  */
-declare let getYBoundsTight: (a: number[][]) => {
+declare const getYBoundsTight: (a: number[][]) => {
     minY: {
         ts: number[];
         box: number[][];
@@ -30,7 +30,7 @@ declare let getYBoundsTight: (a: number[][]) => {
  * Returns the approximate axis-aligned bounding box together with the t values
  * where the bounds on the bezier are reached.
  */
-declare let getBounds: (a: number[][]) => {
+declare const getBounds: (a: number[][]) => {
     ts: number[][];
     box: number[][];
 };

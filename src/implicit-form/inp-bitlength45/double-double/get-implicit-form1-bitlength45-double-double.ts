@@ -1,4 +1,3 @@
-
 import { twoProduct, ddDiffDd } from 'double-double';
 import { getXY } from '../../../to-power-basis/get-xy';
 
@@ -19,6 +18,8 @@ const qdq = ddDiffDd;      // error -> 3*γ²
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
  * @param ps 
+ * 
+ * @doc
  */
 function getImplicitForm1_bitlength45_doubleDouble(ps: number[][]) {
     // The implicit form is given by:

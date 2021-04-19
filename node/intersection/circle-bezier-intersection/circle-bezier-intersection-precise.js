@@ -21,7 +21,7 @@ function circleBezierIntersectionPrecise(circle, ps) {
     else if (ps.length === 2) {
         poly = get_coeffs_quad_1.getCoeffsLinearQuad(circle, ps);
     }
-    let ts = flo_poly_1.allRootsMultiWithErrBounds(poly, poly.map(c => 0));
+    let ts = flo_poly_1.allRootsCertified(poly, 0, 1);
     return ts.map(t => {
         return {
             //t: t.tM,

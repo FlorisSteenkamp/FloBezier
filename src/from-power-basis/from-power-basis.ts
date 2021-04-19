@@ -1,4 +1,3 @@
-
 /**
  * Returns the Bernstein basis representation of a line, quadratic or cubic 
  * bezier given its power bases. 
@@ -11,6 +10,8 @@
  * polynomial from highest to lowest power coefficient), e.g. `[[1,2,3,4], 
  * [5,6,7,8]]` represents a cubic parametric curve given by 
  * x(t) = t^3 + 2t^2 + 3t^3 + 4t^4, y(t) = 5t^3 + 6t^2 + 7t + 8.
+ * 
+ * @doc
  */
 function fromPowerBasis(cs: number[][]): number[][] {
 	const len = cs[0].length;

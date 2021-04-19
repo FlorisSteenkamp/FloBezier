@@ -1,12 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.normal = void 0;
-const tangent_1 = require("./tangent");
+const get_dxy_1 = require("../to-power-basis/get-dxy");
+const flo_poly_1 = require("flo-poly");
 function normal(ps, t) {
-    const tan_ = tangent_1.tangent(ps);
+    const [dX, dY] = get_dxy_1.getDxy(ps);
     function f(t) {
-        let v = tan_(t);
-        return [v[1], -v[0]];
+        return [
+            flo_poly_1.Horner(dY, t),
+            -flo_poly_1.Horner(dX, t)
+        ];
     }
     // Curry
     return t === undefined ? f : f(t);

@@ -1,8 +1,6 @@
-
-
 import { evaluate_anyBitlength_exact } from "../local-properties-at-t/t-to-xy/any-bitlength/exact/evaluate-any-bitlength-exact";
 import { squaredDistanceBetween } from "flo-vector2d";
-import { allRootsMultiWithErrBounds, mid } from "flo-poly";
+import { allRootsCertified, mid } from "flo-poly";
 import { getTangentPolyFromPointExact } from "../simultaneous-properties/get-tangent-poly-from-point/exact/get-tangent-poly-from-point";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
@@ -19,6 +17,8 @@ const { eEstimate } = bigFloatOperators;
  * 
  * @param ps 
  * @param p 
+ * 
+ * @doc
  */
 function inversion01Precise(
         ps: number[][], 
@@ -35,7 +35,7 @@ function inversion01Precise(
     // the coefficients of the poly below is max double-double
     let poly = getTangentPolyFromPointExact(ps, p);
 
-    let ts = allRootsMultiWithErrBounds(poly, poly.map(c => 0));
+    let ts = allRootsCertified(poly);
     if (!ts.length) { return undefined; }
     
     let ps_ = ts.map(t => ({ 

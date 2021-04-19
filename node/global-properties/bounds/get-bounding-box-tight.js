@@ -10,14 +10,14 @@ const eval_de_casteljau_1 = require("../../local-properties-at-t/t-to-xy/eval-de
  * Returns a **non-certified**, **rotated**, **tight** bounding box of the given
  * order 1, 2 or 3 bezier curve as four ordered points of a rotated rectangle.
  */
-let getBoundingBoxTight = flo_memoize_1.memoize(function (ps) {
+const getBoundingBoxTight = flo_memoize_1.memoize(function getBoundingBoxTight(ps) {
     let [xS, yS] = ps[0];
     let [xE, yE] = ps[ps.length - 1];
     let sinθ;
     let cosθ;
     // take care of the case the endpoints are close together
     let len = length_squared_upper_bound_1.lengthSquaredUpperBound(ps);
-    if (flo_vector2d_1.squaredDistanceBetween(ps[0], ps[ps.length - 1]) * Math.pow(2, 8) < len) {
+    if (flo_vector2d_1.squaredDistanceBetween(ps[0], ps[ps.length - 1]) * 2 ** 8 < len) {
         let [xE_, yE_] = eval_de_casteljau_1.evalDeCasteljau(ps, 0.5);
         let hypotenuse = Math.sqrt((xE_ - xS) * (xE_ - xS) + (yE_ - yS) * (yE_ - yS));
         sinθ = (yE_ - yS) / hypotenuse;

@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCoeffs3Exact = void 0;
-const get_x_1 = require("../../../to-power-basis/get-x");
-const get_y_1 = require("../../../to-power-basis/get-y");
+const get_xy_any_bitlength_exact_1 = require("../../../to-power-basis/any-bitlength/exact/get-xy-any-bitlength-exact");
 const big_float_ts_1 = require("big-float-ts");
 /**
  * Returns the self-intersection poly to solve of the given cubic bezier curve.
@@ -10,18 +9,17 @@ const big_float_ts_1 = require("big-float-ts");
  * @param ps An order 3 bezier curve.
  */
 function getCoeffs3Exact(ps) {
-    let [a3, a2, a1] = get_x_1.getXExact(ps);
-    let [b3, b2, b1] = get_y_1.getYExact(ps);
-    //let u2 = -2*a2*a3*b2*b3 + a2*a2*b3*b3 + a3*a3*b2*b2
-    let u2 = big_float_ts_1.eCalculate([
+    const [[a3, a2, a1], [b3, b2, b1]] = get_xy_any_bitlength_exact_1.getXYExact(ps);
+    //const u2 = -2*a2*a3*b2*b3 + a2*a2*b3*b3 + a3*a3*b2*b2
+    const u2 = big_float_ts_1.eCalculate([
         [[-2], a2, a3, b2, b3], [a2, a2, b3, b3], [a3, a3, b2, b2]
     ]);
-    //let u1 = -a1*a3*b2*b3 - a2*a3*b1*b3 + a1*a2*b3*b3 + b1*b2*a3*a3
-    let u1 = big_float_ts_1.eCalculate([
+    //const u1 = -a1*a3*b2*b3 - a2*a3*b1*b3 + a1*a2*b3*b3 + b1*b2*a3*a3
+    const u1 = big_float_ts_1.eCalculate([
         [[-1], a1, a3, b2, b3], [[-1], a2, a3, b1, b3], [a1, a2, b3, b3], [b1, b2, a3, a3]
     ]);
-    //let u0 = -a1*a2*b2*b3 - a2*a3*b1*b2 - 2*a1*a3*b1*b3 + a1*a1*b3*b3 + a3*a3*b1*b1 + a1*a3*b2*b2 + b1*b3*a2*a2
-    let u0 = big_float_ts_1.eCalculate([
+    //const u0 = -a1*a2*b2*b3 - a2*a3*b1*b2 - 2*a1*a3*b1*b3 + a1*a1*b3*b3 + a3*a3*b1*b1 + a1*a3*b2*b2 + b1*b3*a2*a2
+    const u0 = big_float_ts_1.eCalculate([
         [[-1], a1, a2, b2, b3], [[-1], a2, a3, b1, b2], [[-2], a1, a3, b1, b3],
         [a1, a1, b3, b3], [a3, a3, b1, b1], [a1, a3, b2, b2],
         [b1, b3, a2, a2]

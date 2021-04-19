@@ -11,8 +11,11 @@ import { evaluateDdxy } from "../local-properties-at-t/t-to-ddxy/evaluate-ddxy";
  * Returns the total absolute curvature of the bezier over [0,1] using Gaussian 
  * Quadrature integration with 16 wieghts and abscissas which is generally very 
  * accurate and fast. Returns the result in radians. 
- * @param ps - A cubic bezier
+ * 
+ * @param ps a cubic bezier
  * @param interval
+ * 
+ * @doc
  */
 function totalAbsoluteCurvature(ps: number[][], interval: number[]): number;
 function totalAbsoluteCurvature(ps: number[][]): (interval: number[]) => number; 

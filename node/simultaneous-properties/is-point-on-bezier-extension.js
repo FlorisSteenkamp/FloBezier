@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isPointOnBezierExtension = void 0;
-const get_implicit_form3_1 = require("../implicit-form/naive/get-implicit-form3");
-const get_implicit_form3_2 = require("../implicit-form/quad/get-implicit-form3");
+const get_implicit_form3_bitlength45_double_1 = require("../implicit-form/inp-bitlength45/double/get-implicit-form3-bitlength45-double");
+const get_implicit_form3_bitlength45_double_double_1 = require("../implicit-form/inp-bitlength45/double-double/get-implicit-form3-bitlength45-double-double");
+const get_implicit_form3_bitlength45_exact_1 = require("../implicit-form/inp-bitlength45/exact/get-implicit-form3-bitlength45-exact");
+const get_implicit_form2_bitlength45_double_1 = require("../implicit-form/inp-bitlength45/double/get-implicit-form2-bitlength45-double");
+const get_implicit_form2_bitlength45_double_double_1 = require("../implicit-form/inp-bitlength45/double-double/get-implicit-form2-bitlength45-double-double");
+const get_implicit_form2_bitlength45_exact_1 = require("../implicit-form/inp-bitlength45/exact/get-implicit-form2-bitlength45-exact");
 const error_analysis_1 = require("../error-analysis/error-analysis");
-const get_implicit_form3_3 = require("../implicit-form/exact/get-implicit-form3");
-const get_implicit_form2_1 = require("../implicit-form/naive/get-implicit-form2");
-const get_implicit_form2_2 = require("../implicit-form/quad/get-implicit-form2");
-const get_implicit_form2_3 = require("../implicit-form/exact/get-implicit-form2");
-const get_implicit_form1_1 = require("../implicit-form/quad/get-implicit-form1");
+const get_implicit_form1_bitlength45_double_double_1 = require("../implicit-form/inp-bitlength45/double-double/get-implicit-form1-bitlength45-double-double");
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const double_double_1 = require("double-double");
 const big_float_ts_1 = require("big-float-ts");
@@ -37,7 +37,7 @@ function isPointOnBezierExtension3(ps, p) {
     //---- first pre-filter
     {
         // The below takes about 1.2 micro-seconds on a 1st gen i7 and Chrome 79
-        let { coeffs: { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v }, errorBound: { vₓₓₓ_, vₓₓᵧ_, vₓᵧᵧ_, vᵧᵧᵧ_, vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ } } = get_implicit_form3_1.getImplicitForm3(ps);
+        let { coeffs: { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v }, errorBound: { vₓₓₓ_, vₓₓᵧ_, vₓᵧᵧ_, vᵧᵧᵧ_, vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ } } = get_implicit_form3_bitlength45_double_1.getImplicitForm3_bitlength45_double(ps);
         let _vₓₓₓ = abs(vₓₓₓ);
         let _vₓₓᵧ = abs(vₓₓᵧ);
         let _vₓᵧᵧ = abs(vₓᵧᵧ);
@@ -126,7 +126,7 @@ function isPointOnBezierExtension3(ps, p) {
     // error too high - let's try quad precision
     {
         // The below takes about 15 micro-seconds on a 1st gen i7 and Chrome 79
-        let { coeffs: { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v }, errorBound: { vₓₓₓ_, vₓₓᵧ_, vₓᵧᵧ_, vᵧᵧᵧ_, vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ } } = get_implicit_form3_2.getImplicitForm3Quad(ps);
+        let { coeffs: { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v }, errorBound: { vₓₓₓ_, vₓₓᵧ_, vₓᵧᵧ_, vᵧᵧᵧ_, vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ } } = get_implicit_form3_bitlength45_double_double_1.getImplicitForm3_bitlength45_doubleDouble(ps);
         let _vₓₓₓ = abs(vₓₓₓ[1]);
         let _vₓₓᵧ = abs(vₓₓᵧ[1]);
         let _vₓᵧᵧ = abs(vₓᵧᵧ[1]);
@@ -211,7 +211,7 @@ function isPointOnBezierExtension3(ps, p) {
     // error still too high - let's go exact
     {
         // The below takes about 155 micro-seconds on a 1st gen i7 and Chrome 79
-        let { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = get_implicit_form3_3.getImplicitForm3Exact(ps);
+        let { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = get_implicit_form3_bitlength45_exact_1.getImplicitForm3_bitlength45_exact(ps);
         // h (say height) is the the result of evaluating the implicit equation; if
         // it is 0 we are on the curve, else we're not.
         // let h =
@@ -257,7 +257,7 @@ function isPointOnBezierExtension2(ps, p) {
     let [x, y] = p;
     //---- first pre-filter
     {
-        let { coeffs: { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v }, errorBound: { vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ } } = get_implicit_form2_1.getImplicitForm2(ps);
+        let { coeffs: { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v }, errorBound: { vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ } } = get_implicit_form2_bitlength45_double_1.getImplicitForm2_bitlength45_double(ps);
         let _vₓₓ = abs(vₓₓ);
         let _vₓᵧ = abs(vₓᵧ);
         let _vᵧᵧ = abs(vᵧᵧ);
@@ -309,7 +309,7 @@ function isPointOnBezierExtension2(ps, p) {
     }
     // error too high - let's try quad precision
     {
-        let { coeffs: { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v }, errorBound: { vₓ_, vᵧ_, v_ } } = get_implicit_form2_2.getImplicitForm2Quad(ps);
+        let { coeffs: { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v }, errorBound: { vₓ_, vᵧ_, v_ } } = get_implicit_form2_bitlength45_double_double_1.getImplicitForm2_bitlength45_doubleDouble(ps);
         // In the below a prefix underscore on a variable means absolute value, 
         // a postfix underscore means error bound (before multiplication by gamma).
         // h (say height) is the the result of evaluating the implicit equation; if
@@ -355,7 +355,7 @@ function isPointOnBezierExtension2(ps, p) {
     }
     // error still too high - let's go exact
     {
-        let { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = get_implicit_form2_3.getImplicitForm2Exact(ps);
+        let { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = get_implicit_form2_bitlength45_exact_1.getImplicitForm2_bitlength45_exact(ps);
         // h (say height) is the the result of evaluating the implicit equation; 
         // if it is 0 we are on the curve, else we're not.
         // let h =
@@ -390,7 +390,7 @@ function isPointOnBezierExtension2(ps, p) {
 function isPointOnBezierExtension1(ps, p) {
     let [x, y] = p;
     //---- pre-filter - note all coefficients below vₓ, vᵧ, v are exact
-    let { coeffs: { vₓ, vᵧ, v } } = get_implicit_form1_1.getImplicitForm1Quad(ps);
+    let { coeffs: { vₓ, vᵧ, v } } = get_implicit_form1_bitlength45_double_double_1.getImplicitForm1_bitlength45_doubleDouble(ps);
     // In the below a prefix underscore on a variable means absolute value, 
     // a postfix underscore means error bound (before multiplication by gamma).
     // h (say height) is the the result of evaluating the implicit equation; if

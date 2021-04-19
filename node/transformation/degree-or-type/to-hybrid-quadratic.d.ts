@@ -13,5 +13,24 @@
  * curve mentioned above is a measure of how closely the cubic can be
  * represented as a quadratic bezier curve.
  */
-declare function toHybridQuadratic(ps: number[][]): [[number, number], [[number, number], [number, number]], [number, number]];
+declare function toHybridQuadratic(ps: number[][]): [
+    [
+        number,
+        number
+    ],
+    [
+        [
+            number,
+            number
+        ],
+        [
+            number,
+            number
+        ]
+    ],
+    [
+        number,
+        number
+    ]
+];
 export { toHybridQuadratic };

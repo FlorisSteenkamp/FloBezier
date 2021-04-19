@@ -1,4 +1,3 @@
-
 import { twoProduct, ddDiffDd } from 'double-double';
 import { getXY } from '../../../to-power-basis/get-xy';
 
@@ -18,6 +17,8 @@ const qdq = ddDiffDd;
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
  * @param ps 
+ * 
+ * @doc
  */
 function getImplicitForm1_bitlength45_exact(ps: number[][]) {
     let [[a1,a0], [b1,b0]] = getXY(ps);

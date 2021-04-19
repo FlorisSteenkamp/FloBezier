@@ -1,6 +1,5 @@
-
 import { orient2d as orient2d_ } from 'big-float-ts';
-import { toUnitVector, cross, dot } from "flo-vector2d";
+import { dot } from "flo-vector2d";
 import { compareCurvaturesAtInterface } from "../local-properties-at-t/curvature";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
@@ -46,6 +45,8 @@ const DEGREE_LIMIT = DEGREES[1];
  * 
  * @param psI The incoming bezier that ends at the interface
  * @param psO The outgoing bezier that starts at the interface
+ * 
+ * @doc
  */
 // TODO - improve and make at least 46-bitlength precondition
 function getInterfaceCcw(psI: number[][], psO: number[][]) {

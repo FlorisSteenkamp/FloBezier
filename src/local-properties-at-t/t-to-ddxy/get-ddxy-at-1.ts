@@ -1,4 +1,3 @@
-
 /**
  * Returns the 2nd derivative of the power basis representation of a line, 
  * quadratic or cubic bezier's x and y-coordinates when evaluated at 1.
@@ -12,6 +11,8 @@
  * * max bitlength increase === max shift === 0 (for lines)
  * 
  * @param ps An order 1,2 or 3 bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ * 
+ * @doc
  */
 function getDdxyAt1(ps: number[][]): number[] {
 	if (ps.length === 4) {

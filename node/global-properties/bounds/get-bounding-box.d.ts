@@ -6,5 +6,5 @@
  * @returns the axis-aligned bounding box in the form
  * [[minx, miny], [maxx,maxy]
  */
-declare let getBoundingBox: (a: number[][]) => number[][];
+declare const getBoundingBox: (a: number[][]) => number[][];
 export { getBoundingBox };

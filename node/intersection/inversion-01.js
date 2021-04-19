@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.inversion01Precise = void 0;
-const evaluate_1 = require("../local-properties-at-t/t-to-xy/evaluate");
+const evaluate_any_bitlength_exact_1 = require("../local-properties-at-t/t-to-xy/any-bitlength/exact/evaluate-any-bitlength-exact");
 const flo_vector2d_1 = require("flo-vector2d");
 const flo_poly_1 = require("flo-poly");
 const get_tangent_poly_from_point_1 = require("../simultaneous-properties/get-tangent-poly-from-point/exact/get-tangent-poly-from-point");
@@ -27,13 +27,13 @@ function inversion01Precise(ps, p) {
     }
     // the coefficients of the poly below is max double-double
     let poly = get_tangent_poly_from_point_1.getTangentPolyFromPointExact(ps, p);
-    let ts = flo_poly_1.allRootsMultiWithErrBounds(poly, poly.map(c => 0));
+    let ts = flo_poly_1.allRootsCertified(poly);
     if (!ts.length) {
         return undefined;
     }
     let ps_ = ts.map(t => ({
         t: flo_poly_1.mid(t),
-        p: evaluate_1.evaluateExact(ps, flo_poly_1.mid(t)).map(eEstimate)
+        p: evaluate_any_bitlength_exact_1.evaluate_anyBitlength_exact(ps, flo_poly_1.mid(t)).map(eEstimate)
     }));
     // Get point with minimum distance
     let minD = Number.POSITIVE_INFINITY;

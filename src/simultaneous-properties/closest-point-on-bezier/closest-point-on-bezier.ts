@@ -3,7 +3,7 @@ import { getTangentPolyFromPoint } from "../get-tangent-poly-from-point/naive/ge
 import { getTangentPolyFromPointExact } from "../get-tangent-poly-from-point/exact/get-tangent-poly-from-point";
 import { evaluate_anyBitlength_exact } from "../../local-properties-at-t/t-to-xy/any-bitlength/exact/evaluate-any-bitlength-exact";
 import { squaredDistanceBetween } from "flo-vector2d";
-import { allRoots, allRootsMultiWithErrBounds, mid } from "flo-poly";
+import { allRoots, allRootsCertified, mid } from "flo-poly";
 import { evalDeCasteljau } from "../../local-properties-at-t/t-to-xy/eval-de-casteljau";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
@@ -15,8 +15,11 @@ const estimate = eEstimate;
  * Returns the closest point on the bezier to the given point - returns the point
  * and the t value.
  * * this function also acts as an excellent inversion formula.
+ * 
  * @param ps 
  * @param p 
+ * 
+ * @doc
  */
 function closestPointOnBezierPrecise(
         ps: number[][], 
@@ -30,11 +33,7 @@ function closestPointOnBezierPrecise(
     // p to the bezier is calculated to be small enough. nope, we add [0,1] below
     // as endpoints to check so no need.
 
-    let ts = allRootsMultiWithErrBounds(
-        poly, 
-        poly.map(c => 0),  // because all coefficients are exact
-        undefined          // ...
-    ).map(mid);
+    let ts = allRootsCertified(poly, 0, 1).map(mid);
 
     ts.push(0);
     ts.push(1);

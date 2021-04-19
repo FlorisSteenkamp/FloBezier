@@ -50,10 +50,9 @@ function getCurvatureExtrema(ps) {
     const maxima = [];
     for (let i = 0; i < ts.length; i++) {
         const t = ts[i];
-        const dp2_ = flo_poly_1.evaluate(dp2, t);
-        const p1_ = flo_poly_1.evaluate(p1, t);
+        const dp2_ = flo_poly_1.Horner(dp2, t);
+        const p1_ = flo_poly_1.Horner(p1, t);
         const secondDerivative = p1_ * dp2_;
-        //let κ = curvature(ps, t);
         if (secondDerivative >= 0) {
             minima.push(t);
         }

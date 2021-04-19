@@ -1,6 +1,5 @@
-
 import { inversion01Precise } from "./inversion-01";
-import { RootInterval, createRootExact } from "flo-poly/node/roots/multi-with-err-bound/root-interval";
+import { RootInterval, createRootExact } from "flo-poly";
 import { squaredDistanceBetween } from "flo-vector2d";
 import { eEstimate } from "big-float-ts";
 import { evaluate_anyBitlength_exact } from "../local-properties-at-t/t-to-xy/any-bitlength/exact/evaluate-any-bitlength-exact";
@@ -15,6 +14,8 @@ import { evaluate_anyBitlength_exact } from "../local-properties-at-t/t-to-xy/an
  * @param ps1 an order 1,2 or 3 bezier curve
  * @param ps2 another order 1,2 or 3 bezier curve
  * @param minD an error bound given as a distance
+ * 
+ * @doc
  */
 function getEndpointIntersections(
         ps1: number[][],

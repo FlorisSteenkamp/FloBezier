@@ -1085,3 +1085,20 @@ function getCoeffs3x3Quad(ps1: number[][], ps2: number[][]) {
 
 
 export { getCoeffs3x3Quad }
+
+
+
+
+    /*
+    let v9 =  
+        qaq(
+            qaq(
+                qmq(qmd(c3,c3c3),vₓₓₓ),
+                qmq(qmd(c3,d3d3),vₓᵧᵧ)
+            ),
+            qaq(
+                qmq(qmd(d3,c3c3),vₓₓᵧ),
+                qmq(qmd(d3,d3d3),vᵧᵧᵧ)
+            )
+        );
+    */

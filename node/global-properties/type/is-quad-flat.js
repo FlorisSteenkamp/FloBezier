@@ -19,10 +19,10 @@ function isQuadFlat(ps, tolerance) {
         return true;
     }
     let [x0, y0] = eval_de_casteljau_1.evalDeCasteljau(ps, 0.5);
-    let numerator = Math.pow(((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1), 2);
+    let numerator = ((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1) ** 2;
     let denominator = vector.squaredDistanceBetween(ps[0], ps[2]);
     let dSquared = Math.abs(numerator / denominator);
-    return dSquared < Math.pow(tolerance, 2);
+    return dSquared < tolerance ** 2;
 }
 exports.isQuadFlat = isQuadFlat;
 //# sourceMappingURL=is-quad-flat.js.map

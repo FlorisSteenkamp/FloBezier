@@ -1,4 +1,3 @@
-
 /**
  * Returns a cubic bezier curve with a zero tangent (as a vector) at 
  * t = 0.5 (i.e. a 'cusp').
@@ -7,6 +6,8 @@
  * @param p0 the bezier start point
  * @param pz the point at which the vanishing tangent should occur
  * @param pE the bezier end point
+ * 
+ * @doc
  */
 function generateCuspAtHalf3(
         p0: number[],

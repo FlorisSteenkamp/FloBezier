@@ -1,4 +1,3 @@
-
 import { from0ToT } from "./split-merge-clone/from-0-to-T";
 import { fromTTo1 } from "./split-merge-clone/from-T-to-1";
 import { evalDeCasteljau } from "../local-properties-at-t/t-to-xy/eval-de-casteljau";
@@ -11,6 +10,8 @@ import { BezierPart } from "../bezier-part";
  * Uses de Casteljau's algorithm.
  * 
  * @param bezierPart A partial bezier
+ * 
+ * @doc
  */
 function bezierFromPart(bezierPart: BezierPart) {
 

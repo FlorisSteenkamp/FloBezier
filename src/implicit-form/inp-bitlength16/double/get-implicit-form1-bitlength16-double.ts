@@ -1,4 +1,3 @@
-
 import { getXY } from '../../../to-power-basis/get-xy';
 
 
@@ -20,6 +19,8 @@ import { getXY } from '../../../to-power-basis/get-xy';
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
  * @param ps
+ * 
+ * @doc
  */
 function getImplicitForm1_bitlength16_double(ps: number[][]) {
     // The implicit form is given by:

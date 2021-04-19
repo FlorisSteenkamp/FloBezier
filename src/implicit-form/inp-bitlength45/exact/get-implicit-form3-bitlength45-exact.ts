@@ -1,4 +1,3 @@
-
 import { ddMultBy2, ddDiffDd, ddAddDd } from 'double-double';
 import { getXY } from '../../../to-power-basis/get-xy';
 
@@ -34,6 +33,8 @@ const ed2 = eDivBy2;
  * * takes about 155 micro-seconds on a 1st gen i7 and Chrome 79
  * 
  * @param ps
+ * 
+ * @doc
  */
 function getImplicitForm3_bitlength45_exact(ps: number[][]) {
     let [[a3,a2,a1,a0], [b3,b2,b1,b0]] = getXY(ps);

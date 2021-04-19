@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.closestPointOnBezierPrecise = exports.closestPointOnBezier = void 0;
 const get_tangent_poly_from_point_1 = require("../get-tangent-poly-from-point/naive/get-tangent-poly-from-point");
 const get_tangent_poly_from_point_2 = require("../get-tangent-poly-from-point/exact/get-tangent-poly-from-point");
-const evaluate_1 = require("../../local-properties-at-t/t-to-xy/evaluate");
+const evaluate_any_bitlength_exact_1 = require("../../local-properties-at-t/t-to-xy/any-bitlength/exact/evaluate-any-bitlength-exact");
 const flo_vector2d_1 = require("flo-vector2d");
 const flo_poly_1 = require("flo-poly");
 const eval_de_casteljau_1 = require("../../local-properties-at-t/t-to-xy/eval-de-casteljau");
@@ -18,19 +18,16 @@ const estimate = big_float_ts_1.eEstimate;
  * @param p
  */
 function closestPointOnBezierPrecise(ps, p) {
-    //let poly = getTangentPolyFromPointExact(ps, p);
     let poly = get_tangent_poly_from_point_2.getTangentPolyFromPointExact(ps, p);
     // we give ample leeway for roots outside [0,1] since roots can be some 
     // distance outside this range at extemely high curvature where the tangent
     // is very small. These can later be coerced to 0 or 1 if the distance from
     // p to the bezier is calculated to be small enough. nope, we add [0,1] below
     // as endpoints to check so no need.
-    let ts = flo_poly_1.allRootsMultiWithErrBounds(poly, poly.map(c => 0), // because all coefficients are exact
-    undefined // ...
-    ).map(flo_poly_1.mid);
+    let ts = flo_poly_1.allRootsCertified(poly, 0, 1).map(flo_poly_1.mid);
     ts.push(0);
     ts.push(1);
-    let ps_ = ts.map(t => ({ p: evaluate_1.evaluateExact(ps, t).map(estimate), t }));
+    let ps_ = ts.map(t => ({ p: evaluate_any_bitlength_exact_1.evaluate_anyBitlength_exact(ps, t).map(estimate), t }));
     //let ps_ = ts.map(t => ({ p: evalDeCasteljau(ps, t), t }));
     // Get point with minimum distance
     let minD = Number.POSITIVE_INFINITY;

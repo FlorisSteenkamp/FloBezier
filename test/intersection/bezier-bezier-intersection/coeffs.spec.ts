@@ -5,15 +5,15 @@ import 'mocha';
 import { estimate, expansionDiff, qNegativeOf } from 'flo-numerical';
 import { toGrid } from '../../helpers/to-grid'
 import { 
-    getCoeffs3x3, getCoeffs3x3Quad, getCoeffs3x3Exact_,
-    getCoeffs3x2, getCoeffs3x2Quad, getCoeffs3x2Exact_, 
-    getCoeffs3x1, getCoeffs3x1Quad, getCoeffs3x1Exact_,
-    getCoeffs2x3, getCoeffs2x3Quad, getCoeffs2x3Exact_,
-    getCoeffs2x2, getCoeffs2x2Quad, getCoeffs2x2Exact_, 
-    getCoeffs2x1, getCoeffs2x1Quad, getCoeffs2x1Exact_,
-    getCoeffs1x3, getCoeffs1x3Quad, getCoeffs1x3Exact_,
-    getCoeffs1x2, getCoeffs1x2Quad, getCoeffs1x2Exact_, 
-    getCoeffs1x1, getCoeffs1x1Quad, getCoeffs1x1Exact_
+    getCoeffs3x3, getCoeffs3x3Quad, getCoeffs3x3Exact,
+    getCoeffs3x2, getCoeffs3x2Quad, getCoeffs3x2Exact, 
+    getCoeffs3x1, getCoeffs3x1Quad, getCoeffs3x1Exact,
+    getCoeffs2x3, getCoeffs2x3Quad, getCoeffs2x3Exact,
+    getCoeffs2x2, getCoeffs2x2Quad, getCoeffs2x2Exact, 
+    getCoeffs2x1, getCoeffs2x1Quad, getCoeffs2x1Exact,
+    getCoeffs1x3, getCoeffs1x3Quad, getCoeffs1x3Exact,
+    getCoeffs1x2, getCoeffs1x2Quad, getCoeffs1x2Exact, 
+    getCoeffs1x1, getCoeffs1x1Quad, getCoeffs1x1Exact
 } from '../../../src/index';
 
 
@@ -39,34 +39,34 @@ const _bz_1: number[][] = [[0,0],[0,0]];
 
 const coeffFs = [,
     [,
-        { est: getCoeffs1x1, exact: getCoeffs1x1Exact_ },    
-        { est: getCoeffs1x2, exact: getCoeffs1x2Exact_ }, 
-        { est: getCoeffs1x3, exact: getCoeffs1x3Exact_ }
+        { est: getCoeffs1x1, exact: getCoeffs1x1Exact },    
+        { est: getCoeffs1x2, exact: getCoeffs1x2Exact }, 
+        { est: getCoeffs1x3, exact: getCoeffs1x3Exact }
     ], [,
-        { est: getCoeffs2x1, exact: getCoeffs2x1Exact_ },
-        { est: getCoeffs2x2, exact: getCoeffs2x2Exact_ }, 
-        { est: getCoeffs2x3, exact: getCoeffs2x3Exact_ }
+        { est: getCoeffs2x1, exact: getCoeffs2x1Exact },
+        { est: getCoeffs2x2, exact: getCoeffs2x2Exact }, 
+        { est: getCoeffs2x3, exact: getCoeffs2x3Exact }
     ], [,
-        { est: getCoeffs3x1, exact: getCoeffs3x1Exact_ },
-        { est: getCoeffs3x2, exact: getCoeffs3x2Exact_ }, 
-        { est: getCoeffs3x3, exact: getCoeffs3x3Exact_ }
+        { est: getCoeffs3x1, exact: getCoeffs3x1Exact },
+        { est: getCoeffs3x2, exact: getCoeffs3x2Exact }, 
+        { est: getCoeffs3x3, exact: getCoeffs3x3Exact }
     ]
 ];
 
 
 const implFormQuadFs = [,
     [,
-        { est: getCoeffs1x1Quad, exact: getCoeffs1x1Exact_ },    
-        { est: getCoeffs1x2Quad, exact: getCoeffs1x2Exact_ }, 
-        { est: getCoeffs1x3Quad, exact: getCoeffs1x3Exact_ }
+        { est: getCoeffs1x1Quad, exact: getCoeffs1x1Exact },    
+        { est: getCoeffs1x2Quad, exact: getCoeffs1x2Exact }, 
+        { est: getCoeffs1x3Quad, exact: getCoeffs1x3Exact }
     ], [,
-        { est: getCoeffs2x1Quad, exact: getCoeffs2x1Exact_ },
-        { est: getCoeffs2x2Quad, exact: getCoeffs2x2Exact_ }, 
-        { est: getCoeffs2x3Quad, exact: getCoeffs2x3Exact_ }
+        { est: getCoeffs2x1Quad, exact: getCoeffs2x1Exact },
+        { est: getCoeffs2x2Quad, exact: getCoeffs2x2Exact }, 
+        { est: getCoeffs2x3Quad, exact: getCoeffs2x3Exact }
     ], [,
-        { est: getCoeffs3x1Quad, exact: getCoeffs3x1Exact_ },
-        { est: getCoeffs3x2Quad, exact: getCoeffs3x2Exact_ }, 
-        { est: getCoeffs3x3Quad, exact: getCoeffs3x3Exact_ }
+        { est: getCoeffs3x1Quad, exact: getCoeffs3x1Exact },
+        { est: getCoeffs3x2Quad, exact: getCoeffs3x2Exact }, 
+        { est: getCoeffs3x3Quad, exact: getCoeffs3x3Exact }
     ]
 ];
 
@@ -141,7 +141,9 @@ function testCoeffs(
 
         assert(errActual <= errBound, errStr);
 
-        if (iteration < 1) { console.log(errStr); }
+        if (iteration < 1) { 
+            //console.log(errStr); 
+        }
     }
 }
 
@@ -179,7 +181,9 @@ function testCoeffsQuad(
 
         assert(errActual <= errBound, errStr);
 
-        if (iteration < 1) { console.log(errStr); }
+        if (iteration < 1) { 
+            //console.log(errStr); 
+        }
     }
 }
 

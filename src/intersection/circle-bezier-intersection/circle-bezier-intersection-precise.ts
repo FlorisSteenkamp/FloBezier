@@ -1,14 +1,17 @@
 
 import { getCoeffsCubicQuad, getCoeffsQuadraticQuad, getCoeffsLinearQuad } from './quad/get-coeffs-quad';
-import { allRootsMultiWithErrBounds, mid } from 'flo-poly';
+import { allRootsCertified, mid } from 'flo-poly';
 import { evalDeCasteljau } from '../../local-properties-at-t/t-to-xy/eval-de-casteljau';
 
 
 /**
  * * **precondition** max bit-aligned bitlength === 47
  * * returned parameter values are guaranteed accurate to within 4 ulps
+ * 
  * @param circle 
  * @param ps 
+ * 
+ * @doc
  */
 function circleBezierIntersectionPrecise(
         circle: { center: number[], radius: number}, 
@@ -23,7 +26,7 @@ function circleBezierIntersectionPrecise(
         poly = getCoeffsLinearQuad(circle, ps);
     }
 
-    let ts = allRootsMultiWithErrBounds(poly, poly.map(c => 0));
+    let ts = allRootsCertified(poly, 0, 1);
 
     return ts.map(t => {
         return {

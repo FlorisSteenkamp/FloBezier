@@ -1,4 +1,3 @@
-
 import { isPointOnBezierExtension } from "./is-point-on-bezier-extension";
 import { evalDeCasteljau } from "../local-properties-at-t/t-to-xy/eval-de-casteljau";
 
@@ -19,6 +18,8 @@ import { evalDeCasteljau } from "../local-properties-at-t/t-to-xy/eval-de-castel
  *
  * @param ps1 A bezier curve
  * @param ps2 Another bezier curve
+ * 
+ * @doc
  */
 function areBeziersInSameKFamily(
         ps1: number[][], 

@@ -36,6 +36,8 @@ const γγ3 = γγ(3);
  * 
  * * Precondition: ps must be grid-aligned and have a maximum bitlength of 47.
  * (p may have any bitlength - no restrictions)
+ * 
+ * @doc
  */
 function isPointOnBezierExtension3(ps: number[][], p: number[]): boolean {
     let [x,y] = p;

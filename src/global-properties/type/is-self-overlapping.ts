@@ -9,7 +9,10 @@ import { isLine } from "./is-line";
  * 
  * Robust: This function is robust via adaptive infinite precision floating
  * point arithmetic.
+ * 
  * @param ps An order 1, 2 or 3 bezier curve
+ * 
+ * @doc
  */
 function isSelfOverlapping(ps: number[][]) {
     if (!isLine(ps)) { return false; }

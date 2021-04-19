@@ -1,4 +1,3 @@
-
 import { expansionProduct, twoProduct, scaleExpansion2, eMultBy2, eDiff } from 'big-float-ts';
 import { ddNegativeOf, ddMultBy2, ddDiffDd } from 'double-double';
 import { getXY } from '../../../to-power-basis/get-xy';
@@ -26,6 +25,8 @@ const epr = expansionProduct;
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
  * @param ps 
+ * 
+ * @doc
  */
 function getImplicitForm2_bitlength45_exact(ps: number[][]) {
     

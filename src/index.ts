@@ -1,4 +1,3 @@
-
 import { grahamScan }  from 'flo-graham-scan';
 import { BezierPart } from './bezier-part';
 import { length } from './global-properties/length/length';

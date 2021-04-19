@@ -12,8 +12,11 @@ const qdifq = ddDiffDd;
 
 /**
  * * **precondition** bit-algined bitlength of coefficients <= 47
+ * 
  * @param circle a circle
  * @param ps a cubic bezier curve
+ * 
+ * @doc
  */
 function getCoeffsCubicQuad(
         circle: { center: number[], radius: number}, 

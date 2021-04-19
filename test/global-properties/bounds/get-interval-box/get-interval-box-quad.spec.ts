@@ -37,7 +37,7 @@ describe('interval box', function() {
 			
 			let r2 = getIntervalBoxQuad(ps, i);
 			
-			console.log('interval box quad', r2);
+			//console.log('interval box quad', r2);
 		}
 	});
 });

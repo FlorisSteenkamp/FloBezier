@@ -1,15 +1,22 @@
 
-import { allRoots, differentiate, evaluate as evaluatePoly } from "flo-poly";
+import { allRoots, differentiate, Horner as evaluatePoly } from "flo-poly";
 import { getAbsCurvatureExtremaPolys } from "./get-abs-curvature-extrema-polys";
-import { curvature } from "../local-properties-at-t/curvature";
 import { isLine } from "../global-properties/type/is-line";
 import { isCubicReallyQuad } from "../global-properties/type/is-cubic-really-quad";
 import { toQuadraticFromCubic } from "../transformation/degree-or-type/to-quad-from-cubic";
 
 
+/** 
+ * Curve extrema
+ * 
+ * @doc
+ */
 type Extrema = {
+    /** list of paramter t values where minima occur */
     minima: number[],
+    /** list of paramter t values where maxima occur */
     maxima: number[],
+    /** list of paramter t values where inflection points occur */
     inflections: number[]
 }
 
@@ -29,6 +36,8 @@ type Extrema = {
  * 
  * @param ps an order 1, 2 or 3 bezier curve given as an array of control 
  * points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * 
+ * @doc
  */
 function getCurvatureExtrema(ps: number[][]): Extrema {
     if (isLine(ps)) {
@@ -71,8 +80,6 @@ function getCurvatureExtrema(ps: number[][]): Extrema {
         const p1_ = evaluatePoly(p1, t);
         
         const secondDerivative = p1_*dp2_;
-
-        //let κ = curvature(ps, t);
 
         if (secondDerivative >= 0) {
             minima.push(t);

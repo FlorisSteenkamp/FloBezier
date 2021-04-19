@@ -1,4 +1,3 @@
-
 import { getXY } from '../../../to-power-basis/get-xy';
 
 
@@ -22,7 +21,10 @@ const abs = Math.abs;
  * where `u === Number.EPSILON / 2` before use
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * * takes about 1.2 micro-seconds on a 1st gen i7 and Chrome 79
+ * 
  * @param ps
+ * 
+ * @doc
  */
 function getImplicitForm3_bitlength45_double(ps: number[][]) {
     // The implicit form is given by:

@@ -22,7 +22,9 @@ const abs = Math.abs;
  * where `u === Number.EPSILON / 2` before use
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
- * @param ps 
+ * @param ps
+ * 
+ * @doc
  */
 function getImplicitForm2_bitlength16_double(ps: number[][]) {
     // The implicit form is given by:

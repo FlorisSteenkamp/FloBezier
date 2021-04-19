@@ -1,4 +1,3 @@
-
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { twoProduct, ddAddDd, ddDiffDd, ddMultBy2, ddMultDouble2, ddMultByNeg2, ddMultBy4 } from "double-double";
 
@@ -18,8 +17,11 @@ const qm4 = ddMultBy4;
  * * **precondition** coefficients of curve and point bit-aligned bitlength <= 46
  * * the resulting coefficients are guaranteed to have max bitlength 106 (so it
  * can fit in a double-double)
+ * 
  * @param ps An order 1, 2 or 3 bezier curve given by its control points.
  * @param p 
+ * 
+ * @doc
  */
 function getTangentPolyFromPointExact(ps: number[][], p: number[]) {
     if (ps.length === 4) {

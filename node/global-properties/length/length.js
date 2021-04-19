@@ -14,10 +14,11 @@ function length(interval, ps) {
 }
 exports.length = length;
 /**
- * Returns the curve length in the specified interval. This function is curried.
- * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param interval - The paramter interval over which the length is
- * to be calculated (often === [0,1]).
+ * Returns the curve length in the specified interval.
+ *
+ * @param ps a cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ * @param interval the paramter interval over which the length is to be
+ * calculated (often === [0,1]).
  */
 function length3(interval, ps) {
     if (interval[0] === interval[1]) {

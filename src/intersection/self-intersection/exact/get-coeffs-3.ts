@@ -6,7 +6,10 @@ import { eCalculate } from "big-float-ts";
 /**
  * Returns the self-intersection poly to solve of the given cubic bezier curve.
  * see http://www.mare.ee/indrek/misc/2d.pdf
+ * 
  * @param ps An order 3 bezier curve.
+ * 
+ * @doc
  */
 function getCoeffs3Exact(ps: number[][]) {
     const [[a3, a2, a1], [b3, b2, b1]] = getXYExact(ps);

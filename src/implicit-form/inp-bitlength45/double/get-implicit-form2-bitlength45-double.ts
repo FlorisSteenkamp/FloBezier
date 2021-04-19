@@ -1,4 +1,3 @@
-
 import { getXY } from '../../../to-power-basis/get-xy';
 
 
@@ -23,6 +22,8 @@ const abs = Math.abs;
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
  * @param ps 
+ * 
+ * @doc
  */
 function getImplicitForm2_bitlength45_double(ps: number[][]) {
     // The implicit form is given by:

@@ -1,5 +1,4 @@
-import { RootInterval } from 'flo-poly/node/roots/multi-with-err-bound/root-interval';
-import { RootIntervalExp } from 'flo-poly';
+import { RootIntervalExp, RootInterval } from 'flo-poly';
 /**
  * Representation of one side of an intersection.
  */
@@ -10,7 +9,7 @@ interface X {
     compensated?: number;
     /** The root interval if compensated 1 or more times */
     riExp?: RootIntervalExp;
-    getPsExact?: () => number[][][];
+    getPExact?: () => number[][];
     /**
      * The kind of critical point:
      * * 0 => extreme, e.g. topmost point

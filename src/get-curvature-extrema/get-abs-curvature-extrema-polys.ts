@@ -1,4 +1,3 @@
-
 import { getDxy } from "../to-power-basis/get-dxy";
 import { getDdxy } from "../to-power-basis/get-ddxy";
 import { getDddxy } from "../to-power-basis/get-dddxy";

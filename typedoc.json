@@ -1,0 +1,18 @@
+{
+    "out": "docs-create/docs",
+    "inputFiles": [
+        "./src/index.ts"
+        //"./src/create/cubic-through-point.ts"
+    ],
+    "mdxFolder": "docs-create/docs/mdx",
+    "exclude": [
+        "**/experiments"
+    ],
+    "excludePrivate": false,
+    "hideBreadcrumbs": true,
+    "stripInternal": true,
+    "publicPath": "",
+    "excludeTags": ["implementationDetails"],
+    "tsconfig": "c:/projects/bezier/tsconfig.json",
+    "disableOutputCheck": true
+}

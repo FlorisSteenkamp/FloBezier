@@ -1,5 +1,5 @@
 
-import { evaluate as evaluatePoly } from 'flo-poly';
+import { Horner as evaluatePoly } from 'flo-poly';
 import { getXY } from '../to-power-basis/get-xy';
 import { getDxyAt0 } from "./t-to-dxy/get-dxy-at-0";
 import { getDdxyAt0 } from "./t-to-ddxy/get-ddxy-at-0";
@@ -27,6 +27,8 @@ const sce = scaleExpansion;
  * 
  * @param ps An order 1, 2 or 3 bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param t The parameter value where the curvature should be evaluated
+ * 
+ * @doc
  */
 function κ(ps: number[][], t: number): number;
 function κ(ps: number[][]): (t: number) => number;

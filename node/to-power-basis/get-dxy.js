@@ -29,18 +29,18 @@ function getDxy(ps) {
         let [[x0, y0], [x1, y1], [x2, y2]] = ps;
         return [[
                 2 * (x2 - 2 * x1 + x0),
-                2 * (x1 - x0),
+                2 * (x1 - x0), // t^0 - max bitlength increase 2
             ], [
                 2 * (y2 - 2 * y1 + y0),
-                2 * (y1 - y0),
+                2 * (y1 - y0), // t^0 - max bitlength increase 2
             ]];
     }
     if (ps.length === 2) {
         let [[x0, y0], [x1, y1]] = ps;
         return [[
-                x1 - x0,
+                x1 - x0, // t^0 - max bitlength increase 1
             ], [
-                y1 - y0,
+                y1 - y0, // t^0 - max bitlength increase 1
             ]];
     }
     throw new Error('The bezier curve must be of order 1, 2 or 3.');

@@ -1,4 +1,3 @@
-
 import { memoize } from "flo-memoize";
 import { squaredDistanceBetween, translate, rotate } from "flo-vector2d";
 import { getBoundingBox } from "./get-bounding-box";
@@ -9,6 +8,10 @@ import { evalDeCasteljau } from "../../local-properties-at-t/t-to-xy/eval-de-cas
 /**
  * Returns a **non-certified**, **rotated**, **tight** bounding box of the given 
  * order 1, 2 or 3 bezier curve as four ordered points of a rotated rectangle.
+ * 
+ * @param ps bezier
+ * 
+ * @doc
  */
 const getBoundingBoxTight = memoize(
 function getBoundingBoxTight(ps: number[][]) {
@@ -49,13 +52,16 @@ function getBoundingBoxTight(ps: number[][]) {
  * Helper function. Returns the bounding box of the normalized (i.e. first point 
  * moved to origin and rotated so that last point lies on x-axis) given cubic 
  * bezier.
- * @ignore
+ * 
+ * * returns the bounding box in the form [[minX, minY], [maxX,maxY]
+ * 
  * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param sinθ - Sine of angle made by line from first bezier point to 
  * last with x-axis.
  * @param cosθ - Cosine of angle made by line from first bezier point 
  * to last with x-axis.
- * @returns Bounding box in the form [[minX, minY], [maxX,maxY]
+ * 
+ * @internal
  */
 function getNormalizedBoundingBox(ps: number[][], sinθ: number, cosθ: number) {
 	let vectorToOrigin = ps[0].map(x => -x);

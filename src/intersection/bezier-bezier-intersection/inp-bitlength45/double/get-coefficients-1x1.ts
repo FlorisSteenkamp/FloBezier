@@ -1,4 +1,3 @@
-
 import { getImplicitForm1_bitlength45_double } from "../../../../implicit-form/inp-bitlength45/double/get-implicit-form1-bitlength45-double";
 import { γ } from "../../../../error-analysis/error-analysis";
 import { getXY } from "../../../../to-power-basis/get-xy";
@@ -8,6 +7,13 @@ const abs = Math.abs;
 const γ1 = γ(1);
 
 
+/**
+ * 
+ * @param ps1 
+ * @param ps2 
+ * 
+ * @doc
+ */
 function getCoeffs1x1(ps1: number[][], ps2: number[][]) {
     let { 
         coeffs: { vₓ, vᵧ, v },

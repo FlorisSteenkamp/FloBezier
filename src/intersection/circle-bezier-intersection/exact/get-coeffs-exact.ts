@@ -1,5 +1,3 @@
-
-
 import { getXYExact } from "../../../to-power-basis/any-bitlength/exact/get-xy-any-bitlength-exact";
 
 
@@ -12,6 +10,8 @@ const { twoProduct, eCalculate, scaleExpansion } = bigFloatOperators;
  * 
  * @param circle a circle
  * @param ps a cubic bezier curve
+ * 
+ * @doc
  */
 function getCoeffsCubicExact(
         circle: { center: number[], radius: number}, 

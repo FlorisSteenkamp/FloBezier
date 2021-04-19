@@ -32,6 +32,8 @@ const qMax  = ddMax;
  * @param ps an order 1,2 or 3 bezier curve
  * @param t1 first parameter value as a quad precision floating point value
  * @param t2 second parameter value as a quad precision floating point value
+ * 
+ * @doc
  */
 function getIntervalBoxQuad(
         ps: number[][], 
@@ -52,6 +54,11 @@ function getIntervalBoxQuad(
 
 
 // quad precision t1, t2
+/**
+ * 
+ * @param param0 
+ * @param param1 
+ */
 function getIntervalBox3Quad(
         [[x0,y0],[x1,y1],[x2,y2],[x3,y3]]: number[][], 
         [t1, t2]: number[][]) {
@@ -182,6 +189,11 @@ function getIntervalBox3Quad(
 }
 
 
+/**
+ * 
+ * @param param0 
+ * @param param1 
+ */
 function getIntervalBox2Quad(
         [[x0,y0],[x1,y1],[x2,y2]]: number[][], 
         [t1, t2]: number[][]) {
@@ -367,6 +379,12 @@ function getIntervalBox1Quad(
 }
 
 
+/**
+ * 
+ * @param ps 
+ * @param t 
+ * @returns 
+ */
 function getIntervalBoxExactTQuad(
         ps: number[][], 
         t: number[]) {

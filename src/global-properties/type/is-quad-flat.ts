@@ -1,4 +1,3 @@
-
 import * as vector from 'flo-vector2d';
 import { isQuadObtuse } from "./is-quad-obtuse";
 import { evalDeCasteljau } from '../../local-properties-at-t/t-to-xy/eval-de-casteljau';
@@ -8,7 +7,10 @@ import { evalDeCasteljau } from '../../local-properties-at-t/t-to-xy/eval-de-cas
  * Returns true if the given quadratic bezier curve is acute (see isQuadObtuse) 
  * and can be approximated with a line segment with maximum Hausdorff distance 
  * <= the given tolerance.
+ * 
  * @param ps A quadratic bezier curve.
+ * 
+ * @doc
  */
 function isQuadFlat(
         ps: number[][],

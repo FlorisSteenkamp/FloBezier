@@ -14,7 +14,10 @@ const fes = fastExpansionSum;
  * Returns the self-intersection poly to solve of the given cubic bezier curve.
  * see http://www.mare.ee/indrek/misc/2d.pdf
  * * precondition: max 47 bit bit-aligned coefficient bitlength
+ * 
  * @param ps An order 3 bezier curve.
+ * 
+ * @doc
  */
 function getCoeffs3Exact_(ps: number[][]) {
     let [[a3,a2,a1],[b3,b2,b1]] = getXY(ps);  // 49-bit aligned => error free

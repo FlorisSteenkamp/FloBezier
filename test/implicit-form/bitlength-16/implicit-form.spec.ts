@@ -190,7 +190,9 @@ function testImplictForm(
 
         assert(errActual <= errBound, errStr);
 
-        if (iteration < 1) { console.log(errStr); }
+        if (iteration < 1) { 
+            //console.log(errStr); 
+        }
     }
 }
 

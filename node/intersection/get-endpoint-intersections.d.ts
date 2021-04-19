@@ -1,4 +1,4 @@
-import { RootInterval } from "flo-poly/node/roots/multi-with-err-bound/root-interval";
+import { RootInterval } from "flo-poly";
 /**
  * Returns the t pairs where the endpoints of the two given same-k-family curves
  * overlap.
