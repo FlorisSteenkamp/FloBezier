@@ -12,9 +12,9 @@ const { orient2d } = operators;
  * 
  * @param ps An order 1, 2 or 3 bezier curve.
  * 
- * @doc
+ * @doc mdx
  */
-function isLine(ps: number[][]) {
+function isLine(ps: number[][]): boolean {
     if (ps.length === 2) {
         // Line
         return true;
@@ -40,7 +40,10 @@ function isLine(ps: number[][]) {
 /**
  * Returns true if the given bezier degenerates to a horizontal line (possibly
  * self-overlapping)
+ * 
  * @param ps An order 1, 2 or 3 bezier curve.
+ * 
+ * @doc
  */
 function isHorizontalLine(ps: number[][]) {
     let y = ps[0][1];
@@ -57,7 +60,10 @@ function isHorizontalLine(ps: number[][]) {
 /**
  * Returns true if the given bezier degenerates to a vertical line (possibly
  * self-overlapping)
+ * 
  * @param ps An order 1, 2 or 3 bezier curve.
+ * 
+ * @doc
  */
 function isVerticalLine(ps: number[][]) {
     let x = ps[0][0];

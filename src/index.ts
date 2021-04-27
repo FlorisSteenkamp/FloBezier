@@ -14,7 +14,7 @@ import { intersectBoxes } from './boxes/intersect-boxes';
 import { areBoxesIntersecting } from './boxes/are-boxes-intersecting';
 import { evalDeCasteljau } from './local-properties-at-t/t-to-xy/eval-de-casteljau';
 import { evalDeCasteljauWithErr } from './local-properties-at-t/t-to-xy/eval-de-casteljau-with-err';
-import { evalDeCasteljauWithErrQuad } from './local-properties-at-t/t-to-xy/dd-eval-de-casteljau-with-err';
+import { evalDeCasteljauWithErrDd } from './local-properties-at-t/t-to-xy/dd-eval-de-casteljau-with-err';
 
 import { isPointOnBezierExtension } from './simultaneous-properties/is-point-on-bezier-extension';
 import { totalCurvature, totalAbsoluteCurvature } from './global-properties/total-curvature';
@@ -80,7 +80,7 @@ import { toEstimation} from './transformation/to-estimation';
 import { fromPowerBasis } from './from-power-basis/from-power-basis';
 import { getHodograph } from './transformation/get-hodograph';
 import { generateCuspAtHalf3 } from './create/generate-cusp-at-half-t';
-import { cubicThroughPointGiven013 } from './create/cubic-through-point';
+import { cubicThroughPointGiven013 } from './create/cubic-through-point-given013';
 import { bezierSelfIntersection } from './intersection/self-intersection/self-intersection';
 import { getEndpointIntersections } from './intersection/get-endpoint-intersections';
 import { inversion01Precise } from './intersection/inversion-01';
@@ -106,14 +106,13 @@ import { κ, curvature } from './local-properties-at-t/curvature';
 import { quadToPolyline } from './transformation/quad-to-polyline';
 import { isQuadObtuse } from './global-properties/type/is-quad-obtuse';
 import { getIntervalBox } from './global-properties/bounds/get-interval-box/get-interval-box';
-import { getIntervalBoxQuad, getIntervalBox1Quad, getIntervalBox2Quad, getIntervalBox3Quad } from './global-properties/bounds/get-interval-box/get-interval-box-quad';
+import { getIntervalBoxDd } from './global-properties/bounds/get-interval-box/get-interval-box-dd';
 import { splitAt, splitAtPrecise } from './transformation/split-merge-clone/split-at';
 import { closestPointOnBezierPrecise } from './simultaneous-properties/closest-point-on-bezier/closest-point-on-bezier';
 import { hausdorffDistance, hausdorffDistanceCandidates } from './simultaneous-properties/hausdorff-distance';
 import { lengthUpperBound } from './global-properties/length/length-upper-bound';
 import { lengthSquaredUpperBound } from './global-properties/length/length-squared-upper-bound';
 import { splitByMaxCurveLength } from './transformation/split-merge-clone/split-by-max-curve-length';
-//import { getCurvatureExtrema } from './get-curvature-extrema/get-curvature-extrema';
 import { getCurvatureExtrema } from './get-curvature-extrema/get-curvature-extrema';
 import { flatness } from './global-properties/flatness';
 import { splitByMaxCurvature } from './transformation/split-merge-clone/split-by-max-curvature';
@@ -243,7 +242,7 @@ export {
 
 	// Bounds
 	getBounds,
-	getXBoundsTight, getYBoundsTight,
+	//getXBoundsTight, getYBoundsTight,
 	getBoundingHull,
 	getBoundingBoxTight,
 	getBoundingBox,
@@ -301,10 +300,10 @@ export {
 	cubicThroughPointGiven013,
 
 	// TODO - categorize
-	getIntervalBoxQuad, getIntervalBox1Quad, getIntervalBox2Quad, getIntervalBox3Quad,
+	getIntervalBoxDd,
 	evalDeCasteljau,
 	evalDeCasteljauWithErr,
-	evalDeCasteljauWithErrQuad,
+	evalDeCasteljauWithErrDd,
 	evaluate_anyBitlength_exact,
 	isPointOnBezierExtension,
 

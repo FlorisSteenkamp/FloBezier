@@ -1,4 +1,3 @@
-
 import { allRoots } from "flo-poly";
 
 
@@ -9,9 +8,9 @@ import { allRoots } from "flo-poly";
  * 
  * @param ps an order 1, 2 or 3 bezier curve
  * 
- * @doc
+ * @doc mdx
  */
-function getInflections(ps: number[][]) {
+function getInflections(ps: number[][]): number[] {
 	if (ps.length < 4) {
 		// Neither lines, nor parabolas have inflection points
 		return [];

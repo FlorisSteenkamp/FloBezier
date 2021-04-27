@@ -1,5 +1,4 @@
-
-import { evalDeCasteljauWithErrQuad } from "../../../local-properties-at-t/t-to-xy/dd-eval-de-casteljau-with-err";
+import { evalDeCasteljauWithErrDd } from "../../../local-properties-at-t/t-to-xy/dd-eval-de-casteljau-with-err";
 import { operators } from "double-double";
 
 const { 
@@ -24,42 +23,49 @@ const qMax  = ddMax;
 
 
 /**
- * Returns the approximate bezier curve that is the curve from t1 to t2 in such 
- * a way that the control points axis-aligned-box of the newly returned curve is 
- * guaranteed to engulf the true (numerically exact) curve control points 
- * axis-aligned box.
- * * **precondition** t1 < t2
- * @param ps an order 1,2 or 3 bezier curve
- * @param t1 first parameter value as a quad precision floating point value
- * @param t2 second parameter value as a quad precision floating point value
+ * Returns an axis-aligned-box that is guaranteed to engulf the entire 
+ * given bezier curve from `t1` to `t2`. The returned box is given as an array 
+ * of points in double-double precision, e.g. `[[[0,1],[0,1]], [[0,2],[0,2]]]`.
  * 
- * @doc
+ * * **precondition:** t1 < t2
+ * * **precondition:** t1,t2 >= 0 && t1,t2 <= 1
+ * * **precondition:** 49-bit aligned bezier coordinates
+ * 
+ * @param ps an order 1, 2 or 3 bezier curve given as an array of control 
+ * points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param ts [first, second] parameter values, given in double-double 
+ * precision, e.g. [[0,0.11], [0,0.12]]. (Use [[getIntervalBox]] instead for
+ * double precision)
+ * 
+ * @doc mdx
  */
-function getIntervalBoxQuad(
+function getIntervalBoxDd(
         ps: number[][], 
         ts: number[][]): number[][][] {
 
     if (ts[0] !== ts[1]) {
         if (ps.length === 4) {
-            return getIntervalBox3Quad(ps, ts);
+            return getIntervalBox3Dd(ps, ts);
         }
         if (ps.length === 3) {
-            return getIntervalBox2Quad(ps, ts);
+            return getIntervalBox2Dd(ps, ts);
         }
-        return getIntervalBox1Quad(ps, ts);
+        return getIntervalBox1Dd(ps, ts);
     } else {  // ts[0] === ts[1]
-        return getIntervalBoxExactTQuad(ps, ts[0]);
+        return getIntervalBoxAtTDd(ps, ts[0]);
     }
 }
 
 
-// quad precision t1, t2
 /**
+ * quad precision t1, t2
  * 
  * @param param0 
- * @param param1 
+ * @param param1
+ * 
+ * @internal
  */
-function getIntervalBox3Quad(
+function getIntervalBox3Dd(
         [[x0,y0],[x1,y1],[x2,y2],[x3,y3]]: number[][], 
         [t1, t2]: number[][]) {
 
@@ -190,11 +196,14 @@ function getIntervalBox3Quad(
 
 
 /**
+ * quad precision t1, t2
  * 
  * @param param0 
  * @param param1 
+ * 
+ * @internal
  */
-function getIntervalBox2Quad(
+function getIntervalBox2Dd(
         [[x0,y0],[x1,y1],[x2,y2]]: number[][], 
         [t1, t2]: number[][]) {
 
@@ -304,10 +313,14 @@ function getIntervalBox2Quad(
 
 
 /**
+ * quad precision t1, t2
+ * 
  * @param param0 
  * @param param1 
+ * 
+ * @internal
  */
-function getIntervalBox1Quad(
+function getIntervalBox1Dd(
         [[x0,y0],[x1,y1]]: number[][], 
         [t1, t2]: number[][]) {
 
@@ -380,12 +393,14 @@ function getIntervalBox1Quad(
 
 
 /**
+ * quad precision t1, t2
  * 
  * @param ps 
  * @param t 
- * @returns 
+ * 
+ * @internal
  */
-function getIntervalBoxExactTQuad(
+function getIntervalBoxAtTDd(
         ps: number[][], 
         t: number[]) {
 
@@ -408,7 +423,7 @@ function getIntervalBoxExactTQuad(
         ];
     }
 
-    let { p, pE } = evalDeCasteljauWithErrQuad(ps, t);
+    let { p, pE } = evalDeCasteljauWithErrDd(ps, t);
 
     return [
         [qad(p[0],-pE[0]), qad(p[1],-pE[1])],
@@ -417,8 +432,4 @@ function getIntervalBoxExactTQuad(
 }
 
 
-export { 
-    getIntervalBoxQuad, 
-    getIntervalBox1Quad, getIntervalBox2Quad, getIntervalBox3Quad,
-    getIntervalBoxExactTQuad
-}
+export { getIntervalBoxDd }

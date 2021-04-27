@@ -1,8 +1,10 @@
 {
     "out": "docs-create/docs",
     "inputFiles": [
-        "./src/index.ts"
+        //"./src/index.ts"
         //"./src/create/cubic-through-point.ts"
+        //"./src/boxes/are-boxes-intersecting.ts"
+        "./src/global-properties/bounds/get-bounding-box-.ts"
     ],
     "mdxFolder": "docs-create/docs/mdx",
     "exclude": [
@@ -13,6 +15,5 @@
     "stripInternal": true,
     "publicPath": "",
     "excludeTags": ["implementationDetails"],
-    "tsconfig": "c:/projects/bezier/tsconfig.json",
-    "disableOutputCheck": true
+    "tsconfig": "c:/projects/bezier/tsconfig.json"
 }

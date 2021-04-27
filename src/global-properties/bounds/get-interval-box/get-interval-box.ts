@@ -1,4 +1,3 @@
-
 import { evalDeCasteljauWithErr } from "../../../local-properties-at-t/t-to-xy/eval-de-casteljau-with-err";
 
 
@@ -8,16 +7,20 @@ const abs = Math.abs;
 
 
 /**
- * Returns an axis-aligned-box that is guaranteed to engulf the entire given 
- * bezier curve from t1 to t2.
+ * Returns an axis-aligned-box that is guaranteed to engulf the entire 
+ * given bezier curve from t1 to t2. The returned box is given as an array 
+ * of points in double precision, e.g. `[[[1],[1]], [[2],[2]]]`.
  * 
  * * **precondition:** t1 < t2
  * * **precondition:** t1,t2 >= 0 && t1,t2 <= 1
- * * **precondition**: 49-bit aligned coordinates (inherited from 
+ * * **precondition:** 49-bit aligned coordinates (inherited from 
  * evalDeCasteljauWithErr - can easily be relaxed)
  * 
- * @param ps an order 1,2 or 3 bezier curve
+ * @param ps an order 1, 2 or 3 bezier curve given as an array of control 
+ * points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param ts [first, second] parameter values, e.g. [0.11, 0.12]
+ * 
+ * @doc mdx
  */
 function getIntervalBox(
         ps: number[][], 
@@ -34,7 +37,7 @@ function getIntervalBox(
     } 
     
     // ts[0] === ts[1]
-    return getIntervalBoxExactT(ps, ts[0]);
+    return getIntervalBoxAtT(ps, ts[0]);
 }
 
 
@@ -42,7 +45,7 @@ function getIntervalBox(
  * Returns an axis-aligned-box that is guaranteed to engulf the entire given 
  * bezier curve from t1 to t2.
  * 
- * This is achievied by calculating the error bounds of a new curve calculated
+ * This is achieved by calculating the error bounds of a new curve calculated
  * form t1 to t2 using a splitting algorithm and then taking its extreme 
  * control points and finally finding a box that engulfs the control points
  * @internal
@@ -368,12 +371,12 @@ function getIntervalBox1(
 
 
 /**
- * @internal
- * 
  * @param ps 
  * @param t 
+ * 
+ * @internal
  */
-function getIntervalBoxExactT(
+function getIntervalBoxAtT(
         ps: number[][], 
         t: number): number[][] {
 
@@ -394,7 +397,4 @@ function getIntervalBoxExactT(
 }
 
 
-export { 
-    getIntervalBox, 
-    getIntervalBox1, getIntervalBox2, getIntervalBox3
-}
+export { getIntervalBox }

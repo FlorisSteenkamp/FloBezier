@@ -1,6 +1,6 @@
 import { memoize } from "flo-memoize";
 import { getDxy } from "../../to-power-basis/get-dxy";
-import { allRoots, allRootsCertified } from "flo-poly";
+import { allRoots } from "flo-poly";
 import { getIntervalBox } from "./get-interval-box/get-interval-box";
 import { γ } from "../../error-analysis/error-analysis";
 import { operators } from "double-double";
@@ -14,111 +14,108 @@ const u = Number.EPSILON/2;
 const γ1 = γ(1);
 
 
-// TODO - remove!!! testing!!!
-testing();
-function testing() {
-	{
-		// coefficients in double-double precision
-		let p = [
-			[ 0.1580350755837278, 3770986809251668.5 ],
-			[ -0.437621888289444, -11611163849314706 ],
-			[ 0.37925906415346655, 13622867559528270 ],
-			[ -0.18215364304839451, -6015675011409949 ],
-			[ -0.2113068076998193, -2535765899677980.5 ],
-			[ -0.03234301695064162, 1004670324427690 ],
-			[ -0.13228935570003014, 5119556864733271 ],
-			[ 0.46839905715354696, -5283583821747902 ],
-			[ -0.0020342528097285484, 1955103350624411 ],
-			[ -0.004629837980953938, -252827841312240.88 ]
-		];
-
-		// coefficients in double precision
-		let pD = [
-			3770986809251668.5,
-			-11611163849314706,
-			13622867559528270,
-			-6015675011409949,
-			-2535765899677980.5,
-			1004670324427690,
-			5119556864733271,
-			-5283583821747902,
-			1955103350624411,
-			-252827841312240.88
-		];
-
-		// coefficient-wise error bound of double-double precision 
-		// coefficients
-		let pE = [
-			5.973763369817942e-16,
-			3.154260190691488e-15,
-			1.0432584785199789e-14,
-			2.0265321429548282e-14,
-			3.236053769569458e-14,
-			3.1173345325629133e-14,
-			2.228376621708172e-14,
-			1.2374462883419778e-14,
-			3.82255386973334e-15,
-			5.160968273258298e-16
-		];
-
-		//getPsExact
-
-		const ts = allRootsCertified(p, -50, 100, pE, undefined);
-		//console.log(ts);
-
-		//const tsf = allRoots()
-		//assert(isThereRootAt(0, 2, ts));
-	}
-}
-
 /**
  * Returns a tight axis-aligned bounding box bound of the given bezier curve.
- * @param ps 
+ * 
+ * @param ps an order 1, 2 or 3 bezier curve given as an array of control 
+ * points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  */
 const getXBoundsTight = memoize(
-function getXBoundsTight(ps: number[][]) {
-	let pS = ps[0];
-	let pE = ps[ps.length-1];
+	function getXBoundsTight(ps: number[][]): {
+		minX: { ts: number[]; box: number[][]; };
+		maxX: { ts: number[]; box: number[][]; }; } {
 
-	let minX: { ts: number[]; box: number[][]; };
-	let maxX: { ts: number[]; box: number[][]; };
-	if (pS[0] < pE[0]) {
-		minX = { ts: [0,0], box: [pS,pS] };
-		maxX = { ts: [1,1], box: [pE,pE] };
-	} else {
-		minX = { ts: [1,1], box: [pE,pE] };
-		maxX = { ts: [0,0], box: [pS,pS] };
+		let pS = ps[0];
+		let pE = ps[ps.length-1];
+
+		let minX: { ts: number[]; box: number[][]; };
+		let maxX: { ts: number[]; box: number[][]; };
+		if (pS[0] < pE[0]) {
+			minX = { ts: [0,0], box: [pS,pS] };
+			maxX = { ts: [1,1], box: [pE,pE] };
+		} else {
+			minX = { ts: [1,1], box: [pE,pE] };
+			maxX = { ts: [0,0], box: [pS,pS] };
+		}
+
+		if (ps.length === 2) { return { minX, maxX }; }
+
+		let [dx,] = getDxy(ps);  // <= exact if 48-bit aligned
+
+		// Roots of derivative
+		let rootsX: { r: number; rE: number; }[];
+		if (ps.length === 4) {
+			rootsX = quadRoots(dx);
+		} else { // ps.length === 3
+			rootsX = getLinearRoots(dx);
+		}
+			
+		// Test points
+		for (let i=0; i<rootsX.length; i++) {
+			let r = rootsX[i];
+			let ts = [r.r - r.rE, r.r + r.rE];
+			let box = getIntervalBox(ps, ts);
+
+			if (box[0][0] < minX.box[0][0]) { minX = { ts, box } }
+			if (box[1][0] > maxX.box[0][0]) { maxX = { ts, box } }
+		}
+
+		return { minX, maxX };
 	}
-
-	if (ps.length === 2) { return { minX, maxX }; }
-
-	let [dx,] = getDxy(ps);  // <= exact if 48-bit aligned
-
-	// Roots of derivative
-	let rootsX: { r: number; rE: number; }[];
-	if (ps.length === 4) {
-		rootsX = quadRoots(dx);
-	} else { // ps.length === 3
-		rootsX = getLinearRoots(dx);
-	}
-		
-	// Test points
-	for (let i=0; i<rootsX.length; i++) {
-		let r = rootsX[i];
-		let ts = [r.r - r.rE, r.r + r.rE];
-		let box = getIntervalBox(ps, ts);
-
-		if (box[0][0] < minX.box[0][0]) { minX = { ts, box } }
-		if (box[1][0] > maxX.box[0][0]) { maxX = { ts, box } }
-	}
-
-	return { minX, maxX };
-}
 );
 
 
-// TODO - move this another library
-function getLinearRoots([a,b]: number[]): { r: number; rE: number }[] {
+/**
+ * Returns a tight axis-aligned bounding box bound of the given bezier curve.
+ * @param ps an order 1, 2 or 3 bezier curve given as an array of control 
+ * points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ */
+const getYBoundsTight = memoize(
+	function getYBoundsTight(ps: number[][]) {
+		let pS = ps[0];
+		let pE = ps[ps.length-1];
+
+		let minY: { ts: number[]; box: number[][]; };
+		let maxY: { ts: number[]; box: number[][]; };
+		if (pS[1] < pE[1]) {
+			minY = { ts: [0,0], box: [pS,pS] };
+			maxY = { ts: [1,1], box: [pE,pE] };
+		} else {
+			minY = { ts: [1,1], box: [pE,pE] };
+			maxY = { ts: [0,0], box: [pS,pS] };
+		}
+
+		if (ps.length === 2) { return { minY, maxY }; }
+
+		let [,dy] = getDxy(ps);  // <= exact if 48-bit aligned
+		// Roots of derivative
+		let rootsY: { r: number; rE: number; }[];
+		if (ps.length === 4) {
+			rootsY = quadRoots(dy);
+		} else { // ps.length === 3
+			rootsY = getLinearRoots(dy);
+		}
+
+
+		// Test points
+		for (let i=0; i<rootsY.length; i++) {
+			let r = rootsY[i];
+			let ts = [r.r - r.rE, r.r + r.rE];
+			let box = getIntervalBox(ps, ts);
+
+			if (box[0][1] < minY.box[0][1]) { minY = { ts, box } }
+			if (box[1][1] > maxY.box[0][1]) { maxY = { ts, box } }
+		}
+
+		return { minY, maxY };
+	}
+);
+
+
+/**
+ * @internal
+ */
+ function getLinearRoots([a,b]: number[]): { r: number; rE: number }[] {
 	let r = -b/a;
 	let rE = u*abs(b/a);
 
@@ -131,57 +128,11 @@ function getLinearRoots([a,b]: number[]): { r: number; rE: number }[] {
 
 
 /**
- * Returns a tight axis-aligned bounding box bound of the given bezier curve.
- * @param ps 
- */
-const getYBoundsTight = memoize(
-function getYBoundsTight(ps: number[][]) {
-	let pS = ps[0];
-	let pE = ps[ps.length-1];
-
-	let minY: { ts: number[]; box: number[][]; };
-	let maxY: { ts: number[]; box: number[][]; };
-	if (pS[1] < pE[1]) {
-		minY = { ts: [0,0], box: [pS,pS] };
-		maxY = { ts: [1,1], box: [pE,pE] };
-	} else {
-		minY = { ts: [1,1], box: [pE,pE] };
-		maxY = { ts: [0,0], box: [pS,pS] };
-	}
-
-	if (ps.length === 2) { return { minY, maxY }; }
-
-	let [,dy] = getDxy(ps);  // <= exact if 48-bit aligned
-	// Roots of derivative
-	let rootsY: { r: number; rE: number; }[];
-	if (ps.length === 4) {
-		rootsY = quadRoots(dy);
-	} else { // ps.length === 3
-		rootsY = getLinearRoots(dy);
-	}
-
-
-	// Test points
-	for (let i=0; i<rootsY.length; i++) {
-		let r = rootsY[i];
-		let ts = [r.r - r.rE, r.r + r.rE];
-		let box = getIntervalBox(ps, ts);
-
-		if (box[0][1] < minY.box[0][1]) { minY = { ts, box } }
-		if (box[1][1] > maxY.box[0][1]) { maxY = { ts, box } }
-	}
-
-	return { minY, maxY };
-}
-);
-
-
-
-/**
  * Return quad roots in range [0,1] with error assuming input coefficients 
  * are exact.
+ * 
+ * @internal
  */
-// TODO - move this another library
 function quadRoots([a,b,c]: number[]): { r: number; rE: number }[] {
 	// first check a !== 0, else get root of the line 'bt + c = 0'
 	if (a === 0) {
@@ -235,49 +186,52 @@ function quadRoots([a,b,c]: number[]): { r: number; rE: number }[] {
 
 
 /**
- * Returns the approximate axis-aligned bounding box together with the t values 
- * where the bounds on the bezier are reached.
+ * Returns the axis-aligned bounding box together with the t values where the 
+ * bounds on the bezier are reached.
+ * 
+ * @param ps an order 1, 2 or 3 bezier curve given as an array of control 
+ * points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  */
 const getBounds = memoize(
-function getBounds(ps: number[][]) {
-	// Roots of derivative
-	const dxy = getDxy(ps);
-	let rootsX = allRoots(dxy[0],0,1);
-	let rootsY = allRoots(dxy[1],0,1);
+	function getBounds(ps: number[][]): { ts: number[][]; box: number[][]; } {
+		// Roots of derivative
+		const dxy = getDxy(ps);
+		let rootsX = allRoots(dxy[0],0,1);
+		let rootsY = allRoots(dxy[1],0,1);
+			
+		// Endpoints
+		rootsX.push(0, 1); 
+		rootsY.push(0, 1);
 		
-	// Endpoints
-	rootsX.push(0, 1); 
-	rootsY.push(0, 1);
-	
-	let minX = Number.POSITIVE_INFINITY;
-	let minY = Number.POSITIVE_INFINITY;
-	let maxX = Number.NEGATIVE_INFINITY;
-	let maxY = Number.NEGATIVE_INFINITY;
-	
-	let tMinX: number;
-	let tMaxX: number;
-	let tMinY: number;
-	let tMaxY: number;
+		let minX = Number.POSITIVE_INFINITY;
+		let minY = Number.POSITIVE_INFINITY;
+		let maxX = Number.NEGATIVE_INFINITY;
+		let maxY = Number.NEGATIVE_INFINITY;
+		
+		let tMinX: number;
+		let tMaxX: number;
+		let tMinY: number;
+		let tMaxY: number;
 
-	// Test points
-	for (let i=0; i<rootsX.length; i++) {
-		let t = rootsX[i];
-		let [x] = evalDeCasteljau(ps, t);
-		if (x < minX) { minX = x;  tMinX = t; }
-		if (x > maxX) { maxX = x;  tMaxX = t; }
+		// Test points
+		for (let i=0; i<rootsX.length; i++) {
+			let t = rootsX[i];
+			let [x] = evalDeCasteljau(ps, t);
+			if (x < minX) { minX = x;  tMinX = t; }
+			if (x > maxX) { maxX = x;  tMaxX = t; }
+		}
+		for (let i=0; i<rootsY.length; i++) {
+			let t = rootsY[i]; 
+			let [,y] = evalDeCasteljau(ps, t);  
+			if (y < minY) { minY = y;  tMinY = t; }
+			if (y > maxY) { maxY = y;  tMaxY = t; }
+		}
+		
+		let ts  = [[tMinX, tMinY], [tMaxX, tMaxY]];
+		let box = [[minX,  minY ], [maxX,  maxY ]];
+		
+		return { ts, box };
 	}
-	for (let i=0; i<rootsY.length; i++) {
-		let t = rootsY[i]; 
-		let [,y] = evalDeCasteljau(ps, t);  
-		if (y < minY) { minY = y;  tMinY = t; }
-		if (y > maxY) { maxY = y;  tMaxY = t; }
-	}
-	
-	let ts  = [[tMinX, tMinY], [tMaxX, tMaxY]];
-	let box = [[minX,  minY ], [maxX,  maxY ]];
-	
-	return { ts, box };
-}
 );
 
 

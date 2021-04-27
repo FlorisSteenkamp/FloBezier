@@ -1,4 +1,3 @@
-
 import { allRoots, differentiate, Horner as evaluatePoly } from "flo-poly";
 import { getAbsCurvatureExtremaPolys } from "./get-abs-curvature-extrema-polys";
 import { isLine } from "../global-properties/type/is-line";
@@ -22,22 +21,19 @@ type Extrema = {
 
 
 /**
- * Returns the parameter t values (in [0,1]) of local minimum / maximum absolute 
- * curvature for the given bezier curve.
+ * Returns the parameter `t` values (in `[0,1]`) of local minimum / maximum 
+ * absolute curvature for the given bezier curve.
  * 
  * If there are an infinite number of such t values (such as is the case for a 
  * line), an empty array is returned.
  * 
  * * see [MvG](https://math.stackexchange.com/a/1956264/130809)'s excellent 
  * answer on math.stackexchange
- * * endpoints are not considered by default
- * * **non-exact:** the resulting t values may not be the exact t values of the
- * extrema due to floating point roundof during calculation
  * 
  * @param ps an order 1, 2 or 3 bezier curve given as an array of control 
- * points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * 
- * @doc
+ * @doc mdx
  */
 function getCurvatureExtrema(ps: number[][]): Extrema {
     if (isLine(ps)) {

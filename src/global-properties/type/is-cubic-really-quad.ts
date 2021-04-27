@@ -14,7 +14,7 @@ const abs = Math.abs;
  * 
  * @param ps a cubic bezier curve
  * 
- * @doc
+ * @doc mdx
  */
 function isCubicReallyQuad(ps: number[][]) {
     let [[x0,y0],[x1,y1],[x2,y2],[x3,y3]] = ps;

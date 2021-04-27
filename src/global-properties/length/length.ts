@@ -11,7 +11,7 @@ import { distanceBetween } from "flo-vector2d";
  * @param interval the paramter interval over which the length is 
  * to be calculated (usually === [0,1]).
  * 
- * @doc
+ * @doc mdx
  */
 function length(interval: number[], ps: number[][]): number;
 function length(interval: number[]): (ps: number[][]) => number;
@@ -91,6 +91,8 @@ function length2(interval: number[], ps: number[][]) {
 	) / (4*A_32);
 }
 */
+
+
 /**
  * Returns the curve length in the specified interval. This function is curried.
  * @param ps A quadratic bezier, e.g. [[0,0],[1,1],[2,1]]

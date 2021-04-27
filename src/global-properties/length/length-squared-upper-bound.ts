@@ -11,7 +11,7 @@ import { squaredDistanceBetween } from "flo-vector2d";
  * between control points as a measure. 
  * @param ps
  * 
- * @doc
+ * @doc mdx
  */
 function lengthSquaredUpperBound(ps: number[][]): number {
     let totalLength = 0;

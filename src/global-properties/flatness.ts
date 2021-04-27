@@ -10,7 +10,7 @@ import { distanceBetween } from "flo-vector2d";
  * 
  * @param ps An order 1,2 or 3 bezier curve.
  * 
- * @doc
+ * @doc mdx
  */
 function flatness(ps: number[][]): number {
     return lengthUpperBound(ps) / distanceBetween(ps[0], ps[ps.length-1]);

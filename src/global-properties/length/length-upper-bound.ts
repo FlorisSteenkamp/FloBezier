@@ -1,4 +1,3 @@
-
 import { distanceBetween } from "flo-vector2d";
 
 
@@ -9,7 +8,7 @@ import { distanceBetween } from "flo-vector2d";
  * 
  * @param ps 
  * 
- * @doc
+ * @doc mdx
  */
 function lengthUpperBound(ps: number[][]): number {
     let totalLength = 0;

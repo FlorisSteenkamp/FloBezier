@@ -15,7 +15,7 @@ import { evaluateDdxy } from "../local-properties-at-t/t-to-ddxy/evaluate-ddxy";
  * @param ps a cubic bezier
  * @param interval
  * 
- * @doc
+ * @doc mdx
  */
 function totalAbsoluteCurvature(ps: number[][], interval: number[]): number;
 function totalAbsoluteCurvature(ps: number[][]): (interval: number[]) => number; 
@@ -45,6 +45,8 @@ function totalAbsoluteCurvature(ps: number[][], interval?: number[]) {
  * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param interval - The interval of integration (often === [0,1])
  * @returns The total curvature.
+ * 
+ * @doc mdx
  */
 function totalCurvature(ps: number[][], interval: number[]): number;
 function totalCurvature(ps: number[][]): (interval: number[]) => number;

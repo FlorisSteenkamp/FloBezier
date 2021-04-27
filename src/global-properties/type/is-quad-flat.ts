@@ -10,7 +10,7 @@ import { evalDeCasteljau } from '../../local-properties-at-t/t-to-xy/eval-de-cas
  * 
  * @param ps A quadratic bezier curve.
  * 
- * @doc
+ * @internal
  */
 function isQuadFlat(
         ps: number[][],

@@ -12,7 +12,7 @@ import { isLine } from "./is-line";
  * 
  * @param ps An order 1, 2 or 3 bezier curve
  * 
- * @doc
+ * @doc mdx
  */
 function isSelfOverlapping(ps: number[][]) {
     if (!isLine(ps)) { return false; }

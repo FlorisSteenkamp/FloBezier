@@ -1,4 +1,3 @@
-
 import { fromTo, dot } from "flo-vector2d";
 
 
@@ -10,7 +9,7 @@ import { fromTo, dot } from "flo-vector2d";
  * angles ∠P0 and ∠P2 are <= 90 degrees then the quad is considered acute,
  * otherwise it is considered obtuse.
  * 
- * @doc
+ * @doc mdx
  */
 function isQuadObtuse(ps: number[][]) {
     let v0 = fromTo(ps[0], ps[1]);
