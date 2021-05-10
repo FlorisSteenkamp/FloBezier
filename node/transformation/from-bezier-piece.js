@@ -10,6 +10,8 @@ const eval_de_casteljau_1 = require("../local-properties-at-t/t-to-xy/eval-de-ca
  * Uses de Casteljau's algorithm.
  *
  * @param bezierPart A partial bezier
+ *
+ * @doc
  */
 function bezierFromPart(bezierPart) {
     let { ps, ts } = bezierPart;

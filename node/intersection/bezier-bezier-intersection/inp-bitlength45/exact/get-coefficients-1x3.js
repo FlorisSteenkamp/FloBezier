@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCoeffs1x3Exact = void 0;
-const get_implicit_form1_bitlength45_exact_1 = require("../../../../implicit-form/inp-bitlength45/exact/get-implicit-form1-bitlength45-exact");
+const get_implicit_form1_bitlength45_exact_1 = require("../../../../implicit-form/exact/get-implicit-form1-bitlength45-exact");
 const get_xy_1 = require("../../../../to-power-basis/get-xy");
 const double_double_1 = require("double-double");
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗

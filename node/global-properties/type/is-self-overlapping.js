@@ -11,7 +11,10 @@ const is_line_1 = require("./is-line");
  *
  * Robust: This function is robust via adaptive infinite precision floating
  * point arithmetic.
+ *
  * @param ps An order 1, 2 or 3 bezier curve
+ *
+ * @doc mdx
  */
 function isSelfOverlapping(ps) {
     if (!is_line_1.isLine(ps)) {

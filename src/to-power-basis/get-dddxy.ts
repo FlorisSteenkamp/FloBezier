@@ -1,4 +1,3 @@
-
 /**
  * Returns the 3rd derivative of the power basis representation of a line, 
  * quadratic or cubic bezier's x and y-coordinates.

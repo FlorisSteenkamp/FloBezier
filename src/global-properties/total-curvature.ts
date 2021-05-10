@@ -17,22 +17,15 @@ import { evaluateDdxy } from "../local-properties-at-t/t-to-ddxy/evaluate-ddxy";
  * 
  * @doc mdx
  */
-function totalAbsoluteCurvature(ps: number[][], interval: number[]): number;
-function totalAbsoluteCurvature(ps: number[][]): (interval: number[]) => number; 
-function totalAbsoluteCurvature(ps: number[][], interval?: number[]) {
+function totalAbsoluteCurvature(
+		ps: number[][], 
+		interval: number[]): number {
 	
-	function f(interval: number[] = [0,1]) {
-		// Numerically integrate the absolute curvature
-		let result = gaussQuadrature(
-				t => Math.abs(κds(ps, t)),
-				interval
-		);
-		
-		return result;		
-	}
-
-	// Curry
-	return interval === undefined ? f : f(interval);
+	// Numerically integrate the absolute curvature
+	return gaussQuadrature(
+			t => Math.abs(κds(ps, t)),
+			interval
+	);
 }
 
 
@@ -48,13 +41,14 @@ function totalAbsoluteCurvature(ps: number[][], interval?: number[]) {
  * 
  * @doc mdx
  */
-function totalCurvature(ps: number[][], interval: number[]): number;
-function totalCurvature(ps: number[][]): (interval: number[]) => number;
-function totalCurvature(ps: number[][], interval?: number[]) {
+function totalCurvature(
+		ps: number[][], 
+		interval: number[]): number {
+
 	//const tanPs = tangent(ps);
 
-	function f(interval: number[]): number {
-		return gaussQuadrature(t => κds(ps,t), interval);
+
+	return gaussQuadrature(t => κds(ps,t), interval);
 		// TODO
 		/*
 		let [a,b] = interval;
@@ -62,10 +56,6 @@ function totalCurvature(ps: number[][], interval?: number[]) {
 		let tangentB = tanPs(b);
 		let sinθ = Vector.cross(tanA, tanB)
 		*/
-	}
-
-	// Curry
-	return interval === undefined ? f : f(interval);
 }
 
 

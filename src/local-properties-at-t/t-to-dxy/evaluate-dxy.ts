@@ -3,13 +3,15 @@ import { getDxy } from '../../to-power-basis/get-dxy';
 
 
 /**
- * Returns the value of the once differentiated (with respect to t) bezier 
- * when evaluated at t. This function is curried.
+ * Returns the `[x,y]` value of the once differentiated (with respect to `t`) 
+ * bezier curve when evaluated at `t`. This function is curried.
  * 
- * @param ps A line, quadratic or cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param t The t parameter
+ * * uses double precision calculations internally
  * 
- * @doc
+ * @param ps a linear, quadratic or cubic bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param t the t parameter
+ * 
+ * @doc mdx
  */
  function evaluateDxy(ps: number[][], t: number): number[];
  function evaluateDxy(ps: number[][]): (t: number) => number[];

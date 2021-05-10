@@ -8,7 +8,7 @@ import { quadraticToCubic } from "./quadratic-to-cubic";
  * 
  * @param ps An order 1, 2 or 3 bezier curve
  * 
- * @doc
+ * @doc mdx
  */
 function toCubic(ps: number[][]) {
 	if (ps.length === 2) { // Linear

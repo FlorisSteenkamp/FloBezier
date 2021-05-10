@@ -11,6 +11,8 @@
  * * max bitlength increase === max shift === 0 (for lines)
  *
  * @param ps An order 1,2 or 3 bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ *
+ * @doc
  */
 declare function getDdxyAt1(ps: number[][]): number[];
 export { getDdxyAt1 };

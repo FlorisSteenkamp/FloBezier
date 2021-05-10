@@ -1,15 +1,21 @@
-
 /** 
- * Evaluates the given bezier curve at the parameter t.
+ * Returns the result of evaluating the given bezier curve at the parameter `t`
+ * using [De Casteljau's algorithm](https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm)
+ * in double precision floating point arithmetic.
  * 
- * @param ps An order 1, 2 or 3 bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param t The parameter value where the bezier should be evaluated
+ * The resulting point `p` is returned as the pair `[x,y]`, where `x` and `y` are 
+ * double precision floating point numbers.
  * 
- * @doc
+ * * max bit-aligned bitlength increase: ??? bits TODO
+ * 
+ * @param ps an order 1, 2 or 3 bezier curve, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param t the parameter value where the bezier should be evaluated
+ * 
+ * @doc mdx
  **/
 function evalDeCasteljau(
 		ps: number[][], 
-		t: number) {
+		t: number): number[] {
 
 	if (t === 0) {
 		return ps[0];

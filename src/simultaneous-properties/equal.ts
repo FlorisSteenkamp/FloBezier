@@ -1,19 +1,22 @@
-
 /**
- * Returns true if the two beziers are deeply equal
+ * Returns true if the two given bezier curves are exactly equal as compared
+ * by value (deep equality)
  * 
- * @param psA an order 2, 3 or 4 bezier curve
- * @param psB another bezier curve
+ * @param ps1 an order 1, 2 or 3 bezier curve
+ * @param ps2 another bezier curve
  * 
  * @doc
  */
-function equal(psA: number[][], psB: number[][]) {
-    if (psA === psB) { return true; }
+function equal(
+        ps1: number[][], 
+        ps2: number[][]): boolean {
 
-    if (psA.length !== psB.length) { return false; }
+    if (ps1 === ps2) { return true; }
+
+    if (ps1.length !== ps2.length) { return false; }
     
-    for (let i=0; i<psA.length; i++) {
-        if (psA[i][0] !== psB[i][0] || psA[i][1] !== psB[i][1]) {
+    for (let i=0; i<ps1.length; i++) {
+        if (ps1[i][0] !== ps2[i][0] || ps1[i][1] !== ps2[i][1]) {
             return false;
         }
     }

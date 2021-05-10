@@ -1,9 +1,11 @@
 
 
+// TODO - complete implementations of other orders, etc.
+
 /**
- * * see https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm
+ * * see [De Casteljau's algorithm](https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm)
  * 
- * @doc
+ * @internal
  */
 function splitDeCasteljau3(cs: number[], t: number): number[][] {
 	if (t === 0) { return [[cs[0], cs[0], cs[0], cs[0]], cs]; }

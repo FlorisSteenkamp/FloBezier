@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCoeffs3x1 = void 0;
-const get_implicit_form3_bitlength45_double_1 = require("../../../../implicit-form/inp-bitlength45/double/get-implicit-form3-bitlength45-double");
+const get_implicit_form3_bitlength45_double_1 = require("../../../../implicit-form/double/get-implicit-form3-bitlength45-double");
 const error_analysis_1 = require("../../../../error-analysis/error-analysis");
 const get_xy_1 = require("../../../../to-power-basis/get-xy");
 let abs = Math.abs;

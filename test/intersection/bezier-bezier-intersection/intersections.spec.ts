@@ -2,7 +2,7 @@
 import { expect, assert } from 'chai';
 //import { describe } from 'mocha';
 import 'mocha';
-import { bezierBezierIntersectionImplicit } from '../../../src/index';
+import { bezierBezierIntersection } from '../../../src/index';
 
 
 describe('intersections', function() {
@@ -10,7 +10,7 @@ describe('intersections', function() {
 	function() {
         let ps1 = [[1,1],[2,2]];
         let ps2 = [[0,1.5],[1.5,0.2]];
-        let ts = bezierBezierIntersectionImplicit(ps1, ps2);
+        let ts = bezierBezierIntersection(ps1, ps2);
         console.log(ts);
         //assert(r < 0);
     });
@@ -19,7 +19,7 @@ describe('intersections', function() {
 	function() {
         let ps1 = [[1,1],[2,2]];
         let ps2 = [[0,1.5],[1.5,0.2], ];
-        let ts = bezierBezierIntersectionImplicit(ps1, ps2);
+        let ts = bezierBezierIntersection(ps1, ps2);
         console.log(ts);
         //assert(r < 0);
 	});

@@ -9,8 +9,11 @@ const split_at_1 = require("./split-at");
  * A loose bound on the accuracy of the resultant points is given by:
  * |δP| = 2n*max(|b_k|)η, where n = 3 (cubic), b_k are the control points
  * and η is Number.EPSILON.
- * @param ps - A cubic bezier curve
- * @param t - The t parameter where the resultant bezier should end
+ *
+ * @param ps a cubic bezier curve
+ * @param t the t parameter where the resultant bezier should end
+ *
+ * @doc
  */
 function from0ToT(ps, t) {
     return split_at_1.splitAt(ps, t)[0];

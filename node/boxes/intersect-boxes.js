@@ -4,13 +4,17 @@ exports.intersectBoxes = void 0;
 const min = Math.min;
 const max = Math.max;
 /**
- * Returns the intersection of 2 given axis-aligned rectangular boxes.
+ * Returns the intersection of 2 given axis-aligned rectangular boxes (or
+ * `undefined` if they don't intersect).
  *
- * * **exact**
- * * **closed**:  interpret boxes as being closed (i.e. they contain their border).
+ * * **exact** - not susceptible to floating point round-off
+ * * **closed** - interpret boxes as being closed (i.e. they contain their border).
  *
- * @param a an axis-aligned rectangular box
- * @param a another axis-aligned rectangular box
+ * @param a an axis-aligned rectangular box (given by an array of two [[Point]]s,
+ * e.g. `[[1,2], [3,4]]` )
+ * @param b another box
+ *
+ * @doc mdx
  */
 function intersectBoxes(a, b) {
     let [[ax0, ay0], [ax1, ay1]] = a;

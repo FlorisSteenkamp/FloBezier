@@ -13,8 +13,11 @@ let splitAtFs = [splitLineAt, splitQuadAt, splitCubicAt];
 /**
  * Returns 2 new beziers split at the given t parameter, i.e. for the ranges
  * [0,t] and [t,1].
+ *
  * @param ps An order 1, 2 or 3 bezier curve
  * @param t The curve parameter
+ *
+ * @doc
  */
 function splitAt(ps, t) {
     return splitAtFs[ps.length - 2](ps, t);
@@ -34,6 +37,8 @@ let splitAtPreciseFs = [
  *
  * @param ps An order 1, 2 or 3 bezier curve
  * @param t The curve parameter
+ *
+ * @doc
  */
 function splitAtPrecise(ps, t) {
     return splitAtPreciseFs[ps.length - 2](ps, t);
@@ -57,8 +62,11 @@ exports.splitAtExact = splitAtExact;
  * A loose bound on the accuracy of the resultant points is given by:
  * |δP| = 2n*max_k(|b_k|)η, where n = 3 (cubic), b_k are the control points
  * and η is Number.EPSILON.
+ *
  * @param ps A cubic bezier curve
  * @param t The t parameter where the curve should be split
+ *
+ * @doc
  */
 function splitCubicAt(ps, t) {
     let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;

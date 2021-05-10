@@ -8,6 +8,8 @@
  * the precision can require 6 doubles for the t^3 term.
  *
  * @param ps An order 1, 2 or 3 bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ *
+ * @doc
  */
 declare function getXYExact(ps: number[][]): number[][][];
 export { getXYExact };

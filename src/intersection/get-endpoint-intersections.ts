@@ -6,16 +6,18 @@ import { evaluate_anyBitlength_exact } from "../local-properties-at-t/t-to-xy/an
 
 
 /**
- * Returns the t pairs where the endpoints of the two given same-k-family curves 
- * overlap.
+ * Returns the parameter `t` values where the endpoints of the two 
+ * given *algebraically identical* curves overlap.
  * 
- * * **precondition**: the two given curves must be in the same k-family.
+ * * **precondition:** the two given curves must be *algebraically identical*
+ * (i.e. in the same k-family, in other words identical except possibly for
+ * endpoints).
  * 
  * @param ps1 an order 1,2 or 3 bezier curve
  * @param ps2 another order 1,2 or 3 bezier curve
  * @param minD an error bound given as a distance
  * 
- * @doc
+ * @doc mdx
  */
 function getEndpointIntersections(
         ps1: number[][],
@@ -35,34 +37,43 @@ function getEndpointIntersections(
 
     let riPairs: RootInterval[][] = [];
     let minD2S1 = squaredDistanceBetween(evaluate_anyBitlength_exact(ps2, t2S1).map(eEstimate), p1S)
-    if (t2S1 && minD2S1 < minD) {
+    //console.log(t2S1, minD2S1)
+    //if (t2S1 && minD2S1 < minD) {
+    if (t2S1 !== undefined && minD2S1 < minD) {
         riPairs.push([
             createRootExact(0), // TODO - multiplicity should be +infinity ??
             createRootExact(t2S1)  // TODO - multiplicity should be +infinity ??
         ]);
     }
     let minD2E1 = squaredDistanceBetween(evaluate_anyBitlength_exact(ps2, t2E1).map(eEstimate), p1E)
-    if (t2E1 && minD2E1 < minD) {
+    //console.log(t2E1, minD2E1)
+    //if (t2E1 && minD2E1 < minD) {
+    if (t2E1 !== undefined && minD2E1 < minD) {
         riPairs.push([
             createRootExact(1), // TODO - multiplicity should be +infinity ??
             createRootExact(t2E1), // TODO - multiplicity should be +infinity ??
         ]);
     }
     let minD1S2 = squaredDistanceBetween(evaluate_anyBitlength_exact(ps1, t1S2).map(eEstimate), p2S)
-    if (t1S2 && minD1S2 < minD) {
+    //console.log(t1S2, minD1S2)
+    //if (t1S2 && minD1S2 < minD) {
+    if (t1S2 !== undefined && minD1S2 < minD) {
         riPairs.push([
             createRootExact(t1S2), // TODO - multiplicity should be +infinity ??
             createRootExact(0), // TODO - multiplicity should be +infinity ??
         ]);
     }
     let minD1E2 = squaredDistanceBetween(evaluate_anyBitlength_exact(ps1, t1E2).map(eEstimate), p2E)
-    if (t1E2 && minD1E2 < minD) {
+    //console.log(t1E2, minD1E2)
+    //if (t1E2 && minD1E2 < minD) {
+    if (t1E2 !== undefined && minD1E2 < minD) {
         riPairs.push([
             createRootExact(t1E2), // TODO - multiplicity should be +infinity ??
             createRootExact(1), // TODO - multiplicity should be +infinity ??
         ]);
     }
 
+    //console.log(riPairs)
     return riPairs;
 }
 

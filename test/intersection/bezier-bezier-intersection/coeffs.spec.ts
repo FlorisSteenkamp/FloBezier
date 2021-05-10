@@ -5,15 +5,15 @@ import 'mocha';
 import { estimate, expansionDiff, qNegativeOf } from 'flo-numerical';
 import { toGrid } from '../../helpers/to-grid'
 import { 
-    getCoeffs3x3, getCoeffs3x3Quad, getCoeffs3x3Exact,
-    getCoeffs3x2, getCoeffs3x2Quad, getCoeffs3x2Exact, 
-    getCoeffs3x1, getCoeffs3x1Quad, getCoeffs3x1Exact,
-    getCoeffs2x3, getCoeffs2x3Quad, getCoeffs2x3Exact,
-    getCoeffs2x2, getCoeffs2x2Quad, getCoeffs2x2Exact, 
-    getCoeffs2x1, getCoeffs2x1Quad, getCoeffs2x1Exact,
-    getCoeffs1x3, getCoeffs1x3Quad, getCoeffs1x3Exact,
-    getCoeffs1x2, getCoeffs1x2Quad, getCoeffs1x2Exact, 
-    getCoeffs1x1, getCoeffs1x1Quad, getCoeffs1x1Exact
+    getCoeffsBez3Bez3, getCoeffsBez3Bez3Dd, getCoeffsBez3Bez3Exact,
+    getCoeffsBez3Bez2, getCoeffsBez3Bez2Dd, getCoeffsBez3Bez2Exact, 
+    getCoeffsBez3Bez1, getCoeffsBez3Bez1Dd, getCoeffsBez3Bez1Exact,
+    getCoeffsBez2Bez3, getCoeffsBez2Bez3Dd, getCoeffsBez2Bez3Exact,
+    getCoeffsBez2Bez2, getCoeffsBez2Bez2Dd, getCoeffsBez2Bez2Exact, 
+    getCoeffsBez2Bez1, getCoeffsBez2Bez1Dd, getCoeffsBez2Bez1Exact,
+    getCoeffsBez1Bez3, getCoeffsBez1Bez3Dd, getCoeffsBez1Bez3Exact,
+    getCoeffsBez1Bez2, getCoeffsBez1Bez2Dd, getCoeffsBez1Bez2Exact, 
+    getCoeffsBez1Bez1, getCoeffsBez1Bez1Dd, getCoeffsBez1Bez1Exact
 } from '../../../src/index';
 
 
@@ -39,34 +39,34 @@ const _bz_1: number[][] = [[0,0],[0,0]];
 
 const coeffFs = [,
     [,
-        { est: getCoeffs1x1, exact: getCoeffs1x1Exact },    
-        { est: getCoeffs1x2, exact: getCoeffs1x2Exact }, 
-        { est: getCoeffs1x3, exact: getCoeffs1x3Exact }
+        { est: getCoeffsBez1Bez1, exact: getCoeffsBez1Bez1Exact },    
+        { est: getCoeffsBez1Bez2, exact: getCoeffsBez1Bez2Exact }, 
+        { est: getCoeffsBez1Bez3, exact: getCoeffsBez1Bez3Exact }
     ], [,
-        { est: getCoeffs2x1, exact: getCoeffs2x1Exact },
-        { est: getCoeffs2x2, exact: getCoeffs2x2Exact }, 
-        { est: getCoeffs2x3, exact: getCoeffs2x3Exact }
+        { est: getCoeffsBez2Bez1, exact: getCoeffsBez2Bez1Exact },
+        { est: getCoeffsBez2Bez2, exact: getCoeffsBez2Bez2Exact }, 
+        { est: getCoeffsBez2Bez3, exact: getCoeffsBez2Bez3Exact }
     ], [,
-        { est: getCoeffs3x1, exact: getCoeffs3x1Exact },
-        { est: getCoeffs3x2, exact: getCoeffs3x2Exact }, 
-        { est: getCoeffs3x3, exact: getCoeffs3x3Exact }
+        { est: getCoeffsBez3Bez1, exact: getCoeffsBez3Bez1Exact },
+        { est: getCoeffsBez3Bez2, exact: getCoeffsBez3Bez2Exact }, 
+        { est: getCoeffsBez3Bez3, exact: getCoeffsBez3Bez3Exact }
     ]
 ];
 
 
-const implFormQuadFs = [,
+const implFormDdFs = [,
     [,
-        { est: getCoeffs1x1Quad, exact: getCoeffs1x1Exact },    
-        { est: getCoeffs1x2Quad, exact: getCoeffs1x2Exact }, 
-        { est: getCoeffs1x3Quad, exact: getCoeffs1x3Exact }
+        { est: getCoeffsBez1Bez1Dd, exact: getCoeffsBez1Bez1Exact },    
+        { est: getCoeffsBez1Bez2Dd, exact: getCoeffsBez1Bez2Exact }, 
+        { est: getCoeffsBez1Bez3Dd, exact: getCoeffsBez1Bez3Exact }
     ], [,
-        { est: getCoeffs2x1Quad, exact: getCoeffs2x1Exact },
-        { est: getCoeffs2x2Quad, exact: getCoeffs2x2Exact }, 
-        { est: getCoeffs2x3Quad, exact: getCoeffs2x3Exact }
+        { est: getCoeffsBez2Bez1Dd, exact: getCoeffsBez2Bez1Exact },
+        { est: getCoeffsBez2Bez2Dd, exact: getCoeffsBez2Bez2Exact }, 
+        { est: getCoeffsBez2Bez3Dd, exact: getCoeffsBez2Bez3Exact }
     ], [,
-        { est: getCoeffs3x1Quad, exact: getCoeffs3x1Exact },
-        { est: getCoeffs3x2Quad, exact: getCoeffs3x2Exact }, 
-        { est: getCoeffs3x3Quad, exact: getCoeffs3x3Exact }
+        { est: getCoeffsBez3Bez1Dd, exact: getCoeffsBez3Bez1Exact },
+        { est: getCoeffsBez3Bez2Dd, exact: getCoeffsBez3Bez2Exact }, 
+        { est: getCoeffsBez3Bez3Dd, exact: getCoeffsBez3Bez3Exact }
     ]
 ];
 
@@ -98,7 +98,7 @@ describe('intersection coefficients', function() {
 
             for (let j=1; j<=3; j++) {
                 for (let k=1; k<=3; k++) {
-                    let f = implFormQuadFs[j][k];
+                    let f = implFormDdFs[j][k];
                     testCoeffsQuad(j,k, f.est, f.exact, bzs1[j], bzs2[k], i);
                 }
             }

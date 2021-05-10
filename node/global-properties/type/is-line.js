@@ -11,6 +11,8 @@ const { orient2d } = big_float_ts_1.operators;
  * * **exact:** for any bitlength of the given coordinates.
  *
  * @param ps An order 1, 2 or 3 bezier curve.
+ *
+ * @doc mdx
  */
 function isLine(ps) {
     if (ps.length === 2) {
@@ -33,7 +35,10 @@ exports.isLine = isLine;
 /**
  * Returns true if the given bezier degenerates to a horizontal line (possibly
  * self-overlapping)
+ *
  * @param ps An order 1, 2 or 3 bezier curve.
+ *
+ * @doc
  */
 function isHorizontalLine(ps) {
     let y = ps[0][1];
@@ -48,7 +53,10 @@ exports.isHorizontalLine = isHorizontalLine;
 /**
  * Returns true if the given bezier degenerates to a vertical line (possibly
  * self-overlapping)
+ *
  * @param ps An order 1, 2 or 3 bezier curve.
+ *
+ * @doc
  */
 function isVerticalLine(ps) {
     let x = ps[0][0];

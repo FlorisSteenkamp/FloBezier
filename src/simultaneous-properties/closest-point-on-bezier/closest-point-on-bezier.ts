@@ -1,4 +1,3 @@
-
 import { getTangentPolyFromPoint } from "../get-tangent-poly-from-point/naive/get-tangent-poly-from-point";
 import { getTangentPolyFromPointExact } from "../get-tangent-poly-from-point/exact/get-tangent-poly-from-point";
 import { evaluate_anyBitlength_exact } from "../../local-properties-at-t/t-to-xy/any-bitlength/exact/evaluate-any-bitlength-exact";

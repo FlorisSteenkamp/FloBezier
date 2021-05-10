@@ -7,7 +7,10 @@
  *
  * Robust: This function is robust via adaptive infinite precision floating
  * point arithmetic.
+ *
  * @param ps An order 1, 2 or 3 bezier curve
+ *
+ * @doc mdx
  */
 declare function isSelfOverlapping(ps: number[][]): boolean;
 export { isSelfOverlapping };

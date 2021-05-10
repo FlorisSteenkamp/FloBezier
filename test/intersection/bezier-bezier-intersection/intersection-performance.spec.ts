@@ -2,7 +2,7 @@
 import { expect, assert } from 'chai';
 //import { describe } from 'mocha';
 import 'mocha';
-import { bezierBezierIntersectionImplicit, bezierSelfIntersection } from '../../../src/index';
+import { bezierBezierIntersection, bezierSelfIntersection } from '../../../src/index';
 // @ts-ignore
 import { performance } from 'perf_hooks';
 import { toGrid } from '../../helpers/to-grid'
@@ -34,7 +34,7 @@ function test() {
     //const r = Math.random;
     const r = randOnGrid_;
 
-    const n = 20_000;
+    const n = 2_000;
     let curves: paper.Curve[] = [];
     let pss: number[][][] = [];
     for (let i=0; i<n; i++) {
@@ -58,11 +58,12 @@ function test() {
         for (let i=0; i<n-1; i++) {
             const ps1 = pss[i];
             const ps2 = pss[i+1];
-            const ts = bezierBezierIntersectionImplicit(ps1, ps2);
-            if (ts.length) { total1++ }
+            const ts = bezierBezierIntersection(ps1, ps2);
+            //if (ts.length) { total1++ }
+            total1 += ts.length;
         }
         let timing = performance.now() - timeStart;
-        console.log('milli-seconds: ' + timing.toFixed(3));
+        console.log('native: milli-seconds: ' + timing.toFixed(3));
     }
     console.log(total1)
 
@@ -75,10 +76,11 @@ function test() {
             const curve1 = curves[i];
             const curve2 = curves[i+1];
             const ts = curve1.getIntersections(curve2);
-            if (ts.length) { total2++ }
+            //if (ts.length) { total2++ }
+            total2 += ts.length;
         }
         let timing = performance.now() - timeStart;
-        console.log('milli-seconds: ' + timing.toFixed(3));
+        console.log('paper.js: milli-seconds: ' + timing.toFixed(3));
     }
     console.log(total2)
 

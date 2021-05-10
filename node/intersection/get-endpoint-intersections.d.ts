@@ -8,6 +8,8 @@ import { RootInterval } from "flo-poly";
  * @param ps1 an order 1,2 or 3 bezier curve
  * @param ps2 another order 1,2 or 3 bezier curve
  * @param minD an error bound given as a distance
+ *
+ * @doc
  */
 declare function getEndpointIntersections(ps1: number[][], ps2: number[][], minD: number): RootInterval[][];
 export { getEndpointIntersections };

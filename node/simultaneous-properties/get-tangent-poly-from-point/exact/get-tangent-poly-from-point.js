@@ -17,8 +17,11 @@ const qm4 = double_double_1.ddMultBy4;
  * * **precondition** coefficients of curve and point bit-aligned bitlength <= 46
  * * the resulting coefficients are guaranteed to have max bitlength 106 (so it
  * can fit in a double-double)
+ *
  * @param ps An order 1, 2 or 3 bezier curve given by its control points.
  * @param p
+ *
+ * @doc
  */
 function getTangentPolyFromPointExact(ps, p) {
     if (ps.length === 4) {

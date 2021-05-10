@@ -1,12 +1,15 @@
-import { RootInterval } from 'flo-poly';
+import { RootInterval } from "flo-poly";
 import { X } from './x';
 /**
  * Returns the intersection polynomial coefficients between two bezier curves
  * unless all coefficients are exactly zero in which case undefined is returned
  * so that is easy to check if the two curves are actually identical
  * algebraically when endpoints are ignored.
+ *
  * @param ps1
  * @param ps2
+ *
+ * @doc
  */
 declare function getIntersectionCoeffs(ps1: number[][], ps2: number[][]): {
     coeffs: number[][];
@@ -26,7 +29,10 @@ declare function getIntersectionCoeffs(ps1: number[][], ps2: number[][]): {
  * or quadratic if given as such (check with isReallyQuadratic), else convert
  * them (cubics can be converted with toQuadraticFromCubic)
  * * algorithm adapted from [Indrek](http://www.mare.ee/indrek/misc/2d.pdf)
+ *
  * @param ps
+ *
+ * @doc
  */
 declare function bezierBezierIntersectionImplicit(ps1: number[][], ps2: number[][]): RootInterval[];
 /**

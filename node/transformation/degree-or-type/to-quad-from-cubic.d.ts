@@ -5,7 +5,10 @@
  * * the resulting quadratic will be exactly the cubic if the cubic is really
  * a quadratic in disguise and the bit-aligned bitlength of the coordinates of
  * the control points <= 52.
+ *
  * @param ps a cubic bezier curve.
+ *
+ * @doc
  */
 declare function toQuadraticFromCubic(ps: number[][]): number[][];
 export { toQuadraticFromCubic };

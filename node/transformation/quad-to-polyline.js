@@ -6,7 +6,10 @@ const split_at_1 = require("./split-merge-clone/split-at");
 /**
  * Transforms the given quadratic bezier into a polyline approximation to within
  * a given tolerance.
+ *
  * @param ps A quadratic bezier curve given as an array of points.
+ *
+ * @doc
  */
 function quadToPolyline(ps, tolerance) {
     // A quad bezier has the following useful properties (Let the control

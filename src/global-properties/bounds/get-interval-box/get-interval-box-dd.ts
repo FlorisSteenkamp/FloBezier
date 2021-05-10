@@ -1,4 +1,4 @@
-import { evalDeCasteljauWithErrDd } from "../../../local-properties-at-t/t-to-xy/dd-eval-de-casteljau-with-err";
+import { evalDeCasteljauWithErrDd } from "../../../local-properties-at-t/t-to-xy/eval-de-casteljau-with-err-dd";
 import { operators } from "double-double";
 
 const { 

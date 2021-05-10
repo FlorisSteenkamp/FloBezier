@@ -8,7 +8,9 @@ const flo_poly_1 = require("flo-poly");
  * * see [Caffeine Owl](http://www.caffeineowl.com/graphics/2d/vectorial/cubic-inflexion.html)
  *
  * @param ps an order 1, 2 or 3 bezier curve
- **/
+ *
+ * @doc mdx
+ */
 function getInflections(ps) {
     if (ps.length < 4) {
         // Neither lines, nor parabolas have inflection points

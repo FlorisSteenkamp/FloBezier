@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCoeffs2x2Quad = void 0;
 const error_analysis_1 = require("../../../../error-analysis/error-analysis");
 const double_double_1 = require("double-double");
-const get_implicit_form2_bitlength45_double_double_1 = require("../../../../implicit-form/inp-bitlength45/double-double/get-implicit-form2-bitlength45-double-double");
+const get_implicit_form2_bitlength45_double_double_1 = require("../../../../implicit-form/double-double/get-implicit-form2-bitlength45-double-double");
 const get_xy_1 = require("../../../../to-power-basis/get-xy");
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const tp = double_double_1.twoProduct;

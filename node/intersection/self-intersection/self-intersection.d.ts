@@ -5,7 +5,10 @@
  * * only cubic (or higher order) bezier curves have self-intersections
  * * see http://www.mare.ee/indrek/misc/2d.pdf
  * * the returned t values are within 1 ulp accurate
+ *
  * @param ps A cubic bezier curve.
+ *
+ * @doc
  */
 declare function bezierSelfIntersection(ps: number[][]): number[];
 /**

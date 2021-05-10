@@ -19,6 +19,8 @@
  *
  * @param psI The incoming bezier that ends at the interface
  * @param psO The outgoing bezier that starts at the interface
+ *
+ * @doc
  */
 declare function getInterfaceCcw(psI: number[][], psO: number[][]): number;
 export { getInterfaceCcw };

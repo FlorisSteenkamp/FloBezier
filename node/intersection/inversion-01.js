@@ -17,6 +17,8 @@ const { eEstimate } = big_float_ts_1.operators;
  *
  * @param ps
  * @param p
+ *
+ * @doc
  */
 function inversion01Precise(ps, p) {
     // TODO - a double point could give two t-values which is not currently

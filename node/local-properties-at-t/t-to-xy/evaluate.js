@@ -7,6 +7,8 @@ const flo_poly_1 = require("flo-poly");
  *
  * @param ps
  * @param t
+ *
+ * @doc
  */
 function evaluate(ps, t) {
     const len = ps.length;

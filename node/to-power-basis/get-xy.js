@@ -18,6 +18,8 @@ exports.getXY = void 0;
  * (due to 'multiplication' by 4 (1x 1x)
  *
  * @param ps An order 1, 2 or 3 bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ *
+ * @doc
  */
 function getXY(ps) {
     if (ps.length === 4) {

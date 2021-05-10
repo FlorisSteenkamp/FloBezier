@@ -1,0 +1,12 @@
+{
+    "name": "flo-bezier3-performance",
+    "author": {
+        "name": "Floris Steenkamp"
+    },
+    "license": "MIT",
+    "private": false,
+    "scripts": {
+        "build": "tsc bezier-bezier-intersection.ts",
+        "start": "ts-node bezier-bezier-intersection.ts"
+    }
+}

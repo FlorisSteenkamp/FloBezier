@@ -7,8 +7,11 @@ const flatness_1 = require("../../global-properties/flatness");
  * Split the order 1, 2 or 3 bezier into pieces (given as an array of parameter
  * (t) values) such that each piece is flat within a given tolerance given by
  * the flatness function.
+ *
  * @param ps
- * @param tolerance Maximum tolerance (must be > 1) for flatness measure.
+ * @param tolerance maximum tolerance (must be > 1) for flatness measure.
+ *
+ * @doc
  */
 function splitByMaxCurvature(ps, tolerance = 1.1) {
     let ts = [0, 1]; // include endpoints

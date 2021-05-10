@@ -14,8 +14,11 @@ const estimate = big_float_ts_1.eEstimate;
  * Returns the closest point on the bezier to the given point - returns the point
  * and the t value.
  * * this function also acts as an excellent inversion formula.
+ *
  * @param ps
  * @param p
+ *
+ * @doc
  */
 function closestPointOnBezierPrecise(ps, p) {
     let poly = get_tangent_poly_from_point_2.getTangentPolyFromPointExact(ps, p);

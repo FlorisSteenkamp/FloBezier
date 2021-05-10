@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getBoundingBoxTight = void 0;
-const flo_memoize_1 = require("flo-memoize");
 const flo_vector2d_1 = require("flo-vector2d");
 const get_bounding_box_1 = require("./get-bounding-box");
 const length_squared_upper_bound_1 = require("../length/length-squared-upper-bound");
@@ -9,8 +8,14 @@ const eval_de_casteljau_1 = require("../../local-properties-at-t/t-to-xy/eval-de
 /**
  * Returns a **non-certified**, **rotated**, **tight** bounding box of the given
  * order 1, 2 or 3 bezier curve as four ordered points of a rotated rectangle.
+ * (Each point is given as `[x,y]`)
+ *
+ * @param ps an order 1, 2 or 3 bezier curve given as an array of control
+ * points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ *
+ * @doc mdx
  */
-const getBoundingBoxTight = flo_memoize_1.memoize(function getBoundingBoxTight(ps) {
+function getBoundingBoxTight(ps) {
     let [xS, yS] = ps[0];
     let [xE, yE] = ps[ps.length - 1];
     let sinθ;
@@ -36,19 +41,22 @@ const getBoundingBoxTight = flo_memoize_1.memoize(function getBoundingBoxTight(p
     ];
     let rotate_ = flo_vector2d_1.rotate(sinθ, cosθ);
     return axisAlignedBox.map(p => flo_vector2d_1.translate(ps[0], rotate_(p)));
-});
+}
 exports.getBoundingBoxTight = getBoundingBoxTight;
 /**
  * Helper function. Returns the bounding box of the normalized (i.e. first point
  * moved to origin and rotated so that last point lies on x-axis) given cubic
  * bezier.
- * @ignore
+ *
+ * * returns the bounding box in the form [[minX, minY], [maxX,maxY]
+ *
  * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param sinθ - Sine of angle made by line from first bezier point to
  * last with x-axis.
  * @param cosθ - Cosine of angle made by line from first bezier point
  * to last with x-axis.
- * @returns Bounding box in the form [[minX, minY], [maxX,maxY]
+ *
+ * @internal
  */
 function getNormalizedBoundingBox(ps, sinθ, cosθ) {
     let vectorToOrigin = ps[0].map(x => -x);

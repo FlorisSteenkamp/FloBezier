@@ -19,6 +19,8 @@ const eval_de_casteljau_1 = require("../local-properties-at-t/t-to-xy/eval-de-ca
  *
  * @param ps1 A bezier curve
  * @param ps2 Another bezier curve
+ *
+ * @doc
  */
 function areBeziersInSameKFamily(ps1, ps2) {
     // Get ten points on the first bezier or its extension. Ten, since there is

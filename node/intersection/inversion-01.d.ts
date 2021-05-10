@@ -7,6 +7,8 @@
  *
  * @param ps
  * @param p
+ *
+ * @doc
  */
 declare function inversion01Precise(ps: number[][], p: number[]): number;
 export { inversion01Precise };

@@ -1,21 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getIntervalBox3 = exports.getIntervalBox2 = exports.getIntervalBox1 = exports.getIntervalBox = void 0;
+exports.getIntervalBox = void 0;
 const eval_de_casteljau_with_err_1 = require("../../../local-properties-at-t/t-to-xy/eval-de-casteljau-with-err");
 const eps = Number.EPSILON;
 const u = eps / 2;
 const abs = Math.abs;
 /**
- * Returns an axis-aligned-box that is guaranteed to engulf the entire given
- * bezier curve from t1 to t2.
+ * Returns an axis-aligned-box that is guaranteed to engulf the entire
+ * given bezier curve from t1 to t2. The returned box is given as an array
+ * of points in double precision, e.g. `[[[1],[1]], [[2],[2]]]`.
  *
  * * **precondition:** t1 < t2
  * * **precondition:** t1,t2 >= 0 && t1,t2 <= 1
- * * **precondition**: 49-bit aligned coordinates (inherited from
+ * * **precondition:** 49-bit aligned coordinates (inherited from
  * evalDeCasteljauWithErr - can easily be relaxed)
  *
- * @param ps an order 1,2 or 3 bezier curve
+ * @param ps an order 1, 2 or 3 bezier curve given as an array of control
+ * points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param ts [first, second] parameter values, e.g. [0.11, 0.12]
+ *
+ * @doc mdx
  */
 function getIntervalBox(ps, ts) {
     if (ts[0] !== ts[1]) {
@@ -28,14 +32,14 @@ function getIntervalBox(ps, ts) {
         return getIntervalBox1(ps, ts);
     }
     // ts[0] === ts[1]
-    return getIntervalBoxExactT(ps, ts[0]);
+    return getIntervalBoxAtT(ps, ts[0]);
 }
 exports.getIntervalBox = getIntervalBox;
 /**
  * Returns an axis-aligned-box that is guaranteed to engulf the entire given
  * bezier curve from t1 to t2.
  *
- * This is achievied by calculating the error bounds of a new curve calculated
+ * This is achieved by calculating the error bounds of a new curve calculated
  * form t1 to t2 using a splitting algorithm and then taking its extreme
  * control points and finally finding a box that engulfs the control points
  * @internal
@@ -146,7 +150,6 @@ function getIntervalBox3(ps, ts) {
     let maxY = Math.max(y0 + _y0, y1 + _y1, y2 + _y2, y3 + _y3);
     return [[minX, minY], [maxX, maxY]];
 }
-exports.getIntervalBox3 = getIntervalBox3;
 /**
  * Returns an axis-aligned-box that is guaranteed to engulf the entire given
  * bezier curve from t1 to t2.
@@ -234,7 +237,6 @@ function getIntervalBox2([[x0, y0], [x1, y1], [x2, y2]], [t1, t2]) {
     let maxY = Math.max(y0 + _y0, y1 + _y1, y2 + _y2);
     return [[minX, minY], [maxX, maxY]];
 }
-exports.getIntervalBox2 = getIntervalBox2;
 /**
  * Returns an axis-aligned-box that is guaranteed to engulf the entire given
  * bezier curve from t1 to t2.
@@ -296,14 +298,13 @@ function getIntervalBox1([[x0, y0], [x1, y1]], [t1, t2]) {
     let maxY = Math.max(y0 + _y0, y1 + _y1);
     return [[minX, minY], [maxX, maxY]];
 }
-exports.getIntervalBox1 = getIntervalBox1;
 /**
- * @internal
- *
  * @param ps
  * @param t
+ *
+ * @internal
  */
-function getIntervalBoxExactT(ps, t) {
+function getIntervalBoxAtT(ps, t) {
     let _pS = ps[0];
     let _pE = ps[ps.length - 1];
     if (t === 0) {

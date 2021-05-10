@@ -4,13 +4,15 @@ exports.areBoxesIntersecting = void 0;
 /**
  * Returns true if the 2 given axis-aligned rectangular boxes intersect.
  *
- * * **exact**
+ * * **exact** - not susceptible to floating point round-off
  *
- * @param a an axis-aligned rectangular box
+ * @param closed If true, interpret boxes as being closed (i.e. they contain
+ * their border) or open.
+ * @param a an axis-aligned rectangular box (given by an array of two [[Point]]s,
+ * e.g. `[[1,2], [3,4]]` )
  * @param b another axis-aligned rectangular box
- * @param closed (defaults to true) Interpret boxes as being closed (i.e. they
- * contain their border) or open. If open then if both boxes have zero area
- * then they are both considered close.
+ *
+ * @doc mdx curry
  */
 function areBoxesIntersecting(closed) {
     return (a, b) => {

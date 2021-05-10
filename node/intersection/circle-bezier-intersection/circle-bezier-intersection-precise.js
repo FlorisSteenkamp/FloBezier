@@ -7,8 +7,11 @@ const eval_de_casteljau_1 = require("../../local-properties-at-t/t-to-xy/eval-de
 /**
  * * **precondition** max bit-aligned bitlength === 47
  * * returned parameter values are guaranteed accurate to within 4 ulps
+ *
  * @param circle
  * @param ps
+ *
+ * @doc
  */
 function circleBezierIntersectionPrecise(circle, ps) {
     let poly;

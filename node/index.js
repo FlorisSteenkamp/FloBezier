@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.lengthSquaredUpperBound = exports.lengthUpperBound = exports.getBoundingBox = exports.getBoundingBoxTight = exports.getBoundingHull = exports.getYBoundsTight = exports.getXBoundsTight = exports.getBounds = exports.getImplicitForm1_bitlength45_exact = exports.getImplicitForm1_bitlength45_doubleDouble = exports.getImplicitForm1_bitlength45_double = exports.getImplicitForm2_bitlength45_exact = exports.getImplicitForm2_bitlength45_doubleDouble = exports.getImplicitForm2_bitlength45_double = exports.getImplicitForm3_bitlength45_exact = exports.getImplicitForm3_bitlength45_doubleDouble = exports.getImplicitForm3_bitlength45_double = exports.toEstimation = exports.toExpansion = exports.quadToPolyline = exports.toString = exports.clone = exports.splitByCurvatureAndLength = exports.splitByMaxCurvature = exports.splitByMaxCurveLength = exports.splitAtPrecise = exports.splitAt = exports.fromToPrecise = exports.fromTo = exports.fromTTo1 = exports.from0ToT = exports.reverse = exports.toHybridQuadratic = exports.fromPowerBasis = exports.cubicToQuadratic = exports.toCubic = exports.getTAtLength = exports.normal = exports.tangent = exports.curvature = exports.κ = exports.evaluateHybridQuadratic = exports.getDdxyAt0 = exports.getDxyAt0 = exports.getDdxyAt1 = exports.getDxyAt1 = exports.getDddxy = exports.getDdxy = exports.getDxy = exports.getXY = void 0;
-exports.getCoeffs3x2Quad = exports.getCoeffs3x2 = exports.getCoeffs3x3Exact = exports.getCoeffs3x3Quad = exports.getCoeffs3x3 = exports.isPointOnBezierExtension = exports.evaluate_anyBitlength_exact = exports.evalDeCasteljauWithErrQuad = exports.evalDeCasteljauWithErr = exports.evalDeCasteljau = exports.getIntervalBox3Quad = exports.getIntervalBox2Quad = exports.getIntervalBox1Quad = exports.getIntervalBoxQuad = exports.cubicThroughPointGiven013 = exports.generateCuspAtHalf3 = exports.bezierFromPart = exports.bezierSelfIntersection = exports.circleBezierIntersectionPrecise = exports.circleBezierIntersection = exports.areBoxesIntersecting = exports.intersectBoxes = exports.getOtherTs = exports.getIntersectionCoeffs = exports.bezierBezierIntersectionImplicit = exports.inversion01Precise = exports.getEndpointIntersections = exports.hausdorffDistanceCandidates = exports.hausdorffDistance = exports.getTangentPolyFromPointExact = exports.getTangentPolyFromPoint = exports.closestPointOnBezierPrecise = exports.areBeziersInSameKFamily = exports.getInterfaceCcw = exports.equal = exports.getInflections = exports.toQuadraticFromCubic = exports.isCubicReallyQuad = exports.getHodograph = exports.isSelfOverlapping = exports.isVerticalLine = exports.isHorizontalLine = exports.isLine = exports.flatness = exports.isQuadObtuse = exports.length = exports.totalAbsoluteCurvature = exports.totalCurvature = exports.getCurvatureExtrema = exports.getIntervalBox = void 0;
-exports.getImplicitForm3_bitlength16_double = exports.getImplicitForm2_bitlength16_double = exports.getImplicitForm1_bitlength16_double = exports.evaluate = exports.closestPointOnBezier = exports.getCoeffs3Exact = exports.getCoeffs3Quad = exports.getCoeffs3 = exports.getCoeffs1x1Exact = exports.getCoeffs1x1Quad = exports.getCoeffs1x1 = exports.getCoeffs1x2Exact = exports.getCoeffs1x2Quad = exports.getCoeffs1x2 = exports.getCoeffs1x3Exact = exports.getCoeffs1x3Quad = exports.getCoeffs1x3 = exports.getCoeffs2x1Exact = exports.getCoeffs2x1Quad = exports.getCoeffs2x1 = exports.getCoeffs2x2Exact = exports.getCoeffs2x2Quad = exports.getCoeffs2x2 = exports.getCoeffs2x3Exact = exports.getCoeffs2x3Quad = exports.getCoeffs2x3 = exports.getCoeffs3x1Exact = exports.getCoeffs3x1Quad = exports.getCoeffs3x1 = exports.getCoeffs3x2Exact = void 0;
+exports.getCurvatureExtrema = exports.getIntervalBox = exports.lengthSquaredUpperBound = exports.lengthUpperBound = exports.getBoundingBox = exports.getBoundingBoxTight = exports.getBoundingHull = exports.getBounds = exports.getImplicitForm1_bitlength45_exact = exports.getImplicitForm1_bitlength45_doubleDouble = exports.getImplicitForm1_bitlength45_double = exports.getImplicitForm2_bitlength45_exact = exports.getImplicitForm2_bitlength45_doubleDouble = exports.getImplicitForm2_bitlength45_double = exports.getImplicitForm3_bitlength45_exact = exports.getImplicitForm3_bitlength45_doubleDouble = exports.getImplicitForm3_bitlength45_double = exports.toEstimation = exports.toExpansion = exports.quadToPolyline = exports.toString = exports.clone = exports.splitByCurvatureAndLength = exports.splitByMaxCurvature = exports.splitByMaxCurveLength = exports.splitAtPrecise = exports.splitAt = exports.fromToPrecise = exports.fromTo = exports.fromTTo1 = exports.from0ToT = exports.reverse = exports.toHybridQuadratic = exports.fromPowerBasis = exports.cubicToQuadratic = exports.toCubic = exports.getTAtLength = exports.normal = exports.tangent = exports.curvature = exports.κ = exports.evaluateHybridQuadratic = exports.getDdxyAt0 = exports.getDxyAt0 = exports.getDdxyAt1 = exports.getDxyAt1 = exports.getDddxy = exports.getDdxy = exports.getDxy = exports.getXY = void 0;
+exports.getCoeffs2x3 = exports.getCoeffs3x1Exact = exports.getCoeffs3x1Quad = exports.getCoeffs3x1 = exports.getCoeffs3x2Exact = exports.getCoeffs3x2Quad = exports.getCoeffs3x2 = exports.getCoeffs3x3Exact = exports.getCoeffs3x3Quad = exports.getCoeffs3x3 = exports.isPointOnBezierExtension = exports.evaluate_anyBitlength_exact = exports.evalDeCasteljauWithErrDd = exports.evalDeCasteljauWithErr = exports.evalDeCasteljau = exports.getIntervalBoxDd = exports.cubicThroughPointGiven013 = exports.generateCuspAtHalf3 = exports.bezierFromPart = exports.bezierSelfIntersection = exports.circleBezierIntersectionPrecise = exports.circleBezierIntersection = exports.areBoxesIntersecting = exports.intersectBoxes = exports.getOtherTs = exports.getIntersectionCoeffs = exports.bezierBezierIntersectionImplicit = exports.inversion01Precise = exports.getEndpointIntersections = exports.hausdorffDistanceCandidates = exports.hausdorffDistance = exports.getTangentPolyFromPointExact = exports.getTangentPolyFromPoint = exports.closestPointOnBezierPrecise = exports.areBeziersInSameKFamily = exports.getInterfaceCcw = exports.equal = exports.getInflections = exports.toQuadraticFromCubic = exports.isCubicReallyQuad = exports.getHodograph = exports.isSelfOverlapping = exports.isVerticalLine = exports.isHorizontalLine = exports.isLine = exports.flatness = exports.isQuadObtuse = exports.length = exports.totalAbsoluteCurvature = exports.totalCurvature = void 0;
+exports.evaluate = exports.closestPointOnBezier = exports.getCoeffs3Exact = exports.getCoeffs3Quad = exports.getCoeffs3 = exports.getCoeffs1x1Exact = exports.getCoeffs1x1Quad = exports.getCoeffs1x1 = exports.getCoeffs1x2Exact = exports.getCoeffs1x2Quad = exports.getCoeffs1x2 = exports.getCoeffs1x3Exact = exports.getCoeffs1x3Quad = exports.getCoeffs1x3 = exports.getCoeffs2x1Exact = exports.getCoeffs2x1Quad = exports.getCoeffs2x1 = exports.getCoeffs2x2Exact = exports.getCoeffs2x2Quad = exports.getCoeffs2x2 = exports.getCoeffs2x3Exact = exports.getCoeffs2x3Quad = void 0;
 const flo_graham_scan_1 = require("flo-graham-scan");
 const length_1 = require("./global-properties/length/length");
 Object.defineProperty(exports, "length", { enumerable: true, get: function () { return length_1.length; } });
@@ -29,7 +29,7 @@ Object.defineProperty(exports, "evalDeCasteljau", { enumerable: true, get: funct
 const eval_de_casteljau_with_err_1 = require("./local-properties-at-t/t-to-xy/eval-de-casteljau-with-err");
 Object.defineProperty(exports, "evalDeCasteljauWithErr", { enumerable: true, get: function () { return eval_de_casteljau_with_err_1.evalDeCasteljauWithErr; } });
 const dd_eval_de_casteljau_with_err_1 = require("./local-properties-at-t/t-to-xy/dd-eval-de-casteljau-with-err");
-Object.defineProperty(exports, "evalDeCasteljauWithErrQuad", { enumerable: true, get: function () { return dd_eval_de_casteljau_with_err_1.evalDeCasteljauWithErrQuad; } });
+Object.defineProperty(exports, "evalDeCasteljauWithErrDd", { enumerable: true, get: function () { return dd_eval_de_casteljau_with_err_1.evalDeCasteljauWithErrDd; } });
 const is_point_on_bezier_extension_1 = require("./simultaneous-properties/is-point-on-bezier-extension");
 Object.defineProperty(exports, "isPointOnBezierExtension", { enumerable: true, get: function () { return is_point_on_bezier_extension_1.isPointOnBezierExtension; } });
 const total_curvature_1 = require("./global-properties/total-curvature");
@@ -41,23 +41,23 @@ const get_inflections_1 = require("./global-properties/get-inflections");
 Object.defineProperty(exports, "getInflections", { enumerable: true, get: function () { return get_inflections_1.getInflections; } });
 const bezier_bezier_intersection_implicit_1 = require("./intersection/bezier-bezier-intersection/bezier-bezier-intersection-implicit");
 Object.defineProperty(exports, "getIntersectionCoeffs", { enumerable: true, get: function () { return bezier_bezier_intersection_implicit_1.getIntersectionCoeffs; } });
-const get_implicit_form3_bitlength45_double_1 = require("./implicit-form/inp-bitlength45/double/get-implicit-form3-bitlength45-double");
+const get_implicit_form3_bitlength45_double_1 = require("./implicit-form/double/get-implicit-form3-bitlength45-double");
 Object.defineProperty(exports, "getImplicitForm3_bitlength45_double", { enumerable: true, get: function () { return get_implicit_form3_bitlength45_double_1.getImplicitForm3_bitlength45_double; } });
-const get_implicit_form3_bitlength45_double_double_1 = require("./implicit-form/inp-bitlength45/double-double/get-implicit-form3-bitlength45-double-double");
+const get_implicit_form3_bitlength45_double_double_1 = require("./implicit-form/double-double/get-implicit-form3-bitlength45-double-double");
 Object.defineProperty(exports, "getImplicitForm3_bitlength45_doubleDouble", { enumerable: true, get: function () { return get_implicit_form3_bitlength45_double_double_1.getImplicitForm3_bitlength45_doubleDouble; } });
-const get_implicit_form3_bitlength45_exact_1 = require("./implicit-form/inp-bitlength45/exact/get-implicit-form3-bitlength45-exact");
+const get_implicit_form3_bitlength45_exact_1 = require("./implicit-form/exact/get-implicit-form3-bitlength45-exact");
 Object.defineProperty(exports, "getImplicitForm3_bitlength45_exact", { enumerable: true, get: function () { return get_implicit_form3_bitlength45_exact_1.getImplicitForm3_bitlength45_exact; } });
-const get_implicit_form2_bitlength45_double_1 = require("./implicit-form/inp-bitlength45/double/get-implicit-form2-bitlength45-double");
+const get_implicit_form2_bitlength45_double_1 = require("./implicit-form/double/get-implicit-form2-bitlength45-double");
 Object.defineProperty(exports, "getImplicitForm2_bitlength45_double", { enumerable: true, get: function () { return get_implicit_form2_bitlength45_double_1.getImplicitForm2_bitlength45_double; } });
-const get_implicit_form2_bitlength45_double_double_1 = require("./implicit-form/inp-bitlength45/double-double/get-implicit-form2-bitlength45-double-double");
+const get_implicit_form2_bitlength45_double_double_1 = require("./implicit-form/double-double/get-implicit-form2-bitlength45-double-double");
 Object.defineProperty(exports, "getImplicitForm2_bitlength45_doubleDouble", { enumerable: true, get: function () { return get_implicit_form2_bitlength45_double_double_1.getImplicitForm2_bitlength45_doubleDouble; } });
-const get_implicit_form2_bitlength45_exact_1 = require("./implicit-form/inp-bitlength45/exact/get-implicit-form2-bitlength45-exact");
+const get_implicit_form2_bitlength45_exact_1 = require("./implicit-form/exact/get-implicit-form2-bitlength45-exact");
 Object.defineProperty(exports, "getImplicitForm2_bitlength45_exact", { enumerable: true, get: function () { return get_implicit_form2_bitlength45_exact_1.getImplicitForm2_bitlength45_exact; } });
-const get_implicit_form1_bitlength45_double_1 = require("./implicit-form/inp-bitlength45/double/get-implicit-form1-bitlength45-double");
+const get_implicit_form1_bitlength45_double_1 = require("./implicit-form/double/get-implicit-form1-bitlength45-double");
 Object.defineProperty(exports, "getImplicitForm1_bitlength45_double", { enumerable: true, get: function () { return get_implicit_form1_bitlength45_double_1.getImplicitForm1_bitlength45_double; } });
-const get_implicit_form1_bitlength45_double_double_1 = require("./implicit-form/inp-bitlength45/double-double/get-implicit-form1-bitlength45-double-double");
+const get_implicit_form1_bitlength45_double_double_1 = require("./implicit-form/double-double/get-implicit-form1-bitlength45-double-double");
 Object.defineProperty(exports, "getImplicitForm1_bitlength45_doubleDouble", { enumerable: true, get: function () { return get_implicit_form1_bitlength45_double_double_1.getImplicitForm1_bitlength45_doubleDouble; } });
-const get_implicit_form1_bitlength45_exact_1 = require("./implicit-form/inp-bitlength45/exact/get-implicit-form1-bitlength45-exact");
+const get_implicit_form1_bitlength45_exact_1 = require("./implicit-form/exact/get-implicit-form1-bitlength45-exact");
 Object.defineProperty(exports, "getImplicitForm1_bitlength45_exact", { enumerable: true, get: function () { return get_implicit_form1_bitlength45_exact_1.getImplicitForm1_bitlength45_exact; } });
 const get_coefficients_3x3_1 = require("./intersection/bezier-bezier-intersection/inp-bitlength45/double/get-coefficients-3x3");
 Object.defineProperty(exports, "getCoeffs3x3", { enumerable: true, get: function () { return get_coefficients_3x3_1.getCoeffs3x3; } });
@@ -129,8 +129,8 @@ const get_hodograph_1 = require("./transformation/get-hodograph");
 Object.defineProperty(exports, "getHodograph", { enumerable: true, get: function () { return get_hodograph_1.getHodograph; } });
 const generate_cusp_at_half_t_1 = require("./create/generate-cusp-at-half-t");
 Object.defineProperty(exports, "generateCuspAtHalf3", { enumerable: true, get: function () { return generate_cusp_at_half_t_1.generateCuspAtHalf3; } });
-const cubic_through_point_1 = require("./create/cubic-through-point");
-Object.defineProperty(exports, "cubicThroughPointGiven013", { enumerable: true, get: function () { return cubic_through_point_1.cubicThroughPointGiven013; } });
+const cubic_through_point_given013_1 = require("./create/cubic-through-point-given013");
+Object.defineProperty(exports, "cubicThroughPointGiven013", { enumerable: true, get: function () { return cubic_through_point_given013_1.cubicThroughPointGiven013; } });
 const self_intersection_1 = require("./intersection/self-intersection/self-intersection");
 Object.defineProperty(exports, "bezierSelfIntersection", { enumerable: true, get: function () { return self_intersection_1.bezierSelfIntersection; } });
 const get_endpoint_intersections_1 = require("./intersection/get-endpoint-intersections");
@@ -180,11 +180,8 @@ const is_quad_obtuse_1 = require("./global-properties/type/is-quad-obtuse");
 Object.defineProperty(exports, "isQuadObtuse", { enumerable: true, get: function () { return is_quad_obtuse_1.isQuadObtuse; } });
 const get_interval_box_1 = require("./global-properties/bounds/get-interval-box/get-interval-box");
 Object.defineProperty(exports, "getIntervalBox", { enumerable: true, get: function () { return get_interval_box_1.getIntervalBox; } });
-const get_interval_box_quad_1 = require("./global-properties/bounds/get-interval-box/get-interval-box-quad");
-Object.defineProperty(exports, "getIntervalBoxQuad", { enumerable: true, get: function () { return get_interval_box_quad_1.getIntervalBoxQuad; } });
-Object.defineProperty(exports, "getIntervalBox1Quad", { enumerable: true, get: function () { return get_interval_box_quad_1.getIntervalBox1Quad; } });
-Object.defineProperty(exports, "getIntervalBox2Quad", { enumerable: true, get: function () { return get_interval_box_quad_1.getIntervalBox2Quad; } });
-Object.defineProperty(exports, "getIntervalBox3Quad", { enumerable: true, get: function () { return get_interval_box_quad_1.getIntervalBox3Quad; } });
+const get_interval_box_dd_1 = require("./global-properties/bounds/get-interval-box/get-interval-box-dd");
+Object.defineProperty(exports, "getIntervalBoxDd", { enumerable: true, get: function () { return get_interval_box_dd_1.getIntervalBoxDd; } });
 const split_at_1 = require("./transformation/split-merge-clone/split-at");
 Object.defineProperty(exports, "splitAt", { enumerable: true, get: function () { return split_at_1.splitAt; } });
 Object.defineProperty(exports, "splitAtPrecise", { enumerable: true, get: function () { return split_at_1.splitAtPrecise; } });
@@ -199,7 +196,6 @@ const length_squared_upper_bound_1 = require("./global-properties/length/length-
 Object.defineProperty(exports, "lengthSquaredUpperBound", { enumerable: true, get: function () { return length_squared_upper_bound_1.lengthSquaredUpperBound; } });
 const split_by_max_curve_length_1 = require("./transformation/split-merge-clone/split-by-max-curve-length");
 Object.defineProperty(exports, "splitByMaxCurveLength", { enumerable: true, get: function () { return split_by_max_curve_length_1.splitByMaxCurveLength; } });
-//import { getCurvatureExtrema } from './get-curvature-extrema/get-curvature-extrema';
 const get_curvature_extrema_1 = require("./get-curvature-extrema/get-curvature-extrema");
 Object.defineProperty(exports, "getCurvatureExtrema", { enumerable: true, get: function () { return get_curvature_extrema_1.getCurvatureExtrema; } });
 const flatness_1 = require("./global-properties/flatness");
@@ -223,10 +219,7 @@ Object.defineProperty(exports, "getTangentPolyFromPoint", { enumerable: true, ge
 const get_tangent_poly_from_point_2 = require("./simultaneous-properties/get-tangent-poly-from-point/exact/get-tangent-poly-from-point");
 Object.defineProperty(exports, "getTangentPolyFromPointExact", { enumerable: true, get: function () { return get_tangent_poly_from_point_2.getTangentPolyFromPointExact; } });
 const get_bounds_1 = require("./global-properties/bounds/get-bounds");
-Object.defineProperty(exports, "getXBoundsTight", { enumerable: true, get: function () { return get_bounds_1.getXBoundsTight; } });
-Object.defineProperty(exports, "getYBoundsTight", { enumerable: true, get: function () { return get_bounds_1.getYBoundsTight; } });
-const get_bounds_2 = require("./global-properties/bounds/get-bounds");
-Object.defineProperty(exports, "getBounds", { enumerable: true, get: function () { return get_bounds_2.getBounds; } });
+Object.defineProperty(exports, "getBounds", { enumerable: true, get: function () { return get_bounds_1.getBounds; } });
 const get_bounding_box_tight_1 = require("./global-properties/bounds/get-bounding-box-tight");
 Object.defineProperty(exports, "getBoundingBoxTight", { enumerable: true, get: function () { return get_bounding_box_tight_1.getBoundingBoxTight; } });
 const get_bounding_box_1 = require("./global-properties/bounds/get-bounding-box");
@@ -246,15 +239,9 @@ const evaluate_any_bitlength_exact_1 = require("./local-properties-at-t/t-to-xy/
 Object.defineProperty(exports, "evaluate_anyBitlength_exact", { enumerable: true, get: function () { return evaluate_any_bitlength_exact_1.evaluate_anyBitlength_exact; } });
 const evaluate_1 = require("./local-properties-at-t/t-to-xy/evaluate");
 Object.defineProperty(exports, "evaluate", { enumerable: true, get: function () { return evaluate_1.evaluate; } });
-const get_implicit_form1_bitlength16_double_1 = require("./implicit-form/inp-bitlength16/double/get-implicit-form1-bitlength16-double");
-Object.defineProperty(exports, "getImplicitForm1_bitlength16_double", { enumerable: true, get: function () { return get_implicit_form1_bitlength16_double_1.getImplicitForm1_bitlength16_double; } });
-const get_implicit_form2_bitlength16_double_1 = require("./implicit-form/inp-bitlength16/double/get-implicit-form2-bitlength16-double");
-Object.defineProperty(exports, "getImplicitForm2_bitlength16_double", { enumerable: true, get: function () { return get_implicit_form2_bitlength16_double_1.getImplicitForm2_bitlength16_double; } });
-const get_implicit_form3_bitlength16_double_1 = require("./implicit-form/inp-bitlength16/double/get-implicit-form3-bitlength16-double");
-Object.defineProperty(exports, "getImplicitForm3_bitlength16_double", { enumerable: true, get: function () { return get_implicit_form3_bitlength16_double_1.getImplicitForm3_bitlength16_double; } });
 /**
  * Returns the convex hull of a bezier's control points. This hull bounds the
- * bezier curve. This function is memoized.
+ * bezier curve.
  *
  * The tolerance at which the cross product of two nearly collinear lines of the
  * hull are considered collinear is 1e-12.

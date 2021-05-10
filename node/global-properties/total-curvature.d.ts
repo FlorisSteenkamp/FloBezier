@@ -5,8 +5,11 @@
  * Returns the total absolute curvature of the bezier over [0,1] using Gaussian
  * Quadrature integration with 16 wieghts and abscissas which is generally very
  * accurate and fast. Returns the result in radians.
- * @param ps - A cubic bezier
+ *
+ * @param ps a cubic bezier
  * @param interval
+ *
+ * @doc mdx
  */
 declare function totalAbsoluteCurvature(ps: number[][], interval: number[]): number;
 declare function totalAbsoluteCurvature(ps: number[][]): (interval: number[]) => number;
@@ -17,6 +20,8 @@ declare function totalAbsoluteCurvature(ps: number[][]): (interval: number[]) =>
  * @param ps - A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param interval - The interval of integration (often === [0,1])
  * @returns The total curvature.
+ *
+ * @doc mdx
  */
 declare function totalCurvature(ps: number[][], interval: number[]): number;
 declare function totalCurvature(ps: number[][]): (interval: number[]) => number;

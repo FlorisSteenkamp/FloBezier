@@ -5,6 +5,8 @@ import { BezierPart } from "../bezier-part";
  * Uses de Casteljau's algorithm.
  *
  * @param bezierPart A partial bezier
+ *
+ * @doc
  */
 declare function bezierFromPart(bezierPart: BezierPart): number[][];
 export { bezierFromPart };

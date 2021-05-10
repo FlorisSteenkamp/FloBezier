@@ -29,7 +29,10 @@ const γ1 = error_analysis_1.γ(1);
  * * only cubic (or higher order) bezier curves have self-intersections
  * * see http://www.mare.ee/indrek/misc/2d.pdf
  * * the returned t values are within 1 ulp accurate
+ *
  * @param ps A cubic bezier curve.
+ *
+ * @doc
  */
 function bezierSelfIntersection(ps) {
     if (ps.length < 4) {

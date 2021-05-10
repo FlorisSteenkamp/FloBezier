@@ -1,14 +1,13 @@
-
-import { getImplicitForm3_bitlength45_double } from "../implicit-form/inp-bitlength45/double/get-implicit-form3-bitlength45-double";
-import { getImplicitForm3_bitlength45_doubleDouble } from "../implicit-form/inp-bitlength45/double-double/get-implicit-form3-bitlength45-double-double";
-import { getImplicitForm3_bitlength45_exact } from "../implicit-form/inp-bitlength45/exact/get-implicit-form3-bitlength45-exact";
-import { getImplicitForm2_bitlength45_double } from "../implicit-form/inp-bitlength45/double/get-implicit-form2-bitlength45-double";
-import { getImplicitForm2_bitlength45_doubleDouble } from "../implicit-form/inp-bitlength45/double-double/get-implicit-form2-bitlength45-double-double";
-import { getImplicitForm2_bitlength45_exact } from "../implicit-form/inp-bitlength45/exact/get-implicit-form2-bitlength45-exact";
+import { getImplicitForm3 } from "../implicit-form/double/get-implicit-form3";
+import { getImplicitForm3Dd } from "../implicit-form/double-double/get-implicit-form3-dd";
+import { getImplicitForm3Exact } from "../implicit-form/exact/get-implicit-form3-exact";
+import { getImplicitForm2 } from "../implicit-form/double/get-implicit-form2";
+import { getImplicitForm2Dd } from "../implicit-form/double-double/get-implicit-form2-dd";
+import { getImplicitForm2Exact } from "../implicit-form/exact/get-implicit-form2-exact";
 import { γ, γγ } from '../error-analysis/error-analysis';
 
 
-import { getImplicitForm1_bitlength45_doubleDouble } from "../implicit-form/inp-bitlength45/double-double/get-implicit-form1-bitlength45-double-double";
+import { getImplicitForm1Dd } from "../implicit-form/double-double/get-implicit-form1-dd";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { twoProduct, ddMultDd, ddAddDd, ddMultDouble2 } from "double-double";
@@ -31,13 +30,13 @@ const γγ3 = γγ(3);
 
 /**
  * Returns true if the given point is on the given cubic bezier curve where the 
- * parameter t is allowed to extend to +-infinity, i.e. t is an element of 
+ * parameter t is allowed to extend to ±infinity, i.e. t is an element of 
  * [-inf, +inf], false otherwise.
  * 
- * * Precondition: ps must be grid-aligned and have a maximum bitlength of 47.
+ * * **precondition:** `ps` must be grid-aligned and have a maximum bitlength of 47.
  * (p may have any bitlength - no restrictions)
  * 
- * @doc
+ * @internal
  */
 function isPointOnBezierExtension3(ps: number[][], p: number[]): boolean {
     let [x,y] = p;
@@ -48,7 +47,7 @@ function isPointOnBezierExtension3(ps: number[][], p: number[]): boolean {
         let { 
             coeffs: { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v },
             errorBound: { vₓₓₓ_, vₓₓᵧ_, vₓᵧᵧ_, vᵧᵧᵧ_, vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ }
-        } = getImplicitForm3_bitlength45_double(ps);
+        } = getImplicitForm3(ps);
         
         let _vₓₓₓ = abs(vₓₓₓ);
         let _vₓₓᵧ = abs(vₓₓᵧ);
@@ -148,7 +147,7 @@ function isPointOnBezierExtension3(ps: number[][], p: number[]): boolean {
         let { 
             coeffs: { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v },
             errorBound: { vₓₓₓ_, vₓₓᵧ_, vₓᵧᵧ_, vᵧᵧᵧ_, vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ }
-        } = getImplicitForm3_bitlength45_doubleDouble(ps);
+        } = getImplicitForm3Dd(ps);
         
         let _vₓₓₓ = abs(vₓₓₓ[1]);
         let _vₓₓᵧ = abs(vₓₓᵧ[1]);
@@ -242,7 +241,7 @@ function isPointOnBezierExtension3(ps: number[][], p: number[]): boolean {
     {
         // The below takes about 155 micro-seconds on a 1st gen i7 and Chrome 79
         let { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
-        getImplicitForm3_bitlength45_exact(ps);
+        getImplicitForm3Exact(ps);
         
         // h (say height) is the the result of evaluating the implicit equation; if
         // it is 0 we are on the curve, else we're not.
@@ -289,6 +288,8 @@ function isPointOnBezierExtension3(ps: number[][], p: number[]): boolean {
  * 
  * * Precondition: ps must be grid-aligned and have a maximum bitlength of 47.
  * (p may have any bitlength - no restrictions)
+ * 
+ * @internal
  */
 function isPointOnBezierExtension2(ps: number[][], p: number[]): boolean {
     let [x,y] = p;
@@ -298,7 +299,7 @@ function isPointOnBezierExtension2(ps: number[][], p: number[]): boolean {
         let { 
             coeffs: { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v },
             errorBound: { vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ }
-        } = getImplicitForm2_bitlength45_double(ps);
+        } = getImplicitForm2(ps);
         
         let _vₓₓ = abs(vₓₓ);
         let _vₓᵧ = abs(vₓᵧ);
@@ -361,7 +362,7 @@ function isPointOnBezierExtension2(ps: number[][], p: number[]): boolean {
         let { 
             coeffs: { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v },
             errorBound: { vₓ_, vᵧ_, v_ }
-        } = getImplicitForm2_bitlength45_doubleDouble(ps);
+        } = getImplicitForm2Dd(ps);
         
         // In the below a prefix underscore on a variable means absolute value, 
         // a postfix underscore means error bound (before multiplication by gamma).
@@ -415,7 +416,7 @@ function isPointOnBezierExtension2(ps: number[][], p: number[]): boolean {
     // error still too high - let's go exact
     {
         let { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
-            getImplicitForm2_bitlength45_exact(ps);
+            getImplicitForm2Exact(ps);
         
         // h (say height) is the the result of evaluating the implicit equation; 
         // if it is 0 we are on the curve, else we're not.
@@ -447,18 +448,19 @@ function isPointOnBezierExtension2(ps: number[][], p: number[]): boolean {
  * the parameter t is allowed to extend to +-infinity, i.e. t is an element of 
  * [-inf, +inf], false otherwise.
  * 
- * * Precondition: ps must be grid-aligned and have a maximum bitlength of 47.
+ * * **Precondition:** `ps` must be grid-aligned and have a maximum bitlength of 47.
  * (p may have any bitlength - no restrictions)
  * * there are many alternative implementations to this function, e.g. ccw, etc;
  * it is just kept for symmetry.
- * o
+ * 
+ * @internal
  */
 function isPointOnBezierExtension1(ps: number[][], p: number[]): boolean {
     let [x,y] = p;
 
     //---- pre-filter - note all coefficients below vₓ, vᵧ, v are exact
     let { coeffs: { vₓ, vᵧ, v } } = 
-        getImplicitForm1_bitlength45_doubleDouble(ps);
+        getImplicitForm1Dd(ps);
     
     // In the below a prefix underscore on a variable means absolute value, 
     // a postfix underscore means error bound (before multiplication by gamma).
@@ -491,11 +493,13 @@ function isPointOnBezierExtension1(ps: number[][], p: number[]): boolean {
 
 
 /**
- * Returns true if the given point is on the given bezier curve where the 
- * parameter t is allowed to extend to +-infinity, i.e. t is an element of 
- * [-inf, +inf], false otherwise.
+ * Returns `true` if the given point is on the given bezier curve where the 
+ * parameter `t` is allowed to extend to ±∞, i.e. `t` is an element of 
+ * `(-∞, +∞)`, `false` otherwise.
  * 
- * * **precondition**: ps and p must be grid-aligned with a maximum bitlength of 47.
+ * * **precondition**: `ps` and `p` must be bit-aligned with a maximum 
+ * bitlength of 47.
+ * 
  * @param ps 
  * @param p 
  */

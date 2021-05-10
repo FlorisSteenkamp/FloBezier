@@ -11,6 +11,8 @@ exports.getDxy = void 0;
  * * max bitlength increase === max shift === 1 (for lines)
  *
  * @param ps An order 1,2 or 3 bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ *
+ * @doc
  */
 function getDxy(ps) {
     if (ps.length === 4) {

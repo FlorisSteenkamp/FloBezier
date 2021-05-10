@@ -15,6 +15,8 @@ const evaluate_any_bitlength_exact_1 = require("../local-properties-at-t/t-to-xy
  * @param ps1 an order 1,2 or 3 bezier curve
  * @param ps2 another order 1,2 or 3 bezier curve
  * @param minD an error bound given as a distance
+ *
+ * @doc
  */
 function getEndpointIntersections(ps1, ps2, minD) {
     let p1S = ps1[0];

@@ -2,13 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateCuspAtHalf3 = void 0;
 /**
- * Returns a cubic bezier curve with a zero tangent (as a vector) at
- * t = 0.5 (i.e. a 'cusp').
- * * **non-exact:** the cusp is not necessarily *exactly* at the given point,
- * nor does the tangent vector necessarily vanish *exactly*.
+ * Returns the cubic bezier curve control points with a zero tangent vector
+ * (i.e. `[0,0]`) at `t = 0.5` (i.e. a 'cusp') at the given [[Point]] with
+ * given starting and ending control [Point]s.
+ * * **non-exact** - due to floating-point round-off the cusp is not necessarily
+ * *exactly* at the given point, nor does the tangent vector necessarily vanish
+ * *exactly*.
+ *
  * @param p0 the bezier start point
  * @param pz the point at which the vanishing tangent should occur
  * @param pE the bezier end point
+ *
+ * @doc mdx
  */
 function generateCuspAtHalf3(p0, pz, pE) {
     // x3 - 3x2 + 3x1 - x0, // := a = coefficent of t^3

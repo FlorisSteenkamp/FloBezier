@@ -3,13 +3,15 @@ import { Horner as polyEvaluate } from 'flo-poly';
 
 
 /**
- * Returns the x value of the twice differentiated (with respect to t) cubic 
- * bezier when evaluated at t. This function is curried.
+ * Returns the `[x,y]` value of the twice differentiated (with respect to `t`) 
+ * bezier curve when evaluated at `t`. This function is curried.
  * 
- * @param ps a cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ * * uses double precision calculations internally
+ * 
+ * @param ps a cubic bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * @param t the t parameter
  * 
- * @doc
+ * @doc mdx
  */
 function evaluateDdxy(ps: number[][], t: number): number[];
 function evaluateDdxy(ps: number[][]): (t: number) => number[];

@@ -2,6 +2,8 @@
  *
  * @param circle a circle
  * @param ps a cubic bezier curve
+ *
+ * @doc
  */
 declare function getCoeffsCubic(circle: {
     center: number[];

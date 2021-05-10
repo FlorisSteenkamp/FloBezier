@@ -3,7 +3,7 @@ import { expect, assert } from 'chai';
 //import { describe } from 'mocha';
 import 'mocha';
 import { 
-	evalDeCasteljauWithErrQuad,
+	evalDeCasteljauWithErrDd,
 	evaluate_anyBitlength_exact
 } from '../../../src/index';
 import { eEstimate } from 'big-float-ts';
@@ -35,7 +35,7 @@ describe('eval decasteljau', function() {
 			for (let ps of pss) {
 				for (let t of ts) {
 					let pExact = evaluate_anyBitlength_exact(ps, t);
-					let { p, pE } = evalDeCasteljauWithErrQuad(ps, [0,t]);
+					let { p, pE } = evalDeCasteljauWithErrDd(ps, [0,t]);
 
 					const errBound = pE[0] + pE[1];
 					const errActual = manhattanDistanceBetween(p.map(eEstimate), pExact.map(eEstimate));

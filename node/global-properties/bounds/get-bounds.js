@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getYBoundsTight = exports.getXBoundsTight = exports.getBounds = void 0;
-const flo_memoize_1 = require("flo-memoize");
 const get_dxy_1 = require("../../to-power-basis/get-dxy");
 const flo_poly_1 = require("flo-poly");
 const get_interval_box_1 = require("./get-interval-box/get-interval-box");
@@ -12,62 +11,15 @@ const { sqrtWithErr, divWithErr } = double_double_1.operators;
 const abs = Math.abs;
 const u = Number.EPSILON / 2;
 const γ1 = error_analysis_1.γ(1);
-// TODO - remove!!! testing!!!
-testing();
-function testing() {
-    {
-        // coefficients in double-double precision
-        let p = [
-            [0.1580350755837278, 3770986809251668.5],
-            [-0.437621888289444, -11611163849314706],
-            [0.37925906415346655, 13622867559528270],
-            [-0.18215364304839451, -6015675011409949],
-            [-0.2113068076998193, -2535765899677980.5],
-            [-0.03234301695064162, 1004670324427690],
-            [-0.13228935570003014, 5119556864733271],
-            [0.46839905715354696, -5283583821747902],
-            [-0.0020342528097285484, 1955103350624411],
-            [-0.004629837980953938, -252827841312240.88]
-        ];
-        // coefficients in double precision
-        let pD = [
-            3770986809251668.5,
-            -11611163849314706,
-            13622867559528270,
-            -6015675011409949,
-            -2535765899677980.5,
-            1004670324427690,
-            5119556864733271,
-            -5283583821747902,
-            1955103350624411,
-            -252827841312240.88
-        ];
-        // coefficient-wise error bound of double-double precision 
-        // coefficients
-        let pE = [
-            5.973763369817942e-16,
-            3.154260190691488e-15,
-            1.0432584785199789e-14,
-            2.0265321429548282e-14,
-            3.236053769569458e-14,
-            3.1173345325629133e-14,
-            2.228376621708172e-14,
-            1.2374462883419778e-14,
-            3.82255386973334e-15,
-            5.160968273258298e-16
-        ];
-        //getPsExact
-        const ts = flo_poly_1.allRootsCertified(p, -50, 100, pE, undefined);
-        console.log(ts);
-        //const tsf = allRoots()
-        //assert(isThereRootAt(0, 2, ts));
-    }
-}
 /**
  * Returns a tight axis-aligned bounding box bound of the given bezier curve.
- * @param ps
+ *
+ * @param ps an order 1, 2 or 3 bezier curve given as an array of control
+ * points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ *
+ * @internal
  */
-const getXBoundsTight = flo_memoize_1.memoize(function getXBoundsTight(ps) {
+function getXBoundsTight(ps) {
     let pS = ps[0];
     let pE = ps[ps.length - 1];
     let minX;
@@ -105,22 +57,16 @@ const getXBoundsTight = flo_memoize_1.memoize(function getXBoundsTight(ps) {
         }
     }
     return { minX, maxX };
-});
-exports.getXBoundsTight = getXBoundsTight;
-// TODO - move this another library
-function getLinearRoots([a, b]) {
-    let r = -b / a;
-    let rE = u * abs(b / a);
-    if (r + rE > 0 && r - rE < 1) {
-        return [{ r, rE }];
-    }
-    return [];
 }
+exports.getXBoundsTight = getXBoundsTight;
 /**
  * Returns a tight axis-aligned bounding box bound of the given bezier curve.
- * @param ps
+ * @param ps an order 1, 2 or 3 bezier curve given as an array of control
+ * points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ *
+ * @internal
  */
-const getYBoundsTight = flo_memoize_1.memoize(function getYBoundsTight(ps) {
+function getYBoundsTight(ps) {
     let pS = ps[0];
     let pE = ps[ps.length - 1];
     let minY;
@@ -158,13 +104,25 @@ const getYBoundsTight = flo_memoize_1.memoize(function getYBoundsTight(ps) {
         }
     }
     return { minY, maxY };
-});
+}
 exports.getYBoundsTight = getYBoundsTight;
+/**
+ * @internal
+ */
+function getLinearRoots([a, b]) {
+    let r = -b / a;
+    let rE = u * abs(b / a);
+    if (r + rE > 0 && r - rE < 1) {
+        return [{ r, rE }];
+    }
+    return [];
+}
 /**
  * Return quad roots in range [0,1] with error assuming input coefficients
  * are exact.
+ *
+ * @internal
  */
-// TODO - move this another library
 function quadRoots([a, b, c]) {
     // first check a !== 0, else get root of the line 'bt + c = 0'
     if (a === 0) {
@@ -210,10 +168,15 @@ function quadRoots([a, b, c]) {
     return res;
 }
 /**
- * Returns the approximate axis-aligned bounding box together with the t values
- * where the bounds on the bezier are reached.
+ * Returns the axis-aligned bounding box together with the t values where the
+ * bounds on the bezier are reached.
+ *
+ * @param ps an order 1, 2 or 3 bezier curve given as an array of control
+ * points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ *
+ * @doc mdx
  */
-const getBounds = flo_memoize_1.memoize(function getBounds(ps) {
+function getBounds(ps) {
     // Roots of derivative
     const dxy = get_dxy_1.getDxy(ps);
     let rootsX = flo_poly_1.allRoots(dxy[0], 0, 1);
@@ -257,6 +220,6 @@ const getBounds = flo_memoize_1.memoize(function getBounds(ps) {
     let ts = [[tMinX, tMinY], [tMaxX, tMaxY]];
     let box = [[minX, minY], [maxX, maxY]];
     return { ts, box };
-});
+}
 exports.getBounds = getBounds;
 //# sourceMappingURL=get-bounds.js.map

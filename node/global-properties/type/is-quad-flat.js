@@ -8,7 +8,10 @@ const eval_de_casteljau_1 = require("../../local-properties-at-t/t-to-xy/eval-de
  * Returns true if the given quadratic bezier curve is acute (see isQuadObtuse)
  * and can be approximated with a line segment with maximum Hausdorff distance
  * <= the given tolerance.
+ *
  * @param ps A quadratic bezier curve.
+ *
+ * @internal
  */
 function isQuadFlat(ps, tolerance) {
     if (is_quad_obtuse_1.isQuadObtuse(ps)) {

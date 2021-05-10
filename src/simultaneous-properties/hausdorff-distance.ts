@@ -1,4 +1,3 @@
-
 import { closestPointOnBezier } from './closest-point-on-bezier/closest-point-on-bezier';
 import { splitByMaxCurveLength } from '../transformation/split-merge-clone/split-by-max-curve-length';
 import { distanceBetween } from 'flo-vector2d';

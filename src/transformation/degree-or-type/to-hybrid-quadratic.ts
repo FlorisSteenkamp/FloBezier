@@ -1,9 +1,9 @@
 /**
  * Returns the hybrid quadratic version of the given cubic bezier. For a 
- * definition of hybrid quadratic bezier curves see this paper:
+ * definition of hybrid quadratic bezier curves please see this paper:
  * http://scholarsarchive.byu.edu/cgi/viewcontent.cgi?article=2206&context=etd
  * 
- * * returns An array of three quadratic bezier points where the 
+ * * returns an array of three quadratic bezier points where the 
  * middle point is a 'hybrid' point represented as a line (itself represented
  * by two points (a linear bezier curve)) which can be evaluated at a different 
  * t value (call it th). If evaluated at the same t value the result is the same 
@@ -15,7 +15,7 @@
  * 
  * @param ps a cubic bezier curve.
  * 
- * @doc
+ * @doc mdx
  */
 function toHybridQuadratic(ps: number[][]): [
         [number, number], 

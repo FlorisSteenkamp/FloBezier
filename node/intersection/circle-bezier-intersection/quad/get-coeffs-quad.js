@@ -11,8 +11,11 @@ const qmn2 = double_double_1.ddMultByNeg2;
 const qdifq = double_double_1.ddDiffDd;
 /**
  * * **precondition** bit-algined bitlength of coefficients <= 47
+ *
  * @param circle a circle
  * @param ps a cubic bezier curve
+ *
+ * @doc
  */
 function getCoeffsCubicQuad(circle, ps) {
     let { radius: r, center: [cx, cy] } = circle;

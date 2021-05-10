@@ -1,4 +1,3 @@
-import { memoize } from "flo-memoize";
 import { getXBoundsTight, getYBoundsTight } from "./get-bounds";
 
 
@@ -15,18 +14,16 @@ import { getXBoundsTight, getYBoundsTight } from "./get-bounds";
  * 
  * @doc mdx
  */
-const getBoundingBox = memoize(
-	// TODO - why not just use getIntervalBox
-	function getBoundingBox(ps: number[][]): number[][] {
-		const xBounds = getXBoundsTight(ps);
-		const yBounds = getYBoundsTight(ps);
+// TODO - why not just use getIntervalBox
+function getBoundingBox(ps: number[][]): number[][] {
+	const xBounds = getXBoundsTight(ps);
+	const yBounds = getYBoundsTight(ps);
 
-		return [
-			[xBounds.minX.box[0][0], yBounds.minY.box[0][1]],
-			[xBounds.maxX.box[1][0], yBounds.maxY.box[1][1]]
-		];
-	}
-);
+	return [
+		[xBounds.minX.box[0][0], yBounds.minY.box[0][1]],
+		[xBounds.maxX.box[1][0], yBounds.maxY.box[1][1]]
+	];
+}
 
 
 export { getBoundingBox }

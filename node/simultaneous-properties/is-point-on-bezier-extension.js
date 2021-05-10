@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isPointOnBezierExtension = void 0;
-const get_implicit_form3_bitlength45_double_1 = require("../implicit-form/inp-bitlength45/double/get-implicit-form3-bitlength45-double");
-const get_implicit_form3_bitlength45_double_double_1 = require("../implicit-form/inp-bitlength45/double-double/get-implicit-form3-bitlength45-double-double");
-const get_implicit_form3_bitlength45_exact_1 = require("../implicit-form/inp-bitlength45/exact/get-implicit-form3-bitlength45-exact");
-const get_implicit_form2_bitlength45_double_1 = require("../implicit-form/inp-bitlength45/double/get-implicit-form2-bitlength45-double");
-const get_implicit_form2_bitlength45_double_double_1 = require("../implicit-form/inp-bitlength45/double-double/get-implicit-form2-bitlength45-double-double");
-const get_implicit_form2_bitlength45_exact_1 = require("../implicit-form/inp-bitlength45/exact/get-implicit-form2-bitlength45-exact");
+const get_implicit_form3_bitlength45_double_1 = require("../implicit-form/double/get-implicit-form3-bitlength45-double");
+const get_implicit_form3_bitlength45_double_double_1 = require("../implicit-form/double-double/get-implicit-form3-bitlength45-double-double");
+const get_implicit_form3_bitlength45_exact_1 = require("../implicit-form/exact/get-implicit-form3-bitlength45-exact");
+const get_implicit_form2_bitlength45_double_1 = require("../implicit-form/double/get-implicit-form2-bitlength45-double");
+const get_implicit_form2_bitlength45_double_double_1 = require("../implicit-form/double-double/get-implicit-form2-bitlength45-double-double");
+const get_implicit_form2_bitlength45_exact_1 = require("../implicit-form/exact/get-implicit-form2-bitlength45-exact");
 const error_analysis_1 = require("../error-analysis/error-analysis");
-const get_implicit_form1_bitlength45_double_double_1 = require("../implicit-form/inp-bitlength45/double-double/get-implicit-form1-bitlength45-double-double");
+const get_implicit_form1_bitlength45_double_double_1 = require("../implicit-form/double-double/get-implicit-form1-bitlength45-double-double");
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const double_double_1 = require("double-double");
 const big_float_ts_1 = require("big-float-ts");
@@ -31,6 +31,8 @@ const γγ3 = error_analysis_1.γγ(3);
  *
  * * Precondition: ps must be grid-aligned and have a maximum bitlength of 47.
  * (p may have any bitlength - no restrictions)
+ *
+ * @doc
  */
 function isPointOnBezierExtension3(ps, p) {
     let [x, y] = p;

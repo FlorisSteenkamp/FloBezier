@@ -6,6 +6,8 @@ const get_xy_1 = require("../../../to-power-basis/get-xy");
  *
  * @param circle a circle
  * @param ps a cubic bezier curve
+ *
+ * @doc
  */
 function getCoeffsCubic(circle, ps) {
     let { radius: r, center: [cx, cy] } = circle;

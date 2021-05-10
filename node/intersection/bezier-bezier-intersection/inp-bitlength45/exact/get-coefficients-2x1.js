@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCoeffs2x1Exact = void 0;
-const get_implicit_form2_bitlength45_exact_1 = require("../../../../implicit-form/inp-bitlength45/exact/get-implicit-form2-bitlength45-exact");
+const get_implicit_form2_bitlength45_exact_1 = require("../../../../implicit-form/exact/get-implicit-form2-bitlength45-exact");
 const big_float_ts_1 = require("big-float-ts");
 const double_double_1 = require("double-double");
 const get_xy_1 = require("../../../../to-power-basis/get-xy");

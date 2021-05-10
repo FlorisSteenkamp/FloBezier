@@ -3,8 +3,10 @@
  *
  * * **precondition**: 49-bit aligned coordinates
  *
- * @param ps An order 1, 2 or 3 bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param t The parameter value where the bezier should be evaluated
+ * @param ps an order 1, 2 or 3 bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ * @param t the parameter value where the bezier should be evaluated
+ *
+ * @doc
  **/
 declare function evalDeCasteljauWithErr(ps: number[][], t: number): {
     p: number[];

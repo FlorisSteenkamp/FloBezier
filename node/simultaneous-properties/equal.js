@@ -3,8 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.equal = void 0;
 /**
  * Returns true if the two beziers are deeply equal
+ *
  * @param psA an order 2, 3 or 4 bezier curve
  * @param psB another bezier curve
+ *
+ * @doc
  */
 function equal(psA, psB) {
     if (psA === psB) {

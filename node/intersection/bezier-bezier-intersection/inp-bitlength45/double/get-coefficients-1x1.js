@@ -1,11 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCoeffs1x1 = void 0;
-const get_implicit_form1_bitlength45_double_1 = require("../../../../implicit-form/inp-bitlength45/double/get-implicit-form1-bitlength45-double");
+const get_implicit_form1_bitlength45_double_1 = require("../../../../implicit-form/double/get-implicit-form1-bitlength45-double");
 const error_analysis_1 = require("../../../../error-analysis/error-analysis");
 const get_xy_1 = require("../../../../to-power-basis/get-xy");
 const abs = Math.abs;
 const γ1 = error_analysis_1.γ(1);
+/**
+ *
+ * @param ps1
+ * @param ps2
+ *
+ * @doc
+ */
 function getCoeffs1x1(ps1, ps2) {
     let { coeffs: { vₓ, vᵧ, v }, errorBound: { v_ } // vₓ_, vᵧ_ === 0
      } = get_implicit_form1_bitlength45_double_1.getImplicitForm1_bitlength45_double(ps1);

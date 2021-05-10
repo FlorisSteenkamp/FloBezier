@@ -8,6 +8,8 @@ const γ1 = error_analysis_1.γ(1);
 /**
  * Get self-intersection coefficients
  * * **precondition**: max bit-aligned bitlength: 47
+ *
+ * @doc
  */
 function getCoeffs3(ps) {
     let [[a3, a2, a1], [b3, b2, b1]] = get_xy_1.getXY(ps); // exact if max bit-aligned bitlength <= 49

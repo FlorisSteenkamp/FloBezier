@@ -41,6 +41,8 @@ const DEGREE_LIMIT = DEGREES[1];
  *
  * @param psI The incoming bezier that ends at the interface
  * @param psO The outgoing bezier that starts at the interface
+ *
+ * @doc
  */
 // TODO - improve and make at least 46-bitlength precondition
 function getInterfaceCcw(psI, psO) {

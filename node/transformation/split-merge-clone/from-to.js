@@ -10,9 +10,12 @@ const eval_de_casteljau_1 = require("../../local-properties-at-t/t-to-xy/eval-de
  * A loose bound on the accuracy of the resultant points is given by:
  * |δP| = 2*2n*max_k(|b_k|)η, where n = 3 (for a cubic), b_k are the control
  * points and η is Number.EPSILON.
+ *
  * @param ps a cubic bezier curve
  * @param t1 the t parameter where the resultant bezier should start
  * @param t2 the t parameter where the resultant bezier should end
+ *
+ * @doc
  */
 function fromTo(ps) {
     return (t1, t2) => {

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.evalDeCasteljauWithErrQuad = void 0;
+exports.evalDeCasteljauWithErrDd = void 0;
 const error_analysis_1 = require("../../error-analysis/error-analysis");
 const double_double_1 = require("double-double");
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
@@ -12,13 +12,16 @@ const abs = Math.abs;
 const u = Number.EPSILON / 2;
 const γ1 = error_analysis_1.γ(1);
 /**
- * Evaluates the given bezier curve at the parameter t given as a double-doulbe,
+ * Evaluates the given bezier curve at the parameter t given as a double-double,
  * including error.
- * * **precondition**: 49-bit aligned coordinates
- * @param ps An order 1, 2 or 3 bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param t The parameter value where the bezier should be evaluated
+ * * **precondition**: 49-bit aligned bezier coordinates
+ *
+ * @param ps an order 1, 2 or 3 bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ * @param t the parameter value where the bezier should be evaluated
+ *
+ * @doc
  **/
-function evalDeCasteljauWithErrQuad(ps, t) {
+function evalDeCasteljauWithErrDd(ps, t) {
     if (t[0] === 0 && t[1] === 0) {
         return { p: ps[0].map(c => [c]), pE: [0, 0] };
     }
@@ -120,5 +123,5 @@ function evalDeCasteljauWithErrQuad(ps, t) {
         return { p: [x, y], pE: [_x, _y] };
     }
 }
-exports.evalDeCasteljauWithErrQuad = evalDeCasteljauWithErrQuad;
+exports.evalDeCasteljauWithErrDd = evalDeCasteljauWithErrDd;
 //# sourceMappingURL=dd-eval-de-casteljau-with-err.js.map

@@ -63,8 +63,11 @@ const coeffFunctionsExact = [
  * unless all coefficients are exactly zero in which case undefined is returned
  * so that is easy to check if the two curves are actually identical
  * algebraically when endpoints are ignored.
+ *
  * @param ps1
  * @param ps2
+ *
+ * @doc
  */
 function getIntersectionCoeffs(ps1, ps2) {
     let { coeffs, errBound } = coeffFunctionsQuad[ps1.length - 2][ps2.length - 2](ps1, ps2);
@@ -109,7 +112,10 @@ exports.getIntersectionCoeffs = getIntersectionCoeffs;
  * or quadratic if given as such (check with isReallyQuadratic), else convert
  * them (cubics can be converted with toQuadraticFromCubic)
  * * algorithm adapted from [Indrek](http://www.mare.ee/indrek/misc/2d.pdf)
+ *
  * @param ps
+ *
+ * @doc
  */
 function bezierBezierIntersectionImplicit(ps1, ps2) {
     let _coeffs = getIntersectionCoeffs(ps1, ps2);

@@ -14,6 +14,8 @@
  *
  * @param ps1 A bezier curve
  * @param ps2 Another bezier curve
+ *
+ * @doc
  */
 declare function areBeziersInSameKFamily(ps1: number[][], ps2: number[][]): boolean;
 export { areBeziersInSameKFamily };

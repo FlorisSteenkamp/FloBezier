@@ -5,6 +5,8 @@
  *
  * @param ps a linear, quadratic or cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param t the parameter value where the normal should be evaluated
+ *
+ * @doc
  */
 declare function normal(ps: number[][], t: number): number[];
 declare function normal(ps: number[][]): (t: number) => number[];
