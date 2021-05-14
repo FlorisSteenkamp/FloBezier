@@ -19,13 +19,13 @@ function fromTTo1(ps: number[][], t: number): number[][] {
 }
 /*
 function fromTTo1(ps: number[][], t: number): number[][] {
-	let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
+	const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
 	
-	let xs = [x0,x1,x2,x3];
-	let ys = [y0,y1,y2,y3];
+	const xs = [x0,x1,x2,x3];
+	const ys = [y0,y1,y2,y3];
 
-	let [x0_, x1_, x2_, x3_] = deCasteljau(xs, t)[1];
-	let [y0_, y1_, y2_, y3_] = deCasteljau(ys, t)[1];
+	const [x0_, x1_, x2_, x3_] = deCasteljau(xs, t)[1];
+	const [y0_, y1_, y2_, y3_] = deCasteljau(ys, t)[1];
 
 	return [[x0_, y0_], [x1_, y1_], [x2_, y2_], [x3_, y3_]];
 }

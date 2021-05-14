@@ -26,23 +26,17 @@ function getImplicitForm1(ps: number[][]) {
     // The implicit form is given by:
     // vₓx + vᵧy + v = 0
 
-    let [[a1, a0], [b1, b0]] = getXY(ps);
+    const [[a1, a0], [b1, b0]] = getXY(ps);
 
-    let vₓ = -b1;
-    let vᵧ = a1;
+    const vₓ = -b1;
+    const vᵧ = a1;
 
-    //let v = a1*b0 - a0*b1;
-    let w1 = a1*b0;
-    let w1_ = Math.abs(a1*b0);
-    let w2 = a0*b1;
-    let w2_ = Math.abs(a0*b1);
-    let v = w2 - w1;
-    let v_ = w1_ + w2_ + Math.abs(v);
+    //const v = a1*b0 - a0*b1;
+    const w1 = a1*b0;
+    const w2 = a0*b1;
+    const v = w2 - w1;
 
-    return { 
-        coeffs: { vₓ, vᵧ, v },
-        errorBound: { v_ }  // vₓ_, vᵧ_, => zero
-    }
+    return { vₓ, vᵧ, v };
 }
 
 

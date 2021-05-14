@@ -14,7 +14,7 @@ import { gaussQuadrature } from "flo-gauss-quadrature";
  function lengthBez3(interval: number[], ps: number[][]) {
 	if (interval[0] === interval[1]) { return 0; }
 
-	let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
+	const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
 	// Keep line below to ensure zero length curve returns zero!
 	if (x0 === x1 && x1 === x2 && x2 === x3 &&
 		y0 === y1 && y1 === y2 && y2 === y3) {

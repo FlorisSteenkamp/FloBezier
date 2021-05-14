@@ -31,27 +31,37 @@ const qaq = ddAddDd;
  * @doc mdx
  */
 function getCoeffsBez1Bez1Dd(ps1: number[][], ps2: number[][]) {
-    let {
+    const {
         coeffs: { vₓ, vᵧ, v }  // vₓ, vᵧ, v:  48-bit aligned => error free
     } = getImplicitForm1Dd(ps1);
 
-    let [[c1,c0],[d1,d0]] = getXY(ps2);
+    const [[c1,c0],[d1,d0]] = getXY(ps2);
 
-    //let v1 = c1*vₓ + d1*vᵧ;
-    let p1 = tp(c1,vₓ);   // vₓ is a double => error free
-    let p2 = tp(d1,vᵧ);   // vᵧ is a double => error free
-    let v1 = qaq(p1,p2);  // 48-bit aligned => error free
+    //--------------------------------------------------------------------------
+    // `var` -> a variable
+    // `_var` -> the absolute value of $var
+    // `var_` -> the error in var (but should still be multiplied by 3*γ²)
+    // recall: `a*b`, where both `a` and `b` have errors |a| and |b| we get for the
+    //  * error of (a*b) -> a_|b| + |a|b_ + abs(a*b)
+    //  * error of (a+b) -> a_ + b_ + abs(a+b)
+    // the returned errors need to be multiplied by 3γ² to get the true error
+    //--------------------------------------------------------------------------
 
-    //let v0 = c0*vₓ + d0*vᵧ + v_0;
-    let p3 = tp(c0,vₓ);   // vₓ is a double => error free
-    let p4 = tp(d0,vᵧ);   // vᵧ is a double => error free
-    let p5 = qaq(p3,p4);  // 48-bit aligned => error free
-    let v0 = qaq(p5,v);   // 48-bit aligned => error free 
+    //const v1 = c1*vₓ + d1*vᵧ;
+    const p1 = tp(c1,vₓ);   // vₓ is a double => error free
+    const p2 = tp(d1,vᵧ);   // vᵧ is a double => error free
+    const v1 = qaq(p1,p2);  // 48-bit aligned => error free
+
+    //const v0 = c0*vₓ + d0*vᵧ + v_0;
+    const p3 = tp(c0,vₓ);   // vₓ is a double => error free
+    const p4 = tp(d0,vᵧ);   // vᵧ is a double => error free
+    const p5 = qaq(p3,p4);  // 48-bit aligned => error free
+    const v0 = qaq(p5,v);   // 48-bit aligned => error free 
 
 
     return {
         coeffs:   [v1, v0],
-        errBound: [0, 0]  // 48-bit aligned => completely error free
+        errBound: [0, 0]  // 48-bit aligned => compconstely error free
     };
 }
 

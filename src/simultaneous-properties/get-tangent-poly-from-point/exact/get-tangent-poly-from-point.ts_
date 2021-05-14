@@ -35,88 +35,88 @@ function getTangentPolyFromPointExact(ps: number[][], p: number[]) {
  * @param p 
  */
 function getPolyForCubicExact(ps: number[][], p: number[]) {
-    let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
-    let [x, y] = p;
+    const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
+    const [x, y] = p;
 
-    let xx0 = x0 - x;  // (bitlength <= 52) => exact
-    let xx1 = x1 - x;  // (bitlength <= 52) => exact
-    let xx2 = x2 - x;  // (bitlength <= 52) => exact
-    let xx3 = x3 - x;  // (bitlength <= 52) => exact
-    let yy0 = y0 - y;  // (bitlength <= 52) => exact
-    let yy1 = y1 - y;  // (bitlength <= 52) => exact
-    let yy2 = y2 - y;  // (bitlength <= 52) => exact
-    let yy3 = y3 - y;  // (bitlength <= 52) => exact
+    const xx0 = x0 - x;  // (bitlength <= 52) => exact
+    const xx1 = x1 - x;  // (bitlength <= 52) => exact
+    const xx2 = x2 - x;  // (bitlength <= 52) => exact
+    const xx3 = x3 - x;  // (bitlength <= 52) => exact
+    const yy0 = y0 - y;  // (bitlength <= 52) => exact
+    const yy1 = y1 - y;  // (bitlength <= 52) => exact
+    const yy2 = y2 - y;  // (bitlength <= 52) => exact
+    const yy3 = y3 - y;  // (bitlength <= 52) => exact
 
-    let x00 = tp(xx0,xx0);
-    let x01 = scaleExpansion(tp(xx0,xx1), 6);
-    let x02 = scaleExpansion(tp(xx0,xx2), 6);
-    let x03 = scaleExpansion(tp(xx0,xx3), 2);
-    let x11 = scaleExpansion(tp(xx1,xx1), 9);
-    let x12 = scaleExpansion(tp(xx1,xx2), 18);
-    let x13 = scaleExpansion(tp(xx1,xx3), 6);
-    let x22 = scaleExpansion(tp(xx2,xx2), 9);
-    let x23 = scaleExpansion(tp(xx2,xx3), 6);
-    let x33 = tp(xx3,xx3);
+    const x00 = tp(xx0,xx0);
+    const x01 = scaleExpansion(tp(xx0,xx1), 6);
+    const x02 = scaleExpansion(tp(xx0,xx2), 6);
+    const x03 = scaleExpansion(tp(xx0,xx3), 2);
+    const x11 = scaleExpansion(tp(xx1,xx1), 9);
+    const x12 = scaleExpansion(tp(xx1,xx2), 18);
+    const x13 = scaleExpansion(tp(xx1,xx3), 6);
+    const x22 = scaleExpansion(tp(xx2,xx2), 9);
+    const x23 = scaleExpansion(tp(xx2,xx3), 6);
+    const x33 = tp(xx3,xx3);
 
-    let x01_ = negativeOf(x01); 
-    let x03_ = negativeOf(x03); 
-    let x12_ = negativeOf(x12); 
-    let x23_ = negativeOf(x23); 
+    const x01_ = negativeOf(x01); 
+    const x03_ = negativeOf(x03); 
+    const x12_ = negativeOf(x12); 
+    const x23_ = negativeOf(x23); 
 
-    let y00 = tp(yy0,yy0);
-    let y01 = scaleExpansion(tp(yy0,yy1), 6);
-    let y02 = scaleExpansion(tp(yy0,yy2), 6);
-    let y03 = scaleExpansion(tp(yy0,yy3), 2);
-    let y11 = scaleExpansion(tp(yy1,yy1), 9);
-    let y12 = scaleExpansion(tp(yy1,yy2), 18);
-    let y13 = scaleExpansion(tp(yy1,yy3), 6);
-    let y22 = scaleExpansion(tp(yy2,yy2), 9);
-    let y23 = scaleExpansion(tp(yy2,yy3), 6);
-    let y33 = tp(yy3,yy3);
+    const y00 = tp(yy0,yy0);
+    const y01 = scaleExpansion(tp(yy0,yy1), 6);
+    const y02 = scaleExpansion(tp(yy0,yy2), 6);
+    const y03 = scaleExpansion(tp(yy0,yy3), 2);
+    const y11 = scaleExpansion(tp(yy1,yy1), 9);
+    const y12 = scaleExpansion(tp(yy1,yy2), 18);
+    const y13 = scaleExpansion(tp(yy1,yy3), 6);
+    const y22 = scaleExpansion(tp(yy2,yy2), 9);
+    const y23 = scaleExpansion(tp(yy2,yy3), 6);
+    const y33 = tp(yy3,yy3);
 
-    let y01_ = negativeOf(y01);
-    let y03_ = negativeOf(y03);
-    let y12_ = negativeOf(y12);
-    let y23_ = negativeOf(y23);
+    const y01_ = negativeOf(y01);
+    const y03_ = negativeOf(y03);
+    const y12_ = negativeOf(y12);
+    const y23_ = negativeOf(y23);
 
-    //let t5 = 6 * ((x33 - x23 + x13 - x03 + x22 - x12 + x02 + x11 - x01 + x00) + 
+    //const t5 = 6 * ((x33 - x23 + x13 - x03 + x22 - x12 + x02 + x11 - x01 + x00) + 
     //              (y33 - y23 + y13 - y03 + y22 - y12 + y02 + y11 - y01 + y00));
-    let t5 = scaleExpansion(calculateSum(
+    const t5 = scaleExpansion(calculateSum(
             [x33, x23_, x13, x03_, x22, x12_, x02, x11, x01_, x00, 
              y33, y23_, y13, y03_, y22, y12_, y02, y11, y01_, y00]
     ), 6);
 
-    //let t4 = 5 * (x23 - 2*x13 + 3*x03 - 2*x22 + 3*x12 - 4*x02 - 4*x11 + 5*x01 - 6*x00 +
+    //const t4 = 5 * (x23 - 2*x13 + 3*x03 - 2*x22 + 3*x12 - 4*x02 - 4*x11 + 5*x01 - 6*x00 +
     //              y23 - 2*y13 + 3*y03 - 2*y22 + 3*y12 - 4*y02 - 4*y11 + 5*y01 - 6*y00);
-    let t4 = scaleExpansion(calculate([
+    const t4 = scaleExpansion(calculate([
         [x23],  [[-2],x13], [[3],x03], [[-2],x22], [[3],x12], [[-4],x02], [[-4],x11], [[5],x01], [[-6],x00],
         [y23],  [[-2],y13], [[3],y03], [[-2],y22], [[3],y12], [[-4],y02], [[-4],y11], [[5],y01], [[-6],y00]
     ]), 5);
 
-    //let t3 = 4 * (x13 - 3*x03 + x22 - 3*x12 + 6*x02 + 6*x11 - 10*x01 + 15*x00 +
+    //const t3 = 4 * (x13 - 3*x03 + x22 - 3*x12 + 6*x02 + 6*x11 - 10*x01 + 15*x00 +
     //              y13 - 3*y03 + y22 - 3*y12 + 6*y02 + 6*y11 - 10*y01 + 15*y00);	
-    let t3 = scaleExpansion(calculate([
+    const t3 = scaleExpansion(calculate([
         [x13], [[-3],x03], [x22], [[-3],x12], [[6],x02], [[6],x11], [[-10],x01], [[15],x00],
         [y13], [[-3],y03], [y22], [[-3],y12], [[6],y02], [[6],y11], [[-10],y01], [[15],y00]
     ]), 4);
 
-    //let t2 = 3 * (x03 + x12 - 4*x02 - 4*x11 + 10*x01 - 20*x00 +
+    //const t2 = 3 * (x03 + x12 - 4*x02 - 4*x11 + 10*x01 - 20*x00 +
     //              y03 + y12 - 4*y02 - 4*y11 + 10*y01 - 20*y00);
-    let t2 = scaleExpansion(calculate([
+    const t2 = scaleExpansion(calculate([
         [x03], [x12], [[-4],x02], [[-4],x11], [[10],x01], [[-20],x00],
         [y03], [y12], [[-4],y02], [[-4],y11], [[10],y01], [[-20],y00]
     ]), 3);
 
-    //let t1 = 2 * (x02 + x11 - 5*x01 + 15*x00 +
+    //const t1 = 2 * (x02 + x11 - 5*x01 + 15*x00 +
     //              y02 + y11 - 5*y01 + 15*y00);
-    let t1 = scaleExpansion(calculate([
+    const t1 = scaleExpansion(calculate([
         [x02], [x11], [[-5],x01], [[15],x00],
         [y02], [y11], [[-5],y01], [[15],y00]
     ]), 2);
 
-    //let t0 = (x01 - 6*x00 +
+    //const t0 = (x01 - 6*x00 +
     //          y01 - 6*y00);
-    let t0 = calculate([
+    const t0 = calculate([
         [x01], [[-6],x00],
         [y01], [[-6],y00]
     ]);
@@ -134,46 +134,46 @@ function getPolyForQuadraticExact(
         ps: number[][], 
         p: number[]) {
 
-    let [[x0, y0], [x1, y1], [x2, y2]] = ps;
-    let [x, y] = p;
+    const [[x0, y0], [x1, y1], [x2, y2]] = ps;
+    const [x, y] = p;
 
-    let xx0 = x0 - x;  // (bitlength <= 52) => exact
-    let xx1 = x1 - x;  // (bitlength <= 52) => exact
-    let xx2 = x2 - x;  // (bitlength <= 52) => exact
-    let yy0 = y0 - y;  // (bitlength <= 52) => exact
-    let yy1 = y1 - y;  // (bitlength <= 52) => exact
-    let yy2 = y2 - y;  // (bitlength <= 52) => exact
+    const xx0 = x0 - x;  // (bitlength <= 52) => exact
+    const xx1 = x1 - x;  // (bitlength <= 52) => exact
+    const xx2 = x2 - x;  // (bitlength <= 52) => exact
+    const yy0 = y0 - y;  // (bitlength <= 52) => exact
+    const yy1 = y1 - y;  // (bitlength <= 52) => exact
+    const yy2 = y2 - y;  // (bitlength <= 52) => exact
 
-    let x00 = tp(xx0,xx0);
-    let x01 = tp(xx0,xx1);
-    let x02 = tp(xx0,xx2);
-    let x11 = tp(xx1,xx1);
-    let x12 = tp(xx1,xx2);
-    let x22 = tp(xx2,xx2);
+    const x00 = tp(xx0,xx0);
+    const x01 = tp(xx0,xx1);
+    const x02 = tp(xx0,xx2);
+    const x11 = tp(xx1,xx1);
+    const x12 = tp(xx1,xx2);
+    const x22 = tp(xx2,xx2);
 
-    let y00 = tp(yy0,yy0);
-    let y01 = tp(yy0,yy1);
-    let y02 = tp(yy0,yy2);
-    let y11 = tp(yy1,yy1);
-    let y12 = tp(yy1,yy2);
-    let y22 = tp(yy2,yy2);
+    const y00 = tp(yy0,yy0);
+    const y01 = tp(yy0,yy1);
+    const y02 = tp(yy0,yy2);
+    const y11 = tp(yy1,yy1);
+    const y12 = tp(yy1,yy2);
+    const y22 = tp(yy2,yy2);
 
-    let t3 = calculate([
+    const t3 = calculate([
         [y22], [[2],y02], [[-4],y12], [[4],y11], [[-4],y01], [y00],
         [x22], [[2],x02], [[-4],x12], [[4],x11], [[-4],x01], [x00]
     ]);
     
-    let t2 = scaleExpansion(calculate([
+    const t2 = scaleExpansion(calculate([
         [y12], [[-1],y02], [[-2],y11], [[3],y01], [[-1],y00],
         [x12], [[-1],x02], [[-2],x11], [[3],x01], [[-1],x00]
     ]), 3);
      
-    let t1 = calculate([
+    const t1 = calculate([
         [y02], [[2],y11], [[-6],y01], [[3],y00],
         [x02], [[2],x11], [[-6],x01], [[3],x00]
     ]);
      
-    let t0 = calculate([
+    const t0 = calculate([
         [y01], [[-1],y00],
         [x01], [[-1],x00]
     ]);
@@ -188,28 +188,28 @@ function getPolyForQuadraticExact(
  * @param p 
  */
 function getPolyForLineExact(ps: number[][], p: number[]) {
-    let [[x0, y0], [x1, y1]] = ps;
-    let [xp, yp] = p;
+    const [[x0, y0], [x1, y1]] = ps;
+    const [xp, yp] = p;
 
-    let xx0 = x0 - xp;  // (bitlength <= 52) => exact
-    let xx1 = x1 - xp;  // (bitlength <= 52) => exact
-    let yy0 = y0 - yp;  // (bitlength <= 52) => exact
-    let yy1 = y1 - yp;  // (bitlength <= 52) => exact
+    const xx0 = x0 - xp;  // (bitlength <= 52) => exact
+    const xx1 = x1 - xp;  // (bitlength <= 52) => exact
+    const yy0 = y0 - yp;  // (bitlength <= 52) => exact
+    const yy1 = y1 - yp;  // (bitlength <= 52) => exact
 
-    let x00 = tp(xx0,xx0);
-    let x01 = tp(xx0,xx1);
-    let x11 = tp(xx1,xx1);
+    const x00 = tp(xx0,xx0);
+    const x01 = tp(xx0,xx1);
+    const x11 = tp(xx1,xx1);
 
-    let y00 = tp(yy0,yy0);
-    let y01 = tp(yy0,yy1);
-    let y11 = tp(yy1,yy1);
+    const y00 = tp(yy0,yy0);
+    const y01 = tp(yy0,yy1);
+    const y11 = tp(yy1,yy1);
 
-    let t1 = calculate([
+    const t1 = calculate([
         [y11], [[-2],y01], [y00],
         [x11], [[-2],x01], [x00]
     ]);
         
-    let t0 = calculate([
+    const t0 = calculate([
         [y01], [[-1],y00], 
         [x01], [[-1],x00]
     ]) 

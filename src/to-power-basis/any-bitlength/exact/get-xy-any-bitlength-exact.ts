@@ -1,4 +1,3 @@
-
 import { twoDiff, scaleExpansion2, growExpansion, twoSum } from 'big-float-ts';
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
@@ -23,7 +22,7 @@ const ge = growExpansion;
  */
 function getXYExact(ps: number[][]): number[][][] {
 	if (ps.length === 4) {
-		let [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
+		const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
 		return [[
             // x3 + 3*(x1 - x2) - x0
             ge(ge(sce(3, td(x1, x2)), x3), -x0)
@@ -48,7 +47,7 @@ function getXYExact(ps: number[][]): number[][][] {
             [y0]
         ]];
 	} else if (ps.length === 3) {
-		let [[x0,y0], [x1,y1], [x2,y2]] = ps;
+		const [[x0,y0], [x1,y1], [x2,y2]] = ps;
 		return [[
 			// x2 - 2*x1 + x0
 			ge(ts(x2, x0), -2*x1),
@@ -62,7 +61,7 @@ function getXYExact(ps: number[][]): number[][][] {
 			[y0]
         ]];
 	} else if (ps.length === 2) {
-		let [[x0,y0], [x1,y1]] = ps;
+		const [[x0,y0], [x1,y1]] = ps;
 		return [[
 			//x1 - x0,
 			td(x1, x0),

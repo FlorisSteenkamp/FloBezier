@@ -33,12 +33,12 @@ function inversion01Precise(
     }
 
     // the coefficients of the poly below is max double-double
-    let poly = getTangentPolyFromPointExact(ps, p);
+    const poly = getTangentPolyFromPointExact(ps, p);
 
-    let ts = allRootsCertified(poly);
+    const ts = allRootsCertified(poly);
     if (!ts.length) { return undefined; }
     
-    let ps_ = ts.map(t => ({ 
+    const ps_ = ts.map(t => ({ 
         t: mid(t),
         p: evaluate_anyBitlength_exact(ps, mid(t)).map(eEstimate)
     }));
@@ -47,7 +47,7 @@ function inversion01Precise(
     let minD = Number.POSITIVE_INFINITY;
     let t: number = undefined;
     ps_.forEach(p_ => {
-        let d = squaredDistanceBetween(p_.p, p);
+        const d = squaredDistanceBetween(p_.p, p);
         if (d < minD) {
             minD = d;
             t = p_.t;
@@ -73,11 +73,11 @@ function inversionLine(
         ps: number[][], 
         p: number[]) {
 
-    let [[x0,y0],[x1,y1]] = ps;
-    let [x,y] = p;
+    const [[x0,y0],[x1,y1]] = ps;
+    const [x,y] = p;
 
-    let x1_x0 = x1 - x0;
-    let y1_y0 = y1 - y0;
+    const x1_x0 = x1 - x0;
+    const y1_y0 = y1 - y0;
 
     // the compare below ensures numerical stability
     return Math.abs(x1_x0) > Math.abs(y1_y0)

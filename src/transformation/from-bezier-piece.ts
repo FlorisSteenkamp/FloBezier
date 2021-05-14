@@ -15,7 +15,7 @@ import { BezierPart } from "../bezier-part";
  */
 function bezierFromPart(bezierPart: BezierPart) {
 
-	let { ps, ts } = bezierPart;
+	const { ps, ts } = bezierPart;
 
 	// If ts = [0,1] then return original bezier.
 	if (ts[0] === 0 && ts[1] === 1) {
@@ -24,7 +24,7 @@ function bezierFromPart(bezierPart: BezierPart) {
 
 	// If ts[0] === ts[1] then return a single point degenerated bezier.
 	if (ts[0] === ts[1]) {
-		let p = evalDeCasteljau(ps,ts[0]);
+		const p = evalDeCasteljau(ps,ts[0]);
 		return [p,p,p,p];
 	}
 

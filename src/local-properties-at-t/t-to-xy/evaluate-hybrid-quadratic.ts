@@ -18,9 +18,9 @@ function evaluateHybridQuadratic(
         hq: [number[], number[][], number[]], 
         t: number, th: number): number[] {
 
-    let P0 = hq[0];
-    let P1 = evalDeCasteljau(hq[1], th);
-    let P2 = hq[2];
+    const P0 = hq[0];
+    const P1 = evalDeCasteljau(hq[1], th);
+    const P2 = hq[2];
 
     return evalDeCasteljau([P0, P1, P2], t);
 }

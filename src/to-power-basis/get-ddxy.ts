@@ -15,7 +15,7 @@
  */
 function getDdxy(ps: number[][]): number[][] {
 	if (ps.length === 4) {
-		let [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
+		const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
 		return [[
 			6*(x3 + 3*(x1 - x2) - x0), // t^1 - max bitlength increase 6
 			6*(x2 - 2*x1 + x0)         // t^0 - max bitlength increase 5
@@ -24,7 +24,7 @@ function getDdxy(ps: number[][]): number[][] {
 			6*(y2 - 2*y1 + y0)         // t^0 - max bitlength increase 5
 		]]
 	} else if (ps.length === 3) {
-		let [[x0,y0], [x1,y1], [x2,y2]] = ps;
+		const [[x0,y0], [x1,y1], [x2,y2]] = ps;
 		return [[
 			2*(x2 - 2*x1 + x0) // t^0 - max bitlength increase 3
 		], [

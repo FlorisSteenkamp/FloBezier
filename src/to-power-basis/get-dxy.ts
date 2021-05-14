@@ -13,7 +13,7 @@
  */
 function getDxy(ps: number[][]): number[][] {
 	if (ps.length === 4) {
-		let [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
+		const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
 		return [[
 			3*((x3 - x0) + 3*(x1 - x2)), // t^2 - max bitlength increase 5
 			6*(x2 - 2*x1 + x0),        // t^1 - max bitlength increase 5
@@ -26,7 +26,7 @@ function getDxy(ps: number[][]): number[][] {
 	} 
 	
 	if (ps.length === 3) {
-		let [[x0,y0], [x1,y1], [x2,y2]] = ps;
+		const [[x0,y0], [x1,y1], [x2,y2]] = ps;
 		return [[
 			2*(x2 - 2*x1 + x0), // t^1 - max bitlength increase 3
 			2*(x1 - x0),        // t^0 - max bitlength increase 2
@@ -37,7 +37,7 @@ function getDxy(ps: number[][]): number[][] {
 	} 
 	
 	if (ps.length === 2) {
-		let [[x0,y0], [x1,y1]] = ps;
+		const [[x0,y0], [x1,y1]] = ps;
 		return [[
 			x1 - x0,  // t^0 - max bitlength increase 1
 		], [

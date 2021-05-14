@@ -6,7 +6,6 @@
     "license": "MIT",
     "private": false,
     "scripts": {
-        "build": "tsc bezier-bezier-intersection.ts",
         "start": "ts-node bezier-bezier-intersection.ts"
     }
 }

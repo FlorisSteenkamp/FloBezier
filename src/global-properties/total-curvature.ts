@@ -51,10 +51,10 @@ function totalCurvature(
 	return gaussQuadrature(t => κds(ps,t), interval);
 		// TODO
 		/*
-		let [a,b] = interval;
-		let tangentA = tanPs(a);
-		let tangentB = tanPs(b);
-		let sinθ = Vector.cross(tanA, tanB)
+		const [a,b] = interval;
+		const tangentA = tanPs(a);
+		const tangentB = tanPs(b);
+		const sinθ = Vector.cross(tanA, tanB)
 		*/
 }
 
@@ -68,8 +68,8 @@ function κds(ps: number[][], t: number): number {
 	const [dx, dy] = evaluateDxy(ps, t); 
 	const [ddx, ddy] = evaluateDdxy(ps, t);
 
-	let a = dx*ddy - dy*ddx;
-	let b = dx*dx + dy*dy;
+	const a = dx*ddy - dy*ddx;
+	const b = dx*dx + dy*dy;
 	
 	return a/b;
 }

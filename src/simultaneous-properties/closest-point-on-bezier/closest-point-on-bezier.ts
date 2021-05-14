@@ -24,7 +24,7 @@ function closestPointOnBezierPrecise(
         ps: number[][], 
         p: number[]): { p: number[]; t: number; } {
 
-    let poly = getTangentPolyFromPointExact(ps, p);
+    const poly = getTangentPolyFromPointExact(ps, p);
 
     // we give ample leeway for roots outside [0,1] since roots can be some 
     // distance outside this range at extemely high curvature where the tangent
@@ -32,20 +32,20 @@ function closestPointOnBezierPrecise(
     // p to the bezier is calculated to be small enough. nope, we add [0,1] below
     // as endpoints to check so no need.
 
-    let ts = allRootsCertified(poly, 0, 1).map(mid);
+    const ts = allRootsCertified(poly, 0, 1).map(mid);
 
     ts.push(0);
     ts.push(1);
 
-    let ps_ = ts.map(t => ({ p: evaluate_anyBitlength_exact(ps, t).map(estimate), t }));
-    //let ps_ = ts.map(t => ({ p: evalDeCasteljau(ps, t), t }));
+    const ps_ = ts.map(t => ({ p: evaluate_anyBitlength_exact(ps, t).map(estimate), t }));
+    //const ps_ = ts.map(t => ({ p: evalDeCasteljau(ps, t), t }));
 
     
     // Get point with minimum distance
     let minD = Number.POSITIVE_INFINITY;
     let minT: { p: number[], t: number } = undefined;
     ps_.forEach(p_ => {
-        let d = squaredDistanceBetween(p_.p, p);
+        const d = squaredDistanceBetween(p_.p, p);
         if (d < minD) {
             minD = d;
             minT = p_;
@@ -60,20 +60,20 @@ function closestPointOnBezier(
         ps: number[][], 
         p: number[]): { p: number[]; t: number; } {
 
-    let poly = getTangentPolyFromPoint(ps, p);
+    const poly = getTangentPolyFromPoint(ps, p);
 
-    let ts = allRoots(poly, 0, 1);
+    const ts = allRoots(poly, 0, 1);
 
     ts.push(0);
     ts.push(1); 
 
-    let ps_ = ts.map(t => ({ p: evalDeCasteljau(ps,t), t }));
+    const ps_ = ts.map(t => ({ p: evalDeCasteljau(ps,t), t }));
 
     // Get point with minimum distance
     let minD = Number.POSITIVE_INFINITY;
     let minP: { p: number[], t: number } = undefined;
     ps_.forEach(p_ => {
-        let d = squaredDistanceBetween(p_.p, p);
+        const d = squaredDistanceBetween(p_.p, p);
         if (d < minD) {
             minD = d;
             minP = p_;

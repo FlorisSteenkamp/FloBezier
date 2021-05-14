@@ -18,8 +18,8 @@ function isSelfOverlapping(ps: number[][]) {
     if (!isLine(ps)) { return false; }
 
     // Check if control points are non-strict monotone
-    let xs = ps.map(p => p[0]);
-    let ys = ps.map(p => p[1]);
+    const xs = ps.map(p => p[0]);
+    const ys = ps.map(p => p[1]);
     return !(isMonotone(xs) && isMonotone(ys));
 }
 

@@ -8,7 +8,7 @@
  * @internal
  */
 function quadraticToCubic(ps: number[][]) {
-	let [[x0,y0],[x1,y1],[x2,y2]] = ps;
+	const [[x0,y0],[x1,y1],[x2,y2]] = ps;
 
 	return [
 		[x0,y0],

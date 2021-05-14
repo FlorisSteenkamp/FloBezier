@@ -39,84 +39,84 @@ function getImplicitForm2Dd(ps: number[][]) {
     // The implicit form is given by:
     // vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0
     
-    let [[a2,a1,a0],[b2,b1,b0]] = getXY(ps);
+    const [[a2,a1,a0],[b2,b1,b0]] = getXY(ps);
 
-    let a2b1 = tp(a2,b1);  // error free
-    let a1b2 = tp(a1,b2);  // error free
-    let a2b0 = tp(a2,b0);  // error free
-    let a0b2 = tp(a0,b2);  // error free
-    let a1b0 = tp(a1,b0);  // error free
-    let a0b1 = tp(a0,b1);  // error free
-    let a2a2 = tp(a2,a2);  // error free
-    let a2b2 = tp(a2,b2);  // error free
-    let b2b2 = tp(b2,b2);  // error free
+    const a2b1 = tp(a2,b1);  // error free
+    const a1b2 = tp(a1,b2);  // error free
+    const a2b0 = tp(a2,b0);  // error free
+    const a0b2 = tp(a0,b2);  // error free
+    const a1b0 = tp(a1,b0);  // error free
+    const a0b1 = tp(a0,b1);  // error free
+    const a2a2 = tp(a2,a2);  // error free
+    const a2b2 = tp(a2,b2);  // error free
+    const b2b2 = tp(b2,b2);  // error free
 
-    let $a2b1 = a2*b1;
-    let $a1b2 = a1*b2;
-    let $a2b0 = a2*b0;
-    let $a0b2 = a0*b2;
-    let $a1b0 = a1*b0;
-    let $a0b1 = a0*b1;
+    const $a2b1 = a2*b1;
+    const $a1b2 = a1*b2;
+    const $a2b0 = a2*b0;
+    const $a0b2 = a0*b2;
+    const $a1b0 = a1*b0;
+    const $a0b1 = a0*b1;
 
-    let q1 = qdq(a2b1,a1b2);  // 48-bit aligned => error free
-    let q2 = qdq(a2b0,a0b2);  // 48-bit aligned => error free
-    let q3 = qdq(a1b0,a0b1);  // 48-bit aligned => error free
+    const q1 = qdq(a2b1,a1b2);  // 48-bit aligned => error free
+    const q2 = qdq(a2b0,a0b2);  // 48-bit aligned => error free
+    const q3 = qdq(a1b0,a0b1);  // 48-bit aligned => error free
 
-    let $q1 = $a2b1 - $a1b2;
-    let $q2 = $a2b0 - $a0b2;
-    let $q3 = $a1b0 - $a0b1;
+    const $q1 = $a2b1 - $a1b2;
+    const $q2 = $a2b0 - $a0b2;
+    const $q3 = $a1b0 - $a0b1;
 
 
     // -a1*q1*y - a2**2*y**2 + 2*a2*b2*x*y + 2*a2*q2*y + b1*q1*x - b2**2*x**2 - 2*b2*q2*x + q1*q3 - q2**2
 
     // b2**2*x**2
     // -b2**2 *x**2
-    let vₓₓ = qno(b2b2);
+    const vₓₓ = qno(b2b2);
 
     // -2*a2*b2*x*y
     // 2*a2*b2 *x*y
-    let vₓᵧ = qm2(a2b2);
+    const vₓᵧ = qm2(a2b2);
 
     // a2**2*y**2
     // -a2**2 *y**2 
-    let vᵧᵧ = qno(a2a2);
+    const vᵧᵧ = qno(a2a2);
 
     // -2*a0*b2**2 + a1*b1*b2 + 2*a2*b0*b2 - a2*b1**2
     // (b1*q1 + -2*b2*q2) *x
-    //let vₓ = b1*q1 - 2*b2*q2;
-    let $w1 = b1*$q1;
-    let w1 = qmd(b1,q1);
-    let w1_ = abs($w1);
-    let $w2 = 2*b2*$q2;
-    let w2 = qm2(qmd(b2,q2));
-    let w2_ = abs($w2);
-    let $vₓ = $w1 - $w2;
-    let vₓ = qdq(w1,w2);
-    let vₓ_ = w1_ + w2_ + abs($vₓ);
+    //const vₓ = b1*q1 - 2*b2*q2;
+    const $w1 = b1*$q1;
+    const w1 = qmd(b1,q1);
+    const w1_ = abs($w1);
+    const $w2 = 2*b2*$q2;
+    const w2 = qm2(qmd(b2,q2));
+    const w2_ = abs($w2);
+    const $vₓ = $w1 - $w2;
+    const vₓ = qdq(w1,w2);
+    const vₓ_ = w1_ + w2_ + abs($vₓ);
 
     // 2*a0*a2*b2 - a1**2*b2 + a1*a2*b1 - 2*a2**2*b0
     // (-a1*q1 + 2*a2*q2) *y
-    let $w3 = 2*a2*$q2;
-    let w3 = qm2(qmd(a2,q2));
-    let w3_ = abs($w3);
-    let $w4 = a1*$q1;
-    let w4 = qmd(a1,q1);
-    let w4_ = abs($w4);
-    let $vᵧ = $w3 - $w4;
-    let vᵧ = qdq(w3,w4);
-    let vᵧ_ = w3_ + w4_ + abs($vᵧ);
+    const $w3 = 2*a2*$q2;
+    const w3 = qm2(qmd(a2,q2));
+    const w3_ = abs($w3);
+    const $w4 = a1*$q1;
+    const w4 = qmd(a1,q1);
+    const w4_ = abs($w4);
+    const $vᵧ = $w3 - $w4;
+    const vᵧ = qdq(w3,w4);
+    const vᵧ_ = w3_ + w4_ + abs($vᵧ);
 
     // a0**2*b2**2 - a0*a1*b1*b2 - 2*a0*a2*b0*b2 + a0*a2*b1**2 + a1**2*b0*b2 - a1*a2*b0*b1 + a2**2*b0**2
     // q1*q3 + -q2**2
-    let $w5 = $q1*$q3;
-    let w5 = qmq(q1,q3);
-    let w5_ = 2*abs($w5);
-    let $w6 = $q2*$q2;
-    let w6 = qmq(q2,q2);
-    let w6_ = abs($w6);
-    let $v = $w5 - $w6;
-    let v = qdq(w5,w6);
-    let v_ = w5_ + w6_ + abs($v);
+    const $w5 = $q1*$q3;
+    const w5 = qmq(q1,q3);
+    const w5_ = 2*abs($w5);
+    const $w6 = $q2*$q2;
+    const w6 = qmq(q2,q2);
+    const w6_ = 2*abs($w6);
+    const $v = $w5 - $w6;
+    const v = qdq(w5,w6);
+    const v_ = w5_ + w6_ + abs($v);
 
 
     return { 

@@ -27,15 +27,15 @@ function generateCuspAtHalf3(
     // 3y1 - 3y0,           // := g = coefficent of t^1
     // y0,                  // := h = coefficent of t^0
 
-    // let x = at^3 + bt^2 + ct + d
-    // let y = et^3 + ft^2 + gt + h
+    // const x = at^3 + bt^2 + ct + d
+    // const y = et^3 + ft^2 + gt + h
     // x` = 3at^2 + 2bt + c
     // y` = 3et^2 + 2ft + g
 
     // d = x0 and h = y0
-    let [x0,y0] = p0;
-    let [xz, yz] = pz;
-    let [xE, yE] = pE;
+    const [x0,y0] = p0;
+    const [xz, yz] = pz;
+    const [xE, yE] = pE;
 
     // We must have x` = y` = 0 at t = 1/2:
     // 3a/4 + b + c = 0            =>  3a  + 4b  + 4c  =  0       (1)
@@ -53,16 +53,16 @@ function generateCuspAtHalf3(
     // g = 3y1 - 3y0               =>  3y1       - g   =  3y0     (10)
 
     // Solving the above linear system gives:
-    //let a = 4*xE-4*x0;
-    //let b = 4*x0-4*xz-4*xE+4*x0;
-    //let c = -4*x0+4*xz+xE-x0;
-    //let e = 4*yE-4*y0;
-    //let f = 4*y0-4*yz-4*yE+4*y0;
-    //let g = -4*y0+4*yz+yE-y0;
-    let x1 = -(4*x0 - 4*xz - xE - 2*x0)/3;
-    let y1 = -(4*y0 - 4*yz - yE - 2*y0)/3;
-    let x2 = -(4*x0 - 4*xz + 2*xE - 5*x0)/3;
-    let y2 = -(4*y0 - 4*yz + 2*yE - 5*y0)/3;
+    //const a = 4*xE-4*x0;
+    //const b = 4*x0-4*xz-4*xE+4*x0;
+    //const c = -4*x0+4*xz+xE-x0;
+    //const e = 4*yE-4*y0;
+    //const f = 4*y0-4*yz-4*yE+4*y0;
+    //const g = -4*y0+4*yz+yE-y0;
+    const x1 = -(4*x0 - 4*xz - xE - 2*x0)/3;
+    const y1 = -(4*y0 - 4*yz - yE - 2*y0)/3;
+    const x2 = -(4*x0 - 4*xz + 2*xE - 5*x0)/3;
+    const y2 = -(4*y0 - 4*yz + 2*yE - 5*y0)/3;
 
     return [p0, [x1,y1], [x2,y2], pE];
 }

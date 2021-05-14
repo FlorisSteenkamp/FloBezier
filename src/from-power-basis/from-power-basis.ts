@@ -16,7 +16,7 @@ function fromPowerBasis(cs: number[][]): number[][] {
 	const len = cs[0].length;
 
 	if (len === 4) {
-        let [[a3, a2, a1, a0], [b3, b2, b1, b0]] = cs;
+        const [[a3, a2, a1, a0], [b3, b2, b1, b0]] = cs;
 		return [
 			[a0,
 			 b0],
@@ -28,7 +28,7 @@ function fromPowerBasis(cs: number[][]): number[][] {
 			 b0 + b1 + b2 + b3]
 		];
 	} else if (len === 3) {
-		let [[a2, a1, a0], [b2, b1, b0]] = cs;
+		const [[a2, a1, a0], [b2, b1, b0]] = cs;
 		return [
 			[a0,
 			 b0],
@@ -38,7 +38,7 @@ function fromPowerBasis(cs: number[][]): number[][] {
 			 b0 + b1 + b2]
 		];
 	} else if (len === 2) {
-		let [[a1, a0], [b1, b0]] = cs;
+		const [[a1, a0], [b1, b0]] = cs;
 		return [
 			[a0,
 			 b0],

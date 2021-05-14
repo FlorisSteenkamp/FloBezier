@@ -20,22 +20,22 @@ const qdq = qDiffQuad;
  * * **precondition**: max bit-aligned bitlength: 47
  */
 function getCoeffs3Quad(ps: number[][]) {
-    let [a3, a2, a1] = getX(ps);  // exact if max bit-aligned bitlength <= 49
-    let [b3, b2, b1] = getY(ps);  // exact if max bit-aligned bitlength <= 49
+    const [a3, a2, a1] = getX(ps);  // exact if max bit-aligned bitlength <= 49
+    const [b3, b2, b1] = getY(ps);  // exact if max bit-aligned bitlength <= 49
 
-    let a2b3 = tp(a2,b3);  // => error free
-    let a3b2 = tp(a3,b2);  // => error free
-    let a3b1 = tp(a3,b1);  // => error free
-    let a1b3 = tp(a1,b3);  // => error free
-    let a2b1 = tp(a2,b1);  // => error free
-    let a1b2 = tp(a1,b2);  // => error free
+    const a2b3 = tp(a2,b3);  // => error free
+    const a3b2 = tp(a3,b2);  // => error free
+    const a3b1 = tp(a3,b1);  // => error free
+    const a1b3 = tp(a1,b3);  // => error free
+    const a2b1 = tp(a2,b1);  // => error free
+    const a1b2 = tp(a1,b2);  // => error free
 
-    //let $a2b3 = a2*b3;
-    //let $a3b2 = a3*b2;
-    //let $a3b1 = a3*b1;
-    //let $a1b3 = a1*b3;
-    //let $a2b1 = a2*b1;
-    //let $a1b2 = a1*b2;
+    //const $a2b3 = a2*b3;
+    //const $a3b2 = a3*b2;
+    //const $a3b1 = a3*b1;
+    //const $a1b3 = a1*b3;
+    //const $a2b1 = a2*b1;
+    //const $a1b2 = a1*b2;
 
 
     // Note: a variable prepended with and underscore is an absolute value,
@@ -43,65 +43,65 @@ function getCoeffs3Quad(ps: number[][]) {
     // multiplication by the round-off unit u**2).
 
     
-    //let u2 = -2*a2*a3*b2*b3 + a2*a2*b3*b3 + a3*a3*b2*b2
-    //let u2 = 
+    //const u2 = -2*a2*a3*b2*b3 + a2*a2*b3*b3 + a3*a3*b2*b2
+    //const u2 = 
     //    a2b3*(-2*a3b2 + a2b3) + 
     //    a3b2*a3b2
-    //let $f1 = -2*$a3b2 + $a2b3;
-    let f1 = qaq(qn2(a3b2), a2b3);  // 48-bit aligned => error free
-    //let $f2 = $a2b3*$f1;
-    let f2 = qmq(a2b3,f1);
+    //const $f1 = -2*$a3b2 + $a2b3;
+    const f1 = qaq(qn2(a3b2), a2b3);  // 48-bit aligned => error free
+    //const $f2 = $a2b3*$f1;
+    const f2 = qmq(a2b3,f1);
     // 2* in line below since we're using an error of 6γγ for quad multiplication 
     // - other operations (plus, minus, etc.) have 3γγ.
-    let f2_ = 2*abs(f2[1]);  
-    //let $f3 = $a3b2*$a3b2;
-    let f3 = qmq(a3b2,a3b2);
-    let f3_ = 2*abs(f3[1]);
-    //let $u2 = $f2 + $f3;
-    let u2 = qaq(f2,f3);
-    //let u2_ = f2_ + f3_ + abs($u2);
-    let u2_ = f2_ + f3_ + abs(u2[1]); // <-- this will also work - which is faster??
+    const f2_ = 2*abs(f2[1]);  
+    //const $f3 = $a3b2*$a3b2;
+    const f3 = qmq(a3b2,a3b2);
+    const f3_ = 2*abs(f3[1]);
+    //const $u2 = $f2 + $f3;
+    const u2 = qaq(f2,f3);
+    //const u2_ = f2_ + f3_ + abs($u2);
+    const u2_ = f2_ + f3_ + abs(u2[1]); // <-- this will also work - which is faster??
 
-    //let u1 = -a1*a3*b2*b3 - a2*a3*b1*b3 + a1*a2*b3*b3 + b1*b2*a3*a3
-    //let u1 = 
+    //const u1 = -a1*a3*b2*b3 - a2*a3*b1*b3 + a1*a2*b3*b3 + b1*b2*a3*a3
+    //const u1 = 
     //    a1b3*(-a2b3 - a3b2) + 
     //    a3b1*(-a2b3 - a3b2);
-    //let $f4 = -($a2b3 + $a3b2);
-    let f4 = qno(qaq(a2b3,a3b2));  // 48-bit aligned => error free
-    //let $f5 = $a1b3 + $a3b1;  
-    let f5 = qaq(a1b3,a3b1);  // 48-bit aligned => error free
-    //let $u1 = $f4*$f5;
-    let u1 = qmq(f4,f5);
-    let u1_ = 2*abs(u1[1]);
+    //const $f4 = -($a2b3 + $a3b2);
+    const f4 = qno(qaq(a2b3,a3b2));  // 48-bit aligned => error free
+    //const $f5 = $a1b3 + $a3b1;  
+    const f5 = qaq(a1b3,a3b1);  // 48-bit aligned => error free
+    //const $u1 = $f4*$f5;
+    const u1 = qmq(f4,f5);
+    const u1_ = 2*abs(u1[1]);
          
 
-    //let u0 = -a1*a2*b2*b3 - a2*a3*b1*b2 - 2*a1*a3*b1*b3 + a1*a1*b3*b3 + a3*a3*b1*b1 + a1*a3*b2*b2 + b1*b3*a2*a2
-    //let u0 = 
+    //const u0 = -a1*a2*b2*b3 - a2*a3*b1*b2 - 2*a1*a3*b1*b3 + a1*a1*b3*b3 + a3*a3*b1*b1 + a1*a3*b2*b2 + b1*b3*a2*a2
+    //const u0 = 
     //       a2b3*(a2b1 - a1b2) -
     //       a3b2*(a2b1 - a1b2) +
     //       a1b3*(-2*a3b1 + a1b3) + 
     //       a3b1*a3b1;
-    //let $f6 = $a2b1 - $a1b2;
-    let f6 = qdq(a2b1,a1b2);  // 48-bit aligned => error free
-    //let $f7 = $a2b3 - $a3b2;
-    let f7 = qdq(a2b3,a3b2);  // 48-bit aligned => error free
-    //let $f8 = -2*$a3b1 + $a1b3;
-    let f8 = qaq(qn2(a3b1),a1b3);  // 48-bit aligned => error free
-    //let $f9 = $f6*$f7;
-    let f9 = qmq(f6,f7);
-    let f9_ = 2*abs(f9[1]);
-    //let $fa = $a1b3*$f8;
-    let fa = qmq(a1b3,f8);
-    let fa_ = 2*abs(fa[1]);
-    //let $fb = $a3b1*$a3b1;
-    let fb = qmq(a3b1,a3b1);
-    let fb_ = 2*abs(fb[1]);
-    //let $fc = $f9 + $fa;
-    let fc = qaq(f9,fa);
-    let fc_ = f9_ + fa_ + abs(fc[1]);
-    //let $u0 = $fc + $fb;
-    let u0 = qaq(fc,fb);
-    let u0_ = fc_ + fb_ + abs(u0[1]);
+    //const $f6 = $a2b1 - $a1b2;
+    const f6 = qdq(a2b1,a1b2);  // 48-bit aligned => error free
+    //const $f7 = $a2b3 - $a3b2;
+    const f7 = qdq(a2b3,a3b2);  // 48-bit aligned => error free
+    //const $f8 = -2*$a3b1 + $a1b3;
+    const f8 = qaq(qn2(a3b1),a1b3);  // 48-bit aligned => error free
+    //const $f9 = $f6*$f7;
+    const f9 = qmq(f6,f7);
+    const f9_ = 2*abs(f9[1]);
+    //const $fa = $a1b3*$f8;
+    const fa = qmq(a1b3,f8);
+    const fa_ = 2*abs(fa[1]);
+    //const $fb = $a3b1*$a3b1;
+    const fb = qmq(a3b1,a3b1);
+    const fb_ = 2*abs(fb[1]);
+    //const $fc = $f9 + $fa;
+    const fc = qaq(f9,fa);
+    const fc_ = f9_ + fa_ + abs(fc[1]);
+    //const $u0 = $fc + $fb;
+    const u0 = qaq(fc,fb);
+    const u0_ = fc_ + fb_ + abs(u0[1]);
 
     // Solve: u2*t**2 + u1*t + u0 = 0
     return {

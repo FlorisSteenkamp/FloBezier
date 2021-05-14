@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "charset": "utf8",
+        "noImplicitAny": true, 
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        "strictBindCallApply": true,
+        "strictFunctionTypes": true,
+        "module": "commonjs",
+        "target": "es2020",
+        "declaration": false,
+        "noEmitOnError": true,
+        "sourceMap": false
+    },
+    "include": [
+        "bezier-bezier-intersection.ts"
+        //"test/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "src/experiments"
+    ]
+}

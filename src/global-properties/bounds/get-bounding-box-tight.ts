@@ -15,35 +15,35 @@ import { evalDeCasteljau } from "../../local-properties-at-t/t-to-xy/eval-de-cas
  * @doc mdx
  */
 function getBoundingBoxTight(ps: number[][]): number[][] {
-    let [xS, yS] = ps[0];
-	let [xE, yE] = ps[ps.length-1];
+    const [xS, yS] = ps[0];
+	const [xE, yE] = ps[ps.length-1];
 	
 	let sinθ: number;
 	let cosθ: number;
 
 	// take care of the case the endpoints are close together
-	let len = lengthSquaredUpperBound(ps);
+	const len = lengthSquaredUpperBound(ps);
 	if (squaredDistanceBetween(ps[0], ps[ps.length-1]) * 2**8 < len) {
-		let [xE_, yE_] = evalDeCasteljau(ps, 0.5);
-		let hypotenuse = Math.sqrt((xE_-xS)*(xE_-xS) + (yE_-yS)*(yE_-yS));
+		const [xE_, yE_] = evalDeCasteljau(ps, 0.5);
+		const hypotenuse = Math.sqrt((xE_-xS)*(xE_-xS) + (yE_-yS)*(yE_-yS));
 		sinθ = (yE_ - yS) / hypotenuse;
 		cosθ = (xE_ - xS) / hypotenuse;
 	} else {
-		let hypotenuse = Math.sqrt((xE-xS)*(xE-xS) + (yE-yS)*(yE-yS));
+		const hypotenuse = Math.sqrt((xE-xS)*(xE-xS) + (yE-yS)*(yE-yS));
 		sinθ = (yE - yS) / hypotenuse;
 		cosθ = (xE - xS) / hypotenuse;
 	}
 	
-	let box = getNormalizedBoundingBox(ps, sinθ, cosθ);
+	const box = getNormalizedBoundingBox(ps, sinθ, cosθ);
 	
-	let [[p0x,p0y],[p1x,p1y]] = box;
+	const [[p0x,p0y],[p1x,p1y]] = box;
 
-	let axisAlignedBox = [ 
+	const axisAlignedBox = [ 
 		box[0], [p1x, p0y],
 		box[1], [p0x, p1y]
 	];
 
-	let rotate_ = rotate(sinθ, cosθ);
+	const rotate_ = rotate(sinθ, cosθ);
 	return axisAlignedBox.map(p => translate(ps[0], rotate_(p)));
 }
 
@@ -64,10 +64,10 @@ function getBoundingBoxTight(ps: number[][]): number[][] {
  * @internal
  */
 function getNormalizedBoundingBox(ps: number[][], sinθ: number, cosθ: number) {
-	let vectorToOrigin = ps[0].map(x => -x);
+	const vectorToOrigin = ps[0].map(x => -x);
 	
 	const f = translate(vectorToOrigin);
-	let boundingPs = ps.map(p => rotate(-sinθ, cosθ, f(p)));
+	const boundingPs = ps.map(p => rotate(-sinθ, cosθ, f(p)));
 	
 	return getBoundingBox(boundingPs);
 }

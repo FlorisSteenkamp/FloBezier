@@ -1,4 +1,3 @@
-
 import { twoProduct, ddAddDd } from "double-double";
 import { getImplicitForm1Dd } from "../../../../implicit-form/double-double/get-implicit-form1-dd";
 import { getXY } from "../../../../to-power-basis/get-xy";
@@ -32,35 +31,35 @@ const qaq = ddAddDd;
  * @doc mdx
  */
 function getCoeffsBez1Bez2Dd(ps1: number[][], ps2: number[][]) {
-    let {
+    const {
         coeffs: { vₓ, vᵧ, v }  // vₓ, vᵧ, v:  48-bit aligned => error free
     } = getImplicitForm1Dd(ps1);
 
-    let [[c2,c1,c0],[d2,d1,d0]] = getXY(ps2);
+    const [[c2,c1,c0],[d2,d1,d0]] = getXY(ps2);
 
     // a2*v_x + b2*v_y
-    //let v2 = c2*vₓ + d2*vᵧ;
-    let p1 = tp(c2,vₓ);   // vₓ is a double => error free
-    let p2 = tp(d2,vᵧ);   // vᵧ is a double => error free
-    let v2 = qaq(p1,p2);  // 48-bit aligned => error free
+    //const v2 = c2*vₓ + d2*vᵧ;
+    const p1 = tp(c2,vₓ);   // vₓ is a double => error free
+    const p2 = tp(d2,vᵧ);   // vᵧ is a double => error free
+    const v2 = qaq(p1,p2);  // 48-bit aligned => error free
 
     // a1*v_x + b1*v_y
-    //let v1 = c1*vₓ + d1*vᵧ;
-    let p3 = tp(c1,vₓ);   // vₓ is a double => error free
-    let p4 = tp(d1,vᵧ);   // vᵧ is a double => error free
-    let v1 = qaq(p3,p4);  // 48-bit aligned => error free
+    //const v1 = c1*vₓ + d1*vᵧ;
+    const p3 = tp(c1,vₓ);   // vₓ is a double => error free
+    const p4 = tp(d1,vᵧ);   // vᵧ is a double => error free
+    const v1 = qaq(p3,p4);  // 48-bit aligned => error free
 
     // a0*v_x + b0*v_y + v_0
-    //let v0 = c0*vₓ + d0*vᵧ + v;
-    let p5 = tp(c0,vₓ);   // vₓ is a double => error free
-    let p6 = tp(d0,vᵧ);   // vᵧ is a double => error free
-    let p7 = qaq(p5,p6);  // 48-bit aligned => error free
-    let v0 = qaq(p7,v);   // 48-bit aligned => error free
+    //const v0 = c0*vₓ + d0*vᵧ + v;
+    const p5 = tp(c0,vₓ);   // vₓ is a double => error free
+    const p6 = tp(d0,vᵧ);   // vᵧ is a double => error free
+    const p7 = qaq(p5,p6);  // 48-bit aligned => error free
+    const v0 = qaq(p7,v);   // 48-bit aligned => error free
 
 
     return {
         coeffs:   [v2, v1, v0],
-        errBound: [0, 0, 0]  // 48-bit aligned => completely error free
+        errBound: [0, 0, 0]  // 48-bit aligned => compconstely error free
     };
 }
 

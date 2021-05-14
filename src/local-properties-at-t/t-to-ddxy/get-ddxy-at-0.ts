@@ -13,13 +13,13 @@
  */
 function getDdxyAt0(ps: number[][]): number[] {
 	if (ps.length === 4) {
-		let [[x0,y0], [x1,y1], [x2,y2]] = ps;
+		const [[x0,y0], [x1,y1], [x2,y2]] = ps;
 		return [
 			6*x2 - 12*x1 + 6*x0,
 			6*y2 - 12*y1 + 6*y0
 		]; // max bitlength increase 5
 	} else if (ps.length === 3) {
-		let [[x0,y0], [x1,y1], [x2,y2]] = ps;
+		const [[x0,y0], [x1,y1], [x2,y2]] = ps;
 		return [
 			2*x2 - 4*x1 + 2*x0,
 			2*y2 - 4*y1 + 2*y0 

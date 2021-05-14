@@ -15,7 +15,7 @@ function quadToPolyline(
         tolerance: number): number[][] {
 
     // A quad bezier has the following useful properties (Let the control
-    // points be labeled P0, P1 and P2 respectively and let the point at t = 0.5
+    // points be labeled P0, P1 and P2 respectively and const the point at t = 0.5
     // be labeled M1):
     // -------------------------------------------------------------------------
     // * At t = 0.5 P1 has its maximum influence of 0.5 and P0 and P2 each an 
@@ -52,7 +52,7 @@ function quadToPolyline(
     // Loop end
 
     // Stack with nodes still to be checked
-    let stack: IPolylineNode[] = [];
+    const stack: IPolylineNode[] = [];
 
     // Polyline linked list
     let head: IPolylineNode = {
@@ -63,20 +63,20 @@ function quadToPolyline(
 
     stack.push(head);
     while (stack.length) {
-        let node = stack.pop();
+        const node = stack.pop();
         
         if (isQuadFlat(node.ps, tolerance)) { continue; }
 
-        let quads = splitAt(node.ps, 0.5);
-        let prev = node.prev;
-        let next = node.next;
+        const quads = splitAt(node.ps, 0.5);
+        const prev = node.prev;
+        const next = node.next;
 
-        let node1: IPolylineNode = {
+        const node1: IPolylineNode = {
             ps: quads[0], 
             prev,
             next: undefined // to be set below
         };
-        let node2: IPolylineNode = {
+        const node2: IPolylineNode = {
             ps: quads[1], 
             prev: undefined, // to be set below
             next
@@ -94,7 +94,7 @@ function quadToPolyline(
         stack.push(node2);
     }
 
-    let linePs: number[][] = [];
+    const linePs: number[][] = [];
     let node = head;
     linePs.push(head.ps[0]);
     while (node) {

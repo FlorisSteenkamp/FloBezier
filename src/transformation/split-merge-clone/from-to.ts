@@ -20,7 +20,7 @@ import { evalDeCasteljau } from '../../local-properties-at-t/t-to-xy/eval-de-cas
 
 function fromTo(ps: number[][]) {
 	return (t1: number, t2: number) => {
-		let reverse = t1 > t2;
+		const reverse = t1 > t2;
 		if (t1 > t2) { [t1,t2] = [t2,t1]; }
 
 		let ps_: number[][];
@@ -33,7 +33,7 @@ function fromTo(ps: number[][]) {
 			ps_ = splitAt(ps, t1)[1]; 
 		} else if (t1 === t2) {
 			// Degenerate case
-			let p = evalDeCasteljau(ps, t1);
+			const p = evalDeCasteljau(ps, t1);
 			if (ps.length === 2) { return [p,p]; }
 			if (ps.length === 3) { return [p,p,p]; }
 			if (ps.length === 4) { return [p,p,p,p]; }
@@ -60,7 +60,7 @@ function fromTo(ps: number[][]) {
 
 function fromToPrecise(ps: number[][]) {
 	return function(t1: number, t2: number) {
-		let reverse = t1 > t2;
+		const reverse = t1 > t2;
 		if (t1 > t2) { [t1,t2] = [t2,t1]; }
 
 		let ps_: number[][];
@@ -73,7 +73,7 @@ function fromToPrecise(ps: number[][]) {
 			ps_ = splitAtPrecise(ps, t1)[1]; 
 		} else if (t1 === t2) {
 			// Degenerate case
-			let p = evalDeCasteljau(ps, t1);
+			const p = evalDeCasteljau(ps, t1);
 			if (ps.length === 2) { return [p,p]; }
 			if (ps.length === 3) { return [p,p,p]; }
 			if (ps.length === 4) { return [p,p,p,p]; }

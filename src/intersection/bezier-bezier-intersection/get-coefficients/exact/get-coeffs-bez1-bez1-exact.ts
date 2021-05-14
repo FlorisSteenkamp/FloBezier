@@ -30,21 +30,21 @@ const qaq = ddAddDd;
  * @doc mdx
  */
 function getCoeffsBez1Bez1Exact(ps1: number[][], ps2: number[][]) {
-    let { vₓ, vᵧ, v } = getImplicitForm1Exact(ps1);
+    const { vₓ, vᵧ, v } = getImplicitForm1Exact(ps1);
 
-    let [[c1,c0],[d1,d0]] = getXY(ps2);
+    const [[c1,c0],[d1,d0]] = getXY(ps2);
 
 
-    //let v1 = c1*vₓ + d1*vᵧ;
-    let p1 = tp(c1,vₓ);   // vₓ is a double => error free
-    let p2 = tp(d1,vᵧ);   // vᵧ is a double => error free
-    let v1 = qaq(p1,p2);  // 48-bit aligned => error free
+    //const v1 = c1*vₓ + d1*vᵧ;
+    const p1 = tp(c1,vₓ);   // vₓ is a double => error free
+    const p2 = tp(d1,vᵧ);   // vᵧ is a double => error free
+    const v1 = qaq(p1,p2);  // 48-bit aligned => error free
 
-    //let v0 = c0*vₓ + d0*vᵧ + v_0;
-    let p3 = tp(c0,vₓ);   // vₓ is a double => error free
-    let p4 = tp(d0,vᵧ);   // vᵧ is a double => error free
-    let p5 = qaq(p3,p4);  // 48-bit aligned => error free
-    let v0 = qaq(p5,v);   // 48-bit aligned => error free 
+    //const v0 = c0*vₓ + d0*vᵧ + v_0;
+    const p3 = tp(c0,vₓ);   // vₓ is a double => error free
+    const p4 = tp(d0,vᵧ);   // vᵧ is a double => error free
+    const p5 = qaq(p3,p4);  // 48-bit aligned => error free
+    const v0 = qaq(p5,v);   // 48-bit aligned => error free 
 
     return [v1, v0];
 }

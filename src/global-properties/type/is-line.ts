@@ -46,7 +46,7 @@ function isLine(ps: number[][]): boolean {
  * @doc
  */
 function isHorizontalLine(ps: number[][]) {
-    let y = ps[0][1];
+    const y = ps[0][1];
     for (let i=1; i<ps.length; i++) {
         if (ps[i][1] !== y) {
             return false;
@@ -66,7 +66,7 @@ function isHorizontalLine(ps: number[][]) {
  * @doc
  */
 function isVerticalLine(ps: number[][]) {
-    let x = ps[0][0];
+    const x = ps[0][0];
     for (let i=1; i<ps.length; i++) {
         if (ps[i][0] !== x) {
             return false;

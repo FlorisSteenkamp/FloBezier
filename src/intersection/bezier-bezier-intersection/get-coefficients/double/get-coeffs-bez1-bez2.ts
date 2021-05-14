@@ -34,47 +34,27 @@ const γ1 = γ(1);
  * @doc mdx
  */
 function getCoeffsBez1Bez2(ps1: number[][], ps2: number[][]) {
-    let { 
-        coeffs: { vₓ, vᵧ, v },
-        errorBound: { v_ } // vₓ_, vᵧ_ === 0
-    } = getImplicitForm1(ps1);
+    const { vₓ, vᵧ, v } = getImplicitForm1(ps1);
 
-    let [[c2,c1,c0],[d2,d1,d0]] = getXY(ps2);
+    const [[c2,c1,c0],[d2,d1,d0]] = getXY(ps2);
 
-    // a2*v_x + b2*v_y
-    //let v2 = c2*vₓ + d2*vᵧ;
-    let p1 = c2*vₓ;
-    let p1_ = abs(p1);  // vₓ_ === 0
-    let p2 = d2*vᵧ;
-    let p2_ = abs(p2);  // vᵧ_ === 0
-    let v2 = p1 + p2;
-    let v2_ = p1_ + p2_ + abs(v2);
+    //const v2 = c2*vₓ + d2*vᵧ;
+    const p1 = c2*vₓ;
+    const p2 = d2*vᵧ;
+    const v2 = p1 + p2;
 
-    // a1*v_x + b1*v_y
-    //let v1 = c1*vₓ + d1*vᵧ;
-    let p3 = c1*vₓ;
-    let p3_ = abs(p3);  // vₓ_ === 0
-    let p4 = d1*vᵧ;
-    let p4_ = abs(p4);  // vᵧ_ === 0
-    let v1 = p3 + p4;
-    let v1_ = p3_ + p4_ + abs(v1);
+    //const v1 = c1*vₓ + d1*vᵧ;
+    const p3 = c1*vₓ;
+    const p4 = d1*vᵧ;
+    const v1 = p3 + p4;
 
-    // a0*v_x + b0*v_y + v_0
-    //let v0 = c0*vₓ + d0*vᵧ + v;
-    let p5 = c0*vₓ;
-    let p5_ = abs(p5);  // vₓ_ === 0
-    let p6 = d0*vᵧ;
-    let p6_ = abs(p6);  // vᵧ_ === 0
-    let p7 = p5 + p6;
-    let p7_ = p5_ + p6_ + abs(p7);
-    let v0 = p7 + v;
-    let v0_ = p7_ + v_ + abs(v0);
+    //const v0 = c0*vₓ + d0*vᵧ + v;
+    const p5 = c0*vₓ;
+    const p6 = d0*vᵧ;
+    const p7 = p5 + p6;
+    const v0 = p7 + v;
 
-
-    return {
-        coeffs:   [v2, v1, v0],
-        errBound: [v2_, v1_, v0_].map(c => γ1*c)
-    };
+    return [v2, v1, v0];
 }
 
 

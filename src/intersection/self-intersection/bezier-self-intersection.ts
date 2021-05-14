@@ -51,19 +51,19 @@ function bezierSelfIntersection(ps: number[][]): number[] {
     // beziers will have a cusp.
 
     // First get fast naively calculated coefficients
-    let { coeffs: [a, b, c], errBound: [a_, b_, c_] } = getCoeffsBez3(ps);
+    const { coeffs: [a, b, c], errBound: [a_, b_, c_] } = getCoeffsBez3(ps);
     
     // if error in a cannot discern it from zero
     if (abs(a) <= a_) {
         // it is rare to get here 
         // check for sure if a === 0 exactly
-        let [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
-        let a3 = x3 - 3*x2 + 3*x1 - x0;  // <= exact if max bit-aligned bitlength <= 50
-        let a2 = 3*x2 - 6*x1 + 3*x0;     // <= exact if max bit-aligned bitlength <= 49
-        let b3 = y3 - 3*y2 + 3*y1 - y0;  // <= exact if max bit-aligned bitlength <= 50
-        let b2 = 3*y2 - 6*y1 + 3*y0;     // <= exact if max bit-aligned bitlength <= 49
-        let a2b3 = tp(a2,b3);
-        let a3b2 = tp(a3,b2);
+        const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
+        const a3 = x3 - 3*x2 + 3*x1 - x0;  // <= exact if max bit-aligned bitlength <= 50
+        const a2 = 3*x2 - 6*x1 + 3*x0;     // <= exact if max bit-aligned bitlength <= 49
+        const b3 = y3 - 3*y2 + 3*y1 - y0;  // <= exact if max bit-aligned bitlength <= 50
+        const b2 = 3*y2 - 6*y1 + 3*y0;     // <= exact if max bit-aligned bitlength <= 49
+        const a2b3 = tp(a2,b3);
+        const a3b2 = tp(a3,b2);
 
         if (a2b3[0] === a3b2[0] && a2b3[1] === a3b2[1]) {
             return undefined;  // a === 0 => no roots possible
@@ -72,12 +72,12 @@ function bezierSelfIntersection(ps: number[][]): number[] {
 
     // DD = discriminant = b^2 - 4ac
     // calculate DD and its absolute error DD_
-    let bb = b*b;
-    let bb_ = 2*b_*abs(b) + γ1*bb; // the error in b**2
-    let ac4 = 4*a*c;
-    let ac4_ = 4*(a_*abs(c) + abs(a)*c_) + γ1*abs(ac4)
-    let DD = bb - ac4;
-    let DD_ = bb_ + ac4_ + γ1*abs(DD);
+    const bb = b*b;
+    const bb_ = 2*b_*abs(b) + γ1*bb; // the error in b**2
+    const ac4 = 4*a*c;
+    const ac4_ = 4*(a_*abs(c) + abs(a)*c_) + γ1*abs(ac4)
+    const DD = bb - ac4;
+    const DD_ = bb_ + ac4_ + γ1*abs(DD);
 
     // if the discriminant is smaller than negative the error bound then
     // certainly there are no roots, i.e. no cusp and no self-intersections
@@ -91,21 +91,21 @@ function bezierSelfIntersection(ps: number[][]): number[] {
     if (DD > DD_) {
         // calculate roots naively as a fast pre-filter
 
-        let { est: D, err: D_ } = sqrtWithErr(DD, DD_);
+        const { est: D, err: D_ } = sqrtWithErr(DD, DD_);
 
         let q1: number;        
         if (b >= 0) {
-            // let r1 = (-b - D) / 2*a;
-            // let r2 = (2*c) / (-b - D);
+            // const r1 = (-b - D) / 2*a;
+            // const r2 = (2*c) / (-b - D);
             q1 = -b - D;
         } else {
-            // let r2 = (-b + D) / 2*a;
-            // let r1 = (2*c) / (-b + D);
+            // const r2 = (-b + D) / 2*a;
+            // const r1 = (2*c) / (-b + D);
             q1 = -b + D;
         }
-        let q1_ = b_ + D_ + γ1*abs(q1);
-        let { est: r1, err: r1_ } = divWithErr(q1,2*a,q1_,2*a_);
-        let { est: r2, err: r2_ } = divWithErr(2*c,q1,2*c_,q1_);        
+        const q1_ = b_ + D_ + γ1*abs(q1);
+        const { est: r1, err: r1_ } = divWithErr(q1,2*a,q1_,2*a_);
+        const { est: r2, err: r2_ } = divWithErr(2*c,q1,2*c_,q1_);        
 
 
         // the actual 'filter' follows
@@ -124,8 +124,8 @@ function bezierSelfIntersection(ps: number[][]): number[] {
     let [A,B,C] = getCoeffsBez3Exact(ps);
 
     // exact - DD = b^2 - 4ac
-    let eDD = edif(epr(B,B), sce(4,epr(A,C)));
-    let sgn = eSign(eDD);
+    const eDD = edif(epr(B,B), sce(4,epr(A,C)));
+    const sgn = eSign(eDD);
 
     if (sgn < 0) {
         // sgn < 0 => no real roots => no cusp or double point for t in [0,1]
@@ -134,7 +134,7 @@ function bezierSelfIntersection(ps: number[][]): number[] {
 
 
     if (sgn > 0) {
-        let D = ddSqrt(eToDd(eDD));
+        const D = ddSqrt(eToDd(eDD));
         A = eToDd(A);
         B = eToDd(B);
         C = eToDd(C);
@@ -174,21 +174,21 @@ function bezierSelfIntersection(ps: number[][]): number[] {
     // sign === 0 => cusp
 
     // set t = b/d = b/-2a
-    let d = eMultByNeg2(A);
-    let sgnB = eSign(B);
-    let sgnD = eSign(d);
+    const d = eMultByNeg2(A);
+    const sgnB = eSign(B);
+    const sgnD = eSign(d);
 
     // if result is negative the cusp is outside the bezier endpoints
-    let sgn_ = sgnB * sgnD;
+    const sgn_ = sgnB * sgnD;
     if (sgn_ < 0) { return undefined; }
 
     // if result is > 1 the cusp is outside the bezier endpoints
     if (eCompare(eAbs(B), eAbs(d)) > 0) { return undefined; }
 
-    let qB = eToDd(B);
-    let qd = eToDd(d);
-    let qt = qdivq(qB,qd);
-    let t = qt[1];
+    const qB = eToDd(B);
+    const qd = eToDd(d);
+    const qt = qdivq(qB,qd);
+    const t = qt[1];
 
     return [t, t];
 }

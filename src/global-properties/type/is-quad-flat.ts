@@ -18,16 +18,16 @@ function isQuadFlat(
 
     if (isQuadObtuse(ps)) { return false; }
 
-    let [[x1,y1],, [x2,y2]] = ps;
+    const [[x1,y1],, [x2,y2]] = ps;
 
     if (x1 === x2 && y1 === y2) { return true; }
 
-    let [x0,y0] = evalDeCasteljau(ps, 0.5);
+    const [x0,y0] = evalDeCasteljau(ps, 0.5);
 
-    let numerator = ((y2-y1)*x0 - (x2-x1)*y0 + x2*y1 - y2*x1)**2;
-    let denominator = vector.squaredDistanceBetween(ps[0], ps[2]);
+    const numerator = ((y2-y1)*x0 - (x2-x1)*y0 + x2*y1 - y2*x1)**2;
+    const denominator = vector.squaredDistanceBetween(ps[0], ps[2]);
 
-    let dSquared = Math.abs(numerator / denominator);
+    const dSquared = Math.abs(numerator / denominator);
 
     return dSquared < tolerance**2;
 }

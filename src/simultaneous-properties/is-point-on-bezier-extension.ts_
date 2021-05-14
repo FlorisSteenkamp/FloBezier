@@ -21,21 +21,21 @@ import { BezDebug } from "../debug/debug";
  */
 function isPointOnBezierExtension(ps: number[][], p: number[]): boolean {
     // Get power basis
-    let x = getX(ps);
-    let y = getY(ps);
+    const x = getX(ps);
+    const y = getY(ps);
 
     // Move to origin
     x[x.length-1] -= p[0];
     y[y.length-1] -= p[1];
 
-    let a = 0;
-    let b = 0;
-    let c = 0;
-    let d = 0;
-    let e = 0;
-    let f = 0;
-    let g = 0;
-    let h = 0;
+    const a = 0;
+    const b = 0;
+    const c = 0;
+    const d = 0;
+    const e = 0;
+    const f = 0;
+    const g = 0;
+    const h = 0;
 
     if (x.length === 4) {
         [a,b,c,d] = x;
@@ -55,14 +55,14 @@ function isPointOnBezierExtension(ps: number[][], p: number[]): boolean {
 
     
     // first non-zero x power
-    let fnzX = 
+    const fnzX = 
         a !== 0 ? 3 :
         b !== 0 ? 2 :
         c !== 0 ? 1 :
         d !== 0 ? 0 : -1;
 
     // first non-zero y power
-    let fnzY = 
+    const fnzY = 
         e !== 0 ? 3 :
         f !== 0 ? 2 :
         g !== 0 ? 1 :
@@ -78,7 +78,7 @@ function isPointOnBezierExtension(ps: number[][], p: number[]): boolean {
     }
 
     // The sylvester matrix
-    let S: number[][];
+    const S: number[][];
     if (fnzX === 3 && fnzY === 3) {
         S = [
             [a,b,c,d,0,0],
@@ -173,7 +173,7 @@ function isPointOnBezierExtension(ps: number[][], p: number[]): boolean {
         return true;
     }
 
-    let detS = detSlowExact(
+    const detS = detSlowExact(
         S.map(row => row.map(x => [x]))
     );
 

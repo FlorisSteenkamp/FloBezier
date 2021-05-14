@@ -85,10 +85,10 @@ function getCoeffsBezBez(
             errBound: number[], 
             getPExact: () => number[][] } {
 
-    let { coeffs, errBound } = coeffFunctionsDd[ps1.length-2][ps2.length-2](ps1, ps2);
-    //let { coeffs, errBound } = coeffFunctionsDouble[ps1.length-2][ps2.length-2](ps1, ps2);
+    const { coeffs, errBound } = coeffFunctionsDd[ps1.length-2][ps2.length-2](ps1, ps2);
+    //const { coeffs, errBound } = coeffFunctionsDouble[ps1.length-2][ps2.length-2](ps1, ps2);
 
-    let getPExact = () => coeffFunctionsExact[ps1.length-2][ps2.length-2](ps1, ps2);
+    const getPExact = () => coeffFunctionsExact[ps1.length-2][ps2.length-2](ps1, ps2);
 
     // check if all coefficients are zero, 
     // i.e. the two curves are possibly in the same k-family
@@ -101,7 +101,7 @@ function getCoeffsBezBez(
     let sameKFamily = false;
     if (possiblySameKFamily) {
         sameKFamily = true;
-        let poly = getPExact();
+        const poly = getPExact();
         for (let i=0; i<poly.length; i++) {
             if (eSign(poly[i]) !== 0) {
                 sameKFamily = false; break;

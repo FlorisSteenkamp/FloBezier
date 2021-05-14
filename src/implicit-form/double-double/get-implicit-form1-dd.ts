@@ -25,11 +25,11 @@ function getImplicitForm1Dd(ps: number[][]) {
     // The implicit form is given by:
     // vₓx + vᵧy + v = 0
 
-    let [[a1, a0],[b1, b0]] = getXY(ps);
+    const [[a1, a0],[b1, b0]] = getXY(ps);
 
-    let vₓ = -b1;
-    let vᵧ = a1;
-    let v = qdq(
+    const vₓ = -b1;
+    const vᵧ = a1;
+    const v = qdq(
         tp(a0,b1),
         tp(a1,b0)
     );  // 48-bit aligned => error free

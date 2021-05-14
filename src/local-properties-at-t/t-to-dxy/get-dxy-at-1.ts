@@ -13,19 +13,19 @@
  */
 function getDxyAt1(ps: number[][]): number[] {
 	if (ps.length === 4) {
-		let [, , [x2,y2], [x3,y3]] = ps;
+		const [, , [x2,y2], [x3,y3]] = ps;
 		return [
 			3*(x3 - x2),
 			3*(y3 - y2),
 		]; // max bitlength increase 3
 	} else if (ps.length === 3) {
-		let [, [x1,y1], [x2,y2]] = ps;
+		const [, [x1,y1], [x2,y2]] = ps;
 		return [
 			2*(x2 - x1),
 			2*(y2 - y1),
 		]; // max bitlength increase 2
 	} else if (ps.length === 2) {
-		let [[x0,y0], [x1,y1]] = ps;
+		const [[x0,y0], [x1,y1]] = ps;
 		return [
 			x1 - x0,
 			y1 - y0

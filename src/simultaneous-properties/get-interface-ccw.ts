@@ -50,20 +50,20 @@ const DEGREE_LIMIT = DEGREES[1];
  */
 // TODO - improve and make at least 46-bitlength precondition
 function getInterfaceCcw(psI: number[][], psO: number[][]) {
-    let lenI = psI.length;
+    const lenI = psI.length;
 
     // second last control point of incoming curve
-    let p0 = psI[lenI-2];  
+    const p0 = psI[lenI-2];  
     // last control point of incoming curve / first control point of outgoing
-    let p1 = psO[0];
+    const p1 = psO[0];
     // second control point of outgoing curve
-    let p2 = psO[1];
+    const p2 = psO[1];
 
     /*
     if (typeof _bez_debug_ !== 'undefined') {
-        let maxBitLength = 25;
+        const maxBitLength = 25;
 
-        let p1_ = psI[lenI-1];
+        const p1_ = psI[lenI-1];
 
         // ---- precondition: does endpoints coincide
         if (p1_[0] !== p1[0] || p1_[1] !== p1[1]) {
@@ -73,15 +73,15 @@ function getInterfaceCcw(psI: number[][], psO: number[][]) {
         // ---- precondition: are coordinates grid-aligned
 
         // Get all coordinate values into an array
-        let xs: number[] = [];
+        const xs: number[] = [];
         [psI, psO].forEach(ps => ps.forEach(p => p.forEach(x => {
             xs.push(x); 
         })));
         
-        let msb = xs.reduce((prevX, x) => Math.max(prevX, msbExponent(x)), Number.NEGATIVE_INFINITY);
-        let lsb = xs.reduce((prevX, x) => Math.min(prevX, lsbExponent(x)), Number.POSITIVE_INFINITY);
+        const msb = xs.reduce((prevX, x) => Math.max(prevX, msbExponent(x)), Number.NEGATIVE_INFINITY);
+        const lsb = xs.reduce((prevX, x) => Math.min(prevX, lsbExponent(x)), Number.POSITIVE_INFINITY);
 
-        let bitlengthAll = msb - lsb + 1;
+        const bitlengthAll = msb - lsb + 1;
         if (bitlengthAll > maxBitLength) {
             throw new Error(
                 `Curve control point coordinates must be bit-aligned and <= ${maxBitLength}. bitlength === ${bitlengthAll}, coordinates: ${xs}`
@@ -91,26 +91,26 @@ function getInterfaceCcw(psI: number[][], psO: number[][]) {
     */
 
     // Max one bit can be added in the calculations below due to bit-alignment
-    let xE = p1[0] - p0[0];  // tangent x-coordinate
-	let yE = p1[1] - p0[1];  // tangent y-coordinate
-	let xS = p2[0] - p1[0];  // tangent x-coordinate
-    let yS = p2[1] - p1[1];  // tangent y-coordinate
+    const xE = p1[0] - p0[0];  // tangent x-coordinate
+	const yE = p1[1] - p0[1];  // tangent y-coordinate
+	const xS = p2[0] - p1[0];  // tangent x-coordinate
+    const yS = p2[1] - p1[1];  // tangent y-coordinate
     
 	// If the tangent is to be found at t === 0 or t === 1 then using a basic 
     // property of bezier curves we can find the tangents easily as below
     
     // (non-normalized) tangent of incoming curve at t === 1
-    let tangentAtEnd = [xE,yE];
+    const tangentAtEnd = [xE,yE];
     // (non-normalized) tangent of outgoing curve at t === 0
-	let tangentAtStart = [xS,yS];
+	const tangentAtStart = [xS,yS];
 
     // The cross calculated below will have a max bitlength of 
     // (2*(maxBitLength+1))+1 === e.g. (2*(25+1)) + 1 === 53
     // If the preconditions are met it is exact
-    //let crossTangents = cross(tangentAtEnd, tangentAtStart);
+    //const crossTangents = cross(tangentAtEnd, tangentAtStart);
     
     // The cross below is exact by adaptive infinite precision
-    let crossTangents = orient2d(p0, p1, p2);
+    const crossTangents = orient2d(p0, p1, p2);
 
 	if (crossTangents !== 0) {
 		return crossTangents;
@@ -119,7 +119,7 @@ function getInterfaceCcw(psI: number[][], psO: number[][]) {
     // The dot calculated below will have a max bitlength of 
     // (2*(maxBitLength+1))+1 === e.g. (2*(25+1)) + 1 === 53
     // If the preconditions are met it is exact
-    let dotTangents = dot(tangentAtEnd, tangentAtStart);
+    const dotTangents = dot(tangentAtEnd, tangentAtStart);
     if (dotTangents > 0) {
         // Curves go in same direction at interface - neither clock or 
         // anti-clockwise.

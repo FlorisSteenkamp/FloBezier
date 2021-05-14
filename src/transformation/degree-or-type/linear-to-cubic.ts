@@ -7,10 +7,10 @@
  * @internal
  */
 function linearToCubic(ps: number[][]) {
-	let [[x0,y0],[x1,y1]] = ps;
+	const [[x0,y0],[x1,y1]] = ps;
 
-	let xInterval = (x1 - x0)/3;
-    let yInterval = (y1 - y0)/3;
+	const xInterval = (x1 - x0)/3;
+    const yInterval = (y1 - y0)/3;
 
 	return [
 		[x0,y0],

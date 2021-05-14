@@ -8,15 +8,15 @@
  */
 function clone(ps: number[][]) {
 	if (ps.length === 4) {
-		let [[x0,y0],[x1,y1],[x2,y2],[x3,y3]] = ps;
+		const [[x0,y0],[x1,y1],[x2,y2],[x3,y3]] = ps;
 
 		return [[x0,y0],[x1,y1],[x2,y2],[x3,y3]];
 	} else if (ps.length === 3) {
-		let [[x0,y0],[x1,y1],[x2,y2]] = ps;
+		const [[x0,y0],[x1,y1],[x2,y2]] = ps;
 
 		return [[x0,y0],[x1,y1],[x2,y2]];
 	} else if (ps.length === 2) {
-		let [[x0,y0],[x1,y1]] = ps;
+		const [[x0,y0],[x1,y1]] = ps;
 
 		return [[x0,y0],[x1,y1]];
 	}

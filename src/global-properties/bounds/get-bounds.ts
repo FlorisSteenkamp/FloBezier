@@ -25,8 +25,8 @@ function getXBoundsTight(ps: number[][]): {
 	minX: { ts: number[]; box: number[][]; };
 	maxX: { ts: number[]; box: number[][]; }; } {
 
-	let pS = ps[0];
-	let pE = ps[ps.length-1];
+	const pS = ps[0];
+	const pE = ps[ps.length-1];
 
 	let minX: { ts: number[]; box: number[][]; };
 	let maxX: { ts: number[]; box: number[][]; };
@@ -40,7 +40,7 @@ function getXBoundsTight(ps: number[][]): {
 
 	if (ps.length === 2) { return { minX, maxX }; }
 
-	let [dx,] = getDxy(ps);  // <= exact if 48-bit aligned
+	const [dx,] = getDxy(ps);  // <= exact if 48-bit aligned
 
 	// Roots of derivative
 	let rootsX: { r: number; rE: number; }[];
@@ -52,9 +52,9 @@ function getXBoundsTight(ps: number[][]): {
 		
 	// Test points
 	for (let i=0; i<rootsX.length; i++) {
-		let r = rootsX[i];
-		let ts = [r.r - r.rE, r.r + r.rE];
-		let box = getIntervalBox(ps, ts);
+		const r = rootsX[i];
+		const ts = [r.r - r.rE, r.r + r.rE];
+		const box = getIntervalBox(ps, ts);
 
 		if (box[0][0] < minX.box[0][0]) { minX = { ts, box } }
 		if (box[1][0] > maxX.box[0][0]) { maxX = { ts, box } }
@@ -72,8 +72,8 @@ function getXBoundsTight(ps: number[][]): {
  * @internal
  */
 function getYBoundsTight(ps: number[][]) {
-	let pS = ps[0];
-	let pE = ps[ps.length-1];
+	const pS = ps[0];
+	const pE = ps[ps.length-1];
 
 	let minY: { ts: number[]; box: number[][]; };
 	let maxY: { ts: number[]; box: number[][]; };
@@ -87,7 +87,7 @@ function getYBoundsTight(ps: number[][]) {
 
 	if (ps.length === 2) { return { minY, maxY }; }
 
-	let [,dy] = getDxy(ps);  // <= exact if 48-bit aligned
+	const [,dy] = getDxy(ps);  // <= exact if 48-bit aligned
 	// Roots of derivative
 	let rootsY: { r: number; rE: number; }[];
 	if (ps.length === 4) {
@@ -99,9 +99,9 @@ function getYBoundsTight(ps: number[][]) {
 
 	// Test points
 	for (let i=0; i<rootsY.length; i++) {
-		let r = rootsY[i];
-		let ts = [r.r - r.rE, r.r + r.rE];
-		let box = getIntervalBox(ps, ts);
+		const r = rootsY[i];
+		const ts = [r.r - r.rE, r.r + r.rE];
+		const box = getIntervalBox(ps, ts);
 
 		if (box[0][1] < minY.box[0][1]) { minY = { ts, box } }
 		if (box[1][1] > maxY.box[0][1]) { maxY = { ts, box } }
@@ -115,8 +115,8 @@ function getYBoundsTight(ps: number[][]) {
  * @internal
  */
  function getLinearRoots([a,b]: number[]): { r: number; rE: number }[] {
-	let r = -b/a;
-	let rE = u*abs(b/a);
+	const r = -b/a;
+	const rE = u*abs(b/a);
 
 	if (r + rE > 0 && r - rE < 1) {
 		return [{ r, rE }];
@@ -140,12 +140,12 @@ function quadRoots([a,b,c]: number[]): { r: number; rE: number }[] {
 
     // DD = discriminant = b^2 - 4ac
     // calculate DD and its absolute error DD_
-    let bb = b*b;
-    let bb_ = u*bb; // the error bound in b**2
-	let ac4 = 4*a*c;
-	let ac4_ = 4*u*abs(a*c);
-    let DD = bb - ac4;
-    let DD_ = bb_ + ac4_ + γ1*abs(DD);
+    const bb = b*b;
+    const bb_ = u*bb; // the error bound in b**2
+	const ac4 = 4*a*c;
+	const ac4_ = 4*u*abs(a*c);
+    const DD = bb - ac4;
+    const DD_ = bb_ + ac4_ + γ1*abs(DD);
 
     // If the discriminant is smaller than negative the error bound then
 	// certainly there are no roots.
@@ -156,23 +156,23 @@ function quadRoots([a,b,c]: number[]): { r: number; rE: number }[] {
 
 
 	// discriminant is definitely positive
-	let { est: D, err: D_ } = sqrtWithErr(DD, DD_);
+	const { est: D, err: D_ } = sqrtWithErr(DD, DD_);
 
 	let q1: number;        
 	if (b >= 0) {
-		// let r1 = (-b - D) / 2*a;
-		// let r2 = (2*c) / (-b - D);
+		// const r1 = (-b - D) / 2*a;
+		// const r2 = (2*c) / (-b - D);
 		q1 = -b - D;
 	} else {
-		// let r2 = (-b + D) / 2*a;
-		// let r1 = (2*c) / (-b + D);
+		// const r2 = (-b + D) / 2*a;
+		// const r1 = (2*c) / (-b + D);
 		q1 = -b + D;
 	}
-	let q1_ = D_ + γ1*abs(q1);
-	let { est: r1, err: r1_ } = divWithErr(q1,2*a, q1_,0);
-	let { est: r2, err: r2_ } = divWithErr(2*c,q1, 0,q1_);        
+	const q1_ = D_ + γ1*abs(q1);
+	const { est: r1, err: r1_ } = divWithErr(q1,2*a, q1_,0);
+	const { est: r2, err: r2_ } = divWithErr(2*c,q1, 0,q1_);        
 
-	let res: { r: number, rE: number }[] = [];
+	const res: { r: number, rE: number }[] = [];
 	if (r1 + r1_ > 0 && r1 - r1_ < 1) {
 		res.push({ r: r1, rE: r1_ });
 	}
@@ -196,8 +196,8 @@ function quadRoots([a,b,c]: number[]): { r: number; rE: number }[] {
 function getBounds(ps: number[][]): { ts: number[][]; box: number[][]; } {
 	// Roots of derivative
 	const dxy = getDxy(ps);
-	let rootsX = allRoots(dxy[0],0,1);
-	let rootsY = allRoots(dxy[1],0,1);
+	const rootsX = allRoots(dxy[0],0,1);
+	const rootsY = allRoots(dxy[1],0,1);
 		
 	// Endpoints
 	rootsX.push(0, 1); 
@@ -215,20 +215,20 @@ function getBounds(ps: number[][]): { ts: number[][]; box: number[][]; } {
 
 	// Test points
 	for (let i=0; i<rootsX.length; i++) {
-		let t = rootsX[i];
-		let [x] = evalDeCasteljau(ps, t);
+		const t = rootsX[i];
+		const [x] = evalDeCasteljau(ps, t);
 		if (x < minX) { minX = x;  tMinX = t; }
 		if (x > maxX) { maxX = x;  tMaxX = t; }
 	}
 	for (let i=0; i<rootsY.length; i++) {
-		let t = rootsY[i]; 
-		let [,y] = evalDeCasteljau(ps, t);  
+		const t = rootsY[i]; 
+		const [,y] = evalDeCasteljau(ps, t);  
 		if (y < minY) { minY = y;  tMinY = t; }
 		if (y > maxY) { maxY = y;  tMaxY = t; }
 	}
 	
-	let ts  = [[tMinX, tMinY], [tMaxX, tMaxY]];
-	let box = [[minX,  minY ], [maxX,  maxY ]];
+	const ts  = [[tMinX, tMinY], [tMaxX, tMaxY]];
+	const box = [[minX,  minY ], [maxX,  maxY ]];
 	
 	return { ts, box };
 }

@@ -12,7 +12,7 @@ const getCoeffs = getCoeffsBezBez;
  * Returns the intersection between any of two linear, quadratic or cubic bezier 
  * curves. 
  * 
- * The algorithm employed is state-of-the-art and uses advanced techniques such 
+ * The algorithm employed uses advanced techniques such 
  * as floating point error bounding, adaptive multi-precision floating 
  * point arithmetic, pre-filtering of easy cases, certified root finding and 
  * algebraic implicitization of the curves in order to find *guaranteed* accurate

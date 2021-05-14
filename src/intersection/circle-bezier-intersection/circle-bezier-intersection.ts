@@ -8,7 +8,7 @@ import { evalDeCasteljau } from '../../local-properties-at-t/t-to-xy/eval-de-cas
  * Returns the intersection between a circle and linear, quadratic or cubic bezier
  * curve.
  * 
- * The algorithm employed is state-of-the-art and uses advanced techniques such 
+ * The algorithm employed uses advanced techniques such 
  * as floating point error bounding, adaptive multi-precision floating 
  * point arithmetic, pre-filtering of easy cases, certified root finding and 
  * algebraic implicitization of the curves in order to find *guaranteed* accurate

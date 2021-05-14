@@ -18,7 +18,7 @@
  */
 function getDddxy(ps: number[][]): number[] {
 	if (ps.length === 4) {
-		let [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
+		const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
 		return [
 			6*(x3 + 3*(x1 - x2) - x0),
 			6*(y3 + 3*(y1 - y2) - y0)
