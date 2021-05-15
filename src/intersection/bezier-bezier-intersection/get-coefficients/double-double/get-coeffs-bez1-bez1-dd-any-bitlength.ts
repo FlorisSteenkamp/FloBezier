@@ -1,3 +1,4 @@
+import { γγ } from "../../../../error-analysis/error-analysis";
 import { twoProduct, ddAddDd, ddMultDouble2, ddMultDd } from "double-double";
 import { getImplicitForm1DdAnyBitlength } from "../../../../implicit-form/double-double/get-implicit-form1-dd-any-bitlength";
 import { getXYDdAnyBitlength1 } from "../../../../to-power-basis/any-bitlength/double-double/get-xy-dd-any-bitlength";
@@ -9,6 +10,7 @@ const qmd = ddMultDouble2;
 const qmq = ddMultDd;
 
 const abs = Math.abs;
+const γγ3 = γγ(3);
 
 
 // TODO - modify docs
@@ -85,7 +87,7 @@ function getCoeffsBez1Bez1DdAnyBitlength(ps1: number[][], ps2: number[][]) {
 
     return {
         coeffs:   [v1, v0],
-        errBound: [v1_, v0_]
+        errBound: [γγ3*v1_, γγ3*v0_]
     };
 }
 

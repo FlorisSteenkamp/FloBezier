@@ -1316,8 +1316,6 @@ function getCoeffsBez3Bez3DdAnyBitlength(
 
 export { getCoeffsBez3Bez3DdAnyBitlength }
 
-// 1184
-
 
     /*
     const v9 =  

@@ -1,6 +1,6 @@
 import { γγ } from "../../../../error-analysis/error-analysis";
-import { getImplicitForm2Dd } from "../../../../implicit-form/double-double/get-implicit-form2-dd";
-import { getXY } from "../../../../to-power-basis/get-xy";
+import { getImplicitForm2DdAnyBitlength } from "../../../../implicit-form/double-double/get-implicit-form2-dd-any-bitlength";
+import { getXYDdAnyBitlength3 } from '../../../../to-power-basis/any-bitlength/double-double/get-xy-dd-any-bitlength';
 import { twoProduct, ddMultBy2, ddMultDouble2, ddMultDd, ddAddDd } from "double-double";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
@@ -42,10 +42,13 @@ const γγ3 = γγ(3);
 function getCoeffsBez2Bez3DdAnyBitlength(ps1: number[][], ps2: number[][]) {
     const { 
         coeffs: { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v },
-        errorBound: { vₓ_, vᵧ_, v_ }  // vₓₓ_, vₓᵧ_, vᵧᵧ_ === 0
-    } = getImplicitForm2Dd(ps1);
+        errorBound: { vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ }
+    } = getImplicitForm2DdAnyBitlength(ps1);
 
-    const [[c3,c2,c1,c0],[d3,d2,d1,d0]] = getXY(ps2);
+    const {
+        coeffs: [[c3,c2,c1,c0],[d3,d2,d1,d0]],
+        errorBound: [[c3_,c2_,c1_],[d3_,d2_,d1_]]  // c0 and d0 is error free
+    } = getXYDdAnyBitlength3(ps2);
 
     const $vₓₓ  = vₓₓ [1];
     const $vₓᵧ  = vₓᵧ [1];
@@ -54,89 +57,145 @@ function getCoeffsBez2Bez3DdAnyBitlength(ps1: number[][], ps2: number[][]) {
     const $vᵧ  =  vᵧ  [1];
     const $v  =   v   [1];
 
-    const $c0c0 = c0*c0;
-    const $c0c1 = c0*c1;
-    const $c0c2 = c0*c2;
-    const $c0c3 = c0*c3;
-    const $c0d0 = c0*d0;
-    const $c0d1 = c0*d1;
-    const $c0d2 = c0*d2;
-    const $c0d3 = c0*d3;
-    const $c1c1 = c1*c1;
-    const $c1c2 = c1*c2;
-    const $c1c3 = c1*c3;
-    const $c1d0 = c1*d0;
-    const $c1d1 = c1*d1;
-    const $c1d2 = c1*d2;
-    const $c1d3 = c1*d3;
-    const $c2d1 = c2*d1;
-    const $c2c2 = c2*c2;    
-    const $c2c3 = c2*c3;
-    const $c2d0 = c2*d0;
-    const $c2d2 = c2*d2;
-    const $c2d3 = c2*d3;
-    const $c3c3 = c3*c3;
-    const $c3d0 = c3*d0;
-    const $c3d1 = c3*d1;
-    const $c3d2 = c3*d2;
-    const $c3d3 = c3*d3;
+    const _vₓₓ = abs($vₓₓ);
+    const _vₓᵧ = abs($vₓᵧ);
+    const _vᵧᵧ = abs($vᵧᵧ);
+    const _vₓ  = abs($vₓ );
+    const _vᵧ  = abs($vᵧ );
 
-    const $d0d0 = d0*d0;
-    const $d0d1 = d0*d1;
-    const $d0d2 = d0*d2;
-    const $d0d3 = d0*d3;
-    const $d1d1 = d1*d1;
-    const $d1d2 = d1*d2;
-    const $d3d3 = d3*d3;
-    const $d2d2 = d2*d2;
-    const $d2d3 = d2*d3;
-    const $d1d3 = d1*d3;
-
-    const c0c0 = tp(c0,c0);
-    const c0c1 = tp(c0,c1);
-    const c0c2 = tp(c0,c2);
-    const c0c3 = tp(c0,c3);
-    const c0d0 = tp(c0,d0);
-    const c0d1 = tp(c0,d1);
-    const c0d2 = tp(c0,d2);
-    const c0d3 = tp(c0,d3);
-    const c1c1 = tp(c1,c1);
-    const c1c2 = tp(c1,c2);
-    const c1c3 = tp(c1,c3);
-    const c1d0 = tp(c1,d0);
-    const c1d1 = tp(c1,d1);
-    const c1d2 = tp(c1,d2);
-    const c1d3 = tp(c1,d3);
-    const c2d1 = tp(c2,d1);
-    const c2c2 = tp(c2,c2);    
-    const c2c3 = tp(c2,c3);
-    const c2d0 = tp(c2,d0);
-    const c2d2 = tp(c2,d2);
-    const c2d3 = tp(c2,d3);
-    const c3c3 = tp(c3,c3);
-    const c3d0 = tp(c3,d0);
-    const c3d1 = tp(c3,d1);
-    const c3d2 = tp(c3,d2);
-    const c3d3 = tp(c3,d3);
-    const d0d0 = tp(d0,d0);
-    const d0d1 = tp(d0,d1);
-    const d0d2 = tp(d0,d2);
-    const d0d3 = tp(d0,d3);
-    const d1d1 = tp(d1,d1);
-    const d1d2 = tp(d1,d2);
-    const d3d3 = tp(d3,d3);
-    const d2d2 = tp(d2,d2);
-    const d2d3 = tp(d2,d3);
-    const d1d3 = tp(d1,d3);
+    const $c1 = c1[1];
+    const $c2 = c2[1];
+    const $c3 = c3[1];
+    const $d1 = d1[1];
+    const $d2 = d2[1];
+    const $d3 = d3[1];
 
     const _c0 = abs(c0);
-    const _c1 = abs(c1);
-    const _c2 = abs(c2);
-    const _c3 = abs(c3);
+    const _c1 = abs($c1);
+    const _c2 = abs($c2);
+    const _c3 = abs($c3);
     const _d0 = abs(d0);
-    const _d1 = abs(d1);
-    const _d2 = abs(d2);
-    const _d3 = abs(d3);
+    const _d1 = abs($d1);
+    const _d2 = abs($d2);
+    const _d3 = abs($d3);
+
+    const $c0c0 = c0*c0;
+    const $c0c1 = c0*$c1;
+    const $c0c2 = c0*$c2;
+    const $c0c3 = c0*$c3;
+    const $c0d0 = c0*d0;
+    const $c0d1 = c0*$d1;
+    const $c0d2 = c0*$d2;
+    const $c0d3 = c0*$d3;
+    const $c1c1 = $c1*$c1;
+    const $c1c2 = $c1*$c2;
+    const $c1c3 = $c1*$c3;
+    const $c1d0 = $c1*d0;
+    const $c1d1 = $c1*$d1;
+    const $c1d2 = $c1*$d2;
+    const $c1d3 = $c1*$d3;
+    const $c2d1 = $c2*$d1;
+    const $c2c2 = $c2*$c2;    
+    const $c2c3 = $c2*$c3;
+    const $c2d0 = $c2*d0;
+    const $c2d2 = $c2*$d2;
+    const $c2d3 = $c2*$d3;
+    const $c3c3 = $c3*$c3;
+    const $c3d0 = $c3*d0;
+    const $c3d1 = $c3*$d1;
+    const $c3d2 = $c3*$d2;
+    const $c3d3 = $c3*$d3;
+
+    const $d0d0 = d0*d0;
+    const $d0d1 = d0*$d1;
+    const $d0d2 = d0*$d2;
+    const $d0d3 = d0*$d3;
+    const $d1d1 = $d1*$d1;
+    const $d1d2 = $d1*$d2;
+    const $d3d3 = $d3*$d3;
+    const $d2d2 = $d2*$d2;
+    const $d2d3 = $d2*$d3;
+    const $d1d3 = $d1*$d3;
+
+    const c0c0 = tp(c0,c0);  // error free
+    const _c0c0 = abs($c0c0);
+    const c0c1 = qmd(c0,c1);
+    const _c0c1 = abs($c0c1);
+    const c0c1_ = _c0*c1_ + _c0c1;
+    const c0c2 = qmd(c0,c2);
+    const c0c2_ = _c0*c2_ + abs($c0c2);
+    const c0c3 = qmd(c0,c3);
+    const c0c3_ = _c0*c3_ + abs($c0c3);
+    const c0d0 = tp(c0,d0);  // error free
+    const _c0d0 = abs($c0d0);
+    const c0d1 = qmd(c0,d1);
+    const c0d1_ = _c0*d1_ + abs($c0d1);
+    const c0d2 = qmd(c0,d2);
+    const c0d2_ = _c0*d2_ + abs($c0d2);
+    const c0d3 = qmd(c0,d3);
+    const c0d3_ = _c0*d3_ + abs($c0d3);
+    const c1c1 = qmq(c1,c1);
+    const c1c1_ = c1_*_c1 + _c1*c1_ + 2*abs($c1c1);
+    const c1c2 = qmq(c1,c2);
+    const c1c2_ = c1_*_c2 + _c1*c2_ + 2*abs($c1c2);
+    const c1c3 = qmq(c1,c3);
+    const c1c3_ = c1_*_c3 + _c1*c3_ + 2*abs($c1c3);
+    const c1d0 = qmd(d0,c1);
+    const c1d0_ = _d0*c1_ + abs($c1d0);
+    const c1d1 = qmq(c1,d1);
+    const c1d1_ = c1_*_d1 + _c1*d1_ + 2*abs($c1d1);
+    const c1d2 = qmq(c1,d2);
+    const c1d2_ = c1_*_d2 + _c1*d2_ + 2*abs($c1d2);
+    const c1d3 = qmq(c1,d3);
+    const c1d3_ = c1_*_d3 + _c1*d3_ + 2*abs($c1d3);
+    const c2d1 = qmq(c2,d1);
+    const c2d1_ = c2_*_d1 + _c2*d1_ + 2*abs($c2d1);
+    const c2c2 = qmq(c2,c2);    
+    const c2c2_ = c2_*_c2 + _c2*c2_ + 2*abs($c2c2);
+    const c2c3 = qmq(c2,c3);
+    const _c2c3 = abs($c2c3);
+    const c2c3_ = c2_*_c3 + _c2*c3_ + 2*_c2c3;
+    const c2d0 = qmd(d0,c2);
+    const c2d0_ = _d0*c2_ + abs($c2d0);
+    const c2d2 = qmq(c2,d2);
+    const c2d2_ = c2_*_d2 + _c2*d2_ + 2*abs($c2d2);
+    const c2d3 = qmq(c2,d3);
+    const c2d3_ = c2_*_d3 + _c2*d3_ + 2*abs($c2d3);
+    const c3c3 = qmq(c3,c3);
+    const _c3c3 = abs($c3c3);
+    const c3c3_ = c3_*_c3 + _c3*c3_ + 2*_c3c3;
+    const c3d0 = qmd(d0,c3);
+    const c3d0_ = _d0*c3_ + abs($c3d0);
+    const c3d1 = qmq(c3,d1);
+    const c3d1_ = c3_*_d1 + _c3*d1_ + 2*abs($c3d1);
+    const c3d2 = qmq(c3,d2);
+    const c3d2_ = c3_*_d2 + _c3*d2_ + 2*abs($c3d2);
+    const c3d3 = qmq(c3,d3);
+    const _c3d3 = abs($c3d3);
+    const c3d3_ = c3_*_d3 + _c3*d3_ + 2*_c3d3;
+    const d0d0 = tp(d0,d0);  // error free
+    const _d0d0 = abs($d0d0);
+    const d0d1 = qmd(d0,d1);
+    const _d0d1 = abs($d0d1);
+    const d0d1_ = _d0*d1_ + _d0d1;
+    const d0d2 = qmd(d0,d2);
+    const d0d2_ = _d0*d2_ + abs($d0d2);
+    const d0d3 = qmd(d0,d3);
+    const d0d3_ = _d0*d3_ + abs($d0d3);
+    const d1d1 = qmq(d1,d1);
+    const d1d1_ = d1_*_d1 + _d1*d1_ + 2*abs($d1d1);
+    const d1d2 = qmq(d1,d2);
+    const d1d2_ = d1_*_d2 + _d1*d2_ + 2*abs($d1d2);
+    const d3d3 = qmq(d3,d3);
+    const _d3d3 = abs($d3d3);
+    const d3d3_ = d3_*_d3 + _d3*d3_ + 2*_d3d3;
+    const d2d2 = qmq(d2,d2);
+    const d2d2_ = d2_*_d2 + _d2*d2_ + 2*abs($d2d2);
+    const d2d3 = qmq(d2,d3);
+    const _d2d3 = abs($d2d3);
+    const d2d3_ = d2_*_d3 + _d2*d3_ + 2*_d2d3;
+    const d1d3 = qmq(d1,d3);
+    const d1d3_ = d1_*_d3 + _d1*d3_ + 2*abs($d1d3);
 
 
     // a3**2*vₓₓ + a3*b3*vₓᵧ + b3**2*vᵧᵧ
@@ -146,13 +205,13 @@ function getCoeffsBez2Bez3DdAnyBitlength(ps1: number[][], ps2: number[][]) {
     //    d3d3*vᵧᵧ;
     const $p1 = $c3c3*$vₓₓ;
     const p1 = qmq(c3c3,vₓₓ);
-    const p1_ = 2*abs($p1);
+    const p1_ = c3c3_*_vₓₓ + _c3c3*vₓₓ_ + 2*abs($p1);
     const $p2 = $c3d3*$vₓᵧ;
     const p2 = qmq(c3d3,vₓᵧ);
-    const p2_ = 2*abs($p2);
+    const p2_ = c3d3_*_vₓᵧ + _c3d3*vₓᵧ_ + 2*abs($p2);
     const $p3 = $d3d3*$vᵧᵧ;
     const p3 = qmq(d3d3,vᵧᵧ);
-    const p3_ = 2*abs($p3);
+    const p3_ = d3d3_*_vᵧᵧ + _d3d3*vᵧᵧ_ + 2*abs($p3);
     const $p4 = $p1 + $p2;
     const p4 = qaq(p1,p2);
     const p4_ = p1_ + p2_ + abs($p4);
@@ -167,18 +226,20 @@ function getCoeffsBez2Bez3DdAnyBitlength(ps1: number[][], ps2: number[][]) {
     //    vₓᵧ*(c2d3 + c3d2);
     const $p5 = $c2c3*$vₓₓ;
     const p5 = qmq(c2c3,vₓₓ);
-    const p5_ = 2*abs($p5);
+    const p5_ = c2c3_*_vₓₓ + _c2c3*vₓₓ_ + 2*abs($p5);
     const $p6 = $d2d3*$vᵧᵧ;
     const p6 = qmq(d2d3,vᵧᵧ);
-    const p6_ = 2*abs($p6);
+    const p6_ = d2d3_*_vᵧᵧ + _d2d3*vᵧᵧ_ + 2*abs($p6);
     const $p7 = $p5 + $p6;
     const p7 = qaq(p5,p6);
     const p7_ = p5_ + p6_ + abs($p7);
     const $p8 = $c2d3 + $c3d2;
-    const p8 = qaq(c2d3,c3d2);  // 48-bit aligned => error free
+    const p8 = qaq(c2d3,c3d2);
+    const _p8 = abs($p8);
+    const p8_ = c2d3_ + c3d2_ + _p8;
     const $p9 = $p8*$vₓᵧ;
     const p9 = qmq(p8,vₓᵧ);
-    const p9_ = 2*abs($p9);
+    const p9_ = p8_*_vₓᵧ + _p8*vₓᵧ_ + 2*abs($p9);
     const $v5 = 2*$p7 + $p9;
     const v5 = qaq(qm2(p7),p9);
     const v5_ = 2*p7_ + p9_ + abs($v5);
@@ -190,25 +251,32 @@ function getCoeffsBez2Bez3DdAnyBitlength(ps1: number[][], ps2: number[][]) {
     //    (2*d1d3 + d2d2)*vᵧᵧ +
     //    (c1d3 + c2d2 + c3d1)*vₓᵧ;
     const $pa = 2*$c1c3 + $c2c2;
-    const pa = qaq(qm2(c1c3),c2c2);  // 48-bit aligned => error free
+    const pa = qaq(qm2(c1c3),c2c2);
+    const _pa = abs($pa);
+    const pa_ = 2*c1c3_ + c2c2_ + abs($pa);
     const $pb = 2*$d1d3 + $d2d2;
-    const pb = qaq(qm2(d1d3),d2d2);  // 48-bit aligned => error free
+    const pb = qaq(qm2(d1d3),d2d2);
+    const _pb = abs($pb);
+    const pb_ = 2*d1d3_ + d2d2_ + abs($pb);
     const $pc = $c1d3 + $c2d2;
-    const pc = qaq(c1d3,c2d2);  // 48-bit aligned => error free
+    const pc = qaq(c1d3,c2d2);
+    const pc_ = c1d3_ + c2d2_ + abs($pc);
     const $pd = $pc + $c3d1;
-    const pd = qaq(pc,c3d1);  // 48-bit aligned => error free
+    const pd = qaq(pc,c3d1);
+    const _pd = abs($pd);
+    const pd_ = pc_ + c3d1_ + _pd;
     const $pe = $pa*$vₓₓ;
     const pe = qmq(pa,vₓₓ);
-    const pe_ = 2*abs($pe);
+    const pe_ = pa_*_vₓₓ + _pa*vₓₓ_ + 2*abs($pe);
     const $pf = $pb*$vᵧᵧ;
     const pf = qmq(pb,vᵧᵧ);
-    const pf_ = 2*abs($pf);
+    const pf_ = pb_*_vᵧᵧ + _pb*vᵧᵧ_ + 2*abs($pf);
     const $pg = $pe + $pf;
     const pg = qaq(pe,pf);
     const pg_ = pe_ + pf_ + abs($pg);
     const $rp = $pd*$vₓᵧ;
     const rp = qmq(pd,vₓᵧ);
-    const rp_ = 2*abs($rp);
+    const rp_ = pd_*_vₓᵧ + _pd*vₓᵧ_ + 2*abs($rp);
     const $v4 = $pg + $rp;
     const v4 = qaq(pg,rp);
     const v4_ = pg_ + rp_ + abs($v4);
@@ -223,33 +291,41 @@ function getCoeffsBez2Bez3DdAnyBitlength(ps1: number[][], ps2: number[][]) {
     //    c3*vₓ +
     //    d3*vᵧ;
     const $ph = $c0c3 + $c1c2;
-    const ph = qaq(c0c3,c1c2);  // 48-bit aligned => error free
+    const ph = qaq(c0c3,c1c2);
+    const _ph = abs($ph);
+    const ph_ = c0c3_ + c1c2_ + _ph;
     const $pi = $d0d3 + $d1d2;
-    const pi = qaq(d0d3,d1d2);  // 48-bit aligned => error free
+    const pi = qaq(d0d3,d1d2);
+    const _pi = abs($pi);
+    const pi_ = d0d3_ + d1d2_ + _pi;
     const $pj = $c0d3 + $c1d2;
-    const pj = qaq(c0d3,c1d2);  // 48-bit aligned => error free
+    const pj = qaq(c0d3,c1d2);
+    const pj_ = c0d3_ + c1d2_ + abs($pj);
     const $pk = $c2d1 + $c3d0;
-    const pk = qaq(c2d1,c3d0);  // 48-bit aligned => error free
+    const pk = qaq(c2d1,c3d0);
+    const pk_ = c2d1_ + c3d0_ + abs($pk);
     const $pl = $pj + $pk;
-    const pl = qaq(pj,pk);  // 48-bit aligned => error free
+    const pl = qaq(pj,pk);
+    const _pl = abs($pl);
+    const pl_ = pj_ + pk_ + _pl;
     const $pm = $ph*$vₓₓ;
     const pm = qmq(ph,vₓₓ);
-    const pm_ = 2*abs($pm);
+    const pm_ = ph_*_vₓₓ + _ph*vₓₓ_ + 2*abs($pm);
     const $pn = $pi*$vᵧᵧ;
     const pn = qmq(pi,vᵧᵧ);
-    const pn_ = 2*abs($pn);
+    const pn_ = pi_*_vᵧᵧ + _pi*vᵧᵧ_ + 2*abs($pn);
     const $po = 2*($pm + $pn);
     const po = qm2(qaq(pm,pn));
     const po_ = 2*(pm_ + pn_) + abs($po);
     const $pp = $pl*$vₓᵧ;
     const pp = qmq(pl,vₓᵧ);
-    const pp_ = 2*abs($pp);
-    const $rn = c3*$vₓ;
-    const rn = qmd(c3,vₓ);
-    const rn_ = _c3*vₓ_ + abs($rn);
-    const $ro = d3*$vᵧ;
-    const ro = qmd(d3,vᵧ);
-    const ro_ = _d3*vᵧ_ + abs($ro);
+    const pp_ = pl_*_vₓᵧ + _pl*vₓᵧ_ + 2*abs($pp);
+    const $rn = $c3*$vₓ;
+    const rn = qmq(c3,vₓ);
+    const rn_ = c3_*_vₓ + _c3*vₓ_ + 2*abs($rn);
+    const $ro = $d3*$vᵧ;
+    const ro = qmq(d3,vᵧ);
+    const ro_ = d3_*_vᵧ + _d3*vᵧ_ + 2*abs($ro);
     const $pq = $rn + $ro;
     const pq = qaq(rn,ro);
     const pq_ = rn_ + ro_ + abs($pq);
@@ -271,34 +347,41 @@ function getCoeffsBez2Bez3DdAnyBitlength(ps1: number[][], ps2: number[][]) {
     //    c2*vₓ +
     //    d2*vᵧ;
     const $ps = 2*$c0c2 + $c1c1;
-    const ps = qaq(qm2(c0c2),c1c1);  // 48-bit aligned => error free
+    const ps = qaq(qm2(c0c2),c1c1);
+    const _ps = abs($ps);
+    const ps_ = 2*c0c2_ + c1c1_ + _ps;
     const $pt = 2*$d0d2 + $d1d1;
-    const pt = qaq(qm2(d0d2),d1d1);  // 48-bit aligned => error free
+    const pt = qaq(qm2(d0d2),d1d1);
+    const _pt = abs($pt);
+    const pt_ = 2*d0d2_ + d1d1_ + _pt;
     const $pu = $c0d2 + $c1d1;
-    const pu = qaq(c0d2,c1d1);  // 48-bit aligned => error free
+    const pu = qaq(c0d2,c1d1);
+    const pu_ = c0d2_ + c1d1_ + abs($pu);
     const $pv = $pu + $c2d0;
-    const pv = qaq(pu,c2d0);  // 48-bit aligned => error free
+    const pv = qaq(pu,c2d0);
+    const _pv = abs($pv);
+    const pv_ = pu_ + c2d0_ + _pv;
     const $pw = $ps*$vₓₓ;
     const pw = qmq(ps,vₓₓ);
-    const pw_ = 2*abs($pw);
+    const pw_ = ps_*_vₓₓ + _ps*vₓₓ_ + 2*abs($pw);
     const $px = $pt*$vᵧᵧ;
     const px = qmq(pt,vᵧᵧ);
-    const px_ = 2*abs($px);
+    const px_ = pt_*_vᵧᵧ + _pt*vᵧᵧ_ + 2*abs($px);
     const $py = $pv*$vₓᵧ;
     const py = qmq(pv,vₓᵧ);
-    const py_ = 2*abs($py);
+    const py_ = pv_*_vₓᵧ + _pv*vₓᵧ_ + 2*abs($py);
     const $pz = $pw + $px;
     const pz = qaq(pw,px);
     const pz_ = pw_ + px_ + abs($pz);
     const $r1 = $pz + $py;
     const r1 = qaq(pz,py);
     const r1_ = pz_ + py_ + abs($r1);
-    const $r2 = c2*$vₓ;
-    const r2 = qmd(c2,vₓ);
-    const r2_ = _c2*vₓ_ + abs($r2);
-    const $r3 = d2*$vᵧ;
-    const r3 = qmd(d2,vᵧ);
-    const r3_ = _d2*vᵧ_ + abs($r3);
+    const $r2 = $c2*$vₓ;
+    const r2 = qmq(c2,vₓ);
+    const r2_ = c2_*_vₓ + _c2*vₓ_ + 2*abs($r2);
+    const $r3 = $d2*$vᵧ;
+    const r3 = qmq(d2,vᵧ);
+    const r3_ = d2_*_vᵧ + _d2*vᵧ_ + 2*abs($r3);
     const $r4 = $r2 + $r3;
     const r4 = qaq(r2,r3);
     const r4_ = r2_ + r3_ + abs($r4);
@@ -315,27 +398,29 @@ function getCoeffsBez2Bez3DdAnyBitlength(ps1: number[][], ps2: number[][]) {
     //    d1*vᵧ;
     const $r5 = $c0c1*$vₓₓ;
     const r5 = qmq(c0c1,vₓₓ);
-    const r5_ = 2*abs($r5);
+    const r5_ = c0c1_*_vₓₓ + _c0c1*vₓₓ_ + 2*abs($r5);
     const $r6 = $d0d1*$vᵧᵧ;
     const r6 = qmq(d0d1,vᵧᵧ);
-    const r6_ = 2*abs($r6);
+    const r6_ = d0d1_*_vᵧᵧ + _d0d1*vᵧᵧ_ + 2*abs($r6);
     const $r7 = $c0d1 + $c1d0;
-    const r7 = qaq(c0d1,c1d0);  // 48-bit aligned => error free
+    const r7 = qaq(c0d1,c1d0);
+    const _r7 = abs($r7);
+    const r7_ = c0d1_ + c1d0_ + _r7;
     const $r8 = $r7*$vₓᵧ;
     const r8 = qmq(r7,vₓᵧ);
-    const r8_ = 2*abs($r8);
+    const r8_ = r7_*_vₓᵧ + _r7*vₓᵧ_ + 2*abs($r8);
     const $r9 = 2*($r5 + $r6);
     const r9 = qm2(qaq(r5,r6));
     const r9_ = 2*(r5_ + r6_) + abs($r9);
     const $ra = $r9 + $r8;
     const ra = qaq(r9,r8);
     const ra_ = r9_ + r8_ + abs($ra);
-    const $rb = c1*$vₓ;
-    const rb = qmd(c1,vₓ);
-    const rb_ = _c1*vₓ_ + abs($rb);
-    const $rc = d1*$vᵧ;
-    const rc = qmd(d1,vᵧ);
-    const rc_ = _d1*vᵧ_ + abs($rc);
+    const $rb = $c1*$vₓ;
+    const rb = qmq(c1,vₓ);
+    const rb_ = c1_*_vₓ + _c1*vₓ_ + 2*abs($rb);
+    const $rc = $d1*$vᵧ;
+    const rc = qmq(d1,vᵧ);
+    const rc_ = d1_*_vᵧ + _d1*vᵧ_ + 2*abs($rc);
     const $rd = $rb + $rc;
     const rd = qaq(rb,rc);
     const rd_ = rb_ + rc_ + abs($rd);
@@ -354,13 +439,13 @@ function getCoeffsBez2Bez3DdAnyBitlength(ps1: number[][], ps2: number[][]) {
     //    v;
     const $re = $c0c0*$vₓₓ;
     const re = qmq(c0c0,vₓₓ);
-    const re_ = 2*abs($re);
+    const re_ = _c0c0*vₓₓ_ + 2*abs($re);
     const $rf = $c0d0*$vₓᵧ;
     const rf = qmq(c0d0,vₓᵧ);
-    const rf_ = 2*abs($rf);
+    const rf_ = _c0d0*vₓᵧ_ + 2*abs($rf);
     const $rg = $d0d0*$vᵧᵧ;
     const rg = qmq(d0d0,vᵧᵧ);
-    const rg_ = 2*abs($rg);
+    const rg_ = _d0d0*vᵧᵧ_ + 2*abs($rg);
     const $rh = c0*$vₓ;
     const rh = qmd(c0,vₓ);
     const rh_ = _c0*vₓ_ + abs($rh);

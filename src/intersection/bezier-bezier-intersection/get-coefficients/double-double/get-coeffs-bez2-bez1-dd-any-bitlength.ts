@@ -1,6 +1,6 @@
 import { γγ } from "../../../../error-analysis/error-analysis";
-import { getImplicitForm2Dd } from "../../../../implicit-form/double-double/get-implicit-form2-dd";
-import { getXY } from "../../../../to-power-basis/get-xy";
+import { getImplicitForm2DdAnyBitlength } from "../../../../implicit-form/double-double/get-implicit-form2-dd-any-bitlength";
+import { getXYDdAnyBitlength1 } from "../../../../to-power-basis/any-bitlength/double-double/get-xy-dd-any-bitlength";
 import { twoProduct, ddMultBy2, ddMultDouble2, ddMultDd, ddAddDd } from "double-double";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
@@ -42,10 +42,10 @@ const γγ3 = γγ(3);
 function getCoeffsBez2Bez1DdAnyBitlength(ps1: number[][], ps2: number[][]) {
     const { 
         coeffs: { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v },
-        errorBound: { vₓ_, vᵧ_, v_ }  // vₓₓ_, vₓᵧ_, vᵧᵧ_ === 0
-    } = getImplicitForm2Dd(ps1);
-
-    const [[c1,c0],[d1,d0]] = getXY(ps2);
+        errorBound: { vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ }
+    } = getImplicitForm2DdAnyBitlength(ps1);
+    
+    const [[c1,c0],[d1,d0]] = getXYDdAnyBitlength1(ps2);
 
     const $vₓₓ  = vₓₓ [1];
     const $vₓᵧ  = vₓᵧ [1];
@@ -54,44 +54,61 @@ function getCoeffsBez2Bez1DdAnyBitlength(ps1: number[][], ps2: number[][]) {
     const $vᵧ  =  vᵧ  [1];
     const $v  =   v   [1];
 
-    const $c0c0 = c0*c0;
-    const $c0c1 = c0*c1;
-    const $c0d0 = c0*d0;
-    const $c0d1 = c0*d1;
-    const $c1c1 = c1*c1;
-    const $c1d0 = c1*d0;
-    const $c1d1 = c1*d1;
-    const $d0d0 = d0*d0;
-    const $d0d1 = d0*d1;
-    const $d1d1 = d1*d1;
+    const _vₓₓ  = abs($vₓₓ);
+    const _vₓᵧ  = abs($vₓᵧ);
+    const _vᵧᵧ  = abs($vᵧᵧ);
 
-    const c0c0 = tp(c0,c0);
-    const c0c1 = tp(c0,c1);
-    const c0d0 = tp(c0,d0);
-    const c0d1 = tp(c0,d1);
-    const c1c1 = tp(c1,c1);
-    const c1d0 = tp(c1,d0);
-    const c1d1 = tp(c1,d1);
-    const d0d0 = tp(d0,d0);
-    const d0d1 = tp(d0,d1);
-    const d1d1 = tp(d1,d1);
+    const $c1 = c1[1];
+    const $d1 = d1[1];
 
     const _c0 = abs(c0);
-    const _c1 = abs(c1);
+    const _c1 = abs($c1);
     const _d0 = abs(d0);
-    const _d1 = abs(d1);
+    const _d1 = abs($d1);
+
+    const $c0c0 = c0*c0;
+    const $c0c1 = c0*$c1;
+    const $c0d0 = c0*d0;
+    const $c0d1 = c0*$d1;
+    const $c1c1 = $c1*$c1;
+    const $c1d0 = $c1*d0;
+    const $c1d1 = $c1*$d1;
+    const $d0d0 = d0*d0;
+    const $d0d1 = d0*$d1;
+    const $d1d1 = $d1*$d1;
+
+    const c0c0 = tp (c0,c0);
+    const c0c1 = qmd(c0,c1);
+    const _c0c1_ = abs($c0c1);
+    const c0d0 = tp (c0,d0);
+    const c0d1 = qmd(c0,d1);
+    const c0d1_ = abs($c0d1);
+    const _c1c1 = abs($c1c1);
+    const c1c1 = qmq(c1,c1);
+    const c1c1_ = 2*_c1c1;
+    const c1d0 = qmd(d0,c1);
+    const c1d0_ = abs($c1d0);
+    const _c1d1 = abs($c1d1);
+    const c1d1 = qmq(c1,d1);
+    const c1d1_ = 2*_c1d1;
+    const d0d0 = tp (d0,d0);
+    const d0d1 = qmd(d0,d1);
+    const _d0d1_ = abs($d0d1);
+    const _d1d1 = abs($d1d1);
+    const d1d1 = qmq(d1,d1);
+    const d1d1_ = 2*_d1d1;
 
 
     // a1**2*vₓₓ + a1*b1*vₓᵧ + b1**2*vᵧᵧ
     const $p1 = $c1c1*$vₓₓ;
     const p1 = qmq(c1c1,vₓₓ);
-    const p1_ = 2*abs($p1);
+    const p1_ = c1c1_*_vₓₓ * _c1c1*vₓₓ_ + 2*abs($p1);
     const $p2 = $d1d1*$vᵧᵧ;
     const p2 = qmq(d1d1,vᵧᵧ);
-    const p2_ = 2*abs($p2);
+    const p2_ = d1d1_*_vᵧᵧ * _d1d1*vᵧᵧ_ + 2*abs($p2);
     const $p3 = $c1d1*$vₓᵧ;
     const p3 = qmq(c1d1,vₓᵧ);
-    const p3_ = 2*abs($p3);
+    const p3_ = c1d1_*_vₓᵧ * _c1d1*vₓᵧ_ + 2*abs($p3);
     const $p4 = $p1 + $p2;
     const p4 = qaq(p1,p2);
     const p4_ = p1_ + p2_ + abs($p4);
@@ -103,27 +120,28 @@ function getCoeffsBez2Bez1DdAnyBitlength(ps1: number[][], ps2: number[][]) {
     // 2*a0*a1*vₓₓ + a0*b1*vₓᵧ + a1*b0*vₓᵧ + a1*vₓ + 2*b0*b1*vᵧᵧ + b1*vᵧ
     const $p5 = $c0c1*$vₓₓ;
     const p5 = qmq(c0c1,vₓₓ);
-    const p5_ = 2*abs($p5);
+    const p5_ = _c0c1_*(_vₓₓ + vₓₓ_) + 2*abs($p5);
     const $p6 = $d0d1*$vᵧᵧ;
     const p6 = qmq(d0d1,vᵧᵧ);
-    const p6_ = 2*abs($p6);
+    const p6_ = _d0d1_*(_vᵧᵧ + vᵧᵧ_) + 2*abs($p6);
     const $p7 = $c0d1 + $c1d0;
-    const p7 = qaq(c0d1,c1d0);  // 48-bit aligned => error free
+    const p7 = qaq(c0d1,c1d0);
+    const p7_ = c0d1_ + c1d0_ + abs($p7);
     const $pn = $p7*$vₓᵧ;
     const pn = qmq(p7,vₓᵧ);
-    const pn_ = 2*abs($pn);
+    const pn_ = p7_*_vₓᵧ + abs($p7)*vₓᵧ_ + 2*abs($pn);
     const $p8 = 2*($p5 + $p6);
     const p8 = qm2(qaq(p5,p6));
     const p8_ = 2*(p5_ + p6_) + abs($p8);
     const $p9 = $p8 + $pn;
     const p9 = qaq(p8,pn);
     const p9_ = p8_ + pn_ + abs($p9);
-    const $pa = c1*$vₓ;
-    const pa = qmd(c1,vₓ);
-    const pa_ = _c1*vₓ_ + abs($pa);
-    const $pb = d1*$vᵧ;
-    const pb = qmd(d1,vᵧ);
-    const pb_ = _d1*vᵧ_ + abs($pb);
+    const $pa = $c1*$vₓ;
+    const pa = qmq(c1,vₓ);
+    const pa_ = _c1*vₓ_ + 2*abs($pa);
+    const $pb = $d1*$vᵧ;
+    const pb = qmq(d1,vᵧ);
+    const pb_ = _d1*vᵧ_ + 2*abs($pb);
     const $pc = $pa + $pb;
     const pc = qaq(pa,pb);
     const pc_ = pa_ + pb_ + abs($pc);

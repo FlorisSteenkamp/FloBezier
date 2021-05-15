@@ -24,19 +24,19 @@ import { getCoeffsBez3Bez3 } from "../src/index";
 import { getCoeffsBez1Bez1Dd } from "../src/index";
 import { getCoeffsBez1Bez1DdAnyBitlength } from "../src/index";
 import { getCoeffsBez1Bez2Dd } from "../src/index";
-//import { getCoeffsBez1Bez2DdAnyBitlength } from "../src/index";
+import { getCoeffsBez1Bez2DdAnyBitlength } from "../src/index";
 import { getCoeffsBez1Bez3Dd } from "../src/index";
-//import { getCoeffsBez1Bez3DdAnyBitlength } from "../src/index";
+import { getCoeffsBez1Bez3DdAnyBitlength } from "../src/index";
 import { getCoeffsBez2Bez1Dd } from "../src/index";
-//import { getCoeffsBez2Bez1DdAnyBitlength } from "../src/index";
+import { getCoeffsBez2Bez1DdAnyBitlength } from "../src/index";
 import { getCoeffsBez2Bez2Dd } from "../src/index";
-//import { getCoeffsBez2Bez2DdAnyBitlength } from "../src/index";
+import { getCoeffsBez2Bez2DdAnyBitlength } from "../src/index";
 import { getCoeffsBez2Bez3Dd } from "../src/index";
-//import { getCoeffsBez2Bez3DdAnyBitlength } from "../src/index";
+import { getCoeffsBez2Bez3DdAnyBitlength } from "../src/index";
 import { getCoeffsBez3Bez1Dd } from "../src/index";
-//import { getCoeffsBez3Bez1DdAnyBitlength } from "../src/index";
+import { getCoeffsBez3Bez1DdAnyBitlength } from "../src/index";
 import { getCoeffsBez3Bez2Dd } from "../src/index";
-//import { getCoeffsBez3Bez2DdAnyBitlength } from "../src/index";
+import { getCoeffsBez3Bez2DdAnyBitlength } from "../src/index";
 import { getCoeffsBez3Bez3Dd } from "../src/index";
 import { getCoeffsBez3Bez3DdAnyBitlength } from "../src/index";
 
@@ -58,12 +58,12 @@ const abs = Math.abs;
 declare const paper: any;
 
 /** the number of bezier pairs (=== number of beziers - 1) */
-const num = 5_000;
+const num = 50_000;
 const maxBitLength = 47;  // 47 ???????
 const transY = 0.5;
 //const maxCoordinate = 128;
 const maxCoordinateX = 1;
-const squashFactor = 2**40;
+const squashFactor = 2**0;
 const maxCoordinateY = 1/squashFactor;
 //const expMaxX = Math.ceil(Math.log2(maxCoordinateX));
 //const expMaxY = Math.ceil(Math.log2(maxCoordinateY));
@@ -108,9 +108,9 @@ const coeffFunctionsDd = [
 //];
 
 const coeffFunctionsDdAnyBitlength = [
-    [getCoeffsBez1Bez1DdAnyBitlength, getCoeffsBez1Bez2Dd, getCoeffsBez1Bez3Dd],
-    [getCoeffsBez2Bez1Dd, getCoeffsBez2Bez2Dd, getCoeffsBez2Bez3Dd],
-    [getCoeffsBez3Bez1Dd, getCoeffsBez3Bez2Dd, getCoeffsBez3Bez3DdAnyBitlength]
+    [getCoeffsBez1Bez1DdAnyBitlength, getCoeffsBez1Bez2DdAnyBitlength, getCoeffsBez1Bez3DdAnyBitlength],
+    [getCoeffsBez2Bez1DdAnyBitlength, getCoeffsBez2Bez2DdAnyBitlength, getCoeffsBez2Bez3DdAnyBitlength],
+    [getCoeffsBez3Bez1DdAnyBitlength, getCoeffsBez3Bez2DdAnyBitlength, getCoeffsBez3Bez3DdAnyBitlength]
 ];
 
 const coeffFunctionsExact = [
@@ -256,7 +256,12 @@ function untransp(p: number[]): number[] {
 }
 
 
-function getPss(order: 1|2|3) {
+function getRandInt(n: number): number {
+    return Math.floor(Math.random() * n);
+}
+
+
+function getPss(order: 0|1|2|3) {
     const rx = randOnGridX_;
     const ry = () => trans(randOnGridY_());
 
@@ -264,23 +269,38 @@ function getPss(order: 1|2|3) {
     let curves: any[] = [];
     let pss: number[][][] = [];
     
-
     for (let i=0; i<num+1; i++) {
+        let order_ = order !== 0
+            ? order
+            : getRandInt(3) + 1;
+
+        //if (i < 20) { console.log(order_)}
         const ps: number[][] = [];
-        for (let j=0; j<order+1; j++) {
+        for (let j=0; j<order_+1; j++) {
             ps.push([rx(),ry()]);
         }
+        pss.push(ps);
+
         //const ps = [[rx(),ry()],[rx(),ry()],[rx(),ry()],[rx(),ry()]];
 
         //let curve: paper.Curve;
+        /*
         let curve: any;
-        if (order === 1) {
+        if (order_ === 1) {
             curve = new paper.Curve(
                 new paper.Point(ps[0][0], ps[0][1]),
                 new paper.Point(ps[1][0], ps[1][1])
             );
         }
-        if (order === 3) {
+        if (order_ === 2) {
+            // not working??
+            curve = new paper.Curve(
+                new paper.Point(ps[0][0], ps[0][1]),
+                new paper.Point(ps[1][0] - ps[0][0], ps[1][1] - ps[0][1]),
+                new paper.Point(ps[2][0], ps[2][1])
+            );
+        }
+        if (order_ === 3) {
             curve = new paper.Curve(
                 new paper.Point(ps[0][0], ps[0][1]),
                 new paper.Point(ps[1][0] - ps[0][0], ps[1][1] - ps[0][1]),
@@ -288,9 +308,9 @@ function getPss(order: 1|2|3) {
                 new paper.Point(ps[3][0], ps[3][1])
             );
         }
-
-        pss.push(ps);
+        
         curves.push(curve);
+        */
 
         if (i === 1) {
             drawBeziers(pss[0], pss[1]);
@@ -313,7 +333,8 @@ function test() {
     // pre-load
     //const { pss, curves } = getPss(1);  // linear
     //const { pss, curves } = getPss(2);  // quadratic
-    const { pss, curves } = getPss(3);  // cubic
+    //const { pss, curves } = getPss(3);  // cubic
+    const { pss, curves } = getPss(0);  // a mix
 
     //console.log(pss)
 
@@ -405,6 +426,7 @@ function test() {
 
 
     //---- Paper.js ----//
+    /*
     let totalPaper = 0;
     const dsPaper: number[] = [];
     let timingPaper: number;
@@ -429,33 +451,13 @@ function test() {
         }
         timingPaper = performance.now() - timeStart;
     }
-    
-
-    ///////////////////////////////
-    let sumNative = 0;
-    for (const d of dsNative) {
-        sumNative += d;
-    }
-    const meanNative = sumNative / totalNative;
-    let sumSquaredDiffsNative = 0;
-    for (let i=0; i<totalNative; i++) {
-        sumSquaredDiffsNative += (meanNative - dsNative[i])**2;
-    }
-    const stdDevNative = Math.sqrt(sumSquaredDiffsNative / totalNative);
-
-    console.log('-------------------------');
-    console.log('native');
-    console.log('-------------------------');
-    console.log('millis: ' + timingNative.toFixed(3));
-    console.log('xs: ' + totalNative)
-    console.log('mean: ' + meanNative);
-    console.log('stdDev: ' + stdDevNative);
-
 
     ///////////////////////////////
     let sumPaper = 0;
+    let maxPaper = 0;
     for (const d of dsPaper) {
         sumPaper += d;
+        if (d > maxPaper) { maxPaper = d; }
     }
     const meanPaper = sumPaper / totalPaper;
     let sumSquaredDiffsPaper = 0;
@@ -469,9 +471,36 @@ function test() {
     console.log('paper');
     console.log('-------------------------');
     console.log('millis: ' + timingPaper.toFixed(3));
-    console.log('xs: ' + totalPaper)
+    console.log('xs: ' + totalPaper);
+    console.log('max: ' + maxPaper);
+    console.log('max/eps: ' + maxPaper/Number.EPSILON);
     console.log('mean: ' + meanPaper);
     console.log('stdDev: ' + stdDevPaper);
+    */
+
+    ///////////////////////////////
+    let sumNative = 0;
+    let maxNative = 0;
+    for (const d of dsNative) {
+        sumNative += d;
+        if (d > maxNative) { maxNative = d; }
+    }
+    const meanNative = sumNative / totalNative;
+    let sumSquaredDiffsNative = 0;
+    for (let i=0; i<totalNative; i++) {
+        sumSquaredDiffsNative += (meanNative - dsNative[i])**2;
+    }
+    const stdDevNative = Math.sqrt(sumSquaredDiffsNative / totalNative);
+
+    console.log('-------------------------');
+    console.log('native');
+    console.log('-------------------------');
+    console.log('millis: ' + timingNative.toFixed(3));
+    console.log('xs: ' + totalNative)
+    console.log('max: ' + maxNative);
+    console.log('max/eps: ' + maxNative/Number.EPSILON);
+    console.log('mean: ' + meanNative);
+    console.log('stdDev: ' + stdDevNative);
 }
 
 
