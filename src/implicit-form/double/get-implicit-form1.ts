@@ -2,8 +2,7 @@ import { getXY } from '../../to-power-basis/get-xy';
 
 
 /**
- * Returns the implicit form of the given linear bezier and a coefficientwise 
- * error bound.
+ * Returns the implicit form of the given linear bezier.
  * 
  * Returned coefficients are subscripted to match their monomial's variables,
  * e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`

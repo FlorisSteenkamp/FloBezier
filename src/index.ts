@@ -9,7 +9,12 @@ import { cubicToQuadratic } from './transformation/cubic-to-quadratic';
 import { bezierFromPart } from './transformation/from-bezier-piece';
 import { evaluateHybridQuadratic } from './local-properties-at-t/t-to-xy/evaluate-hybrid-quadratic';
 
+import { getControlPointBox } from './global-properties/bounds/get-control-point-box';
+
 import { closestPointOnBezier } from './simultaneous-properties/closest-point-on-bezier/closest-point-on-bezier';
+
+// TODO - remove - just for testing
+import { bezier3Intersection } from './intersection/bezier3-intersection/bezier3-intersection';
 
 import { intersectBoxes } from './boxes/intersect-boxes';
 import { areBoxesIntersecting } from './boxes/are-boxes-intersecting';
@@ -27,73 +32,85 @@ import { getCoeffsBezBez } from './intersection/bezier-bezier-intersection/get-c
 import { getImplicitForm3InclError } from './implicit-form/double-incl-error/get-implicit-form3-incl-error';
 import { getImplicitForm3Dd } from './implicit-form/double-double/get-implicit-form3-dd';
 import { getImplicitForm3Exact } from './implicit-form/exact/get-implicit-form3-exact';
+import { getImplicitForm3ExactAnyBitlength } from './implicit-form/exact/get-implicit-form3-exact-any-bitlength';
 
 import { getImplicitForm2InclError } from './implicit-form/double-incl-error/get-implicit-form2-incl-error';
 import { getImplicitForm2Dd } from './implicit-form/double-double/get-implicit-form2-dd';
 import { getImplicitForm2Exact } from './implicit-form/exact/get-implicit-form2-exact';
+import { getImplicitForm2ExactAnyBitlength } from './implicit-form/exact/get-implicit-form2-exact-any-bitlength';
 
 import { getImplicitForm1InclError } from './implicit-form/double-incl-error/get-implicit-form1-incl-error';
 import { getImplicitForm1Dd } from './implicit-form/double-double/get-implicit-form1-dd';
 import { getImplicitForm1Exact } from './implicit-form/exact/get-implicit-form1-exact';
+import { getImplicitForm1ExactAnyBitlength } from './implicit-form/exact/get-implicit-form1-exact-any-bitlength';
 
 import { getCoeffsBez3Bez3DdAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez3-dd-any-bitlength';
 import { getCoeffsBez3Bez3 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez3-bez3';
 import { getCoeffsBez3Bez3InclError } from './intersection/bezier-bezier-intersection/get-coefficients/double-incl-error/get-coeffs-bez3-bez3-incl-error';
 import { getCoeffsBez3Bez3Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez3-dd';
 import { getCoeffsBez3Bez3Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez3-exact';
+import { getCoeffsBez3Bez3ExactAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez3-exact-any-bitlength';
 
 import { getCoeffsBez3Bez2DdAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez2-dd-any-bitlength';
 import { getCoeffsBez3Bez2 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez3-bez2';
 import { getCoeffsBez3Bez2InclError } from './intersection/bezier-bezier-intersection/get-coefficients/double-incl-error/get-coeffs-bez3-bez2-incl-error';
 import { getCoeffsBez3Bez2Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez2-dd';
 import { getCoeffsBez3Bez2Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez2-exact';
+import { getCoeffsBez3Bez2ExactAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez2-exact-any-bitlength';
 
 import { getCoeffsBez3Bez1DdAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez1-dd-any-bitlength';
 import { getCoeffsBez3Bez1 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez3-bez1';
 import { getCoeffsBez3Bez1InclError } from './intersection/bezier-bezier-intersection/get-coefficients/double-incl-error/get-coeffs-bez3-bez1-incl-error';
 import { getCoeffsBez3Bez1Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez1-dd';
 import { getCoeffsBez3Bez1Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez1-exact';
+import { getCoeffsBez3Bez1ExactAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez1-exact-any-bitlength';
 
 import { getCoeffsBez2Bez3DdAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez2-bez3-dd-any-bitlength';
 import { getCoeffsBez2Bez3 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez2-bez3';
 import { getCoeffsBez2Bez3InclError } from './intersection/bezier-bezier-intersection/get-coefficients/double-incl-error/get-coeffs-bez2-bez3-incl-error';
 import { getCoeffsBez2Bez3Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez2-bez3-dd';
 import { getCoeffsBez2Bez3Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez2-bez3-exact';
+import { getCoeffsBez2Bez3ExactAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez2-bez3-exact-any-bitlength';
 
 import { getCoeffsBez2Bez2DdAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez2-bez2-dd-any-bitlength';
 import { getCoeffsBez2Bez2 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez2-bez2';
 import { getCoeffsBez2Bez2InclError } from './intersection/bezier-bezier-intersection/get-coefficients/double-incl-error/get-coeffs-bez2-bez2-incl-error';
 import { getCoeffsBez2Bez2Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez2-bez2-dd';
 import { getCoeffsBez2Bez2Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez2-bez2-exact';
+import { getCoeffsBez2Bez2ExactAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez2-bez2-exact-any-bitlength';
 
 import { getCoeffsBez2Bez1DdAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez2-bez1-dd-any-bitlength';
 import { getCoeffsBez2Bez1 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez2-bez1';
 import { getCoeffsBez2Bez1InclError } from './intersection/bezier-bezier-intersection/get-coefficients/double-incl-error/get-coeffs-bez2-bez1-incl-error';
 import { getCoeffsBez2Bez1Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez2-bez1-dd';
 import { getCoeffsBez2Bez1Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez2-bez1-exact';
+import { getCoeffsBez2Bez1ExactAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez2-bez1-exact-any-bitlength';
 
 import { getCoeffsBez1Bez3DdAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez3-dd-any-bitlength';
 import { getCoeffsBez1Bez3 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez1-bez3';
 import { getCoeffsBez1Bez3InclError } from './intersection/bezier-bezier-intersection/get-coefficients/double-incl-error/get-coeffs-bez1-bez3-incl-error';
 import { getCoeffsBez1Bez3Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez3-dd';
 import { getCoeffsBez1Bez3Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez3-exact';
+import { getCoeffsBez1Bez3ExactAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez3-exact-any-bitlength';
 
 import { getCoeffsBez1Bez2DdAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez2-dd-any-bitlength';
 import { getCoeffsBez1Bez2 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez1-bez2';
 import { getCoeffsBez1Bez2InclError } from './intersection/bezier-bezier-intersection/get-coefficients/double-incl-error/get-coeffs-bez1-bez2-incl-error';
 import { getCoeffsBez1Bez2Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez2-dd';
 import { getCoeffsBez1Bez2Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez2-exact';
+import { getCoeffsBez1Bez2ExactAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez2-exact-any-bitlength';
 
 import { getCoeffsBez1Bez1DdAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez1-dd-any-bitlength';
 import { getCoeffsBez1Bez1 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez1-bez1';
 import { getCoeffsBez1Bez1InclError } from './intersection/bezier-bezier-intersection/get-coefficients/double-incl-error/get-coeffs-bez1-bez1-incl-error';
 import { getCoeffsBez1Bez1Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez1-dd';
 import { getCoeffsBez1Bez1Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez1-exact';
+import { getCoeffsBez1Bez1ExactAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez1-exact-any-bitlength';
 
 import { getCoeffsBez3 } from './intersection/self-intersection/get-coefficients/double/get-coeffs-bez3';
 import { getCoeffsBez3Dd } from './intersection/self-intersection/get-coefficients/double-double/get-coeffs-bez3-dd';
 import { getCoeffsBez3Exact } from './intersection/self-intersection/get-coefficients/exact/get-coeffs-bez3-exact';
-import { getCoeffsBez3Exact_NoPrecondition } from './intersection/self-intersection/get-coefficients/exact/get-coeffs-bez3-exact-no-precondition';
+import { getCoeffsBez3ExactAnyBitlength } from './intersection/self-intersection/get-coefficients/exact/get-coeffs-bez3-exact-any-bitlength';
 
 import { toExpansion } from './transformation/to-expansion';
 import { toEstimation} from './transformation/to-estimation';
@@ -128,7 +145,7 @@ import { isQuadObtuse } from './global-properties/type/is-quad-obtuse';
 import { getIntervalBox } from './global-properties/bounds/get-interval-box/get-interval-box';
 import { getIntervalBoxDd } from './global-properties/bounds/get-interval-box/get-interval-box-dd';
 import { splitAt, splitAtPrecise } from './transformation/split-merge-clone/split-at';
-import { closestPointOnBezierPrecise } from './simultaneous-properties/closest-point-on-bezier/closest-point-on-bezier';
+import { closestPointOnBezierPrecise } from './simultaneous-properties/closest-point-on-bezier/closest-point-on-bezier-precise';
 import { hausdorffDistance, hausdorffDistanceCandidates } from './simultaneous-properties/hausdorff-distance';
 import { lengthUpperBound } from './global-properties/length/length-upper-bound';
 import { lengthSquaredUpperBound } from './global-properties/length/length-squared-upper-bound';
@@ -380,11 +397,25 @@ export {
 	getCoeffsBez1Bez1Dd,
 	getCoeffsBez1Bez1Exact,
 
+
+	getImplicitForm3ExactAnyBitlength,
+	getImplicitForm2ExactAnyBitlength,
+	getImplicitForm1ExactAnyBitlength,
+	getCoeffsBez3Bez3ExactAnyBitlength,
+	getCoeffsBez3Bez2ExactAnyBitlength,
+	getCoeffsBez3Bez1ExactAnyBitlength,
+	getCoeffsBez2Bez3ExactAnyBitlength,
+	getCoeffsBez2Bez2ExactAnyBitlength,
+	getCoeffsBez2Bez1ExactAnyBitlength,
+	getCoeffsBez1Bez3ExactAnyBitlength,
+	getCoeffsBez1Bez2ExactAnyBitlength,
+	getCoeffsBez1Bez1ExactAnyBitlength,
+
 	// self-intersection
 	getCoeffsBez3,
 	getCoeffsBez3Dd,
 	getCoeffsBez3Exact,
-	getCoeffsBez3Exact_NoPrecondition,
+	getCoeffsBez3ExactAnyBitlength,
 
 	closestPointOnBezier,
 
@@ -392,7 +423,12 @@ export {
 
 	/// Add!
 	evaluateDdxy,
-	evaluateDxy
+	evaluateDxy,
+
+	// TODO - remove - just for testing
+	bezier3Intersection,
+
+	getControlPointBox
 }
 
 export { 

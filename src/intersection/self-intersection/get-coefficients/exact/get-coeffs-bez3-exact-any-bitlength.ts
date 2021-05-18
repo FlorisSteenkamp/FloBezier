@@ -1,4 +1,4 @@
-import { getXYExact } from "../../../../to-power-basis/any-bitlength/exact/get-xy-any-bitlength-exact";
+import { getXYExactAnyBitlength3 } from "../../../../to-power-basis/any-bitlength/exact/get-xy-exact-any-bitlength";
 import { eCalculate } from "big-float-ts";
 
 
@@ -18,8 +18,8 @@ import { eCalculate } from "big-float-ts";
  * 
  * @doc
  */
-function getCoeffsBez3Exact_NoPrecondition(ps: number[][]) {
-    const [[a3, a2, a1], [b3, b2, b1]] = getXYExact(ps);
+function getCoeffsBez3ExactAnyBitlength(ps: number[][]) {
+    const [[a3, a2, a1], [b3, b2, b1]] = getXYExactAnyBitlength3(ps);
 
     //const u2 = -2*a2*a3*b2*b3 + a2*a2*b3*b3 + a3*a3*b2*b2
     const u2 = eCalculate([ 
@@ -44,5 +44,5 @@ function getCoeffsBez3Exact_NoPrecondition(ps: number[][]) {
 }
 
 
-export { getCoeffsBez3Exact_NoPrecondition }
+export { getCoeffsBez3ExactAnyBitlength }
 

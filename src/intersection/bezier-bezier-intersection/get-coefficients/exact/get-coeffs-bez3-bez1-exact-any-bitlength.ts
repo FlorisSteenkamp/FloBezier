@@ -1,15 +1,17 @@
-import { 
-    twoProduct, scaleExpansion2, expansionProduct, fastExpansionSum, 
-    eMultBy2 } from "big-float-ts";
-import { getImplicitForm3Exact } from "../../../../implicit-form/exact/get-implicit-form3-exact";
-import { getXY } from "../../../../to-power-basis/get-xy";
+import { getImplicitForm3ExactAnyBitlength } from "../../../../implicit-form/exact/get-implicit-form3-exact-any-bitlength";
+import { getXYExactAnyBitlength1 } from "../../../../to-power-basis/any-bitlength/exact/get-xy-exact-any-bitlength";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+import { 
+    twoProduct, expansionProduct, fastExpansionSum, scaleExpansion2, 
+    eMultBy2
+} from "big-float-ts";
+
+const tp  = twoProduct;    // error -> 0
 const sce = scaleExpansion2;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
 const em2 = eMultBy2;
-const tp = twoProduct;
 
 
 /**
@@ -34,42 +36,42 @@ const tp = twoProduct;
  * 
  * @doc mdx
  */
-function getCoeffsBez3Bez1Exact(ps1: number[][], ps2: number[][]) {
+function getCoeffsBez3Bez1ExactAnyBitlength(ps1: number[][], ps2: number[][]) {
     const { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
-        getImplicitForm3Exact(ps1);
+        getImplicitForm3ExactAnyBitlength(ps1);
 
-    const [[c1,c0],[d1,d0]] = getXY(ps2);
+    const [[c1,c0],[d1,d0]] = getXYExactAnyBitlength1(ps2);
 
 
     const c0c0 = tp(c0,c0);
-    const c0c1 = tp(c0,c1);
+    const c0c1 = sce(c0,c1);
     const c0d0 = tp(c0,d0);
-    const c0d1 = tp(c0,d1);
-    const c1c1 = tp(c1,c1);
-    const c1d0 = tp(c1,d0);
-    const c1d1 = tp(c1,d1);
+    const c0d1 = sce(c0,d1);
+    const c1c1 = epr(c1,c1);
+    const c1d0 = sce(d0,c1);
+    const c1d1 = epr(c1,d1);
     const d0d0 = tp(d0,d0);
-    const d0d1 = tp(d0,d1);
-    const d1d1 = tp(d1,d1);
+    const d0d1 = sce(d0,d1);
+    const d1d1 = epr(d1,d1);
     
     const z1 = sce(c0,vₓₓₓ);
-    const z7 = sce(3*c0,vₓₓₓ);  // 3*c0: 47-bit aligned => error free 
+    const z7 = epr(tp(3,c0),vₓₓₓ);  // 3*c0: 47-bit aligned => error free 
     const z2 = sce(c0,vₓₓᵧ);
     const z3 = sce(d0,vₓₓᵧ);
     const z4 = sce(c0,vₓᵧᵧ);
     const z5 = sce(d0,vₓᵧᵧ);
     const z6 = sce(d0,vᵧᵧᵧ);
-    const z8 = sce(3*d0,vᵧᵧᵧ);
+    const z8 = epr(tp(3,d0),vᵧᵧᵧ);
 
 
     // a1**3*v_xxx + a1**2*b1*v_xxy + a1*b1**2*v_xyy + b1**3*v_yyy
     //const v3 =
     //    c1c1*(c1*vₓₓₓ + d1*vₓₓᵧ) +
     //    d1d1*(c1*vₓᵧᵧ + d1*vᵧᵧᵧ);
-    const u1 = sce(c1,vₓₓₓ);
-    const u2 = sce(c1,vₓᵧᵧ);
-    const u3 = sce(d1,vₓₓᵧ);
-    const u4 = sce(d1,vᵧᵧᵧ);
+    const u1 = epr(c1,vₓₓₓ);
+    const u2 = epr(c1,vₓᵧᵧ);
+    const u3 = epr(d1,vₓₓᵧ);
+    const u4 = epr(d1,vᵧᵧᵧ);
     const u5 = fes(u1,u3);
     const u6 = fes(u2,u4);
     const u7 = epr(c1c1,u5);
@@ -117,8 +119,8 @@ function getCoeffsBez3Bez1Exact(ps1: number[][], ps2: number[][]) {
     const us = epr(d0d1,uo);
     const ut = epr(c0d1,up);
     const uu = epr(c1d0,uq);
-    const uv = sce(c1,vₓ);
-    const uw = sce(d1,vᵧ);
+    const uv = epr(c1,vₓ);
+    const uw = epr(d1,vᵧ);
     const ux = fes(ur,us);
     const uy = fes(ut,uu);
     const uz = fes(ux,uy);
@@ -160,4 +162,4 @@ function getCoeffsBez3Bez1Exact(ps1: number[][], ps2: number[][]) {
 }
 
 
-export { getCoeffsBez3Bez1Exact }
+export { getCoeffsBez3Bez1ExactAnyBitlength }

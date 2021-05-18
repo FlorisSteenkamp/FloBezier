@@ -21,8 +21,25 @@ function getTangentPolyFromPoint(ps: number[][], p: number[]) {
 
 
 function getPolyForCubic(ps: number[][], p: number[]) {
-    const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
-    const [xp, yp] = p;
+    //const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
+    //const [xp, yp] = p;
+
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const p2 = ps[2];
+    const p3 = ps[3];
+
+    const x0 = p0[0];
+    const y0 = p0[1];
+    const x1 = p1[0];
+    const y1 = p1[1];
+    const x2 = p2[0];
+    const y2 = p2[1];
+    const x3 = p3[0];
+    const y3 = p3[1];
+
+    const xp = p[0];
+    const yp = p[1];
 
     const xx0 = x0 - xp;
     const xx1 = x1 - xp;
@@ -86,8 +103,22 @@ function getPolyForCubic(ps: number[][], p: number[]) {
 
 
 function getPolyForQuadratic(ps: number[][], p: number[]) {
-    const [[x0, y0], [x1, y1], [x2, y2]] = ps;
-    const [xp, yp] = p;
+    //const [[x0, y0], [x1, y1], [x2, y2]] = ps;
+    //const [xp, yp] = p;
+
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const p2 = ps[2];
+
+    const x0 = p0[0];
+    const y0 = p0[1];
+    const x1 = p1[0];
+    const y1 = p1[1];
+    const x2 = p2[0];
+    const y2 = p2[1];
+
+    const xp = p[0];
+    const yp = p[1];
 
     const xx0 = x0 - xp;
     const xx1 = x1 - xp;

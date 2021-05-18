@@ -1,10 +1,12 @@
-import { getImplicitForm1Exact } from "../../../../implicit-form/exact/get-implicit-form1-exact";
-import { getXY } from "../../../../to-power-basis/get-xy";
-import { twoProduct, ddAddDd } from "double-double";
+import { getImplicitForm1ExactAnyBitlength } from "../../../../implicit-form/exact/get-implicit-form1-exact-any-bitlength";
+import { getXYExactAnyBitlength2 } from "../../../../to-power-basis/any-bitlength/exact/get-xy-exact-any-bitlength";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const tp = twoProduct;
-const qaq = ddAddDd;
+import { expansionProduct, fastExpansionSum, scaleExpansion2 } from "big-float-ts";
+
+const sce = scaleExpansion2;
+const epr = expansionProduct;
+const fes = fastExpansionSum;
 
 
 /**
@@ -29,34 +31,34 @@ const qaq = ddAddDd;
  * 
  * @doc mdx
  */
-function getCoeffsBez1Bez2Exact(ps1: number[][], ps2: number[][]) {
-    const { vₓ, vᵧ, v } = getImplicitForm1Exact(ps1);
+function getCoeffsBez1Bez2ExactAnyBitlength(ps1: number[][], ps2: number[][]) {
+    const { vₓ, vᵧ, v } = getImplicitForm1ExactAnyBitlength(ps1);
 
-    const [[c2,c1,c0],[d2,d1,d0]] = getXY(ps2);
+    const [[c2,c1,c0],[d2,d1,d0]] = getXYExactAnyBitlength2(ps2);
 
 
     // a2*v_x + b2*v_y
     //const v2 = c2*vₓ + d2*vᵧ;
-    const p1 = tp(c2,vₓ);   // vₓ is a double => error free
-    const p2 = tp(d2,vᵧ);   // vᵧ is a double => error free
-    const v2 = qaq(p1,p2);  // 48-bit aligned => error free
+    const p1 = epr(c2,vₓ);
+    const p2 = epr(d2,vᵧ);
+    const v2 = fes(p1,p2);
 
     // a1*v_x + b1*v_y
     //const v1 = c1*vₓ + d1*vᵧ;
-    const p3 = tp(c1,vₓ);   // vₓ is a double => error free
-    const p4 = tp(d1,vᵧ);   // vᵧ is a double => error free
-    const v1 = qaq(p3,p4);  // 48-bit aligned => error free
+    const p3 = epr(c1,vₓ);
+    const p4 = epr(d1,vᵧ);
+    const v1 = fes(p3,p4);
 
     // a0*v_x + b0*v_y + v_0
     //const v0 = c0*vₓ + d0*vᵧ + v;
-    const p5 = tp(c0,vₓ);   // vₓ is a double => error free
-    const p6 = tp(d0,vᵧ);   // vᵧ is a double => error free
-    const p7 = qaq(p5,p6);  // 48-bit aligned => error free
-    const v0 = qaq(p7,v);   // 48-bit aligned => error free
+    const p5 = sce(c0,vₓ);
+    const p6 = sce(d0,vᵧ);
+    const p7 = fes(p5,p6);
+    const v0 = fes(p7,v);
 
 
     return [v2, v1, v0];
 }
 
 
-export { getCoeffsBez1Bez2Exact }
+export { getCoeffsBez1Bez2ExactAnyBitlength }

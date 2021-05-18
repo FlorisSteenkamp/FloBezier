@@ -1,4 +1,3 @@
-
 import { getImplicitForm1Exact } from "../../../../implicit-form/exact/get-implicit-form1-exact";
 import { getXY } from "../../../../to-power-basis/get-xy";
 import { twoProduct, ddAddDd } from "double-double";

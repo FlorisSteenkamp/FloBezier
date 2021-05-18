@@ -1,16 +1,17 @@
-import { getImplicitForm2Exact } from "../../../../implicit-form/exact/get-implicit-form2-exact";
-import { twoProduct, scaleExpansion2, expansionProduct, fastExpansionSum, eMultBy2 } from "big-float-ts";
-import { ddAddDd, ddMultBy2 } from 'double-double';
-import { getXY } from "../../../../to-power-basis/get-xy";
+import { getImplicitForm2ExactAnyBitlength } from "../../../../implicit-form/exact/get-implicit-form2-exact-any-bitlength";
+import { getXYExactAnyBitlength2 } from "../../../../to-power-basis/any-bitlength/exact/get-xy-exact-any-bitlength";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const qaq = ddAddDd;
-const qm2 = ddMultBy2;
+import { 
+    twoProduct, expansionProduct, fastExpansionSum, scaleExpansion2, 
+    eMultBy2
+} from "big-float-ts";
+
+const tp  = twoProduct;    // error -> 0
 const sce = scaleExpansion2;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
 const em2 = eMultBy2;
-const tp = twoProduct;
 
 
 /**
@@ -35,33 +36,33 @@ const tp = twoProduct;
  * 
  * @doc mdx
  */
-function getCoeffsBez2Bez2Exact(ps1: number[][], ps2: number[][]) {
-    const { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = getImplicitForm2Exact(ps1);
+function getCoeffsBez2Bez2ExactAnyBitlength(ps1: number[][], ps2: number[][]) {
+    const { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = getImplicitForm2ExactAnyBitlength(ps1);
 
-    const [[c2,c1,c0],[d2,d1,d0]] = getXY(ps2);
+    const [[c2,c1,c0],[d2,d1,d0]] = getXYExactAnyBitlength2(ps2);
 
 
     const c0c0 = tp(c0,c0);
-    const c0c1 = tp(c0,c1);
-    const c0c2 = tp(c0,c2);
+    const c0c1 = sce(c0,c1);
+    const c0c2 = sce(c0,c2);
     const c0d0 = tp(c0,d0);
-    const c0d1 = tp(c0,d1);
-    const c0d2 = tp(c0,d2);
-    const c1c1 = tp(c1,c1);
-    const c1c2 = tp(c1,c2);
-    const c1d0 = tp(c1,d0);
-    const c1d1 = tp(c1,d1);
-    const c1d2 = tp(c1,d2);
-    const c2d1 = tp(c2,d1);
-    const c2c2 = tp(c2,c2);    
-    const c2d0 = tp(c2,d0);
-    const c2d2 = tp(c2,d2);
+    const c0d1 = sce(c0,d1);
+    const c0d2 = sce(c0,d2);
+    const c1c1 = epr(c1,c1);
+    const c1c2 = epr(c1,c2);
+    const c1d0 = sce(d0,c1);
+    const c1d1 = epr(c1,d1);
+    const c1d2 = epr(c1,d2);
+    const c2d1 = epr(c2,d1);
+    const c2c2 = epr(c2,c2);    
+    const c2d0 = sce(d0,c2);
+    const c2d2 = epr(c2,d2);
     const d0d0 = tp(d0,d0);
-    const d0d1 = tp(d0,d1);
-    const d0d2 = tp(d0,d2);
-    const d1d1 = tp(d1,d1);
-    const d1d2 = tp(d1,d2);
-    const d2d2 = tp(d2,d2);
+    const d0d1 = sce(d0,d1);
+    const d0d2 = sce(d0,d2);
+    const d1d1 = epr(d1,d1);
+    const d1d2 = epr(d1,d2);
+    const d2d2 = epr(d2,d2);
 
 
     // a2**2*v_xx + a2*b2*v_xy + b2**2*v_yy
@@ -82,7 +83,7 @@ function getCoeffsBez2Bez2Exact(ps1: number[][], ps2: number[][]) {
     //    ((c1*d2) + (c2*d1))*vₓᵧ;
     const p5 = epr(c1c2,vₓₓ);
     const p6 = epr(d1d2,vᵧᵧ);
-    const p7 = qaq(c1d2,c2d1);  // 48-bit aligned => error free
+    const p7 = fes(c1d2,c2d1);  // 48-bit aligned => error free
     const p8 = epr(p7,vₓᵧ);
     const p9 = em2(fes(p5,p6));
     const v3 = fes(p9,p8);
@@ -97,15 +98,15 @@ function getCoeffsBez2Bez2Exact(ps1: number[][], ps2: number[][]) {
     //    ((c0*d2) + (c1*d1) + (c2*d0))*vₓᵧ +
     //    c2*vₓ  +          
     //    d2*vᵧ;
-    const pa = qaq(qm2(c0c2),c1c1);  // 48-bit aligned => error free
-    const pb = qaq(qm2(d0d2),d1d1);  // 48-bit aligned => error free
-    const pc = qaq(c0d2,c1d1);  // 48-bit aligned => error free
-    const pd = qaq(pc,c2d0);  // 48-bit aligned => error free
+    const pa = fes(em2(c0c2),c1c1);  // 48-bit aligned => error free
+    const pb = fes(em2(d0d2),d1d1);  // 48-bit aligned => error free
+    const pc = fes(c0d2,c1d1);  // 48-bit aligned => error free
+    const pd = fes(pc,c2d0);  // 48-bit aligned => error free
     const pe = epr(pa,vₓₓ);
     const pf = epr(pb,vᵧᵧ);
     const pg = epr(pd,vₓᵧ);
-    const ph = sce(c2,vₓ);
-    const pi = sce(d2,vᵧ);
+    const ph = epr(c2,vₓ);
+    const pi = epr(d2,vᵧ);
     const pj = fes(pe,pf);
     const pk = fes(pj,pg);
     const pl = fes(ph,pi);
@@ -121,11 +122,11 @@ function getCoeffsBez2Bez2Exact(ps1: number[][], ps2: number[][]) {
     //    d1*vᵧ;
     const pm = epr(c0c1,vₓₓ);
     const pn = epr(d0d1,vᵧᵧ);
-    const po = qaq(c0d1,c1d0);  // 48-bit aligned => error free
+    const po = fes(c0d1,c1d0);  // 48-bit aligned => error free
     const pp = epr(po,vₓᵧ);
     const pq = em2(fes(pm,pn));
-    const pr = sce(c1,vₓ);
-    const ps = sce(d1,vᵧ);
+    const pr = epr(c1,vₓ);
+    const ps = epr(d1,vᵧ);
     const pt = fes(pq,pp);
     const pu = fes(pr,ps);
     const v1 = fes(pt,pu);
@@ -155,4 +156,4 @@ function getCoeffsBez2Bez2Exact(ps1: number[][], ps2: number[][]) {
 }
 
 
-export { getCoeffsBez2Bez2Exact }
+export { getCoeffsBez2Bez2ExactAnyBitlength }

@@ -1,8 +1,6 @@
-import { twoProduct, ddDiffDd, twoDiff, ddMultDouble2, ddAddDd, ddAddDouble } from 'double-double';
+import { twoDiff, ddMultDouble2, ddAddDd, ddAddDouble } from 'double-double';
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const tp  = twoProduct;     // error -> 0
-const qdq = ddDiffDd;       // error -> 3*γ²
 const td =  twoDiff;        // error -> 0
 const qmd = ddMultDouble2;  // error -> 3*u²
 const qaq = ddAddDd;

@@ -1,10 +1,29 @@
 import { 
     bezierBezierIntersection, closestPointOnBezierPrecise, evaluate, 
-    getCoeffsBez1Bez1Exact, getCoeffsBez1Bez2Exact, getCoeffsBez1Bez3Exact, 
-    getCoeffsBez2Bez1Exact, getCoeffsBez2Bez2Exact, getCoeffsBez2Bez3Exact, 
-    getCoeffsBez3Bez1Exact, getCoeffsBez3Bez2Exact, getCoeffsBez3Bez3Exact, 
+    getCoeffsBez1Bez1ExactAnyBitlength,
+    getCoeffsBez1Bez2ExactAnyBitlength, 
+    getCoeffsBez1Bez3ExactAnyBitlength, 
+    getCoeffsBez2Bez1ExactAnyBitlength, 
+    getCoeffsBez2Bez2ExactAnyBitlength, 
+    getCoeffsBez2Bez3ExactAnyBitlength, 
+    getCoeffsBez3Bez1ExactAnyBitlength, 
+    getCoeffsBez3Bez2ExactAnyBitlength, 
+    getCoeffsBez3Bez3ExactAnyBitlength, 
+    getCoeffsBez1Bez1Exact,
+    getCoeffsBez1Bez2Exact, 
+    getCoeffsBez1Bez3Exact, 
+    getCoeffsBez2Bez1Exact, 
+    getCoeffsBez2Bez2Exact, 
+    getCoeffsBez2Bez3Exact, 
+    getCoeffsBez3Bez1Exact, 
+    getCoeffsBez3Bez2Exact, 
+    getCoeffsBez3Bez3Exact, 
     getCoeffsBez3Bez3InclError, 
-    getIntervalBox, getOtherTs, intersectBoxes, X 
+    getIntervalBox, getOtherTs, intersectBoxes, X,
+    bezier3Intersection,
+    getControlPointBox as _getControlPointBox,
+    areBoxesIntersecting,
+    getBoundingBoxTight as _getBoundingBoxTight
 } from '../src/index';
 //import { performance } from 'perf_hooks';
 import { toGrid } from '../test/helpers/to-grid';
@@ -50,6 +69,9 @@ import { distanceBetween } from 'flo-vector2d';
 import { operators as bigFloatOperators } from "big-float-ts";
 
 const { eSign } = bigFloatOperators;
+
+const getControlPointBox = _getControlPointBox;
+const getBoundingBoxTight = _getBoundingBoxTight;
 
 
 const abs = Math.abs;
@@ -120,6 +142,11 @@ const coeffFunctionsExact = [
 ];
 
 
+const coeffFunctionsExactAnyBitlength = [
+    [getCoeffsBez1Bez1ExactAnyBitlength, getCoeffsBez1Bez2ExactAnyBitlength, getCoeffsBez1Bez3ExactAnyBitlength],
+    [getCoeffsBez2Bez1ExactAnyBitlength, getCoeffsBez2Bez2ExactAnyBitlength, getCoeffsBez2Bez3ExactAnyBitlength],
+    [getCoeffsBez3Bez1ExactAnyBitlength, getCoeffsBez3Bez2ExactAnyBitlength, getCoeffsBez3Bez3ExactAnyBitlength]
+];
 
 
 function getCoeffs2(
@@ -208,9 +235,22 @@ function drawIntersections(xs: X[][]) {
         const br = tc(unsquashp(untransp(x0.box[1])));
         //dot_(tc(unsquashp(untransp(p))));
         box_([tl,br]);
-        console.log(tl,br)
+        //console.log(tl,br)
         dot_(tl);
         dot_(br);
+    });
+}
+
+
+function drawIntersectionsGeo(ts: number[], ps: number[][]) {
+    //if (!ris) { return; }
+    //ris.map(t => dot_1(tc(evaluate(ps2, mid(t)))));
+
+    ts.map(t => {
+        const _p = evaluate(ps, t);
+        const p = tc(unsquashp(untransp(_p)));
+
+        dot_(p);
     });
 }
 
@@ -284,7 +324,7 @@ function getPss(order: 0|1|2|3) {
         //const ps = [[rx(),ry()],[rx(),ry()],[rx(),ry()],[rx(),ry()]];
 
         //let curve: paper.Curve;
-        /*
+        
         let curve: any;
         if (order_ === 1) {
             curve = new paper.Curve(
@@ -310,7 +350,7 @@ function getPss(order: 0|1|2|3) {
         }
         
         curves.push(curve);
-        */
+        
 
         if (i === 1) {
             drawBeziers(pss[0], pss[1]);
@@ -319,6 +359,9 @@ function getPss(order: 0|1|2|3) {
 
     return { pss, curves };
 }
+
+
+const areBoxesIntersecting_ = areBoxesIntersecting(closed);
 
 
 function test() {
@@ -334,37 +377,10 @@ function test() {
     //const { pss, curves } = getPss(1);  // linear
     //const { pss, curves } = getPss(2);  // quadratic
     //const { pss, curves } = getPss(3);  // cubic
-    const { pss, curves } = getPss(0);  // a mix
+    const { pss, curves } = getPss(3);  // a mix
 
     //console.log(pss)
 
-    /*
-    const rx = randOnGridX_;
-    const ry = () => trans(randOnGridY_());
-
-    //let curves: paper.Curve[] = [];
-    let curves: any[] = [];
-    let pss: number[][][] = [];
-    //let pss = [];
-    for (let i=0; i<num+1; i++) {
-        const ps = [[rx(),ry()],[rx(),ry()],[rx(),ry()],[rx(),ry()]];
-
-        const curve = new paper.Curve(
-            new paper.Point(ps[0][0], ps[0][1]),
-            new paper.Point(ps[1][0] - ps[0][0], ps[1][1] - ps[0][1]),
-            new paper.Point(ps[2][0] - ps[3][0], ps[2][1] - ps[3][1]),
-            new paper.Point(ps[3][0], ps[3][1])
-        );
-
-        pss.push(ps);
-        curves.push(curve);
-
-        if (i === 1) {
-            drawBeziers(pss[0], pss[1]);
-        }
-    }
-    */
-    
     /*
     let total0 = 0;
     //---- Naive ----//
@@ -391,6 +407,7 @@ function test() {
 
 
     //---- Native ----//
+    /*
     let totalNative = 0;
     const dsNative: number[] = [];
     let timingNative: number;
@@ -399,10 +416,24 @@ function test() {
         for (let i=0; i<num; i++) {
             const ps1 = pss[i];
             const ps2 = pss[i+1];
+
+            //const b1 = getControlPointBox(ps1);
+            //const b2 = getControlPointBox(ps2);
+            //if (!areBoxesIntersecting_(b1,b2)) {
+            //    //console.log('cc')
+            //    continue;
+            //}
+            //const b1 = getBoundingBoxTight(ps1);
+            //const b2 = getBoundingBoxTight(ps2);
+            //if (!doConvexPolygonsIntersect(b1,b2,true)) {
+            //    //console.log('cc')
+            //    continue;
+            //}
+
             const rs = bezierBezierIntersection2(ps1, ps2);
 
             const xs = getOtherTs(ps1, ps2, rs);
-            if (!xs) { continue; }
+            if (!xs) { continue; } 
 
             //if (ts.length) { total1++ }
             totalNative += xs.length;
@@ -411,22 +442,74 @@ function test() {
                 //console.log()
                 drawIntersections(xs);
             }
-            for (const x of xs) {
-                const box = x[0].box;
-                const px = (box[1][0] + box[0][0])/2;
-                const py = (box[1][1] + box[0][1])/2;
-                const p = [px,py];
-                const bp = closestPointOnBezierPrecise(ps2, p);
-                const d = distanceBetween(p, bp.p);
-                dsNative.push(d);
-            }
+            //for (const x of xs) {
+            //    const box = x[0].box;
+            //    const px = (box[1][0] + box[0][0])/2;
+            //    const py = (box[1][1] + box[0][1])/2;
+            //    const p = [px,py];
+            //    const bp = closestPointOnBezierPrecise(ps2, p);
+            //    const d = distanceBetween(p, bp.p);
+            //    dsNative.push(d);
+            //}
         }
         timingNative = performance.now() - timeStart;
     }
+    */
+
+    //---- Geo ----//
+    let totalGeo = 0;
+    const dsGeo: number[] = [];
+    let timingGeo: number;
+    let filtered = 0;
+    let drawn = false;
+    
+    {
+        const timeStart = performance.now();
+        for (let i=0; i<num; i++) {
+            const ps1 = pss[i];
+            const ps2 = pss[i+1];
+
+            //const b1 = getControlPointBox(ps1);
+            //const b2 = getControlPointBox(ps2);
+            //if (!areBoxesIntersecting_(b1,b2)) {
+            //    filtered++;
+            //    continue;
+            //}
+            //const b1 = getBoundingBoxTight(ps1);
+            //const b2 = getBoundingBoxTight(ps2);
+            //if (!doConvexPolygonsIntersect(b1,b2,true)) {
+            //    filtered++;
+            //    continue;
+            //}
+
+            const ts = bezier3Intersection(ps1, ps2, 1e-10);
+
+            totalGeo += ts.length;
+
+            //if (showGeoXs && i < 1) {
+            //if (!drawn && ts.length > 0) {
+            if (i < 1) {
+                drawn = true;
+                drawIntersectionsGeo(ts, ps1);
+            }
+            for (const t of ts) {
+                //const p = evaluate(ps1, tPair[0]);
+                //console.log(t)
+
+                if (t === undefined) { continue; }
+
+                //const p = evaluate(ps1, t);
+                //const bp = closestPointOnBezierPrecise(ps2, p);
+                //const d = distanceBetween(p, bp.p);
+                //dsGeo.push(d);
+            }
+        }
+        timingGeo = performance.now() - timeStart;
+    }
+    console.log(filtered)
 
 
     //---- Paper.js ----//
-    /*
     let totalPaper = 0;
     const dsPaper: number[] = [];
     let timingPaper: number;
@@ -439,68 +522,111 @@ function test() {
             //if (ts.length) { total2++ }
             totalPaper += ts.length;
 
-            //if (i < 1) {
-                for (const t of ts) {
-                    const p = [t.point.x, t.point.y];
-                    const bp = closestPointOnBezierPrecise(pss[i+1], p);
-                    const d = distanceBetween(p, bp.p);
-                    //console.log(d);
-                    dsPaper.push(d);
-                }                
-            //}
+            for (const t of ts) {
+                //const p = [t.point.x, t.point.y];
+                //const bp = closestPointOnBezierPrecise(pss[i+1], p);
+                //const d = distanceBetween(p, bp.p);
+                //dsPaper.push(d);
+            }
         }
         timingPaper = performance.now() - timeStart;
     }
 
     ///////////////////////////////
-    let sumPaper = 0;
-    let maxPaper = 0;
-    for (const d of dsPaper) {
-        sumPaper += d;
-        if (d > maxPaper) { maxPaper = d; }
+    if (dsPaper.length !== 0) {
+        let sumPaper = 0;
+        let maxPaper = 0;
+        for (const d of dsPaper) {
+            sumPaper += d;
+            if (d > maxPaper) { maxPaper = d; }
+        }
+        const meanPaper = sumPaper / totalPaper;
+        let sumSquaredDiffsPaper = 0;
+        for (let i=0; i<totalPaper; i++) {
+            sumSquaredDiffsPaper += (meanPaper - dsPaper[i])**2;
+        }
+        const stdDevPaper = Math.sqrt(sumSquaredDiffsPaper / totalPaper);
+        //console.log(dsPaper);
+        console.log('');
+        console.log('-------------------------');
+        console.log('paper');
+        console.log('-------------------------');
+        console.log('millis: ' + timingPaper.toFixed(3));
+        console.log('xs: ' + totalPaper);
+        console.log('max: ' + maxPaper);
+        console.log('max/eps: ' + maxPaper/Number.EPSILON);
+        console.log('mean: ' + meanPaper);
+        console.log('stdDev: ' + stdDevPaper);
+    } else {
+        console.log('-------------------------');
+        console.log('paper');
+        console.log('-------------------------');
+        console.log('millis: ' + timingPaper.toFixed(3));
     }
-    const meanPaper = sumPaper / totalPaper;
-    let sumSquaredDiffsPaper = 0;
-    for (let i=0; i<totalPaper; i++) {
-        sumSquaredDiffsPaper += (meanPaper - dsPaper[i])**2;
+
+    ///////////////////////////////
+    /*
+    if (dsNative.length !== 0) {
+        let sumNative = 0;
+        let maxNative = 0;
+        for (const d of dsNative) {
+            sumNative += d;
+            if (d > maxNative) { maxNative = d; }
+        }
+        const meanNative = sumNative / totalNative;
+        let sumSquaredDiffsNative = 0;
+        for (let i=0; i<totalNative; i++) {
+            sumSquaredDiffsNative += (meanNative - dsNative[i])**2;
+        }
+        const stdDevNative = Math.sqrt(sumSquaredDiffsNative / totalNative);
+
+        console.log('-------------------------');
+        console.log('native');
+        console.log('-------------------------');
+        console.log('millis: ' + timingNative.toFixed(3));
+        console.log('xs: ' + totalNative)
+        console.log('max: ' + maxNative);
+        console.log('max/eps: ' + maxNative/Number.EPSILON);
+        console.log('mean: ' + meanNative);
+        console.log('stdDev: ' + stdDevNative);
+    } else {
+        console.log('-------------------------');
+        console.log('native');
+        console.log('-------------------------');
+        console.log('millis: ' + timingNative.toFixed(3));        
     }
-    const stdDevPaper = Math.sqrt(sumSquaredDiffsPaper / totalPaper);
-    //console.log(dsPaper);
-    console.log('');
-    console.log('-------------------------');
-    console.log('paper');
-    console.log('-------------------------');
-    console.log('millis: ' + timingPaper.toFixed(3));
-    console.log('xs: ' + totalPaper);
-    console.log('max: ' + maxPaper);
-    console.log('max/eps: ' + maxPaper/Number.EPSILON);
-    console.log('mean: ' + meanPaper);
-    console.log('stdDev: ' + stdDevPaper);
     */
 
     ///////////////////////////////
-    let sumNative = 0;
-    let maxNative = 0;
-    for (const d of dsNative) {
-        sumNative += d;
-        if (d > maxNative) { maxNative = d; }
-    }
-    const meanNative = sumNative / totalNative;
-    let sumSquaredDiffsNative = 0;
-    for (let i=0; i<totalNative; i++) {
-        sumSquaredDiffsNative += (meanNative - dsNative[i])**2;
-    }
-    const stdDevNative = Math.sqrt(sumSquaredDiffsNative / totalNative);
+    if (dsGeo.length !== 0) {
+        let sumGeo = 0;
+        let maxGeo = 0;
+        for (const d of dsGeo) {
+            sumGeo += d;
+            if (d > maxGeo) { maxGeo = d; }
+        }
+        const meanGeo = sumGeo / totalGeo;
+        let sumSquaredDiffsGeo = 0;
+        for (let i=0; i<totalGeo; i++) {
+            sumSquaredDiffsGeo += (meanGeo - dsGeo[i])**2;
+        }
+        const stdDevGeo = Math.sqrt(sumSquaredDiffsGeo / totalGeo);
 
-    console.log('-------------------------');
-    console.log('native');
-    console.log('-------------------------');
-    console.log('millis: ' + timingNative.toFixed(3));
-    console.log('xs: ' + totalNative)
-    console.log('max: ' + maxNative);
-    console.log('max/eps: ' + maxNative/Number.EPSILON);
-    console.log('mean: ' + meanNative);
-    console.log('stdDev: ' + stdDevNative);
+        console.log('-------------------------');
+        console.log('Geo');
+        console.log('-------------------------');
+        console.log('millis: ' + timingGeo.toFixed(3));
+        console.log('xs: ' + totalGeo)
+        console.log('max: ' + maxGeo);
+        console.log('max/eps: ' + maxGeo/Number.EPSILON);
+        console.log('mean: ' + meanGeo);
+        console.log('stdDev: ' + stdDevGeo);
+    } else {
+        console.log('-------------------------');
+        console.log('Geo');
+        console.log('-------------------------');
+        console.log('millis: ' + timingGeo.toFixed(3));
+    }
 }
 
 
@@ -517,7 +643,7 @@ function getCoeffs(
     const { coeffs, errBound } = coeffFunctionsDdAnyBitlength[ps1.length-2][ps2.length-2](ps1, ps2);
     
 
-    const getPExact = () => coeffFunctionsExact[ps1.length-2][ps2.length-2](ps1, ps2);
+    const getPExactAnyBitlength = () => coeffFunctionsExactAnyBitlength[ps1.length-2][ps2.length-2](ps1, ps2);
 
     // check if all coefficients are zero, 
     // i.e. the two curves are possibly in the same k-family
@@ -530,7 +656,7 @@ function getCoeffs(
     let sameKFamily = false;
     if (possiblySameKFamily) {
         sameKFamily = true;
-        const poly = getPExact();
+        const poly = getPExactAnyBitlength();
         for (let i=0; i<poly.length; i++) {
             if (eSign(poly[i]) !== 0) {
                 sameKFamily = false; break;
@@ -542,7 +668,7 @@ function getCoeffs(
         return undefined;
     }
 
-    return { coeffs, errBound, getPExact };
+    return { coeffs, errBound, getPExact: getPExactAnyBitlength };
 }
 
 
@@ -732,3 +858,79 @@ test();
 
 
 
+
+
+/**
+ * Adapted from https://stackoverflow.com/a/12414951/2010061.
+ * Returns true if there is any intersection between the 2 polygons, false otherwise
+ * Uses the Separating Axis Theorem.
+ *
+ * @param polygonA an array of connected points that form a closed polygon
+ * @param polygonB an array of connected points that form a closed polygon
+ * @param closed set to false to compare open polygons (not containing their 
+ * boundary) or true to compare closed polygons
+ */
+ function doConvexPolygonsIntersect(
+        polygonA: number[][], 
+        polygonB: number[][],
+        closed: boolean) {
+
+    // for each polygon, look at each edge of the polygon, and determine if 
+    // it separates the two shapes
+    for (let polygon of [polygonA, polygonB]) {
+        let len = polygon.length;
+        for (let i=1; i<len+1; i++) {
+
+            // grab 2 consecutive vertices to create an edge
+            let p1 = polygon[i - 1];
+            let p2 = polygon[i % len];
+
+            // find the vector perpendicular to this edge
+            let normal = [p2[1] - p1[1], p1[0] - p2[0]];
+
+            let minA = Number.POSITIVE_INFINITY;
+            let maxA = Number.NEGATIVE_INFINITY;
+            // for each vertex in the first shape, project it onto the line 
+            // perpendicular to the edge and keep track of the min and max of 
+            // these values
+            for (let k=0; k<polygonA.length; k++) {
+                let projected = 
+                    normal[0] * polygonA[k][0] + 
+                    normal[1] * polygonA[k][1];
+                    
+                if (projected < minA) { minA = projected; }
+                if (projected > maxA) { maxA = projected; }
+            }
+
+            // for each vertex in the second shape, project it onto the line 
+            // perpendicular to the edge and keep track of the min and max of 
+            // these values
+            let minB = Number.POSITIVE_INFINITY;
+            let maxB = Number.NEGATIVE_INFINITY;
+            for (let k=0; k<polygonB.length; k++) {
+                let projected = 
+                    normal[0] * polygonB[k][0] + 
+                    normal[1] * polygonB[k][1];
+
+                if (projected < minB) { minB = projected; }
+                if (projected > maxB) { maxB = projected; }
+            }
+
+            // if there is no overlap between the projections, the edge we are 
+            // looking at separates the two polygons, and we know there is no 
+            // overlap
+            if (closed) {
+                if (maxA < minB || maxB < minA) {
+                    return false;
+                }
+            } 
+            if (!closed) {
+                if (maxA <= minB || maxB <= minA) {
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
+}
