@@ -8,7 +8,7 @@ import { getXY } from '../../to-power-basis/get-xy';
  * e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
  * 
  * * the implicit form is given by: `vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0`
- * * **precondition:** the coordinates of the given bezier must be 47-bit aligned
+ * * **precondition:** none
  * * intermediate calculations are done in **double** precision and this is
  * reflected in the output error bound (which is approximately 
  * `n * Number.EPSILON * the condition number`, where roughly `1 < n < 100` and 

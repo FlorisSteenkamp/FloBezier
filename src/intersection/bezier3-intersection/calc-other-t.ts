@@ -93,9 +93,10 @@ function calcOtherT(
     
     let d = squaredDistanceBetween(p, p_.p);
     let maxTolerance = 4 * 16 * 24*Number.EPSILON * max;
+    //let maxTolerance = 1024 * 1024 * (4 * 16 * 24*Number.EPSILON * max);
     //console.log(Math.sqrt(d), maxTolerance);
     if (d > maxTolerance*maxTolerance) {
-        return undefined;
+        //return undefined;
     }
 
     return p_.t;

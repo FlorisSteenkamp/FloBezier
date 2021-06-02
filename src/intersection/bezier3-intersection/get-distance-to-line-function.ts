@@ -1,58 +1,79 @@
+import { ddAddDd, ddDiffDd, ddMultDd, twoDiff, twoProduct, twoSum } from "double-double";
+
+const td = twoDiff;
+const tp = twoProduct;
+const ts = twoSum;
+const qaq = ddAddDd;
+const qdq = ddDiffDd;
+const qmq = ddMultDd;
+
 
 /**
- * @private
- * @param l 
+ * @param pS any point on the line
+ * @param pS any other point on the line
+ * 
+ * @internal
  */
 function getDistanceToLineFunction(
-		p1: number[],
-		p2: number[]): (p: number[]) => number {
+		pS: number[],
+		pE: number[]): (p: number[]) => number {
 
-	//let [a,b,c] = getLineEquation(l);
-	//let [[x1,y1],[x2,y2]] = l;
-	//const le = getLineEquation(l);
-	//const a = le[0];
-	//const b = le[1];
-	//const c = le[2];	
+	//console.log(pS,pE);
+	const xS = pS[0];
+	const yS = pS[1];
+	const xE = pE[0];
+	const yE = pE[1];
+	const s = yS - yE;
+	const t = xE - xS;
+	const u = xS*yE - xE*yS;
 
-	//unrolled
-	const x1 = p1[0];
-	const y1 = p1[1];
-	const x2 = p2[0];
-	const y2 = p2[1];
-	let s = y1-y2;
-	let t = x2-x1;
-	let u = x1*y2 - x2*y1;
-
-	let d = Math.sqrt(s**2 + t**2);
+	const d = Math.sqrt(s**2 + t**2);
 
 	const ss = s/d;
 	const tt = t/d;
 	const uu = u/d;
 
 	return function(p: number[]) {
+		//console.log(s,t,u,d)
 		return ss*p[0] + tt*p[1] + uu;
 	}
-
-	//return [s/d, t/d, u/d];
 }
 
 
 /**
- * Get the implicit line equation from two 2d points in the form f(x,y) := ax + by + c = 0
- * returned as the array [a,b,c].
- * @param l A line given by two points, e.g. [[2,0],[3,3]]
+ * just to test
+ * @param pS 
+ * @param pE 
+ * @returns 
  */
-function getLineEquation(l: number[][]): number[] {
-	let [[x1,y1],[x2,y2]] = l;
-	
-	let s = y1-y2;
-	let t = x2-x1;
-	let u = x1*y2 - x2*y1;
+function getDistanceToLineFunctionDd(
+		pS: number[],
+		pE: number[]): (p: number[]) => number {
 
-	let d = Math.sqrt(s**2 + t**2);
+	//console.log(pS,pE);
+	const xS = pS[0];
+	const yS = pS[1];
+	const xE = pE[0];
+	const yE = pE[1];
 
-	return [s/d, t/d, u/d];
+	const s = td(yS, yE);
+	const t = td(xE, xS);
+
+	const u = qdq(tp(xS,yE), tp(xE,yS));
+
+	//const d = Math.sqrt(qaq(qmq(s,s), qmq(t,t))[1]);
+	const d = Math.sqrt(ts(s[1]*s[1], t[1]*t[1])[1]);
+
+	const ss = s[1]/d;
+	const tt = t[1]/d;
+	const uu = u[1]/d;
+
+	return function(p: number[]) {
+		//console.log(s,t,u,d)
+		return ss*p[0] + tt*p[1] + uu;
+	}
 }
 
 
-export { getDistanceToLineFunction }
+export { getDistanceToLineFunction, getDistanceToLineFunctionDd }
+//export { getDistanceToLineFunction as getDistanceToLineFunctionDd, getDistanceToLineFunctionDd as getDistanceToLineFunction }

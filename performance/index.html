@@ -11,20 +11,51 @@
 
 <body>
     <style>
-        #some-canvas {
-            border: 1px solid #eee;
+        .some-canvas {
+            border: 5px solid #eee;
             touch-action: none;
             background: black;
             display: block;
+            grid-column: 1 / 3;
+            grid-row: 1 / 2;
+            margin: auto;
+            padding: 0px;
+            margin-bottom: 5px;
+            margin-top: 5px;
+            width: 1280px;
+            height: 768px;
         }
+
+        .tree-svg {
+            width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+
+        #root-div {
+            height: 300px;
+            /*max-height: 300px;*/
+            overflow-y: scroll;
+        }
+       
+
     </style>
+
+    <div id="root-div">
+    </div>
     <canvas 
-        id='some-canvas'
-        width='640px'
-        height='384px'
-    ></canvas>
+        id='canvas1' 
+        class='some-canvas' 
+        width='1280px' 
+        height='768px' 
+    >
+    </canvas>
+    
+    <!--
     <button id='clickme'>
         click me!
     </button>
+    -->
 </body>
 </html>

@@ -10,10 +10,11 @@
         "target": "es2020",
         "declaration": false,
         "noEmitOnError": true,
-        "sourceMap": false
+        "sourceMap": false,
+        "jsx": "react"
     },
     "include": [
-        "bezier-bezier-intersection.ts"
+        "src/bezier-bezier-intersection.ts"
         //"test/**/*.ts"
     ],
     "exclude": [

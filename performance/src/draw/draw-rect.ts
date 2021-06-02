@@ -16,8 +16,8 @@ function drawRect(
 
         ctx.strokeStyle = strokeStyle;
         ctx.fillStyle = fillStyle;
-        ctx.beginPath();
 
+        ctx.beginPath();
         ctx.moveTo(x1,y1);
         ctx.lineTo(x1,y2);
         ctx.lineTo(x2,y2);

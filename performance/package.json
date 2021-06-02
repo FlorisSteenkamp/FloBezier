@@ -7,5 +7,13 @@
     "private": false,
     "scripts": {
         "start": "ts-node bezier-bezier-intersection.ts"
+    },
+    "dependencies": {
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2"
+    },
+    "devDependencies": {
+        "@types/react": "^17.0.8",
+        "@types/react-dom": "^17.0.5"
     }
 }

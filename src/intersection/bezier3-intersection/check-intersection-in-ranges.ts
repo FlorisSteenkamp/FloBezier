@@ -1,14 +1,12 @@
 import { Iteration } from './iteration';
-
 import { center as _center } from "./center";
-import { getDistanceToLineFunction as _getDistanceToLineFunction } from "./get-distance-to-line-function";
+import { getDistanceToLineFunction as _getDistanceToLineFunction, getDistanceToLineFunctionDd } from "./get-distance-to-line-function";
 import { geoClip as _geoClip } from './clip/geo-clip';
-import { fromTo as _fromToVect } from 'flo-vector2d';
+import { fromTo as _fromToVect, toLength, toUnitVector } from 'flo-vector2d';
 import { len as _len } from 'flo-vector2d';
 import { translate as _translate } from 'flo-vector2d';
-//import { splitAt } from "../../transformation/split-merge-clone/split-at";
-//import { fromTo } from "../../transformation/split-merge-clone/from-to";
 import { splitCubicAt2 as _splitCubicAt2, fromTo2 as _fromTo2 } from './split-at-test';
+import { __debug__ } from './debug';
 
 
 const center = _center;
@@ -21,94 +19,118 @@ const len = _len;
 const translate = _translate;
 
 
-// Helper function
+/** our guarantee in accuracy */
+//const δ = 2**(-33);  // drop ~ 20 of the 53 floating point bits; ~ 33 left
+//const δ = 2**(-20);
+
+
+let qq = 0;
+
+/**
+ * Helper function
+ * @param F the bezier curve that should be fat line bounded
+ * @param G the bezier curve that should be geometric interval bounded
+ */
 function checkIntersectionInRanges(
-        Q_: number[][], 
-        P_: number[][], 
-        qRange: number[], 
-        pRange: number[], 
-        idx: number,
-        δ: number): { newIterations: Iteration[], t1: number } {
+        //iter: Iteration): { newIterations: Iteration[], t1: number } {
+        iter: Iteration): Iteration[] {
 
-    let cidx = idx === 0 ? 1 : 0; // Counter flip-flop index
+    qq++; // TODO - remove
 
+    //let { F, G, fRange, gRange } = iter;
+    const F = iter.F;
+    const G = iter.G;
+    const fRange = iter.fRange;
+    const gRange = iter.gRange;
+
+    const ftMin = fRange[0];
+    const ftMax = fRange[1];
+    const gtMin = gRange[0];
+    const gtMax = gRange[1];
+
+    // TODO - inefficient - initial 2 ranges will always be [0,1]
+    const F_ = fromTo2(F, ftMin, ftMax); 
+    const G_ = fromTo2(G, gtMin, gtMax); 
+
+    if (typeof __debug__ !== 'undefined' && !__debug__.already) {
+        __debug__.currentIter.F_ = F_;
+        __debug__.currentIter.G_ = G_;
+    }
+
+    //----------------------------------------------------------------
+    // TODO - remove later below (unless it might be used for some reason)
     // Move intersection toward the origin to reduce floating point round-off.
+    //const c = center(P_, Q_);
+    //P_ = c[0];
+    //Q_ = c[1];
+    //----------------------------------------------------------------
 
-    //[P_, Q_] = center(P_, Q_);
-
-    // TODO!!!!!!!!!!!!! - fix center!!!! - just removed temp to test max possible speed
-    const c = center(P_, Q_);
-    P_ = c[0];
-    Q_ = c[1];
-
-
-    //console.log(P_.toString());
-    //console.log(Q_.toString());
-
-    let Q0 = Q_[0];
-    let QE = Q_[Q_.length-1]
+    // Q will be fat line bounded. Get start and endpoint of curve
+    // TODO - consider, implement and test the case where `FS` and `QE` are the same point
+    let FS = F_[0];
+    let FE = F_[F_.length-1];
 
     // Get the implict line equation for the line defined by the first and 
     // last control point of Q. This equation gives the distance between any 
     // point and the line.
-    let dQ = getDistanceToLineFunction(Q0, QE);
+    //let dF = getDistanceToLineFunction(FS, FE);
+    let dF = getDistanceToLineFunctionDd(FS, FE);
 
-    // Calculate the distance from the control points of Q to the line 
-    let dMin = 0;
-    let dMax = 0;
-    if (Q_.length === 4) {
-        // Cubic
-        let dQ1 = dQ(Q_[1]);
-        let dQ2 = dQ(Q_[2]);
+    // Signed distances to cubic mid control points
+    let dF1 = dF(F_[1]);
+    let dF2 = dF(F_[2]);
 
-        // Calculate the fat line of Q.
-        let C = (dQ1*dQ2 > 0) ? 3/4 : 4/9;
-        dMin = C * Math.min(0,dQ1,dQ2);
-        dMax = C * Math.max(0,dQ1,dQ2);
-    } else if (Q_.length === 3) {
-        // Quadratic
-        let dQ1 = dQ(Q_[1]);
-        dMin = 0.5 * Math.min(0,dQ1);
-        dMax = 0.5 * Math.max(0,dQ1);
-    } else if (Q_.length === 2) {
-        // Line
-        dMin = dMax = 0;
+    // Calculate the fat line of F.
+    // Calculate the distance from the control points of F to the line.
+    let C = (dF1*dF2 > 0) ? 3/4 : 4/9;
+    //let C = 1;
+    const dMin = C * Math.min(0, dF1, dF2);
+    const dMax = C * Math.max(0, dF1, dF2);
+
+    // Add fatline debug info
+    if (typeof __debug__ !== 'undefined' && !__debug__.already) {
+        __debug__.currentIter.fatline = getFatlineDebugInfo(F_, FS, FE, dMin, dMax);
     }
 
+    let {tMin, tMax} = geoClip(G_, dF, dMin, dMax);
 
-    //if (typeof _bez_debug_ !== 'undefined') {
-    //    _bez_debug_.generated.elems.beziers.push([P_, Q_]);
-    //    _bez_debug_.generated.elems.fatLine.push(
-    //        { l: [Q_[0], Q_[Q_.length-1]], minD: dMin, maxD: dMax }
-    //    );
-    //}
-
-    let {tMin, tMax} = geoClip(P_, dQ, dMin, dMax);
-
+    // TODO - investigate why this is here
     if (tMin === Number.POSITIVE_INFINITY) {
         // No intersection
-        return { newIterations: [], t1: undefined };
+        return [];
     }
 
+    // TODO - investigate doing this maybe only in first 1 or few iterations
     if (tMax - tMin > 0.7) {
-        // First try a fatline perpendicular to the line Q0 - Q3
+    //if (false) {
+        // First try a fatline perpendicular to the prior one
+        let vQ = fromToVect(FS, FE);  // Move [FS, Q3] to the origin
+        let vQr = [-vQ[1], vQ[0]];  // Rotate vector by -90 degrees
+        let vQrm3 = translate(vQr, FS);
 
-        // Move [Q0, Q3] to the origin
-        let vQ = fromToVect(Q0, QE);
-        // Rotate vector by -90 degrees
-        let vQr = [-vQ[1], vQ[0]];
-        let l = (len(vQ) / 2) * 2;
-        // Move back to middle of Q0 and Q3
-        let vQrm0 = [(Q0[0] + QE[0])/2, (Q0[1] + QE[1])/2];
-        let vQrm3 = translate(vQr, vQrm0);
+        let dQ_ = getDistanceToLineFunction(FS, vQrm3);
+        
+        // Signed distances to other 3 cubic control points
+        let dF1_ = dQ_(F_[1]);
+        let dF2_ = dQ_(F_[2]);
+        let dF3_ = dQ_(F_[3]);
+
+        // TODO - investigate the zeros
+        //const dMin_ = Math.min(dF1_, dF2_, dF3_);
+        //const dMax_ = Math.max(dF1_, dF2_, dF3_);
+        const dMin_ = Math.min(0, dF1_, dF2_, dF3_);
+        const dMax_ = Math.max(0, dF1_, dF2_, dF3_);
     
-        let dQ_ = getDistanceToLineFunction(vQrm0, vQrm3);
+        // Add fatline debug info
+        if (typeof __debug__ !== 'undefined' && !__debug__.already) {
+            __debug__.currentIter.fatlinePerp = getFatlineDebugInfo(F_, FS, vQrm3, dMin_, dMax_);
+        }
 
-        let {tMin: tMin_, tMax: tMax_} = geoClip(P_, dQ_, -l, +l);
+        let {tMin: tMin_, tMax: tMax_} = geoClip(G_, dQ_, dMin_, dMax_);
 
         if (tMin === Number.POSITIVE_INFINITY) {
             // No intersection
-            return { newIterations: [], t1: undefined };
+            return [];
         }
 
         tMax = Math.min(tMax, tMax_);
@@ -121,86 +143,129 @@ function checkIntersectionInRanges(
     // two halfs seperately.
     if (tMax - tMin > 0.7) {
         // Some length measure
-        let pSpan = pRange[1] - pRange[0];
-        let qSpan = qRange[1] - qRange[0];
-
-        //let pq = coincident(P_,Q_);
-        //if (pq !== undefined) {
-        //    return { newIterations: [], t1: undefined };
-        //}
+        let gSpan = gtMax - gtMin;
+        let fSpan = ftMax - ftMin;
 
         // Split the curve in half
-        if (pSpan <= qSpan) {
-            cidx = idx;
-            [P_, Q_] = [Q_, P_];
-            [pRange, qRange] = [qRange, pRange];
+        if (gSpan >= fSpan) {
+            const iter1 = {
+                F, G, fRange, 
+                gRange: [gtMin, gtMin + gSpan/2],
+            };
+            const iter2 = { 
+                F, G, fRange, 
+                gRange: [gtMin + gSpan/2, gtMax],
+            };
+
+            if (typeof __debug__ !== 'undefined' && !__debug__.already) {
+                __debug__.iters.push(iter1);
+                __debug__.iters.push(iter2);
+                __debug__.currentIter.children = [iter1, iter2];
+            }
+
+            return [iter1, iter2];
         }
 
-        // Update t range.
-        let span = pRange[1] - pRange[0];
-        
-        // 1st half
-        let tMinA = pRange[0];
-        let tMaxA = tMinA + span/2;
-
-        // 2nd half
-        let tMinB = tMaxA;
-        let tMaxB = pRange[1];
-
-        //let [A, B] = splitAtPrecise(P_, 0.5);
-        //let [A, B] = splitAt(P_, 0.5);
-        let [A, B] = splitCubicAt2(P_, 0.5);
-
-        return {  
-            newIterations: [{ 
-                ps1: A, 
-                ps2: Q_, 
-                tRange1: [tMinA, tMaxA], 
-                tRange2: qRange, 
-                idx: cidx 
-            }, { 
-                ps1: B, 
-                ps2: Q_, 
-                tRange1: [tMinB, tMaxB], 
-                tRange2: qRange, 
-                idx: cidx 
-            }],
-            t1: undefined
+        const iter1 = {
+            F,
+            G, 
+            fRange: [ftMin, ftMin + fSpan/2], 
+            gRange,
         };
+        const iter2 = { 
+            F,
+            G, 
+            fRange: [ftMin + fSpan/2, ftMax], 
+            gRange,
+        };
+
+        if (typeof __debug__ !== 'undefined' && !__debug__.already) {
+            __debug__.iters.push(iter1);
+            __debug__.iters.push(iter2);
+            __debug__.currentIter.children = [iter1, iter2];
+        }
+        return [iter1, iter2];
     }
 
 
     // Update t range.
-    let span = pRange[1] - pRange[0];
-    let tMin_ = (tMin*span + pRange[0]);
-    let tMax_ = (tMax*span + pRange[0]);
+    //let span = gRange[1] - gRange[0];
 
-    if (Math.abs((tMax - tMin) * span) < δ) {
-        // Accurate enough solution found
-        let t1 = (((tMax + tMin) * span) / 2) + pRange[0];
-        return { newIterations: [], t1 };
-    }
+    //if (Math.abs((tMax - tMin) * span) < δ) {
+    //    // Accurate enough solution found
+    //    let t1 = (((tMax + tMin) * span) / 2) + gtMin;
+    //    return { newIterations: [], t1 };
+    //}
+    //console.log(tMax - tMin)
 
-    // Clip
-    //P_ = fromToPrecise(P_)(tMin, tMax);
-    //P_ = fromTo(P_)(tMin, tMax);
-    P_ = fromTo2(P_)(tMin, tMax);
+    let gtSpan = gtMax - gtMin;
+
+    const tMin_ = tMin*gtSpan + gtMin;
+    const tMax_ = tMax*gtSpan + gtMin;
 
     // Swap Q and P and iterate.
-    return {  
-        newIterations: [{ 
-            ps1: P_, 
-            ps2: Q_, 
-            tRange1: [tMin_, tMax_], 
-            tRange2: qRange, 
-            idx: cidx 
-        }],
-        t1: undefined
-    };
+    const newIter = { 
+        F: G,
+        G: F, 
+        fRange: [tMin_, tMax_],
+        gRange: fRange, 
+    }
+
+    //if (Math.abs(tMax_ - tMin_) < δ) {
+    //    // Accurate enough solution found
+    //    //let t1 = (tMax_ + tMin_) / 2;
+    //    return [newIter];
+    //}
+
+
+    // Clip
+    //P_ = fromTo2(P_,tMin, tMax);
+
+    //let tMin_ = (gtMin + tMin*span);
+    //let tMax_ = (gtMin + tMax*span);
+
+    // Swap Q and P and iterate.
+
+    //const newIter = { 
+    //    F: G,
+    //    G: F, 
+    //    fRange: [tMin_, tMax_],
+    //    gRange: fRange, 
+    //}
+
+    if (typeof __debug__ !== 'undefined' && !__debug__.already) {
+        __debug__.iters.push(newIter);
+        __debug__.currentIter.children = [newIter];
+    }
+
+    return [newIter];
 }
 
 
+function getFatlineDebugInfo(
+        F: number[][],
+        FS: number[], 
+        FE: number[],
+        dMin: number,
+        dMax: number) {
 
+    let vF = fromToVect(FS, FE); // Move [FS, FE] to the origin
+    let vFr = [-vF[1], vF[0]]; // Rotate vector by -90 degrees
+    let offsetMin = toLength(vFr, dMin);
+    let offsetMax = toLength(vFr, dMax);
+
+    //if (qq >= 8) {
+    //    console.log(F);
+    //    console.log(dMin, dMax)
+    //}
+
+    let psMin = [translate(FS,offsetMin), translate(FE,offsetMin)];
+    let psMax = [translate(FS,offsetMax), translate(FE,offsetMax)];
+    return {
+        psBase: [FS, FE],
+        psMin, psMax
+    };
+}
 
 
 

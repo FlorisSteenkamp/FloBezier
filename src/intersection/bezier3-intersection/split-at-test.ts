@@ -75,31 +75,29 @@ function splitCubicAt2(
  * @doc
  */
 
- function fromTo2(ps: number[][]) {
-	return (t1: number, t2: number) => {
-		const reverse = t1 > t2;
-		if (t1 > t2) { [t1,t2] = [t2,t1]; }
+ function fromTo2(ps: number[][], t1: number, t2: number) {
+    const reverse = t1 > t2;
+    if (t1 > t2) { [t1,t2] = [t2,t1]; }
 
-		let ps_: number[][];
+    let ps_: number[][];
 
-		if (t1 === 0 && t2 === 1) { 
-			ps_ = ps; 
-		} else if (t1 === 0) { 
-			ps_ = splitCubicAt2(ps, t2)[0];
-		} else if (t2 === 1) { 
-			ps_ = splitCubicAt2(ps, t1)[1]; 
-		} else if (t1 === t2) {
-			// Degenerate case
-			const p = evalDeCasteljau(ps, t1);
-			if (ps.length === 2) { return [p,p]; }
-			if (ps.length === 3) { return [p,p,p]; }
-			if (ps.length === 4) { return [p,p,p,p]; }
-		} else {
-			ps_ = splitCubicAt2(splitCubicAt2(ps, t1)[1], (t2-t1)/(1-t1))[0];
-		}
+    if (t1 === 0 && t2 === 1) { 
+        ps_ = ps; 
+    } else if (t1 === 0) { 
+        ps_ = splitCubicAt2(ps, t2)[0];
+    } else if (t2 === 1) { 
+        ps_ = splitCubicAt2(ps, t1)[1]; 
+    } else if (t1 === t2) {
+        // Degenerate case
+        const p = evalDeCasteljau(ps, t1);
+        if (ps.length === 2) { return [p,p]; }
+        if (ps.length === 3) { return [p,p,p]; }
+        if (ps.length === 4) { return [p,p,p,p]; }
+    } else {
+        ps_ = splitCubicAt2(splitCubicAt2(ps, t1)[1], (t2-t1)/(1-t1))[0];
+    }
 
-		return reverse ? ps_.slice().reverse() : ps_;
-	}
+    return reverse ? ps_.slice().reverse() : ps_;
 }
 
 

@@ -175,6 +175,9 @@ import { evaluate } from './local-properties-at-t/t-to-xy/evaluate';
 import { evaluateDdxy } from './local-properties-at-t/t-to-ddxy/evaluate-ddxy';
 import { evaluateDxy } from './local-properties-at-t/t-to-dxy/evaluate-dxy';
 
+import { getXYDdAnyBitlength3 } from './to-power-basis/any-bitlength/double-double/get-xy-dd-any-bitlength';
+import { getImplicitForm3DdAnyBitlength } from './implicit-form/double-double/get-implicit-form3-dd-any-bitlength';
+
 
 /** 
  * Returns the convex hull of a bezier's control points. This hull bounds the 
@@ -428,7 +431,10 @@ export {
 	// TODO - remove - just for testing
 	bezier3Intersection,
 
-	getControlPointBox
+	getControlPointBox,
+
+	getXYDdAnyBitlength3,
+	getImplicitForm3DdAnyBitlength,
 }
 
 export { 

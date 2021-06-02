@@ -2,10 +2,10 @@ const path = require('path');
 
 
 module.exports = {
-    entry: './bezier-bezier-intersection.ts',
-    //mode: 'development',
+    entry: './src/bezier-bezier-intersection.ts',
+    mode: 'development',
     //devtool: undefined,
-    mode: 'production',
+    //mode: 'production',
     module: {
         rules: [
             {

@@ -4,9 +4,10 @@ import { drawCircle } from './draw-circle';
 function drawBezier(
         ctx: CanvasRenderingContext2D,
         strokeStyle: string,
-        fillStyle: string) {
+        fillStyle: string,
+        dotRadius: number) {
 
-    const dot_ = drawCircle(ctx, 4, strokeStyle, strokeStyle);
+    const dot_ = drawCircle(ctx, dotRadius, strokeStyle, strokeStyle);
 
     return (
             ps: number[][],
@@ -22,7 +23,7 @@ function drawBezier(
 
             ctx.strokeStyle = strokeStyle;
             ctx.fillStyle = fillStyle;
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(x0,y0);
             ctx.bezierCurveTo(x1, y1, x2, y2, x3, y3);
