@@ -1,123 +1,194 @@
-//import { allRoots } from 'flo-poly';
+import { toString } from '../../..';
+import type { __Debug__ } from '../debug';
 import { toHybridQuadratic as _toHybridQuadratic } from './to-hybrid-quadratic';
-import { __debug__ } from '../debug';
 
+declare var __debug__: __Debug__;
 
 const toHybridQuadratic = _toHybridQuadratic;
 
 const min = Math.min;
 const max = Math.max;
+const abs = Math.abs;
+const eps = Number.EPSILON;
+const u = eps/2;
+const onemin = 1 - eps;
+const onemax = 1 + eps;
 
+
+const noIntersection: undefined = undefined;
+const noClip: number[] = [0,1];
 
 /**
- * @param G the bezier curve to be geo clipped
- * @param dF distance to fat line's zero line
+ * Performs geometric clipping of the given bezier curve and returns the new
+ * minimum and maximum `t` parameter values.
+ * 
+ * * helper function to the geometric interval bezier-bezier intersection 
+ * algorithm
+ * * the returned min and max `t` values has the following guarantees:
+ *   * `Number.EPSILON | t`
+ *   * `0 <= t <= 1`
+ * 
+ * @param G the bezier curve to be geo clipped - coordinate error bounds are 
+ * assumed to have counters of `[[<6>,<6>], [<6>,<6>], [<10>,<10>], [<11>,<11>]]`
+ * @param dF function to calculate a min and max distance to the fat line's 'baseline'
  * @param dMin fat line min signed distance
  * @param dMax fat line max signed distance
+ * 
+ * @internal
  */
 function geoClip(
-        G: number[][], 
-        dF: (p: number[]) => number, 
+        G: { ps: number[][], _ps: number[][] }, 
+        dF: (p: number[], _p: number[]) => { dMin: number; dMax: number; },
         dMin: number, 
-        dMax: number) {
+        dMax: number): number[] | undefined {
 
-    let hq = toHybridQuadratic(G);
-    /** distance (from line) to hybrid quadratic (and cubic) first control point */
-    let dH0   = dF(hq[0]);
-    /** distance (from line) to hybrid quadratic (and cubic) last control point */
-    let dH2   = dF(hq[3]);
-    /** distance (from line) to hybrid quadratic's moving control point start */
-    let dH10  = dF(hq[1]);
-    /** distance (from line) to hybrid quadratic's moving control point end */
-    let dH11  = dF(hq[2]);
+    const _hq_ = toHybridQuadratic(G);
+    // estimated hybrid coordinates
+    const hq = _hq_.hq;     
+    // hybrid coordinate error bounds with error counters of <8> and <12> for
+    // the two points respectively (both x and y coordinates have same error
+    // counters)
+    const _hq = _hq_._hq;
+    
+    // estimated bezier control points
+    const Gps = G.ps;
+    // coordinate error bounds are assumed to have counters 
+    // of `[[<6>,<6>], [<6>,<6>], [<10>,<10>], [<11>,<11>]]`
+    const G_ps = G._ps;
 
-    let dHmin = min(dH10, dH11);
-    let dHmax = max(dH10, dH11);
+    /** min/max distance (from line) to hybrid quadratic (and cubic) first control point */
+    const dH0   = dF(Gps[0], G_ps[0]);
+    /** min/max distance (from line) to hybrid quadratic (and cubic) last control point */
+    const dH2   = dF(Gps[3], G_ps[3]);
+    /** min/max distance (from line) to hybrid quadratic's moving control point start */
+    const dH10  = dF(hq[0], _hq[0]);
+    /** min/max distance (from line) to hybrid quadratic's moving control point end */
+    const dH11  = dF(hq[1], _hq[1]);
+
+    const dH1min = min(dH10.dMin, dH11.dMin);
+    const dH1max = max(dH10.dMax, dH11.dMax);
 
     if (typeof __debug__ !== 'undefined' && !__debug__.already) {
-        //if (__debug__.tree.name !== 'r') {
-            __debug__.currentIter.hq = hq;
-        //}
+        const currentIter = __debug__.currentIter;
+        // just for drawing purposes (not perfectle accurate)
+        currentIter.hq = [G.ps[0], ...hq, G.ps[3]];
+        if (currentIter.geo) {
+            // we already did the first geoclip - assume this to be the perpendicular clip
+            currentIter.geoPerp = { dH0, dH10, dH11, dH2, dMin, dMax };
+        } else {
+            currentIter.geo = { dH0, dH10, dH11, dH2, dMin, dMax };
+        }
     }
 
-    const a = dH0 - 2*dHmin + dH2;
-    const b = -2*dH0 + 2*dHmin;
+    const dH0Min = dH0.dMin;
+    const dH0Max = dH0.dMax;
+    const dH2Min = dH2.dMin;
+    const dH2Max = dH2.dMax;
 
-    const d = dH0 - 2*dHmax + dH2;
-    const e = -2*dH0 + 2*dHmax;
+    //--------------------------------------------------------------------------
+    // see the paper at https://scholarsarchive.byu.edu/cgi/viewcontent.cgi?referer=&httpsredir=1&article=2206&context=etd)
+    // After writing eq. (3.16) and (3.17) in power basis (by simply multiplying 
+    // out and collecting terms) and taking error bounds into account:
+    //--------------------------------------------------------------------------
+    
+    /** the quadratic term coefficient of the *lower* Bernstein basis polynomial */
+    const a = dH0Min - 2*dH1min + dH2Min;  // t^2 
+    /** the linear term coefficient of the *lower* Bernstein basis polynomial */
+    const b = -2*(dH0Min - dH1min);  // t^1
+    /** 
+     * the constant term coefficient of the *lower* Bernstein basis polynomial's
+     * intersection with the lower fat line (dMin)
+     */ 
+    const c1 = dH0Min - dMin;  // t^0 - dMin
+    /** 
+     * the constant term coefficient of the *lower* Bernstein basis polynomial's
+     * intersection with the upper fat line (dMax)
+     */ 
+    const c2 = dH0Min - dMax;  // t^0 - dMax
 
-    //console.log(hq);
-    //console.log(dH0, dH2, dH10, dH11);
-    //console.log(a,b,d,e,dH0);
 
-    let rootsMinMin = quadraticRoots(a, b, dH0 - dMin);
-    let rootsMinMax = quadraticRoots(a, b, dH0 - dMax);
-    let rootsMaxMin = quadraticRoots(d, e, dH0 - dMin);
-    let rootsMaxMax = quadraticRoots(d, e, dH0 - dMax);
+    /** the quadratic term coefficient of the *upper* Bernstein basis polynomial */
+    const d = dH0Max - 2*dH1max + dH2Max;
+    /** the linear term coefficient of the *upper* Bernstein basis polynomial */
+    const e = -2*(dH0Max - dH1max);
+    /** 
+     * the constant term coefficient of the *upper* Bernstein basis polynomial's
+     * intersection with the *lower* fat line (dMin)
+     */ 
+    const f1 = dH0Max - dMin;
+    /** 
+     * the constant term coefficient of the *upper* Bernstein basis polynomial's
+     * intersection with the *upper* fat line (dMax)
+     */ 
+    const f2 = dH0Max - dMax;
+    //--------------------------------------------------------------------------
+
     
     let tMin = Number.POSITIVE_INFINITY;
     let tMax = Number.NEGATIVE_INFINITY;
 
-    for (let i=0; i<rootsMinMin.length; i++) {
-        const r = rootsMinMin[i];
-        if (r >= 0 && r <= 1) {
-            if (r < tMin) { tMin = r; }
-            if (r > tMax) { tMax = r; }
-        }
-        //if (r < 0) { tMin = 0; } if (r > 1) { tMax = 1; }
+    /** *lower* Bernstein *lower* fatline roots */
+    let rootsMinBMinF = quadraticRoots(a, b, c1);
+    /** *lower* Bernstein *upper* fatline roots */
+    let rootsMinBMaxF = quadraticRoots(a, b, c2);
+    /** *upper* Bernstein *lower* fatline roots */
+    let rootsMaxBMinF = quadraticRoots(d, e, f1);
+    /** *upper* Bernstein *upper* fatline roots */
+    let rootsMaxBMaxF = quadraticRoots(d, e, f2);
+
+    // if there are an infinite number of roots, i.e. if the quadratic is
+    // really the zero polynomial (of negative infinite degree)
+    if (rootsMinBMinF === undefined || rootsMinBMaxF === undefined || 
+        rootsMaxBMinF === undefined || rootsMaxBMaxF === undefined) { 
+        // no clipping could happen
+        return noClip; 
+    }
+    
+   
+    for (let i=0; i<rootsMinBMinF.length; i++) {
+        const r = rootsMinBMinF[i];
+        if (r < tMin) { tMin = r; }
+        if (r > tMax) { tMax = r; }
     }
 
-    for (let i=0; i<rootsMinMax.length; i++) {
-        const r = rootsMinMax[i];
-        if (r >= 0 && r <= 1) {
-            if (r < tMin) { tMin = r; }
-            if (r > tMax) { tMax = r; }
-        }
+    for (let i=0; i<rootsMinBMaxF.length; i++) {
+        const r = rootsMinBMaxF[i];
+        if (r < tMin) { tMin = r; }
+        if (r > tMax) { tMax = r; }
     }
 
-    for (let i=0; i<rootsMaxMin.length; i++) {
-        const r = rootsMaxMin[i];
-        if (r >= 0 && r <= 1) {
-            if (r < tMin) { tMin = r; }
-            if (r > tMax) { tMax = r; }
-        }
+    for (let i=0; i<rootsMaxBMinF.length; i++) {
+        const r = rootsMaxBMinF[i];
+        if (r < tMin) { tMin = r; }
+        if (r > tMax) { tMax = r; }
     }
 
-    for (let i=0; i<rootsMaxMax.length; i++) {
-        const r = rootsMaxMax[i];
-        if (r >= 0 && r <= 1) {
-            if (r < tMin) { tMin = r; }
-            if (r > tMax) { tMax = r; }
-        }
+    for (let i=0; i<rootsMaxBMaxF.length; i++) {
+        const r = rootsMaxBMaxF[i];
+        if (r < tMin) { tMin = r; }
+        if (r > tMax) { tMax = r; }
     }
 
-    if (dH0 >= dMin && dH0 <= dMax) {
+   
+    if (dH0Max >= dMin && dH0Min <= dMax) {
         tMin = 0;
     }
-    if (dH2 >= dMin && dH2 <= dMax) {
+    if (dH2Max >= dMin && dH2Min <= dMax) { 
         tMax = 1;
     }
 
-    if (tMin < 0) { tMin = 0; } 
-    if (tMax > 1) { tMax = 1; }
+    if (tMin === Number.POSITIVE_INFINITY) {
+        // will have here also: `tMax === Number.NEGATIVE_INFINITY`
+        return noIntersection;
+    }
 
-
-    // ADDED!!!! CHECK CORRECTNESS!!!!
-    //if (tMin === Number.POSITIVE_INFINITY) {
-    //    tMin = 0;
-    //}
-    //if (tMax === Number.NEGATIVE_INFINITY) {
-    //    tMax = 1;
-    //}
-
-
-    return {tMin, tMax};
+    return [tMin, tMax];
 }
 
 
 /**
- * Floating-point-stably calculates and returns the quadratic roots of 
- * the given quadratic polynomial.
+ * Floating-point-stably calculates and returns the (ordered) quadratic roots of 
+ * the given quadratic polynomial in [0,1].
  * 
  * * **precondition:** the input polynomial must be quadratic (given as an array
  * of exactly 3 values with the first value *unequal* to zero)
@@ -133,7 +204,7 @@ function geoClip(
  * 
  * @doc
  */
- function quadraticRoots(
+function quadraticRoots(
         a: number, 
         b: number, 
         c: number): number[] {
@@ -144,7 +215,6 @@ function geoClip(
             if (c === 0) {
                 // degenerate zero polynomial (degree -infinity polynomial)
                 // infinite number of roots
-                // TODO - handle this case when this function is called
                 return undefined;
             }
 
@@ -153,50 +223,133 @@ function geoClip(
         }
 
         // degenerate linear
-        return [-c/b];
+        //return [-c/b];
+
+        const r = -c/b;
+        const E = abs(r*u);
+        const Emin = r-E;
+        const Emax = r+E;
+        if (Emax < 0 || Emin > 1) { return []; }
+
+        if (Emin < 0 && Emax > 0) { return [0,Emax]; }
+        if (Emin < 1 && Emax > 1) { return [Emin,1]; }
+
+        // we return the root interval pairs inline to account for error
+        return [Emin, Emax];  
     }
 
-	const _D = b*b - 4*a*c;
+    if (c === 0) {
+        const r = -b/a;
+        const E = abs(r*u);
+        const Emin = r-E;
+        const Emax = r+E;
+        if (Emax < 0 || Emin > 1) { return []; }
+
+        if (Emin < 0 && Emax > 0) { return [0,Emax]; }
+        if (Emin < 1 && Emax > 1) { return [0,Emin,1]; }
+
+        // we return the root interval pairs inline to account for error
+        return [Emin, Emax];  
+    }
+
+    const D1 = b*b;  // <1>D1 (error counters)
+    const D2 = 4*a*c;  // <1>D2
+	const D = D1 - D2;
+    // <2>D <= D1 - D2;  // <2>(<1>D1 + <1>D2)
+    const _D = D1 + abs(D2);
+    const D_ = 2*u*_D;
 	
-	if (_D < 0) {
-		// no real roots
+	if (D + D_ < 0) {
+		// no real roots possible
 		return []; 
 	}
-	
-	if (_D === 0) {
-		return [-b / (2*a)];
+
+    // at this point `D + D_ >= 0`
+
+	if (D + D_ === 0) {
+        const r = -b/(2*a);
+        const E = abs(r*u);  // single division error
+
+        const Emin = r-E;
+        const Emax = r+E;
+        if (Emax < 0 || Emin > 1) { return []; }
+
+        if (Emin < 0 && Emax > 0) { return [0,Emax]; }
+        if (Emin < 1 && Emax > 1) { return [Emin,1]; }
+
+        // we return the root interval pairs inline to account for error
+        return [Emin, Emax];  
 	}
-	
-	const D = Math.sqrt(_D);
-	
-	return b >= 0 ? [
-            (-b - D) / (2*a), 
-            (2*c) / (-b - D)
-        ] : [
-            (2*c) / (-b + D), 
-            (-b + D) / (2*a)
-        ];
+
+    // at this point `D + D_ > 0`
+
+    const Dmin = D - D_ < 0 ? 0 : D - D_;
+    const DDmin = Math.sqrt(Dmin)*(1 - eps);
+    const DDmax = Math.sqrt(D + D_)*(1 + eps);
+
+    // at this point DDMax > 0
+
+    // at this point `DDmax > 0` and `DDmin >= 0`
+    let numerMaxAbs: number;
+    let numerMinAbs: number;
+    if (b >= 0) {
+        numerMaxAbs = -b - DDmax;
+        numerMinAbs = -b - DDmin;
+    } else {
+        numerMinAbs = -b + DDmin;
+        numerMaxAbs = -b + DDmax;
+    }
+    const a2 = 2*a;
+    const c2 = 2*c;
+
+    //const r1 = numerMin / a2;
+    //const r2 = c2 / numerMin;
+
+    // at this point `numerMin` and `numerMax` have the same sign (or numerMin is zero)
+    let r1min: number;
+    let r1max: number;
+    let r2min: number;
+    let r2max: number;
+    if (numerMaxAbs*a2 >= 0) {
+        // same signs - `r1min >= 0` and `r1max > 0`
+        r1min = (numerMaxAbs/a2)*(1 - eps);
+        r1max = (numerMinAbs/a2)*(1 + eps);
+    } else {
+        // opposite signs - `r1min <= 0` and `r1max < 0`
+        r1min = (numerMaxAbs/a2)*(1 + eps);
+        r1max = (numerMinAbs/a2)*(1 - eps);
+    }
+    if (numerMaxAbs*c2 > 0) {
+        // same signs - `r2min > 0` and `r2Max >= 0`
+        r2min = (c2/numerMaxAbs)*(1 - eps);
+        // TODO - check if below can be a `NaN`
+        r2max = (c2/numerMinAbs)*(1 + eps);  // could be +-inf
+    } else if (numerMaxAbs*c2 < 0) {
+        // opposite signs - `r2min < 0` and `r2Max <= 0`
+        // TODO - check if below can be a `NaN`
+        r2min = (c2/numerMinAbs)*(1 + eps);  // could be +-inf 
+        r2max = (c2/numerMaxAbs)*(1 - eps);
+    }
+
+    const rs: number[] = [];
+    if (r1max < 0 || r1min > 1) {
+        // root is outside of range
+    } else {
+        // we return the root interval pairs inline
+        // at this stage r1min might be (slightly) < 0 and r1max > 1
+        rs.push(r1min < 0 ? 0 : r1min, r1max > 1 ? 1 : r1max);
+    }
+
+    if (r2max < 0 || r2min > 1) {
+        // root is outside of range
+    } else {
+        // we return the root interval pairs inline
+        // at this stage r2min might be (slightly) < 0 and r2max > 1
+        rs.push(r2min < 0 ? 0 : r2min, r2max > 1 ? 1 : r2max);
+    }
+
+    return rs;  // not ordered
 }
 
 
 export { geoClip }
-
-
-
-// unrolled toHybridQuadratic(P);
-    //const p0 = P[0];
-    //const p1 = P[1];
-    //const p2 = P[2];
-    //const p3 = P[3];
-    //const x0 = p0[0];
-    //const y0 = p0[1];
-    //const x1 = p1[0];
-    //const y1 = p1[1];
-    //const x2 = p2[0];
-    //const y2 = p2[1];
-    //const x3 = p3[0];
-    //const y3 = p3[1];
-    //let dH0   = dQ([x0,y0]);
-    //let dH2   = dQ([x3,y3]);
-    //let dH10  = dQ([(3*x1 - x0)/2, (3*y1 - y0)/2]);
-    //let dH11  = dQ([(3*x2 - x3)/2, (3*y2 - y3)/2]);

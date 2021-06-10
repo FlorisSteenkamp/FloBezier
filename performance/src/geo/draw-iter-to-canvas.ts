@@ -1,13 +1,13 @@
 import { toString } from "../../../src";
 import { Fatline, IterationExtras } from "../../../src/intersection/bezier3-intersection/debug";
 import { Iteration } from "../../../src/intersection/bezier3-intersection/iteration";
-import { draw, ctx } from '../draw-stuff';
+import { draw } from '../draw-stuff';
 import { tcFatline } from './tc-fatline';
 import { tcGeo } from './tc-geo';
 import { tcPs } from './tc-ps';
 
 
-function drawIterToCanvas(
+function drawIterClipsToCanvas(
         canvas: HTMLCanvasElement,
         iter: Iteration & IterationExtras) {
 
@@ -23,8 +23,8 @@ function drawIterToCanvas(
     const { F_: F, G_: G, fatline, fatlinePerp, hq } = iter;
 
     const { minX, maxX, minY, maxY } = getExtents([
-        ...F, 
-        ...G, 
+        ...F.ps, 
+        ...G.ps, 
         ...getFatlinePs(fatline),
         ...(fatlinePerp ? getFatlinePs(fatlinePerp) : []),
         ...(hq as number[][])
@@ -64,7 +64,7 @@ function drawIterToCanvas(
     const X = maxX - minX;
     const Y = maxY - minY;
     const scaleX = 2**-(Math.trunc(Math.log2(X)));
-    const scaleY = 2**-(Math.trunc(Math.log2(Y)));
+    const scaleY = 2**-(Math.trunc(Math.log2(Y)) + 0);
        
     // translate for clarity
     function trans(p: number[]) {
@@ -77,8 +77,8 @@ function drawIterToCanvas(
 
     //////////////////
     beziers_(
-        tcPs(transformPs_(F)), 
-        tcPs(transformPs_(G))
+        tcPs(transformPs_(F.ps)), 
+        tcPs(transformPs_(G.ps))
     );
     fatline_(tcFatline(transformFatline_(fatline)));
     //console.log(scaleX, scaleY, minX, minY);
@@ -94,13 +94,30 @@ function drawIterToCanvas(
 }
 
 
+function drawIterHybridPolyToCanvas(
+        canvas: HTMLCanvasElement,
+        iter: Iteration & IterationExtras) {
+
+    if (!canvas) { return; }
+
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, 1280, 768);
+    const { fatline_, geo_, beziers_, hybridPoly_ } = draw(ctx);
+
+    if (!iter.F_ || !iter.G_) { return; }
+
+    const { geo, geoPerp } = iter;
+
+    hybridPoly_(geo);
+}
+
+
+
 function transformPs(f: (p: number[]) => number[]) {
     return (ps: number[][]) => {
         return ps.map(p => f(p));
     }
 }
-
-type Geo = [[number, number], [number, number], [number, number], [number, number]]
 
 function transformFatline(f: (p: number[]) => number[]) {
     return (fatline: Fatline): Fatline => {
@@ -113,12 +130,12 @@ function transformFatline(f: (p: number[]) => number[]) {
 }
 
 function transformGeo(f: (p: number[]) => number[]) {
-    return (geo: Geo): Geo => {
+    return (geo: number[][]): number[][] => {
         return [
-            f(geo[0]) as [number, number],
-            f(geo[1]) as [number, number],
-            f(geo[2]) as [number, number],
-            f(geo[3]) as [number, number]
+            f(geo[0]),
+            f(geo[1]),
+            f(geo[2]),
+            f(geo[3])
         ]
     }
 }
@@ -152,4 +169,4 @@ function getExtents(ps: number[][]) {
 }
 
 
-export { drawIterToCanvas }
+export { drawIterClipsToCanvas, drawIterHybridPolyToCanvas }

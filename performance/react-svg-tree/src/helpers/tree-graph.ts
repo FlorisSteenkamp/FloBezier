@@ -204,7 +204,7 @@ function yCoord<T>(tree: TreeGraph<T>, node: T): number {
     return pos ? pos.y : 0;
 }
 
-function getCoordinates<T>(tree: TreeGraph<T>, node: T): [number, number] {
+function getCoordinates<T>(tree: TreeGraph<T>, node: T): number[] {
     return [xCoord(tree, node), yCoord(tree, node)];
 }
 

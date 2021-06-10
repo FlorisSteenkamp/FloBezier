@@ -2,16 +2,9 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import { IterationExtras } from '../../../src/intersection/bezier3-intersection/debug';
 import { Iteration } from '../../../src/intersection/bezier3-intersection/iteration';
-import { NodeProps } from '../../react-svg-tree/src/helpers/node-props';
 import { mapWithParent } from '../../react-svg-tree/src/helpers/tree-graph';
 import { $Tree } from '../../react-svg-tree/src/tree';
-import { drawIterToCanvas } from './draw-iter-to-canvas';
 import { $Node } from './$node';
-
-
-interface Props {
-    vertices: Map<number, number[]>;
-}
 
 
 type TreeNode = Iteration & IterationExtras;

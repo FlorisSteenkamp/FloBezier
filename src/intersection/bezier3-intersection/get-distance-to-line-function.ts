@@ -1,79 +1,72 @@
-import { ddAddDd, ddDiffDd, ddMultDd, twoDiff, twoProduct, twoSum } from "double-double";
+import { ddDiffDd, twoProduct } from "double-double";
 
-const td = twoDiff;
 const tp = twoProduct;
-const ts = twoSum;
-const qaq = ddAddDd;
 const qdq = ddDiffDd;
-const qmq = ddMultDd;
+
+const abs = Math.abs;
+const eps = Number.EPSILON;
+const u = eps/2;
 
 
-/**
- * @param pS any point on the line
- * @param pS any other point on the line
- * 
- * @internal
- */
+/*
 function getDistanceToLineFunction(
 		pS: number[],
 		pE: number[]): (p: number[]) => number {
 
-	//console.log(pS,pE);
 	const xS = pS[0];
 	const yS = pS[1];
 	const xE = pE[0];
 	const yE = pE[1];
-	const s = yS - yE;
-	const t = xE - xS;
-	const u = xS*yE - xE*yS;
 
-	const d = Math.sqrt(s**2 + t**2);
-
-	const ss = s/d;
-	const tt = t/d;
-	const uu = u/d;
+	const s = td(yS, yE)[1];
+	const t = td(xE, xS)[1];
+	const u = qdq(tp(xS,yE), tp(xE,yS))[1];
 
 	return function(p: number[]) {
-		//console.log(s,t,u,d)
-		return ss*p[0] + tt*p[1] + uu;
+		return s*p[0] + t*p[1] + u;
 	}
 }
+*/
 
 
-/**
- * just to test
- * @param pS 
- * @param pE 
- * @returns 
- */
-function getDistanceToLineFunctionDd(
+function getDistanceToLineFunction(
 		pS: number[],
-		pE: number[]): (p: number[]) => number {
+		pE: number[]) {
 
-	//console.log(pS,pE);
 	const xS = pS[0];
 	const yS = pS[1];
 	const xE = pE[0];
 	const yE = pE[1];
 
-	const s = td(yS, yE);
-	const t = td(xE, xS);
+	// note: td(yS, yE) nearly always has low double === 0 -> could potentially be taken advantage of in future
+	const s = yS - yE;  // <1>s
+	const t = xE - xS;  // <1>t
+	const v = qdq(tp(xS,yE), tp(xE,yS))[1];  // <1>v
 
-	const u = qdq(tp(xS,yE), tp(xE,yS));
+	const _s = abs(s);
+	const _t = abs(t);
+	const _v = abs(v);
 
-	//const d = Math.sqrt(qaq(qmq(s,s), qmq(t,t))[1]);
-	const d = Math.sqrt(ts(s[1]*s[1], t[1]*t[1])[1]);
+	return function(p: number[], _p: number[]) {
+		// error counter assumed <12> 
+		// (the max of <6>,<6>,<10>,<11> and <12> from other functions)
+		const x = p[0];  // <12>x 
+		const y = p[1];  // <12>y
 
-	const ss = s[1]/d;
-	const tt = t[1]/d;
-	const uu = u[1]/d;
+		//return s*x + t*y + u;
 
-	return function(p: number[]) {
-		//console.log(s,t,u,d)
-		return ss*p[0] + tt*p[1] + uu;
+		const _x = _p[0];
+		const _y = _p[1];
+
+		// assume counter of <11> on all coordinates
+		// TODO - for the moment we assume we can get s, t exact, v has counter of 2
+		const d = s*x + t*y + v;
+		// <14>r <= <16>(<15>(<14>(<1>s*<12>x) + <14>(<1>t*<12>y)) + <1>v)
+		const _d = _s*_x + _t*_y + _v;
+		const E = 16*u*_d;
+
+		return { dMin: d - E, dMax: d + E };
 	}
 }
 
-
-export { getDistanceToLineFunction, getDistanceToLineFunctionDd }
-//export { getDistanceToLineFunction as getDistanceToLineFunctionDd, getDistanceToLineFunctionDd as getDistanceToLineFunction }
+export { getDistanceToLineFunction }

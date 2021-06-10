@@ -4,7 +4,7 @@ import { draw, ctx } from '../draw-stuff';
 import { unsquashp, untransp } from '../affine';
 import { updDs } from '../upd-ds';
 import { showResults } from '../show-results';
-import { __debug__ } from '../../../src/intersection/bezier3-intersection/debug';
+import { __Debug__ } from '../../../src/intersection/bezier3-intersection/debug';
 import { renderTree } from './render-tree';
 
 
@@ -12,6 +12,10 @@ const { tc, num, timingOnly, showGeoXs, showGeoIters } = settings;
 //const { dot_, fatline_, geo_, beziers_ } = draw(ctx);
 
 const abs = Math.abs;
+
+(window as any as { __debug__: Partial<__Debug__> | undefined}).__debug__ = { already: false };
+declare var __debug__: __Debug__;
+
 
 /**
  * 
@@ -43,9 +47,9 @@ function geo(
 
         if (!timingOnly) {
             const xs = xss[i];
-            const ts_ = tss.filter(t => t[0] !== undefined);
+            const tss_ = tss.filter(t => t[0] !== undefined);
 
-            const res = updDs(ds, xs, ts_.map(t => t[0]));
+            const res = updDs(ds, xs, tss_.map(ts => ts[0][0]));
 
             if (!res) {
                 console.log(toString(ps1));
@@ -79,13 +83,13 @@ function createCanvas(pdiv: HTMLDivElement): HTMLCanvasElement {
 
 
 
-function drawIntersectionsGeo(ts: number[][], ps: number[][]) {
+function drawIntersectionsGeo(tss: number[][][], ps: number[][]) {
     //if (!ris) { return; }
     //ris.map(t => dot_1(tc(evaluate(ps2, mid(t)))));
     const { dot_ } = draw(ctx);
 
-    ts.map(t => {
-        const _p = evaluate(ps, t[0]);
+    tss.map(ts => {
+        const _p = evaluate(ps, ts[0][0]);
         const p = tc(unsquashp(untransp(_p)));
 
         dot_(p);

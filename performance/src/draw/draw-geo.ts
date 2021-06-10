@@ -8,7 +8,7 @@ function drawGeo(
 
     const dot_ = drawCircle(ctx, 2, strokeStyle, strokeStyle);
 
-    return (hq: [[number, number], [number, number], [number, number], [number, number]]) => {
+    return (hq: number[][]) => {
         const [[x0,y0], [x11,y11], [x12,y12], [x2,y2]] = hq;
 
         ctx.strokeStyle = strokeStyle;

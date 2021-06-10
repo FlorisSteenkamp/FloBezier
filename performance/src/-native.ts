@@ -1,5 +1,5 @@
 import { allRootsCertified, RootInterval } from "flo-poly";
-import { closestPointOnBezierPrecise, getOtherTs, X } from "../../src/index";
+import { closestPointOnBezierPrecise, getOtherTs, X, isCubicReallyQuad, toQuadraticFromCubic, isLine } from "../../src/index";
 import { settings } from './settings'; 
 import { draw, ctx } from './draw-stuff';
 import { unsquashp, untransp } from './affine';
@@ -123,9 +123,21 @@ function native(
 }
 
 
+// just a quick function - no special cases taken into account
+function toLineFromCubic(ps: number[][]) {
+    return [ps[0], ps[3]];
+}
+
+
 function bezierBezierIntersection2(
         ps1: number[][], 
         ps2: number[][]): RootInterval[] {
+
+    ps1 = isLine(ps1) 
+        ? toLineFromCubic(ps1) 
+        : isCubicReallyQuad(ps1) 
+            ? toQuadraticFromCubic(ps1)
+            : ps1;
 
     let _coeffs = getCoeffs(ps1,ps2);
     if (_coeffs === undefined) { return undefined; }

@@ -47,7 +47,7 @@ function makeLong(ps: number[][]) {
     const E = ps[1];
 
     const v = fromTo(S, E);
-    const vL = toLength(v, 1000);  // make looooong(ish)
+    const vL = toLength(v, 2000);  // make looooong(ish)
 
     const lS = translate(S,vL);
     const lE = translate(S,reverse(vL));
