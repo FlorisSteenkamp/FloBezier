@@ -25,6 +25,9 @@ interface __Debug__ {
 
     /** the current iteration; only used *during* debug info gathering */
     currentIter: Iteration & IterationExtras;
+
+    /** current serial uid number to assign to the next iteration */
+    uid: number;
 }
 
 

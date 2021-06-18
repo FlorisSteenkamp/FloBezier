@@ -20,7 +20,9 @@ const qdq = ddDiffDd;
  * 
  * @doc mdx
  */
-function getImplicitForm1Exact(ps: number[][]) {
+function getImplicitForm1Exact(
+        ps: number[][]): { vₓ: number, vᵧ: number, v: number[] } {
+
     const [[a1,a0], [b1,b0]] = getXY(ps);
 
     const vₓ = -b1;

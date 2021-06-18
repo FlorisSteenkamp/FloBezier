@@ -23,8 +23,8 @@ function randOnGrid(max: number, expMax: number, significantFigures: number) {
 }
 
 describe('intersections', function() {
-    it('it should find intersections fast', test)
-    it('it should find intersections fast', test)
+    //it('it should find intersections fast', test)
+    //it('it should find intersections fast', test)
 });
 
 

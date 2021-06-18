@@ -1,12 +1,14 @@
+import type { ImplicitFormExact1, ImplicitFormExact2 } from '../implicit-form-types';
 import { getXYExactAnyBitlength2 } from '../../to-power-basis/any-bitlength/exact/get-xy-exact-any-bitlength';
+import { getImplicitForm1ExactAnyBitlength, getImplicitForm1ExactAnyBitlengthPb } from './get-implicit-form1-exact-any-bitlength';
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { 
     twoProduct, expansionProduct, scaleExpansion2, 
-    eDiff, eNegativeOf, eMultBy2, 
+    eDiff, eNegativeOf, eMultBy2, eSign, 
 } from "big-float-ts";
+import { eSign as _eSign } from 'big-float-ts';
 
-const tp  = twoProduct;     // error -> 0
 const sce = scaleExpansion2;
 const em2 = eMultBy2;
 const edif = eDiff;
@@ -15,7 +17,8 @@ const eno = eNegativeOf;
 
 
 /**
- * Returns the exact implicit form of the given quadratic bezier curve.
+ * Returns the exact implicit form of the given quadratic bezier curve
+ * or `undefined` if the curve is really a point.
  * 
  * Returned coefficients are subscripted to match their monomial's variables,
  * e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
@@ -28,8 +31,39 @@ const eno = eNegativeOf;
  * 
  * @doc mdx
  */
-function getImplicitForm2ExactAnyBitlength(ps: number[][]) {
-    const [[a2, a1, a0], [b2, b1, b0]] = getXYExactAnyBitlength2(ps);
+function getImplicitForm2ExactAnyBitlength(
+        ps: number[][]): 
+            | Partial<ImplicitFormExact2>
+            | ImplicitFormExact1 {
+
+    return getImplicitForm2ExactAnyBitlengthPb(
+            getXYExactAnyBitlength2(ps)
+    );
+}
+
+
+/**
+ * The power basis version of [[getImplicitForm2ExactAnyBitlength]].
+ * 
+ * @param pspb the power basis representation of a quadratic bezier curve that 
+ * can be found via [[getXYExactAnyBitlength2]]
+ * 
+ * @internal
+ */
+ function getImplicitForm2ExactAnyBitlengthPb(
+        pspb: [
+                [number[], number[], number], 
+                [number[], number[], number]
+            ]):
+                | Partial<ImplicitFormExact2>
+                | ImplicitFormExact1 {
+
+    const [[a2,a1,a0], [b2,b1,b0]] = pspb;
+
+    if (eSign(a2) === 0 && eSign(b2) === 0) {
+        // the input bezier curve is in fact not cubic but has order < 2
+        return getImplicitForm1ExactAnyBitlengthPb([[a1,a0], [b1,b0]]);
+    }
 
     const a2b1 = epr(a2,b1);
     const a1b2 = epr(a1,b2);
@@ -78,9 +112,9 @@ function getImplicitForm2ExactAnyBitlength(ps: number[][]) {
     const w6 = epr(q2,q2);
     const v = edif(w5,w6);
 
+    //console.log({ vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v })
 
     return { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v };
 }
 
-
-export { getImplicitForm2ExactAnyBitlength }
+export { getImplicitForm2ExactAnyBitlength, getImplicitForm2ExactAnyBitlengthPb }

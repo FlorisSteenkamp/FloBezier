@@ -7,9 +7,9 @@ import { allRoots as _allRoots } from './roots/all-roots';
 import { settings } from './settings';
 import { ctx } from './draw-stuff';
 import { getPss } from './get-pss';
-import { native } from './-native';
+import { native } from './native/-native';
 import { geo } from './geo/-geo';
-import { naive } from '../src/-naive';
+import { naive } from './naive/-naive';
 import { X } from '../../src/index';
 import { twoProduct } from 'double-double';
 

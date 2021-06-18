@@ -1,12 +1,15 @@
-import { getImplicitForm1ExactAnyBitlength } from "../../../../implicit-form/exact/get-implicit-form1-exact-any-bitlength";
-import { getXYExactAnyBitlength2 } from "../../../../to-power-basis/any-bitlength/exact/get-xy-exact-any-bitlength";
+import type { ImplicitFormExact1 } from "../../../../implicit-form/implicit-form-types";
+import { getImplicitForm1ExactAnyBitlengthPb } from "../../../../implicit-form/exact/get-implicit-form1-exact-any-bitlength";
+import { getXYExactAnyBitlength1, getXYExactAnyBitlength2 } from "../../../../to-power-basis/any-bitlength/exact/get-xy-exact-any-bitlength";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-import { expansionProduct, fastExpansionSum, scaleExpansion2 } from "big-float-ts";
+import { expansionProduct, fastExpansionSum, scaleExpansion2, eSign as _eSign } from "big-float-ts";
+import { getCoeffsBez1Bez1ExactAnyBitlength } from "./get-coeffs-bez1-bez1-exact-any-bitlength";
 
 const sce = scaleExpansion2;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
+const eSign = _eSign;
 
 
 /**
@@ -32,9 +35,29 @@ const fes = fastExpansionSum;
  * @doc mdx
  */
 function getCoeffsBez1Bez2ExactAnyBitlength(ps1: number[][], ps2: number[][]) {
-    const { vₓ, vᵧ, v } = getImplicitForm1ExactAnyBitlength(ps1);
+    /** ps1 in power bases */
+    const ps1pb = getXYExactAnyBitlength1(ps1);
+        
+    //const [[e1,e0],[f1,f0]] = ps1pb;
+    // if both polynomials' linear terms are exactly zero then it really is a point
+    if (eSign(ps1pb[0][0]) === 0 && eSign(ps1pb[1][0]) === 0) {
+        // the input bezier curve is in fact not a line but has order < 1,
+        // i.e. it is a point
+        // TODO
+        //return getCoeffsBez0Bez3ExactAnyBitlength([ps1[0]], ps2]);
+    }
 
     const [[c2,c1,c0],[d2,d1,d0]] = getXYExactAnyBitlength2(ps2);
+
+    if (eSign(c2) === 0 && eSign(d2) === 0) {
+        // the input bezier curve is in fact not quadratic but has order < 2
+        return getCoeffsBez1Bez1ExactAnyBitlength(ps1, [ps2[0],ps2[2]]);
+    }
+
+    let { vₓ, vᵧ, v } = 
+        // this type coercion is justified since we already checked that the
+        // curve really has order 1
+        getImplicitForm1ExactAnyBitlengthPb(ps1pb) as ImplicitFormExact1;
 
 
     // a2*v_x + b2*v_y
@@ -56,8 +79,14 @@ function getCoeffsBez1Bez2ExactAnyBitlength(ps1: number[][], ps2: number[][]) {
     const p7 = fes(p5,p6);
     const v0 = fes(p7,v);
 
+    const r = [v2, v1, v0];
+    
+    // remove leading zero coefficients
+    //while (r.length > 1 && eSign(r[0]) === 0) {
+    //    r.shift();
+    //}
 
-    return [v2, v1, v0];
+    return r;
 }
 
 

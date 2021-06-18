@@ -1,3 +1,4 @@
+import type { ImplicitFormExact1, ImplicitFormExact2, ImplicitFormExact3 } from "../../../../implicit-form/implicit-form-types";
 import { 
     twoProduct, scaleExpansion2, expansionProduct, fastExpansionSum, 
     eMultBy2 } from "big-float-ts";
@@ -40,7 +41,10 @@ const tp = twoProduct;
  */
 function getCoeffsBez3Bez2Exact(ps1: number[][], ps2: number[][]) {
     const { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
-        getImplicitForm3Exact(ps1);
+        getImplicitForm3Exact(ps1) as
+            & ImplicitFormExact3  // vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ possibly `undefined`
+            & ImplicitFormExact2  // vₓₓ, vₓᵧ, vᵧᵧ possibly `undefined`
+            & { vₓ: number; vᵧ: number; v: number[]; };
 
     const [[c2,c1,c0],[d2,d1,d0]] = getXY(ps2);
 

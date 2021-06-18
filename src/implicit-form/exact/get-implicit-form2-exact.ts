@@ -1,4 +1,6 @@
+import type { ImplicitFormExact2 } from '../implicit-form-types';
 import { expansionProduct, twoProduct, scaleExpansion2, eMultBy2, eDiff } from 'big-float-ts';
+import { eSign as _eSign } from 'big-float-ts';
 import { ddNegativeOf, ddMultBy2, ddDiffDd } from 'double-double';
 import { getXY } from '../../to-power-basis/get-xy';
 
@@ -11,6 +13,7 @@ const qdq = ddDiffDd;      // error -> 3*γ²
 const em2 = eMultBy2;
 const edif = eDiff;
 const epr = expansionProduct;
+const eSign = _eSign;
 
 
 
@@ -28,8 +31,17 @@ const epr = expansionProduct;
  * 
  * @doc mdx
  */
-function getImplicitForm2Exact(ps: number[][]) {
+function getImplicitForm2Exact(
+        ps: number[][]): 
+            | ImplicitFormExact2 
+            | {vₓ: number; vᵧ: number; v: number[]} {
+
     const [[a2, a1, a0], [b2, b1, b0]] = getXY(ps);
+
+    //if (a2 === 0 && b2 === 0) {
+    //    // the input bezier curve is in fact not quadratic but has order < 2
+    //    return getImplicitForm1Exact(ps);
+    //}
 
     const a2b1 = tp(a2,b1);  // error free
     const a1b2 = tp(a1,b2);  // error free

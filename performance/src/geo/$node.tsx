@@ -1,10 +1,8 @@
 import * as React from 'react';
-import { render } from 'react-dom';
 import { IterationExtras } from '../../../src/intersection/bezier3-intersection/debug';
 import { Iteration } from '../../../src/intersection/bezier3-intersection/iteration';
 import { NodeProps } from '../../react-svg-tree/src/helpers/node-props';
 import { mapWithParent } from '../../react-svg-tree/src/helpers/tree-graph';
-import { $Tree } from '../../react-svg-tree/src/tree';
 import { settings } from '../settings';
 import { drawIterClipsToCanvas, drawIterHybridPolyToCanvas } from './draw-iter-to-canvas';
 import { draw, ctx } from '../draw-stuff';
@@ -12,16 +10,16 @@ import { unsquashp, untransp } from '../affine';
 import { bezier3Intersection, evaluate } from '../../../src/index';
 
 
-const { tc, num, timingOnly, showGeoXs, showGeoIters } = settings;
+const { tc } = settings;
 
-type TreeNode = Iteration & IterationExtras;
+type IterationWithExtras = Iteration & IterationExtras;
 
 
-let prevOver: TreeNode = undefined;
-let prevClick: TreeNode = undefined;
-let prevRClick: TreeNode = undefined;
+let prevOver: IterationWithExtras = undefined;
+let prevClick: IterationWithExtras = undefined;
+let prevRClick: IterationWithExtras = undefined;
 
-function onMouseOver(node: TreeNode) {
+function onMouseOver(node: IterationWithExtras) {
     if (prevOver === node) { return; }
     prevOver = node;
 
@@ -29,14 +27,14 @@ function onMouseOver(node: TreeNode) {
 }
 
 
-function onClick(node: TreeNode) {
+function onClick(node: IterationWithExtras) {
     //if (prevClick === node) { return; }
     prevClick = node;
 
     drawIterHybridPolyToCanvas(canvas, node);
  }
 
-function onRightClick(node: TreeNode) {
+function onRightClick(node: IterationWithExtras) {
     //if (prevRClick === node) { return; }
     prevRClick = node;
 
@@ -63,12 +61,13 @@ function drawIntersectionsGeo(tss: number[][][], ps: number[][]) {
 
 const canvas = document.getElementById('canvas1') as HTMLCanvasElement;
 
-function $Node(props: NodeProps<TreeNode>) {
+function $Node(props: NodeProps<IterationWithExtras>) {
     const { x, y, node } = props;
-    const key = node.uid.toString();
+    const key = node.uid !== undefined ? node.uid.toString() : '';
+    const str = node.uid !== undefined && node.uid >= 0 ? node.uid.toString() : '';
 
     const fill = isLeadToX(node) ? 'blue' : 'black';
-    return (
+    return (<g key={key}>
         <circle 
             style={{ fill }}
             key={key}
@@ -82,11 +81,17 @@ function $Node(props: NodeProps<TreeNode>) {
             }}
             onClick={(e: any) => onClick(node)}
         />
-    );
+        <text 
+            x={x-5} y={y-5}
+            style={{font: 'bold 8px sans-serif', fill: 'red'}}
+        >
+                {str}
+        </text>
+    </g>);
 }
 
 
-function isLeadToX(node: TreeNode) {
+function isLeadToX(node: IterationWithExtras) {
     const nodesWithParent = mapWithParent(node => node.children || [], node);
 
     for (const nodeWithParent of nodesWithParent) {

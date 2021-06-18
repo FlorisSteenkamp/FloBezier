@@ -1,17 +1,22 @@
-import { getImplicitForm3ExactAnyBitlength } from "../../../../implicit-form/exact/get-implicit-form3-exact-any-bitlength";
-import { getXYExactAnyBitlength2 } from "../../../../to-power-basis/any-bitlength/exact/get-xy-exact-any-bitlength";
+import type { ImplicitFormExact3 } from "../../../../implicit-form/implicit-form-types";
+import { getImplicitForm3ExactAnyBitlengthPb } from "../../../../implicit-form/exact/get-implicit-form3-exact-any-bitlength";
+import { getXYExactAnyBitlength2, getXYExactAnyBitlength3 } from "../../../../to-power-basis/any-bitlength/exact/get-xy-exact-any-bitlength";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { 
     twoProduct, expansionProduct, fastExpansionSum, scaleExpansion2, 
-    eMultBy2
+    eMultBy2, eSign as _eSign
 } from "big-float-ts";
+import { getCoeffsBez2Bez2ExactAnyBitlength } from "./get-coeffs-bez2-bez2-exact-any-bitlength";
+import { toQuadraticFromCubic } from "../../../../transformation/degree-or-type/to-quad-from-cubic";
+import { getCoeffsBez3Bez1ExactAnyBitlength } from "./get-coeffs-bez3-bez1-exact-any-bitlength";
 
 const tp  = twoProduct;    // error -> 0
 const sce = scaleExpansion2;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
 const em2 = eMultBy2;
+const eSign = _eSign;
 
 
 /**
@@ -37,10 +42,27 @@ const em2 = eMultBy2;
  * @doc mdx
  */
 function getCoeffsBez3Bez2ExactAnyBitlength(ps1: number[][], ps2: number[][]) {
-    const { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
-        getImplicitForm3ExactAnyBitlength(ps1);
+    /** ps1 in power bases */
+    const ps1pb = getXYExactAnyBitlength3(ps1);
+    
+    //const [[e3,e2,e1,e0],[f3,f2,f1,f0]] = ps1pb;
+    // if both polynomials' cubic terms are exactly zero then its really a quadratic
+    if (eSign(ps1pb[0][0]) === 0 && eSign(ps1pb[1][0]) === 0) {
+        // the input bezier curve is in fact not cubic but has order < 3
+        return getCoeffsBez2Bez2ExactAnyBitlength(toQuadraticFromCubic(ps1), ps2);
+    }
 
     const [[c2,c1,c0],[d2,d1,d0]] = getXYExactAnyBitlength2(ps2);
+
+    if (eSign(c2) === 0 && eSign(d2) === 0) {
+        // the input bezier curve is in fact not quadratic but has order < 2
+        return getCoeffsBez3Bez1ExactAnyBitlength(ps1, [ps2[0],ps2[2]]);
+    }
+
+    let { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
+        // this type coercion is justified since we already checked that the
+        // curve really has order 3
+        getImplicitForm3ExactAnyBitlengthPb(ps1pb) as ImplicitFormExact3;
 
     const c0c0 = tp(c0,c0);
     const c0c1 = sce(c0,c1);
@@ -327,7 +349,14 @@ function getCoeffsBez3Bez2ExactAnyBitlength(ps1: number[][], ps2: number[][]) {
     const ub = fes(u9,ua);
     const v0 = fes(ub,v);
 
-    return [v6, v5, v4, v3, v2, v1, v0];
+    const r = [v6, v5, v4, v3, v2, v1, v0];
+
+    // remove leading zero coefficients
+    //while (r.length > 1 && eSign(r[0]) === 0) {
+    //    r.shift();
+    //}
+
+    return r;
 }
 
 

@@ -20,6 +20,13 @@ const toLength = _toLength;
 const noIntersection: undefined = undefined;
 const noClip: number[] = [0,1];
 
+/** 
+ * the heuristic value indicating the maximum `t` parameter span allowed after
+ * clipping before perpendicular fatline clipping or curve splitting is
+ * employed.
+ */
+const maxClipTSpan = 0.7;
+
 
 /**
  * Returns 0, 1 or 2 new narrowed ranges of possible intersections based on the 
@@ -34,7 +41,7 @@ const noClip: number[] = [0,1];
  * @internal
  */
 function checkIntersectionInRanges(
-        iter: Iteration): Iteration[] {
+        iter: Iteration, swapped: boolean): Iteration[] {
 
     //--------------------------------------
     // let { F, G, fRange, gRange } = iter;
@@ -127,11 +134,13 @@ function checkIntersectionInRanges(
     let tMin = tRange[0];
     let tMax = tRange[1];
 
-    if (!last && tMax - tMin > 0.7) {
+    if (!last && tMax - tMin > maxClipTSpan) {
+        // This optimization is for cases where the bezier curves meet nearly 
+        // collinearly at interface points.
         if (!clipPerp()) { return []; };
     }
 
-    if (!last && tMax - tMin > 0.7) {
+    if (!last && tMax - tMin > maxClipTSpan) {
         return split();
     }
 
@@ -201,6 +210,10 @@ function checkIntersectionInRanges(
     }
 
 
+    /** 
+     * Split the bezier curve such that the main algorithm ensures that the 
+     * intersections are ordered by t value.
+     */
     function split() {
         // The paper calls for a heuristic that if less than 30% will be
         // clipped, rather split the longest curve and find intersections in the
@@ -220,10 +233,10 @@ function checkIntersectionInRanges(
             if (typeof __debug__ !== 'undefined' && !__debug__.already) {
                 (iter1 as IterationExtras).parent = __debug__.currentIter;
                 (iter2 as IterationExtras).parent = __debug__.currentIter;
-                __debug__.currentIter.children = [iter1, iter2];
+                __debug__.currentIter.children = [iter2, iter1];
             }
 
-            return [iter1, iter2];
+            return [iter2, iter1];
         }
 
         // The `+ 1 - 1` at the end is critical in ensuring that `Number.EPSILON | tMin_`
@@ -234,10 +247,10 @@ function checkIntersectionInRanges(
         if (typeof __debug__ !== 'undefined' && !__debug__.already) {
             (iter1 as IterationExtras).parent = __debug__.currentIter;
             (iter2 as IterationExtras).parent = __debug__.currentIter;
-            __debug__.currentIter.children = [iter1, iter2];
+            __debug__.currentIter.children = [iter2, iter1];
         }
 
-        return [iter1, iter2];
+        return [iter2, iter1];
     }
 }
 

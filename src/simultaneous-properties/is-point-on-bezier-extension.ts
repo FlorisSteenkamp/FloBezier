@@ -6,12 +6,12 @@ import { getImplicitForm2Dd } from "../implicit-form/double-double/get-implicit-
 import { getImplicitForm2Exact } from "../implicit-form/exact/get-implicit-form2-exact";
 import { γ, γγ } from '../error-analysis/error-analysis';
 
-
 import { getImplicitForm1Dd } from "../implicit-form/double-double/get-implicit-form1-dd";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { twoProduct, ddMultDd, ddAddDd, ddMultDouble2 } from "double-double";
 import { expansionProduct, fastExpansionSum, eSign, scaleExpansion2, eEstimate } from 'big-float-ts';
+import { ImplicitFormExact1, ImplicitFormExact2, ImplicitFormExact3 } from "../implicit-form/implicit-form-types";
 
 const tp  = twoProduct;
 const qmq = ddMultDd;
@@ -29,9 +29,9 @@ const γγ3 = γγ(3);
 
 
 /**
- * Returns true if the given point is on the given cubic bezier curve where the 
- * parameter t is allowed to extend to ±infinity, i.e. t is an element of 
- * [-inf, +inf], false otherwise.
+ * Returns `true` if the given point is on the given cubic bezier curve where the 
+ * parameter `t` is allowed to extend to `±∞`, i.e. if `t ∈ (-∞, +∞)`, 
+ * `false` otherwise.
  * 
  * * **precondition:** `ps` must be grid-aligned and have a maximum bitlength of 47.
  * (p may have any bitlength - no restrictions)
@@ -106,7 +106,7 @@ function isPointOnBezierExtension3(ps: number[][], p: number[]): boolean {
         const vᵧy_ = vᵧ_*_y + abs(vᵧy);
 
         // group the terms to reduce error, e.g. v usually has the highest bitlength
-        //const h = 
+        // const h = 
         //    (
         //        ((vₓₓₓxxx + vₓₓᵧxxy) + (vₓᵧᵧxyy + vᵧᵧᵧyyy)) + 
         //        (vₓₓxx + vₓᵧxy + vᵧᵧyy)
@@ -239,9 +239,15 @@ function isPointOnBezierExtension3(ps: number[][], p: number[]): boolean {
 
     // error still too high - const's go exact
     {
+        // TODO - the type coercion below indicates we need to handle the case
+        // where the cubic is really a quadratic or a line or a point
+
         // The below takes about 155 micro-seconds on a 1st gen i7 and Chrome 79
         const { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
-        getImplicitForm3Exact(ps);
+            getImplicitForm3Exact(ps) as 
+                & ImplicitFormExact3   // vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ possibly `undefined`
+                & ImplicitFormExact2   // vₓₓ, vₓᵧ, vᵧᵧ possibly `undefined`
+                & ImplicitFormExact1;  // vₓ, vᵧ possibly `undefined`
         
         // h (say height) is the the result of evaluating the implicit equation; if
         // it is 0 we are on the curve, else we're not.
@@ -415,8 +421,13 @@ function isPointOnBezierExtension2(ps: number[][], p: number[]): boolean {
 
     // error still too high - const's go exact
     {
+        // TODO - the type coercion below indicates we need to handle the case
+        // where the cubic is really a quadratic or a line or a point
+        
         const { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
-            getImplicitForm2Exact(ps);
+            getImplicitForm2Exact(ps) as 
+                & ImplicitFormExact2   // vₓₓ, vₓᵧ, vᵧᵧ possibly `undefined`
+                & ImplicitFormExact1;  // vₓ, vᵧ possibly `undefined`
         
         // h (say height) is the the result of evaluating the implicit equation; 
         // if it is 0 we are on the curve, else we're not.

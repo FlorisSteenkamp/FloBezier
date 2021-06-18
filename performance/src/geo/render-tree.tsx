@@ -7,21 +7,24 @@ import { $Tree } from '../../react-svg-tree/src/tree';
 import { $Node } from './$node';
 
 
-type TreeNode = Iteration & IterationExtras;
+type IterationWithExtras = Iteration & IterationExtras;
 
 
-function renderTree(tree: TreeNode) {
-    function getChildren(node: TreeNode): TreeNode[] {
+function renderTree(tree: IterationWithExtras) {
+    function getChildren(node: IterationWithExtras): IterationWithExtras[] {
         return node.children || [];
     }
 
-    function getNodeKey(node: TreeNode) {
-         return node.uid.toString();
+    function getNodeKey(node: IterationWithExtras) {
+         return node.uid !== undefined ? node.uid.toString() : '';
     }
 
     const nodesWithParent = mapWithParent(getChildren, tree);
+    let ii = 0;
     for (const nodeWithParent of nodesWithParent) {
-        nodeWithParent.node.uid = Math.random();
+        if (nodeWithParent.node.uid === undefined) {
+            nodeWithParent.node.uid = --ii;
+        }
     }
 
     render(

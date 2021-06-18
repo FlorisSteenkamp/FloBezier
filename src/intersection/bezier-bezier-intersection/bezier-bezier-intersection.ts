@@ -18,8 +18,7 @@ const getCoeffs = getCoeffsBezBez;
  * algebraic implicitization of the curves in order to find *guaranteed* accurate
  * results (see points below)
  *
- * * if the two curves are identical algebraically (i.e. provided 
- * endpoints are ignored) `undefined` is returned
+ * * if the two curves have an infinite number of intersections `undefined` is returned
  * * the second bezier curve's parameter `t` values are retuned; call [[getOtherTs]] to
  * get the first bezier's `t` values.
  * * * **precondition:** the coordinates of the given bezier curves must be 

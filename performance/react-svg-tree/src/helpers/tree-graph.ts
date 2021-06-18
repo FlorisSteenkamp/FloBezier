@@ -47,11 +47,9 @@ function createTreeGraph<T>(
 
 
 function mapWithParent<T>(
-        //treeGraph: TreeGraph<T>): { node: T; parent: T }[] {
         getChildren: (node: T) => T[],
         root: T): { node: T; parent: T }[] {
 
-    //const { getChildren, root } = treeGraph;
     const nodesWithParent: { node: T; parent: T }[] = [{
         node: root,
         parent: undefined

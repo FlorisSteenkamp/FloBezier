@@ -1,10 +1,6 @@
-import { 
-    twoProduct, ddNegativeOf, ddMultBy2, ddMultDouble2, ddMultDd, ddDiffDd
-} from 'double-double';
+import { ddNegativeOf, ddMultBy2, ddMultDouble2, ddMultDd, ddDiffDd } from 'double-double';
 import { getXYDdAnyBitlength2 } from '../../to-power-basis/any-bitlength/double-double/get-xy-dd-any-bitlength';
-import { getXY } from '../../to-power-basis/get-xy';
 
-const tp  = twoProduct;     // error -> 0
 const qno = ddNegativeOf;    // error -> 0
 const qm2 = ddMultBy2;       // error -> 0 
 //const qmd2 = qMultDouble1;  // error -> 1.5*γ²
@@ -164,7 +160,6 @@ function getImplicitForm2DdAnyBitlength(ps: number[][]) {
     const $v = $w5 - $w6;
     const v = qdq(w5,w6);
     const v_ = w5_ + w6_ + abs($v);
-
 
     return { 
         coeffs: { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v },

@@ -8,7 +8,7 @@ const abs = Math.abs;
 
 
 /**
- * Returns true if the given bezier curve is really a quadratic curve.
+ * Returns true if the given cubic bezier curve is really a quadratic curve.
  * 
  * * **exact:** for any bitlength of the coefficients
  * 
@@ -19,7 +19,8 @@ const abs = Math.abs;
 function isCubicReallyQuad(ps: number[][]) {
     const [[x0,y0],[x1,y1],[x2,y2],[x3,y3]] = ps;
 
-    // the if in the line below is unrolled
+    // TODO - better comment in line belwo
+    // the if in the line below is unrolled (uses a toHybridQuadratic condition (points same?))
     //if ((x3 + 3*x1) - (x0 + 3*x2) === 0 && 
     //    (y3 + 3*y1) - (y0 + 3*y2) === 0) {
 
@@ -34,11 +35,11 @@ function isCubicReallyQuad(ps: number[][]) {
     const v2 = x0 + v1;
     const v2_ = v1_ + abs(v2);  // the absolute error in v2
     const w = u2 - v2;
-    const w_ = u*(u2_ + v2_ + abs(w));  // the absolute error in w
+    const w_ = u2_ + v2_ + abs(w);  // the absolute error in w
 
     // if w cannot possibly be zero, i.e. if the error is smaller than the value
-    if (abs(w) - w_ > 0) {
-        //console.log('fast filtered 1');
+    if (abs(w) - u*w_ > 0) {
+        // fast filter 1 passed
         return false;
     }
 
@@ -51,14 +52,14 @@ function isCubicReallyQuad(ps: number[][]) {
     const r2 = y0 + r1;
     const r2_ = r1_ + abs(r2);  // the absolute error in r2
     const s = q2 - r2;
-    const s_ = u*(q2_ + r2_ + abs(s));  // the absolute error in s
+    const s_ = q2_ + r2_ + abs(s);  // the absolute error in s
 
-    if (abs(s) - s_ > 0) {
-        //console.log('fast filtered 2');
+    if (abs(s) - u*s_ > 0) {
+        // fast filter 2 passed
         return false;
     }
 
-    //console.log('unable to filter - go slow and exact')
+    // unable to filter - go slow and exact
 
     return (
         eSign(eDiff(

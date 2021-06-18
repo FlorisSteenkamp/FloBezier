@@ -41,6 +41,7 @@ function getIntervalBox(
 }
 
 
+// TODO - this is (nearly) exactly the same as the (better?) `fromTo` used in `bezier3Intersection`
 /**
  * Returns an axis-aligned-box that is guaranteed to engulf the entire given 
  * bezier curve from t1 to t2.

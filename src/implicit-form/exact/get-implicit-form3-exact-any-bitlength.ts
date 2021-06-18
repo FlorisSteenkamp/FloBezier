@@ -1,10 +1,13 @@
+import type { ImplicitFormExact1, ImplicitFormExact2, ImplicitFormExact3 } from '../implicit-form-types';
 import { getXYExactAnyBitlength3 } from '../../to-power-basis/any-bitlength/exact/get-xy-exact-any-bitlength';
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { 
     expansionProduct, fastExpansionSum, scaleExpansion2, 
-    eDiff, eNegativeOf, eMultBy2, eDivBy2 
+    eDiff, eNegativeOf, eMultBy2, eDivBy2
 } from "big-float-ts";
+import { eSign as _eSign } from 'big-float-ts';
+import { getImplicitForm2ExactAnyBitlengthPb } from './get-implicit-form2-exact-any-bitlength';
 
 const sce = scaleExpansion2;
 const epr = expansionProduct;
@@ -13,26 +16,61 @@ const edif = eDiff;
 const eno = eNegativeOf;
 const em2 = eMultBy2;
 const ed2 = eDivBy2;
+const eSign = _eSign;
 
 
 /**
- * Returns the exact implicit form of the given cubic bezier curve.
+ * Returns the exact implicit form of the given cubic bezier curve
+ * or `undefined` if the curve is really a point.
  * 
  * Returned coefficients are subscripted to match their monomial's variables,
  * e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
  * 
  * * the implicit form is given by: `vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0`
- * * **precondition:** the coordinates of the given bezier must be 47-bit aligned
+ * * **precondition:** none 
  * 
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * * takes about 155 micro-seconds on a 3rd gen i7 and Chrome 79
  * 
  * @param ps
  * 
- * @doc mdx - TODO - remove mdx from these functions - they will become too many
+ * @doc mdx - TODO - remove mdx from these functions - they will become too many?
  */
-function getImplicitForm3ExactAnyBitlength(ps: number[][]) {
-    const [[a3,a2,a1,a0], [b3,b2,b1,b0]] = getXYExactAnyBitlength3(ps);
+function getImplicitForm3ExactAnyBitlength(
+        ps: number[][]): 
+            | Partial<ImplicitFormExact3> 
+            | Partial<ImplicitFormExact2>
+            | ImplicitFormExact1 {
+
+    return getImplicitForm3ExactAnyBitlengthPb(
+        getXYExactAnyBitlength3(ps)
+    );
+}
+
+
+/**
+ * The power basis version of [[getImplicitForm3ExactAnyBitlength]].
+ * 
+ * @param pspb the power basis representation of a cubic bezier curve that can
+ * be found via [[getXYExactAnyBitlength3]]
+ * 
+ * @internal
+ */
+function getImplicitForm3ExactAnyBitlengthPb(
+        pspb: [
+                [number[], number[], number[], number], 
+                [number[], number[], number[], number]
+            ]):
+                | Partial<ImplicitFormExact3> 
+                | Partial<ImplicitFormExact2>
+                | ImplicitFormExact1 {
+
+    const [[a3,a2,a1,a0], [b3,b2,b1,b0]] = pspb;
+
+    if (eSign(a3) === 0 && eSign(b3) === 0) {
+        // the input bezier curve is in fact not cubic but has order < 3
+        return getImplicitForm2ExactAnyBitlengthPb([[a2,a1,a0], [b2,b1,b0]]);
+    }
 
     const a3b1 = epr(a3,b1);
     const a1b3 = epr(a1,b3);
@@ -85,8 +123,7 @@ function getImplicitForm3ExactAnyBitlength(ps: number[][]) {
     const vₓᵧᵧ = epr(sce(-3,b3),a3a3);
     const vᵧᵧᵧ = epr(a3,a3a3);
 
-    // 46-bit aligned => qmd(3*q1 - q5,...) -> error free
-    const u1 = edif(sce(-3,q1), q5); // 47-bit aligned => qmd(3*q1 - q5) -> error free
+    const u1 = edif(sce(-3,q1), q5);
 
     //const vₓₓ = (u1*b3b3 + q3*(b1b3 - b2b2)) + tq2*b2b3;
     const w1 = epr(u1,b3b3);
@@ -105,7 +142,7 @@ function getImplicitForm3ExactAnyBitlength(ps: number[][]) {
     
 
     //const vₓᵧ = 2*(q3*(a2b2 - p2/2) - (u1*a3b3 + q2*p1));
-    const wa = edif(a2b2,ed2(p2));  // 47-bit aligned => wa = a2b2 - p2/2 -> error free
+    const wa = edif(a2b2,ed2(p2));
     const wb = epr(u1,a3b3);
     const wc = epr(q2,p1);
     const wd = fes(wb,wc);
@@ -155,9 +192,8 @@ function getImplicitForm3ExactAnyBitlength(ps: number[][]) {
     //const v = q1*(tq2q4 - q1q1 - q1q5) + s3*q6 - q3q4*q4;
     const v = fes(v6,v2);
 
-        
     return { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v };
 }
 
 
-export { getImplicitForm3ExactAnyBitlength }
+export { getImplicitForm3ExactAnyBitlength, getImplicitForm3ExactAnyBitlengthPb }

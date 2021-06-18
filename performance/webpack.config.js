@@ -1,4 +1,5 @@
 const path = require('path');
+const projectRoot = '../../';
 
 
 module.exports = {
@@ -17,7 +18,9 @@ module.exports = {
     },
     resolve: {
         extensions: [ '.tsx', '.ts', '.js', '.d.ts' ],
-        alias: {}
+        alias: {
+            'flo-poly$': path.resolve(__dirname, projectRoot + 'poly/src/index.ts'),
+        }
     },
     output: {
         filename: './perf.min.js',

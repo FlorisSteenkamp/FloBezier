@@ -13,7 +13,7 @@ const { tc, num, timingOnly, showGeoXs, showGeoIters } = settings;
 
 const abs = Math.abs;
 
-(window as any as { __debug__: Partial<__Debug__> | undefined}).__debug__ = { already: false };
+(window as any as { __debug__: Partial<__Debug__> | undefined}).__debug__ = { already: false, uid: 0 };
 declare var __debug__: __Debug__;
 
 
@@ -37,13 +37,12 @@ function geo(
         const ps1 = pss[i];
         const ps2 = pss[i+1];
 
-        //const ts = bezier3Intersection(ps1, ps2, 1e-10);
         const tss = bezier3Intersection(ps1, ps2);
 
         total += tss.length;
-        //console.log(tss)
 
         if (showGeoXs && i < 1) { drawIntersectionsGeo(tss, ps1); }
+        //console.log(tss)
 
         if (!timingOnly) {
             const xs = xss[i];
@@ -55,6 +54,7 @@ function geo(
                 console.log(toString(ps1));
                 console.log(toString(ps2));
                 console.log('----');
+                //throw 'up'
             }
         }
     }

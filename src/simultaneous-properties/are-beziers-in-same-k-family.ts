@@ -30,9 +30,7 @@ function areBeziersInSameKFamily(
     // max 9 intersections between two cubic bezier curves; 
     // 'cubic x cubic -> 3 x 3' according to Bezout's Theorem. Also, make each
     // parametric t-value an integer power of two to keep the bitlength a 
-    // minimum (1 in this case). Don't use 1 either since it could be likely
-    // two beziers share an endpoint by design causing the algorithm to do an
-    // additional check and run slower.
+    // minimum (1 in this case).
     let ps = [0.0625, 0.125, 0.25, 0.5, 1, 2, 4, 8, 16, 32].map(
         t => evalDeCasteljau(ps1, t)
     );

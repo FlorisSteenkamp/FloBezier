@@ -144,6 +144,12 @@ function geoClip(
         return noClip; 
     }
     
+    //--------------------------------------------------------------------------
+    // see the paper at https://scholarsarchive.byu.edu/cgi/viewcontent.cgi?referer=&httpsredir=1&article=2206&context=etd)
+    // According to the paper we can do clipping such that 2 intervals are
+    // sometimes returned. We just return the combined interval in those cases
+    // which might make the algorithm slightly slower but a bit simpler.
+    //--------------------------------------------------------------------------
    
     for (let i=0; i<rootsMinBMinF.length; i++) {
         const r = rootsMinBMinF[i];
@@ -243,13 +249,13 @@ function quadraticRoots(
         const E = abs(r*u);
         const Emin = r-E;
         const Emax = r+E;
-        if (Emax < 0 || Emin > 1) { return []; }
+        if (Emax < 0 || Emin > 1) { return [0]; }
 
         if (Emin < 0 && Emax > 0) { return [0,Emax]; }
         if (Emin < 1 && Emax > 1) { return [0,Emin,1]; }
 
         // we return the root interval pairs inline to account for error
-        return [Emin, Emax];  
+        return [0, Emin, Emax];  
     }
 
     const D1 = b*b;  // <1>D1 (error counters)
@@ -312,8 +318,8 @@ function quadraticRoots(
     let r2max: number;
     if (numerMaxAbs*a2 >= 0) {
         // same signs - `r1min >= 0` and `r1max > 0`
-        r1min = (numerMaxAbs/a2)*(1 - eps);
-        r1max = (numerMinAbs/a2)*(1 + eps);
+        r1min = (numerMinAbs/a2)*(1 - eps);
+        r1max = (numerMaxAbs/a2)*(1 + eps);
     } else {
         // opposite signs - `r1min <= 0` and `r1max < 0`
         r1min = (numerMaxAbs/a2)*(1 + eps);

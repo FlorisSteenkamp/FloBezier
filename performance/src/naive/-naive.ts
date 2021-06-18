@@ -1,26 +1,25 @@
-import { closestPointOnBezier, closestPointOnBezierPrecise, evaluate, getCoeffsBez1Bez1, getIntervalBox, intersectBoxes } from "../../src/index";
-import { getCoeffsBez1Bez2 } from "../../src/index";
-import { getCoeffsBez1Bez3 } from "../../src/index";
-import { getCoeffsBez2Bez1 } from "../../src/index";
-import { getCoeffsBez2Bez2 } from "../../src/index";
-import { getCoeffsBez2Bez3 } from "../../src/index";
-import { getCoeffsBez3Bez1 } from "../../src/index";
-import { getCoeffsBez3Bez2 } from "../../src/index";
+import { closestPointOnBezier, closestPointOnBezierPrecise, evaluate, getCoeffsBez1Bez1, getIntervalBox, intersectBoxes } from "../../../src/index";
+import { getCoeffsBez1Bez2 } from "../../../src/index";
+import { getCoeffsBez1Bez3 } from "../../../src/index";
+import { getCoeffsBez2Bez1 } from "../../../src/index";
+import { getCoeffsBez2Bez2 } from "../../../src/index";
+import { getCoeffsBez2Bez3 } from "../../../src/index";
+import { getCoeffsBez3Bez1 } from "../../../src/index";
+import { getCoeffsBez3Bez2 } from "../../../src/index";
 //import { getCoeffsBez3Bez3InclError } from "../src/index";
-import { getCoeffsBez3Bez3 } from "../../src/index";
-import { X } from '../../src/index';
-import { settings } from './settings'; 
-import { draw, ctx } from './draw-stuff';
-import { getCoeffsBez1Bez1Dd, getCoeffsBez1Bez2Dd, getCoeffsBez1Bez3Dd, getCoeffsBez2Bez1Dd, getCoeffsBez2Bez2Dd, getCoeffsBez2Bez3Dd, getCoeffsBez3Bez1Dd, getCoeffsBez3Bez2Dd, getCoeffsBez3Bez3Dd } from "../../src/index";
+import { getCoeffsBez3Bez3 } from "../../../src/index";
+import { X } from '../../../src/index';
+import { settings } from '../settings'; 
+import { draw, ctx } from '../draw-stuff';
+import { getCoeffsBez1Bez1Dd, getCoeffsBez1Bez2Dd, getCoeffsBez1Bez3Dd, getCoeffsBez2Bez1Dd, getCoeffsBez2Bez2Dd, getCoeffsBez2Bez3Dd, getCoeffsBez3Bez1Dd, getCoeffsBez3Bez2Dd, getCoeffsBez3Bez3Dd } from "../../../src/index";
 
-import { allRoots as _allRoots } from './roots/all-roots';
-import { unsquashp, untransp } from './affine';
+import { allRoots as _allRoots } from '../roots/all-roots';
+import { unsquashp, untransp } from '../affine';
 import { distanceBetween } from "flo-vector2d";
-import { allRootsCertifiedSimplified, toCasStr } from "flo-poly";
 
-import { getCoeffsBez3Bez3DdAnyBitlength } from './naive/get-coeffs-bez3-bez3-dd-any-bitlength';
-import { showResults } from "./show-results";
-import { updDs } from "./upd-ds";
+import { getCoeffsBez3Bez3DdAnyBitlength } from './get-coeffs-bez3-bez3-dd-any-bitlength';
+import { showResults } from "../show-results";
+import { updDs } from "../upd-ds";
 
 const allRoots = _allRoots;
 

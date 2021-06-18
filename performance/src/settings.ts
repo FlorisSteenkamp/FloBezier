@@ -1,5 +1,11 @@
+// * test with lower order beziers disguised as higher order
+//   (thus will allRootsCertified be able to cope with 0 leading coefficients)
+// * test with degenerate to point cases
+// * finish geo-clip
+// * test with expanding grid ?
+// * retest same k family
+// * also test polynomial curves (e.g. normal quadratics and cubics)
 
-//const tc = transformCoordinatesBL(640, 384);
 const tc = transformCoordinatesBL(2*640, 2*384);
 const tcml = transformCoordinatesML(2*640, 2*384);
 
@@ -9,18 +15,15 @@ const maxCoordinateX = 1;
 const maxCoordinateY = 1/squashFactor;
 const expMax = Math.ceil(Math.log2(Math.max(maxCoordinateX, maxCoordinateY)));
 const settings = {
-    timingOnly: false,
+    timingOnly: true,
+    /** the number of bezier pairs (=== number of beziers - 1) */
+    num: 50_000,
+    maxBitLength: 53,
 
     showNaive: false,
     showNative: true,
     showPaper: true,
     showGeo: true,
-
-    /** the number of bezier pairs (=== number of beziers - 1) */
-    num: 1,
-    maxBitLength: 47,  // 47 ???????,    
-    //maxBitLength: 53,  // 47 ???????,    
-    //transY: 0.5,
     transY: 0,
     maxCoordinateX,
     squashFactor,
@@ -29,10 +32,9 @@ const settings = {
     expMax,
 
     showNaiveXs: false,
-    showNativeXs: false,
-    showPaperXs: false,
-
+    showNativeXs: true,
     showGeoXs: true,
+    showPaperXs: true,
     showGeoIters: true,
 
     tc, tcml

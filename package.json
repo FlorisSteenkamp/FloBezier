@@ -54,6 +54,8 @@
         "build-browser": "webpack",
         "test": "nyc mocha",
         "performance": "cd performance & ts-node bezier-bezier-intersection.ts",
-        "a": "mocha ./test/intersection/bezier-bezier-intersection/intersection-performance.spec.ts --timeout 6000 --require ts-node/register --require source-map-support/register"
+        "a": "mocha ./test/intersection/bezier-bezier-intersection/intersection-performance.spec.ts --timeout 6000 --require ts-node/register --require source-map-support/register",
+        "b": "mocha ./test/implicit-form/implicit-form.spec.ts --timeout 1000 --require ts-node/register --require source-map-support/register",
+        "c": "mocha ./test/intersection/bezier-bezier-intersection/coeffs-3.spec.ts --timeout 6000 --require ts-node/register --require source-map-support/register"
     }
 }

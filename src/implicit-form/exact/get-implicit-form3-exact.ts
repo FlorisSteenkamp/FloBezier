@@ -6,6 +6,8 @@ import {
     twoProduct, expansionProduct, fastExpansionSum, scaleExpansion2, 
     eDiff, eNegativeOf, eMultBy2, eDivBy2 
 } from "big-float-ts";
+import { getImplicitForm2Exact } from './get-implicit-form2-exact';
+import { ImplicitFormExact2, ImplicitFormExact3 } from '../implicit-form-types';
 
 
 const tp  = twoProduct;    // error -> 0
@@ -37,8 +39,18 @@ const ed2 = eDivBy2;
  * 
  * @doc mdx - TODO - remove mdx from these functions - they will become too many
  */
-function getImplicitForm3Exact(ps: number[][]) {
+function getImplicitForm3Exact(
+        ps: number[][]): 
+            | Partial<ImplicitFormExact3> 
+            | Partial<ImplicitFormExact2>
+            | { vₓ: number, vᵧ: number, v: number[] } {
+
     const [[a3,a2,a1,a0], [b3,b2,b1,b0]] = getXY(ps);
+
+    //if (a3 === 0 && b3 === 0) {
+    //    // the input bezier curve is in fact not cubic but has order < 3
+    //    return getImplicitForm2Exact(ps);
+    //}
 
     const a3b1 = tp(a3,b1);  // error free
     const a1b3 = tp(a1,b3);  // error free

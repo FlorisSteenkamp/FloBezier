@@ -33,7 +33,6 @@ function evaluate_anyBitlength_exact(
     // @ts-ignore
     Y[len-1] = [Y[len-1]];
     
-    
     return [
         eHorner(X,t),
         eHorner(Y,t)

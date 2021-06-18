@@ -70,7 +70,7 @@ function getXYExactAnyBitlength(
 		,
 
 		// 3*(x2 - 2*x1 + x0)
-		sce(3, ge(td(x2, 2*x1),x0)),
+		sce(3, ge(td(x2, 2*x1), x0)),
 
 		// 3*(x1 - x0)
 		sce(3, td(x1, x0)),
@@ -83,7 +83,6 @@ function getXYExactAnyBitlength(
 		sce(3, td(y1, y0)),
 		y0
 	]];
-
 }
 
 
@@ -138,6 +137,7 @@ function getXYExactAnyBitlength(
 		 ] {
 
 	const [[x0,y0], [x1,y1]] = ps;
+
 	return [[
 		//x1 - x0,
 		td(x1, x0),

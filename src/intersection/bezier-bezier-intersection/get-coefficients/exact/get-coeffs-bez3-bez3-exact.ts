@@ -1,3 +1,4 @@
+import type { ImplicitFormExact2, ImplicitFormExact3 } from "../../../../implicit-form/implicit-form-types";
 import { 
     twoProduct, scaleExpansion2, expansionProduct, fastExpansionSum, 
     eMultBy2 } from "big-float-ts";
@@ -39,8 +40,20 @@ const tp = twoProduct;
  * @doc mdx
  */
 function getCoeffsBez3Bez3Exact(ps1: number[][], ps2: number[][]) {
-    const { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
-        getImplicitForm3Exact(ps1);
+    let { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
+        getImplicitForm3Exact(ps1) as 
+            // TODO - only ImplicitFormExact3
+            & ImplicitFormExact3  // vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ possibly `undefined`
+            & ImplicitFormExact2  // vₓₓ, vₓᵧ, vᵧᵧ possibly `undefined`
+            & { vₓ: number; vᵧ: number; v: number[]; };
+
+    //if (vₓₓₓ === undefined) { 
+    //    vₓₓₓ = [0]; vₓₓᵧ = [0]; vₓᵧᵧ = [0];  vᵧᵧᵧ = [0]; 
+    //}
+    //if (vₓₓ === undefined) { 
+    //    vₓₓ = [0]; vₓᵧ = [0]; vᵧᵧ = [0];
+    //}
+    
 
     const [[c3,c2,c1,c0],[d3,d2,d1,d0]] = getXY(ps2);
 
@@ -462,7 +475,6 @@ function getCoeffsBez3Bez3Exact(ps1: number[][], ps2: number[][]) {
     const pa = fes(pf,pg);
     const pb = fes(p9,pa);
     const v0 = fes(pb,v);
-
 
     return [v9, v8, v7, v6, v5, v4, v3, v2, v1, v0];
 }

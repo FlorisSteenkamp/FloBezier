@@ -15,15 +15,18 @@ function updDs(
         xs: X[][],
         ts: number[]): boolean {
 
-    if (xs.length !== ts.length) {
-        //console.log('DIFFERENT!!!'); throw 'done';
+    const xslength = xs ? xs.length : 0;
+    const tslength = ts ? ts.length : 0;
+
+    if (xslength !== tslength) {
+        //console.log(xs, ts)
         return false;
     }
         
-    for (let j=0; j<ts.length; j++) {
+    for (let j=0; j<tslength; j++) {
         const tP = ts[j];
         let closest = Number.POSITIVE_INFINITY;
-        for (let k=0; k<xs.length; k++) {
+        for (let k=0; k<xslength; k++) {
             const xPair = xs[k];
             const ri = xPair[0].ri;
             const t = (ri.tE + ri.tS) / 2;

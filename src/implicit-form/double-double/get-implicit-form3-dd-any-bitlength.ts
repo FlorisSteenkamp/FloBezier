@@ -1,5 +1,5 @@
 import { 
-    twoProduct, ddNegativeOf, ddMultBy2, 
+    ddNegativeOf, ddMultBy2, 
     ddMultDouble2, ddMultDd, ddDiffDd, ddAddDd, ddDivBy2
 } from 'double-double';
 import { getXYDdAnyBitlength3 } from '../../to-power-basis/any-bitlength/double-double/get-xy-dd-any-bitlength';
@@ -7,13 +7,12 @@ import { getXYDdAnyBitlength3 } from '../../to-power-basis/any-bitlength/double-
 
 const abs = Math.abs;
 
-const tp  = twoProduct;     // error -> 0
 const qno = ddNegativeOf;    // error -> 0
 const qm2 = ddMultBy2;       // error -> 0 
 const qd2 = ddDivBy2;        // error -> 0 
 //const qmd2 = qMultDouble1;  // error -> 1.5*γ²
 const qmd = ddMultDouble2;   // error -> 3*γ²
-const qmq = ddMultDd;      // error -> 5*γ² (theoretical), 7*γ² (worst found), we use 6*γ²
+const qmq = ddMultDd;      // error -> 5*γ² (worst found), 7*γ² (theoretical), we use 6*γ²
 const qdq = ddDiffDd;      // error -> 3*γ²
 const qaq = ddAddDd;       // error -> 3*γ²
 
@@ -26,7 +25,7 @@ const qaq = ddAddDd;       // error -> 3*γ²
  * e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
  * 
  * * the implicit form is given by: `vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0`
- * * **precondition:** the coordinates of the given bezier must be 47-bit aligned
+ * * **precondition:** none
  * * intermediate calculations are done in double-double precision and this is
  * reflected in the output error bound (which is approximately 
  * `n * (Number.EPSILON**2) * the condition number`, where roughly `1 < n < 100` and 
@@ -120,7 +119,6 @@ function getImplicitForm3DdAnyBitlength(ps: number[][]) {
 
     // The implicit form is given by:
     // vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0
-
 
     const $a1 = a1[1];
     const $a2 = a2[1];

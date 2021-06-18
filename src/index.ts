@@ -29,18 +29,24 @@ import { X } from './intersection/bezier-bezier-intersection/x';
 import { getInflections } from './global-properties/get-inflections';
 import { getCoeffsBezBez } from './intersection/bezier-bezier-intersection/get-coefficients/get-coeffs-bez-bez';
 
+import { getImplicitForm3 } from './implicit-form/double/get-implicit-form3';
 import { getImplicitForm3InclError } from './implicit-form/double-incl-error/get-implicit-form3-incl-error';
 import { getImplicitForm3Dd } from './implicit-form/double-double/get-implicit-form3-dd';
+import { getImplicitForm3DdAnyBitlength } from './implicit-form/double-double/get-implicit-form3-dd-any-bitlength';
 import { getImplicitForm3Exact } from './implicit-form/exact/get-implicit-form3-exact';
 import { getImplicitForm3ExactAnyBitlength } from './implicit-form/exact/get-implicit-form3-exact-any-bitlength';
 
+import { getImplicitForm2 } from './implicit-form/double/get-implicit-form2';
 import { getImplicitForm2InclError } from './implicit-form/double-incl-error/get-implicit-form2-incl-error';
 import { getImplicitForm2Dd } from './implicit-form/double-double/get-implicit-form2-dd';
+import { getImplicitForm2DdAnyBitlength } from './implicit-form/double-double/get-implicit-form2-dd-any-bitlength';
 import { getImplicitForm2Exact } from './implicit-form/exact/get-implicit-form2-exact';
 import { getImplicitForm2ExactAnyBitlength } from './implicit-form/exact/get-implicit-form2-exact-any-bitlength';
 
+import { getImplicitForm1 } from './implicit-form/double/get-implicit-form1';
 import { getImplicitForm1InclError } from './implicit-form/double-incl-error/get-implicit-form1-incl-error';
 import { getImplicitForm1Dd } from './implicit-form/double-double/get-implicit-form1-dd';
+import { getImplicitForm1DdAnyBitlength } from './implicit-form/double-double/get-implicit-form1-dd-any-bitlength';
 import { getImplicitForm1Exact } from './implicit-form/exact/get-implicit-form1-exact';
 import { getImplicitForm1ExactAnyBitlength } from './implicit-form/exact/get-implicit-form1-exact-any-bitlength';
 
@@ -121,6 +127,7 @@ import { cubicThroughPointGiven013 } from './create/cubic-through-point-given013
 import { bezierSelfIntersection } from './intersection/self-intersection/bezier-self-intersection';
 import { getEndpointIntersections } from './intersection/get-endpoint-intersections';
 import { inversion01Precise } from './intersection/inversion-01';
+import { tFromXY3 } from './intersection/t-from-xy';
 //import { inversion1_BL52_1ULP } from './graveyard/inversion-old';
 
 import { getXY       } from './to-power-basis/get-xy';
@@ -165,6 +172,7 @@ import { getBoundingBoxTight } from './global-properties/bounds/get-bounding-box
 import { getBoundingBox } from './global-properties/bounds/get-bounding-box';
 import { toHybridQuadratic } from './transformation/degree-or-type/to-hybrid-quadratic';
 import { isCubicReallyQuad } from './global-properties/type/is-cubic-really-quad';
+import { isQuadReallyLine } from  './global-properties/type/is-quad-really-line';
 import { toQuadraticFromCubic } from './transformation/degree-or-type/to-quad-from-cubic';
 import { circleBezierIntersectionD } from './intersection/circle-bezier-intersection/double/circle-bezier-intersection-d';
 import { circleBezierIntersection } from './intersection/circle-bezier-intersection/circle-bezier-intersection';
@@ -176,7 +184,6 @@ import { evaluateDdxy } from './local-properties-at-t/t-to-ddxy/evaluate-ddxy';
 import { evaluateDxy } from './local-properties-at-t/t-to-dxy/evaluate-dxy';
 
 import { getXYDdAnyBitlength3 } from './to-power-basis/any-bitlength/double-double/get-xy-dd-any-bitlength';
-import { getImplicitForm3DdAnyBitlength } from './implicit-form/double-double/get-implicit-form3-dd-any-bitlength';
 
 
 /** 
@@ -200,8 +207,25 @@ const getBoundingHull = grahamScan;
  * @param ps - A bezier curve
  */
 function toString(ps: number[][]) {
-	const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
-	return `[[${x0},${y0}],[${x1},${y1}],[${x2},${y2}],[${x3},${y3}]]`;
+	if (ps.length === 4) {
+		const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
+		return `[[${x0},${y0}],[${x1},${y1}],[${x2},${y2}],[${x3},${y3}]]`;
+	}
+
+	if (ps.length === 3) {
+		const [[x0,y0], [x1,y1], [x2,y2]] = ps;
+		return `[[${x0},${y0}],[${x1},${y1}],[${x2},${y2}]]`;		
+	}
+
+	if (ps.length === 2) {
+		const [[x0,y0], [x1,y1]] = ps;
+		return `[[${x0},${y0}],[${x1},${y1}]]`;		
+	}
+
+	if (ps.length === 1) {
+		const [[x0,y0]] = ps;
+		return `[[${x0},${y0}]]`;		
+	}
 }
 
 
@@ -264,14 +288,20 @@ export {
 	quadToPolyline,
 	toExpansion,
 	toEstimation,
+	getImplicitForm3,
 	getImplicitForm3InclError,
 	getImplicitForm3Dd,
+	getImplicitForm3DdAnyBitlength,
 	getImplicitForm3Exact,
+	getImplicitForm2,
 	getImplicitForm2InclError,
 	getImplicitForm2Dd,
+	getImplicitForm2DdAnyBitlength,
 	getImplicitForm2Exact,
+	getImplicitForm1,
 	getImplicitForm1InclError,
 	getImplicitForm1Dd,
+	getImplicitForm1DdAnyBitlength,
 	getImplicitForm1Exact,
 	
 	// -----------------------
@@ -300,6 +330,7 @@ export {
 	isLine, isHorizontalLine, isVerticalLine,
 	isSelfOverlapping,
 	getHodograph,
+	isQuadReallyLine,
 	isCubicReallyQuad,
 	toQuadraticFromCubic,
 	getInflections,
@@ -319,6 +350,7 @@ export {
 	getEndpointIntersections,
 	inversion01Precise,	
 	//inversion1_BL52_1ULP,
+	tFromXY3,
 
 	// Intersections
 	bezierBezierIntersection, 
@@ -434,7 +466,6 @@ export {
 	getControlPointBox,
 
 	getXYDdAnyBitlength3,
-	getImplicitForm3DdAnyBitlength,
 }
 
 export { 
