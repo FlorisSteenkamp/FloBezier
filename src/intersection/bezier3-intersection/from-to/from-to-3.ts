@@ -9,13 +9,13 @@ const psErrorFree = [[0,0],[0,0],[0,0],[0,0]];
 
 /**
  * Returns a bezier curve that starts and ends at the given t parameters 
- * including and error bound (that needs to be multiplied by `11u`, where 
+ * including an error bound (that needs to be multiplied by `11u`, where 
  * `u === Number.EPSILON/2`).
  * 
  * * precondition 1: exact tS, tE, ps
  * * precondition 2: tS, tE ∈ [0,1]
- * * precondition 3: (Number.EPSILON | tS (and tE))  (eps divides tS, tE)
- * * precondition 4: tE >= tS
+ * * precondition 3: `Number.EPSILON | tS` and `Number.EPSILON | tE`
+ * * precondition 4: tE > tS
  * 
  * @param ps a cubic bezier curve
  * @param tS the t parameter where the resultant bezier should start
@@ -41,15 +41,12 @@ const psErrorFree = [[0,0],[0,0],[0,0],[0,0]];
 
 /**
  * Returns a bezier curve that starts at the given t parameter and ends 
- * at `t === 1` including and error bound (that needs to be multiplied 
+ * at `t === 1` including an error bound (that needs to be multiplied 
  * by `11u`, where `u === Number.EPSILON/2`).
- * 
- * Uses de Casteljau's algorithm. 
  * 
  * * precondition 1: exact `t`, `ps`
  * * precondition 2: t ∈ [0,1)
- * * precondition 3: `Number.EPSILON | t`  (i.e. `eps` divides `t`)
- * * precondition 4: `t < 1`
+ * * precondition 3: `Number.EPSILON | t`
  * 
  * @param ps a cubic bezier curve
  * @param t the t parameter where the resultant bezier should start
@@ -106,8 +103,8 @@ function splitRight3(
     const _y1 = abs(y1);
     const _x2 = abs(x2);
     const _y2 = abs(y2);
-    const _x3 = abs(x2);
-    const _y3 = abs(y2);
+    const _x3 = abs(x3);
+    const _y3 = abs(y3);
 
     // using error bound counter rule 2 in the final step:
     // <2>xx2 <= <2>(<1>(<0>x3*<0>t) + <1>(<0>x2*<0>s))
@@ -133,7 +130,7 @@ function splitRight3(
         [_xx0, _yy0],
         [_xx1, _yy1],
         [_xx2, _yy2],
-        [_x3, _y3]
+        [0, 0]
     ];
 
     return {
@@ -145,19 +142,15 @@ function splitRight3(
 
 /**
  * Returns a bezier curve that starts at `t === 0` and ends at the given t 
- * parameter including and error bound (that needs to be multiplied by `11u`, where 
+ * parameter including an error bound (that needs to be multiplied by `11u`, where 
  * `u === Number.EPSILON/2`).
- * 
- * Uses de Casteljau's algorithm. 
  * 
  * * precondition 1: exact `t`, `ps`
  * * precondition 2: `t ∈ (0,1]`
  * * precondition 3: `Number.EPSILON | t`  (i.e. `eps` divides `t`)
- * * precondition 4: `t > 0`
  * 
  * @param ps a cubic bezier curve
- * @param tS the t parameter where the resultant bezier should start
- * @param tE the t parameter where the resultant bezier should end
+ * @param t the `t` parameter where the resultant bezier should end
  */
 function splitLeft3(
         ps: number[][], 
@@ -210,8 +203,8 @@ function splitLeft3(
     const _y1 = abs(y1);
     const _x2 = abs(x2);
     const _y2 = abs(y2);
-    const _x3 = abs(x2);
-    const _y3 = abs(y2);
+    const _x3 = abs(x3);
+    const _y3 = abs(y3);
 
     const _xx1 = _x1*t + _x0*s;
     // <2>xx1 <= <2>(<1>(<0>x1*<0>t) + <1>(<0>x0*<0>s))
@@ -233,7 +226,7 @@ function splitLeft3(
     //];
 
     const psL_ = [
-        [_x0, _y0],
+        [0, 0],
         [_xx1, _yy1],
         [_xx2, _yy2],
         [_xx3, _yy3]
@@ -248,10 +241,8 @@ function splitLeft3(
 
 /**
  * Returns a bezier curve that starts and ends at the given `t` parameters
- * including and error bound (that needs to be multiplied by `11u`, where 
+ * including an error bound (that needs to be multiplied by `11u`, where 
  * `u === Number.EPSILON/2`). 
- * 
- * Uses de Casteljau's algorithm. 
  * 
  * * precondition 1: exact `t`, `tE`, `ps`
  * * precondition 2: `tS, tE ∈ (0,1)`
@@ -284,11 +275,11 @@ function splitAtBoth3(
     //   3. fl(a) === <1>a
 
     // splitRight
-    const s   = 1 - t;  // <0>s <= exact by precondition 3
+    const s = 1 - t;  // <0>s <= exact by precondition 3
     // make v the smallest float > (the true v) such that `eps | v`
     //const v = (tE - t)/s; 
     // see the function `getV` below to see why `v` is calculated this way
-    const v   = ((tE - t)/(1 - t))*(1 + Number.EPSILON) + 1 - 1;
+    const v   = ((tE - t)/s)*(1 + Number.EPSILON) + 1 - 1;
     const tt  = t*t;   // <1>tt  <= <0>t<0>t   (by counter rule 2)
     const ttt = t*tt;  // <2>ttt <= <0>t<1>tt  (again by counter rule 2)
     const ss  = s*s;   // <1>ss  <= <0>s<0>s
@@ -330,8 +321,8 @@ function splitAtBoth3(
     const _y1 = abs(y1);
     const _x2 = abs(x2);
     const _y2 = abs(y2);
-    const _x3 = abs(x2);
-    const _y3 = abs(y2);
+    const _x3 = abs(x3);
+    const _y3 = abs(y3);
 
     // <4>xa <= <4>(<3>((<2>(<1>ss*<0>x1) + <2>(<1>tt*<0>x3))) + <2>(2*<1>ts*<0>x2));
     const _xa = (ss*_x1 + tt*_x3) + 2*ts*_x2;
@@ -411,7 +402,3 @@ function getV(
 
 
 export { fromTo3 }
-
-
-// At this point since `tE > tS` and `tS < 1` ???
-// recall `|fl(a∘b) - a∘b| < u`

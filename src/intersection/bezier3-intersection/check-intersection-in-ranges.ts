@@ -6,13 +6,15 @@ import { toLength as _toLength } from 'flo-vector2d';
 import { len as _len } from 'flo-vector2d';
 import { translate as _translate } from 'flo-vector2d';
 import { getDistanceToLineFunction as _getDistanceToLineFunction } from "./get-distance-to-line-function";
-import { fromTo3 as _fromTo3 } from './from-to-3';
+//import { fromTo3 as _fromTo3 } from './from-to/from-to-3';
+import { fromTo as _fromTo } from './from-to/from-to';
 
 declare var __debug__: __Debug__;
 
 const getDistanceToLineFunction = _getDistanceToLineFunction;
 const geoClip = _geoClip;
-const fromTo3 = _fromTo3;
+//const fromTo3 = _fromTo3;
+const fromTo = _fromTo;
 const fromToVect = _fromToVect;
 const translate = _translate;
 const toLength = _toLength;
@@ -41,7 +43,7 @@ const maxClipTSpan = 0.7;
  * @internal
  */
 function checkIntersectionInRanges(
-        iter: Iteration, swapped: boolean): Iteration[] {
+        iter: Iteration): Iteration[] {
 
     //--------------------------------------
     // let { F, G, fRange, gRange } = iter;
@@ -77,11 +79,11 @@ function checkIntersectionInRanges(
     const gtMax = gRange[1];
 
 
-    // get the bezier curves (and an error bound) within the narrowed ranges
-    // note: the error bound need be multiplied by `11u`, where 
-    // `u === Number.EPSILON/2`).
-    const F_ = fromTo3(F, ftMin, ftMax); 
-    const G_ = fromTo3(G, gtMin, gtMax); 
+    // Get the bezier curves (and an error bound) within the narrowed ranges
+    // Note: the error bound need be multiplied by `11u`, where 
+    // `u === Number.EPSILON/2` (see `fromTo3` for details).
+    const F_ = fromTo(F, ftMin, ftMax); 
+    const G_ = fromTo(G, gtMin, gtMax); 
 
     const Fps = F_.ps;
     const F_ps = F_._ps;
@@ -91,11 +93,12 @@ function checkIntersectionInRanges(
         __debug__.currentIter.G_ = G_;
     }
 
+    const lenF = Fps.length;
     // Q will be fat line bounded. Get start and endpoint of curve
     // TODO - consider, implement and test the case where `FS` and `QE` are 
     // the same point
     let FS = Fps[0];
-    let FE = Fps[Fps.length-1];
+    let FE = Fps[lenF-1];
 
     // Get the implict line equation for the line defined by the first and 
     // last control point of Q. This equation gives the distance between any 
@@ -108,16 +111,16 @@ function checkIntersectionInRanges(
     let dF0 = dF(Fps[0], F_ps[0]);
     let dF1 = dF(Fps[1], F_ps[1]);
     let dF2 = dF(Fps[2], F_ps[2]);
-    let dF3 = dF(Fps[3], F_ps[3]);
+    let dF3 = lenF === 4 ? dF(Fps[3], F_ps[3]) : { dMin: 0, dMax: 0 };
     
 
     // Calculate the fat line of F.
     // Calculate the distance from the control points of F to the line.
-    //let C = (dF1*dF2 > 0) ? 3/4 : 4/9;
-    // the above calculation of C has been replaced by the one below so we can
+    //let C = len === 4 ? (dF1*dF2 > 0) ? 3/4 : 4/9 : 1/2;
+    // The above calculation of C has been replaced by the one below so we can
     // ensure robustness (`dF1` and `dF2` are not simply numbers but also have
-    // and error bound associated with them)
-    let C = 3/4;
+    // an error bound associated with them)
+    let C = lenF === 4 ? 3/4 : 1/2;
     const dMin = C * Math.min(0, dF0.dMin, dF1.dMin, dF2.dMin, dF3.dMin);
     const dMax = C * Math.max(0, dF0.dMax, dF1.dMax, dF2.dMax, dF3.dMax);
 
@@ -187,7 +190,7 @@ function checkIntersectionInRanges(
         let dF0_ = dQ_(Fps[0], F_ps[0]);
         let dF1_ = dQ_(Fps[1], F_ps[1]);
         let dF2_ = dQ_(Fps[2], F_ps[2]);
-        let dF3_ = dQ_(Fps[3], F_ps[3]);
+        let dF3_ = lenF === 4 ? dQ_(Fps[3], F_ps[3]) : { dMin: 0, dMax: 0 };
     
         const dMin_ = Math.min(0, dF0_.dMin, dF1_.dMin, dF2_.dMin, dF3_.dMin);
         const dMax_ = Math.max(0, dF0_.dMax, dF1_.dMax, dF2_.dMax, dF3_.dMax);
@@ -198,7 +201,9 @@ function checkIntersectionInRanges(
         }
     
         const tRange = geoClip(G_, dQ_, dMin_, dMax_);
-        if (tRange === noIntersection) { return false; }
+        if (tRange === noIntersection) { 
+            return false; 
+        }
     
         const tMin_ = tRange[0];
         const tMax_ = tRange[1];
@@ -211,8 +216,7 @@ function checkIntersectionInRanges(
 
 
     /** 
-     * Split the bezier curve such that the main algorithm ensures that the 
-     * intersections are ordered by t value.
+     * Split the bezier curve.
      */
     function split() {
         // The paper calls for a heuristic that if less than 30% will be

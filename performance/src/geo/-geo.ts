@@ -1,10 +1,10 @@
+import type { __Debug__ } from '../../../src/intersection/bezier3-intersection/debug';
 import { bezier3Intersection, evaluate, toString, X } from '../../../src/index';
 import { settings } from '../settings'; 
 import { draw, ctx } from '../draw-stuff';
 import { unsquashp, untransp } from '../affine';
 import { updDs } from '../upd-ds';
 import { showResults } from '../show-results';
-import { __Debug__ } from '../../../src/intersection/bezier3-intersection/debug';
 import { renderTree } from './render-tree';
 
 
@@ -33,7 +33,7 @@ function geo(
     const ds: number[] = [];
     
     const timeStart = performance.now();
-    for (let i=0; i<num; i++) {
+    for (let i=0; i<2*num; i++, i++) {
         const ps1 = pss[i];
         const ps2 = pss[i+1];
 

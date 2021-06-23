@@ -22,7 +22,7 @@ function native(
     const xss: X[][][] = [];
 
     const timeStart = performance.now();
-    for (let i=0; i<num; i++) {
+    for (let i=0; i<2*num; i++, i++) {
         const ps1 = pss[i];
         const ps2 = pss[i+1];
 

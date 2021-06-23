@@ -3,10 +3,7 @@ from sympy import Matrix, det, binomial, linsolve, symbols, nonlinsolve
 
 
 def splitAtRight3():
-    # values
-
     # constants
-    #tS, tE = symbols('tS tE')
     tS = symbols('tS')
     a1, a0, b1, b0 = symbols('a1 a0 b1 b0')
     x0, x1, x2, x3 = symbols('x0 x1 x2 x3')
@@ -26,16 +23,6 @@ def splitAtRight3():
     #x3 = x3
 
     #r1 = r1.subs(x,x_)
-    #r2 = r2.subs(y,y_)
-
-    #print(r1)
-
-    #res = linsolve(
-    #    [r1,r2,r3,r4,r5,r6,r7,r8,r9,r10], 
-    #    a3, a2, a1, a0, b3, b2, b1, b0, x2, y2
-    #)
-
-    # (2 - 3*t)/(t**2*(t - 1)), 
 
     print(x0)
     print(x1)
@@ -45,10 +32,7 @@ def splitAtRight3():
 
 
 def splitAtLeft3():
-    # values
-
     # constants
-    #tS, tE = symbols('tS tE')
     tM = symbols('tM')
     x0, x1, x2, x3 = symbols('x0 x1 x2 x3')
     y0, y1, y2, y3 = symbols('y0 y1 y2 y3')
@@ -74,19 +58,12 @@ def splitAtLeft3():
 
 
 def splitAt3():
-    # values
-
     # constants
-    tS, tE = symbols('tS tE')
-    tM = symbols('tM')
-    #t = symbols('t')
+    tS, tE, tM = symbols('tS tE tM')
     x0, x1, x2, x3 = symbols('x0 x1 x2 x3')
-    #xx0, xx1, xx2, xx3 = symbols('x0 x1 x2 x3')
     s, t2, t3, s2, s3, ts = symbols('s t2 t3 s2 s3 ts')
     s_, t2_, t3_, s2_, s3_, ts_ = symbols('s_ t2_ t3_ s2_ s3_ ts_')
     
-
-    # variables
     # splitRight
     #tM = (tE - tS)/(1 - tS)
     #s = 1 - tS
@@ -121,7 +98,8 @@ def splitAt3():
     print(xx1)
     print(xx2)
     print(xx3)
-    return x0, x1, x2, x3
+
+    return xx0, xx1, xx2, xx3
 
 #splitAtRight3()
 #splitAtLeft3()

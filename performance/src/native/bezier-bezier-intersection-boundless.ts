@@ -1,6 +1,6 @@
-import { eEstimate } from "big-float-ts";
-import { allRootsCertified, differentiate, RootInterval, toCasStr } from "flo-poly";
-import { isCubicReallyQuad, isQuadReallyLine, toQuadraticFromCubic } from "../../../src";
+import { allRootsCertified, RootInterval } from "flo-poly";
+import { isCubicReallyQuad, isQuadReallyLine, tFromXY3, toQuadraticFromCubic } from "../../../src";
+import { tFromXY } from "../../../src/intersection/t-from-xy";
 import { getCoeffs }  from './get-coeffs';
 
 
@@ -8,23 +8,23 @@ function bezierBezierIntersectionBoundless(
         ps1: number[][], 
         ps2: number[][]): RootInterval[] {
    
-    if (ps1.length === 4 && isCubicReallyQuad(ps1)) {
-        ps1 = toQuadraticFromCubic(ps1)
-    }
-    if (ps1.length === 3 && isQuadReallyLine(ps1)) {
-        ps1 = [ps1[0], ps1[2]];
-    }
+    //if (ps1.length === 4 && isCubicReallyQuad(ps1)) {
+    //    ps1 = toQuadraticFromCubic(ps1)
+    //}
+    //if (ps1.length === 3 && isQuadReallyLine(ps1)) {
+    //    ps1 = [ps1[0], ps1[2]];
+    //}
     // TODO
     //if (ps1.length === 2 && isLineReallyPoint(ps1)) {
     //    ps1 = [ps1[0]];
     //}
 
-    if (ps2.length === 4 && isCubicReallyQuad(ps2)) {
-        ps2 = toQuadraticFromCubic(ps2)
-    }
-    if (ps2.length === 3 && isQuadReallyLine(ps2)) {
-        ps2 = [ps2[0], ps2[2]];
-    }
+    //if (ps2.length === 4 && isCubicReallyQuad(ps2)) {
+    //    ps2 = toQuadraticFromCubic(ps2)
+    //}
+    //if (ps2.length === 3 && isQuadReallyLine(ps2)) {
+    //    ps2 = [ps2[0], ps2[2]];
+    //}
     // TODO
     //if (ps2.length === 2 && isLineReallyPoint(ps2)) {
     //    ps2 = [ps2[0]];
@@ -33,16 +33,25 @@ function bezierBezierIntersectionBoundless(
     let _coeffs = getCoeffs(ps1,ps2);
     if (_coeffs === undefined) { 
         // infinite number of intersections (or maybe not!)
+        //console.log('use endpoint Xs')
         return undefined; 
     }
 
     let { coeffs, errBound, getPExact } = _coeffs;
 
-    const rs = allRootsCertified(coeffs, 0, 1, errBound, getPExact);
+    // @ts-ignore
+    const rs = allRootsCertified(coeffs, 0, 1, errBound, getPExact, true);
 
     //console.log(rs.map(r => r.tS));
     //console.log(rs.map(r => r.multiplicity));
     //console.log(rs.map(r => `${r.tS} | ${r.tE} => ${r.tE - r.tS} ` ));
+
+    if (rs === undefined) {
+        console.log(tFromXY(ps1, ps2[0]));
+        console.log(tFromXY(ps1, ps2[3]));
+        //console.log(tFromXY3(ps2, ps1[0]));
+        //console.log(tFromXY3(ps2, ps1[3]));
+    }
 
     return rs;
 }

@@ -18,4 +18,10 @@ function toGrid(
 }
 
 
-export { toGrid }
+function randOnGrid(max: number, maxBitLength: number) { 
+    if (maxBitLength === 53) { return () => max * Math.random(); }
+    const expMax = Math.ceil(Math.log2(Math.max(max)));
+    return () => toGrid(max * Math.random(), expMax, maxBitLength);
+}
+
+export { randOnGrid }

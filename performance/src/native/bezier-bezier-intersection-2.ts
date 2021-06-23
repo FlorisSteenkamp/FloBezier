@@ -1,6 +1,6 @@
 import { getOtherTs2 } from './get-other-ts-2';
 import { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless';
-import { X } from '../../../src';
+import { tFromXY3, X } from '../../../src';
 
 
 function bezierBezierIntersection2(

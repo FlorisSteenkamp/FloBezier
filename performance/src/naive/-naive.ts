@@ -45,7 +45,7 @@ function naive(
     const ds: number[] = [];
 
     const timeStart = performance.now();
-    for (let i=0; i<num; i++) {
+    for (let i=0; i<2*num; i++, i++) {
         const ps1 = pss[i];
         const ps2 = pss[i+1];
         const ts = bbi(ps1, ps2);

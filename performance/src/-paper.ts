@@ -18,7 +18,7 @@ function doPaper(
     let timing: number;
 
     const timeStart = performance.now();
-    for (let i=0; i<num; i++) {
+    for (let i=0; i<2*num; i++, i++) {
         const curve1 = curves[i];
         const curve2 = curves[i+1];
         const _ts = curve1.getIntersections(curve2);

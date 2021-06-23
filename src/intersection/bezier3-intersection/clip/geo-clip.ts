@@ -1,6 +1,6 @@
-import { toString } from '../../..';
 import type { __Debug__ } from '../debug';
 import { toHybridQuadratic as _toHybridQuadratic } from './to-hybrid-quadratic';
+import { toString } from '../../..';
 
 declare var __debug__: __Debug__;
 
@@ -17,6 +17,7 @@ const onemax = 1 + eps;
 
 const noIntersection: undefined = undefined;
 const noClip: number[] = [0,1];
+
 
 /**
  * Performs geometric clipping of the given bezier curve and returns the new
@@ -42,7 +43,15 @@ function geoClip(
         dMin: number, 
         dMax: number): number[] | undefined {
 
-    const _hq_ = toHybridQuadratic(G);
+    // estimated bezier control points
+    const Gps = G.ps;
+
+    const lenG = Gps.length;
+
+    const _hq_: { hq: number[][]; _hq: number[][]; } = lenG === 4 
+        ? toHybridQuadratic(G) 
+        : { hq: [Gps[1],Gps[1]], _hq: [[0,0],[0,0]] };  // degenerate
+
     // estimated hybrid coordinates
     const hq = _hq_.hq;     
     // hybrid coordinate error bounds with error counters of <8> and <12> for
@@ -50,8 +59,6 @@ function geoClip(
     // counters)
     const _hq = _hq_._hq;
     
-    // estimated bezier control points
-    const Gps = G.ps;
     // coordinate error bounds are assumed to have counters 
     // of `[[<6>,<6>], [<6>,<6>], [<10>,<10>], [<11>,<11>]]`
     const G_ps = G._ps;
@@ -59,7 +66,7 @@ function geoClip(
     /** min/max distance (from line) to hybrid quadratic (and cubic) first control point */
     const dH0   = dF(Gps[0], G_ps[0]);
     /** min/max distance (from line) to hybrid quadratic (and cubic) last control point */
-    const dH2   = dF(Gps[3], G_ps[3]);
+    const dH2   = dF(Gps[lenG-1], G_ps[lenG-1]);
     /** min/max distance (from line) to hybrid quadratic's moving control point start */
     const dH10  = dF(hq[0], _hq[0]);
     /** min/max distance (from line) to hybrid quadratic's moving control point end */
@@ -71,7 +78,7 @@ function geoClip(
     if (typeof __debug__ !== 'undefined' && !__debug__.already) {
         const currentIter = __debug__.currentIter;
         // just for drawing purposes (not perfectle accurate)
-        currentIter.hq = [G.ps[0], ...hq, G.ps[3]];
+        currentIter.hq = [G.ps[0], ...hq, G.ps[lenG-1]];
         if (currentIter.geo) {
             // we already did the first geoclip - assume this to be the perpendicular clip
             currentIter.geoPerp = { dH0, dH10, dH11, dH2, dMin, dMax };
@@ -290,8 +297,8 @@ function quadraticRoots(
     // at this point `D + D_ > 0`
 
     const Dmin = D - D_ < 0 ? 0 : D - D_;
-    const DDmin = Math.sqrt(Dmin)*(1 - eps);
-    const DDmax = Math.sqrt(D + D_)*(1 + eps);
+    const DDmin = Math.sqrt(Dmin)*(onemin);
+    const DDmax = Math.sqrt(D + D_)*(onemax);
 
     // at this point DDMax > 0
 
@@ -318,23 +325,23 @@ function quadraticRoots(
     let r2max: number;
     if (numerMaxAbs*a2 >= 0) {
         // same signs - `r1min >= 0` and `r1max > 0`
-        r1min = (numerMinAbs/a2)*(1 - eps);
-        r1max = (numerMaxAbs/a2)*(1 + eps);
+        r1min = (numerMinAbs/a2)*(onemin);
+        r1max = (numerMaxAbs/a2)*(onemax);
     } else {
         // opposite signs - `r1min <= 0` and `r1max < 0`
-        r1min = (numerMaxAbs/a2)*(1 + eps);
-        r1max = (numerMinAbs/a2)*(1 - eps);
+        r1min = (numerMaxAbs/a2)*(onemax);
+        r1max = (numerMinAbs/a2)*(onemin);
     }
     if (numerMaxAbs*c2 > 0) {
         // same signs - `r2min > 0` and `r2Max >= 0`
-        r2min = (c2/numerMaxAbs)*(1 - eps);
+        r2min = (c2/numerMaxAbs)*(onemin);
         // TODO - check if below can be a `NaN`
-        r2max = (c2/numerMinAbs)*(1 + eps);  // could be +-inf
+        r2max = (c2/numerMinAbs)*(onemax);  // could be +-inf
     } else if (numerMaxAbs*c2 < 0) {
         // opposite signs - `r2min < 0` and `r2Max <= 0`
         // TODO - check if below can be a `NaN`
-        r2min = (c2/numerMinAbs)*(1 + eps);  // could be +-inf 
-        r2max = (c2/numerMaxAbs)*(1 - eps);
+        r2min = (c2/numerMinAbs)*(onemax);  // could be +-inf 
+        r2max = (c2/numerMaxAbs)*(onemin);
     }
 
     const rs: number[] = [];

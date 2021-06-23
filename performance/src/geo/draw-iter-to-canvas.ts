@@ -5,6 +5,7 @@ import { draw } from '../draw-stuff';
 import { tcFatline } from './tc-fatline';
 import { tcGeo } from './tc-geo';
 import { tcPs } from './tc-ps';
+import { log } from '../log';
 
 
 function drawIterClipsToCanvas(
@@ -19,6 +20,8 @@ function drawIterClipsToCanvas(
     
     if (!iter.F_ || !iter.G_) { return; }
 
+    //console.log(toString(iter.F_.ps))
+    //console.log(toString(iter.G_.ps))
 
     const { F_: F, G_: G, fatline, fatlinePerp, hq } = iter;
 
@@ -151,6 +154,7 @@ function getFatlinePs(fatline: Fatline): number[][] {
 
 
 function getExtents(ps: number[][]) {
+    //console.log(ps)
     let minX = Number.POSITIVE_INFINITY;
     let maxX = Number.NEGATIVE_INFINITY;
     let minY = Number.POSITIVE_INFINITY;

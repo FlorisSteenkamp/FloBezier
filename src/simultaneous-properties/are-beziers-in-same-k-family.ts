@@ -2,8 +2,11 @@ import { isPointOnBezierExtension } from "./is-point-on-bezier-extension";
 import { evalDeCasteljau } from "../local-properties-at-t/t-to-xy/eval-de-casteljau";
 
 
+// TODO - bitlength calculation below is wrong due to evaluation.
+// TODO - this algorithm is wrong - it actually checks for infinite number
+// of intersections (which includes same-k-family cases) - could implicitizion provide a solution??
+// TODO - also consider order 1 and 2 (and 0?) cases
 /**
- * * TODO - bitlength calculation below is wrong due to evaluation.
  * 
  * Returns true if two beziers are in the same K-family, i.e. when their infinte
  * extensions is the same curve. This algorithm is robust if the preconditions 

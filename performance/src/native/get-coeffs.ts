@@ -51,32 +51,6 @@ function getCoeffs(
     const { coeffs: coeffsDd, errBound: errBoundDd } = 
         coeffFunctionsDdAnyBitlength[ps1.length-2][ps2.length-2](ps1, ps2);
 
-    // If the leading coefficient is too close to zero we have no choice but
-    // to go to infinite precision unless the error is also zero.
-    // while `|lcoef| < lcoeff error bound' -> possibly zero 'lcoef'
-    if (abs(coeffsDd[0][1]) <= errBoundDd[0]) {
-        // leading coefficient is too close to zero
-        // go to infinite precision
-
-        const pExact = 
-            coeffFunctionsExactAnyBitlength[ps1.length-2][ps2.length-2](ps1, ps2);
-
-        //if (pExact.length === 0) {
-            // infinite intersections -> usually same K Family
-            // but could also be point intersecting curve, etc.
-            //return undefined;
-        //}
-
-        const coeffs_ = pExact.map(eToDd);
-
-        return {
-            coeffs: coeffs_, 
-            // the error is the *low* order double times `Number.EPSILON`
-            errBound: coeffs_.map(c => abs(c[0]*Number.EPSILON)),
-            getPExact: () => pExact
-        };
-    }
-    
     const getPExactAnyBitlength = 
         () => coeffFunctionsExactAnyBitlength[ps1.length-2][ps2.length-2](ps1, ps2);
 
@@ -84,23 +58,23 @@ function getCoeffs(
     /*
     // check if all coefficients are zero, 
     // i.e. the two curves are possibly in the same k-family
-    let possiblySameKFamily = true;
+    let possiblyInfiniteXs = true;
     for (let i=0; i<coeffs.length; i++) {
         if (abs(coeffs[i][1]) - errBound[i] > 0) {
-            possiblySameKFamily = false; break;
+            possiblyInfiniteXs = false; break;
         }
     }
-    let sameKFamily = false;
-    if (possiblySameKFamily) {
-        sameKFamily = true;
+    let infiniteXs = false;
+    if (possiblyInfiniteXs) {
+        infiniteXs = true;
         const poly = getPExactAnyBitlength();
         for (let i=0; i<poly.length; i++) {
             if (eSign(poly[i]) !== 0) {
-                sameKFamily = false; break;
+                infiniteXs = false; break;
             }
         }        
     }
-    if (sameKFamily) {
+    if (infiniteXs) {
         return undefined;
     }
     */

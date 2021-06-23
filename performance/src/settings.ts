@@ -5,6 +5,9 @@
 // * test with expanding grid ?
 // * retest same k family
 // * also test polynomial curves (e.g. normal quadratics and cubics)
+// * update package to use newest version of flo-poly (otherwise overlapping
+//   intersections won't work)
+// * check why if __debug__ is set to `undefined` everything slows down a lot
 
 const tc = transformCoordinatesBL(2*640, 2*384);
 const tcml = transformCoordinatesML(2*640, 2*384);
@@ -13,23 +16,22 @@ const tcml = transformCoordinatesML(2*640, 2*384);
 const squashFactor = 2**0;
 const maxCoordinateX = 1;
 const maxCoordinateY = 1/squashFactor;
-const expMax = Math.ceil(Math.log2(Math.max(maxCoordinateX, maxCoordinateY)));
+//const expMax = Math.ceil(Math.log2(Math.max(maxCoordinateX, maxCoordinateY)));
 const settings = {
     timingOnly: true,
-    /** the number of bezier pairs (=== number of beziers - 1) */
+    /** the number of bezier pairs (=== number of beziers / 2) */
     num: 50_000,
     maxBitLength: 53,
 
     showNaive: false,
     showNative: true,
-    showPaper: true,
+    showPaper: false,
     showGeo: true,
     transY: 0,
     maxCoordinateX,
     squashFactor,
     maxCoordinateY,
     scaleFactor: 1,
-    expMax,
 
     showNaiveXs: false,
     showNativeXs: true,

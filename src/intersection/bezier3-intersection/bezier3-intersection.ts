@@ -2,7 +2,6 @@ import type { __Debug__, IterationExtras } from './debug';
 import type { Iteration } from './iteration';
 import { checkIntersectionInRanges as _checkIntersectionInRanges } from './check-intersection-in-ranges';
 import { bezierBezierIntersection, getOtherTs } from '../bezier-bezier-intersection/bezier-bezier-intersection';
-import { toString } from '../..';
 
 declare var __debug__: __Debug__;
 
@@ -50,14 +49,20 @@ function bezier3Intersection(
         ps1: number[][], 
         ps2: number[][]): number[][][] {
 
-    /** Intersection t values for both beziers */
+    //if (ps1.length <= 3 && ps2.length <= 3) {
+    //if (ps1.length < 4 || ps2.length < 4) {
+    if (ps1.length <= 2 || ps2.length <= 2) {
+        return implicit(ps1, ps2);
+    }
+
+    /** Intersection `t` values for both beziers */
     let xs: number[][][] = [];
 
     /** an iteration still left to check for intersections */
     let iteration: Iteration = { 
         F: ps1, 
         G: ps2,
-        fRange: [0,1], 
+        fRange: [0,1],
         gRange: [0,1],
         last: undefined
     };
@@ -84,7 +89,7 @@ function bezier3Intersection(
             (iter as Iteration & IterationExtras).uid = __debug__.uid++;
         }
 
-        let newIterations = checkIntersectionInRanges(iter, swapped);
+        let newIterations = checkIntersectionInRanges(iter);
 
         if (newIterations.length === 1) {
             const newIter = newIterations[0];
@@ -112,24 +117,25 @@ function bezier3Intersection(
                     : [lfRange, fRange]
                 );
             // else if this iteration is precise enough
-            } else if (δδ < δ) {
-                if (typeof __debug__ !== 'undefined' && !__debug__.already) {
-                    (newIter as Iteration & IterationExtras).foundX = true;
-                }
-                if (δδ < Δ) {
-                    // destructively change the `fRange` as a heuristic so its not
-                    // too narrow for the final clip; this might only be a 
-                    // problem if `fRange === 0` 
-                    fRange[0] = max(0, fRange[0] - Δ);
-                    fRange[1] = min(1, fRange[1] + Δ);
-                }
-                newIter.last = newIter;
-                stack.push(newIter);  // push the final iteration
             } else {
-                stack.push(newIter);
+                if (δδ < δ) {
+                    if (typeof __debug__ !== 'undefined' && !__debug__.already) {
+                        (newIter as Iteration & IterationExtras).foundX = true;
+                    }
+                    if (δδ < Δ) {
+                        // destructively change the `fRange` as a heuristic so its not
+                        // too narrow for the final clip; this might only be a 
+                        // problem if `fRange === 0` 
+                        fRange[0] = max(0, fRange[0] - Δ);
+                        fRange[1] = min(1, fRange[1] + Δ);
+                    }
+                    newIter.last = newIter;
+                }
+                stack.push(newIter);  // push the (possibly) final iteration
             }
         } else if (newIterations.length === 2) {
-            stack.push(...newIterations);
+            //stack.push(...newIterations);
+            stack.push(newIterations[0], newIterations[1]);
         }
     }
 
@@ -149,13 +155,6 @@ function bezier3Intersection(
     xs.sort((x1, x2) => x1[0][0] - x2[0][0]);
 
     combineXs(xs);
-
-    //console.log(xs.map(x => x[0][0]))
-
-    //if (xs.length === 6) {
-    //    console.log(toString(ps1))
-    //    console.log(toString(ps2))
-    //}
 
     return xs;
 }

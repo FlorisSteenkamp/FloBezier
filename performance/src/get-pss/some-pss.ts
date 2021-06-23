@@ -1,38 +1,3 @@
-import { drawBezier } from './draw/draw-bezier';
-import { toGrid } from '../../test/helpers/to-grid';
-import { trans, untransp, unsquashp, squashp, squash } from '../src/affine';
-import { settings } from './settings';
-import { bezierBezierIntersection, isCubicReallyQuad, isQuadReallyLine, toCubic, toHybridQuadratic, toQuadraticFromCubic, toString } from '../../src';
-
-const { tc, num, maxCoordinateX, maxCoordinateY, expMax, maxBitLength } = settings;
-
-declare const paper: any;
-
-function randOnGrid(max: number, expMax: number, maxBitLength: number) { 
-    if (maxBitLength === 53) { return () => max * Math.random(); }
-    return () => toGrid(max * Math.random(), expMax, maxBitLength);
-}
-
-
-function getRandInt(n: number): number {
-    return Math.floor(Math.random() * n);
-}
-
-
-function drawBeziers(ctx: CanvasRenderingContext2D) {
-    return (ps1: number[][], ps2: number[][]) => {
-        const drawBezier1 = drawBezier(ctx, '#f00', undefined, 0.5);
-        const drawBezier2 = drawBezier(ctx, '#0f0', undefined, 0.5);
-
-        drawBezier1(ps1, true, false);
-        drawBezier2(ps2, true, false);
-    }
-}
-
-
-const randOnGridX_ = randOnGrid(maxCoordinateX, expMax, maxBitLength);
-const randOnGridY_ = randOnGrid(maxCoordinateY, expMax, maxBitLength);
-
 
 // a bit contrived (next 2)
 const ps1 = [[0.11815017137396211, 1.1717377096885642],
@@ -539,8 +504,6 @@ const psss: number[][][] = [
 ];
 */
 
-const psss: number[][][] = [];
-
 //console.log('bb', bezierBezierIntersection(
 //    [
 //        [0,0], [], [], []
@@ -569,6 +532,58 @@ psss.push(
 );
 */
 
+const pssA: number[][][] = [
+    // same k family (non-overlapping)
+    [
+        [0.3525314928192529,0.011087603634223342],
+        [0.15979973251273805,0.3048079917978157],
+        [0.27864652102852006,0.4261487125617691],
+        [0.4145225866523674,0.6675139045906917]
+    ],
+    [
+        [0.48251607185424916,0.7995522627414218],
+        [0.5047444997062911,0.8478015437918174],
+        [0.526082308997843,0.9007385607970946],
+        [0.5451658456931909,0.9597170366214414]
+    ]
+];
+
+/*
+{
+    let qq = 0;
+    const r = randOnGrid(maxCoordinateX, expMax, maxBitLength);
+
+    while (true && qq++ < 1000_000) {
+        const bz = [
+            [r(),r()],
+            [r(),r()],
+            [r(),r()],
+            [r(),r()]
+        ]
+
+        const bz1 = from0ToT(bz, 0.75);
+        const bz2 = fromTTo1(bz, 0.875);
+
+        //console.log(bz);
+        //console.log(bz1);
+        //console.log(bz2);
+        //throw 'a'
+
+        //console.log(areBeziersInSameKFamily(ps1,ps2));
+        if (areBeziersInSameKFamily(bz1,bz2)) {
+            psss.push(bz1, bz2);
+            console.log('same')
+
+            console.log(toString(bz1));
+            console.log(toString(bz2));
+
+            break;
+        }
+    }
+}
+*/
+
+
 //console.log(toString(toCubic(psss[1])))
 //console.log(isCubicReallyQuad(psss[1]));
 //console.log(isQuadReallyLine(toQuadraticFromCubic(psss[1])));
@@ -586,119 +601,37 @@ for (let i=0; i<psss.length; i++) {
 }
 */
 
-function stretch(pss: number[][][]): number[][][] {
-    const factor = 2**43;
 
-    return pss.map(ps => ps.map(p => [p[0], factor*p[1]]))
-}
+//let pss: number[][][] = [ps5,ps6];
+//let pss: number[][][] = [ps6,ps7];
+//let pss: number[][][] = [ps8,ps9];
+//let pss: number[][][] = [psa,psb];
+//let pss: number[][][] = [psc,psd];
+//let pss: number[][][] = [pse,psf];
+//let pss: number[][][] = [psg,psh];
+//let pss: number[][][] = stretch([psg,psh]);  // TODO - fix this (the case where weird point is clipped) - already fixed probably
+//let pss: number[][][] = [psk,psl];
+//let pss: number[][][] = [psm,psn];
+//let pss: number[][][] = [psp,pso];
+//let pss: number[][][] = [psq,psr];
+//let pss: number[][][] = [pst,psu];
 
-
-function transformNop(ps: number[][]) { return ps; }
-
-
-// make some quadratic from the given cubic curve
-function transformToQuad(ps: number[][]): number[][] {
-    const q = [ps[0],ps[1],ps[2]];
-    const c = toCubic(q);
-
-    if (isCubicReallyQuad(c)) {
-        //console.log(toString(c));
-    }
-
-    return c;
-}
-
-
-
-
-function getPss(
-        order: 0|1|2|3, 
-        transform: (ps: number[][]) => number[][] = transformNop) {
-
-    //transform = transformToQuad;
-
-    //if (isCubicReallyQuad(psss[0])) {
-    //    console.log('1');
-    //}
-    //if (isCubicReallyQuad(psss[1])) {
-    //    console.log('2');
-    //}
-
-    const rx = () => randOnGridX_();
-    const ry = () => trans(randOnGridY_());
-
-    //let pss: number[][][] = [ps5,ps6];
-    //let pss: number[][][] = [ps6,ps7];
-    //let pss: number[][][] = [ps8,ps9];
-    //let pss: number[][][] = [psa,psb];
-    //let pss: number[][][] = [psc,psd];
-    //let pss: number[][][] = [pse,psf];
-    //let pss: number[][][] = [psg,psh];
-    //let pss: number[][][] = stretch([psg,psh]);  // TODO - fix this (the case where weird point is clipped)
-    //let pss: number[][][] = [psk,psl];
-    //let pss: number[][][] = [psm,psn];
-    //let pss: number[][][] = [psp,pso];
-    //let pss: number[][][] = [psq,psr];
-    //let pss: number[][][] = [pst,psu];
-    let pss: number[][][] = psss;
-    //let pss: number[][][] = [];
-    
-    let i = pss.length;
-    for (; i<num+1; i++) {
-        let order_ = order !== 0
-            ? order
-            : getRandInt(3) + 1;
-
-        const ps: number[][] = [];
-        for (let j=0; j<order_+1; j++) {
-            ps.push([rx(),ry()]);
-        }
-        pss.push(transform(ps));
-
-        //console.log(toString(ps));
-    }
-
-    //drawBeziers(ctx, pss[0], pss[1]);
-
-    return { pss, curves: getCurvesFromPss(pss) };
-}
+const psA: number[][][] = [
+    // same k family (non-overlapping)
+    [
+        [0.3525314928192529,0.011087603634223342],
+        [0.15979973251273805,0.3048079917978157],
+        [0.27864652102852006,0.4261487125617691],
+        [0.4145225866523674,0.6675139045906917]
+    ],
+    [
+        [0.48251607185424916,0.7995522627414218],
+        [0.5047444997062911,0.8478015437918174],
+        [0.526082308997843,0.9007385607970946],
+        [0.5451658456931909,0.9597170366214414]
+    ]
+];
 
 
-function getCurvesFromPss(pss: number[][][]) {
-    let curves: any[] = [];
+export { }
 
-    for (let i=0; i<num+1; i++) {
-        const ps = pss[i];
-
-        let curve: any;
-        if (ps.length === 2) {
-            curve = new paper.Curve(
-                new paper.Point(ps[0][0], ps[0][1]),
-                new paper.Point(ps[1][0], ps[1][1])
-            );
-        }
-        if (ps.length === 3) {
-            // not working??
-            curve = new paper.Curve(
-                new paper.Point(ps[0][0], ps[0][1]),
-                new paper.Point(ps[1][0] - ps[0][0], ps[1][1] - ps[0][1]),
-                new paper.Point(ps[2][0], ps[2][1])
-            );
-        }
-        if (ps.length === 4) {
-            curve = new paper.Curve(
-                new paper.Point(ps[0][0], ps[0][1]),
-                new paper.Point(ps[1][0] - ps[0][0], ps[1][1] - ps[0][1]),
-                new paper.Point(ps[2][0] - ps[3][0], ps[2][1] - ps[3][1]),
-                new paper.Point(ps[3][0], ps[3][1])
-            );
-        }
-        
-        curves.push(curve);
-    }
-
-    return curves;
-}
-
-
-export { getPss, drawBeziers }

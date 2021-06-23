@@ -2,7 +2,7 @@ import { drawCircle } from './draw/draw-circle';
 import { drawRect } from './draw/draw-rect';
 import { drawFatline } from './draw/draw-fatline';
 import { drawGeo } from './draw/draw-geo';
-import { drawBeziers } from './get-pss';
+import { drawBeziers } from './get-pss/get-pss';
 import { drawHybridPoly } from './draw/draw-hybrid-poly';
 
 
