@@ -135,13 +135,13 @@ function geoClip(
     let tMax = Number.NEGATIVE_INFINITY;
 
     /** *lower* Bernstein *lower* fatline roots */
-    let rootsMinBMinF = quadraticRoots(a, b, c1);
+    const rootsMinBMinF = quadraticRoots(a, b, c1);
     /** *lower* Bernstein *upper* fatline roots */
-    let rootsMinBMaxF = quadraticRoots(a, b, c2);
+    const rootsMinBMaxF = quadraticRoots(a, b, c2);
     /** *upper* Bernstein *lower* fatline roots */
-    let rootsMaxBMinF = quadraticRoots(d, e, f1);
+    const rootsMaxBMinF = quadraticRoots(d, e, f1);
     /** *upper* Bernstein *upper* fatline roots */
-    let rootsMaxBMaxF = quadraticRoots(d, e, f2);
+    const rootsMaxBMaxF = quadraticRoots(d, e, f2);
 
     // if there are an infinite number of roots, i.e. if the quadratic is
     // really the zero polynomial (of negative infinite degree)
