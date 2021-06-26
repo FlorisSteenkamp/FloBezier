@@ -1,16 +1,22 @@
-import type { ImplicitFormExact2, ImplicitFormExact3 } from "../../../../implicit-form/implicit-form-types";
-import { 
-    twoProduct, scaleExpansion2, expansionProduct, fastExpansionSum, 
-    eMultBy2 } from "big-float-ts";
-import { getImplicitForm3Exact } from "../../../../implicit-form/exact/get-implicit-form3-exact";
-import { getXY } from "../../../../to-power-basis/get-xy";
+import type { ImplicitFormExact3 } from "../../../../implicit-form/implicit-form-types";
+import { getXYExact1, getXYExact3 } from "../../../../to-power-basis/get-xy/exact/get-xy-exact";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+import { 
+    twoProduct, expansionProduct, fastExpansionSum, scaleExpansion2, 
+    eMultBy2, eSign as _eSign
+} from "big-float-ts";
+import { getCoeffsBez2Bez1Exact } from "./get-coeffs-bez2-bez1-exact";
+import { toQuadraticFromCubic } from "../../../../transformation/degree-or-type/to-quad-from-cubic";
+import { getImplicitForm3ExactPb } from "../../../../implicit-form/exact/get-implicit-form3-exact";
+import { isPointOnBezierExtension } from "../../../../simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension";
+
+const tp  = twoProduct;    // error -> 0
 const sce = scaleExpansion2;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
 const em2 = eMultBy2;
-const tp = twoProduct;
+const eSign = _eSign;
 
 
 /**
@@ -25,8 +31,7 @@ const tp = twoProduct;
  * Shewchuk floating point expansions from highest to lowest power, 
  * e.g. `[[5],[-3],[0]]` represents the polynomial `5x^2 - 3x`.
  * 
- * * **precondition:** the coordinates of the given bezier curves must be 
- * 47-bit aligned
+ * * **precondition:**  TODO - add underflow / overflow conditions
  * * the returned polynomial coefficients are exact (i.e. error-free)
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
@@ -35,45 +40,64 @@ const tp = twoProduct;
  * 
  * @doc mdx
  */
-function getCoeffsBez3Bez1Exact(ps1: number[][], ps2: number[][]) {
-    const { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
-        getImplicitForm3Exact(ps1) as
-            & ImplicitFormExact3  // vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ possibly `undefined`
-            & ImplicitFormExact2  // vₓₓ, vₓᵧ, vᵧᵧ possibly `undefined`
-            & { vₓ: number; vᵧ: number; v: number[]; };
+function getCoeffsBez3Bez1Exact(
+        ps1: number[][], ps2: number[][]): number[][] {
 
-    const [[c1,c0],[d1,d0]] = getXY(ps2);
+    /** ps1 in power bases */
+    const ps1pb = getXYExact3(ps1);
+    
+    //const [[e3,e2,e1,e0],[f3,f2,f1,f0]] = ps1pb;
+    // if both polynomials' cubic terms are exactly zero then its really a quadratic
+    if (eSign(ps1pb[0][0]) === 0 && eSign(ps1pb[1][0]) === 0) {
+        // the input bezier curve is in fact not cubic but has order < 3
+        return getCoeffsBez2Bez1Exact(toQuadraticFromCubic(ps1), ps2);
+    }
 
+    const [[c1,c0],[d1,d0]] = getXYExact1(ps2);
+
+    if (eSign(c1) === 0 && eSign(d1) === 0) {
+        // the input bezier curve is in fact not a line but has order < 1,
+        // i.e. it is a point
+        // TODO
+        return isPointOnBezierExtension(ps1, ps2[0])
+            ? [[0]]   // infinite intersections
+            : [[1]];  // no intersections
+    }
+
+    let { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
+        // this type coercion is justified since we already checked that the
+        // curve really has order 3
+        getImplicitForm3ExactPb(ps1pb) as ImplicitFormExact3;
 
     const c0c0 = tp(c0,c0);
-    const c0c1 = tp(c0,c1);
+    const c0c1 = sce(c0,c1);
     const c0d0 = tp(c0,d0);
-    const c0d1 = tp(c0,d1);
-    const c1c1 = tp(c1,c1);
-    const c1d0 = tp(c1,d0);
-    const c1d1 = tp(c1,d1);
+    const c0d1 = sce(c0,d1);
+    const c1c1 = epr(c1,c1);
+    const c1d0 = sce(d0,c1);
+    const c1d1 = epr(c1,d1);
     const d0d0 = tp(d0,d0);
-    const d0d1 = tp(d0,d1);
-    const d1d1 = tp(d1,d1);
+    const d0d1 = sce(d0,d1);
+    const d1d1 = epr(d1,d1);
     
     const z1 = sce(c0,vₓₓₓ);
-    const z7 = sce(3*c0,vₓₓₓ);  // 3*c0: 47-bit aligned => error free 
+    const z7 = epr(tp(3,c0),vₓₓₓ);
     const z2 = sce(c0,vₓₓᵧ);
     const z3 = sce(d0,vₓₓᵧ);
     const z4 = sce(c0,vₓᵧᵧ);
     const z5 = sce(d0,vₓᵧᵧ);
     const z6 = sce(d0,vᵧᵧᵧ);
-    const z8 = sce(3*d0,vᵧᵧᵧ);
+    const z8 = epr(tp(3,d0),vᵧᵧᵧ);
 
 
     // a1**3*v_xxx + a1**2*b1*v_xxy + a1*b1**2*v_xyy + b1**3*v_yyy
     //const v3 =
     //    c1c1*(c1*vₓₓₓ + d1*vₓₓᵧ) +
     //    d1d1*(c1*vₓᵧᵧ + d1*vᵧᵧᵧ);
-    const u1 = sce(c1,vₓₓₓ);
-    const u2 = sce(c1,vₓᵧᵧ);
-    const u3 = sce(d1,vₓₓᵧ);
-    const u4 = sce(d1,vᵧᵧᵧ);
+    const u1 = epr(c1,vₓₓₓ);
+    const u2 = epr(c1,vₓᵧᵧ);
+    const u3 = epr(d1,vₓₓᵧ);
+    const u4 = epr(d1,vᵧᵧᵧ);
     const u5 = fes(u1,u3);
     const u6 = fes(u2,u4);
     const u7 = epr(c1c1,u5);
@@ -121,8 +145,8 @@ function getCoeffsBez3Bez1Exact(ps1: number[][], ps2: number[][]) {
     const us = epr(d0d1,uo);
     const ut = epr(c0d1,up);
     const uu = epr(c1d0,uq);
-    const uv = sce(c1,vₓ);
-    const uw = sce(d1,vᵧ);
+    const uv = epr(c1,vₓ);
+    const uw = epr(d1,vᵧ);
     const ux = fes(ur,us);
     const uy = fes(ut,uu);
     const uz = fes(ux,uy);
@@ -160,7 +184,14 @@ function getCoeffsBez3Bez1Exact(ps1: number[][], ps2: number[][]) {
     const fd = fes(f9,fc);
     const v0 = fes(fd,v);
 
-    return [v3, v2, v1, v0];
+    const r = [v3, v2, v1, v0];
+    
+    // remove leading zero coefficients
+    //while (r.length > 1 && eSign(r[0]) === 0) {
+    //    r.shift();
+    //}
+
+    return r;
 }
 
 

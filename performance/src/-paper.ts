@@ -26,7 +26,7 @@ function doPaper(
 
         if (!timingOnly) {
             const ts = _ts.map((t: any) => t.time) as number[];
-            const xs = xss[i];
+            const xs = xss[i/2];
 
             updDs(ds, xs, ts);
         }

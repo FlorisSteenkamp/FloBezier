@@ -7,7 +7,8 @@
 // * also test polynomial curves (e.g. normal quadratics and cubics)
 // * update package to use newest version of flo-poly (otherwise overlapping
 //   intersections won't work)
-// * check why if __debug__ is set to `undefined` everything slows down a lot
+// * test `isPointOnBezierExtension` where the cubic is really a quad
+
 
 const tc = transformCoordinatesBL(2*640, 2*384);
 const tcml = transformCoordinatesML(2*640, 2*384);
@@ -18,9 +19,9 @@ const maxCoordinateX = 1;
 const maxCoordinateY = 1/squashFactor;
 //const expMax = Math.ceil(Math.log2(Math.max(maxCoordinateX, maxCoordinateY)));
 const settings = {
-    timingOnly: true,
+    timingOnly: false,
     /** the number of bezier pairs (=== number of beziers / 2) */
-    num: 50_000,
+    num: 1,
     maxBitLength: 53,
 
     showNaive: false,

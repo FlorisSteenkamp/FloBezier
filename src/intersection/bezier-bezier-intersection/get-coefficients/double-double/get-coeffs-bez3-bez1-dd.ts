@@ -1,6 +1,6 @@
 import { γγ } from "../../../../error-analysis/error-analysis";
-import { getImplicitForm3Dd } from "../../../../implicit-form/double-double/get-implicit-form3-dd";
-import { getXY } from "../../../../to-power-basis/get-xy";
+import { getXY1DdWithRunningError } from "../../../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error";
+import { getImplicitForm3DdWithRunningError } from "../../../../implicit-form/double-double/get-implicit-form3-dd-with-running-error";
 import { twoProduct, ddMultBy2, ddMultDouble2, ddMultDd, ddAddDd } from "double-double";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
@@ -26,8 +26,7 @@ const γγ3 = γγ(3);
  * double-double precision floating point numbers from highest to lowest power, 
  * e.g. `[[0,5],[0,-3],[0,0]]` represents the polynomial `5x^2 - 3x`.
  * 
- * * **precondition:** the coordinates of the given bezier curves must be 
- * 47-bit aligned
+ * * **precondition:** none
  * * intermediate calculations are done in double-double precision and this is
  * reflected in the output error bound (which is approximately 
  * `n * (Number.EPSILON**2) * the condition number`, where roughly `1 < n < 100` and 
@@ -44,9 +43,9 @@ function getCoeffsBez3Bez1Dd(ps1: number[][], ps2: number[][]) {
     const { 
         coeffs: { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v },
         errorBound: { vₓₓₓ_, vₓₓᵧ_, vₓᵧᵧ_, vᵧᵧᵧ_, vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ }
-    } = getImplicitForm3Dd(ps1);
+    } = getImplicitForm3DdWithRunningError(ps1);
 
-    const [[c1,c0],[d1,d0]] = getXY(ps2);
+    const [[c1,c0],[d1,d0]] = getXY1DdWithRunningError(ps2);
 
     const $vₓₓₓ = vₓₓₓ[1];
     const $vₓₓᵧ = vₓₓᵧ[1];
@@ -59,27 +58,42 @@ function getCoeffsBez3Bez1Dd(ps1: number[][], ps2: number[][]) {
     const $vᵧ  =  vᵧ  [1];
     const $v  =   v   [1];
 
-    const $c0c0 = c0*c0;
-    const $c0c1 = c0*c1;
-    const $c0d0 = c0*d0;
-    const $c0d1 = c0*d1;
-    const $c1c1 = c1*c1;
-    const $c1d0 = c1*d0;
-    const $c1d1 = c1*d1;
-    const $d0d0 = d0*d0;
-    const $d0d1 = d0*d1;
-    const $d1d1 = d1*d1;
+    const $c1 = c1[1];
+    const $d1 = d1[1];
 
-    const c0c0 = tp(c0,c0);
-    const c0c1 = tp(c0,c1);
-    const c0d0 = tp(c0,d0);
-    const c0d1 = tp(c0,d1);
-    const c1c1 = tp(c1,c1);
-    const c1d0 = tp(c1,d0);
-    const c1d1 = tp(c1,d1);
-    const d0d0 = tp(d0,d0);
-    const d0d1 = tp(d0,d1);
-    const d1d1 = tp(d1,d1);
+    const _c0 = abs(c0);
+    const _c1 = abs($c1);
+    const _d0 = abs(d0);
+    const _d1 = abs($d1);
+
+    const $c0c0 = c0*c0;
+    const $c0c1 = c0*$c1;
+    const $c0d0 = c0*d0;
+    const $c0d1 = c0*$d1;
+    const $c1c1 = $c1*$c1;
+    const $c1d0 = $c1*d0;
+    const $c1d1 = $c1*$d1;
+    const $d0d0 = d0*d0;
+    const $d0d1 = d0*$d1;
+    const $d1d1 = $d1*$d1;
+
+    const c0c0 = tp(c0,c0);  // error free
+    const c0c1 = qmd(c0,c1);
+    const c0c1_ = abs($c0c1);
+    const c0d0 = tp(c0,d0);  // error free
+    const c0d1 = qmd(c0,d1);
+    const c0d1_ = abs($c0d1);
+    const c1c1 = qmq(c1,c1);
+    const c1c1_ = 2*abs($c1c1);
+    const c1d0 = qmd(d0,c1);
+    const c1d0_ = abs($c1d0);
+    const c1d1 = qmq(c1,d1);
+    const c1d1_ = 2*abs($c1d1);
+    const d0d0 = tp(d0,d0);  // error free
+    const d0d1 = qmd(d0,d1);
+    const d0d1_ = abs($d0d1);
+    const d1d1 = qmq(d1,d1);
+    const d1d1_ = 2*abs($d1d1);
     
     const _c0c0 = abs($c0c0);
     const _c0c1 = abs($c0c1);
@@ -92,10 +106,6 @@ function getCoeffsBez3Bez1Dd(ps1: number[][], ps2: number[][]) {
     const _d0d1 = abs($d0d1);
     const _d1d1 = abs($d1d1);
    
-    const _c0 = abs(c0);
-    const _c1 = abs(c1);
-    const _d0 = abs(d0);
-    const _d1 = abs(d1);
 
     const $z1 = c0*$vₓₓₓ;
     const z1 = qmd(c0,vₓₓₓ);
@@ -127,18 +137,18 @@ function getCoeffsBez3Bez1Dd(ps1: number[][], ps2: number[][]) {
     //const v3 =
     //    c1c1*(c1*vₓₓₓ + d1*vₓₓᵧ) +
     //    d1d1*(c1*vₓᵧᵧ + d1*vᵧᵧᵧ);
-    const $u1 = c1*$vₓₓₓ;
-    const u1 = qmd(c1,vₓₓₓ);
-    const u1_ = _c1*vₓₓₓ_ + abs($u1);
-    const $u2 = c1*$vₓᵧᵧ;
-    const u2 = qmd(c1,vₓᵧᵧ);
-    const u2_ = _c1*vₓᵧᵧ_ + abs($u2);
-    const $u3 = d1*$vₓₓᵧ;
-    const u3 = qmd(d1,vₓₓᵧ);
-    const u3_ = _d1*vₓₓᵧ_ + abs($u3);
-    const $u4 = d1*$vᵧᵧᵧ;
-    const u4 = qmd(d1,vᵧᵧᵧ);
-    const u4_ = _d1*vᵧᵧᵧ_ + abs($u4);
+    const $u1 = $c1*$vₓₓₓ;
+    const u1 = qmq(c1,vₓₓₓ);
+    const u1_ = _c1*vₓₓₓ_ + 2*abs($u1);
+    const $u2 = $c1*$vₓᵧᵧ;
+    const u2 = qmq(c1,vₓᵧᵧ);
+    const u2_ = _c1*vₓᵧᵧ_ + 2*abs($u2);
+    const $u3 = $d1*$vₓₓᵧ;
+    const u3 = qmq(d1,vₓₓᵧ);
+    const u3_ = _d1*vₓₓᵧ_ + 2*abs($u3);
+    const $u4 = $d1*$vᵧᵧᵧ;
+    const u4 = qmq(d1,vᵧᵧᵧ);
+    const u4_ = _d1*vᵧᵧᵧ_ + 2*abs($u4);
     const $u5 = $u1 + $u3;
     const u5 = qaq(u1,u3);
     const _u5 = abs($u5);
@@ -149,10 +159,10 @@ function getCoeffsBez3Bez1Dd(ps1: number[][], ps2: number[][]) {
     const u6_ = u2_ + u4_ + _u6;
     const $u7 = $c1c1*$u5;
     const u7 = qmq(c1c1,u5);
-    const u7_ = _c1c1*u5_ + 2*abs($u7);
+    const u7_ = c1c1_*_u5 + _c1c1*u5_ + 2*abs($u7);
     const $u8 = $d1d1*$u6;
     const u8 = qmq(d1d1,u6);
-    const u8_ = _d1d1*u6_ + 2*abs($u8);
+    const u8_ = d1d1_*_u6 + _d1d1*u6_ + 2*abs($u8);
     const $v3 = $u7 + $u8;
     const v3 = qaq(u7,u8);
     const v3_ = u7_ + u8_ + abs($v3);
@@ -190,13 +200,13 @@ function getCoeffsBez3Bez1Dd(ps1: number[][], ps2: number[][]) {
     const ue_ = ub_ + vᵧᵧ_ + _ue;
     const $uf = $c1c1*$uc;
     const uf = qmq(c1c1,uc);
-    const uf_ = _c1c1*uc_ + 2*abs($uf);
+    const uf_ = c1c1_*_uc + _c1c1*uc_ + 2*abs($uf);
     const $ug = $c1d1*$ud;
     const ug = qmq(c1d1,ud);
-    const ug_ = _c1d1*ud_ + 2*abs($ug);
+    const ug_ = c1d1_*_ud + _c1d1*ud_ + 2*abs($ug);
     const $uh = $d1d1*$ue;
     const uh = qmq(d1d1,ue);
-    const uh_ = _d1d1*ue_ + 2*abs($uh);
+    const uh_ = d1d1_*_ue + _d1d1*ue_ + 2*abs($uh);
     const $ui = $uf + $ug;
     const ui = qaq(uf,ug);
     const ui_ = uf_ + ug_ + abs($ui);
@@ -237,22 +247,22 @@ function getCoeffsBez3Bez1Dd(ps1: number[][], ps2: number[][]) {
     const uq_ = z5_ + vₓᵧ_ + _uq;
     const $ur = $c0c1*$un;
     const ur = qmq(c0c1,un);
-    const ur_ = _c0c1*un_ + 2*abs($ur);
+    const ur_ = c0c1_*_un + _c0c1*un_ + 2*abs($ur);
     const $us = $d0d1*$uo;
     const us = qmq(d0d1,uo);
-    const us_ = _d0d1*uo_ + 2*abs($us);
+    const us_ = d0d1_*_uo + _d0d1*uo_ + 2*abs($us);
     const $ut = $c0d1*$up;
     const ut = qmq(c0d1,up);
-    const ut_ = _c0d1*up_ + 2*abs($ut);
+    const ut_ = c0d1_*_up + _c0d1*up_ + 2*abs($ut);
     const $uu = $c1d0*$uq;
     const uu = qmq(c1d0,uq);
-    const uu_ = _c1d0*uq_ + 2*abs($uu);
-    const $uv = c1*$vₓ;
-    const uv = qmd(c1,vₓ);
-    const uv_ = _c1*vₓ_ + abs($uv);
-    const $uw = d1*$vᵧ;
-    const uw = qmd(d1,vᵧ);
-    const uw_ = _d1*vᵧ_ + abs($uw);
+    const uu_ = c1d0_*_uq + _c1d0*uq_ + 2*abs($uu);
+    const $uv = $c1*$vₓ;
+    const uv = qmq(c1,vₓ);
+    const uv_ = _c1*vₓ_ + 2*abs($uv);
+    const $uw = $d1*$vᵧ;
+    const uw = qmq(d1,vᵧ);
+    const uw_ = _d1*vᵧ_ + 2*abs($uw);
     const $ux = $ur + $us;
     const ux = qaq(ur,us);
     const ux_ = ur_ + us_ + abs($ux);

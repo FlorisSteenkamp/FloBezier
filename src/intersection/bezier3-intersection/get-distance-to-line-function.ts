@@ -18,8 +18,8 @@ function getDistanceToLineFunction(
 	const xE = pE[0];
 	const yE = pE[1];
 
-	const s = td(yS, yE)[1];
-	const t = td(xE, xS)[1];
+	const s = yS - yE;
+	const t = xE - xS;
 	const u = qdq(tp(xS,yE), tp(xE,yS))[1];
 
 	return function(p: number[]) {
@@ -58,10 +58,9 @@ function getDistanceToLineFunction(
 		const _x = _p[0];
 		const _y = _p[1];
 
-		// assume counter of <11> on all coordinates
-		// TODO - for the moment we assume we can get s, t exact, v has counter of 2
+		// error counter of <12> on all coordinates
 		const d = s*x + t*y + v;
-		// <14>r <= <16>(<15>(<14>(<1>s*<12>x) + <14>(<1>t*<12>y)) + <1>v)
+		// <16>r <= <16>(<15>(<14>(<1>s*<12>x) + <14>(<1>t*<12>y)) + <1>v)
 		const _d = _s*_x + _t*_y + _v;
 		const E = 16*u*_d;
 

@@ -1,4 +1,4 @@
-import { getXY } from '../../to-power-basis/get-xy';
+import { getXY3 } from '../../to-power-basis/get-xy/double/get-xy';
 
 
 /**
@@ -8,13 +8,6 @@ import { getXY } from '../../to-power-basis/get-xy';
  * e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
  * 
  * * the implicit form is given by: `vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0`
- * * **precondition:** none
- * * intermediate calculations are done in **double** precision and this is
- * reflected in the output error bound (which is approximately 
- * `n * Number.EPSILON * the condition number`, where roughly `1 < n < 100` and 
- * depends on the specific calculation)
- * * the error bound returned first needs to be scaled by `γ === u/(1 - u)`,
- * where `u === Number.EPSILON / 2` before use
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * * takes about 1.2 micro-seconds on a 3rd gen i7 and Chrome 79
  * 
@@ -26,7 +19,7 @@ function getImplicitForm3(ps: number[][]) {
     // The implicit form is given by:
     // vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0
 
-    const [[a3,a2,a1,a0],[b3,b2,b1,b0]] = getXY(ps);
+    const [[a3,a2,a1,a0],[b3,b2,b1,b0]] = getXY3(ps);
 
     const a3b1 = a3*b1;
     const a1b3 = a1*b3;

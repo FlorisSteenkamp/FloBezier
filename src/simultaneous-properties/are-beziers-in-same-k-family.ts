@@ -1,5 +1,5 @@
-import { isPointOnBezierExtension } from "./is-point-on-bezier-extension";
 import { evalDeCasteljau } from "../local-properties-at-t/t-to-xy/eval-de-casteljau";
+import { isPointOnBezierExtension } from "./is-point-on-bezier-extension/is-point-on-bezier-extension";
 
 
 // TODO - bitlength calculation below is wrong due to evaluation.

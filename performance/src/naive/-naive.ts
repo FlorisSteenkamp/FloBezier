@@ -1,23 +1,21 @@
-import { closestPointOnBezier, closestPointOnBezierPrecise, evaluate, getCoeffsBez1Bez1, getIntervalBox, intersectBoxes } from "../../../src/index";
-import { getCoeffsBez1Bez2 } from "../../../src/index";
-import { getCoeffsBez1Bez3 } from "../../../src/index";
-import { getCoeffsBez2Bez1 } from "../../../src/index";
-import { getCoeffsBez2Bez2 } from "../../../src/index";
-import { getCoeffsBez2Bez3 } from "../../../src/index";
-import { getCoeffsBez3Bez1 } from "../../../src/index";
-import { getCoeffsBez3Bez2 } from "../../../src/index";
-//import { getCoeffsBez3Bez3InclError } from "../src/index";
-import { getCoeffsBez3Bez3 } from "../../../src/index";
+import { closestPointOnBezier, evaluate, getIntervalBox, intersectBoxes } from "../../../src/index";
+import { 
+    getCoeffsBez1Bez1,
+    getCoeffsBez1Bez2,
+    getCoeffsBez1Bez3,
+    getCoeffsBez2Bez1,
+    getCoeffsBez2Bez2,
+    getCoeffsBez2Bez3,
+    getCoeffsBez3Bez1,
+    getCoeffsBez3Bez2,
+    getCoeffsBez3Bez3
+} from "../../../experiments-new/index";
 import { X } from '../../../src/index';
 import { settings } from '../settings'; 
 import { draw, ctx } from '../draw-stuff';
-import { getCoeffsBez1Bez1Dd, getCoeffsBez1Bez2Dd, getCoeffsBez1Bez3Dd, getCoeffsBez2Bez1Dd, getCoeffsBez2Bez2Dd, getCoeffsBez2Bez3Dd, getCoeffsBez3Bez1Dd, getCoeffsBez3Bez2Dd, getCoeffsBez3Bez3Dd } from "../../../src/index";
-
 import { allRoots as _allRoots } from '../roots/all-roots';
 import { unsquashp, untransp } from '../affine';
 import { distanceBetween } from "flo-vector2d";
-
-import { getCoeffsBez3Bez3DdAnyBitlength } from './get-coeffs-bez3-bez3-dd-any-bitlength';
 import { showResults } from "../show-results";
 import { updDs } from "../upd-ds";
 
@@ -57,7 +55,7 @@ function naive(
             drawIntersections(ts);
         }
         if (!timingOnly) {
-            const xs = xss[i];
+            const xs = xss[i/2];
 
             updDs(ds, xs, ts.map(x => (x[0].ri.tE + x[0].ri.tS) / 2));
         }
@@ -183,13 +181,6 @@ function getOtherTs2(
 }
 
 
-const coeffFunctionsDd = [
-    [getCoeffsBez1Bez1Dd, getCoeffsBez1Bez2Dd, getCoeffsBez1Bez3Dd],
-    [getCoeffsBez2Bez1Dd, getCoeffsBez2Bez2Dd, getCoeffsBez2Bez3Dd],
-    [getCoeffsBez3Bez1Dd, getCoeffsBez3Bez2Dd, getCoeffsBez3Bez3DdAnyBitlength]
-];
-
-
 function getCoeffs2(
     ps1: number[][], 
     ps2: number[][]): number[] {
@@ -201,82 +192,4 @@ function getCoeffs2(
 }
 
 
-// TODO - remember to use getClosestPoint as opposed to a new set of t values
-function getCoeffs(
-    ps1: number[][], 
-    ps2: number[][]) {
-
-    //const coeffs = coeffFunctionsDd[ps1.length-2][ps2.length-2](ps1, ps2);
-    //const coeffs = getCoeffsBez3Bez3Dd(ps1, ps2);
-
-    //const cs = coeffs.coeffs.map(c => {
-    //    return c[c.length-1];
-    //})
-
-
-    const coeffs = getCoeffsBez3Bez3DdAnyBitlength(ps1, ps2);
-
-    const cs = coeffs.map(c => {
-        return c[c.length-1];
-    })
-
-    return cs;
-
-    /*
-    return {
-        coeffs: cs,
-        errBound: coeffs.errBound
-    };
-    */
-
-
-}
-
-
 export { naive }
-
-
-
-
-/*
-    // signChanges bNumRootsIn01
-    if (ii++ < 10) {
-        //console.log('------------');
-        const cTrans = changeVariablesTranslateX(coeffs, 1);
-        //console.log(signChanges(coeffs));
-        const sTrans = signChanges(cTrans);
-        const cs = [coeffs];
-	    for (let i=1; i<=coeffs.length-1; i++) {
-		    cs.push(differentiate(cs[i-1])); 
-	    }
-
-        const cFlip = changeVariablesScale(coeffs, -1);
-        const s = signChanges(coeffs);
-        const sFlip = signChanges(cFlip);
-        const numRoots = bNumRootsIn01(scaleFloatsToBigints(coeffs));
-
-        const dd = cs.map(c => signChanges(c));
-        //console.log(numRoots, s, sFlip, sTrans, `[${dd}]`);
-        console.log(numRoots, s, sTrans, `[${dd}]`, toCasStr(coeffs));
-        //console.log('------------');
-    }
-    */
-
-    //{
-    //    const numRoots = bNumRootsIn01(scaleFloatsToBigints(coeffs));
-    //    if (numRoots === 0 || numRoots === 1) { return []; }
-    //}
-
-
-
-    /*
-            for (const x of xs) {
-                const box = x[0].box;
-                const px = (box[1][0] + box[0][0])/2;
-                const py = (box[1][1] + box[0][1])/2;
-                const p = [px,py];
-                const bp = closestPointOnBezierPrecise(ps2, p);
-                const d = distanceBetween(p, bp.p);
-                dsNaive.push(d);
-            }
-            */

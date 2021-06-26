@@ -1,19 +1,14 @@
-import { ddMultBy2, ddDiffDd, ddAddDd } from 'double-double';
-import { getXY } from '../../to-power-basis/get-xy';
+import type { ImplicitFormExact1, ImplicitFormExact2, ImplicitFormExact3 } from '../implicit-form-types';
+import { getXYExact3 } from '../../to-power-basis/get-xy/exact/get-xy-exact';
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { 
-    twoProduct, expansionProduct, fastExpansionSum, scaleExpansion2, 
-    eDiff, eNegativeOf, eMultBy2, eDivBy2 
+    expansionProduct, fastExpansionSum, scaleExpansion2, 
+    eDiff, eNegativeOf, eMultBy2, eDivBy2
 } from "big-float-ts";
-import { getImplicitForm2Exact } from './get-implicit-form2-exact';
-import { ImplicitFormExact2, ImplicitFormExact3 } from '../implicit-form-types';
+import { eSign as _eSign } from 'big-float-ts';
+import { getImplicitForm2ExactPb } from './get-implicit-form2-exact';
 
-
-const tp  = twoProduct;    // error -> 0
-const qm2 = ddMultBy2;     // error -> 0 
-const qdq = ddDiffDd;      // error -> 3*γ²
-const qaq = ddAddDd;       // error -> 3*γ²
 const sce = scaleExpansion2;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
@@ -21,71 +16,96 @@ const edif = eDiff;
 const eno = eNegativeOf;
 const em2 = eMultBy2;
 const ed2 = eDivBy2;
+const eSign = _eSign;
 
 
 /**
- * Returns the exact implicit form of the given cubic bezier curve.
+ * Returns the exact implicit form of the given cubic bezier curve
+ * or `undefined` if the curve is really a point.
  * 
  * Returned coefficients are subscripted to match their monomial's variables,
  * e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
  * 
  * * the implicit form is given by: `vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0`
- * * **precondition:** the coordinates of the given bezier must be 47-bit aligned
+ * * **precondition:** none 
  * 
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * * takes about 155 micro-seconds on a 3rd gen i7 and Chrome 79
  * 
  * @param ps
  * 
- * @doc mdx - TODO - remove mdx from these functions - they will become too many
+ * @doc mdx - TODO - remove mdx from these functions - they will become too many?
  */
 function getImplicitForm3Exact(
         ps: number[][]): 
             | Partial<ImplicitFormExact3> 
             | Partial<ImplicitFormExact2>
-            | { vₓ: number, vᵧ: number, v: number[] } {
+            | ImplicitFormExact1 {
 
-    const [[a3,a2,a1,a0], [b3,b2,b1,b0]] = getXY(ps);
+    return getImplicitForm3ExactPb(
+        getXYExact3(ps)
+    );
+}
 
-    //if (a3 === 0 && b3 === 0) {
-    //    // the input bezier curve is in fact not cubic but has order < 3
-    //    return getImplicitForm2Exact(ps);
-    //}
 
-    const a3b1 = tp(a3,b1);  // error free
-    const a1b3 = tp(a1,b3);  // error free
-    const a3b2 = tp(a3,b2);  // error free
-    const a2b2 = tp(a2,b2);  // error free
-    const a2b3 = tp(a2,b3);  // error free
-    const a3a3 = tp(a3,a3);  // error free
-    const b2b2 = tp(b2,b2);  // error free
-    const b3b3 = tp(b3,b3);  // error free
-    const a1a3 = tp(a1,a3);  // error free
-    const a2a2 = tp(a2,a2);  // error free
-    const b1b3 = tp(b1,b3);  // error free
-    const b2b3 = tp(b2,b3);  // error free
-    const a2a3 = tp(a2,a3);  // error free
-    const a3b3 = tp(a3,b3);  // error free
-    const a3b0 = tp(a3,b0);  // error free
-    const a0b3 = tp(a0,b3);  // error free
-    const a2b0 = tp(a2,b0);  // error free
-    const a0b2 = tp(a0,b2);  // error free
-    const a2b1 = tp(a2,b1);  // error free
-    const a1b2 = tp(a1,b2);  // error free
-    const a1b0 = tp(a1,b0);  // error free
-    const a0b1 = tp(a0,b1);  // error free
+/**
+ * The power basis version of [[getImplicitForm3ExactAnyBitlength]].
+ * 
+ * @param pspb the power basis representation of a cubic bezier curve that can
+ * be found via [[getXYExactAnyBitlength3]]
+ * 
+ * @internal
+ */
+function getImplicitForm3ExactPb(
+        pspb: [
+                [number[], number[], number[], number], 
+                [number[], number[], number[], number]
+            ]):
+                | Partial<ImplicitFormExact3> 
+                | Partial<ImplicitFormExact2>
+                | ImplicitFormExact1 {
 
-    const q1 = qdq(a3b0,a0b3);  // 48-bit aligned => error free
-    const q2 = qdq(a3b1,a1b3);  // 48-bit aligned => error free
-    const q3 = qdq(a3b2,a2b3);  // 48-bit aligned => error free
-    const q4 = qdq(a2b0,a0b2);  // 48-bit aligned => error free
-    const q5 = qdq(a2b1,a1b2);  // 48-bit aligned => error free
-    const q6 = qdq(a1b0,a0b1);  // 48-bit aligned => error free
-    const t1 = qdq(b1b3,b2b2);  // 48-bit aligned => error free
-    const t2 = qdq(a1a3,a2a2);  // 48-bit aligned => error free
-    const p1 = qaq(a2b3,a3b2);  // 48-bit aligned => error free
-    const p2 = qaq(a1b3,a3b1);  // 48-bit aligned => error free
-    const tq2 = qm2(q2);        // error free
+    const [[a3,a2,a1,a0], [b3,b2,b1,b0]] = pspb;
+
+    if (eSign(a3) === 0 && eSign(b3) === 0) {
+        // the input bezier curve is in fact not cubic but has order < 3
+        return getImplicitForm2ExactPb([[a2,a1,a0], [b2,b1,b0]]);
+    }
+
+    const a3b1 = epr(a3,b1);
+    const a1b3 = epr(a1,b3);
+    const a3b2 = epr(a3,b2);
+    const a2b2 = epr(a2,b2);
+    const a2b3 = epr(a2,b3);
+    const a3a3 = epr(a3,a3);
+    const b2b2 = epr(b2,b2);
+    const b3b3 = epr(b3,b3);
+    const a1a3 = epr(a1,a3);
+    const a2a2 = epr(a2,a2);
+    const b1b3 = epr(b1,b3);
+    const b2b3 = epr(b2,b3);
+    const a2a3 = epr(a2,a3);
+    const a3b3 = epr(a3,b3);
+    const a3b0 = sce(b0,a3);
+    const a0b3 = sce(a0,b3);
+    const a2b0 = sce(b0,a2);
+    const a0b2 = sce(a0,b2);
+    const a2b1 = epr(a2,b1);
+    const a1b2 = epr(a1,b2);
+    const a1b0 = sce(b0,a1);
+    const a0b1 = sce(a0,b1);
+
+    const q1 = edif(a3b0,a0b3);
+    const q2 = edif(a3b1,a1b3);
+    const q3 = edif(a3b2,a2b3);
+    const q4 = edif(a2b0,a0b2);
+    const q5 = edif(a2b1,a1b2);
+    const q6 = edif(a1b0,a0b1);
+    const t1 = edif(b1b3,b2b2);
+    const t2 = edif(a1a3,a2a2);
+    const p1 = fes(a2b3,a3b2);
+    const p2 = fes(a1b3,a3b1);
+    const tq2 = em2(q2);  // error free
 
     const q1q1  = epr(q1,q1);
     const q1q2  = epr(q1,q2);
@@ -98,13 +118,12 @@ function getImplicitForm3Exact(
     const q3q6  = epr(q3,q6);
 
 
-    const vₓₓₓ = sce(-b3,b3b3);
-    const vₓₓᵧ = sce( 3*a3,b3b3);  // 47-bit aligned => 3*a0,... -> error free
-    const vₓᵧᵧ = sce(-3*b3,a3a3);  // 47-bit aligned => 3*b0,... -> error free 
-    const vᵧᵧᵧ = sce(a3,a3a3);
+    const vₓₓₓ = epr(eno(b3),b3b3);
+    const vₓₓᵧ = epr(sce(3,a3),b3b3);
+    const vₓᵧᵧ = epr(sce(-3,b3),a3a3);
+    const vᵧᵧᵧ = epr(a3,a3a3);
 
-    // 46-bit aligned => qmd(3*q1 - q5,...) -> error free
-    const u1 = edif(sce(-3,q1), q5); // 47-bit aligned => qmd(3*q1 - q5) -> error free
+    const u1 = edif(sce(-3,q1), q5);
 
     //const vₓₓ = (u1*b3b3 + q3*(b1b3 - b2b2)) + tq2*b2b3;
     const w1 = epr(u1,b3b3);
@@ -123,7 +142,7 @@ function getImplicitForm3Exact(
     
 
     //const vₓᵧ = 2*(q3*(a2b2 - p2/2) - (u1*a3b3 + q2*p1));
-    const wa = edif(a2b2,ed2(p2));  // 47-bit aligned => wa = a2b2 - p2/2 -> error free
+    const wa = edif(a2b2,ed2(p2));
     const wb = epr(u1,a3b3);
     const wc = epr(q2,p1);
     const wd = fes(wb,wc);
@@ -148,17 +167,17 @@ function getImplicitForm3Exact(
 
 
     //const vₓ = b3*s1 + (b2*s2 + b1*s3);
-    const wm = sce(b3,s1); 
-    const ws = sce(b2,s2);
-    const wt = sce(b1,s3);
+    const wm = epr(b3,s1); 
+    const ws = epr(b2,s2);
+    const wt = epr(b1,s3);
     const wn = fes(ws,wt);
     const vₓ = fes(wm,wn);
 
 
     //const vᵧ = -a3*s1 - (a2*s2 + a1*s3);
-    const wo = sce(a3,s1);
-    const wu = sce(a2,s2);
-    const wv = sce(a1,s3);
+    const wo = epr(a3,s1);
+    const wu = epr(a2,s2);
+    const wv = epr(a1,s3);
     const wp = fes(wu,wv);
     const vᵧ = eno(fes(wo,wp));
 
@@ -173,9 +192,8 @@ function getImplicitForm3Exact(
     //const v = q1*(tq2q4 - q1q1 - q1q5) + s3*q6 - q3q4*q4;
     const v = fes(v6,v2);
 
-        
     return { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v };
 }
 
 
-export { getImplicitForm3Exact }
+export { getImplicitForm3Exact, getImplicitForm3ExactPb }

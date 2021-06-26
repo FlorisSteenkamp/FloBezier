@@ -1,4 +1,4 @@
-import { getXYExactAnyBitlength } from "../../../../to-power-basis/any-bitlength/exact/get-xy-exact-any-bitlength";
+import { getXYExact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact";
 import { eHorner } from 'flo-poly';
 
 
@@ -24,7 +24,7 @@ function evaluate_anyBitlength_exact(
     if (t === 1) { return [[ps[len-1][0]], [ps[len-1][1]]]; }
 
 
-    const [X,Y] = getXYExactAnyBitlength(ps) as number[][][];
+    const [X,Y] = getXYExact(ps) as number[][][];
 
     // wrap the last number as a Shewchuck expansion of length 1
 

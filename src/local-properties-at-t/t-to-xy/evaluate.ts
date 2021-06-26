@@ -1,4 +1,4 @@
-import { getXY } from "../../to-power-basis/get-xy";
+import { getXY } from "../../to-power-basis/get-xy/double/get-xy";
 import { Horner as evaluatePoly } from 'flo-poly';
 
 

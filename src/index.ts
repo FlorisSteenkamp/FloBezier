@@ -22,7 +22,7 @@ import { evalDeCasteljau } from './local-properties-at-t/t-to-xy/eval-de-castelj
 import { evalDeCasteljauWithErr } from './local-properties-at-t/t-to-xy/eval-de-casteljau-with-err';
 import { evalDeCasteljauWithErrDd } from './local-properties-at-t/t-to-xy/eval-de-casteljau-with-err-dd';
 
-import { isPointOnBezierExtension } from './simultaneous-properties/is-point-on-bezier-extension';
+import { isPointOnBezierExtension } from './simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension';
 import { totalCurvature, totalAbsoluteCurvature } from './global-properties/total-curvature';
 import { reverse } from './transformation/reverse';
 import { X } from './intersection/bezier-bezier-intersection/x';
@@ -30,88 +30,46 @@ import { getInflections } from './global-properties/get-inflections';
 import { getCoeffsBezBez } from './intersection/bezier-bezier-intersection/get-coefficients/get-coeffs-bez-bez';
 
 import { getImplicitForm3 } from './implicit-form/double/get-implicit-form3';
-import { getImplicitForm3InclError } from './implicit-form/double-incl-error/get-implicit-form3-incl-error';
-import { getImplicitForm3Dd } from './implicit-form/double-double/get-implicit-form3-dd';
-import { getImplicitForm3DdAnyBitlength } from './implicit-form/double-double/get-implicit-form3-dd-any-bitlength';
+import { getImplicitForm3ErrorCounters } from './implicit-form/get-error-counters/get-implicit-form3-error-counters';
+import { getImplicitForm3DdWithRunningError } from './implicit-form/double-double/get-implicit-form3-dd-with-running-error';
 import { getImplicitForm3Exact } from './implicit-form/exact/get-implicit-form3-exact';
-import { getImplicitForm3ExactAnyBitlength } from './implicit-form/exact/get-implicit-form3-exact-any-bitlength';
 
 import { getImplicitForm2 } from './implicit-form/double/get-implicit-form2';
-import { getImplicitForm2InclError } from './implicit-form/double-incl-error/get-implicit-form2-incl-error';
-import { getImplicitForm2Dd } from './implicit-form/double-double/get-implicit-form2-dd';
-import { getImplicitForm2DdAnyBitlength } from './implicit-form/double-double/get-implicit-form2-dd-any-bitlength';
+import { getImplicitForm2ErrorCounters } from './implicit-form/get-error-counters/get-implicit-form2-error-counters';
+import { getImplicitForm2DdWithRunningError } from './implicit-form/double-double/get-implicit-form2-dd-with-running-error';
 import { getImplicitForm2Exact } from './implicit-form/exact/get-implicit-form2-exact';
-import { getImplicitForm2ExactAnyBitlength } from './implicit-form/exact/get-implicit-form2-exact-any-bitlength';
 
 import { getImplicitForm1 } from './implicit-form/double/get-implicit-form1';
-import { getImplicitForm1InclError } from './implicit-form/double-incl-error/get-implicit-form1-incl-error';
-import { getImplicitForm1Dd } from './implicit-form/double-double/get-implicit-form1-dd';
-import { getImplicitForm1DdAnyBitlength } from './implicit-form/double-double/get-implicit-form1-dd-any-bitlength';
+import { getImplicitForm1ErrorCounters } from './implicit-form/get-error-counters/get-implicit-form1-error-counters';
+import { getImplicitForm1DdWithRunningError } from './implicit-form/double-double/get-implicit-form1-dd-with-running-error';
 import { getImplicitForm1Exact } from './implicit-form/exact/get-implicit-form1-exact';
-import { getImplicitForm1ExactAnyBitlength } from './implicit-form/exact/get-implicit-form1-exact-any-bitlength';
 
-import { getCoeffsBez3Bez3DdAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez3-dd-any-bitlength';
-import { getCoeffsBez3Bez3 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez3-bez3';
-import { getCoeffsBez3Bez3InclError } from './intersection/bezier-bezier-intersection/get-coefficients/double-incl-error/get-coeffs-bez3-bez3-incl-error';
 import { getCoeffsBez3Bez3Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez3-dd';
 import { getCoeffsBez3Bez3Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez3-exact';
-import { getCoeffsBez3Bez3ExactAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez3-exact-any-bitlength';
 
-import { getCoeffsBez3Bez2DdAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez2-dd-any-bitlength';
-import { getCoeffsBez3Bez2 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez3-bez2';
-import { getCoeffsBez3Bez2InclError } from './intersection/bezier-bezier-intersection/get-coefficients/double-incl-error/get-coeffs-bez3-bez2-incl-error';
 import { getCoeffsBez3Bez2Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez2-dd';
 import { getCoeffsBez3Bez2Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez2-exact';
-import { getCoeffsBez3Bez2ExactAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez2-exact-any-bitlength';
 
-import { getCoeffsBez3Bez1DdAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez1-dd-any-bitlength';
-import { getCoeffsBez3Bez1 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez3-bez1';
-import { getCoeffsBez3Bez1InclError } from './intersection/bezier-bezier-intersection/get-coefficients/double-incl-error/get-coeffs-bez3-bez1-incl-error';
 import { getCoeffsBez3Bez1Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez1-dd';
 import { getCoeffsBez3Bez1Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez1-exact';
-import { getCoeffsBez3Bez1ExactAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez1-exact-any-bitlength';
 
-import { getCoeffsBez2Bez3DdAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez2-bez3-dd-any-bitlength';
-import { getCoeffsBez2Bez3 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez2-bez3';
-import { getCoeffsBez2Bez3InclError } from './intersection/bezier-bezier-intersection/get-coefficients/double-incl-error/get-coeffs-bez2-bez3-incl-error';
 import { getCoeffsBez2Bez3Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez2-bez3-dd';
 import { getCoeffsBez2Bez3Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez2-bez3-exact';
-import { getCoeffsBez2Bez3ExactAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez2-bez3-exact-any-bitlength';
 
-import { getCoeffsBez2Bez2DdAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez2-bez2-dd-any-bitlength';
-import { getCoeffsBez2Bez2 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez2-bez2';
-import { getCoeffsBez2Bez2InclError } from './intersection/bezier-bezier-intersection/get-coefficients/double-incl-error/get-coeffs-bez2-bez2-incl-error';
 import { getCoeffsBez2Bez2Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez2-bez2-dd';
 import { getCoeffsBez2Bez2Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez2-bez2-exact';
-import { getCoeffsBez2Bez2ExactAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez2-bez2-exact-any-bitlength';
 
-import { getCoeffsBez2Bez1DdAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez2-bez1-dd-any-bitlength';
-import { getCoeffsBez2Bez1 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez2-bez1';
-import { getCoeffsBez2Bez1InclError } from './intersection/bezier-bezier-intersection/get-coefficients/double-incl-error/get-coeffs-bez2-bez1-incl-error';
 import { getCoeffsBez2Bez1Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez2-bez1-dd';
 import { getCoeffsBez2Bez1Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez2-bez1-exact';
-import { getCoeffsBez2Bez1ExactAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez2-bez1-exact-any-bitlength';
 
-import { getCoeffsBez1Bez3DdAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez3-dd-any-bitlength';
-import { getCoeffsBez1Bez3 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez1-bez3';
-import { getCoeffsBez1Bez3InclError } from './intersection/bezier-bezier-intersection/get-coefficients/double-incl-error/get-coeffs-bez1-bez3-incl-error';
 import { getCoeffsBez1Bez3Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez3-dd';
 import { getCoeffsBez1Bez3Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez3-exact';
-import { getCoeffsBez1Bez3ExactAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez3-exact-any-bitlength';
 
-import { getCoeffsBez1Bez2DdAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez2-dd-any-bitlength';
-import { getCoeffsBez1Bez2 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez1-bez2';
-import { getCoeffsBez1Bez2InclError } from './intersection/bezier-bezier-intersection/get-coefficients/double-incl-error/get-coeffs-bez1-bez2-incl-error';
 import { getCoeffsBez1Bez2Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez2-dd';
 import { getCoeffsBez1Bez2Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez2-exact';
-import { getCoeffsBez1Bez2ExactAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez2-exact-any-bitlength';
 
-import { getCoeffsBez1Bez1DdAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez1-dd-any-bitlength';
-import { getCoeffsBez1Bez1 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez1-bez1';
-import { getCoeffsBez1Bez1InclError } from './intersection/bezier-bezier-intersection/get-coefficients/double-incl-error/get-coeffs-bez1-bez1-incl-error';
 import { getCoeffsBez1Bez1Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez1-dd';
 import { getCoeffsBez1Bez1Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez1-exact';
-import { getCoeffsBez1Bez1ExactAnyBitlength } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez1-exact-any-bitlength';
 
 import { getCoeffsBez3 } from './intersection/self-intersection/get-coefficients/double/get-coeffs-bez3';
 import { getCoeffsBez3Dd } from './intersection/self-intersection/get-coefficients/double-double/get-coeffs-bez3-dd';
@@ -130,7 +88,7 @@ import { inversion01Precise } from './intersection/inversion-01';
 import { tFromXY3 } from './intersection/t-from-xy';
 //import { inversion1_BL52_1ULP } from './graveyard/inversion-old';
 
-import { getXY       } from './to-power-basis/get-xy';
+import { getXY       } from './to-power-basis/get-xy/double/get-xy';
 import { getDxy      } from './to-power-basis/get-dxy';
 import { getDdxy     } from './to-power-basis/get-ddxy';
 import { getDxyAt1   } from './local-properties-at-t/t-to-dxy/get-dxy-at-1';
@@ -143,7 +101,7 @@ import { normal      } from './local-properties-at-t/normal';
 import { from0ToT    } from './transformation/split-merge-clone/from-0-to-T';
 import { fromTTo1    } from './transformation/split-merge-clone/from-T-to-1';
 import { fromTo, fromToPrecise } from './transformation/split-merge-clone/from-to';
-import { getOtherTs } from './intersection/bezier-bezier-intersection/bezier-bezier-intersection';
+import { getOtherTs } from './intersection/bezier-bezier-intersection/get-other-ts';
 import { bezierBezierIntersection } from './intersection/bezier-bezier-intersection/bezier-bezier-intersection';
 import { toCubic } from './transformation/degree-or-type/to-cubic';
 import { κ, curvature } from './local-properties-at-t/curvature';
@@ -183,7 +141,7 @@ import { evaluate } from './local-properties-at-t/t-to-xy/evaluate';
 import { evaluateDdxy } from './local-properties-at-t/t-to-ddxy/evaluate-ddxy';
 import { evaluateDxy } from './local-properties-at-t/t-to-dxy/evaluate-dxy';
 
-import { getXYDdAnyBitlength3 } from './to-power-basis/any-bitlength/double-double/get-xy-dd-any-bitlength';
+import { getXY3DdWithRunningError } from './to-power-basis/get-xy/double-double/get-xy-dd-with-running-error';
 
 
 /** 
@@ -289,20 +247,15 @@ export {
 	toExpansion,
 	toEstimation,
 	getImplicitForm3,
-	getImplicitForm3InclError,
-	getImplicitForm3Dd,
-	getImplicitForm3DdAnyBitlength,
-	getImplicitForm3Exact,
+	getImplicitForm3ErrorCounters,
+	getImplicitForm3DdWithRunningError,
 	getImplicitForm2,
-	getImplicitForm2InclError,
-	getImplicitForm2Dd,
-	getImplicitForm2DdAnyBitlength,
+	getImplicitForm2ErrorCounters,
+	getImplicitForm2DdWithRunningError,
 	getImplicitForm2Exact,
 	getImplicitForm1,
-	getImplicitForm1InclError,
-	getImplicitForm1Dd,
-	getImplicitForm1DdAnyBitlength,
-	getImplicitForm1Exact,
+	getImplicitForm1ErrorCounters,
+	getImplicitForm1DdWithRunningError,
 	
 	// -----------------------
 	// -- Global properties --
@@ -378,73 +331,28 @@ export {
 	evaluate_anyBitlength_exact,
 	isPointOnBezierExtension,
 
-	getCoeffsBez3Bez3DdAnyBitlength,
-	getCoeffsBez3Bez3,
-	getCoeffsBez3Bez3InclError, 
 	getCoeffsBez3Bez3Dd,
-	getCoeffsBez3Bez3Exact,
-
-	getCoeffsBez3Bez2DdAnyBitlength,
-	getCoeffsBez3Bez2,
-	getCoeffsBez3Bez2InclError,
 	getCoeffsBez3Bez2Dd,
-	getCoeffsBez3Bez2Exact,
-
-	getCoeffsBez3Bez1DdAnyBitlength,
-	getCoeffsBez3Bez1,
-	getCoeffsBez3Bez1InclError,
 	getCoeffsBez3Bez1Dd,
-	getCoeffsBez3Bez1Exact,
-
-	getCoeffsBez2Bez3DdAnyBitlength,
-	getCoeffsBez2Bez3,
-	getCoeffsBez2Bez3InclError,
 	getCoeffsBez2Bez3Dd,
-	getCoeffsBez2Bez3Exact,
-
-	getCoeffsBez2Bez2DdAnyBitlength,
-	getCoeffsBez2Bez2,
-	getCoeffsBez2Bez2InclError,
 	getCoeffsBez2Bez2Dd,
-	getCoeffsBez2Bez2Exact,
-
-	getCoeffsBez2Bez1DdAnyBitlength,
-	getCoeffsBez2Bez1,
-	getCoeffsBez2Bez1InclError,
 	getCoeffsBez2Bez1Dd,
-	getCoeffsBez2Bez1Exact,
-
-	getCoeffsBez1Bez3DdAnyBitlength,
-	getCoeffsBez1Bez3,
-	getCoeffsBez1Bez3InclError,
 	getCoeffsBez1Bez3Dd,
-	getCoeffsBez1Bez3Exact,
-
-	getCoeffsBez1Bez2DdAnyBitlength,
-	getCoeffsBez1Bez2,
-	getCoeffsBez1Bez2InclError,
 	getCoeffsBez1Bez2Dd,
-	getCoeffsBez1Bez2Exact,
-
-	getCoeffsBez1Bez1DdAnyBitlength,
-	getCoeffsBez1Bez1,
-	getCoeffsBez1Bez1InclError,
 	getCoeffsBez1Bez1Dd,
+
+	getImplicitForm3Exact as getImplicitForm3ExactAnyBitlength,
+	getImplicitForm2Exact as getImplicitForm2ExactAnyBitlength,
+	getImplicitForm1Exact as getImplicitForm1ExactAnyBitlength,
+	getCoeffsBez3Bez3Exact,
+	getCoeffsBez3Bez2Exact,
+	getCoeffsBez3Bez1Exact,
+	getCoeffsBez2Bez3Exact,
+	getCoeffsBez2Bez2Exact,
+	getCoeffsBez2Bez1Exact,
+	getCoeffsBez1Bez3Exact,
+	getCoeffsBez1Bez2Exact,
 	getCoeffsBez1Bez1Exact,
-
-
-	getImplicitForm3ExactAnyBitlength,
-	getImplicitForm2ExactAnyBitlength,
-	getImplicitForm1ExactAnyBitlength,
-	getCoeffsBez3Bez3ExactAnyBitlength,
-	getCoeffsBez3Bez2ExactAnyBitlength,
-	getCoeffsBez3Bez1ExactAnyBitlength,
-	getCoeffsBez2Bez3ExactAnyBitlength,
-	getCoeffsBez2Bez2ExactAnyBitlength,
-	getCoeffsBez2Bez1ExactAnyBitlength,
-	getCoeffsBez1Bez3ExactAnyBitlength,
-	getCoeffsBez1Bez2ExactAnyBitlength,
-	getCoeffsBez1Bez1ExactAnyBitlength,
 
 	// self-intersection
 	getCoeffsBez3,
@@ -465,7 +373,7 @@ export {
 
 	getControlPointBox,
 
-	getXYDdAnyBitlength3,
+	getXY3DdWithRunningError as getXYDdAnyBitlength3,
 }
 
 export { 

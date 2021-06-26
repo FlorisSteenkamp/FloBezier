@@ -1,3 +1,0 @@
-All functions in this folder assumes the input bit length to be at least 47
-bit-aligned even though some functions are less restrictive, i.e. only require
-48, 49, etc. bit-aligned coefficients.

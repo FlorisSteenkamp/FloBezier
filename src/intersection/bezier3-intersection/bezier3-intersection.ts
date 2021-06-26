@@ -1,17 +1,18 @@
 import type { __Debug__, IterationExtras } from './debug';
 import type { Iteration } from './iteration';
 import { checkIntersectionInRanges as _checkIntersectionInRanges } from './check-intersection-in-ranges';
-import { bezierBezierIntersection, getOtherTs } from '../bezier-bezier-intersection/bezier-bezier-intersection';
+import { bezierBezierIntersection as _bezierBezierIntersection } from '../bezier-bezier-intersection/bezier-bezier-intersection';
 
-declare var __debug__: __Debug__;
+const __debug__: __Debug__ = (typeof globalThis !== 'undefined' && (globalThis as any).__debug__)
+    ? (globalThis as any).__debug__
+    : undefined;
 
 const checkIntersectionInRanges = _checkIntersectionInRanges;
+const bezierBezierIntersection = _bezierBezierIntersection;
 
 const min = Math.min;
 const max = Math.max;
 const abs = Math.abs;
-
-// TODO - add back quadratic and linear cases
 
 
 /** 
@@ -49,9 +50,8 @@ function bezier3Intersection(
         ps1: number[][], 
         ps2: number[][]): number[][][] {
 
-    //if (ps1.length <= 3 && ps2.length <= 3) {
-    //if (ps1.length < 4 || ps2.length < 4) {
     if (ps1.length <= 2 || ps2.length <= 2) {
+        // revert to implicit form when it's going to be fast anyway
         return implicit(ps1, ps2);
     }
 
@@ -69,7 +69,7 @@ function bezier3Intersection(
 
     let stack = [iteration];
 
-    if (typeof __debug__ !== 'undefined' && !__debug__.already) {
+    if (__debug__ !== undefined && !__debug__.already) {
         __debug__.tree = iteration;
     }
 
@@ -77,14 +77,14 @@ function bezier3Intersection(
     // A slight improvement to the algorithm may be possible by doing a 
     // breath-first (rather than depth-first) traversal and reverting to 
     // implicitization once the tree reaches a certain width
-    /** max iteration heuristic before doing implicitization */
-    const maxIters = 60;   // TODO - make about 60
+
+    /** max iteration heuristic before reverting to implicitization */
+    const maxIters = 60;
     while (stack.length !== 0 && iters < maxIters) {
         iters++;
         const iter = stack.pop();
-        const swapped = iter.F === ps2;
 
-        if (typeof __debug__ !== 'undefined' && !__debug__.already) {
+        if (__debug__ !== undefined && !__debug__.already) {
             __debug__.currentIter = iter;
             (iter as Iteration & IterationExtras).uid = __debug__.uid++;
         }
@@ -112,14 +112,14 @@ function bezier3Intersection(
                     return implicit(ps1, ps2);  
                 }
 
-                xs.push(swapped
+                xs.push(iter.F === ps2
                     ? [fRange, lfRange]
                     : [lfRange, fRange]
                 );
             // else if this iteration is precise enough
             } else {
                 if (δδ < δ) {
-                    if (typeof __debug__ !== 'undefined' && !__debug__.already) {
+                    if (__debug__ !== undefined && !__debug__.already) {
                         (newIter as Iteration & IterationExtras).foundX = true;
                     }
                     if (δδ < Δ) {
@@ -139,15 +139,17 @@ function bezier3Intersection(
         }
     }
 
-    if (typeof __debug__ !== 'undefined') {
-        // prevent further debugging
-        __debug__.already = true;
-    }
-
     if (iters === maxIters) {
+        if (__debug__ !== undefined/* && !__debug__.already*/) {
+            __debug__.maxItersCount++;
+        }
         return implicit(ps1, ps2);
     }
 
+    if (__debug__ !== undefined) {
+        // prevent further debugging
+        __debug__.already = true;
+    }
 
     //---------------------------------------------------------------
     // check for possible duplicate intersections at split points
@@ -160,7 +162,7 @@ function bezier3Intersection(
 }
 
 
-function combineXs(xs: number[][][]) {
+function combineXs(xs: number[][][]): void {
     let testAgain = true;
     while (testAgain) {
         testAgain = false;
@@ -214,21 +216,25 @@ function combineXs(xs: number[][][]) {
 }
 
 
-// rename
 function implicit(
         ps1: number[][], 
         ps2: number[][]): number[][][] {
 
-    // fall back to implicitization (about 5x slower)
-    // TODO - ensure implicitization works perfectly
-    const rs = bezierBezierIntersection(ps1,ps2);
-    const xPairs = getOtherTs(ps1, ps2, rs);
-    if (!xPairs) { return []; } 
+    const xPairs = bezierBezierIntersection(ps1,ps2);
+    if (!xPairs) { 
+        // infinite intersections
+        return undefined; 
+    }
 
-    return xPairs.map(xPair => [
-        [xPair[0].ri.tS, xPair[0].ri.tE],
-        [xPair[1].ri.tS, xPair[1].ri.tE]]
-    );
+    return xPairs.map(xPair => {
+        const xPair0ri = xPair[0].ri;
+        const xPair1ri = xPair[1].ri;
+
+        return [
+            [xPair0ri.tS, xPair0ri.tE],
+            [xPair1ri.tS, xPair1ri.tE]
+        ]
+    });
 }
 
 

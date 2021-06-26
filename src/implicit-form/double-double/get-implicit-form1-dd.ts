@@ -1,11 +1,13 @@
-import { twoProduct, ddDiffDd } from 'double-double';
-import { getXY } from '../../to-power-basis/get-xy';
+import { ddDiffDd, ddMultDouble2, ddNegativeOf } from 'double-double';
+import { getXY1Dd } from '../../to-power-basis/get-xy/double-double/get-xy-dd';
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const qdq = ddDiffDd;       // error -> 3*γ²
+const qmd = ddMultDouble2;
+const qno = ddNegativeOf;
 
 
-const tp  = twoProduct;     // error -> 0
-const qdq = ddDiffDd;      // error -> 3*γ²
-
-
+// TODO - modify
 /**
  * Returns the error-free double-double precision implicit form of the given 
  * linear bezier.
@@ -14,7 +16,7 @@ const qdq = ddDiffDd;      // error -> 3*γ²
  * e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
  * 
  * * the implicit form is given by: `vₓx + vᵧy + v = 0`
- * * **precondition:** the coordinates of the given bezier must be 48-bit aligned
+ * * **precondition:** TODO - add underflow / overflow conditions + docs below
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
  * @param ps 
@@ -25,19 +27,15 @@ function getImplicitForm1Dd(ps: number[][]) {
     // The implicit form is given by:
     // vₓx + vᵧy + v = 0
 
-    const [[a1, a0],[b1, b0]] = getXY(ps);
+    const [[a1, a0], [b1, b0]] = getXY1Dd(ps);
 
-    const vₓ = -b1;
-    const vᵧ = a1;
-    const v = qdq(
-        tp(a0,b1),
-        tp(a1,b0)
-    );  // 48-bit aligned => error free
+    const vₓ = qno(b1);  // exact
+    const vᵧ = a1;       // exact
 
-    return {
-        coeffs: { vₓ, vᵧ, v },
-        errorBound: { }  // vₓ_, vᵧ_, v_ === 0
-    }
+    //const v = a0*b1 - a1*b0;
+    const v = qdq(qmd(a0,b1),qmd(b0,a1));
+
+    return { vₓ, vᵧ, v };
 }
 
 

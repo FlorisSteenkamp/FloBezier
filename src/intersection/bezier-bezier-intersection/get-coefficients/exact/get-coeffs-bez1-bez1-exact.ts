@@ -1,10 +1,14 @@
-import { getImplicitForm1Exact } from "../../../../implicit-form/exact/get-implicit-form1-exact";
-import { getXY } from "../../../../to-power-basis/get-xy";
-import { twoProduct, ddAddDd } from "double-double";
+import type { ImplicitFormExact1 } from "../../../../implicit-form/implicit-form-types";
+import { getImplicitForm1ExactPb } from "../../../../implicit-form/exact/get-implicit-form1-exact";
+import { getXYExact1 } from "../../../../to-power-basis/get-xy/exact/get-xy-exact";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const tp = twoProduct;
-const qaq = ddAddDd;
+import { expansionProduct, fastExpansionSum, scaleExpansion2, eSign as _eSign } from "big-float-ts";
+
+const sce = scaleExpansion2;
+const epr = expansionProduct;
+const fes = fastExpansionSum;
+const eSign = _eSign;
 
 
 /**
@@ -18,8 +22,7 @@ const qaq = ddAddDd;
  * Shewchuk floating point expansions from highest to lowest power, 
  * e.g. `[[5],[-3],[0]]` represents the polynomial `5x^2 - 3x`.
  * 
- * * **precondition:** the coordinates of the given bezier curves must be 
- * 47-bit aligned
+ * * **precondition:** TODO - add underflow / overflow conditions
  * * the returned polynomial coefficients are exact (i.e. error-free)
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
@@ -28,24 +31,55 @@ const qaq = ddAddDd;
  * 
  * @doc mdx
  */
+// TODO - rename all these by chopping off the AnyBitlength part since it
+// is now implied implicitly
 function getCoeffsBez1Bez1Exact(ps1: number[][], ps2: number[][]) {
-    const { vₓ, vᵧ, v } = getImplicitForm1Exact(ps1);
+    /** ps1 in power bases */
+    const ps1pb = getXYExact1(ps1);
+        
+    //const [[e1,e0],[f1,f0]] = ps1pb;
+    // if both polynomials' linear terms are exactly zero then it really is a point
+    if (eSign(ps1pb[0][0]) === 0 && eSign(ps1pb[1][0]) === 0) {
+        // the input bezier curve is in fact not a line but has order < 1,
+        // i.e. it is a point
+        // TODO
+        //return getCoeffsBez0Bez3ExactAnyBitlength([ps1[0]], ps2]);
+    }
 
-    const [[c1,c0],[d1,d0]] = getXY(ps2);
+    const [[c1,c0],[d1,d0]] = getXYExact1(ps2);
+
+    if (eSign(c1) === 0 && eSign(d1) === 0) {
+        // the input bezier curve is in fact not a line but has order < 1,
+        // i.e. it is a point
+        // TODO
+        //return getCoeffsBez2Bez0ExactAnyBitlength(ps1, [ps2[0]]);
+    }
+
+    let { vₓ, vᵧ, v } = 
+        // this type coercion is justified since we already checked that the
+        // curve really has order 1
+        getImplicitForm1ExactPb(ps1pb) as ImplicitFormExact1;
 
 
     //const v1 = c1*vₓ + d1*vᵧ;
-    const p1 = tp(c1,vₓ);   // vₓ is a double => error free
-    const p2 = tp(d1,vᵧ);   // vᵧ is a double => error free
-    const v1 = qaq(p1,p2);  // 48-bit aligned => error free
+    const p1 = epr(c1,vₓ);
+    const p2 = epr(d1,vᵧ);
+    const v1 = fes(p1,p2);
 
     //const v0 = c0*vₓ + d0*vᵧ + v_0;
-    const p3 = tp(c0,vₓ);   // vₓ is a double => error free
-    const p4 = tp(d0,vᵧ);   // vᵧ is a double => error free
-    const p5 = qaq(p3,p4);  // 48-bit aligned => error free
-    const v0 = qaq(p5,v);   // 48-bit aligned => error free 
+    const p3 = sce(c0,vₓ);
+    const p4 = sce(d0,vᵧ);
+    const p5 = fes(p3,p4);
+    const v0 = fes(p5,v);
 
-    return [v1, v0];
+    const r = [v1, v0];
+    
+    // remove leading zero coefficients
+    //while (r.length > 1 && eSign(r[0]) === 0) {
+    //    r.shift();
+    //}
+
+    return r;
 }
 
 

@@ -1,10 +1,9 @@
 import type { Iteration } from './iteration';
 
 
-// To enable debugging add the line below before calling the intersection algorithm:
-//(window as any as { __debug__: Partial<__Debug__> | undefined}).__debug__ = { already: false };
-// and then whereever needed add:
-// declare var __debug__: __Debug__;
+// Use the below line *before* calling the bezier intersection algorithm to enable debugging
+//(globalThis as any as { __debug__: Partial<__Debug__> | undefined}).__debug__ = 
+//  { already: false, uid: 0, maxItersCount: 0 };
 
 
 /**
@@ -28,6 +27,8 @@ interface __Debug__ {
 
     /** current serial uid number to assign to the next iteration */
     uid: number;
+
+    maxItersCount: number;
 }
 
 

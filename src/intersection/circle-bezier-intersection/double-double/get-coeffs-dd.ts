@@ -1,5 +1,4 @@
-
-import { getXY } from "../../../to-power-basis/get-xy";
+import { getXY3, getXY2, getXY1 } from "../../../to-power-basis/get-xy/double/get-xy";
 import { twoProduct, ddAddDd, ddMultByNeg2, ddMultBy2, ddDiffDd } from "double-double";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
@@ -23,7 +22,7 @@ function getCoeffsCubicDd(
         ps: number[][]) {
 
     const { radius: r, center: [cx,cy] } = circle;
-    const [[a3,a2,a1,a0],[b3,b2,b1,b0]] = getXY(ps);  // exact if bitlength <= 49
+    const [[a3,a2,a1,a0],[b3,b2,b1,b0]] = getXY3(ps);  // exact if bitlength <= 49
 
     // bitlength 48 -> saves 2 bits -> 1-4 summands
     // bitlength 47 -> saves 4 bits -> 5-16 summands
@@ -70,7 +69,7 @@ function getCoeffsQuadraticDd(
         ps: number[][]): number[][] {
 
     const { radius: r, center: [cx, cy] } = circle;
-    const [[a2,a1,a0],[b2,b1,b0]] = getXY(ps);  // exact if bitlength <= 49
+    const [[a2,a1,a0],[b2,b1,b0]] = getXY2(ps);  // exact if bitlength <= 49
 
     // (a2*a2 + b2*b2)*t**4 + 
     const t4 = qaq(tp(a2,a2),tp(b2,b2));  // exact if bitlength <= 48 - 2 summands
@@ -104,8 +103,7 @@ function getCoeffsLinearDd(
         ps: number[][]): number[][] {
 
     const { radius: r, center: [cx, cy] } = circle;
-    const [[a1,a0],[b1,b0]] = getXY(ps);  // exact if bitlength <= 49
-
+    const [[a1,a0],[b1,b0]] = getXY1(ps);  // exact if bitlength <= 49
 
     // (a1**2 + b1**2)*t**2 +
     const t2 = qaq(tp(a1,a1),tp(b1,b1));  // exact if bitlength <= 48 - 2 summands

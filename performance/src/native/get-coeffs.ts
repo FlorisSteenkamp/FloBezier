@@ -1,4 +1,3 @@
-import { operators as bigFloatOperators } from "big-float-ts";
 import { 
     getCoeffsBez1Bez1DdAnyBitlength, 
     getCoeffsBez1Bez2DdAnyBitlength, 
@@ -21,9 +20,6 @@ import {
     getCoeffsBez3Bez2ExactAnyBitlength, 
     getCoeffsBez3Bez3ExactAnyBitlength 
 } from "../../../src/index";
-
-const { eSign, eToDd } = bigFloatOperators;
-const abs = Math.abs;
 
 
 const coeffFunctionsDdAnyBitlength = [
@@ -48,7 +44,7 @@ function getCoeffs(
             getPExact: () => number[][];
         } {
 
-    const { coeffs: coeffsDd, errBound: errBoundDd } = 
+    const { coeffs, errBound } = 
         coeffFunctionsDdAnyBitlength[ps1.length-2][ps2.length-2](ps1, ps2);
 
     const getPExactAnyBitlength = 
@@ -79,7 +75,7 @@ function getCoeffs(
     }
     */
 
-    return { coeffs: coeffsDd, errBound: errBoundDd, getPExact: getPExactAnyBitlength };
+    return { coeffs, errBound, getPExact: getPExactAnyBitlength };
 }
 
 

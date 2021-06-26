@@ -1,4 +1,4 @@
-import { getXY } from "../../../../to-power-basis/get-xy";
+import { getXY3 } from "../../../../to-power-basis/get-xy/double/get-xy";
 import { twoProduct, ddDiffDd } from "double-double";
 import { expansionProduct, fastExpansionSum } from 'big-float-ts';
 
@@ -27,7 +27,7 @@ const fes = fastExpansionSum;
  * @doc
  */
 function getCoeffsBez3Exact(ps: number[][]) {
-    const [[a3,a2,a1],[b3,b2,b1]] = getXY(ps);  // 49-bit aligned => error free
+    const [[a3,a2,a1],[b3,b2,b1]] = getXY3(ps);  // 49-bit aligned => error free
 
     const a2b3 = tp(a2,b3);  // => error free
     const a3b2 = tp(a3,b2);  // => error free

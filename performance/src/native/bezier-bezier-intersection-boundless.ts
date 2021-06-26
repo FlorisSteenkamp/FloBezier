@@ -1,3 +1,4 @@
+/*
 import { allRootsCertified, RootInterval } from "flo-poly";
 import { isCubicReallyQuad, isQuadReallyLine, tFromXY3, toQuadraticFromCubic } from "../../../src";
 import { tFromXY } from "../../../src/intersection/t-from-xy";
@@ -79,3 +80,4 @@ export { bezierBezierIntersectionBoundless }
 
 
 // big_float_ts_1.eEstimate(src_1.evaluate_anyBitlength_exact(ps, 0.01090967008633885)[1])
+*/

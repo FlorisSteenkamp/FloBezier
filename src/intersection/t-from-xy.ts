@@ -1,6 +1,6 @@
 import { allRootsCertified, RootInterval } from 'flo-poly';
-import { getXYExactAnyBitlength2, getXYExactAnyBitlength3 } from "../to-power-basis/any-bitlength/exact/get-xy-exact-any-bitlength";
-import { getXYDdAnyBitlength1, getXYDdAnyBitlength2, getXYDdAnyBitlength3 } from "../to-power-basis/any-bitlength/double-double/get-xy-dd-any-bitlength";
+import { getXYExact2, getXYExact3 } from "../to-power-basis/get-xy/exact/get-xy-exact";
+import { getXY1DdWithRunningError, getXY2DdWithRunningError, getXY3DdWithRunningError } from "../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error";
 import { twoDiff as twoDiff_ } from 'big-float-ts';
 
 
@@ -53,7 +53,7 @@ function tFromXY3(
     const {
         coeffs: [_polyDdX, _polyDdY],
         errorBound: [polyX_, polyY_]
-    } = getXYDdAnyBitlength3(ps);
+    } = getXY3DdWithRunningError(ps);
 
     // pop the constant term off `x(t)`
     const txDd = _polyDdX.pop() as number;
@@ -71,7 +71,7 @@ function tFromXY3(
     ] = undefined;
 
     const getPExactX = (): number[][] => { 
-        if (pExactXY === undefined) { pExactXY = getXYExactAnyBitlength3(ps); }
+        if (pExactXY === undefined) { pExactXY = getXYExact3(ps); }
         const _pExactX = pExactXY[0];  // x coordinate
         // pop the constant term off `x(t)`
         const tx = _pExactX.pop() as number;
@@ -81,7 +81,7 @@ function tFromXY3(
     }
 
     const getPExactY = (): number[][] => {
-        if (pExactXY === undefined) { pExactXY = getXYExactAnyBitlength3(ps); }
+        if (pExactXY === undefined) { pExactXY = getXYExact3(ps); }
         const _pExactY = pExactXY[1];  // y coordinate
         // pop the constant term off `y(t)`
         const ty = _pExactY.pop() as number;
@@ -149,7 +149,7 @@ function tFromXY2(
     const {
         coeffs: [_polyDdX, _polyDdY],
         errorBound: [polyX_, polyY_]
-    } = getXYDdAnyBitlength2(ps);
+    } = getXY2DdWithRunningError(ps);
 
     // pop the constant term off `x(t)`
     const txDd = _polyDdX.pop() as number;
@@ -167,7 +167,7 @@ function tFromXY2(
     ] = undefined;
 
     const getPExactX = (): number[][] => { 
-        if (pExactXY === undefined) { pExactXY = getXYExactAnyBitlength2(ps); }
+        if (pExactXY === undefined) { pExactXY = getXYExact2(ps); }
         const _pExactX = pExactXY[0];  // x coordinate
         // pop the constant term off `x(t)`
         const tx = _pExactX.pop() as number;
@@ -177,7 +177,7 @@ function tFromXY2(
     }
 
     const getPExactY = (): number[][] => {
-        if (pExactXY === undefined) { pExactXY = getXYExactAnyBitlength2(ps); }
+        if (pExactXY === undefined) { pExactXY = getXYExact2(ps); }
         const _pExactY = pExactXY[1];  // y coordinate
         // pop the constant term off `y(t)`
         const ty = _pExactY.pop() as number;
@@ -242,7 +242,7 @@ function tFromXY1(
 
     // get power basis representation in double-double precision including error
     // bound
-    const [_polyDdX, _polyDdY] = getXYDdAnyBitlength1(ps);
+    const [_polyDdX, _polyDdY] = getXY1DdWithRunningError(ps);
 
     // pop the constant term off `x(t)`
     const txDd = _polyDdX.pop() as number;

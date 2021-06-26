@@ -1,5 +1,4 @@
-
-import { getXY } from "../../../to-power-basis/get-xy";
+import { getXY3, getXY2, getXY1 } from "../../../to-power-basis/get-xy/double/get-xy";
 
 
 /**
@@ -13,7 +12,7 @@ function getCoeffsCubic(
         ps: number[][]) {
 
     const { radius: r, center: [cx, cy] } = circle;
-    const [[a3,a2,a1,a0],[b3,b2,b1,b0]] = getXY(ps);
+    const [[a3,a2,a1,a0],[b3,b2,b1,b0]] = getXY3(ps);
 
     // (a3*a3 + b3*b3)*t**6 + 
     const t6 = a3*a3 + b3*b3;
@@ -51,7 +50,7 @@ function getCeoffsQuadratic(
         ps: number[][]) {
 
     const { radius: r, center: [cx, cy] } = circle;
-    const [[a2,a1,a0],[b2,b1,b0]] = getXY(ps);
+    const [[a2,a1,a0],[b2,b1,b0]] = getXY2(ps);
 
     // (a2*a2 + b2*b2)*t**4 + 
     const t4 = a2*a2 + b2*b2;
@@ -83,7 +82,7 @@ function getCeoffsLine(
         ps: number[][]) {
 
     const { radius: r, center: [cx, cy] } = circle;
-    const [[a1,a0],[b1,b0]] = getXY(ps);
+    const [[a1,a0],[b1,b0]] = getXY1(ps);
 
 
     // (a1**2 + b1**2)*t**2 +

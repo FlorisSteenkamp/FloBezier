@@ -1,17 +1,22 @@
-import { ImplicitFormExact2, ImplicitFormExact3 } from "../../../../implicit-form/implicit-form-types";
-import { twoProduct, scaleExpansion2, expansionProduct, fastExpansionSum, eMultBy2 } from "big-float-ts";
-import { ddAddDd, ddMultBy2 } from 'double-double';
-import { getImplicitForm2Exact } from "../../../../implicit-form/exact/get-implicit-form2-exact";
-import { getXY } from "../../../../to-power-basis/get-xy";
+import type { ImplicitFormExact2 } from "../../../../implicit-form/implicit-form-types";
+import { getImplicitForm2ExactPb } from "../../../../implicit-form/exact/get-implicit-form2-exact";
+import { getXYExact2, getXYExact3 } from "../../../../to-power-basis/get-xy/exact/get-xy-exact";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const qaq = ddAddDd;
-const qm2 = ddMultBy2;
+import { 
+    twoProduct, expansionProduct, fastExpansionSum, scaleExpansion2, 
+    eMultBy2, eSign as _eSign
+} from "big-float-ts";
+import { getCoeffsBez1Bez3Exact } from "./get-coeffs-bez1-bez3-exact";
+import { getCoeffsBez2Bez2Exact } from "./get-coeffs-bez2-bez2-exact";
+import { toQuadraticFromCubic } from "../../../../transformation/degree-or-type/to-quad-from-cubic";
+
+const tp  = twoProduct;    // error -> 0
 const sce = scaleExpansion2;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
 const em2 = eMultBy2;
-const tp = twoProduct;
+const eSign = _eSign;
 
 
 /**
@@ -26,8 +31,7 @@ const tp = twoProduct;
  * Shewchuk floating point expansions from highest to lowest power, 
  * e.g. `[[5],[-3],[0]]` represents the polynomial `5x^2 - 3x`.
  * 
- * * **precondition:** the coordinates of the given bezier curves must be 
- * 47-bit aligned
+ * * **precondition:**  TODO - add underflow / overflow conditions
  * * the returned polynomial coefficients are exact (i.e. error-free)
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
@@ -37,50 +41,64 @@ const tp = twoProduct;
  * @doc mdx
  */
 function getCoeffsBez2Bez3Exact(ps1: number[][], ps2: number[][]) {
-    const { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
-        getImplicitForm2Exact(ps1) as
-            & ImplicitFormExact3  // vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ possibly `undefined`
-            & ImplicitFormExact2  // vₓₓ, vₓᵧ, vᵧᵧ possibly `undefined`
-            & { vₓ: number; vᵧ: number; v: number[]; };
+    /** ps1 in power bases */
+    const ps1pb = getXYExact2(ps1);
+    
+    //const [[e2,e1,e0],[f2,f1,f0]] = ps1pb;
+    // if both polynomials' quadratic terms are exactly zero then its really a line
+    if (eSign(ps1pb[0][0]) === 0 && eSign(ps1pb[1][0]) === 0) {
+        // the input bezier curve is in fact not quadratic but has order < 2
+        return getCoeffsBez1Bez3Exact([ps1[0],ps1[2]], ps2);
+    }
 
-    const [[c3,c2,c1,c0],[d3,d2,d1,d0]] = getXY(ps2);
+    const [[c3,c2,c1,c0],[d3,d2,d1,d0]] = getXYExact3(ps2);
+
+    if (eSign(c3) === 0 && eSign(d3) === 0) {
+        // the input bezier curve is in fact not cubic but has order < 3
+        return getCoeffsBez2Bez2Exact(ps1, toQuadraticFromCubic(ps2));
+    }
+
+    let { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
+        // this type coercion is justified since we already checked that the
+        // curve really has order 2
+        getImplicitForm2ExactPb(ps1pb) as ImplicitFormExact2;
 
     const c0c0 = tp(c0,c0);
-    const c0c1 = tp(c0,c1);
-    const c0c2 = tp(c0,c2);
-    const c0c3 = tp(c0,c3);
+    const c0c1 = sce(c0,c1);
+    const c0c2 = sce(c0,c2);
+    const c0c3 = sce(c0,c3);
     const c0d0 = tp(c0,d0);
-    const c0d1 = tp(c0,d1);
-    const c0d2 = tp(c0,d2);
-    const c0d3 = tp(c0,d3);
-    const c1c1 = tp(c1,c1);
-    const c1c2 = tp(c1,c2);
-    const c1c3 = tp(c1,c3);
-    const c1d0 = tp(c1,d0);
-    const c1d1 = tp(c1,d1);
-    const c1d2 = tp(c1,d2);
-    const c1d3 = tp(c1,d3);
-    const c2d1 = tp(c2,d1);
-    const c2c2 = tp(c2,c2);    
-    const c2c3 = tp(c2,c3);
-    const c2d0 = tp(c2,d0);
-    const c2d2 = tp(c2,d2);
-    const c2d3 = tp(c2,d3);
-    const c3c3 = tp(c3,c3);
-    const c3d0 = tp(c3,d0);
-    const c3d1 = tp(c3,d1);
-    const c3d2 = tp(c3,d2);
-    const c3d3 = tp(c3,d3);
+    const c0d1 = sce(c0,d1);
+    const c0d2 = sce(c0,d2);
+    const c0d3 = sce(c0,d3);
+    const c1c1 = epr(c1,c1);
+    const c1c2 = epr(c1,c2);
+    const c1c3 = epr(c1,c3);
+    const c1d0 = sce(d0,c1);
+    const c1d1 = epr(c1,d1);
+    const c1d2 = epr(c1,d2);
+    const c1d3 = epr(c1,d3);
+    const c2d1 = epr(c2,d1);
+    const c2c2 = epr(c2,c2);    
+    const c2c3 = epr(c2,c3);
+    const c2d0 = sce(d0,c2);
+    const c2d2 = epr(c2,d2);
+    const c2d3 = epr(c2,d3);
+    const c3c3 = epr(c3,c3);
+    const c3d0 = sce(d0,c3);
+    const c3d1 = epr(c3,d1);
+    const c3d2 = epr(c3,d2);
+    const c3d3 = epr(c3,d3);
     const d0d0 = tp(d0,d0);
-    const d0d1 = tp(d0,d1);
-    const d0d2 = tp(d0,d2);
-    const d0d3 = tp(d0,d3);
-    const d1d1 = tp(d1,d1);
-    const d1d2 = tp(d1,d2);
-    const d3d3 = tp(d3,d3);
-    const d2d2 = tp(d2,d2);
-    const d2d3 = tp(d2,d3);
-    const d1d3 = tp(d1,d3);
+    const d0d1 = sce(d0,d1);
+    const d0d2 = sce(d0,d2);
+    const d0d3 = sce(d0,d3);
+    const d1d1 = epr(d1,d1);
+    const d1d2 = epr(d1,d2);
+    const d3d3 = epr(d3,d3);
+    const d2d2 = epr(d2,d2);
+    const d2d3 = epr(d2,d3);
+    const d1d3 = epr(d1,d3);
 
     // a3**2*vₓₓ + a3*b3*vₓᵧ + b3**2*vᵧᵧ
     //const v6 =
@@ -101,7 +119,7 @@ function getCoeffsBez2Bez3Exact(ps1: number[][], ps2: number[][]) {
     const p5 = epr(c2c3,vₓₓ);
     const p6 = epr(d2d3,vᵧᵧ);
     const p7 = fes(p5,p6);
-    const p8 = qaq(c2d3,c3d2);  // 48-bit aligned => error free
+    const p8 = fes(c2d3,c3d2);  // 48-bit aligned => error free
     const p9 = epr(p8,vₓᵧ);
     const v5 = fes(em2(p7),p9);
 
@@ -111,10 +129,10 @@ function getCoeffsBez2Bez3Exact(ps1: number[][], ps2: number[][]) {
     //    (2*c1c3 + c2c2)*vₓₓ +
     //    (2*d1d3 + d2d2)*vᵧᵧ +
     //    (c1d3 + c2d2 + c3d1)*vₓᵧ;
-    const pa = qaq(qm2(c1c3),c2c2);  // 48-bit aligned => error free
-    const pb = qaq(qm2(d1d3),d2d2);  // 48-bit aligned => error free
-    const pc = qaq(c1d3,c2d2);  // 48-bit aligned => error free
-    const pd = qaq(pc,c3d1);  // 48-bit aligned => error free
+    const pa = fes(em2(c1c3),c2c2);  // 48-bit aligned => error free
+    const pb = fes(em2(d1d3),d2d2);  // 48-bit aligned => error free
+    const pc = fes(c1d3,c2d2);  // 48-bit aligned => error free
+    const pd = fes(pc,c3d1);  // 48-bit aligned => error free
     const pe = epr(pa,vₓₓ);
     const pf = epr(pb,vᵧᵧ);
     const pg = fes(pe,pf);
@@ -130,17 +148,17 @@ function getCoeffsBez2Bez3Exact(ps1: number[][], ps2: number[][]) {
     //    (c0d3 + c1d2 + c2d1 + c3d0)*vₓᵧ +
     //    c3*vₓ +
     //    d3*vᵧ;
-    const ph = qaq(c0c3,c1c2);  // 48-bit aligned => error free
-    const pi = qaq(d0d3,d1d2);  // 48-bit aligned => error free
-    const pj = qaq(c0d3,c1d2);  // 48-bit aligned => error free
-    const pk = qaq(c2d1,c3d0);  // 48-bit aligned => error free
-    const pl = qaq(pj,pk);  // 48-bit aligned => error free
+    const ph = fes(c0c3,c1c2);  // 48-bit aligned => error free
+    const pi = fes(d0d3,d1d2);  // 48-bit aligned => error free
+    const pj = fes(c0d3,c1d2);  // 48-bit aligned => error free
+    const pk = fes(c2d1,c3d0);  // 48-bit aligned => error free
+    const pl = fes(pj,pk);  // 48-bit aligned => error free
     const pm = epr(ph,vₓₓ);
     const pn = epr(pi,vᵧᵧ);
     const po = em2(fes(pm,pn));
     const pp = epr(pl,vₓᵧ);
-    const rn = sce(c3,vₓ);
-    const ro = sce(d3,vᵧ);
+    const rn = epr(c3,vₓ);
+    const ro = epr(d3,vᵧ);
     const pq = fes(rn,ro);
     const pr = fes(po,pp);
     const v3 = fes(pr,pq);
@@ -155,17 +173,17 @@ function getCoeffsBez2Bez3Exact(ps1: number[][], ps2: number[][]) {
     //    (c0d2 + c1d1 + c2d0)*vₓᵧ +
     //    c2*vₓ +
     //    d2*vᵧ;
-    const ps = qaq(qm2(c0c2),c1c1);  // 48-bit aligned => error free
-    const pt = qaq(qm2(d0d2),d1d1);  // 48-bit aligned => error free
-    const pu = qaq(c0d2,c1d1);  // 48-bit aligned => error free
-    const pv = qaq(pu,c2d0);  // 48-bit aligned => error free
+    const ps = fes(em2(c0c2),c1c1);  // 48-bit aligned => error free
+    const pt = fes(em2(d0d2),d1d1);  // 48-bit aligned => error free
+    const pu = fes(c0d2,c1d1);  // 48-bit aligned => error free
+    const pv = fes(pu,c2d0);  // 48-bit aligned => error free
     const pw = epr(ps,vₓₓ);
     const px = epr(pt,vᵧᵧ);
     const py = epr(pv,vₓᵧ);
     const pz = fes(pw,px);
     const r1 = fes(pz,py);
-    const r2 = sce(c2,vₓ);
-    const r3 = sce(d2,vᵧ);
+    const r2 = epr(c2,vₓ);
+    const r3 = epr(d2,vᵧ);
     const r4 = fes(r2,r3);
     const v2 = fes(r1,r4);
 
@@ -178,12 +196,12 @@ function getCoeffsBez2Bez3Exact(ps1: number[][], ps2: number[][]) {
     //    d1*vᵧ;
     const r5 = epr(c0c1,vₓₓ);
     const r6 = epr(d0d1,vᵧᵧ);
-    const r7 = qaq(c0d1,c1d0);  // 48-bit aligned => error free
+    const r7 = fes(c0d1,c1d0);  // 48-bit aligned => error free
     const r8 = epr(r7,vₓᵧ);
     const r9 = em2(fes(r5,r6));
     const ra = fes(r9,r8);
-    const rb = sce(c1,vₓ);
-    const rc = sce(d1,vᵧ);
+    const rb = epr(c1,vₓ);
+    const rc = epr(d1,vᵧ);
     const rd = fes(rb,rc);
     const v1 = fes(ra,rd);
     
@@ -207,7 +225,14 @@ function getCoeffsBez2Bez3Exact(ps1: number[][], ps2: number[][]) {
     const rm = fes(rk,rl);
     const v0 = fes(rm,v);
 
-    return [v6, v5, v4, v3, v2, v1, v0];
+    const r = [v6, v5, v4, v3, v2, v1, v0];
+    
+    // remove leading zero coefficients
+    //while (r.length > 1 && eSign(r[0]) === 0) {
+    //    r.shift();
+    //}
+
+    return r;
 }
 
 

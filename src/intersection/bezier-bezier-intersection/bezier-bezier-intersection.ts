@@ -1,11 +1,6 @@
-import { allRootsCertified, RootInterval } from "flo-poly";
-import { getIntervalBox } from '../../global-properties/bounds/get-interval-box/get-interval-box';
-import { intersectBoxes } from '../../boxes/intersect-boxes';
-import { X } from './x';
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-import { getCoeffsBezBez } from "./get-coefficients/get-coeffs-bez-bez";
-const getCoeffs = getCoeffsBezBez;
+import type { X } from './x';
+import { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless';
+import { getOtherTs } from '../..';
 
 
 /**
@@ -21,8 +16,9 @@ const getCoeffs = getCoeffsBezBez;
  * * if the two curves have an infinite number of intersections `undefined` is returned
  * * the second bezier curve's parameter `t` values are retuned; call [[getOtherTs]] to
  * get the first bezier's `t` values.
+ * // TODO
  * * * **precondition:** the coordinates of the given bezier curves must be 
- * 47-bit aligned
+ * such that underflow / overflow does not occur 
  * * this algorithm is mathematically guaranteed accurate to within 
  * `4 * Number.EPSILON` in the t values of the *second* bezier curve (provided
  * the precondition is met).
@@ -36,66 +32,12 @@ const getCoeffs = getCoeffsBezBez;
  */
 function bezierBezierIntersection(
         ps1: number[][], 
-        ps2: number[][]): RootInterval[] {
+        ps2: number[][]): X[][] {
 
-    let _coeffs = getCoeffs(ps1,ps2);
-    if (_coeffs === undefined) { return undefined; }
-    
-    let { coeffs, errBound, getPExact } = _coeffs;
+    const rs = bezierBezierIntersectionBoundless(ps1, ps2);
 
-    return allRootsCertified(coeffs, 0, 1, errBound, getPExact);
+    return getOtherTs(ps1, ps2, rs);
 }
 
 
-
-/**
- * Returns the ordered (first ps1, then ps2) intersection pairs given the two
- * curves that intersect and the t values of the **second** curve. The `t`
- * values of the second curve can be found using bezierBezierIntersection
- * 
- * * If the t values given is undefined, undefined is returned 
- * * if it is an empty array, an empty array is returned. 
- * * If the t values given is not an empty array and it turns out the curves 
- * are in the same k family then undefined is returned.
- * @param ps1 the first bezier
- * @param ps2 the second bezier
- * @param ts2 the t values of the second bezier
- */
-function getOtherTs(
-        ps1: number[][], 
-        ps2: number[][],
-        ts2: RootInterval[]): X[][] {
-
-    if (ts2 === undefined) { return undefined; } 
-    if (ts2.length === 0) { return []; }
-    let ts1 = bezierBezierIntersection(ps2, ps1);
-    if (ts1 === undefined) { return undefined; } 
-    if (ts1.length === 0) { return []; }
-
-    let is1 = ts1.map(ri => getIntervalBox(ps1, [ri.tS, ri.tE]));
-    let is2 = ts2.map(ri => getIntervalBox(ps2, [ri.tS, ri.tE]));
-
-    let xPairs: X[][] = [];
-    for (let i=0; i<ts1.length; i++) {
-        let box1 = is1[i];
-        for (let j=0; j<ts2.length; j++) {
-            let box2 = is2[j];
-            let box = intersectBoxes(box1,box2);
-            if (box !== undefined) {
-                // TODO important - combine boxes to make sense, i.e. combine better
-                // e.g. two odd multiplicity boxes should combine to a single even, etc. etc.
-                let x1: X = { ri: ts1[i], box, kind: 1 };
-                let x2: X = { ri: ts2[j], box, kind: 1 };
-                xPairs.push([x1, x2]);
-            }
-        }
-    }
-
-    return xPairs;
-}
-
-
-export { 
-    bezierBezierIntersection, 
-    getOtherTs
-}
+export { bezierBezierIntersection }

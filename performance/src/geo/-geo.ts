@@ -9,12 +9,10 @@ import { renderTree } from './render-tree';
 
 
 const { tc, num, timingOnly, showGeoXs, showGeoIters } = settings;
-//const { dot_, fatline_, geo_, beziers_ } = draw(ctx);
 
-const abs = Math.abs;
-
-(window as any as { __debug__: Partial<__Debug__> | undefined}).__debug__ = { already: false, uid: 0 };
-declare var __debug__: __Debug__;
+const __debug__: __Debug__ = (typeof globalThis !== 'undefined' && (globalThis as any).__debug__)
+    ? (globalThis as any).__debug__
+    : undefined;
 
 
 /**
@@ -45,7 +43,7 @@ function geo(
         //console.log(tss)
 
         if (!timingOnly) {
-            const xs = xss[i];
+            const xs = xss[i/2];
             const tss_ = tss.filter(t => t[0] !== undefined);
 
             const res = updDs(ds, xs, tss_.map(ts => ts[0][0]));
@@ -63,8 +61,10 @@ function geo(
     showResults('geo', timingOnly, timing, ds, total);
     //console.log('total', total)
 
-    if (typeof __debug__ !== 'undefined' && showGeoIters) {
+    if (__debug__ !== undefined && showGeoIters) {
         renderTree(__debug__.tree);
+
+        console.log(__debug__.maxItersCount);
     } 
 }
 

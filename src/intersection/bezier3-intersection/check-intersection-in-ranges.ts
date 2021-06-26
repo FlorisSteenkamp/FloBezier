@@ -6,14 +6,15 @@ import { toLength as _toLength } from 'flo-vector2d';
 import { len as _len } from 'flo-vector2d';
 import { translate as _translate } from 'flo-vector2d';
 import { getDistanceToLineFunction as _getDistanceToLineFunction } from "./get-distance-to-line-function";
-//import { fromTo3 as _fromTo3 } from './from-to/from-to-3';
 import { fromTo as _fromTo } from './from-to/from-to';
 
-declare var __debug__: __Debug__;
+
+const __debug__: __Debug__ = (typeof globalThis !== 'undefined' && (globalThis as any).__debug__)
+    ? (globalThis as any).__debug__
+    : undefined;
 
 const getDistanceToLineFunction = _getDistanceToLineFunction;
 const geoClip = _geoClip;
-//const fromTo3 = _fromTo3;
 const fromTo = _fromTo;
 const fromToVect = _fromToVect;
 const translate = _translate;
@@ -88,17 +89,18 @@ function checkIntersectionInRanges(
     const Fps = F_.ps;
     const F_ps = F_._ps;
 
-    if (typeof __debug__ !== 'undefined' && !__debug__.already) {
+    if (__debug__ !== undefined && !__debug__.already) {
         __debug__.currentIter.F_ = F_;
         __debug__.currentIter.G_ = G_;
     }
 
     const lenF = Fps.length;
     // Q will be fat line bounded. Get start and endpoint of curve
-    // TODO - consider, implement and test the case where `FS` and `QE` are 
-    // the same point
     let FS = Fps[0];
     let FE = Fps[lenF-1];
+    // Note: The case where `FS` and `FE` are the same point will result in
+    // `geoClip` not clipping and returning 'no intersection' so we don't
+    // explicitly test for it here.
 
     // Get the implict line equation for the line defined by the first and 
     // last control point of Q. This equation gives the distance between any 
@@ -125,7 +127,7 @@ function checkIntersectionInRanges(
     const dMax = C * Math.max(0, dF0.dMax, dF1.dMax, dF2.dMax, dF3.dMax);
 
     // Add fatline debug info
-    if (typeof __debug__ !== 'undefined' && !__debug__.already) {
+    if (__debug__ !== undefined && !__debug__.already) {
         __debug__.currentIter.fatline = getFatlineDebugInfo(FS, FE, dMin, dMax);
     }
 
@@ -161,7 +163,7 @@ function checkIntersectionInRanges(
         last
     }
 
-    if (typeof __debug__ !== 'undefined' && !__debug__.already) {
+    if (__debug__ !== undefined && !__debug__.already) {
         (newIter as IterationExtras).parent = __debug__.currentIter;
         __debug__.currentIter.children = [newIter];
     }
@@ -196,7 +198,7 @@ function checkIntersectionInRanges(
         const dMax_ = Math.max(0, dF0_.dMax, dF1_.dMax, dF2_.dMax, dF3_.dMax);
     
         // Add fatline debug info
-        if (typeof __debug__ !== 'undefined' && !__debug__.already) {
+        if (__debug__ !== undefined && !__debug__.already) {
             __debug__.currentIter.fatlinePerp = getFatlineDebugInfo(FS, V, dMin_, dMax_);
         }
     
@@ -222,7 +224,6 @@ function checkIntersectionInRanges(
         // The paper calls for a heuristic that if less than 30% will be
         // clipped, rather split the longest curve and find intersections in the
         // two halfs seperately.
-        // TODO - check for intersection *at* split point too
         const gtSpan = gtMax - gtMin;
         const ftSpan = ftMax - ftMin;
 
@@ -234,7 +235,7 @@ function checkIntersectionInRanges(
             const iter1 = { F, G, fRange, gRange: [gtMin, tMid], last };
             const iter2 = { F, G, fRange, gRange: [tMid, gtMax], last };
 
-            if (typeof __debug__ !== 'undefined' && !__debug__.already) {
+            if (__debug__ !== undefined && !__debug__.already) {
                 (iter1 as IterationExtras).parent = __debug__.currentIter;
                 (iter2 as IterationExtras).parent = __debug__.currentIter;
                 __debug__.currentIter.children = [iter2, iter1];
@@ -248,7 +249,7 @@ function checkIntersectionInRanges(
         const iter1 = { F, G, fRange: [ftMin, tMid], gRange, last };
         const iter2 = { F, G, fRange: [tMid, ftMax], gRange, last };
 
-        if (typeof __debug__ !== 'undefined' && !__debug__.already) {
+        if (__debug__ !== undefined && !__debug__.already) {
             (iter1 as IterationExtras).parent = __debug__.currentIter;
             (iter2 as IterationExtras).parent = __debug__.currentIter;
             __debug__.currentIter.children = [iter2, iter1];

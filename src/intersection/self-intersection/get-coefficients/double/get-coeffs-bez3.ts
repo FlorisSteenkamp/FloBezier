@@ -1,5 +1,5 @@
 import { γ } from "../../../../error-analysis/error-analysis";
-import { getXY } from "../../../../to-power-basis/get-xy";
+import { getXY3 } from "../../../../to-power-basis/get-xy/double/get-xy";
 
 
 const abs = Math.abs;
@@ -29,7 +29,7 @@ const γ1 = γ(1);
  * @doc
  */
 function getCoeffsBez3(ps: number[][]) {
-    const [[a3,a2,a1],[b3,b2,b1]] = getXY(ps);  // exact if max bit-aligned bitlength <= 49
+    const [[a3,a2,a1],[b3,b2,b1]] = getXY3(ps);  // exact if max bit-aligned bitlength <= 49
 
     const a2b3 = a2*b3;
     const a3b2 = a3*b2;

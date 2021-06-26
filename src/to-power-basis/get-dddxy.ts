@@ -26,6 +26,7 @@ function getDddxy(ps: number[][]): number[] {
 	} else if (ps.length === 3 || ps.length === 2) {
 		return [0, 0];
 	}
+
 	// if x0,x1,x2,x3 <= X (for some X) and t is an element of [0,1], then
 	// max(dddx)(t) <= 48*X for all t.
 }

@@ -1,5 +1,5 @@
 import { γγ } from "../../../../error-analysis/error-analysis";
-import { getXY } from "../../../../to-power-basis/get-xy";
+import { getXY3 } from "../../../../to-power-basis/get-xy/double/get-xy";
 
 import { twoProduct, ddMultDd, ddAddDd, ddDiffDd } from "double-double";
 
@@ -36,7 +36,7 @@ const γγ3 = γγ(3);
  * @doc
  */
 function getCoeffsBez3Dd(ps: number[][]) {
-    const [[a3,a2,a1],[b3,b2,b1]] = getXY(ps);  // exact if max bit-aligned bitlength <= 49
+    const [[a3,a2,a1],[b3,b2,b1]] = getXY3(ps);  // exact if max bit-aligned bitlength <= 49
 
     const a2b3 = tp(a2,b3);  // => error free
     const a3b2 = tp(a3,b2);  // => error free

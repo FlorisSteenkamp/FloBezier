@@ -1,8 +1,10 @@
 import type { __Debug__ } from '../debug';
 import { toHybridQuadratic as _toHybridQuadratic } from './to-hybrid-quadratic';
-import { toString } from '../../..';
 
-declare var __debug__: __Debug__;
+const __debug__: __Debug__ = (typeof globalThis !== 'undefined' && (globalThis as any).__debug__)
+    ? (globalThis as any).__debug__
+    : undefined;
+
 
 const toHybridQuadratic = _toHybridQuadratic;
 
@@ -75,7 +77,7 @@ function geoClip(
     const dH1min = min(dH10.dMin, dH11.dMin);
     const dH1max = max(dH10.dMax, dH11.dMax);
 
-    if (typeof __debug__ !== 'undefined' && !__debug__.already) {
+    if (__debug__ !== undefined && !__debug__.already) {
         const currentIter = __debug__.currentIter;
         // just for drawing purposes (not perfectle accurate)
         currentIter.hq = [G.ps[0], ...hq, G.ps[lenG-1]];
@@ -335,11 +337,11 @@ function quadraticRoots(
     if (numerMaxAbs*c2 > 0) {
         // same signs - `r2min > 0` and `r2Max >= 0`
         r2min = (c2/numerMaxAbs)*(onemin);
-        // TODO - check if below can be a `NaN`
+        // `r2max` cannot be a `NaN` since `c2` is > 0
         r2max = (c2/numerMinAbs)*(onemax);  // could be +-inf
     } else if (numerMaxAbs*c2 < 0) {
         // opposite signs - `r2min < 0` and `r2Max <= 0`
-        // TODO - check if below can be a `NaN`
+        // `r2min` cannot be a `NaN` since `c2` is > 0
         r2min = (c2/numerMinAbs)*(onemax);  // could be +-inf 
         r2max = (c2/numerMaxAbs)*(onemin);
     }
