@@ -1,5 +1,5 @@
 import type { ImplicitFormExact1, ImplicitFormExact2 } from '../implicit-form-types';
-import { getXYExact2 } from '../../to-power-basis/get-xy/exact/get-xy-exact';
+import { getXY2Exact } from '../../to-power-basis/get-xy/exact/get-xy-exact';
 import { getImplicitForm1ExactPb } from './get-implicit-form1-exact';
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
@@ -37,7 +37,7 @@ function getImplicitForm2Exact(
             | ImplicitFormExact1 {
 
     return getImplicitForm2ExactPb(
-            getXYExact2(ps)
+            getXY2Exact(ps)
     );
 }
 

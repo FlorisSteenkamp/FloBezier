@@ -1,5 +1,6 @@
-import { γ } from "../../../../error-analysis/error-analysis";
-import { getXY3WithRunningError } from "../../../../to-power-basis/get-xy/double/get-xy-with-running-error";
+import { γ } from "../../../../../src/error-analysis/error-analysis";
+import { getXY3 } from "../../../../../src/to-power-basis/get-xy/double/get-xy";
+
 
 const abs = Math.abs;
 const γ1 = γ(1);
@@ -14,7 +15,8 @@ const γ1 = γ(1);
  * precision floating point numbers from highest to lowest power, 
  * e.g. `[5,-3,0]` represents the polynomial `5x^2 - 3x`.
  * 
- * * **precondition:** TODO - overflow/underflow
+ * * **precondition:** the coordinates of the given bezier curve must be 
+ * 47-bit aligned
  * * intermediate calculations are done in double precision and this is
  * reflected in the output error bound (which is approximately equal to
  * `n * Number.EPSILON * the condition number`, where roughly `1 < n < 100` and 
@@ -27,17 +29,7 @@ const γ1 = γ(1);
  * @doc
  */
 function getCoeffsBez3(ps: number[][]) {
-    const {
-        coeffs: [[a3,a2,a1],[b3,b2,b1]],
-        errorBound: [[a3_,a2_],[b3_,b2_]]
-    } = getXY3WithRunningError(ps);
-
-    const _a3 = abs(a3);
-    const _a2 = abs(a2);
-    const _a1 = abs(a1);
-    const _b3 = abs(b3);
-    const _b2 = abs(b2);
-    const _b1 = abs(b1);
+    const [[a3,a2,a1],[b3,b2,b1]] = getXY3(ps);  // exact if max bit-aligned bitlength <= 49
 
     const a2b3 = a2*b3;
     const a3b2 = a3*b2;
@@ -50,29 +42,22 @@ function getCoeffsBez3(ps: number[][]) {
     // postpended with an underscore denotes an absolute error (before 
     // multiplication by the round-off unit u) - both underscores present means
     // it is both an absolute value and a round-off error.
-    const _a2b3 = abs(a2b3);
-    const _a3b2 = abs(a3b2);
-    const _a3b1 = abs(a3b1);
-    const _a1b3 = abs(a1b3);
-    const _a2b1 = abs(a2b1);
-    const _a1b2 = abs(a1b2);
-
-    const a2b3_ = a2_*_b3 + _a2*b3_ + _a2b3;
-    const a3b2_ = a3_*_b2 + _a3*b2_ + _a3b2;
-    const a3b1_ = a3_*_b1 +         + _a3b1;
-    const a1b3_ =         + _a1*b3_ + _a1b3;
-    const a2b1_ = a2_*_b1 +         + _a2b1;
-    const a1b2_ =         + _a1*b2_ + _a1b2;
+    const _a2b3_ = abs(a2b3);
+    const _a3b2_ = abs(a3b2);
+    const _a3b1_ = abs(a3b1);
+    const _a1b3_ = abs(a1b3);
+    const _a2b1_ = abs(a2b1);
+    const _a1b2_ = abs(a1b2);
 
     const f4 = a2b3 - a3b2;
     const _f4 = abs(f4);
-    const f4_ = a2b3_ + a3b2_ + _f4;
+    const f4_ = _a2b3_ + _a3b2_ + _f4;
     const f5 = a1b3 - a3b1;
     const _f5 = abs(f5);
-    const f5_ = a1b3_ + a3b1_ + _f5;
+    const f5_ = _a1b3_ + _a3b1_ + _f5;
     const f6 = a2b1 - a1b2;
     const _f6 = abs(f6);
-    const f6_ = a2b1_ + a1b2_ + _f6;
+    const f6_ = _a2b1_ + _a1b2_ + _f6;
 
     
     //const u2 = -2*a2*a3*b2*b3 + a2*a2*b3*b3 + a3*a3*b2*b2

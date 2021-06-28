@@ -39,7 +39,7 @@ function getXY3DdWithRunningError(
 	const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
 	
 	// ----------------------------
-	// xx3 = x3 + 3*(x1 - x2) - x0
+	// xx3 = (x3 - x0) + 3*(x1 - x2)
 	// ----------------------------
 	const xa = td(x3,x0);  // error free
 	const xb = td(x1,x2);  // error free

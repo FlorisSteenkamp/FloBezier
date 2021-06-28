@@ -1,6 +1,6 @@
 import type { ImplicitFormExact2 } from "../../../../implicit-form/implicit-form-types";
 import { getImplicitForm2ExactPb } from "../../../../implicit-form/exact/get-implicit-form2-exact";
-import { getXYExact2 } from "../../../../to-power-basis/get-xy/exact/get-xy-exact";
+import { getXY2Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { 
@@ -41,7 +41,7 @@ const eSign = _eSign;
  */
 function getCoeffsBez2Bez2Exact(ps1: number[][], ps2: number[][]) {
     /** ps1 in power bases */
-    const ps1pb = getXYExact2(ps1);
+    const ps1pb = getXY2Exact(ps1);
     
     //const [[e2,e1,e0],[f2,f1,f0]] = ps1pb;
     // if both polynomials' quadratic terms are exactly zero then its really a line
@@ -50,7 +50,7 @@ function getCoeffsBez2Bez2Exact(ps1: number[][], ps2: number[][]) {
         return getCoeffsBez1Bez2Exact([ps1[0],ps1[2]], ps2);
     }
 
-    const [[c2,c1,c0],[d2,d1,d0]] = getXYExact2(ps2);
+    const [[c2,c1,c0],[d2,d1,d0]] = getXY2Exact(ps2);
 
     if (eSign(c2) === 0 && eSign(d2) === 0) {
         // the input bezier curve is in fact not quadratic but has order < 2

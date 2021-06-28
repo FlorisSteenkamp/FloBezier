@@ -1,6 +1,6 @@
 import type { ImplicitFormExact3 } from "../../../../implicit-form/implicit-form-types";
 import { getImplicitForm3ExactPb } from "../../../../implicit-form/exact/get-implicit-form3-exact";
-import { getXYExact3 } from "../../../../to-power-basis/get-xy/exact/get-xy-exact";
+import { getXY3Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { 
@@ -42,7 +42,7 @@ const eSign = _eSign;
  */
 function getCoeffsBez3Bez3Exact(ps1: number[][], ps2: number[][]) {
     /** ps1 in power bases */
-    const ps1pb = getXYExact3(ps1);
+    const ps1pb = getXY3Exact(ps1);
     
     //const [[e3,e2,e1,e0],[f3,f2,f1,f0]] = ps1pb;
     // if both polynomials' cubic terms are exactly zero then its really a quadratic
@@ -51,7 +51,7 @@ function getCoeffsBez3Bez3Exact(ps1: number[][], ps2: number[][]) {
         return getCoeffsBez2Bez3Exact(toQuadraticFromCubic(ps1), ps2);
     }
 
-    const [[c3,c2,c1,c0],[d3,d2,d1,d0]] = getXYExact3(ps2);
+    const [[c3,c2,c1,c0],[d3,d2,d1,d0]] = getXY3Exact(ps2);
 
     if (eSign(c3) === 0 && eSign(d3) === 0) {
         // the input bezier curve is in fact not cubic but has order < 3
@@ -337,8 +337,8 @@ function getCoeffsBez3Bez3Exact(ps1: number[][], ps2: number[][]) {
     const m4 = fes(em2(c0d2),c1d1);
     const m5 = fes(r8,c1c2);
     const m6 = fes(r9,d1d2);
-    const m7 = epr(tp(3,c0),m5);  // 3*c0: 47-bit aligned => error free
-    const m8 = epr(tp(3,d0),m6);  // 3*c0: 47-bit aligned => error free
+    const m7 = epr(tp(3,c0),m5);
+    const m8 = epr(tp(3,d0),m6);
     const m9 = epr(c1,c1c1);
     const ma = epr(d1,d1d1);
     const mb = epr(vₓₓ,r8);

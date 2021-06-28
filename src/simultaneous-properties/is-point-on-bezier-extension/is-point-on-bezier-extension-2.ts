@@ -24,6 +24,9 @@ const γ1 = γ(1);
 const γγ3 = γγ(3);
 
 
+type DoubleDouble = number[];
+
+
 /**
  * Returns true if the given point is on the given quadratic bezier curve where 
  * the parameter t is allowed to extend to +-infinity, i.e. t is an element of 
@@ -78,7 +81,7 @@ const γγ3 = γγ(3);
     {
         const { 
             coeffs: { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v },
-            errorBound: { vₓ_, vᵧ_, v_ }
+            errorBound: { vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ }
         } = getImplicitForm2DdWithRunningError(ps);
         
         // In the below a prefix underscore on a variable means absolute value, 
@@ -89,21 +92,19 @@ const γγ3 = γγ(3);
         // const h =
         //   vₓₓ*x*x + vₓᵧ*x*y + vᵧᵧ*y*y + vₓ*x + vᵧ*y + v;
 
-        const _x = abs(x);
         const xx = tp(x,x);  // <= error free
-        const _y = abs(y);
         const yy = tp(y,y);  // <= error free
         const xy = tp(x,y);  // <= error free
         const vₓₓxx = qmq(vₓₓ,xx);
-        const vₓₓxx_ = 2*abs(vₓₓxx[1]);
+        const vₓₓxx_ = vₓₓ_*xx[1] + 2*abs(vₓₓxx[1]);
         const vₓᵧxy = qmq(vₓᵧ,xy);
-        const vₓᵧxy_ = 2*abs(vₓᵧxy[1]);
+        const vₓᵧxy_ = vₓᵧ_*abs(xy[1]) + 2*abs(vₓᵧxy[1]);
         const vᵧᵧyy = qmq(vᵧᵧ,yy);
-        const vᵧᵧyy_ = 2*abs(vᵧᵧyy[1]);
+        const vᵧᵧyy_ = vᵧᵧ_*yy[1] + 2*abs(vᵧᵧyy[1]);
         const vₓx = qmd(x,vₓ);
-        const vₓx_ = vₓ_*_x + abs(vₓx[1]);
+        const vₓx_ = vₓ_*abs(x) + abs(vₓx[1]);
         const vᵧy = qmd(y,vᵧ);
-        const vᵧy_ = vᵧ_*_y + abs(vᵧy[1]);
+        const vᵧy_ = vᵧ_*abs(y) + abs(vᵧy[1]);
 
         // group the terms to reduce error, e.g. v usually has the highest bitlength
         //const h = 

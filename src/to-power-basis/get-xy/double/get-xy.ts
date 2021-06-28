@@ -34,13 +34,13 @@ function getXY3(ps: number[][]): number[][] {
 	const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
 
 	return [[
-		x3 - x0 + 3*(x1 - x2), // t^3 - max bitlength increase 3
-		3*(x2 + x0 - 2*x1),    // t^2 - max bitlength increase 4
+		(x3 - x0) + 3*(x1 - x2), // t^3 - max bitlength increase 3
+		3*((x2 + x0) - 2*x1),    // t^2 - max bitlength increase 4
 		3*(x1 - x0),           // t^1 - max bitlength increase 3
 		x0,                    // t^0 - max bitlength increase 0
 	], [
-		y3 - y0 + 3*(y1 - y2), // t^3 - max bitlength increase 3
-		3*(y2 + y0 - 2*y1),    // t^2 - max bitlength increase 4
+		(y3 - y0) + 3*(y1 - y2), // t^3 - max bitlength increase 3
+		3*((y2 + y0) - 2*y1),    // t^2 - max bitlength increase 4
 		3*(y1 - y0),           // t^1 - max bitlength increase 3
 		y0,                    // t^0 - max bitlength increase 0
 	]];
@@ -51,11 +51,11 @@ function getXY2(ps: number[][]): number[][] {
 	const [[x0,y0], [x1,y1], [x2,y2]] = ps;
 	
 	return [[
-		x2 + x0 - 2*x1,  // t^2 - max bitlength increase 2
+		(x2 + x0) - 2*x1,  // t^2 - max bitlength increase 2
 		2*(x1 - x0),     // t^1 - max bitlength increase 2
 		x0,              // t^0 - max bitlength increase 0
 	], [
-		y2 + y0 - 2*y1,  // t^2 - max bitlength increase 2
+		(y2 + y0) - 2*y1,  // t^2 - max bitlength increase 2
 		2*(y1 - y0),     // t^1 - max bitlength increase 2
 		y0,              // t^0 - max bitlength increase 0            
 	]];

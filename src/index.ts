@@ -74,7 +74,6 @@ import { getCoeffsBez1Bez1Exact } from './intersection/bezier-bezier-intersectio
 import { getCoeffsBez3 } from './intersection/self-intersection/get-coefficients/double/get-coeffs-bez3';
 import { getCoeffsBez3Dd } from './intersection/self-intersection/get-coefficients/double-double/get-coeffs-bez3-dd';
 import { getCoeffsBez3Exact } from './intersection/self-intersection/get-coefficients/exact/get-coeffs-bez3-exact';
-import { getCoeffsBez3ExactAnyBitlength } from './intersection/self-intersection/get-coefficients/exact/get-coeffs-bez3-exact-any-bitlength';
 
 import { toExpansion } from './transformation/to-expansion';
 import { toEstimation} from './transformation/to-estimation';
@@ -246,16 +245,21 @@ export {
 	quadToPolyline,
 	toExpansion,
 	toEstimation,
+
 	getImplicitForm3,
 	getImplicitForm3ErrorCounters,
 	getImplicitForm3DdWithRunningError,
+	getImplicitForm3Exact,
+
 	getImplicitForm2,
 	getImplicitForm2ErrorCounters,
 	getImplicitForm2DdWithRunningError,
 	getImplicitForm2Exact,
+
 	getImplicitForm1,
 	getImplicitForm1ErrorCounters,
 	getImplicitForm1DdWithRunningError,
+	getImplicitForm1Exact,
 	
 	// -----------------------
 	// -- Global properties --
@@ -341,9 +345,6 @@ export {
 	getCoeffsBez1Bez2Dd,
 	getCoeffsBez1Bez1Dd,
 
-	getImplicitForm3Exact as getImplicitForm3ExactAnyBitlength,
-	getImplicitForm2Exact as getImplicitForm2ExactAnyBitlength,
-	getImplicitForm1Exact as getImplicitForm1ExactAnyBitlength,
 	getCoeffsBez3Bez3Exact,
 	getCoeffsBez3Bez2Exact,
 	getCoeffsBez3Bez1Exact,
@@ -358,7 +359,6 @@ export {
 	getCoeffsBez3,
 	getCoeffsBez3Dd,
 	getCoeffsBez3Exact,
-	getCoeffsBez3ExactAnyBitlength,
 
 	closestPointOnBezier,
 

@@ -1,6 +1,6 @@
 import type { ImplicitFormExact1 } from "../../../../implicit-form/implicit-form-types";
 import { getImplicitForm1ExactPb } from "../../../../implicit-form/exact/get-implicit-form1-exact";
-import { getXYExact1 } from "../../../../to-power-basis/get-xy/exact/get-xy-exact";
+import { getXY1Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { expansionProduct, fastExpansionSum, scaleExpansion2, eSign as _eSign } from "big-float-ts";
@@ -35,7 +35,7 @@ const eSign = _eSign;
 // is now implied implicitly
 function getCoeffsBez1Bez1Exact(ps1: number[][], ps2: number[][]) {
     /** ps1 in power bases */
-    const ps1pb = getXYExact1(ps1);
+    const ps1pb = getXY1Exact(ps1);
         
     //const [[e1,e0],[f1,f0]] = ps1pb;
     // if both polynomials' linear terms are exactly zero then it really is a point
@@ -46,7 +46,7 @@ function getCoeffsBez1Bez1Exact(ps1: number[][], ps2: number[][]) {
         //return getCoeffsBez0Bez3ExactAnyBitlength([ps1[0]], ps2]);
     }
 
-    const [[c1,c0],[d1,d0]] = getXYExact1(ps2);
+    const [[c1,c0],[d1,d0]] = getXY1Exact(ps2);
 
     if (eSign(c1) === 0 && eSign(d1) === 0) {
         // the input bezier curve is in fact not a line but has order < 1,

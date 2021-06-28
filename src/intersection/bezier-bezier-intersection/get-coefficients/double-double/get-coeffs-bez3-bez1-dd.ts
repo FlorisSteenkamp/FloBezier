@@ -110,9 +110,12 @@ function getCoeffsBez3Bez1Dd(ps1: number[][], ps2: number[][]) {
     const $z1 = c0*$vₓₓₓ;
     const z1 = qmd(c0,vₓₓₓ);
     const z1_ = _c0*vₓₓₓ_ + abs($z1);
-    const $z7 = (3*c0)*$vₓₓₓ;
-    const z7 = qmd(3*c0,vₓₓₓ);  // 3*c0: 47-bit aligned => error free 
-    const z7_ = 3*_c0*vₓₓₓ_ + abs($z7);
+    const $za = 3*c0;
+    const za = tp(3,c0);
+    const _za = abs($za);
+    const $z7 = $za*$vₓₓₓ;
+    const z7 = qmq(za,vₓₓₓ);
+    const z7_ = _za*vₓₓₓ_ + 2*abs($z7);
     const $z2 = c0*$vₓₓᵧ;
     const z2 = qmd(c0,vₓₓᵧ);
     const z2_ = _c0*vₓₓᵧ_ + abs($z2);
@@ -128,10 +131,12 @@ function getCoeffsBez3Bez1Dd(ps1: number[][], ps2: number[][]) {
     const $z6 = d0*$vᵧᵧᵧ;
     const z6 = qmd(d0,vᵧᵧᵧ);
     const z6_ = _d0*vᵧᵧᵧ_ + abs($z6);
-    const $z8 = (3*d0)*$vᵧᵧᵧ;
-    const z8 = qmd(3*d0,vᵧᵧᵧ);
-    const z8_ = 3*_d0*vᵧᵧᵧ_ + abs($z8);
-
+    const $zb = 3*d0;
+    const zb = tp(3,d0);
+    const _zb = abs($zb);
+    const $z8 = $zb*$vᵧᵧᵧ;
+    const z8 = qmq(zb,vᵧᵧᵧ);
+    const z8_ = _zb*vᵧᵧᵧ_ + 2*abs($z8);
 
     // a1**3*v_xxx + a1**2*b1*v_xxy + a1*b1**2*v_xyy + b1**3*v_yyy
     //const v3 =

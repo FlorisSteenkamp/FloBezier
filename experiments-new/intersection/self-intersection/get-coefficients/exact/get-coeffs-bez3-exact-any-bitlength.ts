@@ -1,4 +1,10 @@
-import { getXYExact3 } from "../../../../to-power-basis/get-xy/exact/get-xy-exact";
+
+//----------------------------------------------------------------
+// OLDER VERSION - BUT SYMMETRY IN COEFFICIENTS IS VERY USEFUL
+// FOR DETERMINING WHEN UNDER/OVERFLOW CAN OCCUR
+//----------------------------------------------------------------
+
+import { getXYExact3 } from "../../../../../src/to-power-basis/get-xy/exact/get-xy-exact";
 import { eCalculate } from "big-float-ts";
 
 

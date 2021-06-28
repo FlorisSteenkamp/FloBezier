@@ -1,10 +1,10 @@
 import { getCoeffsBez3 } from "./get-coefficients/double/get-coeffs-bez3";
 import { getCoeffsBez3Exact } from "./get-coefficients/exact/get-coeffs-bez3-exact";
-import { γ } from "../../error-analysis/error-analysis";
+import { γ } from "../../../src/error-analysis/error-analysis";
 import { operators as bigFloatOperators } from "big-float-ts";
 import { operators as ddOperators } from "double-double";
-import { twoProduct, expansionProduct, eDiff, scaleExpansion2, fastExpansionSum, growExpansion } from 'big-float-ts';
-import { ddNegativeOf, ddAddDd, ddMultBy2, ddDivDd, twoDiff, twoSum } from 'double-double';
+import { twoProduct, expansionProduct, eDiff, scaleExpansion2 } from 'big-float-ts';
+import { ddNegativeOf, ddAddDd, ddMultBy2, ddDivDd } from 'double-double';
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const { eSign, eAbs, eToDd, eMultByNeg2, eEstimate, eCompare } = bigFloatOperators;
@@ -15,14 +15,10 @@ const edif = eDiff;
 const epr = expansionProduct;
 const sce = scaleExpansion2;
 const tp = twoProduct;
-const td = twoDiff;
-const ts = twoSum;
 const qno = ddNegativeOf;
 const qaq = ddAddDd;
 const qm2 = ddMultBy2;
 const qdivq = ddDivDd;
-const fes = fastExpansionSum;
-const ge = growExpansion;
 
 
 const eps = Number.EPSILON;
@@ -61,21 +57,14 @@ function bezierSelfIntersection(ps: number[][]): number[] {
         // it is rare to get here 
         // check for sure if a === 0 exactly
         const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
+        const a3 = x3 - x0 + 3*(x1 - x2);  // <= exact if max bit-aligned bitlength <= 50
+        const a2 = x2 + x0 - 2*x1;         // <= exact if max bit-aligned bitlength <= 49
+        const b3 = y3 - y0 + 3*(y1 - y2);  // <= exact if max bit-aligned bitlength <= 50
+        const b2 = y2 + y0 - 2*y1;         // <= exact if max bit-aligned bitlength <= 49
+        const a2b3 = tp(a2,b3);
+        const a3b2 = tp(a3,b2);
 
-        //const a3 = (x3 - x0) + 3*(x1 - x2);
-        //const a2 = (x2 + x0) - 2*x1;
-        //const b3 = (y3 - y0) + 3*(y1 - y2);
-        //const b2 = (y2 + y0) - 2*y1;
-
-        const a3 = fes(td(x3, x0), sce(3,(td(x1, x2))));
-        const a2 = ge(ts(x2, x0), -2*x1);
-        const b3 = fes(td(y3, y0), sce(3,(td(y1, y2))));
-        const b2 = ge(ts(y2, y0), -2*y1);
-
-        const a2b3 = epr(a2,b3);
-        const a3b2 = epr(a3,b2);
-
-        if (eCompare(a2b3, a3b2) === 0) {
+        if (a2b3[0] === a3b2[0] && a2b3[1] === a3b2[1]) {
             return undefined;  // a === 0 => no roots possible
         }
     }

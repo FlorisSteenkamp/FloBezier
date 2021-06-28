@@ -1,5 +1,5 @@
 import { allRootsCertified, RootInterval } from 'flo-poly';
-import { getXYExact2, getXYExact3 } from "../to-power-basis/get-xy/exact/get-xy-exact";
+import { getXY2Exact, getXY3Exact } from "../to-power-basis/get-xy/exact/get-xy-exact";
 import { getXY1DdWithRunningError, getXY2DdWithRunningError, getXY3DdWithRunningError } from "../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error";
 import { twoDiff as twoDiff_ } from 'big-float-ts';
 
@@ -71,7 +71,7 @@ function tFromXY3(
     ] = undefined;
 
     const getPExactX = (): number[][] => { 
-        if (pExactXY === undefined) { pExactXY = getXYExact3(ps); }
+        if (pExactXY === undefined) { pExactXY = getXY3Exact(ps); }
         const _pExactX = pExactXY[0];  // x coordinate
         // pop the constant term off `x(t)`
         const tx = _pExactX.pop() as number;
@@ -81,7 +81,7 @@ function tFromXY3(
     }
 
     const getPExactY = (): number[][] => {
-        if (pExactXY === undefined) { pExactXY = getXYExact3(ps); }
+        if (pExactXY === undefined) { pExactXY = getXY3Exact(ps); }
         const _pExactY = pExactXY[1];  // y coordinate
         // pop the constant term off `y(t)`
         const ty = _pExactY.pop() as number;
@@ -167,7 +167,7 @@ function tFromXY2(
     ] = undefined;
 
     const getPExactX = (): number[][] => { 
-        if (pExactXY === undefined) { pExactXY = getXYExact2(ps); }
+        if (pExactXY === undefined) { pExactXY = getXY2Exact(ps); }
         const _pExactX = pExactXY[0];  // x coordinate
         // pop the constant term off `x(t)`
         const tx = _pExactX.pop() as number;
@@ -177,7 +177,7 @@ function tFromXY2(
     }
 
     const getPExactY = (): number[][] => {
-        if (pExactXY === undefined) { pExactXY = getXYExact2(ps); }
+        if (pExactXY === undefined) { pExactXY = getXY2Exact(ps); }
         const _pExactY = pExactXY[1];  // y coordinate
         // pop the constant term off `y(t)`
         const ty = _pExactY.pop() as number;

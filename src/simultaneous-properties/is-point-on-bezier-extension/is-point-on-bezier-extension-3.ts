@@ -66,13 +66,6 @@ const γγ3 = γγ(3);
         //   vₓₓₓ*x*x*x + vₓₓᵧ*x*x*y + vₓᵧᵧ*x*y*y + vᵧᵧᵧ*y*y*y + 
         //   vₓₓ*x*x + vₓᵧ*x*y + vᵧᵧ*y*y + vₓ*x + vᵧ*y + v;
 
-        const xx = x*x;
-        const yy = y*y;
-        const vₓₓxx = vₓₓ*xx;
-        const vₓᵧxy = vₓᵧ*x*y;
-        const vᵧᵧyy = vᵧᵧ*yy;
-        const vₓx = vₓ*x;
-        const vᵧy = vᵧ*y;
 
         // group the terms to reduce error, e.g. v usually has the highest bitlength
         // const h = 
@@ -85,18 +78,50 @@ const γγ3 = γγ(3);
         //        v
         //    );
 
-        const q1 = vₓₓₓ*xx*x + vₓₓᵧ*xx*y;
-        const q2 = vₓᵧᵧ*x*yy + vᵧᵧᵧ*yy*y;
-        const q3 = q1 + q2;
-        const q4 = vₓₓxx + vₓᵧxy;
-        const q5 = q4 + vᵧᵧyy;
-        const q6 = q3 + q5;
-        const q7 = vₓx + vᵧy;
-        const q8 = q7 + v;
-        const h = q6 + q8;
+        const xx = x*x;
+        const yy = y*y;
+
+        const h =
+            (
+                (vₓₓₓ*(xx*x) + vₓₓᵧ*(xx*y)) + 
+                (vₓᵧᵧ*(x*yy) + vᵧᵧᵧ*(yy*y)) + 
+                ((vₓₓ*xx + vₓᵧ*(x*y)) + vᵧᵧ*yy)
+            ) +
+            (
+                (vₓ*x + vᵧ*y) + 
+                v
+            );
+
+
+        //-------------------
+        // Error calculation
+        //-------------------
+
+        const x_ = abs(x);  // <0>x
+        const y_ = abs(y);  // <0>y
+        const xx_ = x_*x_;  // <1>xx
+        const yy_ = y_*y_;  // <1>yy
+
+        // <26>h <-- <26>(<24>(<17>(<16> + <16>) + <23>) + <25>(<24> + <24>))
+        const h_ =
+            (
+                // <16> <-- <16>((<14>(<11>vₓₓₓ*<2>(xx*x)) + <15>(<12>vₓₓᵧ*<2>(xx*y)))) +
+                (vₓₓₓ_*(xx_*x_) + vₓₓᵧ_*(xx_*y_)) +
+                // <16> <-- 16((<15>(<12>vₓᵧᵧ*<2>(x*yy)) + <14>(<11>vᵧᵧᵧ*<2>(yy*y)))) +
+                (vₓᵧᵧ_*(x_*yy_) + vᵧᵧᵧ_*(yy_*y_)) + 
+                // <23> <-- <23>(<22>((<21>(<19>vₓₓ*<1>xx) + <20>(<18>vₓᵧ*<1>(x*y))) + <19>(<18>vᵧᵧ*<1>yy)))
+                ((vₓₓ_*xx_ + vₓᵧ_*(x_*y_)) + vᵧᵧ_*yy_)
+            ) +
+            (
+                // <24> <-- <24>(<23>(<22>vₓ*x) + <23>(<22>vᵧ*y))
+                (vₓ_*x_ + vᵧ_*y_) + 
+                // <24>
+                v_
+            );
+
 
         // if the error is not too high too discern h away from zero
-        if (γ1*h_ < abs(h)) {
+        if (26*γ1*h_ < abs(h)) {
             return false; // <-- prefilter applied
         }
     }
@@ -125,12 +150,12 @@ const γγ3 = γγ(3);
 
         const _x = abs(x);
         const xx = tp(x,x);  // <= error free
-        const _xx = abs(xx[1]);
+        const _xx = xx[1];
         const xxx = qmd(x,xx);
         const _xxx_ = abs(xxx[1]);
         const _y = abs(y);
         const yy = tp(y,y);  // <= error free
-        const _yy = abs(yy[1]);
+        const _yy = yy[1];
         const yyy = qmd(y,yy);
         const _yyy_ = abs(yyy[1]);
         const xxy = qmd(y,xx);
