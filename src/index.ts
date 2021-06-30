@@ -131,7 +131,6 @@ import { toHybridQuadratic } from './transformation/degree-or-type/to-hybrid-qua
 import { isCubicReallyQuad } from './global-properties/type/is-cubic-really-quad';
 import { isQuadReallyLine } from  './global-properties/type/is-quad-really-line';
 import { toQuadraticFromCubic } from './transformation/degree-or-type/to-quad-from-cubic';
-import { circleBezierIntersectionD } from './intersection/circle-bezier-intersection/double/circle-bezier-intersection-d';
 import { circleBezierIntersection } from './intersection/circle-bezier-intersection/circle-bezier-intersection';
 
 // TODO - ADD!!!
@@ -316,7 +315,6 @@ export {
 	intersectBoxes,
 	areBoxesIntersecting,
 	
-	circleBezierIntersectionD,
 	circleBezierIntersection,
 	bezierSelfIntersection,
 

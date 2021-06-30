@@ -32,8 +32,7 @@ type DoubleDouble = number[];
  * the parameter t is allowed to extend to +-infinity, i.e. t is an element of 
  * [-inf, +inf], false otherwise.
  * 
- * * Precondition: ps must be grid-aligned and have a maximum bitlength of 47.
- * (p may have any bitlength - no restrictions)
+ * * Precondition: TODO - underflow/overflow
  * 
  * @internal
  */

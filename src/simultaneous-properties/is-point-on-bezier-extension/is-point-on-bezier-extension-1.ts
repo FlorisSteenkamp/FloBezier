@@ -23,8 +23,7 @@ const γγ3 = γγ(3);
  * the parameter t is allowed to extend to +-infinity, i.e. t is an element of 
  * [-inf, +inf], false otherwise.
  * 
- * * **Precondition:** `ps` must be grid-aligned and have a maximum bitlength of 47.
- * (p may have any bitlength - no restrictions)
+ * * **Precondition:** TODO - underflow/overflow
  * * there are many alternative implementations to this function, e.g. ccw, etc;
  * it is just kept for symmetry.
  * 

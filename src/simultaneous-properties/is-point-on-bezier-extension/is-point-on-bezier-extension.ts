@@ -8,8 +8,7 @@ import { isPointOnBezierExtension3 } from './is-point-on-bezier-extension-3';
  * parameter `t` is allowed to extend to ±∞, i.e. `t` is an element of 
  * `(-∞, +∞)`, `false` otherwise.
  * 
- * * **precondition**: `ps` and `p` must be bit-aligned with a maximum 
- * bitlength of 47.
+ * * **precondition**: TODO - underflow/overflow
  * 
  * @param ps 
  * @param p 

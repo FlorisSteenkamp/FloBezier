@@ -1,6 +1,6 @@
 import { allRoots } from "flo-poly";
 import { getCoeffsCubic, getCeoffsQuadratic, getCeoffsLine } from "./get-coeffs";
-import { evalDeCasteljau } from "../../../local-properties-at-t/t-to-xy/eval-de-casteljau";
+import { evalDeCasteljau } from "../../../../src/local-properties-at-t/t-to-xy/eval-de-casteljau";
 
 
 /**

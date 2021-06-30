@@ -1,12 +1,9 @@
-import { getXY3Exact, getXY2Exact, getXY1Exact } from "../../../to-power-basis/get-xy/exact/get-xy-exact";
+import { getXY3Exact, getXY2Exact, getXY1Exact } from "../../../../src/to-power-basis/get-xy/exact/get-xy-exact";
 
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-import { twoProduct, eCalculate, scaleExpansion } from "big-float-ts";
-
-const tp = twoProduct;
-const calc = eCalculate;
-const sce = scaleExpansion;
+import { operators as bigFloatOperators } from "big-float-ts";
+const { twoProduct, eCalculate, scaleExpansion } = bigFloatOperators;
 
 
 /**
@@ -21,7 +18,7 @@ const sce = scaleExpansion;
  * Shewchuk floating point expansions from highest to lowest power, 
  * e.g. `[[5],[-3],[0]]` represents the polynomial `5x^2 - 3x`.
  * 
- * * **precondition:** TODO - overflow/underflow
+ * * **precondition:** none
  * * the returned polynomial coefficients are exact (i.e. error-free)
  * 
  * @param circle a circle
@@ -40,42 +37,42 @@ function getCoeffsCubicExact(
     const b0 = [y0];
 
     // (a3**2 + b3**2)*t**6 + 
-    const t6 = calc([
+    const t6 = eCalculate([
         [a3,a3], 
         [b3,b3]
     ]);
 
     // (2*a2*a3 + 2*b2*b3)*t**5 + 
-    const t5 = sce(calc([
+    const t5 = scaleExpansion(eCalculate([
         [a2,a3], 
         [b2,b3]
     ]), 2);
 
     // (2*a1*a3 + a2**2 + 2*b1*b3 + b2**2)*t**4 + 
-    const t4 = calc([
+    const t4 = eCalculate([
         [[2],a1,a3], [a2,a2], [[2],b1,b3], [b2,b2]
     ]);
 
     // (2*a0*a3 + 2*a1*a2 - 2*a3*cx + 2*b0*b3 + 2*b1*b2 - 2*b3*cy)*t**3 + 
-    const t3 = sce(calc([
+    const t3 = scaleExpansion(eCalculate([
         [a0,a3], [a1,a2], [[-1],a3,[cx]], [b0,b3], [b1,b2], [[-1],b3,[cy]]
     ]), 2);
     
 
     // (2*a0*a2 + a1**2 - 2*a2*cx + 2*b0*b2 + b1**2 - 2*b2*cy)*t**2 + 
-    const t2 = calc([
+    const t2 = eCalculate([
         [[2],a0,a2], [a1,a1], [[-2],a2,[cx]], [[2],b0,b2], [b1,b1], [[-2],b2,[cy]]
     ]);
 
     // (2*a0*a1 - 2*a1*cx + 2*b0*b1 - 2*b1*cy)*t + 
-    const t1 = sce(calc([
+    const t1 = scaleExpansion(eCalculate([
         [a0,a1], [[-1],a1,[cx]], [b0,b1], [[-1],b1,[cy]]
     ]), 2);
 
     // a0**2 - 2*a0*cx + b0**2 - 2*b0*cy + cx**2 + cy**2 - r**2
-    const t0 = calc([
+    const t0 = eCalculate([
         [a0,a0], [[-2],a0,[cx]], [b0,b0], [[-2],b0,[cy]], 
-        [tp(cx,cx)], [tp(cy,cy)], [tp(-r,r)]
+        [twoProduct(cx,cx)], [twoProduct(cy,cy)], [twoProduct(-r,r)]
     ]);
 
     return [t6, t5, t4, t3, t2, t1, t0];
@@ -109,34 +106,33 @@ function getCoeffsQuadraticExact(
     const [[a2,a1,x0], [b2,b1,y0]] = getXY2Exact(ps);
     const a0 = [x0];
     const b0 = [y0];
-    
 
     // (a2**2 + b2**2)*t**4 + 
-    const t4 = calc([
+    const t4 = eCalculate([
         [a2,a2], 
         [b2,b2]
     ]);
 
     // (2*a1*a2 + 2*b1*b2)*t**3 + 
-    const t3 = sce(calc([
+    const t3 = scaleExpansion(eCalculate([
         [a1,a2], 
         [b1,b2]
     ]), 2);
 
     // (2*a0*a2 + a1**2 - 2*a2*cx + 2*b0*b2 + b1**2 - 2*b2*cy)*t**2 + 
-    const t2 = calc([
+    const t2 = eCalculate([
         [[2],a0,a2], [a1,a1], [[-2],a2,[cx]], [[2],b0,b2], [b1,b1], [[-2],b2,[cy]]
     ]);
 
     // (2*a0*a1 - 2*a1*cx + 2*b0*b1 - 2*b1*cy)*t + 
-    const t1 = sce(calc([
+    const t1 = scaleExpansion(eCalculate([
         [a0,a1], [[-1],a1,[cx]], [b0,b1], [[-1],b1,[cy]]
     ]), 2);
 
     // a0**2 - 2*a0*cx + b0**2 - 2*b0*cy + cx**2 + cy**2 - r**2
-    const t0 = calc([
+    const t0 = eCalculate([
         [a0,a0], [[-2],a0,[cx]], [b0,b0], [[-2],b0,[cy]], 
-        [tp(cx,cx)], [tp(cy,cy)], [tp(-r,r)]
+        [twoProduct(cx,cx)], [twoProduct(cy,cy)], [twoProduct(-r,r)]
     ]);
 
     return [t4, t3, t2, t1, t0];
@@ -171,22 +167,21 @@ function getCoeffsLinearExact(
     const a0 = [x0];
     const b0 = [y0];
 
-
     // (a1**2 + b1**2)*t**2 +
-    const t2 = calc([
+    const t2 = eCalculate([
         [a1,a1], 
         [b1,b1]
     ]);
 
     // (2*a0*a1 - 2*a1*cx + 2*b0*b1 - 2*b1*cy)*t + 
-    const t1 = sce(calc([
+    const t1 = scaleExpansion(eCalculate([
         [a0,a1], [[-1],a1,[cx]], [b0,b1], [[-1],b1,[cy]]
     ]), 2);
 
     // a0**2 - 2*a0*cx + b0**2 - 2*b0*cy + cx**2 + cy**2 - r**2
-    const t0 = calc([
+    const t0 = eCalculate([
         [a0,a0], [[-2],a0,[cx]], [b0,b0], [[-2],b0,[cy]], 
-        [tp(cx,cx)], [tp(cy,cy)], [tp(-r,r)]
+        [twoProduct(cx,cx)], [twoProduct(cy,cy)], [twoProduct(-r,r)]
     ]);
 
     return [t2, t1, t0];

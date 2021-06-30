@@ -29,8 +29,7 @@ const γγ3 = γγ(3);
  * parameter `t` is allowed to extend to `±∞`, i.e. if `t ∈ (-∞, +∞)`, 
  * `false` otherwise.
  * 
- * * **precondition:** `ps` must be grid-aligned and have a maximum bitlength of 47.
- * (p may have any bitlength - no restrictions)
+ * * **precondition:** TODO - underflow/overflow
  * 
  * @internal
  */

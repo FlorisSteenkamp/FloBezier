@@ -1,8 +1,6 @@
 import { getCoeffsCubicDd, getCoeffsQuadraticDd, getCoeffsLinearDd } from './double-double/get-coeffs-dd';
-import { allRootsCertified } from 'flo-poly';
-//import { mid } from 'flo-poly';
-//import { evalDeCasteljau } from '../../local-properties-at-t/t-to-xy/eval-de-casteljau';
-import { getCoeffsCubicErrorCounters, getCoeffsLinearErrorCounters, getCoeffsQuadraticErrorCounters } from './get-circle-bezier-intersection-error-counters';
+import { allRootsCertified, mid } from 'flo-poly';
+import { evalDeCasteljau } from '../../../src/local-properties-at-t/t-to-xy/eval-de-casteljau';
 
 
 /**
@@ -16,9 +14,11 @@ import { getCoeffsCubicErrorCounters, getCoeffsLinearErrorCounters, getCoeffsQua
  * results (see points below)
  *
  * * the bezier curve's parameter `t` values are retuned
- * * * **precondition:** TODO - underflow/overflow conditions
+ * * * **precondition:** the coordinates of the given bezier curves must be 
+ * 47-bit aligned
  * * this algorithm is mathematically guaranteed accurate to within 
- * `4 * Number.EPSILON` in the t values of the bezier curve
+ * `4 * Number.EPSILON` in the t values of the bezier curve (provided
+ * the precondition is met).
  * 
  * @param circle 
  * @param ps 
@@ -30,28 +30,22 @@ function circleBezierIntersection(
         ps: number[][]) {
 
     let poly: number[][];
-    let polyE: number[];
     if (ps.length === 4) {
         poly = getCoeffsCubicDd(circle, ps);
-        polyE = getCoeffsCubicErrorCounters(circle, ps);
     } else if (ps.length === 3) {
         poly = getCoeffsQuadraticDd(circle, ps);
-        polyE = getCoeffsQuadraticErrorCounters(circle, ps);
     } else if (ps.length === 2) {
         poly = getCoeffsLinearDd(circle, ps);
-        polyE = getCoeffsLinearErrorCounters(circle, ps);
     }
 
     let ts = allRootsCertified(poly, 0, 1);
 
-    return ts;
-
-    //return ts.map(t => {
-    //    return {
-    //        t: mid(t),
-    //        p: evalDeCasteljau(ps, mid(t))
-    //    }
-    //});
+    return ts.map(t => {
+        return {
+            t: mid(t),
+            p: evalDeCasteljau(ps, mid(t))
+        }
+    });
 }
 
 

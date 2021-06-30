@@ -1,4 +1,4 @@
-import { getXY3, getXY2, getXY1 } from "../../../to-power-basis/get-xy/double/get-xy";
+import { getXY3, getXY2, getXY1 } from "../../../../src/to-power-basis/get-xy/double/get-xy";
 
 
 /**

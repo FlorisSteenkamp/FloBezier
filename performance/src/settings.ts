@@ -1,3 +1,5 @@
+// * misspelt `getCeoffs` -> `getCoeffs`
+// * error counters need to be DOUBLED!!!! for DOUBLE_DOUBLE precision due to `qmq` !!!!!!!!
 // * test with lower order beziers disguised as higher order
 //   (thus will allRootsCertified be able to cope with 0 leading coefficients)
 // * test with degenerate to point cases
