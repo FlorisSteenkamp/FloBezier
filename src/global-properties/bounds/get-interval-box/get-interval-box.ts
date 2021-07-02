@@ -8,8 +8,8 @@ const abs = Math.abs;
 
 /**
  * Returns an axis-aligned-box that is guaranteed to engulf the entire 
- * given bezier curve from t1 to t2. The returned box is given as an array 
- * of points in double precision, e.g. `[[[1],[1]], [[2],[2]]]`.
+ * given bezier curve from t1 to t2. The returned box is given as a pair
+ * of points (the box corners) in double precision, e.g. `[[1,1], [2,2]]`.
  * 
  * * **precondition:** t1 < t2
  * * **precondition:** t1,t2 >= 0 && t1,t2 <= 1

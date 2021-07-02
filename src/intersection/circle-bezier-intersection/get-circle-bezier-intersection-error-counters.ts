@@ -10,7 +10,8 @@ const abs = Math.abs;
  * @param ps a cubic bezier curve
  * 
  * ```
- * // double the error counters for double-double precision! e.g <4> -> <8>
+ * // (1 x γ) the error counters for double precision!
+ * // (6 x γγ) the error counters for double-double precision!
  * return [  
  *      t6_,  // <8>
  *      t5_,  // <8>

@@ -1,5 +1,5 @@
-import { getTangentPolyFromPointExact } from "../get-tangent-poly-from-point/exact/get-tangent-poly-from-point";
-import { evaluate_anyBitlength_exact } from "../../local-properties-at-t/t-to-xy/any-bitlength/exact/evaluate-any-bitlength-exact";
+import { getTangentPolyFromPointExact46 } from "../get-tangent-poly-from-point/exact/get-tangent-poly-from-point-exact";
+import { evaluate_anyBitlength_exact } from "../../../src/local-properties-at-t/t-to-xy/any-bitlength/exact/evaluate-any-bitlength-exact";
 import { squaredDistanceBetween } from "flo-vector2d";
 import { allRootsCertified, mid } from "flo-poly";
 
@@ -18,11 +18,11 @@ const estimate = eEstimate;
  * 
  * @doc
  */
-function closestPointOnBezierPrecise(
+function closestPointOnBezierPrecise47(
         ps: number[][], 
         p: number[]): { p: number[]; t: number; } {
 
-    const poly = getTangentPolyFromPointExact(ps, p);
+    const poly = getTangentPolyFromPointExact46(ps, p);
 
     // we give ample leeway for roots outside [0,1] since roots can be some 
     // distance outside this range at extemely high curvature where the tangent
@@ -35,23 +35,20 @@ function closestPointOnBezierPrecise(
     ts.push(0);
     ts.push(1);
 
-    const ps_ = ts.map(t => ({ p: evaluate_anyBitlength_exact(ps, t).map(estimate), t }));
-    //const ps_ = ts.map(t => ({ p: evalDeCasteljau(ps, t), t }));
-
-    
     // Get point with minimum distance
     let minD = Number.POSITIVE_INFINITY;
     let minT: { p: number[], t: number } = undefined;
-    ps_.forEach(p_ => {
-        const d = squaredDistanceBetween(p_.p, p);
+    for (const t of ts) {
+        const p_ = evaluate_anyBitlength_exact(ps, t).map(estimate);
+        const d = squaredDistanceBetween(p_, p);
         if (d < minD) {
             minD = d;
-            minT = p_;
+            minT = { p: p_, t };
         }
-    });
+    }
 
     return minT;
 }
 
 
-export { closestPointOnBezierPrecise }
+export { closestPointOnBezierPrecise47 }

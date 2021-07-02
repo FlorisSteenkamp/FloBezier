@@ -1,3 +1,5 @@
+// * change `let` to `const`
+// * wilkinson -> stewart error counters
 // * misspelt `getCeoffs` -> `getCoeffs`
 // * error counters need to be DOUBLED!!!! for DOUBLE_DOUBLE precision due to `qmq` !!!!!!!!
 // * test with lower order beziers disguised as higher order

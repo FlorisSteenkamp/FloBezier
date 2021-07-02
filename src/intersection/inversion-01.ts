@@ -1,7 +1,7 @@
 import { evaluate_anyBitlength_exact } from "../local-properties-at-t/t-to-xy/any-bitlength/exact/evaluate-any-bitlength-exact";
 import { squaredDistanceBetween } from "flo-vector2d";
 import { allRootsCertified, mid } from "flo-poly";
-import { getTangentPolyFromPointExact } from "../simultaneous-properties/get-tangent-poly-from-point/exact/get-tangent-poly-from-point";
+import { getTangentPolyFromPointExact } from "../simultaneous-properties/closest-point-on-bezier/get-coeffs/exact/get-closest-on-bezier-from-point-exact";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { operators as bigFloatOperators } from "big-float-ts";

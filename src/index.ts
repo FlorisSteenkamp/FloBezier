@@ -109,7 +109,7 @@ import { isQuadObtuse } from './global-properties/type/is-quad-obtuse';
 import { getIntervalBox } from './global-properties/bounds/get-interval-box/get-interval-box';
 import { getIntervalBoxDd } from './global-properties/bounds/get-interval-box/get-interval-box-dd';
 import { splitAt, splitAtPrecise } from './transformation/split-merge-clone/split-at';
-import { closestPointOnBezierPrecise } from './simultaneous-properties/closest-point-on-bezier/closest-point-on-bezier-precise';
+import { closestPointOnBezierCertified } from './simultaneous-properties/closest-point-on-bezier/closest-point-on-bezier-certified';
 import { hausdorffDistance, hausdorffDistanceCandidates } from './simultaneous-properties/hausdorff-distance';
 import { lengthUpperBound } from './global-properties/length/length-upper-bound';
 import { lengthSquaredUpperBound } from './global-properties/length/length-squared-upper-bound';
@@ -122,8 +122,8 @@ import { areBeziersInSameKFamily } from './simultaneous-properties/are-beziers-i
 import { getInterfaceCcw } from './simultaneous-properties/get-interface-ccw';
 import { isLine, isHorizontalLine, isVerticalLine } from './global-properties/type/is-line';
 import { isSelfOverlapping } from './global-properties/type/is-self-overlapping';
-import { getTangentPolyFromPoint } from './simultaneous-properties/get-tangent-poly-from-point/naive/get-tangent-poly-from-point';
-import { getTangentPolyFromPointExact } from './simultaneous-properties/get-tangent-poly-from-point/exact/get-tangent-poly-from-point';
+import { getClosestOnBezierFromPoint } from './simultaneous-properties/closest-point-on-bezier/get-coeffs/double/get-closest-on-bezier-from-point';
+import { getTangentPolyFromPointExact } from './simultaneous-properties/closest-point-on-bezier/get-coeffs/exact/get-closest-on-bezier-from-point-exact';
 import { getBounds } from './global-properties/bounds/get-bounds';
 import { getBoundingBoxTight } from './global-properties/bounds/get-bounding-box-tight';
 import { getBoundingBox } from './global-properties/bounds/get-bounding-box';
@@ -298,8 +298,8 @@ export {
 	equal,
 	getInterfaceCcw,
 	areBeziersInSameKFamily,
-	closestPointOnBezierPrecise,
-	getTangentPolyFromPoint,
+	closestPointOnBezierCertified as closestPointOnBezierPrecise,
+	getClosestOnBezierFromPoint as getTangentPolyFromPoint,
 	getTangentPolyFromPointExact,
 	hausdorffDistance,
 	hausdorffDistanceCandidates,

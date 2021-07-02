@@ -1,8 +1,12 @@
 import { getCoeffsCubicDd, getCoeffsQuadraticDd, getCoeffsLinearDd } from './double-double/get-coeffs-dd';
+import { getCoeffsCubicExact, getCoeffsQuadraticExact, getCoeffsLinearExact } from './exact/get-coeffs-exact';
 import { allRootsCertified } from 'flo-poly';
 //import { mid } from 'flo-poly';
 //import { evalDeCasteljau } from '../../local-properties-at-t/t-to-xy/eval-de-casteljau';
 import { getCoeffsCubicErrorCounters, getCoeffsLinearErrorCounters, getCoeffsQuadraticErrorCounters } from './get-circle-bezier-intersection-error-counters';
+import { γγ } from '../../error-analysis/error-analysis';
+
+const γγ6 = γγ(6);
 
 
 /**
@@ -30,19 +34,25 @@ function circleBezierIntersection(
         ps: number[][]) {
 
     let poly: number[][];
-    let polyE: number[];
+    let _polyE: number[];
+    let getCoeffsExact: (circle: { center: number[]; radius: number; }, ps: number[][]) => number[][];
     if (ps.length === 4) {
         poly = getCoeffsCubicDd(circle, ps);
-        polyE = getCoeffsCubicErrorCounters(circle, ps);
+        _polyE = getCoeffsCubicErrorCounters(circle, ps);
+        getCoeffsExact = getCoeffsCubicExact;
     } else if (ps.length === 3) {
         poly = getCoeffsQuadraticDd(circle, ps);
-        polyE = getCoeffsQuadraticErrorCounters(circle, ps);
+        _polyE = getCoeffsQuadraticErrorCounters(circle, ps);
+        getCoeffsExact = getCoeffsQuadraticExact;
     } else if (ps.length === 2) {
         poly = getCoeffsLinearDd(circle, ps);
-        polyE = getCoeffsLinearErrorCounters(circle, ps);
+        _polyE = getCoeffsLinearErrorCounters(circle, ps);
+        getCoeffsExact = getCoeffsLinearExact;
     }
 
-    let ts = allRootsCertified(poly, 0, 1);
+    const polyE = _polyE.map(e => γγ6*e);
+
+    const ts = allRootsCertified(poly, 0, 1, polyE, () => getCoeffsExact(circle, ps));
 
     return ts;
 

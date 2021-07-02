@@ -23,13 +23,13 @@ const qm4 = ddMultBy4;
  * 
  * @doc
  */
-function getTangentPolyFromPointExact(ps: number[][], p: number[]) {
+function getTangentPolyFromPointExact46(ps: number[][], p: number[]) {
     if (ps.length === 4) {
-        return getPolyForCubicExact(ps, p);
+        return getPolyForCubicExact46(ps, p);
     } else if (ps.length === 3) {
-        return getPolyForQuadraticExact(ps, p);
+        return getPolyForQuadraticExact47(ps, p);
     } else if (ps.length === 2) {
-        return getPolyForLineExact(ps, p);
+        return getPolyForLineExact47(ps, p);
     }
 }
 
@@ -39,7 +39,7 @@ function getTangentPolyFromPointExact(ps: number[][], p: number[]) {
  * @param ps 
  * @param p 
  */
-function getPolyForCubicExact(ps: number[][], p: number[]): number[][] {
+function getPolyForCubicExact46(ps: number[][], p: number[]): number[][] {
     //const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
     const p0 = ps[0];
     const p1 = ps[1];
@@ -149,7 +149,7 @@ function getPolyForCubicExact(ps: number[][], p: number[]): number[][] {
  * @param ps 
  * @param p 
  */
-function getPolyForQuadraticExact(ps: number[][], p: number[]): number[][] {
+function getPolyForQuadraticExact47(ps: number[][], p: number[]): number[][] {
     const [[x0, y0], [x1, y1], [x2, y2]] = ps;
     const [x, y] = p;
 
@@ -210,7 +210,7 @@ function getPolyForQuadraticExact(ps: number[][], p: number[]): number[][] {
  * @param ps 
  * @param p 
  */
-function getPolyForLineExact(ps: number[][], p: number[]): number[][] {
+function getPolyForLineExact47(ps: number[][], p: number[]): number[][] {
     const [[x0, y0], [x1, y1]] = ps;
     const [x, y] = p;
 
@@ -239,4 +239,4 @@ function getPolyForLineExact(ps: number[][], p: number[]): number[][] {
 }
 
 
-export { getTangentPolyFromPointExact }
+export { getTangentPolyFromPointExact46 }
