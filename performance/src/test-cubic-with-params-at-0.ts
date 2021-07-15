@@ -1,6 +1,6 @@
 import { draw } from './draw-stuff';
 //import { settings } from '../settings'; 
-import { cubicWithParamsAt0 } from './cubic-with-params-at-0/cubic-with-params-at-0';
+import { cubicWithParamsAt0 } from '../../experiments-new/create/cubic-with-params-at-0/cubic-with-params-at-0';
 import { drawCircle } from './draw/draw-circle';
 import { drawCross1 } from './draw/draw-cross';
 import { rotate90Degrees, toLength, toUnitVector, translate } from 'flo-vector2d';
