@@ -1,6 +1,6 @@
 
 import { splitAt, splitAtPrecise } from './split-at';
-import { evalDeCasteljau } from '../../local-properties-at-t/t-to-xy/eval-de-casteljau';
+import { evalDeCasteljau } from '../../local-properties-at-t/t-to-xy/double/eval-de-casteljau';
 
 
 /**

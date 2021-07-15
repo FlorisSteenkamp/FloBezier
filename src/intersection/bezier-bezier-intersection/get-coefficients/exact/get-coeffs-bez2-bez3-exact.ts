@@ -119,7 +119,7 @@ function getCoeffsBez2Bez3Exact(ps1: number[][], ps2: number[][]) {
     const p5 = epr(c2c3,vₓₓ);
     const p6 = epr(d2d3,vᵧᵧ);
     const p7 = fes(p5,p6);
-    const p8 = fes(c2d3,c3d2);  // 48-bit aligned => error free
+    const p8 = fes(c2d3,c3d2);
     const p9 = epr(p8,vₓᵧ);
     const v5 = fes(em2(p7),p9);
 
@@ -129,10 +129,10 @@ function getCoeffsBez2Bez3Exact(ps1: number[][], ps2: number[][]) {
     //    (2*c1c3 + c2c2)*vₓₓ +
     //    (2*d1d3 + d2d2)*vᵧᵧ +
     //    (c1d3 + c2d2 + c3d1)*vₓᵧ;
-    const pa = fes(em2(c1c3),c2c2);  // 48-bit aligned => error free
-    const pb = fes(em2(d1d3),d2d2);  // 48-bit aligned => error free
-    const pc = fes(c1d3,c2d2);  // 48-bit aligned => error free
-    const pd = fes(pc,c3d1);  // 48-bit aligned => error free
+    const pa = fes(em2(c1c3),c2c2);
+    const pb = fes(em2(d1d3),d2d2);
+    const pc = fes(c1d3,c2d2);
+    const pd = fes(pc,c3d1);
     const pe = epr(pa,vₓₓ);
     const pf = epr(pb,vᵧᵧ);
     const pg = fes(pe,pf);
@@ -148,11 +148,11 @@ function getCoeffsBez2Bez3Exact(ps1: number[][], ps2: number[][]) {
     //    (c0d3 + c1d2 + c2d1 + c3d0)*vₓᵧ +
     //    c3*vₓ +
     //    d3*vᵧ;
-    const ph = fes(c0c3,c1c2);  // 48-bit aligned => error free
-    const pi = fes(d0d3,d1d2);  // 48-bit aligned => error free
-    const pj = fes(c0d3,c1d2);  // 48-bit aligned => error free
-    const pk = fes(c2d1,c3d0);  // 48-bit aligned => error free
-    const pl = fes(pj,pk);  // 48-bit aligned => error free
+    const ph = fes(c0c3,c1c2);
+    const pi = fes(d0d3,d1d2);
+    const pj = fes(c0d3,c1d2);
+    const pk = fes(c2d1,c3d0);
+    const pl = fes(pj,pk);
     const pm = epr(ph,vₓₓ);
     const pn = epr(pi,vᵧᵧ);
     const po = em2(fes(pm,pn));
@@ -173,10 +173,10 @@ function getCoeffsBez2Bez3Exact(ps1: number[][], ps2: number[][]) {
     //    (c0d2 + c1d1 + c2d0)*vₓᵧ +
     //    c2*vₓ +
     //    d2*vᵧ;
-    const ps = fes(em2(c0c2),c1c1);  // 48-bit aligned => error free
-    const pt = fes(em2(d0d2),d1d1);  // 48-bit aligned => error free
-    const pu = fes(c0d2,c1d1);  // 48-bit aligned => error free
-    const pv = fes(pu,c2d0);  // 48-bit aligned => error free
+    const ps = fes(em2(c0c2),c1c1);
+    const pt = fes(em2(d0d2),d1d1);
+    const pu = fes(c0d2,c1d1);
+    const pv = fes(pu,c2d0);
     const pw = epr(ps,vₓₓ);
     const px = epr(pt,vᵧᵧ);
     const py = epr(pv,vₓᵧ);
@@ -196,7 +196,7 @@ function getCoeffsBez2Bez3Exact(ps1: number[][], ps2: number[][]) {
     //    d1*vᵧ;
     const r5 = epr(c0c1,vₓₓ);
     const r6 = epr(d0d1,vᵧᵧ);
-    const r7 = fes(c0d1,c1d0);  // 48-bit aligned => error free
+    const r7 = fes(c0d1,c1d0);
     const r8 = epr(r7,vₓᵧ);
     const r9 = em2(fes(r5,r6));
     const ra = fes(r9,r8);

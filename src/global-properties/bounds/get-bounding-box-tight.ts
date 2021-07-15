@@ -1,7 +1,7 @@
 import { squaredDistanceBetween, translate, rotate } from "flo-vector2d";
 import { getBoundingBox } from "./get-bounding-box";
 import { lengthSquaredUpperBound } from "../length/length-squared-upper-bound";
-import { evalDeCasteljau } from "../../local-properties-at-t/t-to-xy/eval-de-casteljau";
+import { evalDeCasteljau } from "../../local-properties-at-t/t-to-xy/double/eval-de-casteljau";
 
 
 /**

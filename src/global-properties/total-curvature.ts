@@ -1,7 +1,7 @@
 
 import { gaussQuadrature } from "flo-gauss-quadrature";
-import { evaluateDxy } from "../local-properties-at-t/t-to-dxy/evaluate-dxy";
-import { evaluateDdxy } from "../local-properties-at-t/t-to-ddxy/evaluate-ddxy";
+import { evaluateDxy } from "../local-properties-at-t/t-to-dxy/double/evaluate-dxy";
+import { evaluateDdxy } from "../local-properties-at-t/t-to-ddxy/double/evaluate-ddxy";
 
 
 /**

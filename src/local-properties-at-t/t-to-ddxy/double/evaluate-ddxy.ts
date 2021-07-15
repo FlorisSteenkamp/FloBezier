@@ -1,4 +1,4 @@
-import { getDdxy } from "../../to-power-basis/get-ddxy";
+import { getDdxy } from "../../../to-power-basis/get-ddxy/double/get-ddxy";
 import { Horner as polyEvaluate } from 'flo-poly';
 
 

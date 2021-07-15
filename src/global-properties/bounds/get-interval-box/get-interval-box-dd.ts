@@ -1,4 +1,4 @@
-import { evalDeCasteljauWithErrDd } from "../../../local-properties-at-t/t-to-xy/eval-de-casteljau-with-err-dd";
+import { evalDeCasteljauDdWithErr } from "../../../local-properties-at-t/t-to-xy/double-double/eval-de-casteljau-dd-with-err";
 import { operators } from "double-double";
 
 const { 
@@ -423,7 +423,7 @@ function getIntervalBoxAtTDd(
         ];
     }
 
-    const { p, pE } = evalDeCasteljauWithErrDd(ps, t);
+    const { p, pE } = evalDeCasteljauDdWithErr(ps, t);
 
     return [
         [qad(p[0],-pE[0]), qad(p[1],-pE[1])],

@@ -68,7 +68,7 @@ function geo(
     } 
 }
 
-
+/*
 function createCanvas(pdiv: HTMLDivElement): HTMLCanvasElement {
     const canvas = document.createElement('canvas');
     canvas.width = 640;
@@ -80,7 +80,7 @@ function createCanvas(pdiv: HTMLDivElement): HTMLCanvasElement {
 
     return canvas;
 }
-
+*/
 
 
 function drawIntersectionsGeo(tss: number[][][], ps: number[][]) {

@@ -12,7 +12,8 @@ import { getPss } from './get-pss/get-pss';
 import { native } from './native/-native';
 import { geo } from './geo/-geo';
 import { naive } from './naive/-naive';
-import { X } from '../../src/index';
+import { curvature, evaluate, tangent, X } from '../../src/index';
+import { testCubicWithParamsAt0 } from './test-cubic-with-params-at-0';
 
 
 function test(hot: boolean) {
@@ -41,3 +42,6 @@ function test(hot: boolean) {
 
 test(false);
 //test(true);
+
+
+//testCubicWithParamsAt0();

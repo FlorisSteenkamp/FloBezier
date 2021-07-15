@@ -1,5 +1,5 @@
-import { getXY } from "../../to-power-basis/get-xy/double/get-xy";
-import { Horner as evaluatePoly } from 'flo-poly';
+import { getXY } from "../../../to-power-basis/get-xy/double/get-xy";
+import { Horner } from 'flo-poly';
 
 
 /**
@@ -27,8 +27,8 @@ function evaluate(
     const [X,Y] = getXY(ps);
     
     return [
-        evaluatePoly(X, t),
-        evaluatePoly(Y, t)
+        Horner(X, t),
+        Horner(Y, t)
     ];
 }
 

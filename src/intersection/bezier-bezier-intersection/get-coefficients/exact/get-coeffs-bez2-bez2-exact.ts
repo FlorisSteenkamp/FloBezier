@@ -103,7 +103,7 @@ function getCoeffsBez2Bez2Exact(ps1: number[][], ps2: number[][]) {
     //    ((c1*d2) + (c2*d1))*vₓᵧ;
     const p5 = epr(c1c2,vₓₓ);
     const p6 = epr(d1d2,vᵧᵧ);
-    const p7 = fes(c1d2,c2d1);  // 48-bit aligned => error free
+    const p7 = fes(c1d2,c2d1);
     const p8 = epr(p7,vₓᵧ);
     const p9 = em2(fes(p5,p6));
     const v3 = fes(p9,p8);
@@ -118,10 +118,10 @@ function getCoeffsBez2Bez2Exact(ps1: number[][], ps2: number[][]) {
     //    ((c0*d2) + (c1*d1) + (c2*d0))*vₓᵧ +
     //    c2*vₓ  +          
     //    d2*vᵧ;
-    const pa = fes(em2(c0c2),c1c1);  // 48-bit aligned => error free
-    const pb = fes(em2(d0d2),d1d1);  // 48-bit aligned => error free
-    const pc = fes(c0d2,c1d1);  // 48-bit aligned => error free
-    const pd = fes(pc,c2d0);  // 48-bit aligned => error free
+    const pa = fes(em2(c0c2),c1c1);
+    const pb = fes(em2(d0d2),d1d1);
+    const pc = fes(c0d2,c1d1);
+    const pd = fes(pc,c2d0);
     const pe = epr(pa,vₓₓ);
     const pf = epr(pb,vᵧᵧ);
     const pg = epr(pd,vₓᵧ);
@@ -142,7 +142,7 @@ function getCoeffsBez2Bez2Exact(ps1: number[][], ps2: number[][]) {
     //    d1*vᵧ;
     const pm = epr(c0c1,vₓₓ);
     const pn = epr(d0d1,vᵧᵧ);
-    const po = fes(c0d1,c1d0);  // 48-bit aligned => error free
+    const po = fes(c0d1,c1d0);
     const pp = epr(po,vₓᵧ);
     const pq = em2(fes(pm,pn));
     const pr = epr(c1,vₓ);

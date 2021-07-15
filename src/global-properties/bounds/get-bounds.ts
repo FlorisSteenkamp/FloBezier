@@ -1,9 +1,9 @@
-import { getDxy } from "../../to-power-basis/get-dxy";
+import { getDxy } from "../../to-power-basis/get-dxy/double/get-dxy";
 import { allRoots } from "flo-poly";
 import { getIntervalBox } from "./get-interval-box/get-interval-box";
 import { γ } from "../../error-analysis/error-analysis";
 import { operators } from "double-double";
-import { evalDeCasteljau } from "../../local-properties-at-t/t-to-xy/eval-de-casteljau";
+import { evalDeCasteljau } from "../../local-properties-at-t/t-to-xy/double/eval-de-casteljau";
 
 
 const { sqrtWithErr, divWithErr } = operators;

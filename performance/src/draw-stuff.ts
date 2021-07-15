@@ -4,6 +4,7 @@ import { drawFatline } from './draw/draw-fatline';
 import { drawGeo } from './draw/draw-geo';
 import { drawBeziers } from './get-pss/get-pss';
 import { drawHybridPoly } from './draw/draw-hybrid-poly';
+import { drawBezier } from './draw/draw-bezier';
 
 
 const canvas = document.getElementById('canvas1') as HTMLCanvasElement;
@@ -17,7 +18,12 @@ function draw(ctx: CanvasRenderingContext2D) {
     const beziers_ = drawBeziers(ctx);
     const hybridPoly_ = drawHybridPoly(ctx, '#f0f', '#f0f2', '#ff0', '#ff02');
 
-    return { dot_, box_, fatline_, geo_, beziers_, hybridPoly_ };
+    const drawBezier_ = drawBezier(ctx, '#f00', undefined, 0.5);
+
+    return { 
+        dot_, box_, fatline_, geo_, beziers_, hybridPoly_,
+        drawBezier_
+    };
 } 
 
 

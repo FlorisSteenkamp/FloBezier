@@ -1,4 +1,4 @@
-import { bezierBezierIntersection, closestPointOnBezierPrecise, X } from "../../../src/index";
+import { bezierBezierIntersection, closestPointOnBezierCertified, X } from "../../../src/index";
 import { settings } from '../settings'; 
 import { draw, ctx } from '../draw-stuff';
 import { distanceBetween } from "flo-vector2d";
@@ -47,8 +47,8 @@ function native(
                 const px = (box[1][0] + box[0][0])/2;
                 const py = (box[1][1] + box[0][1])/2;
                 const p = [px,py];
-                const bp = closestPointOnBezierPrecise(ps2, p);
-                const d = distanceBetween(p, bp.p);
+                const bp = closestPointOnBezierCertified(ps2, p)[0];
+                const d = distanceBetween(p, bp.intervalBox[0]);
                 ds.push(d);
             }
             xss.push(xs);

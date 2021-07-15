@@ -1,6 +1,6 @@
 /**
  * Returns the result (`[x,y]`) of evaluating the 2nd derivative of a linear, 
- * quadratic or cubic bezier curve at `t === 1`. 
+ * quadratic or cubic bezier curve at `t === 0`. 
  * 
  * Bitlength: If the coordinates of the control points are bit-aligned then the
  * * max bitlength (incl bit shift) increase === 5 (for cubics)
@@ -11,23 +11,23 @@
  * 
  * @doc mdx
  */
-function getDdxyAt1(ps: number[][]): number[] {
+function getDdxyAt0(ps: number[][]): number[] {
 	if (ps.length === 4) {
-		const [, [x1,y1], [x2,y2], [x3,y3]] = ps;
+		const [[x0,y0], [x1,y1], [x2,y2]] = ps;
 		return [
-			6*x3 - 12*x2 + 6*x1,
-            6*y3 - 12*y2 + 6*y1,
+			6*((x2 + x0) - 2*x1),
+			6*((y2 + y0) - 2*y1)
 		]; // max bitlength increase 5
 	} else if (ps.length === 3) {
 		const [[x0,y0], [x1,y1], [x2,y2]] = ps;
 		return [
-            2*x2 - 4*x1 + 2*x0, // t^0
-            2*y2 - 4*y1 + 2*y0, // t^0
+			2*((x2 + x0) - 2*x1),
+			2*((y2 + y0) - 2*y1) 
 		]; // max bitlength increase 3
 	} else if (ps.length === 2) {
-		return [0, 0]; // max bitlength increase 0
+		return [0, 0];
 	}
 }
 
 
-export { getDdxyAt1 }
+export { getDdxyAt0 }

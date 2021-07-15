@@ -36,13 +36,13 @@ function getXY3(ps: number[][]): number[][] {
 	return [[
 		(x3 - x0) + 3*(x1 - x2), // t^3 - max bitlength increase 3
 		3*((x2 + x0) - 2*x1),    // t^2 - max bitlength increase 4
-		3*(x1 - x0),           // t^1 - max bitlength increase 3
-		x0,                    // t^0 - max bitlength increase 0
+		3*(x1 - x0),             // t^1 - max bitlength increase 3
+		x0,                      // t^0 - max bitlength increase 0
 	], [
 		(y3 - y0) + 3*(y1 - y2), // t^3 - max bitlength increase 3
 		3*((y2 + y0) - 2*y1),    // t^2 - max bitlength increase 4
-		3*(y1 - y0),           // t^1 - max bitlength increase 3
-		y0,                    // t^0 - max bitlength increase 0
+		3*(y1 - y0),             // t^1 - max bitlength increase 3
+		y0,                      // t^0 - max bitlength increase 0
 	]];
 }
 

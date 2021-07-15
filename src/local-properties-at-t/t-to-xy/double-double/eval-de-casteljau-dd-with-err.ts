@@ -1,4 +1,4 @@
-import { γ } from "../../error-analysis/error-analysis";
+import { γ } from "../../../error-analysis/error-analysis";
 import { ddMultDd, ddAddDd, ddDiffDd, ddMultDouble2 } from "double-double";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
@@ -31,7 +31,7 @@ const γ1 = γ(1);
  * 
  * @doc mdx
  **/
-function evalDeCasteljauWithErrDd(
+function evalDeCasteljauDdWithErr(
 		ps: number[][], 
 		t: number[]): { p: number[][]; pE: number[]; } {
 
@@ -156,4 +156,4 @@ function evalDeCasteljauWithErrDd(
 }
 
 
-export { evalDeCasteljauWithErrDd }
+export { evalDeCasteljauDdWithErr }

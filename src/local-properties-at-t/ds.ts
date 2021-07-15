@@ -1,6 +1,5 @@
-
-import { getDxy } from "../to-power-basis/get-dxy";
-import { Horner as evaluatePoly } from 'flo-poly';
+import { getDxy } from "../to-power-basis/get-dxy/double/get-dxy";
+import { Horner } from 'flo-poly';
 
 
 /**
@@ -18,8 +17,8 @@ function ds(ps: number[][], t?: number) {
 	const [dX, dY] = getDxy(ps);
 
 	function f(t: number): number {
-		const dx = evaluatePoly(dX, t);
-		const dy = evaluatePoly(dY, t);
+		const dx = Horner(dX, t);
+		const dy = Horner(dY, t);
 		
 		return Math.sqrt(dx*dx + dy*dy);	
 	}

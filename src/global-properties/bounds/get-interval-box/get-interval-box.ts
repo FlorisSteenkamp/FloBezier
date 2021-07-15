@@ -1,4 +1,4 @@
-import { evalDeCasteljauWithErr } from "../../../local-properties-at-t/t-to-xy/eval-de-casteljau-with-err";
+import { evalDeCasteljauWithErr } from "../../../local-properties-at-t/t-to-xy/double/eval-de-casteljau-with-err";
 
 
 const eps = Number.EPSILON;

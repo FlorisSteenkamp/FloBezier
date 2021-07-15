@@ -7,7 +7,6 @@ import { getTAtLength } from './local-properties-to-t/get-t-at-length';
 import { equal } from './simultaneous-properties/equal';
 import { cubicToQuadratic } from './transformation/cubic-to-quadratic';
 import { bezierFromPart } from './transformation/from-bezier-piece';
-import { evaluateHybridQuadratic } from './local-properties-at-t/t-to-xy/evaluate-hybrid-quadratic';
 
 import { getControlPointBox } from './global-properties/bounds/get-control-point-box';
 
@@ -18,9 +17,9 @@ import { bezier3Intersection } from './intersection/bezier3-intersection/bezier3
 
 import { intersectBoxes } from './boxes/intersect-boxes';
 import { areBoxesIntersecting } from './boxes/are-boxes-intersecting';
-import { evalDeCasteljau } from './local-properties-at-t/t-to-xy/eval-de-casteljau';
-import { evalDeCasteljauWithErr } from './local-properties-at-t/t-to-xy/eval-de-casteljau-with-err';
-import { evalDeCasteljauWithErrDd } from './local-properties-at-t/t-to-xy/eval-de-casteljau-with-err-dd';
+import { evalDeCasteljau } from './local-properties-at-t/t-to-xy/double/eval-de-casteljau';
+import { evalDeCasteljauWithErr } from './local-properties-at-t/t-to-xy/double/eval-de-casteljau-with-err';
+import { evalDeCasteljauDdWithErr } from './local-properties-at-t/t-to-xy/double-double/eval-de-casteljau-dd-with-err';
 
 import { isPointOnBezierExtension } from './simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension';
 import { totalCurvature, totalAbsoluteCurvature } from './global-properties/total-curvature';
@@ -88,13 +87,13 @@ import { tFromXY3 } from './intersection/t-from-xy';
 //import { inversion1_BL52_1ULP } from './graveyard/inversion-old';
 
 import { getXY       } from './to-power-basis/get-xy/double/get-xy';
-import { getDxy      } from './to-power-basis/get-dxy';
-import { getDdxy     } from './to-power-basis/get-ddxy';
-import { getDxyAt1   } from './local-properties-at-t/t-to-dxy/get-dxy-at-1';
-import { getDdxyAt1  } from './local-properties-at-t/t-to-ddxy/get-ddxy-at-1';
-import { getDxyAt0   } from './local-properties-at-t/t-to-dxy/get-dxy-at-0';
-import { getDdxyAt0  } from './local-properties-at-t/t-to-ddxy/get-ddxy-at-0';
-import { getDddxy    } from './to-power-basis/get-dddxy';
+import { getDxy      } from './to-power-basis/get-dxy/double/get-dxy';
+import { getDdxy     } from './to-power-basis/get-ddxy/double/get-ddxy';
+import { getDxyAt1   } from './local-properties-at-t/t-to-dxy/double/get-dxy-at-1';
+import { getDdxyAt1  } from './local-properties-at-t/t-to-ddxy/double/get-ddxy-at-1';
+import { getDxyAt0   } from './local-properties-at-t/t-to-dxy/double/get-dxy-at-0';
+import { getDdxyAt0  } from './local-properties-at-t/t-to-ddxy/double/get-ddxy-at-0';
+import { getDddxy    } from './to-power-basis/get-dddxy/double/get-dddxy';
 import { tangent     } from './local-properties-at-t/tangent';
 import { normal      } from './local-properties-at-t/normal';
 import { from0ToT    } from './transformation/split-merge-clone/from-0-to-T';
@@ -119,11 +118,9 @@ import { flatness } from './global-properties/flatness';
 import { splitByMaxCurvature } from './transformation/split-merge-clone/split-by-max-curvature';
 import { splitByCurvatureAndLength } from './transformation/split-merge-clone/split-by-curvature-and-length';
 import { areBeziersInSameKFamily } from './simultaneous-properties/are-beziers-in-same-k-family';
-import { getInterfaceCcw } from './simultaneous-properties/get-interface-ccw';
+import { getInterfaceCcw } from './simultaneous-properties/get-interface-ccw/get-interface-ccw';
 import { isLine, isHorizontalLine, isVerticalLine } from './global-properties/type/is-line';
 import { isSelfOverlapping } from './global-properties/type/is-self-overlapping';
-import { getClosestOnBezierFromPoint } from './simultaneous-properties/closest-point-on-bezier/get-coeffs/double/get-closest-on-bezier-from-point';
-import { getTangentPolyFromPointExact } from './simultaneous-properties/closest-point-on-bezier/get-coeffs/exact/get-closest-on-bezier-from-point-exact';
 import { getBounds } from './global-properties/bounds/get-bounds';
 import { getBoundingBoxTight } from './global-properties/bounds/get-bounding-box-tight';
 import { getBoundingBox } from './global-properties/bounds/get-bounding-box';
@@ -134,10 +131,10 @@ import { toQuadraticFromCubic } from './transformation/degree-or-type/to-quad-fr
 import { circleBezierIntersection } from './intersection/circle-bezier-intersection/circle-bezier-intersection';
 
 // TODO - ADD!!!
-import { evaluate_anyBitlength_exact } from './local-properties-at-t/t-to-xy/any-bitlength/exact/evaluate-any-bitlength-exact';
-import { evaluate } from './local-properties-at-t/t-to-xy/evaluate';
-import { evaluateDdxy } from './local-properties-at-t/t-to-ddxy/evaluate-ddxy';
-import { evaluateDxy } from './local-properties-at-t/t-to-dxy/evaluate-dxy';
+import { evaluateExact } from './local-properties-at-t/t-to-xy/exact/evaluate-exact';
+import { evaluate } from './local-properties-at-t/t-to-xy/double/evaluate';
+import { evaluateDdxy } from './local-properties-at-t/t-to-ddxy/double/evaluate-ddxy';
+import { evaluateDxy } from './local-properties-at-t/t-to-dxy/double/evaluate-dxy';
 
 import { getXY3DdWithRunningError } from './to-power-basis/get-xy/double-double/get-xy-dd-with-running-error';
 
@@ -201,7 +198,6 @@ export {
 	// -------------------------------
 	// -- Get local properties at t --
 	// -------------------------------
-	evaluateHybridQuadratic,
 	κ, curvature,
 	tangent,
 	normal,
@@ -298,9 +294,8 @@ export {
 	equal,
 	getInterfaceCcw,
 	areBeziersInSameKFamily,
-	closestPointOnBezierCertified as closestPointOnBezierPrecise,
-	getClosestOnBezierFromPoint as getTangentPolyFromPoint,
-	getTangentPolyFromPointExact,
+	closestPointOnBezierCertified,
+	closestPointOnBezier,
 	hausdorffDistance,
 	hausdorffDistanceCandidates,
 	getEndpointIntersections,
@@ -329,8 +324,8 @@ export {
 	getIntervalBoxDd,
 	evalDeCasteljau,
 	evalDeCasteljauWithErr,
-	evalDeCasteljauWithErrDd,
-	evaluate_anyBitlength_exact,
+	evalDeCasteljauDdWithErr as evalDeCasteljauWithErrDd,
+	evaluateExact as evaluate_anyBitlength_exact,
 	isPointOnBezierExtension,
 
 	getCoeffsBez3Bez3Dd,
@@ -357,8 +352,6 @@ export {
 	getCoeffsBez3,
 	getCoeffsBez3Dd,
 	getCoeffsBez3Exact,
-
-	closestPointOnBezier,
 
 	evaluate,
 

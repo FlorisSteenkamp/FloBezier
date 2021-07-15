@@ -1,4 +1,3 @@
-
 # This code is a modified version of code from 
 # http://www.mare.ee/indrek/misc/2d.pdf
 

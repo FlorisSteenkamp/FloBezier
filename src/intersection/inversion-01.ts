@@ -1,7 +1,10 @@
-import { evaluate_anyBitlength_exact } from "../local-properties-at-t/t-to-xy/any-bitlength/exact/evaluate-any-bitlength-exact";
+// TODO - put back (and export from index)? or is there a better version somewhere else in the code?
+
+import { evaluateExact } from "../local-properties-at-t/t-to-xy/exact/evaluate-exact";
 import { squaredDistanceBetween } from "flo-vector2d";
 import { allRootsCertified, mid } from "flo-poly";
-import { getTangentPolyFromPointExact } from "../simultaneous-properties/closest-point-on-bezier/get-coeffs/exact/get-closest-on-bezier-from-point-exact";
+//import { getTangentPolyFromPointExact } from "../simultaneous-properties/closest-point-on-bezier/get-coeffs/exact/get-closest-on-bezier-from-point-exact";
+import { getClosestOnBezierFromPointExact } from "../simultaneous-properties/closest-point-on-bezier/get-coeffs/exact/get-closest-on-bezier-from-point-exact";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { operators as bigFloatOperators } from "big-float-ts";
@@ -33,14 +36,15 @@ function inversion01Precise(
     }
 
     // the coefficients of the poly below is max double-double
-    const poly = getTangentPolyFromPointExact(ps, p);
+    //const poly = getTangentPolyFromPointExact(ps, p);
+    const poly = getClosestOnBezierFromPointExact(ps, p);
 
     const ts = allRootsCertified(poly);
     if (!ts.length) { return undefined; }
     
     const ps_ = ts.map(t => ({ 
         t: mid(t),
-        p: evaluate_anyBitlength_exact(ps, mid(t)).map(eEstimate)
+        p: evaluateExact(ps, mid(t)).map(eEstimate)
     }));
 
     // Get point with minimum distance

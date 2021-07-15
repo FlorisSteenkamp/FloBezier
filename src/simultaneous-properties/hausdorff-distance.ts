@@ -1,7 +1,7 @@
 import { closestPointOnBezier } from './closest-point-on-bezier/closest-point-on-bezier';
 import { splitByMaxCurveLength } from '../transformation/split-merge-clone/split-by-max-curve-length';
 import { distanceBetween } from 'flo-vector2d';
-import { evalDeCasteljau } from '../local-properties-at-t/t-to-xy/eval-de-casteljau';
+import { evalDeCasteljau } from '../local-properties-at-t/t-to-xy/double/eval-de-casteljau';
 
 
 function hausdorffDistanceCandidates(

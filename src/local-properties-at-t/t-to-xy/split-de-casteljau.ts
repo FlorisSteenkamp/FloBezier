@@ -8,8 +8,14 @@
  * @internal
  */
 function splitDeCasteljau3(cs: number[], t: number): number[][] {
-	if (t === 0) { return [[cs[0], cs[0], cs[0], cs[0]], cs]; }
-	if (t === 1) { return [cs, [cs[3], cs[3], cs[3], cs[3]]]; }
+	if (t === 0) { 
+		const cs0 = cs[0];
+		return [[cs0, cs0, cs0, cs0], cs]; 
+	}
+	if (t === 1) { 
+		const cs3 = cs[3];
+		return [cs, [cs3, cs3, cs3, cs3]]; 
+	}
 
 	const s = 1-t;
 

@@ -77,7 +77,7 @@ function closestPointOnBezierCertified(
     const infos = ris.map(ri => {
         const intervalBox = getIntervalBox(ps, [ri.tS, ri.tE])
         return {
-            di: rootIntervalToDistanceInterval(intervalBox, p, ri),
+            di: rootIntervalToDistanceInterval(intervalBox, p),
             intervalBox,
             ri
         }
@@ -119,8 +119,7 @@ function closestPointOnBezierCertified(
  */
  function rootIntervalToDistanceInterval(
         intervalBox: number[][], 
-        p: number[],
-        ri: RootInterval) {
+        p: number[]) {
 
     const bl = intervalBox[0];
     const tr = intervalBox[1];
@@ -160,7 +159,7 @@ function closestPointOnBezierCertified(
             minD = dc1Min;
         }
 
-        if (dc1Max <= maxD) {
+        if (dc1Max >= maxD) {
             maxD = dc1Max;
         }
     }

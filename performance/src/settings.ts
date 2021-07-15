@@ -1,7 +1,7 @@
 // * change `let` to `const`
 // * wilkinson -> stewart error counters
 // * misspelt `getCeoffs` -> `getCoeffs`
-// * error counters need to be DOUBLED!!!! for DOUBLE_DOUBLE precision due to `qmq` !!!!!!!!
+// * error counters need to be DOUBLED!!!! for DOUBLE_DOUBLE precision due to `qmq` !!!!!!!! (if applicable)
 // * test with lower order beziers disguised as higher order
 //   (thus will allRootsCertified be able to cope with 0 leading coefficients)
 // * test with degenerate to point cases
@@ -12,6 +12,7 @@
 // * update package to use newest version of flo-poly (otherwise overlapping
 //   intersections won't work)
 // * test `isPointOnBezierExtension` where the cubic is really a quad
+// * tests
 
 
 const tc = transformCoordinatesBL(2*640, 2*384);

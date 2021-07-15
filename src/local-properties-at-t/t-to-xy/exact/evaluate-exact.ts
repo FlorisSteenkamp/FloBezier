@@ -1,4 +1,4 @@
-import { getXYExact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact";
+import { getXYExact } from "../../../to-power-basis/get-xy/exact/get-xy-exact";
 import { eHorner } from 'flo-poly';
 
 
@@ -6,7 +6,7 @@ import { eHorner } from 'flo-poly';
  * Returns the result of evaluating the given bezier curve at the parameter `t` 
  * exactly (up to underflow / overflow).
  * 
- * * **precondition:** none
+ * * **precondition:** TODO underflow/overflow
  * * the result is returned as `[x,y]`, where `x` and `y` are Shewchuk floating
  * point expansions
  * 
@@ -15,7 +15,7 @@ import { eHorner } from 'flo-poly';
  * 
  * @doc
  */
-function evaluate_anyBitlength_exact(
+function evaluateExact(
         ps: number[][], t: number): number[][] {
 
 	const len = ps.length;
@@ -40,4 +40,4 @@ function evaluate_anyBitlength_exact(
 }
 
 
-export { evaluate_anyBitlength_exact }
+export { evaluateExact }

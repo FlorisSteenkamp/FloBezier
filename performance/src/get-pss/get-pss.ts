@@ -123,7 +123,8 @@ const psJ = [
 ];
 
 
-psss.push(psI, psJ);
+// TODO - test these
+//psss.push(psI, psJ);
 
 
 function getPss(
@@ -147,7 +148,7 @@ function getPss(
         }
         pss.push(ps);
 
-        console.log(toString(ps));
+        //console.log(toString(ps));
         //console.log(ps.length-1);
     }
     

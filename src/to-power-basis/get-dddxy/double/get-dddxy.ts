@@ -20,8 +20,8 @@ function getDddxy(ps: number[][]): number[] {
 	if (ps.length === 4) {
 		const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
 		return [
-			6*(x3 + 3*(x1 - x2) - x0),
-			6*(y3 + 3*(y1 - y2) - y0)
+			6*((x3 - x0) + 3*(x1 - x2)),
+			6*((y3 - y0) + 3*(y1 - y2))
 		]; // max bitlength increase 6
 	} else if (ps.length === 3 || ps.length === 2) {
 		return [0, 0];

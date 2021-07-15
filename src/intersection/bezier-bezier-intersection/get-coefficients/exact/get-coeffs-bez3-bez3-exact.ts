@@ -230,7 +230,7 @@ function getCoeffsBez3Bez3Exact(ps1: number[][], ps2: number[][]) {
     //    2*(vₓₓ*c2c3 + vᵧᵧ*d2d3);
     const r4 = fes(c2d2,c3d1);
     const r5 = fes(c1d3,c2d2);
-    const k1 = sce(c0,wo);  // wo: 48-bit aligned => error free
+    const k1 = sce(c0,wo);
     const k2 = sce(d0,wo);
     const k3 = epr(c1,r4);
     const k4 = epr(d1,r5);

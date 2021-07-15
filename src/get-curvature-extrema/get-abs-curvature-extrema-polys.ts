@@ -1,6 +1,6 @@
-import { getDxy } from "../to-power-basis/get-dxy";
-import { getDdxy } from "../to-power-basis/get-ddxy";
-import { getDddxy } from "../to-power-basis/get-dddxy";
+import { getDxy } from "../to-power-basis/get-dxy/double/get-dxy";
+import { getDdxy } from "../to-power-basis/get-ddxy/double/get-ddxy";
+import { getDddxy } from "../to-power-basis/get-dddxy/double/get-dddxy";
 
 
 /**

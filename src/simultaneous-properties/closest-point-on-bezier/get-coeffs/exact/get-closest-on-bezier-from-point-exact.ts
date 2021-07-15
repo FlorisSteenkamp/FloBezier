@@ -41,15 +41,15 @@ const ediff = eDiff;
  * 
  * @doc
  */
-//function getClosestOnBezierFromPointExact(ps: number[][], p: number[]) {
-//    if (ps.length === 4) {
-//        return getClosestOnBezier3FromPointExact(ps, p);
-//    } else if (ps.length === 3) {
-//        return getClosestOnBezier2FromPointExact(ps, p);
-//    } else if (ps.length === 2) {
-//        return getClosestOnBezier1FromPointExact(ps, p);
-//    }
-//}
+function getClosestOnBezierFromPointExact(ps: number[][], p: number[]) {
+    if (ps.length === 4) {
+        return getClosestOnBezier3FromPointExact(ps, p);
+    } else if (ps.length === 3) {
+        return getClosestOnBezier2FromPointExact(ps, p);
+    } else if (ps.length === 2) {
+        return getClosestOnBezier1FromPointExact(ps, p);
+    }
+}
 
 
 /**
@@ -254,3 +254,7 @@ export {
     getClosestOnBezier2FromPointExact,
     getClosestOnBezier1FromPointExact
 }
+
+
+// TODO (do we need/need to export this?)
+export { getClosestOnBezierFromPointExact }
