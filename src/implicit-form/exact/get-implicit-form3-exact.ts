@@ -37,10 +37,7 @@ const eSign = _eSign;
  * @doc mdx - TODO - remove mdx from these functions - they will become too many?
  */
 function getImplicitForm3Exact(
-        ps: number[][]): 
-            | Partial<ImplicitFormExact3> 
-            | Partial<ImplicitFormExact2>
-            | ImplicitFormExact1 {
+        ps: number[][]): ImplicitFormExact3 | undefined {
 
     return getImplicitForm3ExactPb(
         getXY3Exact(ps)
@@ -60,16 +57,18 @@ function getImplicitForm3ExactPb(
         pspb: [
                 [number[], number[], number[], number], 
                 [number[], number[], number[], number]
-            ]):
-                | Partial<ImplicitFormExact3> 
-                | Partial<ImplicitFormExact2>
-                | ImplicitFormExact1 {
+            ]): ImplicitFormExact3 | undefined {
 
     const [[a3,a2,a1,a0], [b3,b2,b1,b0]] = pspb;
 
     if (eSign(a3) === 0 && eSign(b3) === 0) {
         // the input bezier curve is in fact not cubic but has order < 3
-        return getImplicitForm2ExactPb([[a2,a1,a0], [b2,b1,b0]]);
+        const implicitForm = getImplicitForm2ExactPb([[a2,a1,a0], [b2,b1,b0]]);
+        if (implicitForm === undefined) { return undefined; }
+        return { 
+            vₓₓₓ: [0], vₓₓᵧ: [0], vₓᵧᵧ: [0], vᵧᵧᵧ: [0], 
+            ...implicitForm
+        };
     }
 
     const a3b1 = epr(a3,b1);

@@ -15,7 +15,9 @@ const max = Math.max;
  * 
  * @doc mdx
  */
-function intersectBoxes(a: number[][], b: number[][]): number[][] | undefined {
+function intersectBoxes(
+        a: number[][], b: number[][]): number[][] | undefined {
+
     let [[ax0, ay0], [ax1, ay1]] = a;
     let [[bx0, by0], [bx1, by1]] = b;
 

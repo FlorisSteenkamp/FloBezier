@@ -1,7 +1,10 @@
-import { operators } from "big-float-ts";
+import { twoProduct, eDiff, fastExpansionSum, eSign } from "big-float-ts";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const { twoProduct, eDiff, fastExpansionSum, eSign } = operators;
+const tp = twoProduct;
+const fes = fastExpansionSum;
+const esign = eSign;
+const ediff = eDiff;
 
 const u = Number.EPSILON / 2;
 const abs = Math.abs;
@@ -19,8 +22,7 @@ const abs = Math.abs;
 function isCubicReallyQuad(ps: number[][]) {
     const [[x0,y0],[x1,y1],[x2,y2],[x3,y3]] = ps;
 
-    // TODO - better comment in line belwo
-    // the if in the line below is unrolled (uses a toHybridQuadratic condition (points same?))
+    // The line below is unrolled (uses a toHybridQuadratic condition (points same?))
     //if ((x3 + 3*x1) - (x0 + 3*x2) === 0 && 
     //    (y3 + 3*y1) - (y0 + 3*y2) === 0) {
 
@@ -62,13 +64,13 @@ function isCubicReallyQuad(ps: number[][]) {
     // unable to filter - go slow and exact
 
     return (
-        eSign(eDiff(
-            fastExpansionSum([x3], twoProduct(3,x1)),
-            fastExpansionSum([x0], twoProduct(3,x2))
+        esign(ediff(
+            fes([x3], tp(3,x1)),
+            fes([x0], tp(3,x2))
         )) === 0 &&
-        eSign(eDiff(
-            fastExpansionSum([y3], twoProduct(3,y1)),
-            fastExpansionSum([y0], twoProduct(3,y2))
+        esign(ediff(
+            fes([y3], tp(3,y1)),
+            fes([y0], tp(3,y2))
         )) === 0
     );
 }

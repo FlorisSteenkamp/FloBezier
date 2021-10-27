@@ -1,4 +1,3 @@
-
 from sympy import Poly, resultant, Symbol, sympify, expand, solve
 from sympy import Matrix, det, binomial, linsolve, symbols, nonlinsolve
 

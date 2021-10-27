@@ -24,7 +24,8 @@ function splitByCurvatureAndLength(
     const fromTo_ = fromTo(ps);
 
     while (tStack.length) {
-        const ts_ = tStack.pop();
+        // Tell TypeScript there *is* something in the stack.
+        const ts_ = tStack.pop()!;
         const ps_ = fromTo_(ts_[0], ts_[1]);
         const l1 = lengthUpperBound(ps_);
         const l2 = distanceBetween(ps_[0], ps_[ps_.length-1]);

@@ -18,6 +18,8 @@ const fromTo2 = fromTo2_;
  * @param ps a cubic bezier curve
  * @param tS the t parameter where the resultant bezier should start
  * @param tE the t parameter where the resultant bezier should end
+ * 
+ * @internal
  */
  function fromTo(
         ps: number[][], 
@@ -31,6 +33,8 @@ const fromTo2 = fromTo2_;
     if (ps.length === 3) {
         return fromTo2(ps, tS, tE);
     }
+
+    throw new Error('The given bezier curve is invalid; it must be of order 2 or 3.');
 }
 
 

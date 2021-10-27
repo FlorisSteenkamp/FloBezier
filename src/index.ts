@@ -18,8 +18,7 @@ import { bezier3Intersection } from './intersection/bezier3-intersection/bezier3
 import { intersectBoxes } from './boxes/intersect-boxes';
 import { areBoxesIntersecting } from './boxes/are-boxes-intersecting';
 import { evalDeCasteljau } from './local-properties-at-t/t-to-xy/double/eval-de-casteljau';
-import { evalDeCasteljauWithErr } from './local-properties-at-t/t-to-xy/double/eval-de-casteljau-with-err';
-import { evalDeCasteljauDdWithErr } from './local-properties-at-t/t-to-xy/double-double/eval-de-casteljau-dd-with-err';
+import { evalDeCasteljauError } from './local-properties-at-t/t-to-xy/eval-de-casteljau-error';
 
 import { isPointOnBezierExtension } from './simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension';
 import { totalCurvature, totalAbsoluteCurvature } from './global-properties/total-curvature';
@@ -70,8 +69,8 @@ import { getCoeffsBez1Bez2Exact } from './intersection/bezier-bezier-intersectio
 import { getCoeffsBez1Bez1Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez1-dd';
 import { getCoeffsBez1Bez1Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez1-exact';
 
-import { getCoeffsBez3 } from './intersection/self-intersection/get-coefficients/double/get-coeffs-bez3';
-import { getCoeffsBez3Dd } from './intersection/self-intersection/get-coefficients/double-double/get-coeffs-bez3-dd';
+import { getCoeffsBez3WithRunningError } from './intersection/self-intersection/get-coefficients/double/get-coeffs-bez3-with-running-error';
+//import { getCoeffsBez3Dd } from './intersection/self-intersection/get-coefficients/double-double/get-coeffs-bez3-dd';
 import { getCoeffsBez3Exact } from './intersection/self-intersection/get-coefficients/exact/get-coeffs-bez3-exact';
 
 import { toExpansion } from './transformation/to-expansion';
@@ -81,9 +80,9 @@ import { getHodograph } from './transformation/get-hodograph';
 import { generateCuspAtHalf3 } from './create/generate-cusp-at-half-t';
 import { cubicThroughPointGiven013 } from './create/cubic-through-point-given013';
 import { bezierSelfIntersection } from './intersection/self-intersection/bezier-self-intersection';
-import { getEndpointIntersections } from './intersection/get-endpoint-intersections';
-import { inversion01Precise } from './intersection/inversion-01';
-import { tFromXY3 } from './intersection/t-from-xy';
+//import { getEndpointIntersections } from './intersection/get-endpoint-intersections';
+//import { inversion01Precise } from './intersection/inversion-01';
+import { tFromXY3 } from './local-properties-to-t/t-from-xy';
 //import { inversion1_BL52_1ULP } from './graveyard/inversion-old';
 
 import { getXY       } from './to-power-basis/get-xy/double/get-xy';
@@ -99,7 +98,8 @@ import { normal      } from './local-properties-at-t/normal';
 import { from0ToT    } from './transformation/split-merge-clone/from-0-to-T';
 import { fromTTo1    } from './transformation/split-merge-clone/from-T-to-1';
 import { fromTo, fromToPrecise } from './transformation/split-merge-clone/from-to';
-import { getOtherTs } from './intersection/bezier-bezier-intersection/get-other-ts';
+// TODO - maybe we need this in another lib??
+//import { getOtherTs } from './intersection/bezier-bezier-intersection/get-other-ts';
 import { bezierBezierIntersection } from './intersection/bezier-bezier-intersection/bezier-bezier-intersection';
 import { toCubic } from './transformation/degree-or-type/to-cubic';
 import { κ, curvature } from './local-properties-at-t/curvature';
@@ -118,7 +118,6 @@ import { flatness } from './global-properties/flatness';
 import { splitByMaxCurvature } from './transformation/split-merge-clone/split-by-max-curvature';
 import { splitByCurvatureAndLength } from './transformation/split-merge-clone/split-by-curvature-and-length';
 import { areBeziersInSameKFamily } from './simultaneous-properties/are-beziers-in-same-k-family';
-import { getInterfaceCcw } from './simultaneous-properties/get-interface-ccw/get-interface-ccw';
 import { isLine, isHorizontalLine, isVerticalLine } from './global-properties/type/is-line';
 import { isSelfOverlapping } from './global-properties/type/is-self-overlapping';
 import { getBounds } from './global-properties/bounds/get-bounds';
@@ -127,6 +126,7 @@ import { getBoundingBox } from './global-properties/bounds/get-bounding-box';
 import { toHybridQuadratic } from './transformation/degree-or-type/to-hybrid-quadratic';
 import { isCubicReallyQuad } from './global-properties/type/is-cubic-really-quad';
 import { isQuadReallyLine } from  './global-properties/type/is-quad-really-line';
+import { isLineReallyPoint } from './global-properties/type/is-line-really-point';
 import { toQuadraticFromCubic } from './transformation/degree-or-type/to-quad-from-cubic';
 import { circleBezierIntersection } from './intersection/circle-bezier-intersection/circle-bezier-intersection';
 
@@ -292,21 +292,20 @@ export {
 	// ------------------------------------------
 
 	equal,
-	getInterfaceCcw,
 	areBeziersInSameKFamily,
 	closestPointOnBezierCertified,
 	closestPointOnBezier,
 	hausdorffDistance,
 	hausdorffDistanceCandidates,
-	getEndpointIntersections,
-	inversion01Precise,	
+	//getEndpointIntersections,
+	//inversion01Precise,	
 	//inversion1_BL52_1ULP,
 	tFromXY3,
 
 	// Intersections
 	bezierBezierIntersection, 
 	getCoeffsBezBez,
-	getOtherTs,
+	//getOtherTs,
 	intersectBoxes,
 	areBoxesIntersecting,
 	
@@ -323,9 +322,8 @@ export {
 	// TODO - categorize
 	getIntervalBoxDd,
 	evalDeCasteljau,
-	evalDeCasteljauWithErr,
-	evalDeCasteljauDdWithErr as evalDeCasteljauWithErrDd,
-	evaluateExact as evaluate_anyBitlength_exact,
+	evalDeCasteljauError,
+	evaluateExact,
 	isPointOnBezierExtension,
 
 	getCoeffsBez3Bez3Dd,
@@ -349,8 +347,8 @@ export {
 	getCoeffsBez1Bez1Exact,
 
 	// self-intersection
-	getCoeffsBez3,
-	getCoeffsBez3Dd,
+	getCoeffsBez3WithRunningError as getCoeffsBez3,
+	//getCoeffsBez3Dd,
 	getCoeffsBez3Exact,
 
 	evaluate,

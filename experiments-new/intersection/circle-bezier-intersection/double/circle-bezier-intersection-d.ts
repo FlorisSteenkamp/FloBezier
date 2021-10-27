@@ -1,6 +1,6 @@
 import { allRoots } from "flo-poly";
-import { getCoeffsCubic, getCeoffsQuadratic, getCeoffsLine } from "./get-coeffs";
-import { evalDeCasteljau } from "../../../../src/local-properties-at-t/t-to-xy/eval-de-casteljau";
+import { getCoeffsCubic, getCoeffsQuadratic, getCoeffsLine } from "./get-coeffs";
+import { evalDeCasteljau } from "../../../../src/local-properties-at-t/t-to-xy/double/eval-de-casteljau";
 
 
 /**
@@ -24,9 +24,9 @@ function circleBezierIntersectionD(
     if (ps.length === 4) {
         poly = getCoeffsCubic(circle, ps);
     } else if (ps.length === 3) {
-        poly = getCeoffsQuadratic(circle, ps);
+        poly = getCoeffsQuadratic(circle, ps);
     } else if (ps.length === 2) {
-        poly = getCeoffsLine(circle, ps);
+        poly = getCoeffsLine(circle, ps);
     }
 
     let ts = allRoots(poly, 0, 1);

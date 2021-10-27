@@ -1,6 +1,6 @@
 import { expect, assert } from 'chai';
-//import { describe } from 'mocha';
-import 'mocha';
+import { describe } from 'mocha';
+//import 'mocha';
 import { fromPowerBasis, getXY, areBoxesIntersecting } from '../../src/index';
 
 

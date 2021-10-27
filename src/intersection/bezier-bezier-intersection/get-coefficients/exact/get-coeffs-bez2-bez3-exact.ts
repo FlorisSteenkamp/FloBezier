@@ -58,7 +58,7 @@ function getCoeffsBez2Bez3Exact(ps1: number[][], ps2: number[][]) {
         return getCoeffsBez2Bez2Exact(ps1, toQuadraticFromCubic(ps2));
     }
 
-    let { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
+    const { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
         // this type coercion is justified since we already checked that the
         // curve really has order 2
         getImplicitForm2ExactPb(ps1pb) as ImplicitFormExact2;

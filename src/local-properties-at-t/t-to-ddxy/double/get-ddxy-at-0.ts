@@ -18,15 +18,21 @@ function getDdxyAt0(ps: number[][]): number[] {
 			6*((x2 + x0) - 2*x1),
 			6*((y2 + y0) - 2*y1)
 		]; // max bitlength increase 5
-	} else if (ps.length === 3) {
+	} 
+	
+	if (ps.length === 3) {
 		const [[x0,y0], [x1,y1], [x2,y2]] = ps;
 		return [
 			2*((x2 + x0) - 2*x1),
 			2*((y2 + y0) - 2*y1) 
 		]; // max bitlength increase 3
-	} else if (ps.length === 2) {
+	} 
+	
+	if (ps.length === 2 || ps.length === 1) {
 		return [0, 0];
 	}
+
+	throw new Error('The given bezier curve is invalid.');
 }
 
 

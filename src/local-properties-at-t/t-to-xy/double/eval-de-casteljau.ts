@@ -23,8 +23,6 @@ function evalDeCasteljau(
 		return ps[ps.length-1];
 	}
 
-	//const s = 1-t;  // <= exact if eps | t, but not a precondition here
-
 	if (ps.length === 4) {
 		const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;	
 
@@ -43,7 +41,9 @@ function evalDeCasteljau(
 		const y = b02 + (b12 - b02)*t;
 
 		return [x,y];
-	} else if (ps.length === 3) {
+	} 
+	
+	if (ps.length === 3) {
 		const [[x0,y0], [x1,y1], [x2,y2]] = ps;	
 
 		const a01 = x0 + (x1 - x0)*t;
@@ -55,7 +55,9 @@ function evalDeCasteljau(
 		const y = b01 + (b11 - b01)*t;
 
 		return [x,y];
-	} else if (ps.length === 2) {
+	} 
+	
+	if (ps.length === 2) {
 		const [[x0,y0], [x1,y1]] = ps;	
 
 		const x = x0 + (x1 - x0)*t;
@@ -63,6 +65,12 @@ function evalDeCasteljau(
 
 		return [x,y];
 	}
+
+	if (ps.length === 1) {
+		return ps[0];	
+	}
+
+	throw new Error('The given bezier curve is invalid.');
 }
 
 

@@ -1,5 +1,5 @@
 // TODO - put back (and export from index)? or is there a better version somewhere else in the code?
-
+/*
 import { evaluateExact } from "../local-properties-at-t/t-to-xy/exact/evaluate-exact";
 import { squaredDistanceBetween } from "flo-vector2d";
 import { allRootsCertified, mid } from "flo-poly";
@@ -23,6 +23,7 @@ const { eEstimate } = bigFloatOperators;
  * 
  * @doc
  */
+/*
 function inversion01Precise(
         ps: number[][], 
         p: number[]): number {
@@ -72,7 +73,7 @@ function inversion01Precise(
  * 
  * @param ps an order 1 bezier curve
  * @param p a point
- */
+ *//*
 function inversionLine(
         ps: number[][], 
         p: number[]) {
@@ -91,3 +92,4 @@ function inversionLine(
 
 
 export { inversion01Precise }
+*/

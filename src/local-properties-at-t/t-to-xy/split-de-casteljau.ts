@@ -17,7 +17,7 @@ function splitDeCasteljau3(cs: number[], t: number): number[][] {
 		return [cs, [cs3, cs3, cs3, cs3]]; 
 	}
 
-	const s = 1-t;
+	const s = 1 - t;
 
 	// j === 0, ..., n (with n === 3 -> cubic bezier)
 	const b00 = cs[0]; // i === 0 

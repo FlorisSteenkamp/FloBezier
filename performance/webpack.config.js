@@ -3,7 +3,7 @@ const projectRoot = '../../';
 
 
 module.exports = {
-    entry: './src/bezier-bezier-intersection.ts',
+    entry: './src/test-bezier-intersection.ts',
     mode: 'development',
     //devtool: undefined,
     //mode: 'production',

@@ -59,12 +59,13 @@ function getCoeffsBez3Bez1Exact(
         // the input bezier curve is in fact not a line but has order < 1,
         // i.e. it is a point
         // TODO
-        return isPointOnBezierExtension(ps1, ps2[0])
+        const p = ps2[0];
+        return isPointOnBezierExtension(ps1, [[p[0]],[p[1]]])
             ? [[0]]   // infinite intersections
             : [[1]];  // no intersections
     }
 
-    let { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
+    const { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
         // this type coercion is justified since we already checked that the
         // curve really has order 3
         getImplicitForm3ExactPb(ps1pb) as ImplicitFormExact3;

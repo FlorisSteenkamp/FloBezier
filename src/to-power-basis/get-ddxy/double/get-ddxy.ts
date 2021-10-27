@@ -23,16 +23,24 @@ function getDdxy(ps: number[][]): number[][] {
 			6*(y3 + 3*(y1 - y2) - y0), // t^1 - max bitlength increase 6
 			6*(y2 - 2*y1 + y0)         // t^0 - max bitlength increase 5
 		]]
-	} else if (ps.length === 3) {
+	} 
+	
+	if (ps.length === 3) {
 		const [[x0,y0], [x1,y1], [x2,y2]] = ps;
 		return [[
 			2*(x2 - 2*x1 + x0) // t^0 - max bitlength increase 3
 		], [
 			2*(y2 - 2*y1 + y0) // t^0 - max bitlength increase 3
 		]];
-	} else if (ps.length === 2) {
+	} 
+	
+	if (ps.length === 2) {
 		return [[0],[0]];
 	}
+
+
+	// TODO - add case of degenerate point
+	throw new Error('The given bezier curve is invalid.');
 }
 
 

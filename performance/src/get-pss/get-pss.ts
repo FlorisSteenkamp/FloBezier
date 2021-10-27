@@ -3,11 +3,24 @@ import { trans } from '../affine';
 import { settings } from '../settings';
 import { randOnGrid } from './rand-on-grid';
 import { getCurvesFromPss } from './get-curves-from-pss';
-import { toString } from '../../../src';
+import { bezierBezierIntersection, bezierSelfIntersection, evalDeCasteljau, getHodograph, getImplicitForm1, getImplicitForm3, getXY, isQuadReallyLine, toString } from '../../../src';
+import { 
+    psCCSameAlgebraicallyNonOverlapping,
+    get33SameAlgebraicallyNonOverlapping,
+    psEdgeCase1,
+    get3A2B3EqA3B2,
+    psCCSameAlgebraicallyNonOverlappingIntersecting,
+    psQQBothSelfOverlappingAndOverlapping,
+    getCCSameAlgebraicallyOverlapping
+} from '../../../test/intersection/bezier-bezier-intersection/get-curve-pairs';
+import { generateSelfIntersecting } from '../../../src/create/generate-self-intersecting';
+import { getXY2 } from '../../../src/to-power-basis/get-xy/double/get-xy';
+import { rotate, scale } from 'flo-vector2d';
+
 
 const { num, maxCoordinateX, maxCoordinateY, maxBitLength } = settings;
 
-function getRandInt(n: number): number {
+function getRandomInt(n: number): number {
     return Math.floor(Math.random() * n);
 }
 
@@ -27,7 +40,6 @@ const randOnGridX_ = randOnGrid(maxCoordinateX, maxBitLength);
 const randOnGridY_ = randOnGrid(maxCoordinateY, maxBitLength);
 
 //let psss: number[][][] = getSameKPss();;
-let psss: number[][][] = [];
 
 //const psA = [
 //    [0,0], 
@@ -126,15 +138,66 @@ const psJ = [
 // TODO - test these
 //psss.push(psI, psJ);
 
+/*
+{
+    const ps1 = [[0,0],[1,1]];
+    const ps2 = [[0.2,0],[0.3,1]];
+    const { vₓ, vᵧ, v } = getImplicitForm1(ps1);
+    const { vₓ: wₓ, vᵧ: wᵧ, v: w } = getImplicitForm1(ps2);
+    const y  = (v*wₓ - vₓ*w) / (vₓ*wᵧ - vᵧ*wₓ);
+    console.log(y);
+
+    const xs = bezierBezierIntersection(ps1,ps2);
+    console.log(evalDeCasteljau(ps1, xs[0][0].ri.tS));
+}
+*/
+
+//let a = [1,0];
+//let b = rotate(Math.sin(0.1), Math.cos(0.1), a);
+//let c = scale(b,2);
+//let d = scale(b,2.999999999);
+//console.log(getXY2([b,c,d]));
+//console.log(toString([b,c,d]));
+//console.log(evalDeCasteljau([b,c,d], -1000000000000000));
+//console.log(evalDeCasteljau([b,c,d], +1000000000000000));
+//console.log(isQuadReallyLine([b,c,d]));
+
 
 function getPss(
         orderss: [1|2|3, 1|2|3][]) {
 
     const rx = () => randOnGridX_();
     const ry = () => trans(randOnGridY_());
+
+    const a = get33SameAlgebraicallyNonOverlapping(true);
+
+    //console.log(toString(a[0]));
+    //console.log();
+    //console.log(toString(a[1]));
+
+    //const b = generateSelfIntersecting([0.5,0], [1,0.25], [0,0.22], [0.0111,0.8]);
+    //const b = generateSelfIntersecting([0,0], [1,1], [2,1], [0.1,0.9]);
+    //console.log('bbbbbbbbb',bezierSelfIntersection(b,false))
     
-    let pss: number[][][] = psss;
-    
+    const c = [[0,0],[0.1,0.1],[0.2,0.2],[0.3,0.5]];
+    //const a = [get3A2B3EqA3B2(),get3A2B3EqA3B2()];
+    //const d = psCCSameAlgebraicallyNonOverlappingIntersecting.map(getHodograph);
+    //const d = get33SameAlgebraicallyNonOverlapping(false).map(getHodograph);
+    //const d = getCCSameAlgebraicallyOverlapping(false, true).map(getHodograph);
+    //const d = getCCSameAlgebraicallyOverlapping(false).map(getHodograph);
+    const d = getCCSameAlgebraicallyOverlapping(false);
+    console.log(toString(getXY(d[0])))
+    console.log(toString(getXY(d[1])))
+    let pss: number[][][] = [
+        //...psCCSameAlgebraicallyNonOverlapping
+        //b,
+        //c,
+        ...d,
+        //...psQQBothSelfOverlappingAndOverlapping,
+        //...a
+        //...psEdgeCase1
+    ];
+
     let i = pss.length;
     for (; i<2*num; i++) {
         const idx = Math.trunc(i/2) % orderss.length;

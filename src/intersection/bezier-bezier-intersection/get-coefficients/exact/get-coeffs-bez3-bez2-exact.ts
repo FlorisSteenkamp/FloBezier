@@ -58,7 +58,7 @@ function getCoeffsBez3Bez2Exact(ps1: number[][], ps2: number[][]) {
         return getCoeffsBez3Bez1Exact(ps1, [ps2[0],ps2[2]]);
     }
 
-    let { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
+    const { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
         // this type coercion is justified since we already checked that the
         // curve really has order 3
         getImplicitForm3ExactPb(ps1pb) as ImplicitFormExact3;

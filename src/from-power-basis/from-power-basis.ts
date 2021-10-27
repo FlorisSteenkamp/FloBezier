@@ -27,7 +27,9 @@ function fromPowerBasis(cs: number[][]): number[][] {
 			[a0 + a1 + a2 + a3, 
 			 b0 + b1 + b2 + b3]
 		];
-	} else if (len === 3) {
+	} 
+	
+	if (len === 3) {
 		const [[a2, a1, a0], [b2, b1, b0]] = cs;
 		return [
 			[a0,
@@ -37,15 +39,27 @@ function fromPowerBasis(cs: number[][]): number[][] {
 			[a0 + a1 + a2,
 			 b0 + b1 + b2]
 		];
-	} else if (len === 2) {
+	} 
+	
+	if (len === 2) {
 		const [[a1, a0], [b1, b0]] = cs;
 		return [
 			[a0,
 			 b0],
 			[a0 + a1,
-			 b0 + b1],			 
+			 b0 + b1]
 		];
 	}
+
+	if (len === 1) {
+		const [[a0], [b0]] = cs;
+		return [
+			[a0,
+			 b0]
+		];
+	}
+
+	throw new Error('The given bezier curve is invalid.');
 }
 
 

@@ -1,10 +1,8 @@
 import { bezierBezierIntersection, closestPointOnBezierCertified, X } from "../../../src/index";
 import { settings } from '../settings'; 
-import { draw, ctx } from '../draw-stuff';
 import { distanceBetween } from "flo-vector2d";
 import { showResults } from "../show-results";
 import { drawIntersections } from './draw-intersections';
-//import { bezierBezierIntersection2 } from './bezier-bezier-intersection-2';
 
 
 const { num } = settings;
@@ -26,7 +24,6 @@ function native(
         const ps1 = pss[i];
         const ps2 = pss[i+1];
 
-        //const xs = bezierBezierIntersection2(ps1, ps2);
         const xs = bezierBezierIntersection(ps1, ps2);
 
         if (!xs) { 

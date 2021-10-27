@@ -1,32 +1,37 @@
 import { allRootsCertified, RootInterval } from "flo-poly";
-import { tFromXY } from "../../../src/intersection/t-from-xy";
 import { getCoeffsBezBez }  from './get-coefficients/get-coeffs-bez-bez';
 
 
-// TODO - docs
+/**
+ * Returns the intersection between any of two linear, quadratic or cubic bezier 
+ * curves without limiting the `t` value in [0,1], i.e. `t ∈ [-∞,+∞]`.
+ * 
+ * * if the two curves have an infinite number of intersections `undefined` is returned
+ * * the second bezier curve's parameter `t` values are retuned
+ *
+ * * **precondition:** TODO underflow / overflow
+ * * **precondition:** cubics are really cubics, etc. TODO
+ * 
+ * @param ps1 
+ * @param ps2 
+ * 
+ * @internal
+ */
 function bezierBezierIntersectionBoundless(
         ps1: number[][], 
-        ps2: number[][]): RootInterval[] {
+        ps2: number[][]): RootInterval[] | undefined {
    
     let _coeffs = getCoeffsBezBez(ps1,ps2);
     if (_coeffs === undefined) { 
-        // infinite number of intersections (or maybe not!)
+        // infinite number of intersections
         // TODO
         //console.log('use endpoint Xs')
-        return undefined; 
+        return undefined;
     }
 
     let { coeffs, errBound, getPExact } = _coeffs;
 
-    const rs = allRootsCertified(coeffs, 0, 1, errBound, getPExact, true);
-
-    if (rs === undefined) {
-        // TODO - finish (endpoint intersections)
-        console.log(tFromXY(ps1, ps2[0]));
-        console.log(tFromXY(ps1, ps2[3]));
-    }
-
-    return rs;
+    return allRootsCertified(coeffs, 0, 1, errBound, getPExact, true);
 }
 
 

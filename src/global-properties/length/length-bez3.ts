@@ -11,7 +11,9 @@ import { gaussQuadrature } from "flo-gauss-quadrature";
  * 
  * @internal
  */
- function lengthBez3(interval: number[], ps: number[][]) {
+ function lengthBez3(
+	 	interval: number[], ps: number[][]): number {
+
 	if (interval[0] === interval[1]) { return 0; }
 
 	const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;

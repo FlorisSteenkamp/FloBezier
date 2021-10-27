@@ -14,7 +14,7 @@
         "jsx": "react"
     },
     "include": [
-        "src/bezier-bezier-intersection.ts"
+        "src/test-bezier-intersection.ts"
         //"test/**/*.ts"
     ],
     "exclude": [

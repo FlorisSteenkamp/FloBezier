@@ -16,8 +16,6 @@ type IterationWithExtras = Iteration & IterationExtras;
 
 
 let prevOver: IterationWithExtras = undefined;
-let prevClick: IterationWithExtras = undefined;
-let prevRClick: IterationWithExtras = undefined;
 
 function onMouseOver(node: IterationWithExtras) {
     if (prevOver === node) { return; }
@@ -28,16 +26,10 @@ function onMouseOver(node: IterationWithExtras) {
 
 
 function onClick(node: IterationWithExtras) {
-    //if (prevClick === node) { return; }
-    prevClick = node;
-
     drawIterHybridPolyToCanvas(canvas, node);
- }
+}
 
 function onRightClick(node: IterationWithExtras) {
-    //if (prevRClick === node) { return; }
-    prevRClick = node;
-
     drawIterClipsToCanvas(canvas, node);
     if (!node.parent) {
         const tss = bezier3Intersection(node.F, node.G);

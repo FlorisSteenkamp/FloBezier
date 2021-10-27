@@ -6,25 +6,21 @@ import { γ, γγ } from '../../../src/error-analysis/error-analysis';
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { twoProduct, ddMultDd, ddAddDd, ddMultDouble2 } from "double-double";
-import { expansionProduct, fastExpansionSum, eSign, scaleExpansion2, eEstimate } from 'big-float-ts';
-import { ImplicitFormExact1, ImplicitFormExact2, ImplicitFormExact3 } from "../../../src/implicit-form/implicit-form-types";
+import { expansionProduct, fastExpansionSum, eSign, scaleExpansion2, eEstimate, eToDd } from 'big-float-ts';
 
 const tp  = twoProduct;
 const qmq = ddMultDd;
 const qaq = ddAddDd;
-const qmd = ddMultDouble2;
 const sce = scaleExpansion2;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
 const sign = eSign;
 const estimate = eEstimate;
+const etodd = eToDd;
 
 const abs = Math.abs;
 const γ1 = γ(1);
 const γγ3 = γγ(3);
-
-
-type DoubleDouble = number[];
 
 
 /**
@@ -32,17 +28,28 @@ type DoubleDouble = number[];
  * the parameter t is allowed to extend to +-infinity, i.e. t is an element of 
  * [-inf, +inf], false otherwise.
  * 
- * * Precondition: TODO - underflow/overflow
+ * * **Precondition:** TODO - underflow/overflow
+ * 
+ * @param ps a quadratic bezier curve
+ * @param p A point with coordinates given as Shewchuk expansions. If only
+ * double precision coordinates need to be provided then wrap it in an array,
+ * e.g. for a point with x and y coordinates given as 1 and 2 set 
+ * `p === [[1],[2]]`. TODO - link to Schewchuk
  * 
  * @internal
  */
  function isPointOnBezierExtension2(
-        ps: number[][], p: number[]): boolean {
+        ps: number[][], p: number[][]): boolean {
 
-    const [x,y] = p;
+    const [xe,ye] = p;
+    const lenX = xe.length;
+    const lenY = ye.length;
+    const x = xe[lenX-1];  // get higest order double
+    const y = ye[lenY-1];  // ...
+    const isDouble = (lenX === 1 && lenY === 1)
 
-    const x_ = abs(x);
-    const y_ = abs(y);
+    //const x_ = abs(x);
+    //const y_ = abs(y);
 
     //---- first pre-filter
     {
@@ -62,21 +69,58 @@ type DoubleDouble = number[];
         // `h` (say height) is the the result of evaluating the implicit equation; if
         // it is 0 we are on the curve, else we're not.
 
-        // group the terms to reduce error, e.g. v usually has the highest bitlength
-        const h = (((vₓₓ*x*x + vₓᵧ*x*y) + vᵧᵧ*y*y) + (vₓ*x + vᵧ*y)) + v;
+        
+        // In the below, if x is given as a double then the error counter on
+        // x would be 0, i.e. <0>x, else it would be <1>x. We represent the
+        // error counter with a <D> so that for a point with double precion 
+        // coordinates we have <D> = <0> else <D> = <1>. Same is true for y.
 
-        // <12>h <-- <12>(<11>(<9>(<8>(<7>(<5>vₓₓ*<1>(x*x)) + <7>(<5>vₓᵧ*<1>(x*y))) + <7>(<5>vᵧᵧ*<1>(y*y))) + 
-        //         <10>(<9>(<8>vₓ*x) + <9>(<8>vᵧ*y))) + <10>v);
-        const h_ = (((vₓₓ_*x_*x_ + vₓᵧ_*x_*y_) + vᵧᵧ_*y_*y_) + (vₓ_*x_ + vᵧ_*y_)) + v_;
+        // `0` if we have only double precision coordinates, `1` otherwise
+        const D = isDouble ? 0 : 1;
+
+        const x_ = abs(x);  // <D>x
+        const y_ = abs(y);  // <D>y
+        const xx_ = x_*x_;  // <2D+1>xx
+        const xy_ = x_*y_;  // <2D+1>xy
+        const yy_ = y_*y_;  // <2D+1>yy
+
+        // group the terms to reduce error, e.g. v usually has the highest bitlength
+        const h = 
+            (
+                (
+                    (vₓₓ*x*x + vₓᵧ*x*y) + 
+                    vᵧᵧ*y*y
+                ) + 
+                (
+                    vₓ*x + vᵧ*y
+                )
+            ) + 
+            v;
+
+        // <D+12>h <-- <D+12>(<D+11>(<2D+9>(<2D+8> + <2D+7>) + <D+10>) + <10>);
+        const h_ = 
+            (
+                (
+                    // <2D+8>(<2D+7>(<5>vₓₓ*<2D+1>(xx)) + <2D+7>(<5>vₓᵧ*<2D+1>(xy)))
+                    (vₓₓ_*xx_ + vₓᵧ_*xy_) + 
+                    // <2D+7>(<5>vᵧᵧ*<2D+1>(xy))
+                    vᵧᵧ_*yy_
+                ) + (
+                    // <D+10>(<D+9>(<8>vₓ*<D>x) + <D+9>(<8>vᵧ*<D>y))
+                    vₓ_*x_ + vᵧ_*y_
+                )
+            ) + 
+            // <10>v
+            v_;
 
 
         // if the error is not too high too discern h away from zero
-        if (12*γ1*h_ < abs(h)) {
+        if ((D+12)*γ1*h_ < abs(h)) {
             return false; // <-- prefilter applied
         }
     }
 
-    // error too high - const's try quad precision
+    // error too high - const's try double-double precision
     {
         const { 
             coeffs: { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v },
@@ -91,19 +135,36 @@ type DoubleDouble = number[];
         // const h =
         //   vₓₓ*x*x + vₓᵧ*x*y + vᵧᵧ*y*y + vₓ*x + vᵧ*y + v;
 
-        const xx = tp(x,x);  // <= error free
-        const yy = tp(y,y);  // <= error free
-        const xy = tp(x,y);  // <= error free
+        const xd = etodd(xe);
+        const yd = etodd(ye);
+
+        const _x = abs(x);
+        const _y = abs(y);
+
+        // we're multiplying by `γγ3` at the end but the error `x_` is only `γγ1`
+        // and hence we need to divide the error by 3.
+        const x_ = _x/3;
+        const y_ = _y/3;
+
+        const xx = qmq(xd,xd);
+        const _xx = xx[1];
+        const xx_ = 2*(_x*x_ + _xx);
+        const yy = qmq(yd,yd);
+        const _yy = yy[1];
+        const yy_ = 2*(_y*y_ + _yy);
+        const xy = qmq(xd,yd);
+        const _xy = abs(xy[1]);
+        const xy_ = _x*y_ + x_*_y + 2*_xy;
         const vₓₓxx = qmq(vₓₓ,xx);
-        const vₓₓxx_ = vₓₓ_*xx[1] + 2*abs(vₓₓxx[1]);
+        const vₓₓxx_ = abs(vₓₓ[1])*xx_ + vₓₓ_*_xx + 2*abs(vₓₓxx[1]);
         const vₓᵧxy = qmq(vₓᵧ,xy);
-        const vₓᵧxy_ = vₓᵧ_*abs(xy[1]) + 2*abs(vₓᵧxy[1]);
+        const vₓᵧxy_ = abs(vₓᵧ[1])*xy_ + vₓᵧ_*_xy + 2*abs(vₓᵧxy[1]);
         const vᵧᵧyy = qmq(vᵧᵧ,yy);
-        const vᵧᵧyy_ = vᵧᵧ_*yy[1] + 2*abs(vᵧᵧyy[1]);
-        const vₓx = qmd(x,vₓ);
-        const vₓx_ = vₓ_*abs(x) + abs(vₓx[1]);
-        const vᵧy = qmd(y,vᵧ);
-        const vᵧy_ = vᵧ_*abs(y) + abs(vᵧy[1]);
+        const vᵧᵧyy_ = abs(vᵧᵧ[1])*yy_ + vᵧᵧ_*_yy + 2*abs(vᵧᵧyy[1]);
+        const vₓx = qmq(xd,vₓ);
+        const vₓx_ = abs(vₓ[1])*x_ + vₓ_*_x + 2*abs(vₓx[1]);
+        const vᵧy = qmq(yd,vᵧ);
+        const vᵧy_ = abs(vᵧ[1])*y_ + vᵧ_*_y + 2*abs(vᵧy[1]);
 
         // group the terms to reduce error, e.g. v usually has the highest bitlength
         //const h = 
@@ -132,13 +193,14 @@ type DoubleDouble = number[];
 
     // error still too high - const's go exact
     {
-        // TODO - the type coercion below indicates we need to handle the case
-        // where the cubic is really a quadratic or a line or a point
-        
-        const { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
-            getImplicitForm2Exact(ps) as 
-                & ImplicitFormExact2   // vₓₓ, vₓᵧ, vᵧᵧ possibly `undefined`
-                & ImplicitFormExact1;  // vₓ, vᵧ possibly `undefined`
+        const implictForm = getImplicitForm2Exact(ps);
+
+        if (implictForm === undefined) {
+            // all ps are the same point
+            return isDouble && x === ps[0][0] && y === ps[0][1];
+        }
+
+        const { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = implictForm;
         
         // h (say height) is the the result of evaluating the implicit equation; 
         // if it is 0 we are on the curve, else we're not.

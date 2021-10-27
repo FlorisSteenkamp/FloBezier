@@ -17,6 +17,9 @@ function closestPointOnBezier(
         poly = getClosestOnBezier2FromPoint(ps, p);
     } else if (ps.length === 2) {
         poly = getClosestOnBezier1FromPoint(ps, p);
+    } else {
+        // TODO - add case of degenerate point
+        throw new Error('The given bezier curve is invalid.');
     }
 
     const ts = allRoots(poly, 0, 1);
@@ -26,7 +29,7 @@ function closestPointOnBezier(
 
     // Get point with minimum distance
     let minD = Number.POSITIVE_INFINITY;
-    let minP: { p: number[], t: number } = undefined;
+    let minP: { p: number[], t: number } | undefined = undefined;
     for (const t of ts) {
         const p_ = evalDeCasteljau(ps,t);
         const d = squaredDistanceBetween(p_, p);
@@ -36,7 +39,8 @@ function closestPointOnBezier(
         }
     }
 
-    return minP;
+    // keep TypeScript happy; `minP` cannot be `undefined` here
+    return minP!;
 }
 
 

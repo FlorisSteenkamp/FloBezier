@@ -1,3 +1,4 @@
+/*
 import type { RootInterval } from "flo-poly";
 import type { X } from './x';
 import { getIntervalBox } from "../../global-properties/bounds/get-interval-box/get-interval-box";
@@ -18,16 +19,23 @@ import { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-
  * @param ps1 the first bezier
  * @param ps2 the second bezier
  * @param ts2 the `t` values of the second bezier
- */
+ *//*
  function getOtherTs(
         ps1: number[][], 
         ps2: number[][],
         ts2: RootInterval[]): X[][] {
 
-    if (ts2 === undefined) { return undefined; } 
+    if (ts2 === undefined) { 
+        // infinite number of intersections
+        return undefined; 
+    }
     if (ts2.length === 0) { return []; }
+
     let ts1 = bezierBezierIntersectionBoundless(ps2, ps1);
-    if (ts1 === undefined) { return undefined; } 
+    if (ts1 === undefined) { 
+        // infinite number of intersections
+        return undefined; 
+    } 
     if (ts1.length === 0) { return []; }
 
     let is1 = ts1.map(ri => getIntervalBox(ps1, [ri.tS, ri.tE]));
@@ -54,3 +62,4 @@ import { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-
 
 
 export { getOtherTs }
+*/

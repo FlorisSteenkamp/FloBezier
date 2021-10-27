@@ -34,9 +34,11 @@ function fromTo(ps: number[][]) {
 		} else if (t1 === t2) {
 			// Degenerate case
 			const p = evalDeCasteljau(ps, t1);
+			if (ps.length === 1) { return [p]; }
 			if (ps.length === 2) { return [p,p]; }
 			if (ps.length === 3) { return [p,p,p]; }
 			if (ps.length === 4) { return [p,p,p,p]; }
+			throw new Error('The given bezier curve is invalid.');
 		} else {
 			ps_ = splitAt(splitAt(ps, t1)[1], (t2-t1)/(1-t1))[0];
 		}
@@ -74,9 +76,11 @@ function fromToPrecise(ps: number[][]) {
 		} else if (t1 === t2) {
 			// Degenerate case
 			const p = evalDeCasteljau(ps, t1);
+			if (ps.length === 1) { return [p]; }
 			if (ps.length === 2) { return [p,p]; }
 			if (ps.length === 3) { return [p,p,p]; }
 			if (ps.length === 4) { return [p,p,p,p]; }
+			throw new Error('The given bezier curve is invalid.');
 		} else {
 			ps_ = splitAtPrecise(splitAtPrecise(ps, t1)[1], (t2-t1)/(1-t1))[0];
 		}

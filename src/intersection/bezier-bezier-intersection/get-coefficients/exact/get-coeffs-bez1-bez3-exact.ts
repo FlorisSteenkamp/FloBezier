@@ -26,6 +26,7 @@ const eSign = _eSign;
  * e.g. `[[5],[-3],[0]]` represents the polynomial `5x^2 - 3x`.
  * 
  * * **precondition:**  TODO - add underflow / overflow conditions
+ * * **precondition:** TODO curve orders must be as stated
  * * the returned polynomial coefficients are exact (i.e. error-free)
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
@@ -54,10 +55,9 @@ function getCoeffsBez1Bez3Exact(ps1: number[][], ps2: number[][]) {
         return getCoeffsBez1Bez2Exact(ps1, toQuadraticFromCubic(ps2));
     }
 
-    let { vₓ, vᵧ, v } = 
-        // this type coercion is justified since we already checked that the
-        // curve really has order 1
-        getImplicitForm1ExactPb(ps1pb) as ImplicitFormExact1;
+    // it is a precondition that the curve really has order 1
+    // keep TypeScript happy; `getImplicitForm1ExactPb` cannot return `undefined` here
+    const { vₓ, vᵧ, v } = getImplicitForm1ExactPb(ps1pb)!;
     
     // a3*v_x + b3*v_y
     //const v3 = c3*vₓ + d3*vᵧ;

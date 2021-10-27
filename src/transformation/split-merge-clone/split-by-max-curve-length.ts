@@ -22,7 +22,7 @@ function splitByMaxCurveLength(
     const fromTo_ = fromTo(ps);
 
     while (tStack.length) {
-        const ts_ = tStack.pop();
+        const ts_ = tStack.pop()!;
         const ps_ = fromTo_(ts_[0], ts_[1]);
         if (lengthUpperBound(ps_) > maxLength) {
             const t = (ts_[0] + ts_[1]) / 2;

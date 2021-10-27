@@ -217,7 +217,7 @@ function splitCubicAtExact(ps: number[][][], t: number): number[][][][] {
 function splitCubicAtPrecise(ps: number[][], t: number): number[][][] {
 	const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
 		
-	const s = 1-t;
+	const s = 1 - t;
     const s2 = tp(s,s);
     const s3 = sce(s2, s);
     const t2 = tp(t,t);

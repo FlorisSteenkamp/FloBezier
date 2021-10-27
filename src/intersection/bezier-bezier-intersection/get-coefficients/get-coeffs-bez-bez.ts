@@ -34,7 +34,7 @@ const coeffFunctionsExact = [
 /**
  * Returns an object with properties containing (1) the coefficients (in double-double
  * precision) of a polynomial in 1 variable whose roots are the parameter values 
- * of the intersection points of two given order 1, 2 or 3 bezier curves (i.e. lines, 
+ * (of the second curve) of the intersection points of two given order 1, 2 or 3 bezier curves (i.e. lines, 
  * quadratic and cubic bezier curves), (2) the coefficientwise error bound of the polyomial, 
  * and (3) a function that returns the *exact* polynomial coefficients as Shewchuck expansions.
  * 

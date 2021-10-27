@@ -32,9 +32,7 @@ const eno = eNegativeOf;
  * @doc mdx
  */
 function getImplicitForm2Exact(
-        ps: number[][]): 
-            | Partial<ImplicitFormExact2>
-            | ImplicitFormExact1 {
+        ps: number[][]): ImplicitFormExact2 | undefined {
 
     return getImplicitForm2ExactPb(
             getXY2Exact(ps)
@@ -54,15 +52,18 @@ function getImplicitForm2Exact(
         pspb: [
                 [number[], number[], number], 
                 [number[], number[], number]
-            ]):
-                | Partial<ImplicitFormExact2>
-                | ImplicitFormExact1 {
+            ]): ImplicitFormExact2 | undefined {
 
     const [[a2,a1,a0], [b2,b1,b0]] = pspb;
 
     if (eSign(a2) === 0 && eSign(b2) === 0) {
         // the input bezier curve is in fact not cubic but has order < 2
-        return getImplicitForm1ExactPb([[a1,a0], [b1,b0]]);
+        const implicitForm = getImplicitForm1ExactPb([[a1,a0], [b1,b0]]);
+        if (implicitForm === undefined) { return undefined; }
+        return {
+            vₓₓ: [0], vₓᵧ: [0], vᵧᵧ: [0],
+            ...implicitForm
+        };
     }
 
     const a2b1 = epr(a2,b1);

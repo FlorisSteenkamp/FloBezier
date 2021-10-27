@@ -1,13 +1,7 @@
 {
     "compilerOptions": {
         "charset": "utf8",
-        "noImplicitAny": true, 
-        "noImplicitThis": true,
-        "alwaysStrict": true,
-        "strictBindCallApply": true,
-        //"strictNullChecks": true,
-        "strictFunctionTypes": true,
-        //"strictPropertyInitialization": true,
+        "strict": true,
         "module": "commonjs",
         "target": "es2020",
         "declaration": true,
@@ -16,9 +10,7 @@
         "outDir": "node"
     },
     "include": [
-        //"src/**/*.ts",
         "src/index.ts"
-        //"test/**/*.ts"
     ],
     "exclude": [
         "node_modules",

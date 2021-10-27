@@ -18,16 +18,6 @@ const { orient2d } = operators;
  * @doc mdx
  */
 function isLine(ps: number[][]): boolean {
-    if (ps.length === 2) {
-        // Line
-        return true;
-    }
-
-    if (ps.length === 3) {
-        // Quadratic bezier
-        return orient2d(ps[0], ps[1], ps[2]) === 0;
-    }
-
     if (ps.length === 4) {
         // Cubic bezier
         return (
@@ -37,6 +27,19 @@ function isLine(ps: number[][]): boolean {
             orient2d(ps[0], ps[2], ps[3]) === 0
         );
     }
+
+    if (ps.length === 3) {
+        // Quadratic bezier
+        return orient2d(ps[0], ps[1], ps[2]) === 0;
+    }
+
+    if (ps.length === 2 || ps.length === 1) {
+        // Line (or point)
+        return true;
+    }
+
+
+    throw new Error('The given bezier curve is invalid.');
 }
 
 

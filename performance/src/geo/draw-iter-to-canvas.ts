@@ -34,6 +34,7 @@ function drawIterClipsToCanvas(
     ]);
 
     //console.log(minX,maxX,minY,maxY);
+
     // Theorem 11: If `y/2 <= x <= 2y`, then `x - y` (and `y - x`) is computed exactly.
     // Read: If `minX/2 <= maxX <= 2minX`, then `maxX - minX` (and `minX - maxX`) is computed exactly.
 
@@ -78,22 +79,14 @@ function drawIterClipsToCanvas(
     const transformGeo_ = transformGeo(trans);
     const transformPs_ = transformPs(trans);
 
-    //////////////////
     beziers_(
         tcPs(transformPs_(F.ps)), 
         tcPs(transformPs_(G.ps))
     );
     fatline_(tcFatline(transformFatline_(fatline)));
-    //console.log(scaleX, scaleY, minX, minY);
-    //console.log(fatline);
-    //console.log(transformFatline_(fatline));
-    //console.log(tcFatline(transformFatline_(fatline)));
-    //console.log(fatline.psMin);
-    //console.log(toString(F));
     
     if (fatlinePerp) { fatline_(tcFatline(transformFatline_(fatlinePerp))); }
     geo_(tcGeo(transformGeo_(hq)));
-    //////////////////
 }
 
 

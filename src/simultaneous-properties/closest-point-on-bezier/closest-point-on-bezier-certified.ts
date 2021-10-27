@@ -21,15 +21,14 @@ const eadd = eAdd;
 
 const eps = Number.EPSILON;
 
-const γ1 = γ(1);
 const γγ6 = γγ(6);
 
 
 /**
- * Returns the closest point on the bezier to the given point - returns the point
- * and the `t` value.
- * * this function acts as an excellent inversion formula.
- * * guaranteed accurate to 4 ulps in t value
+ * Returns the closest point(s) (and parameter `t` value(s)) on the given 
+ * bezier curve to the given point.
+ * 
+ * * guaranteed accurate to 4 ulps in `t` value
  * 
  * @param ps 
  * @param p 
@@ -49,26 +48,33 @@ function closestPointOnBezierCertified(
     let ris: RootInterval[];
 
     if (order === 3) {
+        // keep TypeScript happy; `ris` cannot be `undefined` here
         ris = allRootsCertified(
             getClosestOnBezier3FromPointDd(ps, p), 
             0, 1, 
             getClosestOnBezier3FromPointErrorCounters(ps, p).map(e => 10*γγ6*e), 
             () => getClosestOnBezier3FromPointExact(ps, p)
-        );
+        )!;
     } else if (order === 2) {
+        // keep TypeScript happy; `ris` cannot be `undefined` here
         ris = allRootsCertified(
             getClosestOnBezier2FromPointDd(ps, p), 
             0, 1, 
             getClosestOnBezier2FromPointErrorCounters(ps, p).map(e => 8*γγ6*e), 
             () => getClosestOnBezier2FromPointExact(ps, p)
-        );
+        )!;
     } else if (order === 1) {
+        // keep TypeScript happy; `ris` cannot be `undefined` here
         ris = allRootsCertified(
             getClosestOnBezier1FromPointDd(ps, p), 
             0, 1, 
             getClosestOnBezier1FromPointErrorCounters(ps, p).map(e => 6*γγ6*e), 
             () => getClosestOnBezier1FromPointExact(ps, p)
-        );        
+        )!;        
+    } else if (order === 0) {
+        ris = [];
+    } else {
+        throw new Error('The given bezier curve is invalid.');
     }
 
     ris.push({ tS: 0, tE: 0, multiplicity: 1 });

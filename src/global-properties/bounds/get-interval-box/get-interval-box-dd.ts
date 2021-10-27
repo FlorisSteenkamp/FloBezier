@@ -1,10 +1,27 @@
-import { evalDeCasteljauDdWithErr } from "../../../local-properties-at-t/t-to-xy/double-double/eval-de-casteljau-dd-with-err";
-import { operators } from "double-double";
+import { evalDeCasteljauDd } from '../../../local-properties-at-t/t-to-xy/double-double/eval-de-casteljau-dd';
+import { evalDeCasteljauError } from '../../../local-properties-at-t/t-to-xy/eval-de-casteljau-error';
+import { γγ } from '../../../error-analysis/error-analysis';
+import { 
+    ddDiffDd as ddDiffDd_, 
+    ddDivDdWithError as ddDivDdWithError_, 
+    ddAddDouble as ddAddDouble_, 
+    ddMultDd as ddMultDd_, 
+    ddMultDouble2 as ddMultDouble2_, 
+    ddAddDd as ddAddDd_, 
+    ddMultBy2 as ddMultBy2_, 
+    ddMin as ddMin_, 
+    ddMax as ddMax_,
+} from "double-double";
 
-const { 
-    ddDiffDd, ddDivDdWithError, ddAddDouble, ddMultDd, ddMultDouble2, 
-    ddAddDd, ddMultBy2, ddMin, ddMax 
-} = operators;
+const ddDiffDd = ddDiffDd_;
+const ddDivDdWithError = ddDivDdWithError_;
+const ddAddDouble = ddAddDouble_;
+const ddMultDd = ddMultDd_;
+const ddMultDouble2 = ddMultDouble2_;
+const ddAddDd = ddAddDd_;
+const ddMultBy2 = ddMultBy2_;
+const ddMin = ddMin_;
+const ddMax = ddMax_;
 
 
 const u = Number.EPSILON / 2;
@@ -19,7 +36,8 @@ const qmd = ddMultDouble2;
 const qm2 = ddMultBy2;
 const qDivQuadWithError = ddDivDdWithError;
 const qMin = ddMin;
-const qMax  = ddMax;
+const qMax  = ddMax
+const γγ3 = γγ(3);
 
 
 /**
@@ -29,7 +47,6 @@ const qMax  = ddMax;
  * 
  * * **precondition:** t1 < t2
  * * **precondition:** t1,t2 >= 0 && t1,t2 <= 1
- * * **precondition:** 49-bit aligned bezier coordinates
  * 
  * @param ps an order 1, 2 or 3 bezier curve given as an array of control 
  * points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
@@ -67,7 +84,7 @@ function getIntervalBoxDd(
  */
 function getIntervalBox3Dd(
         [[x0,y0],[x1,y1],[x2,y2],[x3,y3]]: number[][], 
-        [t1, t2]: number[][]) {
+        [t1,t2]: number[][]): number[][][] {
 
     //t2 = ((t2-t1) / (1-t1)) * (1 + Number.EPSILON); // <= fl(t2) > t2
     const tDel = qdq(t2,t1);
@@ -78,7 +95,6 @@ function getIntervalBox3Dd(
     const $t2 = qDivQuadWithError(tDel,oMt1,tDel_,oMt1_);
     t2 = qad($t2.est,$t2.err);  // the max t2 can possibly be
 
-    //const s1 = (1 - t1);  // <= exact by precondition - not anymore
     const s1 = qdq(qOne,t1);  // <1>s1
     // below uses error by counters - also note qmq is different than other operators in that it is 2ice as inaccurate
     const tt1 = qmq(t1,t1);    // <2>tt1  
@@ -205,7 +221,7 @@ function getIntervalBox3Dd(
  */
 function getIntervalBox2Dd(
         [[x0,y0],[x1,y1],[x2,y2]]: number[][], 
-        [t1, t2]: number[][]) {
+        [t1, t2]: number[][]): number[][][] {
 
     //t2 = ((t2-t1) / (1-t1)) * (1 + Number.EPSILON); // <= fl(t2) > t2
     const tDel = qdq(t2,t1);
@@ -322,7 +338,7 @@ function getIntervalBox2Dd(
  */
 function getIntervalBox1Dd(
         [[x0,y0],[x1,y1]]: number[][], 
-        [t1, t2]: number[][]) {
+        [t1, t2]: number[][]): number[][][] {
 
     // Implementation for lines kept for symmetry - there are obviously much
     // simpler ways to calculate the required box in the case of a line.
@@ -402,7 +418,7 @@ function getIntervalBox1Dd(
  */
 function getIntervalBoxAtTDd(
         ps: number[][], 
-        t: number[]) {
+        t: number[]): number[][][] {
 
     const _pS = ps[0];
     const _pE = ps[ps.length-1];
@@ -423,7 +439,20 @@ function getIntervalBoxAtTDd(
         ];
     }
 
-    const { p, pE } = evalDeCasteljauDdWithErr(ps, t);
+    const p = evalDeCasteljauDd(ps, t);
+    let pE: number[];
+
+    if (ps.length === 4) {
+        pE = evalDeCasteljauError(ps, t).map(c_ => 8*2*γγ3*c_);
+    } else if (ps.length === 3) {
+        pE = evalDeCasteljauError(ps, t).map(c_ => 5*2*γγ3*c_);
+    } else if (ps.length === 2) {
+        pE = evalDeCasteljauError(ps, t).map(c_ => 2*2*γγ3*c_);
+    } else {
+        // TODO - add case of degenerate point
+        throw new Error('The given bezier curve is invalid.');
+    }
+    
 
     return [
         [qad(p[0],-pE[0]), qad(p[1],-pE[1])],

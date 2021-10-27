@@ -65,7 +65,7 @@ function bezierSelfIntersection(ps: number[][]): number[] {
         const a3b2 = tp(a3,b2);
 
         if (a2b3[0] === a3b2[0] && a2b3[1] === a3b2[1]) {
-            return undefined;  // a === 0 => no roots possible
+            return undefined;  // a === 0 => no roots possible - a cusp!
         }
     }
 

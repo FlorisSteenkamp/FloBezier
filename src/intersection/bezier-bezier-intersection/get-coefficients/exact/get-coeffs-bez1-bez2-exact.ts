@@ -53,7 +53,7 @@ function getCoeffsBez1Bez2Exact(ps1: number[][], ps2: number[][]) {
         return getCoeffsBez1Bez1Exact(ps1, [ps2[0],ps2[2]]);
     }
 
-    let { vₓ, vᵧ, v } = 
+    const { vₓ, vᵧ, v } = 
         // this type coercion is justified since we already checked that the
         // curve really has order 1
         getImplicitForm1ExactPb(ps1pb) as ImplicitFormExact1;

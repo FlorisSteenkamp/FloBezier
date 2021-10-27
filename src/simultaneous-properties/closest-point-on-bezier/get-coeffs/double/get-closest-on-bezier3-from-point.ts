@@ -1,5 +1,7 @@
 
-function getClosestOnBezier3FromPoint(ps: number[][], p: number[]) {
+function getClosestOnBezier3FromPoint(
+        ps: number[][], p: number[]): number[] {
+
     //const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
     //const [xp, yp] = p;
 

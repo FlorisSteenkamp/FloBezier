@@ -5,19 +5,16 @@ import { getImplicitForm3Exact } from "../../implicit-form/exact/get-implicit-fo
 import { γ, γγ } from '../../../src/error-analysis/error-analysis';
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-import { twoProduct, ddMultDd, ddAddDd, ddMultDouble2 } from "double-double";
-import { expansionProduct, fastExpansionSum, eSign, scaleExpansion2, eEstimate } from 'big-float-ts';
-import { ImplicitFormExact1, ImplicitFormExact2, ImplicitFormExact3 } from "../../../src/implicit-form/implicit-form-types";
+import { ddMultDd, ddAddDd } from "double-double";
+import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd } from 'big-float-ts';
 
-const tp  = twoProduct;
 const qmq = ddMultDd;
 const qaq = ddAddDd;
-const qmd = ddMultDouble2;
-const sce = scaleExpansion2;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
 const sign = eSign;
 const estimate = eEstimate;
+const etodd = eToDd;
 
 const abs = Math.abs;
 const γ1 = γ(1);
@@ -25,16 +22,30 @@ const γγ3 = γγ(3);
 
 
 /**
- * Returns `true` if the given point is on the given cubic bezier curve where the 
- * parameter `t` is allowed to extend to `±∞`, i.e. if `t ∈ (-∞, +∞)`, 
+ * Returns `true` if the given point is on the given cubic bezier curve where 
+ * the parameter, `t`, is allowed to extend to `±∞`, i.e. if `t ∈ (-∞, +∞)`, 
  * `false` otherwise.
  * 
  * * **precondition:** TODO - underflow/overflow
  * 
+ * @param ps a cubic bezier curve
+ * @param p A point with coordinates given as Shewchuk expansions. If only
+ * double precision coordinates need to be provided then wrap it in an array,
+ * e.g. for a point with x and y coordinates given as 1 and 2 set 
+ * `p === [[1],[2]]`. TODO - link to Schewchuk
+ * 
  * @internal
  */
- function isPointOnBezierExtension3(ps: number[][], p: number[]): boolean {
-    const [x,y] = p;
+ function isPointOnBezierExtension3(
+        ps: number[][], 
+        p: number[][]): boolean {
+
+    const [xe,ye] = p;
+    const lenX = xe.length;
+    const lenY = ye.length;
+    const x = xe[lenX-1];  // get higest order double
+    const y = ye[lenY-1];  // ...
+    const isDouble = (lenX === 1 && lenY === 1)
 
     //---- first pre-filter
     {
@@ -82,8 +93,8 @@ const γγ3 = γγ(3);
 
         const h =
             (
-                (vₓₓₓ*(xx*x) + vₓₓᵧ*(xx*y)) + 
-                (vₓᵧᵧ*(x*yy) + vᵧᵧᵧ*(yy*y)) + 
+                ((vₓₓₓ*(xx*x) + vₓₓᵧ*(xx*y)) + 
+                 (vₓᵧᵧ*(x*yy) + vᵧᵧᵧ*(yy*y))) + 
                 ((vₓₓ*xx + vₓᵧ*(x*y)) + vᵧᵧ*yy)
             ) +
             (
@@ -96,36 +107,45 @@ const γγ3 = γγ(3);
         // Error calculation
         //-------------------
 
-        const x_ = abs(x);  // <0>x
-        const y_ = abs(y);  // <0>y
-        const xx_ = x_*x_;  // <1>xx
-        const yy_ = y_*y_;  // <1>yy
+        // In the below, if x is given as a double then the error counter on
+        // x would be 0, i.e. <0>x, else it would be <1>x. We represent the
+        // error counter with a <D> so that for a point with double precion 
+        // coordinates we have <D> = <0> else <D> = <1>. Same is true for y.
 
-        // <26>h <-- <26>(<24>(<17>(<16> + <16>) + <23>) + <25>(<24> + <24>))
+        // `0` if we have only double precision coordinates, `1` otherwise
+        const D = isDouble ? 0 : 1;
+
+        const x_ = abs(x);  // <D>x
+        const y_ = abs(y);  // <D>y
+        const xx_ = x_*x_;  // <2D+1>xx
+        const xy_ = x_*y_;  // <2D+1>xy
+        const yy_ = y_*y_;  // <2D+1>yy
+
+        // <D+26>h <-- <D+26>(<2D+24>(<3D+17>(<3D+16> + <3D+16>) + <2D+23>) + <D+25>(<D+24> + <24>))
         const h_ =
             (
-                // <16> <-- <16>((<14>(<11>vₓₓₓ*<2>(xx*x)) + <15>(<12>vₓₓᵧ*<2>(xx*y)))) +
+                // <3D+16> <-- <3D+16>((<3D+14>(<11>vₓₓₓ*<3D+2>(xx*x)) + <3D+15>(<12>vₓₓᵧ*<3D+2>(xx*y)))) +
                 (vₓₓₓ_*(xx_*x_) + vₓₓᵧ_*(xx_*y_)) +
-                // <16> <-- 16((<15>(<12>vₓᵧᵧ*<2>(x*yy)) + <14>(<11>vᵧᵧᵧ*<2>(yy*y)))) +
+                // <3D+16> <-- <3D+16>((<3D+15>(<12>vₓᵧᵧ*<3D+2>(x*yy)) + <3D+14>(<11>vᵧᵧᵧ*<3D+2>(yy*y)))) +
                 (vₓᵧᵧ_*(x_*yy_) + vᵧᵧᵧ_*(yy_*y_)) + 
-                // <23> <-- <23>(<22>((<21>(<19>vₓₓ*<1>xx) + <20>(<18>vₓᵧ*<1>(x*y))) + <19>(<18>vᵧᵧ*<1>yy)))
-                ((vₓₓ_*xx_ + vₓᵧ_*(x_*y_)) + vᵧᵧ_*yy_)
+                // <2D+23> <-- <2D+23>(<2D+22>(<2D+21>(<19>vₓₓ*<2D+1>xx) + <2D+20>(<18>vₓᵧ*<2D+1>(x*y))) + <2D+20>(<18>vᵧᵧ*<2D+1>yy))
+                ((vₓₓ_*xx_ + vₓᵧ_*(xy_)) + vᵧᵧ_*yy_)
             ) +
             (
-                // <24> <-- <24>(<23>(<22>vₓ*x) + <23>(<22>vᵧ*y))
+                // <24> <-- <D+24>(<D+23>(<22>vₓ*<D>x) + <D+23>(<22>vᵧ*<D>y))
                 (vₓ_*x_ + vᵧ_*y_) + 
                 // <24>
                 v_
             );
 
 
-        // if the error is not too high too discern h away from zero
-        if (26*γ1*h_ < abs(h)) {
+        // if the error is not too high too discern `h` away from zero
+        if ((D+26)*γ1*h_ < abs(h)) {
             return false; // <-- prefilter applied
         }
     }
 
-    // error too high - const's try quad precision
+    // error too high - let's try double-double precision
     {
         // The below takes about 15 micro-seconds on a 1st gen i7 and Chrome 79
         const { 
@@ -147,40 +167,56 @@ const γγ3 = γγ(3);
         //   vₓₓₓ*x*x*x + vₓₓᵧ*x*x*y + vₓᵧᵧ*x*y*y + vᵧᵧᵧ*y*y*y + 
         //   vₓₓ*x*x + vₓᵧ*x*y + vᵧᵧ*y*y + vₓ*x + vᵧ*y + v;
 
+        const xd = etodd(xe);
+        const yd = etodd(ye);
+
         const _x = abs(x);
-        const xx = tp(x,x);  // <= error free
-        const _xx = xx[1];
-        const xxx = qmd(x,xx);
-        const _xxx_ = abs(xxx[1]);
         const _y = abs(y);
-        const yy = tp(y,y);  // <= error free
+
+        // we're multiplying by `γγ3` at the end but the error `x_` is only `γγ1`
+        // and hence we need to divide the error by 3.
+        const x_ = _x/3;
+        const y_ = _y/3;
+
+        const xx = qmq(xd,xd);
+        const _xx = xx[1];
+        const xx_ = 2*(_x*x_ + _xx);
+        const xxx = qmq(xd,xx);
+        const _xxx = abs(xxx[1]);
+        const xxx_ = _x*xx_ + x_*_xx + 2*_xxx;
+        const yy = qmq(yd,yd);
         const _yy = yy[1];
-        const yyy = qmd(y,yy);
-        const _yyy_ = abs(yyy[1]);
-        const xxy = qmd(y,xx);
-        const _xxy_ = abs(xxy[1]);
-        const xyy = qmd(x,yy);
-        const _xyy_ = abs(xyy[1]);
-        const xy = tp(x,y);  // <= error free
+        const yy_ = 2*(_y*y_ + _yy);
+        const yyy = qmq(yd,yy);
+        const _yyy = abs(yyy[1]);
+        const yyy_ = _y*yy_ + y_*_yy + 2*_yyy;
+        const xxy = qmq(yd,xx);
+        const _xxy = abs(xxy[1]);
+        const xxy_ = _y*xx_ + y_*_xx + 2*_xxy;
+        const xyy = qmq(xd,yy);
+        const _xyy = abs(xyy[1]);
+        const xyy_ = _x*yy_ + x_*_yy + 2*_xyy;
+        const xy = qmq(xd,yd);
         const _xy = abs(xy[1]);
+        const xy_ = _x*y_ + x_*_y + 2*_xy;
         const vₓₓₓxxx = qmq(vₓₓₓ,xxx);
-        const vₓₓₓxxx_ = (vₓₓₓ_ + _vₓₓₓ)*_xxx_ + 2*abs(vₓₓₓxxx[1]);
+        const vₓₓₓxxx_ = _vₓₓₓ*xxx_ + vₓₓₓ_*_xxx + 2*abs(vₓₓₓxxx[1]);
         const vₓₓᵧxxy = qmq(vₓₓᵧ,xxy);
-        const vₓₓᵧxxy_ = (vₓₓᵧ_ + _vₓₓᵧ)*_xxy_ + 2*abs(vₓₓᵧxxy[1]);
+        const vₓₓᵧxxy_ = _vₓₓᵧ*xxy_ + vₓₓᵧ_*_xxy + 2*abs(vₓₓᵧxxy[1]);
         const vₓᵧᵧxyy = qmq(vₓᵧᵧ,xyy);
-        const vₓᵧᵧxyy_ = (vₓᵧᵧ_ + _vₓᵧᵧ)*_xyy_ + 2*abs(vₓᵧᵧxyy[1]);
+        const vₓᵧᵧxyy_ = _vₓᵧᵧ*xyy_ + vₓᵧᵧ_*_xyy + 2*abs(vₓᵧᵧxyy[1]);
         const vᵧᵧᵧyyy = qmq(vᵧᵧᵧ,yyy);
-        const vᵧᵧᵧyyy_ = (vᵧᵧᵧ_ + _vᵧᵧᵧ)*_yyy_ + 2*abs(vᵧᵧᵧyyy[1]);
+        const vᵧᵧᵧyyy_ = _vᵧᵧᵧ*yyy_ + vᵧᵧᵧ_*_yyy + 2*abs(vᵧᵧᵧyyy[1]);
         const vₓₓxx = qmq(vₓₓ,xx);
-        const vₓₓxx_ = vₓₓ_*_xx + 2*abs(vₓₓxx[1]);
+        const vₓₓxx_ = abs(vₓₓ[1])*xx_ + vₓₓ_*_xx + 2*abs(vₓₓxx[1]);
         const vₓᵧxy = qmq(vₓᵧ,xy);
-        const vₓᵧxy_ = vₓᵧ_*_xy + 2*abs(vₓᵧxy[1]);
+        const vₓᵧxy_ = abs(vₓᵧ[1])*xy_ + vₓᵧ_*_xy + 2*abs(vₓᵧxy[1]);
         const vᵧᵧyy = qmq(vᵧᵧ,yy);
-        const vᵧᵧyy_ = vᵧᵧ_*_yy + 2*abs(vᵧᵧyy[1]);
-        const vₓx = qmd(x,vₓ);
-        const vₓx_ = vₓ_*_x + abs(vₓx[1]);
-        const vᵧy = qmd(y,vᵧ);
-        const vᵧy_ = vᵧ_*_y + abs(vᵧy[1]);
+        const vᵧᵧyy_ = abs(vᵧᵧ[1])*yy_ + vᵧᵧ_*_yy + 2*abs(vᵧᵧyy[1]);
+        const vₓx = qmq(xd,vₓ);
+        const vₓx_ = abs(vₓ[1])*x_ + vₓ_*_x + 2*abs(vₓx[1]);
+        const vᵧy = qmq(yd,vᵧ);
+        const vᵧy_ = abs(vᵧ[1])*y_ + vᵧ_*_y + 2*abs(vᵧy[1]);
 
         // group the terms to reduce error, e.g. v usually has the highest bitlength
         //const h = 
@@ -220,29 +256,29 @@ const γγ3 = γγ(3);
 
     // error still too high - const's go exact
     {
-        // TODO - the type coercion below indicates we need to handle the case
-        // where the cubic is really a quadratic or a line or a point
-
         // The below takes about 155 micro-seconds on a 1st gen i7 and Chrome 79
-        const { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
-            getImplicitForm3Exact(ps) as 
-                & ImplicitFormExact3   // vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ possibly `undefined`
-                & ImplicitFormExact2   // vₓₓ, vₓᵧ, vᵧᵧ possibly `undefined`
-                & ImplicitFormExact1;  // vₓ, vᵧ possibly `undefined`
+        const implictForm = getImplicitForm3Exact(ps);
+
+        if (implictForm === undefined) {
+            // all ps are the same point
+            return isDouble && x === ps[0][0] && y === ps[0][1];
+        }
+
+        let { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = implictForm;
         
-        // h (say height) is the the result of evaluating the implicit equation; if
-        // it is 0 we are on the curve, else we're not.
+        // `h` (say height) is the the result of evaluating the implicit 
+        // equation; if it is 0 we are on the curve, else we're not.
         // const h =
         //   vₓₓₓ*x*x*x + vₓₓᵧ*x*x*y + vₓᵧᵧ*x*y*y + vᵧᵧᵧ*y*y*y + 
         //   vₓₓ*x*x + vₓᵧ*x*y + vᵧᵧ*y*y + vₓ*x + vᵧ*y + v;
 
-        const xx = tp(x,x);  // <= error free
-        const xxx = sce(x,xx);
-        const yy = tp(y,y);  // <= error free
-        const yyy = sce(y,yy);
-        const xxy = sce(y,xx);
-        const xyy = sce(x,yy);
-        const xy = tp(x,y);  // <= error free
+        const xx = epr(xe,xe);  // <= error free
+        const xxx = epr(xe,xx);
+        const yy = epr(ye,ye);  // <= error free
+        const yyy = epr(ye,yy);
+        const xxy = epr(ye,xx);
+        const xyy = epr(xe,yy);
+        const xy = epr(xe,ye);  // <= error free
         const vₓₓₓxxx = epr(vₓₓₓ,xxx);
         const vₓₓᵧxxy = epr(vₓₓᵧ,xxy);
         const vₓᵧᵧxyy = epr(vₓᵧᵧ,xyy);
@@ -250,8 +286,8 @@ const γγ3 = γγ(3);
         const vₓₓxx = epr(vₓₓ,xx);
         const vₓᵧxy = epr(vₓᵧ,xy);
         const vᵧᵧyy = epr(vᵧᵧ,yy);
-        const vₓx = sce(x,vₓ);
-        const vᵧy = sce(y,vᵧ);
+        const vₓx = epr(xe,vₓ);
+        const vᵧy = epr(ye,vᵧ);
 
         const q1 = fes(vₓₓₓxxx,vₓₓᵧxxy);
         const q2 = fes(vₓᵧᵧxyy,vᵧᵧᵧyyy);

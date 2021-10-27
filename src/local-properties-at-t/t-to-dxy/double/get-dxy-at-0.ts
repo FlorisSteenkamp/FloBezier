@@ -18,19 +18,29 @@ function getDxyAt0(ps: number[][]): number[] {
             3*(x1 - x0),
             3*(y1 - y0)
 		]; // max bitlength increase 3
-	} else if (ps.length === 3) {
+	} 
+	
+	if (ps.length === 3) {
 		const [[x0,y0], [x1,y1]] = ps;
 		return [
             2*(x1 - x0),
             2*(y1 - y0),
 		]; // max bitlength increase 2
-	} else if (ps.length === 2) {
+	} 
+	
+	if (ps.length === 2) {
 		const [[x0,y0], [x1,y1]] = ps;
 		return [
             x1 - x0,
             y1 - y0,
 		]; // max bitlength increase 1
 	}
+
+	if (ps.length === 1) {
+		return [0,0];
+	}
+
+	throw new Error('The given bezier curve is invalid.');
 }
 
 

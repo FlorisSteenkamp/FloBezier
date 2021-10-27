@@ -2,6 +2,14 @@ import { isQuadFlat } from "../global-properties/type/is-quad-flat";
 import { splitAt } from "./split-merge-clone/split-at";
 
 
+/** Represents a single line in the polyline. */
+interface IPolylineNode {
+    ps: number[][],
+    prev: IPolylineNode;
+    next: IPolylineNode;
+}
+
+
 /**
  * Transforms the given quadratic bezier into a polyline approximation to within 
  * a given tolerance.
@@ -56,14 +64,15 @@ function quadToPolyline(
 
     // Polyline linked list
     let head: IPolylineNode = {
-        ps, 
-        prev: undefined,
-        next: undefined
+        ps,
+        prev: undefined!,  // keep TypeScript happy - it's ok, we'll set it later
+        next: undefined!   // keep TypeScript happy - it's ok, we'll set it later
     };
 
     stack.push(head);
     while (stack.length) {
-        const node = stack.pop();
+        // keep TypeScript happy; of course there'se something in the stack
+        const node = stack.pop()!;  
         
         if (isQuadFlat(node.ps, tolerance)) { continue; }
 
@@ -74,11 +83,11 @@ function quadToPolyline(
         const node1: IPolylineNode = {
             ps: quads[0], 
             prev,
-            next: undefined // to be set below
+            next: undefined! // keep TypeScript happy - it's ok, we'll set it later
         };
         const node2: IPolylineNode = {
             ps: quads[1], 
-            prev: undefined, // to be set below
+            prev: undefined!, // keep TypeScript happy - it's ok, we'll set it later
             next
         };
 
@@ -103,16 +112,6 @@ function quadToPolyline(
     }
     
     return linePs;
-}
-
-
-/**
- * Represents a single line in the polyline.
- */
-interface IPolylineNode {
-    ps: number[][],
-    prev: IPolylineNode;
-    next: IPolylineNode;
 }
 
 

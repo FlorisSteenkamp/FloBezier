@@ -21,7 +21,7 @@ const eSign = _eSign;
  * e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
  * 
  * * the implicit form is given by: `vₓx + vᵧy + v = 0`
- * * **precondition:** the coordinates of the given bezier must be 48-bit aligned
+ * * **precondition:** underflow/overflow
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
  * @param ps 
@@ -29,7 +29,7 @@ const eSign = _eSign;
  * @doc mdx
  */
 function getImplicitForm1Exact(
-        ps: number[][]): ImplicitFormExact1 {
+        ps: number[][]): ImplicitFormExact1 | undefined {
 
     return getImplicitForm1ExactPb(
         getXY1Exact(ps)
@@ -49,7 +49,7 @@ function getImplicitForm1Exact(
     pspb: [
             [number[], number], 
             [number[], number]
-        ]): ImplicitFormExact1 {
+        ]): ImplicitFormExact1 | undefined {
 
     const [[a1,a0], [b1,b0]] = pspb;
 

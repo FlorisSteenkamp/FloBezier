@@ -222,7 +222,7 @@ function geoClip(
 function quadraticRoots(
         a: number, 
         b: number, 
-        c: number): number[] {
+        c: number): number[] | undefined {
 
     if (a === 0) {
         if (b === 0) {
@@ -355,12 +355,14 @@ function quadraticRoots(
         rs.push(r1min < 0 ? 0 : r1min, r1max > 1 ? 1 : r1max);
     }
 
-    if (r2max < 0 || r2min > 1) {
+    // keep TypeScript happy; `r2max` cannot be `undefined` at this point
+    if (r2max! < 0 || r2min! > 1) {
         // root is outside of range
     } else {
         // we return the root interval pairs inline
         // at this stage r2min might be (slightly) < 0 and r2max > 1
-        rs.push(r2min < 0 ? 0 : r2min, r2max > 1 ? 1 : r2max);
+        // keep TypeScript happy; `r2max` cannot be `undefined` at this point
+        rs.push(r2min! < 0 ? 0 : r2min!, r2max! > 1 ? 1 : r2max!);
     }
 
     return rs;  // not ordered

@@ -7,7 +7,9 @@ import { distanceBetween } from "flo-vector2d";
  * 
  * @internal
  */
- function lengthBez1(interval: number[], ps: number[][]) {
+ function lengthBez1(
+	 	interval: number[], ps: number[][]): number {
+
 	let [t1, t2] = interval;
 	if (t1 === t2) { return 0; }
 

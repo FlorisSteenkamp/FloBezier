@@ -10,14 +10,25 @@ import { quadraticToCubic } from "./quadratic-to-cubic";
  * 
  * @doc mdx
  */
-function toCubic(ps: number[][]) {
-	if (ps.length === 2) { // Linear
-		return linearToCubic(ps); 
-	} else if (ps.length === 3) { // Quadratic
-		return quadraticToCubic(ps); 
-	} else if (ps.length === 4) { // Cubic
+function toCubic(ps: number[][]): number[][] {
+	if (ps.length === 4) { // Cubic
 		return ps;
 	}
+
+	if (ps.length === 3) { // Quadratic
+		return quadraticToCubic(ps); 
+	} 
+
+	if (ps.length === 2) { // Linear
+		return linearToCubic(ps); 
+	}
+	
+	if (ps.length === 1) { // Point
+		const p = ps[0];
+		return [p,p,p,p]; 
+	}
+
+	throw new Error('The given bezier curve is invalid.');
 }
 
 

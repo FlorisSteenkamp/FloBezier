@@ -172,6 +172,6 @@ function getXY1DdWithRunningError(
 export { 
 	getXY1DdWithRunningError, 
 	getXY2DdWithRunningError, 
-	getXY3DdWithRunningError 
+	getXY3DdWithRunningError
 }
 

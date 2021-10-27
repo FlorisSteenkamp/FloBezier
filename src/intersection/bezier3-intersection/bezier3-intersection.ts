@@ -30,6 +30,8 @@ const Δ = 2**(-43);  // 2**(-43) === 1.1368683772161603e-13
  * 
  * * returns an array that contains the `t` paramater pairs at intersection 
  * of the first and second bezier curves respectively.
+ * * returns `undefined` if there are an infinite number of intersections (i.e
+ * when the curves overlap *exactly*)
  * 
  * * the algorithm is based on a paper at http://scholarsarchive.byu.edu/cgi/viewcontent.cgi?article=2206&context=etd 
  * that finds the intersection of a fat line and a so-called geometric interval
@@ -40,7 +42,7 @@ const Δ = 2**(-43);  // 2**(-43) === 1.1368683772161603e-13
  * extremely slow due to sub-linear convergence (and similarly for all fatline
  * algorithms) in those cases; luckily this algorithm detects those cases and
  * reverts to implicitization with strict error bounds to guarantee accuracy
- * and efficiency (implicitization is roughly 10x slower but is rare)
+ * and efficiency (implicitization is roughly 5x slower but is rare)
  * 
  * @param ps1 a bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param ps2 another bezier curve
@@ -82,7 +84,8 @@ function bezier3Intersection(
     const maxIters = 60;
     while (stack.length !== 0 && iters < maxIters) {
         iters++;
-        const iter = stack.pop();
+        // keep TypeScript happy; `stack` cannot be empty here
+        const iter = stack.pop()!;
 
         if (__debug__ !== undefined && !__debug__.already) {
             __debug__.currentIter = iter;
@@ -221,9 +224,14 @@ function implicit(
         ps2: number[][]): number[][][] {
 
     const xPairs = bezierBezierIntersection(ps1,ps2);
-    if (!xPairs) { 
+    
+
+    // TODO
+    if (xPairs === undefined) { 
         // infinite intersections
-        return undefined; 
+        return undefined!;
+        // TODO - bang above
+        //return undefined;
     }
 
     return xPairs.map(xPair => {

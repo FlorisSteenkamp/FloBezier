@@ -68,20 +68,6 @@ function geo(
     } 
 }
 
-/*
-function createCanvas(pdiv: HTMLDivElement): HTMLCanvasElement {
-    const canvas = document.createElement('canvas');
-    canvas.width = 640;
-    canvas.height = 384;
-    //canvas.width = 6;
-    //canvas.height = 4;
-    canvas.className = 'some-canvas';
-    pdiv.appendChild(canvas);
-
-    return canvas;
-}
-*/
-
 
 function drawIntersectionsGeo(tss: number[][][], ps: number[][]) {
     //if (!ris) { return; }

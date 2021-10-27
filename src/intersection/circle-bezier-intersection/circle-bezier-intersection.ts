@@ -48,6 +48,9 @@ function circleBezierIntersection(
         poly = getCoeffsLinearDd(circle, ps);
         _polyE = getCoeffsLinearErrorCounters(circle, ps);
         getCoeffsExact = getCoeffsLinearExact;
+    } else {
+        // TODO - handle case of bezier curve being degenerate to a point
+        throw new Error('The given bezier curve is invalid');
     }
 
     const polyE = _polyE.map(e => γγ6*e);

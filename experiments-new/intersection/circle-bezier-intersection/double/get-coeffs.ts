@@ -45,7 +45,7 @@ function getCoeffsCubic(
  * 
  * @internal
  */
-function getCeoffsQuadratic(
+function getCoeffsQuadratic(
         circle: { center: number[], radius: number}, 
         ps: number[][]) {
 
@@ -77,7 +77,7 @@ function getCeoffsQuadratic(
  * 
  * @internal
  */
-function getCeoffsLine(
+function getCoeffsLine(
         circle: { center: number[], radius: number}, 
         ps: number[][]) {
 
@@ -98,4 +98,4 @@ function getCeoffsLine(
 }
 
 
-export { getCoeffsCubic, getCeoffsQuadratic, getCeoffsLine }
+export { getCoeffsCubic, getCoeffsQuadratic, getCoeffsLine }

@@ -19,40 +19,70 @@ function getDxyExact(
 		ps: number[][]): number[][][] {
 
 	if (ps.length === 4) {
-		const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
-
-		return [[
-			sce(3,eadd(td(x3,x0), sce(3,td(x1,x2)))),
-			sce(6,ge(ts(x2,x0), -2*x1)),
-			sce(3,td(x1,x0))
-		], [
-			sce(3,eadd(td(y3,y0), sce(3,td(y1,y2)))),
-			sce(6,ge(ts(y2,y0), -2*y1)),
-			sce(3,td(y1,y0))
-		]];
+		return getDxy3Exact(ps);
 	} 
 	
 	if (ps.length === 3) {
-		const [[x0,y0], [x1,y1], [x2,y2]] = ps;
-
-		return [[
-			ge(ts(2*x2,2*x0), -4*x1),
-			td(2*x1,2*x0),
-		], [
-			ge(ts(2*y2,2*y0), -4*y1),
-			td(2*y1,2*y0),
-		]];
+		return getDxy2Exact(ps);
 	} 
 	
 	if (ps.length === 2) {
-		const [[x0,y0], [x1,y1]] = ps;
-		return [[
-			td(x1,x0),
-		], [
-			td(y1,y0),
-		]];
+		return getDxy1Exact(ps);
 	}
+
+	// TODO - add case of degenerate point
+	throw new Error('The given bezier curve is invalid.');
 }
 
 
-export { getDxyExact }
+function getDxy3Exact(
+	ps: number[][]): number[][][] {
+
+	const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
+
+	return [[
+		sce(3,eadd(td(x3,x0), sce(3,td(x1,x2)))),
+		sce(6,ge(ts(x2,x0), -2*x1)),
+		sce(3,td(x1,x0))
+	], [
+		sce(3,eadd(td(y3,y0), sce(3,td(y1,y2)))),
+		sce(6,ge(ts(y2,y0), -2*y1)),
+		sce(3,td(y1,y0))
+	]];
+} 
+
+
+function getDxy2Exact(
+		ps: number[][]): number[][][] {
+
+	const [[x0,y0], [x1,y1], [x2,y2]] = ps;
+
+	return [[
+		ge(ts(2*x2,2*x0), -4*x1),
+		td(2*x1,2*x0),
+	], [
+		ge(ts(2*y2,2*y0), -4*y1),
+		td(2*y1,2*y0),
+	]];
+}
+
+
+function getDxy1Exact(
+		ps: number[][]): number[][][] {
+
+	const [[x0,y0], [x1,y1]] = ps;
+
+	return [[
+		td(x1,x0),
+	], [
+		td(y1,y0),
+	]];
+}
+
+
+export { 
+	getDxyExact,
+	getDxy1Exact,
+	getDxy2Exact,
+	getDxy3Exact
+}

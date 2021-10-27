@@ -63,7 +63,9 @@ function getBoundingBoxTight(ps: number[][]): number[][] {
  * 
  * @internal
  */
-function getNormalizedBoundingBox(ps: number[][], sinθ: number, cosθ: number) {
+function getNormalizedBoundingBox(
+		ps: number[][], sinθ: number, cosθ: number): number[][] {
+
 	const vectorToOrigin = ps[0].map(x => -x);
 	
 	const f = translate(vectorToOrigin);

@@ -28,6 +28,7 @@ const ediff = eDiff;
 
 
 /**
+ *  * TODO - not really tangent??, but closest?
  * Returns the polynomial whose roots are all the `t` values on the given bezier 
  * curve such that the line from the given point to the point on the bezier 
  * evaluated at `t` is tangent to the bezier at `t`.
@@ -36,28 +37,12 @@ const ediff = eDiff;
  * then the resulting coefficients are guaranteed to have max bitlength 106 (so it
  * can fit in a double-double)
  * 
- * @param ps An order 1, 2 or 3 bezier curve given by its control points.
- * @param p 
- * 
- * @doc
- */
-function getClosestOnBezierFromPointExact(ps: number[][], p: number[]) {
-    if (ps.length === 4) {
-        return getClosestOnBezier3FromPointExact(ps, p);
-    } else if (ps.length === 3) {
-        return getClosestOnBezier2FromPointExact(ps, p);
-    } else if (ps.length === 2) {
-        return getClosestOnBezier1FromPointExact(ps, p);
-    }
-}
-
-
-/**
- * * **precondition** coefficients of curve and point bit-aligned bitlength <= 46
  * @param ps 
  * @param p 
  */
-function getClosestOnBezier3FromPointExact(ps: number[][], p: number[]): number[][] {
+function getClosestOnBezier3FromPointExact(
+        ps: number[][], p: number[]): number[][] {
+
     //const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
     const p0 = ps[0];
     const p1 = ps[1];
@@ -155,7 +140,7 @@ function getClosestOnBezier3FromPointExact(ps: number[][], p: number[]): number[
 
 
 /**
- * * **precondition** coefficients of curve and point bit-aligned bitlength <= 49
+ * * **precondition** TODO underflow/overflow
  * @param ps 
  * @param p 
  */
@@ -254,7 +239,3 @@ export {
     getClosestOnBezier2FromPointExact,
     getClosestOnBezier1FromPointExact
 }
-
-
-// TODO (do we need/need to export this?)
-export { getClosestOnBezierFromPointExact }

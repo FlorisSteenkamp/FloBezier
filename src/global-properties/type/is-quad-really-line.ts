@@ -1,7 +1,9 @@
-import { operators } from "big-float-ts";
+import { eDiff, eSign, twoSum } from "big-float-ts";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const { twoProduct, eDiff, fastExpansionSum, eSign, twoSum } = operators;
+const ediff = eDiff;
+const esign = eSign;
+const ts = twoSum;
 
 const u = Number.EPSILON / 2;
 const abs = Math.abs;
@@ -13,7 +15,7 @@ const abs = Math.abs;
  * * the required condition is met if: `x0 + x2 = 2*x1` and `y0 + y2 = 2*y1`
  * * **exact:** for any input
  * 
- * @param ps a cubic bezier curve
+ * @param ps a quadratic bezier curve
  * 
  * @doc mdx
  */
@@ -50,8 +52,8 @@ function isQuadReallyLine(ps: number[][]) {
     // unable to filter - go slow and exact
 
     return (
-        eSign(eDiff(twoSum(x0, x2), [2*x1])) === 0 &&
-        eSign(eDiff(twoSum(y0, y2), [2*y1])) === 0
+        esign(ediff(ts(x0, x2), [2*x1])) === 0 &&
+        esign(ediff(ts(y0, y2), [2*y1])) === 0
     );
 }
 

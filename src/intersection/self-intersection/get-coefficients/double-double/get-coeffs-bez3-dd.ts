@@ -38,7 +38,7 @@ function getCoeffsBez3Dd(ps: number[][]) {
     const {
         coeffs: [[a3,a2,a1],[b3,b2,b1]],
         errorBound: [[a3_,a2_,a1_],[b3_,b2_,b1_]]
-    } = getXY3DdWithRunningError(ps);  // exact if max bit-aligned bitlength <= 49
+    } = getXY3DdWithRunningError(ps);
 
     const $a3 = a3[1];
     const $a2 = a2[1];

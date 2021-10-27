@@ -22,11 +22,21 @@
 function getXY(ps: number[][]): number[][] {
 	if (ps.length === 4) {
 		return getXY3(ps);
-	} else if (ps.length === 3) {
+	} 
+	
+	if (ps.length === 3) {
 		return getXY2(ps);
-	} else if (ps.length === 2) {
+	} 
+	
+	if (ps.length === 2) {
 		return getXY1(ps);
 	}
+
+	if (ps.length === 1) {
+		return getXY0(ps);
+	}
+
+	throw new Error('The given bezier curve is invalid.');
 }
 
 
@@ -75,4 +85,11 @@ function getXY1(ps: number[][]): number[][] {
 }
 
 
-export { getXY, getXY3, getXY2, getXY1 }
+function getXY0(ps: number[][]): number[][] {
+	const [[x0,y0]] = ps;
+	
+	return [[x0], [y0]];
+}
+
+
+export { getXY, getXY3, getXY2, getXY1, getXY0 }

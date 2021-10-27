@@ -21,7 +21,7 @@ function splitByMaxCurvature(
     const fromTo_ = fromTo(ps);
 
     while (tStack.length) {
-        const ts_ = tStack.pop();
+        const ts_ = tStack.pop()!;
         const ps_ = fromTo_(ts_[0], ts_[1]);
         //lengthUpperBound(ps) / distanceBetween(ps[0], ps[ps.length-1])
         if (flatness(ps_) > tolerance) {
