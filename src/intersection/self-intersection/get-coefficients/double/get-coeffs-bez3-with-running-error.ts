@@ -1,5 +1,5 @@
-import { γ } from "../../../../error-analysis/error-analysis.js";import { γ } from "../../../../error-analysis/error-analysis.js
-import { getXY3WithRunningError } from "../../../../to-power-basis/get-xy/double/get-xy-with-running-error";
+import { γ } from "../../../../error-analysis/error-analysis.js";
+import { getXY3WithRunningError } from "../../../../to-power-basis/get-xy/double/get-xy-with-running-error.js";
 
 const abs = Math.abs;
 const γ1 = γ(1);

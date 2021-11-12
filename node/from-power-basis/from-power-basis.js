@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.fromPowerBasis = void 0;
 /**
  * Returns the Bernstein basis representation (i.e. control points) of a line,
  * quadratic or cubic bezier given its power bases.
@@ -18,7 +15,7 @@ exports.fromPowerBasis = void 0;
 function fromPowerBasis(cs) {
     const len = cs[0].length;
     if (len === 4) {
-        let [[a3, a2, a1, a0], [b3, b2, b1, b0]] = cs;
+        const [[a3, a2, a1, a0], [b3, b2, b1, b0]] = cs;
         return [
             [a0,
                 b0],
@@ -30,8 +27,8 @@ function fromPowerBasis(cs) {
                 b0 + b1 + b2 + b3]
         ];
     }
-    else if (len === 3) {
-        let [[a2, a1, a0], [b2, b1, b0]] = cs;
+    if (len === 3) {
+        const [[a2, a1, a0], [b2, b1, b0]] = cs;
         return [
             [a0,
                 b0],
@@ -41,15 +38,23 @@ function fromPowerBasis(cs) {
                 b0 + b1 + b2]
         ];
     }
-    else if (len === 2) {
-        let [[a1, a0], [b1, b0]] = cs;
+    if (len === 2) {
+        const [[a1, a0], [b1, b0]] = cs;
         return [
             [a0,
                 b0],
             [a0 + a1,
-                b0 + b1],
+                b0 + b1]
         ];
     }
+    if (len === 1) {
+        const [[a0], [b0]] = cs;
+        return [
+            [a0,
+                b0]
+        ];
+    }
+    throw new Error('The given bezier curve is invalid.');
 }
-exports.fromPowerBasis = fromPowerBasis;
+export { fromPowerBasis };
 //# sourceMappingURL=from-power-basis.js.map

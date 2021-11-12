@@ -1,7 +1,7 @@
-import { from0ToT } from "./split-merge-clone/from-0-to-T.js";import { from0ToT } from "./split-merge-clone/from-0-to-T.jsimport { from0ToT } from "./split-merge-clone/from-0-to-T.jsimport { from0ToT } from "./split-merge-clone/from-0-to-T.js
-import { fromTTo1 } from "./split-merge-clone/from-T-to-1";
-import { evalDeCasteljau } from "../local-properties-at-t/t-to-xy/double/eval-de-casteljau";
-import { BezierPart } from "../bezier-part";
+import { from0ToT } from "./split-merge-clone/from-0-to-T.js";
+import { fromTTo1 } from "./split-merge-clone/from-T-to-1.js";
+import { evalDeCasteljau } from "../local-properties-at-t/t-to-xy/double/eval-de-casteljau.js";
+import { BezierPart } from "../bezier-part.js";
 
 
 /**

@@ -1,11 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCurvatureExtrema = void 0;
-const flo_poly_1 = require("flo-poly");
-const get_abs_curvature_extrema_polys_1 = require("./get-abs-curvature-extrema-polys");
-const is_line_1 = require("../global-properties/type/is-line");
-const is_cubic_really_quad_1 = require("../global-properties/type/is-cubic-really-quad");
-const to_quad_from_cubic_1 = require("../transformation/degree-or-type/to-quad-from-cubic");
+import { allRoots, differentiate, Horner as evaluatePoly } from "flo-poly";
+import { getAbsCurvatureExtremaPolys } from "./get-abs-curvature-extrema-polys.js";
+import { isLine } from "../global-properties/type/is-line.js";
+import { isCubicReallyQuad } from "../global-properties/type/is-cubic-really-quad.js";
+import { toQuadraticFromCubic } from "../transformation/degree-or-type/to-quad-from-cubic.js";
 /**
  * Returns the parameter `t` values (in `[0,1]`) of local minimum / maximum
  * absolute curvature for the given bezier curve.
@@ -22,35 +19,35 @@ const to_quad_from_cubic_1 = require("../transformation/degree-or-type/to-quad-f
  * @doc mdx
  */
 function getCurvatureExtrema(ps) {
-    if (is_line_1.isLine(ps)) {
+    if (isLine(ps)) {
         return { minima: [], maxima: [], inflections: [] };
     }
-    if (ps.length === 4 && is_cubic_really_quad_1.isCubicReallyQuad(ps)) {
-        ps = to_quad_from_cubic_1.toQuadraticFromCubic(ps);
+    if (ps.length === 4 && isCubicReallyQuad(ps)) {
+        ps = toQuadraticFromCubic(ps);
     }
     if (ps.length === 3) {
         const poly = getCurvatureExtremaQuadraticPoly(ps);
-        const maxima = flo_poly_1.allRoots(poly, 0, 1);
+        const maxima = allRoots(poly, 0, 1);
         return {
             minima: [],
             maxima,
             inflections: []
         };
     }
-    const polys = get_abs_curvature_extrema_polys_1.getAbsCurvatureExtremaPolys(ps);
+    const polys = getAbsCurvatureExtremaPolys(ps);
     const p1 = polys.inflectionPoly;
     const p2 = polys.otherExtremaPoly;
-    const ts = flo_poly_1.allRoots(p2, 0, 1);
+    const ts = allRoots(p2, 0, 1);
     // get second derivative (using product rule) to see if it is a local 
     // minimum or maximum, i.e. diff(p1*p2) = p1'*p2 + p1*p2' = dp1*p2 + p1*dp2
     // = p1*dp2 (since dp1*p2 === 0)
-    const dp2 = flo_poly_1.differentiate(p2);
+    const dp2 = differentiate(p2);
     const minima = [];
     const maxima = [];
     for (let i = 0; i < ts.length; i++) {
         const t = ts[i];
-        const dp2_ = flo_poly_1.Horner(dp2, t);
-        const p1_ = flo_poly_1.Horner(p1, t);
+        const dp2_ = evaluatePoly(dp2, t);
+        const p1_ = evaluatePoly(p1, t);
         const secondDerivative = p1_ * dp2_;
         if (secondDerivative >= 0) {
             minima.push(t);
@@ -59,10 +56,9 @@ function getCurvatureExtrema(ps) {
             maxima.push(t);
         }
     }
-    const inflections = flo_poly_1.allRoots(p1, 0, 1);
+    const inflections = allRoots(p1, 0, 1);
     return { minima, maxima, inflections };
 }
-exports.getCurvatureExtrema = getCurvatureExtrema;
 /**
  * Returns the polynomial whose zero is the t value of maximum absolute
  * curvature for the given *quadratic* bezier curve.
@@ -92,4 +88,5 @@ function getCurvatureExtremaQuadraticPoly(ps) {
     const d = wx * wx + wy * wy;
     return [d, -n];
 }
+export { getCurvatureExtrema };
 //# sourceMappingURL=get-curvature-extrema.js.map

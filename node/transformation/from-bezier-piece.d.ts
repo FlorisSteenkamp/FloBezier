@@ -1,4 +1,4 @@
-import { BezierPart } from "../bezier-part";
+import { BezierPart } from "../bezier-part.js";
 /**
  * Returns a new bezier from the given bezier by limiting its t range.
  *

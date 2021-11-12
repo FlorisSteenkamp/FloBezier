@@ -1,4 +1,3 @@
-
 import { lengthUpperBound } from "./length/length-upper-bound.js";
 import { distanceBetween } from "flo-vector2d";
 

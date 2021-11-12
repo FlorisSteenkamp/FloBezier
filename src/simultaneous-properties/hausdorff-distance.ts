@@ -1,5 +1,5 @@
-import { closestPointOnBezier } from './closest-point-on-bezier/closest-point-on-bezier.js';import { closestPointOnBezier } from './closest-point-on-bezier/closest-point-on-bezier.js
-import { splitByMaxCurveLength } from '../transformation/split-merge-clone/split-by-max-curve-length';
+import { closestPointOnBezier } from './closest-point-on-bezier/closest-point-on-bezier.js';
+import { splitByMaxCurveLength } from '../transformation/split-merge-clone/split-by-max-curve-length.js';
 import { distanceBetween } from 'flo-vector2d';
 import { evalDeCasteljau } from '../local-properties-at-t/t-to-xy/double/eval-de-casteljau.js';
 

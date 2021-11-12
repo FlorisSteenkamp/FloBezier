@@ -1,6 +1,6 @@
 import * as vector from 'flo-vector2d';
-import { isQuadObtuse } from "./is-quad-obtuse.js";import { isQuadObtuse } from "./is-quad-obtuse.js
-import { evalDeCasteljau } from '../../local-properties-at-t/t-to-xy/double/eval-de-casteljau';
+import { isQuadObtuse } from "./is-quad-obtuse.js";
+import { evalDeCasteljau } from '../../local-properties-at-t/t-to-xy/double/eval-de-casteljau.js';
 
 
 /**

@@ -1,9 +1,9 @@
 /*
 import type { RootInterval } from "flo-poly";
 import type { X } from './x';
-import { getIntervalBox } from "../../global-properties/bounds/get-interval-box/get-interval-box.js";import { getIntervalBox } from "../../global-properties/bounds/get-interval-box/get-interval-box.jsimport { getIntervalBox } from "../../global-properties/bounds/get-interval-box/get-interval-box.js
-import { intersectBoxes } from "../../boxes/intersect-boxes";
-import { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless';
+import { getIntervalBox } from "../../global-properties/bounds/get-interval-box/get-interval-box.js";
+import { intersectBoxes } from "../../boxes/intersect-boxes.js";
+import { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.js';
 
 
 /**

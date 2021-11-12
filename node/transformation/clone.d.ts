@@ -5,5 +5,5 @@
  *
  * @doc
  */
-declare function clone(ps: number[][]): number[][];
+declare function clone(ps: number[][]): number[][] | undefined;
 export { clone };

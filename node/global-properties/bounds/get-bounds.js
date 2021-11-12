@@ -1,16 +1,13 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getYBoundsTight = exports.getXBoundsTight = exports.getBounds = void 0;
-const get_dxy_1 = require("../../to-power-basis/get-dxy");
-const flo_poly_1 = require("flo-poly");
-const get_interval_box_1 = require("./get-interval-box/get-interval-box");
-const error_analysis_1 = require("../../error-analysis/error-analysis");
-const double_double_1 = require("double-double");
-const eval_de_casteljau_1 = require("../../local-properties-at-t/t-to-xy/eval-de-casteljau");
-const { sqrtWithErr, divWithErr } = double_double_1.operators;
+import { operators } from "double-double";
+import { allRoots } from "flo-poly";
+import { getDxy } from "../../to-power-basis/get-dxy/double/get-dxy.js";
+import { getIntervalBox } from "./get-interval-box/get-interval-box.js";
+import { γ } from "../../error-analysis/error-analysis.js";
+import { evalDeCasteljau } from "../../local-properties-at-t/t-to-xy/double/eval-de-casteljau.js";
+const { sqrtWithErr, divWithErr } = operators;
 const abs = Math.abs;
 const u = Number.EPSILON / 2;
-const γ1 = error_analysis_1.γ(1);
+const γ1 = γ(1);
 /**
  * Returns a tight axis-aligned bounding box bound of the given bezier curve.
  *
@@ -20,8 +17,8 @@ const γ1 = error_analysis_1.γ(1);
  * @internal
  */
 function getXBoundsTight(ps) {
-    let pS = ps[0];
-    let pE = ps[ps.length - 1];
+    const pS = ps[0];
+    const pE = ps[ps.length - 1];
     let minX;
     let maxX;
     if (pS[0] < pE[0]) {
@@ -35,7 +32,7 @@ function getXBoundsTight(ps) {
     if (ps.length === 2) {
         return { minX, maxX };
     }
-    let [dx,] = get_dxy_1.getDxy(ps); // <= exact if 48-bit aligned
+    const [dx,] = getDxy(ps);
     // Roots of derivative
     let rootsX;
     if (ps.length === 4) {
@@ -46,9 +43,9 @@ function getXBoundsTight(ps) {
     }
     // Test points
     for (let i = 0; i < rootsX.length; i++) {
-        let r = rootsX[i];
-        let ts = [r.r - r.rE, r.r + r.rE];
-        let box = get_interval_box_1.getIntervalBox(ps, ts);
+        const r = rootsX[i];
+        const ts = [r.r - r.rE, r.r + r.rE];
+        const box = getIntervalBox(ps, ts);
         if (box[0][0] < minX.box[0][0]) {
             minX = { ts, box };
         }
@@ -58,7 +55,6 @@ function getXBoundsTight(ps) {
     }
     return { minX, maxX };
 }
-exports.getXBoundsTight = getXBoundsTight;
 /**
  * Returns a tight axis-aligned bounding box bound of the given bezier curve.
  * @param ps an order 1, 2 or 3 bezier curve given as an array of control
@@ -67,8 +63,8 @@ exports.getXBoundsTight = getXBoundsTight;
  * @internal
  */
 function getYBoundsTight(ps) {
-    let pS = ps[0];
-    let pE = ps[ps.length - 1];
+    const pS = ps[0];
+    const pE = ps[ps.length - 1];
     let minY;
     let maxY;
     if (pS[1] < pE[1]) {
@@ -82,7 +78,7 @@ function getYBoundsTight(ps) {
     if (ps.length === 2) {
         return { minY, maxY };
     }
-    let [, dy] = get_dxy_1.getDxy(ps); // <= exact if 48-bit aligned
+    const [, dy] = getDxy(ps);
     // Roots of derivative
     let rootsY;
     if (ps.length === 4) {
@@ -93,9 +89,9 @@ function getYBoundsTight(ps) {
     }
     // Test points
     for (let i = 0; i < rootsY.length; i++) {
-        let r = rootsY[i];
-        let ts = [r.r - r.rE, r.r + r.rE];
-        let box = get_interval_box_1.getIntervalBox(ps, ts);
+        const r = rootsY[i];
+        const ts = [r.r - r.rE, r.r + r.rE];
+        const box = getIntervalBox(ps, ts);
         if (box[0][1] < minY.box[0][1]) {
             minY = { ts, box };
         }
@@ -105,13 +101,12 @@ function getYBoundsTight(ps) {
     }
     return { minY, maxY };
 }
-exports.getYBoundsTight = getYBoundsTight;
 /**
  * @internal
  */
 function getLinearRoots([a, b]) {
-    let r = -b / a;
-    let rE = u * abs(b / a);
+    const r = -b / a;
+    const rE = u * abs(b / a);
     if (r + rE > 0 && r - rE < 1) {
         return [{ r, rE }];
     }
@@ -130,12 +125,12 @@ function quadRoots([a, b, c]) {
     }
     // DD = discriminant = b^2 - 4ac
     // calculate DD and its absolute error DD_
-    let bb = b * b;
-    let bb_ = u * bb; // the error bound in b**2
-    let ac4 = 4 * a * c;
-    let ac4_ = 4 * u * abs(a * c);
-    let DD = bb - ac4;
-    let DD_ = bb_ + ac4_ + γ1 * abs(DD);
+    const bb = b * b;
+    const bb_ = u * bb; // the error bound in b**2
+    const ac4 = 4 * a * c;
+    const ac4_ = 4 * u * abs(a * c);
+    const DD = bb - ac4;
+    const DD_ = bb_ + ac4_ + γ1 * abs(DD);
     // If the discriminant is smaller than negative the error bound then
     // certainly there are no roots.
     if (DD <= -DD_) {
@@ -143,22 +138,22 @@ function quadRoots([a, b, c]) {
         return [];
     }
     // discriminant is definitely positive
-    let { est: D, err: D_ } = sqrtWithErr(DD, DD_);
+    const { est: D, err: D_ } = sqrtWithErr(DD, DD_);
     let q1;
     if (b >= 0) {
-        // let r1 = (-b - D) / 2*a;
-        // let r2 = (2*c) / (-b - D);
+        // const r1 = (-b - D) / 2*a;
+        // const r2 = (2*c) / (-b - D);
         q1 = -b - D;
     }
     else {
-        // let r2 = (-b + D) / 2*a;
-        // let r1 = (2*c) / (-b + D);
+        // const r2 = (-b + D) / 2*a;
+        // const r1 = (2*c) / (-b + D);
         q1 = -b + D;
     }
-    let q1_ = D_ + γ1 * abs(q1);
-    let { est: r1, err: r1_ } = divWithErr(q1, 2 * a, q1_, 0);
-    let { est: r2, err: r2_ } = divWithErr(2 * c, q1, 0, q1_);
-    let res = [];
+    const q1_ = D_ + γ1 * abs(q1);
+    const { est: r1, err: r1_ } = divWithErr(q1, 2 * a, q1_, 0);
+    const { est: r2, err: r2_ } = divWithErr(2 * c, q1, 0, q1_);
+    const res = [];
     if (r1 + r1_ > 0 && r1 - r1_ < 1) {
         res.push({ r: r1, rE: r1_ });
     }
@@ -178,15 +173,15 @@ function quadRoots([a, b, c]) {
  */
 function getBounds(ps) {
     // Roots of derivative
-    const dxy = get_dxy_1.getDxy(ps);
-    let rootsX = flo_poly_1.allRoots(dxy[0], 0, 1);
-    let rootsY = flo_poly_1.allRoots(dxy[1], 0, 1);
+    const dxy = getDxy(ps);
+    const rootsX = allRoots(dxy[0], 0, 1);
+    const rootsY = allRoots(dxy[1], 0, 1);
     // Endpoints
     rootsX.push(0, 1);
     rootsY.push(0, 1);
     let minX = Number.POSITIVE_INFINITY;
-    let minY = Number.POSITIVE_INFINITY;
     let maxX = Number.NEGATIVE_INFINITY;
+    let minY = Number.POSITIVE_INFINITY;
     let maxY = Number.NEGATIVE_INFINITY;
     let tMinX;
     let tMaxX;
@@ -194,8 +189,8 @@ function getBounds(ps) {
     let tMaxY;
     // Test points
     for (let i = 0; i < rootsX.length; i++) {
-        let t = rootsX[i];
-        let [x] = eval_de_casteljau_1.evalDeCasteljau(ps, t);
+        const t = rootsX[i];
+        const [x,] = evalDeCasteljau(ps, t);
         if (x < minX) {
             minX = x;
             tMinX = t;
@@ -206,8 +201,8 @@ function getBounds(ps) {
         }
     }
     for (let i = 0; i < rootsY.length; i++) {
-        let t = rootsY[i];
-        let [, y] = eval_de_casteljau_1.evalDeCasteljau(ps, t);
+        const t = rootsY[i];
+        const [, y] = evalDeCasteljau(ps, t);
         if (y < minY) {
             minY = y;
             tMinY = t;
@@ -217,9 +212,11 @@ function getBounds(ps) {
             tMaxY = t;
         }
     }
-    let ts = [[tMinX, tMinY], [tMaxX, tMaxY]];
-    let box = [[minX, minY], [maxX, maxY]];
+    // `tMinX`, ... is guaranteed defined below - TS was (understandably) 
+    // unable to follow the logic.
+    const ts = [[tMinX, tMinY], [tMaxX, tMaxY]];
+    const box = [[minX, minY], [maxX, maxY]];
     return { ts, box };
 }
-exports.getBounds = getBounds;
+export { getBounds, getXBoundsTight, getYBoundsTight };
 //# sourceMappingURL=get-bounds.js.map

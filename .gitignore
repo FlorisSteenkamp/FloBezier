@@ -1,11 +1,12 @@
-.nyc_output
 npm-debug.log
 papers
 research
-node_modules
+node_modules/
 c.bat
 experiments
 docs-create
 todo.txt
 experiments/
 experiments-new/
+notes.txt
+coverage/

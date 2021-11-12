@@ -1,6 +1,6 @@
-import { getDxy } from "../to-power-basis/get-dxy/double/get-dxy.js";import { getDxy } from "../to-power-basis/get-dxy/double/get-dxy.jsimport { getDxy } from "../to-power-basis/get-dxy/double/get-dxy.js
-import { getDdxy } from "../to-power-basis/get-ddxy/double/get-ddxy";
-import { getDddxy } from "../to-power-basis/get-dddxy/double/get-dddxy";
+import { getDxy } from "../to-power-basis/get-dxy/double/get-dxy.js";
+import { getDdxy } from "../to-power-basis/get-ddxy/double/get-ddxy.js";
+import { getDddxy } from "../to-power-basis/get-dddxy/double/get-dddxy.js";
 
 
 /**

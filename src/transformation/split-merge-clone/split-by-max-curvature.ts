@@ -1,5 +1,5 @@
-import { fromTo } from "./from-to.js";import { fromTo } from "./from-to.js
-import { flatness } from "../../global-properties/flatness";
+import { fromTo } from "./from-to.js";
+import { flatness } from "../../global-properties/flatness.js";
 
 
 /**

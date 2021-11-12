@@ -3,7 +3,7 @@
 import { evaluateExact } from "../local-properties-at-t/t-to-xy/exact/evaluate-exact.js";
 import { squaredDistanceBetween } from "flo-vector2d";
 import { allRootsCertified, mid } from "flo-poly";
-//import { getTangentPolyFromPointExact } from "../simultaneous-properties/closest-point-on-bezier/get-coeffs/exact/get-closest-on-bezier-from-point-exact";
+//import { getTangentPolyFromPointExact } from "../simultaneous-properties/closest-point-on-bezier/get-coeffs/exact/get-closest-on-bezier-from-point-exact.js";
 import { getClosestOnBezierFromPointExact } from "../simultaneous-properties/closest-point-on-bezier/get-coeffs/exact/get-closest-on-bezier-from-point-exact.js";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗

@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.reverse = void 0;
 /**
  * Returns the given points (e.g. bezier) in reverse order.
  *
@@ -11,5 +8,5 @@ exports.reverse = void 0;
 function reverse(ps) {
     return ps.slice().reverse();
 }
-exports.reverse = reverse;
+export { reverse };
 //# sourceMappingURL=reverse.js.map

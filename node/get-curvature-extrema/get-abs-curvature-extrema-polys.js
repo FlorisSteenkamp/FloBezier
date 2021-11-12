@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAbsCurvatureExtremaPolys = void 0;
-const get_dxy_1 = require("../to-power-basis/get-dxy");
-const get_ddxy_1 = require("../to-power-basis/get-ddxy");
-const get_dddxy_1 = require("../to-power-basis/get-dddxy");
+import { getDxy } from "../to-power-basis/get-dxy/double/get-dxy.js";
+import { getDdxy } from "../to-power-basis/get-ddxy/double/get-ddxy.js";
+import { getDddxy } from "../to-power-basis/get-dddxy/double/get-dddxy.js";
 /**
  * Returns the polynomials whose zeros are the t values of the local
  * minima / maxima of the absolute curvature for the given bezier curve.
@@ -27,9 +24,9 @@ function getAbsCurvatureExtremaPolys(ps) {
     // dd(kappa^2)/dt === (x′′y′ − x′y′′)*((x′′′y′ − x′y′′′)(x′2 + y′2) − 3(x′x′′ + y′y′′)(x′′y′ − x′y′′))
     // Inflection points at: (x′′y′ − x′y′′) === 0
     // Max abs curvature at: ((x′′′y′ − x′y′′′)(x′2 + y′2) − 3(x′x′′ + y′y′′)(x′′y′ − x′y′′)) === 0
-    const [[dx2, dx1, dx0], [dy2, dy1, dy0]] = get_dxy_1.getDxy(ps); // max bitlength increase === 5
-    const [[ddx1, ddx0], [ddy1, ddy0]] = get_ddxy_1.getDdxy(ps); // max bitlength increase === 6
-    const [dddx, dddy] = get_dddxy_1.getDddxy(ps); // max bitlength increase === 6
+    const [[dx2, dx1, dx0], [dy2, dy1, dy0]] = getDxy(ps); // max bitlength increase === 5
+    const [[ddx1, ddx0], [ddy1, ddy0]] = getDdxy(ps); // max bitlength increase === 6
+    const [dddx, dddy] = getDddxy(ps); // max bitlength increase === 6
     // ((x′′′y′ − x′y′′′)(x′2 + y′2) − 3(x′x′′ + y′y′′)(x′′y′ − x′y′′))
     // or 
     // x′′′x′x′y′ + x′′′y′y′y′ - y′′′x′x′x′ - y′′′x′y′y′ + 
@@ -123,5 +120,5 @@ function getAbsCurvatureExtremaPolys(ps) {
         otherExtremaPoly: [t5, t4, t3, t2, t1, t0]
     };
 }
-exports.getAbsCurvatureExtremaPolys = getAbsCurvatureExtremaPolys;
+export { getAbsCurvatureExtremaPolys };
 //# sourceMappingURL=get-abs-curvature-extrema-polys.js.map

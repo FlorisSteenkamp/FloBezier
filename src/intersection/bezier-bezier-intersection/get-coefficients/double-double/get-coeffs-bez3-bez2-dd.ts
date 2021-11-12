@@ -1,6 +1,6 @@
-import { γγ } from "../../../../error-analysis/error-analysis.js";import { γγ } from "../../../../error-analysis/error-analysis.jsimport { γγ } from "../../../../error-analysis/error-analysis.js
-import { getImplicitForm3DdWithRunningError } from "../../../../implicit-form/double-double/get-implicit-form3-dd-with-running-error";
-import { getXY2DdWithRunningError } from "../../../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error";
+import { γγ } from "../../../../error-analysis/error-analysis.js";
+import { getImplicitForm3DdWithRunningError } from "../../../../implicit-form/double-double/get-implicit-form3-dd-with-running-error.js";
+import { getXY2DdWithRunningError } from "../../../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js";
 import { twoProduct, ddMultBy2, ddMultDouble2, ddMultDd, ddAddDd } from "double-double";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗

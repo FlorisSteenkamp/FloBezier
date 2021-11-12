@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.clone = void 0;
 /**
  * Returns a clone of the given cubic bezier (with a different reference).
  *
@@ -10,17 +7,17 @@ exports.clone = void 0;
  */
 function clone(ps) {
     if (ps.length === 4) {
-        let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
+        const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
         return [[x0, y0], [x1, y1], [x2, y2], [x3, y3]];
     }
     else if (ps.length === 3) {
-        let [[x0, y0], [x1, y1], [x2, y2]] = ps;
+        const [[x0, y0], [x1, y1], [x2, y2]] = ps;
         return [[x0, y0], [x1, y1], [x2, y2]];
     }
     else if (ps.length === 2) {
-        let [[x0, y0], [x1, y1]] = ps;
+        const [[x0, y0], [x1, y1]] = ps;
         return [[x0, y0], [x1, y1]];
     }
 }
-exports.clone = clone;
+export { clone };
 //# sourceMappingURL=clone.js.map

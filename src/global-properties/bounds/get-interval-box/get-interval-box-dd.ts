@@ -1,6 +1,6 @@
-import { evalDeCasteljauDd } from '../../../local-properties-at-t/t-to-xy/double-double/eval-de-casteljau-dd.js';import { evalDeCasteljauDd } from '../../../local-properties-at-t/t-to-xy/double-double/eval-de-casteljau-dd.jsimport { evalDeCasteljauDd } from '../../../local-properties-at-t/t-to-xy/double-double/eval-de-casteljau-dd.js
-import { evalDeCasteljauError } from '../../../local-properties-at-t/t-to-xy/eval-de-casteljau-error';
-import { γγ } from '../../../error-analysis/error-analysis';
+import { evalDeCasteljauDd } from '../../../local-properties-at-t/t-to-xy/double-double/eval-de-casteljau-dd.js';
+import { evalDeCasteljauError } from '../../../local-properties-at-t/t-to-xy/eval-de-casteljau-error.js';
+import { γγ } from '../../../error-analysis/error-analysis.js';
 import { 
     ddDiffDd as ddDiffDd_, 
     ddDivDdWithError as ddDivDdWithError_, 

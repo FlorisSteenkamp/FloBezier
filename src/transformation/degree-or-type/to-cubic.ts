@@ -1,5 +1,5 @@
-import { linearToCubic } from "./linear-to-cubic.js";import { linearToCubic } from "./linear-to-cubic.js
-import { quadraticToCubic } from "./quadratic-to-cubic";
+import { linearToCubic } from "./linear-to-cubic.js";
+import { quadraticToCubic } from "./quadratic-to-cubic.js";
 
 
 /**

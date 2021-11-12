@@ -1,8 +1,8 @@
-import { getImplicitForm3 } from "../../implicit-form/double/get-implicit-form3.js";import { getImplicitForm3 } from "../../implicit-form/double/get-implicit-form3.jsimport { getImplicitForm3 } from "../../implicit-form/double/get-implicit-form3.jsimport { getImplicitForm3 } from "../../implicit-form/double/get-implicit-form3.jsimport { getImplicitForm3 } from "../../implicit-form/double/get-implicit-form3.js
-import { getImplicitForm3ErrorCounters } from "../../implicit-form/get-error-counters/get-implicit-form3-error-counters";
-import { getImplicitForm3DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form3-dd-with-running-error";
-import { getImplicitForm3Exact } from "../../implicit-form/exact/get-implicit-form3-exact";
-import { γ, γγ } from '../../../src/error-analysis/error-analysis';
+import { getImplicitForm3 } from "../../implicit-form/double/get-implicit-form3.js";
+import { getImplicitForm3ErrorCounters } from "../../implicit-form/get-error-counters/get-implicit-form3-error-counters.js";
+import { getImplicitForm3DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form3-dd-with-running-error.js";
+import { getImplicitForm3Exact } from "../../implicit-form/exact/get-implicit-form3-exact.js";
+import { γ, γγ } from '../../../src/error-analysis/error-analysis.js';
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { ddMultDd, ddAddDd } from "double-double";

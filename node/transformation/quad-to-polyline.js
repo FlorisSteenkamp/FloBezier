@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.quadToPolyline = void 0;
-const is_quad_flat_1 = require("../global-properties/type/is-quad-flat");
-const split_at_1 = require("./split-merge-clone/split-at");
+import { isQuadFlat } from "../global-properties/type/is-quad-flat.js";
+import { splitAt } from "./split-merge-clone/split-at.js";
 /**
  * Transforms the given quadratic bezier into a polyline approximation to within
  * a given tolerance.
@@ -13,7 +10,7 @@ const split_at_1 = require("./split-merge-clone/split-at");
  */
 function quadToPolyline(ps, tolerance) {
     // A quad bezier has the following useful properties (Let the control
-    // points be labeled P0, P1 and P2 respectively and let the point at t = 0.5
+    // points be labeled P0, P1 and P2 respectively and const the point at t = 0.5
     // be labeled M1):
     // -------------------------------------------------------------------------
     // * At t = 0.5 P1 has its maximum influence of 0.5 and P0 and P2 each an 
@@ -48,28 +45,29 @@ function quadToPolyline(ps, tolerance) {
     //     no  : split quad at t = 0.5 and push both halves onto the stack
     // Loop end
     // Stack with nodes still to be checked
-    let stack = [];
+    const stack = [];
     // Polyline linked list
     let head = {
         ps,
         prev: undefined,
-        next: undefined
+        next: undefined // keep TypeScript happy - it's ok, we'll set it later
     };
     stack.push(head);
     while (stack.length) {
-        let node = stack.pop();
-        if (is_quad_flat_1.isQuadFlat(node.ps, tolerance)) {
+        // keep TypeScript happy; of course there'se something in the stack
+        const node = stack.pop();
+        if (isQuadFlat(node.ps, tolerance)) {
             continue;
         }
-        let quads = split_at_1.splitAt(node.ps, 0.5);
-        let prev = node.prev;
-        let next = node.next;
-        let node1 = {
+        const quads = splitAt(node.ps, 0.5);
+        const prev = node.prev;
+        const next = node.next;
+        const node1 = {
             ps: quads[0],
             prev,
-            next: undefined // to be set below
+            next: undefined // keep TypeScript happy - it's ok, we'll set it later
         };
-        let node2 = {
+        const node2 = {
             ps: quads[1],
             prev: undefined,
             next
@@ -88,7 +86,7 @@ function quadToPolyline(ps, tolerance) {
         stack.push(node1);
         stack.push(node2);
     }
-    let linePs = [];
+    const linePs = [];
     let node = head;
     linePs.push(head.ps[0]);
     while (node) {
@@ -97,5 +95,5 @@ function quadToPolyline(ps, tolerance) {
     }
     return linePs;
 }
-exports.quadToPolyline = quadToPolyline;
+export { quadToPolyline };
 //# sourceMappingURL=quad-to-polyline.js.map

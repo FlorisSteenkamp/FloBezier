@@ -1,5 +1,5 @@
-import { fromTo } from "./from-to.js";import { fromTo } from "./from-to.js
-import { lengthUpperBound } from "../../global-properties/length/length-upper-bound";
+import { fromTo } from "./from-to.js";
+import { lengthUpperBound } from "../../global-properties/length/length-upper-bound.js";
 import { distanceBetween } from "flo-vector2d";
 
 

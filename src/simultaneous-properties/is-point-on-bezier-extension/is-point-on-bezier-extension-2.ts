@@ -1,7 +1,7 @@
-import { getImplicitForm2 } from "../../implicit-form/double/get-implicit-form2.js";import { getImplicitForm2 } from "../../implicit-form/double/get-implicit-form2.jsimport { getImplicitForm2 } from "../../implicit-form/double/get-implicit-form2.jsimport { getImplicitForm2 } from "../../implicit-form/double/get-implicit-form2.jsimport { getImplicitForm2 } from "../../implicit-form/double/get-implicit-form2.js
-import { getImplicitForm2ErrorCounters } from "../../implicit-form/get-error-counters/get-implicit-form2-error-counters";
-import { getImplicitForm2DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form2-dd-with-running-error";
-import { getImplicitForm2Exact } from "../../implicit-form/exact/get-implicit-form2-exact";
+import { getImplicitForm2 } from "../../implicit-form/double/get-implicit-form2.js";
+import { getImplicitForm2ErrorCounters } from "../../implicit-form/get-error-counters/get-implicit-form2-error-counters.js";
+import { getImplicitForm2DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form2-dd-with-running-error.js";
+import { getImplicitForm2Exact } from "../../implicit-form/exact/get-implicit-form2-exact.js";
 import { γ, γγ } from '../../../src/error-analysis/error-analysis';
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗

@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.cubicToQuadratic = void 0;
 /**
  * Returns the best least squares quadratic bezier approximation to the given
  * cubic bezier.
@@ -11,7 +8,7 @@ exports.cubicToQuadratic = void 0;
  * @doc
  */
 function cubicToQuadratic(ps) {
-    let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
+    const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
     return [
         [(19 / 20) * x0 + (3 / 20) * x1 + (-3 / 20) * x2 + (1 / 20) * x3,
             (19 / 20) * y0 + (3 / 20) * y1 + (-3 / 20) * y2 + (1 / 20) * y3],
@@ -21,5 +18,5 @@ function cubicToQuadratic(ps) {
             (1 / 20) * y0 + (-3 / 20) * y1 + (3 / 20) * y2 + (19 / 20) * y3]
     ];
 }
-exports.cubicToQuadratic = cubicToQuadratic;
+export { cubicToQuadratic };
 //# sourceMappingURL=cubic-to-quadratic.js.map

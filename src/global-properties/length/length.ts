@@ -1,7 +1,6 @@
-import { toString } from '../...js';import { toString } from '../...jsimport { toString } from '../...jsimport { toString } from '../...js
-import { lengthBez1 } from './length-bez1';
-import { lengthBez2 } from './length-bez2';
-import { lengthBez3 } from './length-bez3';
+import { lengthBez1 } from './length-bez1.js';
+import { lengthBez2 } from './length-bez2.js';
+import { lengthBez3 } from './length-bez3.js';
 
 
 /**

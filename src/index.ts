@@ -70,7 +70,7 @@ import { getCoeffsBez1Bez1Dd } from './intersection/bezier-bezier-intersection/g
 import { getCoeffsBez1Bez1Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez1-exact.js';
 
 import { getCoeffsBez3WithRunningError } from './intersection/self-intersection/get-coefficients/double/get-coeffs-bez3-with-running-error.js';
-//import { getCoeffsBez3Dd } from './intersection/self-intersection/get-coefficients/double-double/get-coeffs-bez3-dd';
+//import { getCoeffsBez3Dd } from './intersection/self-intersection/get-coefficients/double-double/get-coeffs-bez3-dd.js';
 import { getCoeffsBez3Exact } from './intersection/self-intersection/get-coefficients/exact/get-coeffs-bez3-exact.js';
 
 import { toExpansion } from './transformation/to-expansion.js';
@@ -80,10 +80,8 @@ import { getHodograph } from './transformation/get-hodograph.js';
 import { generateCuspAtHalf3 } from './create/generate-cusp-at-half-t.js';
 import { cubicThroughPointGiven013 } from './create/cubic-through-point-given013.js';
 import { bezierSelfIntersection } from './intersection/self-intersection/bezier-self-intersection.js';
-//import { getEndpointIntersections } from './intersection/get-endpoint-intersections';
-//import { inversion01Precise } from './intersection/inversion-01';
+//import { getEndpointIntersections } from './intersection/get-endpoint-intersections.js';
 import { tFromXY3 } from './local-properties-to-t/t-from-xy.js';
-//import { inversion1_BL52_1ULP } from './graveyard/inversion-old';
 
 import { getXY       } from './to-power-basis/get-xy/double/get-xy.js';
 import { getDxy      } from './to-power-basis/get-dxy/double/get-dxy.js';
@@ -98,8 +96,7 @@ import { normal      } from './local-properties-at-t/normal.js';
 import { from0ToT    } from './transformation/split-merge-clone/from-0-to-T.js';
 import { fromTTo1    } from './transformation/split-merge-clone/from-T-to-1.js';
 import { fromTo, fromToPrecise } from './transformation/split-merge-clone/from-to.js';
-// TODO - maybe we need this in another lib??
-//import { getOtherTs } from './intersection/bezier-bezier-intersection/get-other-ts';
+//import { getOtherTs } from './intersection/bezier-bezier-intersection/get-other-ts.js';
 import { bezierBezierIntersection } from './intersection/bezier-bezier-intersection/bezier-bezier-intersection.js';
 import { toCubic } from './transformation/degree-or-type/to-cubic.js';
 import { κ, curvature } from './local-properties-at-t/curvature.js';

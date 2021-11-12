@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.fromTTo1 = void 0;
-const split_at_1 = require("./split-at");
+import { splitAt } from "./split-at.js";
 /**
  * Returns an order 1, 2 or 3 bezier curve that starts at the given t parameter
  * and ends at t=1.
@@ -16,7 +13,20 @@ const split_at_1 = require("./split-at");
  * @doc
  */
 function fromTTo1(ps, t) {
-    return split_at_1.splitAt(ps, t)[1];
+    return splitAt(ps, t)[1];
 }
-exports.fromTTo1 = fromTTo1;
+/*
+function fromTTo1(ps: number[][], t: number): number[][] {
+    const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
+    
+    const xs = [x0,x1,x2,x3];
+    const ys = [y0,y1,y2,y3];
+
+    const [x0_, x1_, x2_, x3_] = deCasteljau(xs, t)[1];
+    const [y0_, y1_, y2_, y3_] = deCasteljau(ys, t)[1];
+
+    return [[x0_, y0_], [x1_, y1_], [x2_, y2_], [x3_, y3_]];
+}
+*/
+export { fromTTo1 };
 //# sourceMappingURL=from-T-to-1.js.map

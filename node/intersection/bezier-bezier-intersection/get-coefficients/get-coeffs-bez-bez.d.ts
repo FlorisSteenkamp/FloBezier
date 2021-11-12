@@ -1,7 +1,7 @@
 /**
  * Returns an object with properties containing (1) the coefficients (in double-double
  * precision) of a polynomial in 1 variable whose roots are the parameter values
- * of the intersection points of two given order 1, 2 or 3 bezier curves (i.e. lines,
+ * (of the second curve) of the intersection points of two given order 1, 2 or 3 bezier curves (i.e. lines,
  * quadratic and cubic bezier curves), (2) the coefficientwise error bound of the polyomial,
  * and (3) a function that returns the *exact* polynomial coefficients as Shewchuck expansions.
  *
@@ -9,16 +9,12 @@
  * double-double precision floating point numbers from highest to lowest power,
  * e.g. `[[0,5],[0,-3],[0,0]]` represents the polynomial `5x^2 - 3x`.
  *
+ * // TODO
  * * **precondition:** the coordinates of the given bezier curves must be
- * 47-bit aligned
- * * if all polynomial coefficients are exactly zero `undefined` is returned
- * so that is easy to check if the two curves are actually identical
- * algebraically (i.e. provided endpoints are ignored)
- * * intermediate calculations are done in double-double precision and this is
- * reflected in the output coefficient-wise error bound (which is approximately
- * `n * (Number.EPSILON**2) * the condition number`, where roughly `1 < n < 100` and
- * depends on the specific calculation, e.g. the order of the bezier curves)
- * * the error bound returned need **not** be scaled before use
+ * such that underflow / overflow cannot occur
+ * * if there is an infinite number of intersections `undefined` is returned
+ * * intermediate calculations are done in double-double precision with
+ * fallback to infinite precision (bar underflow / overflow)
  *
  * @param ps1
  * @param ps2

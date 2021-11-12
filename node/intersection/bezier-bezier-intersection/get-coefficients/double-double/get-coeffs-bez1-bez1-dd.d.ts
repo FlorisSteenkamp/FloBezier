@@ -10,14 +10,13 @@
  * double-double precision floating point numbers from highest to lowest power,
  * e.g. `[[0,5],[0,-3],[0,0]]` represents the polynomial `5x^2 - 3x`.
  *
- * * **precondition:** the coordinates of the given bezier curves must be
- * 47-bit aligned
+ * * **precondition:** none TODO - include underflow / overflow
  * * intermediate calculations are done in double-double precision and the
  * result is exact if the precondition is met
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  *
- * @param ps1
- * @param ps2
+ * @param ps1 a linear bezier curve
+ * @param ps2 a linear bezier curve
  *
  * @doc mdx
  */

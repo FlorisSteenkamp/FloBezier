@@ -1,5 +1,5 @@
 /**
- * Returns true if the given bezier curve is really a quadratic curve.
+ * Returns true if the given cubic bezier curve is really a quadratic curve.
  *
  * * **exact:** for any bitlength of the coefficients
  *

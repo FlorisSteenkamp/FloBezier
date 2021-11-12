@@ -1,8 +1,5 @@
-
 import { expect, assert } from 'chai';
-//import { describe } from 'mocha';
-import 'mocha';
-import { estimate, expansionDiff, qNegativeOf } from 'flo-numerical';
+import { eEstimate, eDiff } from 'big-float-ts';
 import { toGrid } from '../../helpers/to-grid'
 import { 
     //getCoeffsBez3Bez3,
@@ -74,15 +71,15 @@ function testCoeffs(
         let rExact = exact[i];
         let errBound = est.errBound[i];
 
-        let errActual = Math.abs(estimate(
-            expansionDiff(rExact, [rEst])
+        let errActual = Math.abs(eEstimate(
+            eDiff(rExact, [rEst])
         ));
 
         let errStr = `
         --------
         quad       : false
         indx       : ${i}
-        rExact     : ${estimate(rExact)} (est)
+        rExact     : ${eEstimate(rExact)} (est)
         rEst       : ${rEst}
         errActual  : ${errActual}
         errBound   : ${errBound}`;
@@ -112,8 +109,8 @@ function testCoeffsQuad(
         let rExact = exact[i];
         let errBound = est.errBound[i];
 
-        let errActual = Math.abs(estimate(
-            expansionDiff(rExact, rEst)
+        let errActual = Math.abs(eEstimate(
+            eDiff(rExact, rEst)
         ));
 
         let errStr = `
@@ -169,7 +166,7 @@ function estimateDd(x: number[]) {
     const v = eCompress(x);
     const vv = v[v.length-1];
     const v2 = v.slice(0,-1);
-    const ve = estimate(v2);
+    const ve = eEstimate(v2);
 
     return [ve, vv];
 }

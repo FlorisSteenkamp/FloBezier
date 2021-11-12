@@ -1,7 +1,7 @@
 import type { ImplicitForm1Coeffs } from "../../implicit-form/implicit-form-types";
 import { allRoots } from 'flo-poly';
-import { getImplicitCoeffsBez1Bez1 } from "./get-coefficients/double/get-implicit-coeffs-bez1-bez1.js";import { getImplicitCoeffsBez1Bez1 } from "./get-coefficients/double/get-implicit-coeffs-bez1-bez1.js
-import { evaluateImplicit1 } from '../../implicit-form/evaluate/double/evaluate-implicit1';
+import { getImplicitCoeffsBez1Bez1 } from "./get-coefficients/double/get-implicit-coeffs-bez1-bez1.js";
+import { evaluateImplicit1 } from '../../implicit-form/evaluate/double/evaluate-implicit1.js';
 
 
 // not limited to bezier curves, e.g. can include ellipses, etc.

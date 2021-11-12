@@ -1,27 +1,25 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.equal = void 0;
 /**
- * Returns true if the two beziers are deeply equal
+ * Returns true if the two given bezier curves are exactly equal when compared
+ * by value (deep equality)
  *
- * @param psA an order 2, 3 or 4 bezier curve
- * @param psB another bezier curve
+ * @param ps1 an order 1, 2 or 3 bezier curve
+ * @param ps2 another bezier curve
  *
  * @doc
  */
-function equal(psA, psB) {
-    if (psA === psB) {
+function equal(ps1, ps2) {
+    if (ps1 === ps2) {
         return true;
     }
-    if (psA.length !== psB.length) {
+    if (ps1.length !== ps2.length) {
         return false;
     }
-    for (let i = 0; i < psA.length; i++) {
-        if (psA[i][0] !== psB[i][0] || psA[i][1] !== psB[i][1]) {
+    for (let i = 0; i < ps1.length; i++) {
+        if (ps1[i][0] !== ps2[i][0] || ps1[i][1] !== ps2[i][1]) {
             return false;
         }
     }
     return true;
 }
-exports.equal = equal;
+export { equal };
 //# sourceMappingURL=equal.js.map

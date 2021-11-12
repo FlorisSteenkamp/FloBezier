@@ -1,26 +1,28 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.toCubic = void 0;
-const linear_to_cubic_1 = require("./linear-to-cubic");
-const quadratic_to_cubic_1 = require("./quadratic-to-cubic");
+import { linearToCubic } from "./linear-to-cubic.js";
+import { quadraticToCubic } from "./quadratic-to-cubic.js";
 /**
  * Returns a cubic bezier curve that is equivalent to the given linear or
  * quadratic bezier curve. Cubics are just returned unaltered.
  *
  * @param ps An order 1, 2 or 3 bezier curve
  *
- * @doc
+ * @doc mdx
  */
 function toCubic(ps) {
-    if (ps.length === 2) { // Linear
-        return linear_to_cubic_1.linearToCubic(ps);
-    }
-    else if (ps.length === 3) { // Quadratic
-        return quadratic_to_cubic_1.quadraticToCubic(ps);
-    }
-    else if (ps.length === 4) { // Cubic
+    if (ps.length === 4) { // Cubic
         return ps;
     }
+    if (ps.length === 3) { // Quadratic
+        return quadraticToCubic(ps);
+    }
+    if (ps.length === 2) { // Linear
+        return linearToCubic(ps);
+    }
+    if (ps.length === 1) { // Point
+        const p = ps[0];
+        return [p, p, p, p];
+    }
+    throw new Error('The given bezier curve is invalid.');
 }
-exports.toCubic = toCubic;
+export { toCubic };
 //# sourceMappingURL=to-cubic.js.map

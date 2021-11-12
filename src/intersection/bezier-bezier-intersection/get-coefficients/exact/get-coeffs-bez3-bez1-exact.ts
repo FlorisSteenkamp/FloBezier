@@ -6,10 +6,10 @@ import {
     twoProduct, expansionProduct, fastExpansionSum, scaleExpansion2, 
     eMultBy2, eSign as _eSign
 } from "big-float-ts";
-import { getCoeffsBez2Bez1Exact } from "./get-coeffs-bez2-bez1-exact.js";import { getCoeffsBez2Bez1Exact } from "./get-coeffs-bez2-bez1-exact.jsimport { getCoeffsBez2Bez1Exact } from "./get-coeffs-bez2-bez1-exact.jsimport { getCoeffsBez2Bez1Exact } from "./get-coeffs-bez2-bez1-exact.js
-import { toQuadraticFromCubic } from "../../../../transformation/degree-or-type/to-quad-from-cubic";
-import { getImplicitForm3ExactPb } from "../../../../implicit-form/exact/get-implicit-form3-exact";
-import { isPointOnBezierExtension } from "../../../../simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension";
+import { getCoeffsBez2Bez1Exact } from "./get-coeffs-bez2-bez1-exact.js";
+import { toQuadraticFromCubic } from "../../../../transformation/degree-or-type/to-quad-from-cubic.js";
+import { getImplicitForm3ExactPb } from "../../../../implicit-form/exact/get-implicit-form3-exact.js";
+import { isPointOnBezierExtension } from "../../../../simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension.js";
 
 const tp  = twoProduct;    // error -> 0
 const sce = scaleExpansion2;

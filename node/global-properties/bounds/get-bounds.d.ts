@@ -1,12 +1,4 @@
-/**
- * Returns a tight axis-aligned bounding box bound of the given bezier curve.
- *
- * @param ps an order 1, 2 or 3 bezier curve given as an array of control
- * points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- *
- * @internal
- */
-declare function getXBoundsTight(ps: number[][]): {
+declare type XBounds = {
     minX: {
         ts: number[];
         box: number[][];
@@ -16,14 +8,7 @@ declare function getXBoundsTight(ps: number[][]): {
         box: number[][];
     };
 };
-/**
- * Returns a tight axis-aligned bounding box bound of the given bezier curve.
- * @param ps an order 1, 2 or 3 bezier curve given as an array of control
- * points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- *
- * @internal
- */
-declare function getYBoundsTight(ps: number[][]): {
+declare type YBounds = {
     minY: {
         ts: number[];
         box: number[][];
@@ -33,6 +18,23 @@ declare function getYBoundsTight(ps: number[][]): {
         box: number[][];
     };
 };
+/**
+ * Returns a tight axis-aligned bounding box bound of the given bezier curve.
+ *
+ * @param ps an order 1, 2 or 3 bezier curve given as an array of control
+ * points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ *
+ * @internal
+ */
+declare function getXBoundsTight(ps: number[][]): XBounds;
+/**
+ * Returns a tight axis-aligned bounding box bound of the given bezier curve.
+ * @param ps an order 1, 2 or 3 bezier curve given as an array of control
+ * points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ *
+ * @internal
+ */
+declare function getYBoundsTight(ps: number[][]): YBounds;
 /**
  * Returns the axis-aligned bounding box together with the t values where the
  * bounds on the bezier are reached.

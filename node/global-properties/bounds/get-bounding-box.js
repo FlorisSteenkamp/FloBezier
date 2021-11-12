@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBoundingBox = void 0;
-const get_bounds_1 = require("./get-bounds");
+import { getXBoundsTight, getYBoundsTight } from "./get-bounds.js";
 /**
  * Returns an axis-aligned bounding box of the given order 1, 2 or 3 bezier
  * curve given as an array of 2 points, e.g. `[[1,2], [3,4]]`.
@@ -17,12 +14,12 @@ const get_bounds_1 = require("./get-bounds");
  */
 // TODO - why not just use getIntervalBox
 function getBoundingBox(ps) {
-    const xBounds = get_bounds_1.getXBoundsTight(ps);
-    const yBounds = get_bounds_1.getYBoundsTight(ps);
+    const xBounds = getXBoundsTight(ps);
+    const yBounds = getYBoundsTight(ps);
     return [
         [xBounds.minX.box[0][0], yBounds.minY.box[0][1]],
         [xBounds.maxX.box[1][0], yBounds.maxY.box[1][1]]
     ];
 }
-exports.getBoundingBox = getBoundingBox;
+export { getBoundingBox };
 //# sourceMappingURL=get-bounding-box.js.map

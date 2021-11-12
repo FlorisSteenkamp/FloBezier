@@ -1,15 +1,15 @@
 import type { ImplicitFormExact3 } from "../../../../implicit-form/implicit-form-types";
-import { getImplicitForm3ExactPb } from "../../../../implicit-form/exact/get-implicit-form3-exact.js";import { getImplicitForm3ExactPb } from "../../../../implicit-form/exact/get-implicit-form3-exact.js
-import { getXY3Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact";
+import { getImplicitForm3ExactPb } from "../../../../implicit-form/exact/get-implicit-form3-exact.js";
+import { getXY3Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact.js";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { 
     twoProduct, expansionProduct, fastExpansionSum, scaleExpansion2, 
     eMultBy2, eSign as _eSign
 } from "big-float-ts";
-import { getCoeffsBez3Bez2Exact } from "./get-coeffs-bez3-bez2-exact.js";import { getCoeffsBez3Bez2Exact } from "./get-coeffs-bez3-bez2-exact.jsimport { getCoeffsBez3Bez2Exact } from "./get-coeffs-bez3-bez2-exact.js
-import { toQuadraticFromCubic } from "../../../../transformation/degree-or-type/to-quad-from-cubic";
-import { getCoeffsBez2Bez3Exact } from "./get-coeffs-bez2-bez3-exact";
+import { getCoeffsBez3Bez2Exact } from "./get-coeffs-bez3-bez2-exact.js";
+import { toQuadraticFromCubic } from "../../../../transformation/degree-or-type/to-quad-from-cubic.js";
+import { getCoeffsBez2Bez3Exact } from "./get-coeffs-bez2-bez3-exact.js";
 
 const tp  = twoProduct;    // error -> 0
 const sce = scaleExpansion2;

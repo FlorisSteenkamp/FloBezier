@@ -1,12 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.toHybridQuadratic = void 0;
 /**
  * Returns the hybrid quadratic version of the given cubic bezier. For a
- * definition of hybrid quadratic bezier curves see this paper:
+ * definition of hybrid quadratic bezier curves please see this paper:
  * http://scholarsarchive.byu.edu/cgi/viewcontent.cgi?article=2206&context=etd
  *
- * * returns An array of three quadratic bezier points where the
+ * * returns an array of three quadratic bezier points where the
  * middle point is a 'hybrid' point represented as a line (itself represented
  * by two points (a linear bezier curve)) which can be evaluated at a different
  * t value (call it th). If evaluated at the same t value the result is the same
@@ -18,11 +15,11 @@ exports.toHybridQuadratic = void 0;
  *
  * @param ps a cubic bezier curve.
  *
- * @doc
+ * @doc mdx
  */
 function toHybridQuadratic(ps) {
     if (ps.length === 4) {
-        let [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
+        const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
         return [
             [x0, y0],
             [
@@ -32,6 +29,7 @@ function toHybridQuadratic(ps) {
             [x3, y3] // evaluated at t
         ];
     }
+    throw new Error('The given bezier curve is invalid (it must be a cubic)');
 }
-exports.toHybridQuadratic = toHybridQuadratic;
+export { toHybridQuadratic };
 //# sourceMappingURL=to-hybrid-quadratic.js.map

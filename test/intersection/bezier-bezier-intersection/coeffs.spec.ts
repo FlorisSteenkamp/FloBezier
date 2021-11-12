@@ -2,7 +2,7 @@
 import { expect, assert } from 'chai';
 //import { describe } from 'mocha';
 import 'mocha';
-import { estimate, expansionDiff, qNegativeOf } from 'flo-numerical';
+import { eEstimate, eDiff } from 'big-float-ts';
 import { toGrid } from '../../helpers/to-grid'
 import { 
     getCoeffsBez3Bez3, getCoeffsBez3Bez3Dd, getCoeffsBez3Bez3Exact,
@@ -125,8 +125,8 @@ function testCoeffs(
         let rExact = exact[i];
         let errBound = est.errBound[i];
 
-        let errActual = Math.abs(estimate(
-            expansionDiff(rExact, [rEst])
+        let errActual = Math.abs(eEstimate(
+            eDiff(rExact, [rEst])
         ));
 
         let errStr = `
@@ -134,7 +134,7 @@ function testCoeffs(
         quad       : false
         bez-orders : ${j}x${k}
         indx       : ${i}
-        rExact     : ${estimate(rExact)} (est)
+        rExact     : ${eEstimate(rExact)} (est)
         rEst       : ${rEst}
         errActual  : ${errActual}
         errBound   : ${errBound}`;
@@ -165,8 +165,8 @@ function testCoeffsQuad(
         let rExact = exact[i];
         let errBound = est.errBound[i];
 
-        let errActual = Math.abs(estimate(
-            expansionDiff(rExact, rEst)
+        let errActual = Math.abs(eEstimate(
+            eDiff(rExact, rEst)
         ));
 
         let errStr = `
@@ -174,8 +174,8 @@ function testCoeffsQuad(
         quad       : true
         bez-orders : ${j}x${k}
         indx       : ${i}
-        rExact     : ${estimate(rExact)} (est)
-        rEst       : ${estimate(rEst)}
+        rExact     : ${eEstimate(rExact)} (est)
+        rEst       : ${eEstimate(rEst)}
         errActual  : ${errActual}
         errBound   : ${errBound}`;
 

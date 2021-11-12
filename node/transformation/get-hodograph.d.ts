@@ -9,5 +9,5 @@
  *
  * @doc
  */
-declare function getHodograph(ps: number[][]): number[][];
+declare function getHodograph(ps: number[][]): number[][] | undefined;
 export { getHodograph };

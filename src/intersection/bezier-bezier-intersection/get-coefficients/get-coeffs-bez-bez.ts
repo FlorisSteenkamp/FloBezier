@@ -1,21 +1,21 @@
-import { getCoeffsBez1Bez1Dd } from './double-double/get-coeffs-bez1-bez1-dd.js';import { getCoeffsBez1Bez1Dd } from './double-double/get-coeffs-bez1-bez1-dd.jsimport { getCoeffsBez1Bez1Dd } from './double-double/get-coeffs-bez1-bez1-dd.jsimport { getCoeffsBez1Bez1Dd } from './double-double/get-coeffs-bez1-bez1-dd.jsimport { getCoeffsBez1Bez1Dd } from './double-double/get-coeffs-bez1-bez1-dd.jsimport { getCoeffsBez1Bez1Dd } from './double-double/get-coeffs-bez1-bez1-dd.jsimport { getCoeffsBez1Bez1Dd } from './double-double/get-coeffs-bez1-bez1-dd.jsimport { getCoeffsBez1Bez1Dd } from './double-double/get-coeffs-bez1-bez1-dd.jsimport { getCoeffsBez1Bez1Dd } from './double-double/get-coeffs-bez1-bez1-dd.jsimport { getCoeffsBez1Bez1Dd } from './double-double/get-coeffs-bez1-bez1-dd.jsimport { getCoeffsBez1Bez1Dd } from './double-double/get-coeffs-bez1-bez1-dd.jsimport { getCoeffsBez1Bez1Dd } from './double-double/get-coeffs-bez1-bez1-dd.jsimport { getCoeffsBez1Bez1Dd } from './double-double/get-coeffs-bez1-bez1-dd.jsimport { getCoeffsBez1Bez1Dd } from './double-double/get-coeffs-bez1-bez1-dd.jsimport { getCoeffsBez1Bez1Dd } from './double-double/get-coeffs-bez1-bez1-dd.jsimport { getCoeffsBez1Bez1Dd } from './double-double/get-coeffs-bez1-bez1-dd.jsimport { getCoeffsBez1Bez1Dd } from './double-double/get-coeffs-bez1-bez1-dd.jsimport { getCoeffsBez1Bez1Dd } from './double-double/get-coeffs-bez1-bez1-dd.js
-import { getCoeffsBez2Bez1Dd } from './double-double/get-coeffs-bez2-bez1-dd';
-import { getCoeffsBez3Bez1Dd } from './double-double/get-coeffs-bez3-bez1-dd';
-import { getCoeffsBez1Bez2Dd } from './double-double/get-coeffs-bez1-bez2-dd';
-import { getCoeffsBez2Bez2Dd } from './double-double/get-coeffs-bez2-bez2-dd';
-import { getCoeffsBez3Bez2Dd } from './double-double/get-coeffs-bez3-bez2-dd';
-import { getCoeffsBez1Bez3Dd } from './double-double/get-coeffs-bez1-bez3-dd';
-import { getCoeffsBez2Bez3Dd } from './double-double/get-coeffs-bez2-bez3-dd';
-import { getCoeffsBez3Bez3Dd } from './double-double/get-coeffs-bez3-bez3-dd';
-import { getCoeffsBez1Bez1Exact } from './exact/get-coeffs-bez1-bez1-exact';
-import { getCoeffsBez2Bez1Exact } from './exact/get-coeffs-bez2-bez1-exact';
-import { getCoeffsBez3Bez1Exact } from './exact/get-coeffs-bez3-bez1-exact';
-import { getCoeffsBez1Bez2Exact } from './exact/get-coeffs-bez1-bez2-exact';
-import { getCoeffsBez2Bez2Exact } from './exact/get-coeffs-bez2-bez2-exact';
-import { getCoeffsBez3Bez2Exact } from './exact/get-coeffs-bez3-bez2-exact';
-import { getCoeffsBez1Bez3Exact } from './exact/get-coeffs-bez1-bez3-exact';
-import { getCoeffsBez2Bez3Exact } from './exact/get-coeffs-bez2-bez3-exact';
-import { getCoeffsBez3Bez3Exact } from './exact/get-coeffs-bez3-bez3-exact';
+import { getCoeffsBez1Bez1Dd } from './double-double/get-coeffs-bez1-bez1-dd.js';
+import { getCoeffsBez2Bez1Dd } from './double-double/get-coeffs-bez2-bez1-dd.js';
+import { getCoeffsBez3Bez1Dd } from './double-double/get-coeffs-bez3-bez1-dd.js';
+import { getCoeffsBez1Bez2Dd } from './double-double/get-coeffs-bez1-bez2-dd.js';
+import { getCoeffsBez2Bez2Dd } from './double-double/get-coeffs-bez2-bez2-dd.js';
+import { getCoeffsBez3Bez2Dd } from './double-double/get-coeffs-bez3-bez2-dd.js';
+import { getCoeffsBez1Bez3Dd } from './double-double/get-coeffs-bez1-bez3-dd.js';
+import { getCoeffsBez2Bez3Dd } from './double-double/get-coeffs-bez2-bez3-dd.js';
+import { getCoeffsBez3Bez3Dd } from './double-double/get-coeffs-bez3-bez3-dd.js';
+import { getCoeffsBez1Bez1Exact } from './exact/get-coeffs-bez1-bez1-exact.js';
+import { getCoeffsBez2Bez1Exact } from './exact/get-coeffs-bez2-bez1-exact.js';
+import { getCoeffsBez3Bez1Exact } from './exact/get-coeffs-bez3-bez1-exact.js';
+import { getCoeffsBez1Bez2Exact } from './exact/get-coeffs-bez1-bez2-exact.js';
+import { getCoeffsBez2Bez2Exact } from './exact/get-coeffs-bez2-bez2-exact.js';
+import { getCoeffsBez3Bez2Exact } from './exact/get-coeffs-bez3-bez2-exact.js';
+import { getCoeffsBez1Bez3Exact } from './exact/get-coeffs-bez1-bez3-exact.js';
+import { getCoeffsBez2Bez3Exact } from './exact/get-coeffs-bez2-bez3-exact.js';
+import { getCoeffsBez3Bez3Exact } from './exact/get-coeffs-bez3-bez3-exact.js';
 
 
 const coeffFunctionsDd = [

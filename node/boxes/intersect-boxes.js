@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.intersectBoxes = void 0;
 const min = Math.min;
 const max = Math.max;
 /**
@@ -46,5 +43,5 @@ function intersectBoxes(a, b) {
         [min(ax1, bx1), min(ay1, by1)]
     ];
 }
-exports.intersectBoxes = intersectBoxes;
+export { intersectBoxes };
 //# sourceMappingURL=intersect-boxes.js.map

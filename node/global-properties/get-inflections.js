@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getInflections = void 0;
-const flo_poly_1 = require("flo-poly");
+import { allRoots } from "flo-poly";
 /**
  * Returns the given order 1, 2 or 3 bezier curve's inflection points.
  *
@@ -30,7 +27,7 @@ function getInflections(ps) {
     const a = bx * cy - by * cx;
     const b = ax * cy - ay * cx;
     const c = ax * by - ay * bx;
-    return flo_poly_1.allRoots([a, b, c], 0, 1);
+    return allRoots([a, b, c], 0, 1);
 }
-exports.getInflections = getInflections;
+export { getInflections };
 //# sourceMappingURL=get-inflections.js.map

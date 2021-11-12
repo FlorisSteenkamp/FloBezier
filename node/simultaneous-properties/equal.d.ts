@@ -1,5 +1,5 @@
 /**
- * Returns true if the two given bezier curves are exactly equal as compared
+ * Returns true if the two given bezier curves are exactly equal when compared
  * by value (deep equality)
  *
  * @param ps1 an order 1, 2 or 3 bezier curve

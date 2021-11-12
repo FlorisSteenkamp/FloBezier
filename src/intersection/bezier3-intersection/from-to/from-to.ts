@@ -1,5 +1,5 @@
-import { fromTo3 as fromTo3_ } from './from-to-3.js';import { fromTo3 as fromTo3_ } from './from-to-3.js
-import { fromTo2 as fromTo2_ } from './from-to-2';
+import { fromTo3 as fromTo3_ } from './from-to-3.js';
+import { fromTo2 as fromTo2_ } from './from-to-2.js';
 
 const fromTo3 = fromTo3_;
 const fromTo2 = fromTo2_;

@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.fromToPrecise = exports.fromTo = void 0;
-const split_at_1 = require("./split-at");
-const eval_de_casteljau_1 = require("../../local-properties-at-t/t-to-xy/eval-de-casteljau");
+import { splitAt, splitAtPrecise } from './split-at.js';
+import { evalDeCasteljau } from '../../local-properties-at-t/t-to-xy/double/eval-de-casteljau.js';
 /**
  * Returns a bezier curve that starts and ends at the given t parameters.
  * Uses de Casteljau's algorithm.
@@ -19,7 +16,7 @@ const eval_de_casteljau_1 = require("../../local-properties-at-t/t-to-xy/eval-de
  */
 function fromTo(ps) {
     return (t1, t2) => {
-        let reverse = t1 > t2;
+        const reverse = t1 > t2;
         if (t1 > t2) {
             [t1, t2] = [t2, t1];
         }
@@ -28,14 +25,17 @@ function fromTo(ps) {
             ps_ = ps;
         }
         else if (t1 === 0) {
-            ps_ = split_at_1.splitAt(ps, t2)[0];
+            ps_ = splitAt(ps, t2)[0];
         }
         else if (t2 === 1) {
-            ps_ = split_at_1.splitAt(ps, t1)[1];
+            ps_ = splitAt(ps, t1)[1];
         }
         else if (t1 === t2) {
             // Degenerate case
-            let p = eval_de_casteljau_1.evalDeCasteljau(ps, t1);
+            const p = evalDeCasteljau(ps, t1);
+            if (ps.length === 1) {
+                return [p];
+            }
             if (ps.length === 2) {
                 return [p, p];
             }
@@ -45,14 +45,14 @@ function fromTo(ps) {
             if (ps.length === 4) {
                 return [p, p, p, p];
             }
+            throw new Error('The given bezier curve is invalid.');
         }
         else {
-            ps_ = split_at_1.splitAt(split_at_1.splitAt(ps, t1)[1], (t2 - t1) / (1 - t1))[0];
+            ps_ = splitAt(splitAt(ps, t1)[1], (t2 - t1) / (1 - t1))[0];
         }
         return reverse ? ps_.slice().reverse() : ps_;
     };
 }
-exports.fromTo = fromTo;
 /**
  * Returns a bezier curve that starts at the given curve and ends at the
  * given t parameter. Uses de Casteljau's algorithm.
@@ -66,7 +66,7 @@ exports.fromTo = fromTo;
  */
 function fromToPrecise(ps) {
     return function (t1, t2) {
-        let reverse = t1 > t2;
+        const reverse = t1 > t2;
         if (t1 > t2) {
             [t1, t2] = [t2, t1];
         }
@@ -75,14 +75,17 @@ function fromToPrecise(ps) {
             ps_ = ps;
         }
         else if (t1 === 0) {
-            ps_ = split_at_1.splitAtPrecise(ps, t2)[0];
+            ps_ = splitAtPrecise(ps, t2)[0];
         }
         else if (t2 === 1) {
-            ps_ = split_at_1.splitAtPrecise(ps, t1)[1];
+            ps_ = splitAtPrecise(ps, t1)[1];
         }
         else if (t1 === t2) {
             // Degenerate case
-            let p = eval_de_casteljau_1.evalDeCasteljau(ps, t1);
+            const p = evalDeCasteljau(ps, t1);
+            if (ps.length === 1) {
+                return [p];
+            }
             if (ps.length === 2) {
                 return [p, p];
             }
@@ -92,12 +95,13 @@ function fromToPrecise(ps) {
             if (ps.length === 4) {
                 return [p, p, p, p];
             }
+            throw new Error('The given bezier curve is invalid.');
         }
         else {
-            ps_ = split_at_1.splitAtPrecise(split_at_1.splitAtPrecise(ps, t1)[1], (t2 - t1) / (1 - t1))[0];
+            ps_ = splitAtPrecise(splitAtPrecise(ps, t1)[1], (t2 - t1) / (1 - t1))[0];
         }
         return reverse ? ps_.slice().reverse() : ps_;
     };
 }
-exports.fromToPrecise = fromToPrecise;
+export { fromTo, fromToPrecise };
 //# sourceMappingURL=from-to.js.map

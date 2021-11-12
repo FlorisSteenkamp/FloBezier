@@ -1,5 +1,5 @@
 /**
- * * **precondition** bit-algined bitlength of coefficients <= 47
+ * * **precondition** TODO - underflow/overflow conditions
  *
  * @param circle a circle
  * @param ps a cubic bezier curve
@@ -11,7 +11,7 @@ declare function getCoeffsCubicDd(circle: {
     radius: number;
 }, ps: number[][]): number[][];
 /**
- * * **precondition** bit-algined bitlength of coefficients <= 47
+ * * **precondition** TODO - underflow/overflow conditions
  *
  * @param circle a circle
  * @param ps a quadratic bezier curve
@@ -23,7 +23,7 @@ declare function getCoeffsQuadraticDd(circle: {
     radius: number;
 }, ps: number[][]): number[][];
 /**
- * * **precondition** bit-algined bitlength of coefficients <= 47
+ * * **precondition** TODO - underflow/overflow conditions
  *
  * @param circle a circle
  * @param ps a linear bezier curve

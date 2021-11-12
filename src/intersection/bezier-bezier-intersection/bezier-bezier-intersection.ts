@@ -1,19 +1,19 @@
 import type { X } from './x';
-import { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.js';import { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.jsimport { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.jsimport { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.jsimport { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.jsimport { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.jsimport { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.jsimport { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.jsimport { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.jsimport { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.jsimport { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.jsimport { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.js
-import { isPointOnBezierExtension } from '../../simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension';
-import { tFromXY } from '../../local-properties-to-t/t-from-xy';
-import { getIntervalBox } from '../../global-properties/bounds/get-interval-box/get-interval-box';
-import { intersectBoxes } from '../../boxes/intersect-boxes';
-import { bezierSelfIntersection } from '../self-intersection/bezier-self-intersection';
-import { getEndpointIntersections } from '../get-endpoint-intersections';
-import { isLine } from '../../global-properties/type/is-line';
+import { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.js';
+import { isPointOnBezierExtension } from '../../simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension.js';
+import { tFromXY } from '../../local-properties-to-t/t-from-xy.js';
+import { getIntervalBox } from '../../global-properties/bounds/get-interval-box/get-interval-box.js';
+import { intersectBoxes } from '../../boxes/intersect-boxes.js';
+import { bezierSelfIntersection } from '../self-intersection/bezier-self-intersection.js';
+import { getEndpointIntersections } from '../get-endpoint-intersections.js';
+import { isLine } from '../../global-properties/type/is-line.js';
 import { getXY1DdWithRunningError, getXY2DdWithRunningError, getXY3DdWithRunningError } from '../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error';
 import { getDxy2Exact, getDxy3Exact } from '../../to-power-basis/get-dxy/exact/get-dxy-exact';
 import { getDxy2Dd, getDxy3Dd } from '../../to-power-basis/get-dxy/double-double/get-dxy-dd';
 import { getDxy2ErrorCounters, getDxy3ErrorCounters } from '../../to-power-basis/get-dxy/get-dxy-error-counters'
 import { allRootsCertified, RootInterval } from 'flo-poly';
-import { γγ } from '../../error-analysis/error-analysis.js';import { γγ } from '../../error-analysis/error-analysis.js
-import { reduceOrderIfPossible } from './reduce-order-if-possible';
+import { γγ } from '../../error-analysis/error-analysis.js';
+import { reduceOrderIfPossible } from './reduce-order-if-possible.js';
 
 const eps = Number.EPSILON;
 const eps2 = 2*eps;

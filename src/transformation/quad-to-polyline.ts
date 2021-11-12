@@ -1,5 +1,5 @@
-import { isQuadFlat } from "../global-properties/type/is-quad-flat.js";import { isQuadFlat } from "../global-properties/type/is-quad-flat.js
-import { splitAt } from "./split-merge-clone/split-at";
+import { isQuadFlat } from "../global-properties/type/is-quad-flat.js";
+import { splitAt } from "./split-merge-clone/split-at.js";
 
 
 /** Represents a single line in the polyline. */

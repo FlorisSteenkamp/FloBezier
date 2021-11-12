@@ -6,8 +6,7 @@
  * Shewchuk floating point expansions from highest to lowest power,
  * e.g. `[[5],[-3],[0]]` represents the polynomial `5x^2 - 3x`.
  *
- * * **precondition:** the coordinates of the given bezier curve must be
- * 47-bit aligned
+ * * **precondition:** TODO underflow/overflow
  * * the returned polynomial coefficients are exact (i.e. error-free)
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  *

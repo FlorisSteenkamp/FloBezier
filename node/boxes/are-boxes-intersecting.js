@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.areBoxesIntersecting = void 0;
 /**
  * Returns true if the 2 given axis-aligned rectangular boxes intersect.
  *
@@ -42,5 +39,5 @@ function areBoxesIntersecting(closed) {
                 by0 < ay1 && by1 > ay0);
     };
 }
-exports.areBoxesIntersecting = areBoxesIntersecting;
+export { areBoxesIntersecting };
 //# sourceMappingURL=are-boxes-intersecting.js.map

@@ -5,8 +5,8 @@ import { fromTo as _fromToVect } from 'flo-vector2d';
 import { toLength as _toLength } from 'flo-vector2d';
 import { len as _len } from 'flo-vector2d';
 import { translate as _translate } from 'flo-vector2d';
-import { getDistanceToLineFunction as _getDistanceToLineFunction } from "./get-distance-to-line-function.js";import { getDistanceToLineFunction as _getDistanceToLineFunction } from "./get-distance-to-line-function.js
-import { fromTo as _fromTo } from './from-to/from-to';
+import { getDistanceToLineFunction as _getDistanceToLineFunction } from "./get-distance-to-line-function.js";
+import { fromTo as _fromTo } from './from-to/from-to.js';
 
 
 const __debug__: __Debug__ = (typeof globalThis !== 'undefined' && (globalThis as any).__debug__)
