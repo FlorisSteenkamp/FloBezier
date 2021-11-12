@@ -1,10 +1,10 @@
 // TODO - put back (and export from index)? or is there a better version somewhere else in the code?
 /*
-import { evaluateExact } from "../local-properties-at-t/t-to-xy/exact/evaluate-exact";
+import { evaluateExact } from "../local-properties-at-t/t-to-xy/exact/evaluate-exact.js";
 import { squaredDistanceBetween } from "flo-vector2d";
 import { allRootsCertified, mid } from "flo-poly";
 //import { getTangentPolyFromPointExact } from "../simultaneous-properties/closest-point-on-bezier/get-coeffs/exact/get-closest-on-bezier-from-point-exact";
-import { getClosestOnBezierFromPointExact } from "../simultaneous-properties/closest-point-on-bezier/get-coeffs/exact/get-closest-on-bezier-from-point-exact";
+import { getClosestOnBezierFromPointExact } from "../simultaneous-properties/closest-point-on-bezier/get-coeffs/exact/get-closest-on-bezier-from-point-exact.js";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { operators as bigFloatOperators } from "big-float-ts";

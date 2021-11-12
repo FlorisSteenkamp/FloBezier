@@ -1,4 +1,4 @@
-import { evaluateExact } from "../local-properties-at-t/t-to-xy/exact/evaluate-exact";
+import { evaluateExact } from "../local-properties-at-t/t-to-xy/exact/evaluate-exact.js";import { evaluateExact } from "../local-properties-at-t/t-to-xy/exact/evaluate-exact.js
 import { isPointOnBezierExtension } from "./is-point-on-bezier-extension/is-point-on-bezier-extension";
 
 

@@ -1,4 +1,4 @@
-import { getCoeffsBez3WithRunningError } from "./get-coefficients/double/get-coeffs-bez3-with-running-error";
+import { getCoeffsBez3WithRunningError } from "./get-coefficients/double/get-coeffs-bez3-with-running-error.js";import { getCoeffsBez3WithRunningError } from "./get-coefficients/double/get-coeffs-bez3-with-running-error.jsimport { getCoeffsBez3WithRunningError } from "./get-coefficients/double/get-coeffs-bez3-with-running-error.js
 import { getCoeffsBez3Exact } from "./get-coefficients/exact/get-coeffs-bez3-exact";
 import { γ } from "../../error-analysis/error-analysis";
 import { operators as bigFloatOperators } from "big-float-ts";

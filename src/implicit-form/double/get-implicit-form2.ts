@@ -1,4 +1,4 @@
-import { getXY2 } from '../../to-power-basis/get-xy/double/get-xy';
+import { getXY2 } from '../../to-power-basis/get-xy/double/get-xy.js';
 
 
 /**

@@ -1,4 +1,4 @@
-import { γγ } from "../../../../error-analysis/error-analysis";
+import { γγ } from "../../../../error-analysis/error-analysis.js";import { γγ } from "../../../../error-analysis/error-analysis.jsimport { γγ } from "../../../../error-analysis/error-analysis.js
 import { getImplicitForm2DdWithRunningError } from "../../../../implicit-form/double-double/get-implicit-form2-dd-with-running-error";
 import { getXY3DdWithRunningError } from '../../../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error';
 import { twoProduct, ddMultBy2, ddMultDouble2, ddMultDd, ddAddDd } from "double-double";

@@ -1,4 +1,4 @@
-import { fromTo3 as fromTo3_ } from './from-to-3';
+import { fromTo3 as fromTo3_ } from './from-to-3.js';import { fromTo3 as fromTo3_ } from './from-to-3.js
 import { fromTo2 as fromTo2_ } from './from-to-2';
 
 const fromTo3 = fromTo3_;

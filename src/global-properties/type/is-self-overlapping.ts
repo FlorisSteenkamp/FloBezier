@@ -1,4 +1,4 @@
-import { isLine } from "./is-line";
+import { isLine } from "./is-line.js";
 
 /**
  * Returns true if the given bezier is a line and self-overlapping, i.e. if it

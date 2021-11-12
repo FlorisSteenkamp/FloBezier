@@ -1,4 +1,4 @@
-import { getClosestOnBezier3FromPointDd } from "./get-coeffs/double-double/get-closest-on-bezier3-from-point-dd";
+import { getClosestOnBezier3FromPointDd } from "./get-coeffs/double-double/get-closest-on-bezier3-from-point-dd.js";import { getClosestOnBezier3FromPointDd } from "./get-coeffs/double-double/get-closest-on-bezier3-from-point-dd.jsimport { getClosestOnBezier3FromPointDd } from "./get-coeffs/double-double/get-closest-on-bezier3-from-point-dd.jsimport { getClosestOnBezier3FromPointDd } from "./get-coeffs/double-double/get-closest-on-bezier3-from-point-dd.jsimport { getClosestOnBezier3FromPointDd } from "./get-coeffs/double-double/get-closest-on-bezier3-from-point-dd.jsimport { getClosestOnBezier3FromPointDd } from "./get-coeffs/double-double/get-closest-on-bezier3-from-point-dd.jsimport { getClosestOnBezier3FromPointDd } from "./get-coeffs/double-double/get-closest-on-bezier3-from-point-dd.jsimport { getClosestOnBezier3FromPointDd } from "./get-coeffs/double-double/get-closest-on-bezier3-from-point-dd.jsimport { getClosestOnBezier3FromPointDd } from "./get-coeffs/double-double/get-closest-on-bezier3-from-point-dd.js
 import { getClosestOnBezier2FromPointDd } from "./get-coeffs/double-double/get-closest-on-bezier2-from-point-dd";
 import { getClosestOnBezier1FromPointDd } from "./get-coeffs/double-double/get-closest-on-bezier1-from-point-dd";
 import { getClosestOnBezier3FromPointExact } from "./get-coeffs/exact/get-closest-on-bezier-from-point-exact";
@@ -8,7 +8,7 @@ import { getClosestOnBezier1FromPointErrorCounters } from "./get-coeffs/get-clos
 import { getClosestOnBezier2FromPointErrorCounters } from "./get-coeffs/get-closest-on-bezier-from-point-error-counters";
 import { getClosestOnBezier3FromPointErrorCounters } from "./get-coeffs/get-closest-on-bezier-from-point-error-counters";
 import { allRootsCertified, RootInterval } from "flo-poly";
-import { getIntervalBox } from "../../global-properties/bounds/get-interval-box/get-interval-box";
+import { getIntervalBox } from "../../global-properties/bounds/get-interval-box/get-interval-box.js";import { getIntervalBox } from "../../global-properties/bounds/get-interval-box/get-interval-box.js
 import { γ, γγ } from '../../error-analysis/error-analysis';
 import { twoDiff, eEstimate, eMult, eAdd } from 'big-float-ts';
 

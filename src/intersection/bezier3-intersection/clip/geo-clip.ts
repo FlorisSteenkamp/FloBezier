@@ -1,5 +1,5 @@
 import type { __Debug__ } from '../debug';
-import { toHybridQuadratic as _toHybridQuadratic } from './to-hybrid-quadratic';
+import { toHybridQuadratic as _toHybridQuadratic } from './to-hybrid-quadratic.js';
 
 const __debug__: __Debug__ = (typeof globalThis !== 'undefined' && (globalThis as any).__debug__)
     ? (globalThis as any).__debug__

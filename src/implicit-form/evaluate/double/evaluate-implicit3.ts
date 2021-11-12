@@ -1,4 +1,4 @@
-import { ImplicitForm3Coeffs } from "../../implicit-form-types";
+import { ImplicitForm3Coeffs } from "../../implicit-form-types.js";
 
 
 function evaluateImplicit3(

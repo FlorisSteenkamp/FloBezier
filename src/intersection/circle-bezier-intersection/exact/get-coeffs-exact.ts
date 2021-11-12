@@ -1,4 +1,4 @@
-import { getXY3Exact, getXY2Exact, getXY1Exact } from "../../../to-power-basis/get-xy/exact/get-xy-exact";
+import { getXY3Exact, getXY2Exact, getXY1Exact } from "../../../to-power-basis/get-xy/exact/get-xy-exact.js";
 
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗

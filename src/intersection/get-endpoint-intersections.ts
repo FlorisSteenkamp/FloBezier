@@ -1,5 +1,5 @@
 import { createRootExact } from "flo-poly";
-import { tFromXY } from '../local-properties-to-t/t-from-xy';
+import { tFromXY } from '../local-properties-to-t/t-from-xy.js';import { tFromXY } from '../local-properties-to-t/t-from-xy.jsimport { tFromXY } from '../local-properties-to-t/t-from-xy.js
 import { X } from "./bezier-bezier-intersection/x";
 import { getIntervalBox } from "../global-properties/bounds/get-interval-box/get-interval-box";
 

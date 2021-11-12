@@ -1,5 +1,5 @@
 
-import { splitAt, splitAtPrecise } from './split-at';
+import { splitAt, splitAtPrecise } from './split-at.js';import { splitAt, splitAtPrecise } from './split-at.js
 import { evalDeCasteljau } from '../../local-properties-at-t/t-to-xy/double/eval-de-casteljau';
 
 

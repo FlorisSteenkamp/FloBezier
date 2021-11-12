@@ -1,10 +1,10 @@
-import { γγ } from '../../../src/error-analysis/error-analysis';
+import { γγ } from '../../../src/error-analysis/error-analysis.js';import { γγ } from '../../../src/error-analysis/error-analysis.js
 import { getImplicitForm1DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form1-dd-with-running-error";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { ddAddDd, ddMultDd, ddMultDouble2 } from "double-double";
 import { expansionProduct, fastExpansionSum, eSign, eEstimate, scaleExpansion2, eToDd } from 'big-float-ts';
-import { getImplicitForm1Exact } from '../../implicit-form/exact/get-implicit-form1-exact';
+import { getImplicitForm1Exact } from '../../implicit-form/exact/get-implicit-form1-exact.js';
 
 const qaq = ddAddDd;
 const epr = expansionProduct;

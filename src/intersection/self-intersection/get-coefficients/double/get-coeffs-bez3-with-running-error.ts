@@ -1,4 +1,4 @@
-import { γ } from "../../../../error-analysis/error-analysis";
+import { γ } from "../../../../error-analysis/error-analysis.js";import { γ } from "../../../../error-analysis/error-analysis.js
 import { getXY3WithRunningError } from "../../../../to-power-basis/get-xy/double/get-xy-with-running-error";
 
 const abs = Math.abs;

@@ -1,5 +1,5 @@
 import { allRootsCertified, RootInterval } from 'flo-poly';
-import { getXY2Exact, getXY3Exact } from "../to-power-basis/get-xy/exact/get-xy-exact";
+import { getXY2Exact, getXY3Exact } from "../to-power-basis/get-xy/exact/get-xy-exact.js";import { getXY2Exact, getXY3Exact } from "../to-power-basis/get-xy/exact/get-xy-exact.js
 import { getXY1DdWithRunningError, getXY2DdWithRunningError, getXY3DdWithRunningError } from "../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error";
 import { twoDiff as twoDiff_ } from 'big-float-ts';
 

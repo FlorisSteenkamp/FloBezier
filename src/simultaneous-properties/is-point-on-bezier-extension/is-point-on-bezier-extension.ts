@@ -1,5 +1,5 @@
 import { eCompress } from 'big-float-ts';
-import { isPointOnBezierExtension1 } from './is-point-on-bezier-extension-1';
+import { isPointOnBezierExtension1 } from './is-point-on-bezier-extension-1.js';import { isPointOnBezierExtension1 } from './is-point-on-bezier-extension-1.jsimport { isPointOnBezierExtension1 } from './is-point-on-bezier-extension-1.js
 import { isPointOnBezierExtension2 } from './is-point-on-bezier-extension-2';
 import { isPointOnBezierExtension3 } from './is-point-on-bezier-extension-3';
 

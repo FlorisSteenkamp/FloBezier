@@ -1,4 +1,4 @@
-import { getXBoundsTight, getYBoundsTight } from "./get-bounds";
+import { getXBoundsTight, getYBoundsTight } from "./get-bounds.js";
 
 
 /**

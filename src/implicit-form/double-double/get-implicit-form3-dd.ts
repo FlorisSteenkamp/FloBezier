@@ -1,5 +1,5 @@
 import { ddNegativeOf, ddMultBy2, ddMultDouble2, ddMultDd, ddDiffDd, ddAddDd, ddDivBy2} from 'double-double';
-import { getXY3Dd } from '../../to-power-basis/get-xy/double-double/get-xy-dd';
+import { getXY3Dd } from '../../to-power-basis/get-xy/double-double/get-xy-dd.js';
 
 const qno = ddNegativeOf;    // error -> 0
 const qm2 = ddMultBy2;       // error -> 0 

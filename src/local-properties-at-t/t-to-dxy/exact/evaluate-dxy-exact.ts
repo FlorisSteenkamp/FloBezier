@@ -1,5 +1,5 @@
 import { eHorner } from 'flo-poly';
-import { getDxyExact } from '../../../to-power-basis/get-dxy/exact/get-dxy-exact';
+import { getDxyExact } from '../../../to-power-basis/get-dxy/exact/get-dxy-exact.js';
 
 
 /**

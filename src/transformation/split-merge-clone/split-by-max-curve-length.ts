@@ -1,5 +1,5 @@
 
-import { lengthUpperBound } from "../../global-properties/length/length-upper-bound";
+import { lengthUpperBound } from "../../global-properties/length/length-upper-bound.js";import { lengthUpperBound } from "../../global-properties/length/length-upper-bound.js
 import { fromTo } from "./from-to";
 
 

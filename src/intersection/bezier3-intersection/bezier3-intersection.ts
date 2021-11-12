@@ -1,6 +1,6 @@
 import type { __Debug__, IterationExtras } from './debug';
 import type { Iteration } from './iteration';
-import { checkIntersectionInRanges as _checkIntersectionInRanges } from './check-intersection-in-ranges';
+import { checkIntersectionInRanges as _checkIntersectionInRanges } from './check-intersection-in-ranges.js';import { checkIntersectionInRanges as _checkIntersectionInRanges } from './check-intersection-in-ranges.js
 import { bezierBezierIntersection as _bezierBezierIntersection } from '../bezier-bezier-intersection/bezier-bezier-intersection';
 
 const __debug__: __Debug__ = (typeof globalThis !== 'undefined' && (globalThis as any).__debug__)

@@ -2,7 +2,7 @@ import {
     ddNegativeOf, ddMultBy2, 
     ddMultDouble2, ddMultDd, ddDiffDd, ddAddDd, ddDivBy2
 } from 'double-double';
-import { getXY3DdWithRunningError } from '../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error';
+import { getXY3DdWithRunningError } from '../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js';
 
 
 const abs = Math.abs;

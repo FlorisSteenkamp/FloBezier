@@ -1,5 +1,5 @@
 
-import { splitAt } from "./split-at";
+import { splitAt } from "./split-at.js";
 
 /**
  * Returns an order 1, 2 or 3 bezier curve that starts at the given t parameter 

@@ -1,9 +1,9 @@
-import { getClosestOnBezier3FromPoint } from "./get-coeffs/double/get-closest-on-bezier3-from-point";
+import { getClosestOnBezier3FromPoint } from "./get-coeffs/double/get-closest-on-bezier3-from-point.js";import { getClosestOnBezier3FromPoint } from "./get-coeffs/double/get-closest-on-bezier3-from-point.jsimport { getClosestOnBezier3FromPoint } from "./get-coeffs/double/get-closest-on-bezier3-from-point.js
 import { getClosestOnBezier2FromPoint } from "./get-coeffs/double/get-closest-on-bezier2-from-point";
 import { getClosestOnBezier1FromPoint } from "./get-coeffs/double/get-closest-on-bezier1-from-point";
 import { squaredDistanceBetween } from "flo-vector2d";
 import { allRoots } from "flo-poly";
-import { evalDeCasteljau } from "../../local-properties-at-t/t-to-xy/double/eval-de-casteljau";
+import { evalDeCasteljau } from "../../local-properties-at-t/t-to-xy/double/eval-de-casteljau.js";
 
 
 function closestPointOnBezier(

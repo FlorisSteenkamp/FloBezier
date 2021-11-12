@@ -1,5 +1,5 @@
 import { ddNegativeOf, ddMultBy2, ddMultDouble2, ddMultDd, ddDiffDd } from 'double-double';
-import { getXY2DdWithRunningError } from '../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error';
+import { getXY2DdWithRunningError } from '../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js';
 
 const qno = ddNegativeOf;    // error -> 0
 const qm2 = ddMultBy2;       // error -> 0 

@@ -1,4 +1,4 @@
-import { evalDeCasteljau } from "../../../local-properties-at-t/t-to-xy/double/eval-de-casteljau";
+import { evalDeCasteljau } from "../../../local-properties-at-t/t-to-xy/double/eval-de-casteljau.js";import { evalDeCasteljau } from "../../../local-properties-at-t/t-to-xy/double/eval-de-casteljau.jsimport { evalDeCasteljau } from "../../../local-properties-at-t/t-to-xy/double/eval-de-casteljau.js
 import { evalDeCasteljauError } from "../../../local-properties-at-t/t-to-xy/eval-de-casteljau-error";
 import { γ } from '../../../error-analysis/error-analysis';
 

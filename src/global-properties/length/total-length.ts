@@ -1,4 +1,4 @@
-import { lengthBez1 } from './length-bez1';
+import { lengthBez1 } from './length-bez1.js';import { lengthBez1 } from './length-bez1.jsimport { lengthBez1 } from './length-bez1.js
 import { lengthBez2 } from './length-bez2';
 import { lengthBez3 } from './length-bez3';
 

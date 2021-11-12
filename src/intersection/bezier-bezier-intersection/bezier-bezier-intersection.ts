@@ -1,5 +1,5 @@
 import type { X } from './x';
-import { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless';
+import { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.js';import { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.jsimport { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.jsimport { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.jsimport { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.jsimport { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.jsimport { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.jsimport { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.jsimport { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.jsimport { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.jsimport { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.jsimport { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.js
 import { isPointOnBezierExtension } from '../../simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension';
 import { tFromXY } from '../../local-properties-to-t/t-from-xy';
 import { getIntervalBox } from '../../global-properties/bounds/get-interval-box/get-interval-box';
@@ -12,7 +12,7 @@ import { getDxy2Exact, getDxy3Exact } from '../../to-power-basis/get-dxy/exact/g
 import { getDxy2Dd, getDxy3Dd } from '../../to-power-basis/get-dxy/double-double/get-dxy-dd';
 import { getDxy2ErrorCounters, getDxy3ErrorCounters } from '../../to-power-basis/get-dxy/get-dxy-error-counters'
 import { allRootsCertified, RootInterval } from 'flo-poly';
-import { γγ } from '../../error-analysis/error-analysis';
+import { γγ } from '../../error-analysis/error-analysis.js';import { γγ } from '../../error-analysis/error-analysis.js
 import { reduceOrderIfPossible } from './reduce-order-if-possible';
 
 const eps = Number.EPSILON;

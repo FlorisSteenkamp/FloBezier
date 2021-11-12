@@ -1,4 +1,4 @@
-import { getXY3Dd, getXY2Dd, getXY1Dd } from "../../../to-power-basis/get-xy/double-double/get-xy-dd";
+import { getXY3Dd, getXY2Dd, getXY1Dd } from "../../../to-power-basis/get-xy/double-double/get-xy-dd.js";
 import { twoProduct, ddAddDd, ddMultByNeg2, ddMultBy2, ddDiffDd, ddMultDd, ddMultDouble2 } from "double-double";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗

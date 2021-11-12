@@ -1,4 +1,4 @@
-import { toString } from '../..';
+import { toString } from '../...js';import { toString } from '../...jsimport { toString } from '../...jsimport { toString } from '../...js
 import { lengthBez1 } from './length-bez1';
 import { lengthBez2 } from './length-bez2';
 import { lengthBez3 } from './length-bez3';

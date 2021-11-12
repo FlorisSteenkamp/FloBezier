@@ -1,5 +1,5 @@
 import type { ImplicitFormExact1, ImplicitFormExact2, ImplicitFormExact3 } from '../implicit-form-types';
-import { getXY3Exact } from '../../to-power-basis/get-xy/exact/get-xy-exact';
+import { getXY3Exact } from '../../to-power-basis/get-xy/exact/get-xy-exact.js';
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { 
@@ -7,7 +7,7 @@ import {
     eDiff, eNegativeOf, eMultBy2, eDivBy2
 } from "big-float-ts";
 import { eSign as _eSign } from 'big-float-ts';
-import { getImplicitForm2ExactPb } from './get-implicit-form2-exact';
+import { getImplicitForm2ExactPb } from './get-implicit-form2-exact.js';
 
 const sce = scaleExpansion2;
 const epr = expansionProduct;

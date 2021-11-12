@@ -1,4 +1,4 @@
-import { isCubicReallyQuad } from '../../global-properties/type/is-cubic-really-quad';
+import { isCubicReallyQuad } from '../../global-properties/type/is-cubic-really-quad.js';import { isCubicReallyQuad } from '../../global-properties/type/is-cubic-really-quad.jsimport { isCubicReallyQuad } from '../../global-properties/type/is-cubic-really-quad.jsimport { isCubicReallyQuad } from '../../global-properties/type/is-cubic-really-quad.js
 import { toQuadraticFromCubic } from '../../transformation/degree-or-type/to-quad-from-cubic';
 import { isQuadReallyLine } from '../../global-properties/type/is-quad-really-line';
 import { isLineReallyPoint } from '../../global-properties/type/is-line-really-point';

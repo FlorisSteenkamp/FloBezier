@@ -1,5 +1,5 @@
 import { ddDiffDd, ddMultDouble2, ddNegativeOf } from 'double-double';
-import { getXY1Dd } from '../../to-power-basis/get-xy/double-double/get-xy-dd';
+import { getXY1Dd } from '../../to-power-basis/get-xy/double-double/get-xy-dd.js';
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const qdq = ddDiffDd;       // error -> 3*γ²

@@ -1,5 +1,5 @@
 /*
-import { getDdxyExact } from "../../../to-power-basis/get-ddxy/exact/get-ddxy-exact";
+import { getDdxyExact } from "../../../to-power-basis/get-ddxy/exact/get-ddxy-exact.js";
 import { eHorner, Horner as polyEvaluate } from 'flo-poly';
 
 

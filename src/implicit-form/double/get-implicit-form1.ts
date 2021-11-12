@@ -1,4 +1,4 @@
-import { getXY1 } from '../../to-power-basis/get-xy/double/get-xy';
+import { getXY1 } from '../../to-power-basis/get-xy/double/get-xy.js';import { getXY1 } from '../../to-power-basis/get-xy/double/get-xy.js
 import { ImplicitForm1Coeffs } from '../implicit-form-types';
 
 

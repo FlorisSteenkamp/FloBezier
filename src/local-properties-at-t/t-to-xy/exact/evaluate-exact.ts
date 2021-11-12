@@ -1,4 +1,4 @@
-import { getXYExact } from "../../../to-power-basis/get-xy/exact/get-xy-exact";
+import { getXYExact } from "../../../to-power-basis/get-xy/exact/get-xy-exact.js";
 import { eHorner } from 'flo-poly';
 
 

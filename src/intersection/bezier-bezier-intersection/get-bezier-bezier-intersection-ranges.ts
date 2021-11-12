@@ -1,5 +1,5 @@
 import type { X } from './x';
-import { reduceOrderIfPossible } from './reduce-order-if-possible';
+import { reduceOrderIfPossible } from './reduce-order-if-possible.js';
 
 
 /**

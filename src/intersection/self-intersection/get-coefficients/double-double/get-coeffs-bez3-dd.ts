@@ -1,6 +1,6 @@
-import { γγ } from "../../../../error-analysis/error-analysis";
+import { γγ } from "../../../../error-analysis/error-analysis.js";
 import { twoProduct, ddMultDd, ddAddDd, ddDiffDd, ddMultDouble2 } from "double-double";
-import { getXY3DdWithRunningError } from "../../../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error";
+import { getXY3DdWithRunningError } from "../../../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const tp  = twoProduct;

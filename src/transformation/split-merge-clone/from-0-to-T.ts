@@ -1,5 +1,5 @@
 
-import { splitAt } from "./split-at";
+import { splitAt } from "./split-at.js";
 
 
 /**

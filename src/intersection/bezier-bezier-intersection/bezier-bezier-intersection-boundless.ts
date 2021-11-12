@@ -1,5 +1,5 @@
 import { allRootsCertified, RootInterval } from "flo-poly";
-import { getCoeffsBezBez }  from './get-coefficients/get-coeffs-bez-bez';
+import { getCoeffsBezBez }  from './get-coefficients/get-coeffs-bez-bez.js';
 
 
 /**

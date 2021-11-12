@@ -1,5 +1,5 @@
 import type { ImplicitFormExact1 } from "../implicit-form-types";
-import { getXY1Exact } from "../../to-power-basis/get-xy/exact/get-xy-exact";
+import { getXY1Exact } from "../../to-power-basis/get-xy/exact/get-xy-exact.js";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { scaleExpansion2, eDiff, eNegativeOf } from "big-float-ts";

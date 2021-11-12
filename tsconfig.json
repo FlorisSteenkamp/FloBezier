@@ -1,13 +1,13 @@
 {
     "compilerOptions": {
-        "charset": "utf8",
         "strict": true,
-        "module": "commonjs",
+        "module": "es2020",
         "target": "es2020",
         "declaration": true,
         "noEmitOnError": true,
         "sourceMap": true,
-        "outDir": "node"
+        "outDir": "node",
+        "moduleResolution": "node"
     },
     "include": [
         "src/index.ts"

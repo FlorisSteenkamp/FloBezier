@@ -1,4 +1,4 @@
-import { getImplicitForm2 } from "../../implicit-form/double/get-implicit-form2";
+import { getImplicitForm2 } from "../../implicit-form/double/get-implicit-form2.js";import { getImplicitForm2 } from "../../implicit-form/double/get-implicit-form2.jsimport { getImplicitForm2 } from "../../implicit-form/double/get-implicit-form2.jsimport { getImplicitForm2 } from "../../implicit-form/double/get-implicit-form2.jsimport { getImplicitForm2 } from "../../implicit-form/double/get-implicit-form2.js
 import { getImplicitForm2ErrorCounters } from "../../implicit-form/get-error-counters/get-implicit-form2-error-counters";
 import { getImplicitForm2DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form2-dd-with-running-error";
 import { getImplicitForm2Exact } from "../../implicit-form/exact/get-implicit-form2-exact";

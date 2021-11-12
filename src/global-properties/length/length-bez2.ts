@@ -1,4 +1,4 @@
-import { ds } from "../../local-properties-at-t/ds";
+import { ds } from "../../local-properties-at-t/ds.js";
 import { gaussQuadrature } from "flo-gauss-quadrature";
 
 

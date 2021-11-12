@@ -1,5 +1,5 @@
 
-import { getDxy } from '../to-power-basis/get-dxy/double/get-dxy';
+import { getDxy } from '../to-power-basis/get-dxy/double/get-dxy.js';
 import { Horner as evaluatePoly } from 'flo-poly';
 
 

@@ -1,5 +1,5 @@
 import { allRoots, differentiate, Horner as evaluatePoly } from "flo-poly";
-import { getAbsCurvatureExtremaPolys } from "./get-abs-curvature-extrema-polys";
+import { getAbsCurvatureExtremaPolys } from "./get-abs-curvature-extrema-polys.js";import { getAbsCurvatureExtremaPolys } from "./get-abs-curvature-extrema-polys.jsimport { getAbsCurvatureExtremaPolys } from "./get-abs-curvature-extrema-polys.jsimport { getAbsCurvatureExtremaPolys } from "./get-abs-curvature-extrema-polys.js
 import { isLine } from "../global-properties/type/is-line";
 import { isCubicReallyQuad } from "../global-properties/type/is-cubic-really-quad";
 import { toQuadraticFromCubic } from "../transformation/degree-or-type/to-quad-from-cubic";

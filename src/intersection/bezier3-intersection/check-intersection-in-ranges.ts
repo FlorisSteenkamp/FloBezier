@@ -1,11 +1,11 @@
 import type { Iteration } from './iteration';
 import type { IterationExtras, __Debug__ } from './debug';
-import { geoClip as _geoClip } from './clip/geo-clip';
+import { geoClip as _geoClip } from './clip/geo-clip.js';
 import { fromTo as _fromToVect } from 'flo-vector2d';
 import { toLength as _toLength } from 'flo-vector2d';
 import { len as _len } from 'flo-vector2d';
 import { translate as _translate } from 'flo-vector2d';
-import { getDistanceToLineFunction as _getDistanceToLineFunction } from "./get-distance-to-line-function";
+import { getDistanceToLineFunction as _getDistanceToLineFunction } from "./get-distance-to-line-function.js";import { getDistanceToLineFunction as _getDistanceToLineFunction } from "./get-distance-to-line-function.js
 import { fromTo as _fromTo } from './from-to/from-to';
 
 

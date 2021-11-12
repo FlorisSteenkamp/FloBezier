@@ -1,4 +1,4 @@
-import { toCubic } from "../transformation/degree-or-type/to-cubic";
+import { toCubic } from "../transformation/degree-or-type/to-cubic.js";import { toCubic } from "../transformation/degree-or-type/to-cubic.js
 import { length } from "../global-properties/length/length";
 import { brent } from "flo-poly";
 

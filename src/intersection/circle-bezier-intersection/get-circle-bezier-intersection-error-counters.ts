@@ -1,4 +1,4 @@
-import { getXY3ErrorCounters, getXY2ErrorCounters, getXY1ErrorCounters } from "../../to-power-basis/get-xy/get-xy-error-counters";
+import { getXY3ErrorCounters, getXY2ErrorCounters, getXY1ErrorCounters } from "../../to-power-basis/get-xy/get-xy-error-counters.js";
 
 const abs = Math.abs;
 
