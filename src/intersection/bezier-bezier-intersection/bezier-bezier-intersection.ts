@@ -31,11 +31,9 @@ const γγ3 = γγ(3);
  * algebraic implicitization of the curves in order to find *guaranteed* 
  * accurate results.
  *
- * TODO
- * * in the rare case where an infinite number of intersections exist, this function
- * will return another (0 arity, i.e parameterless) function that returns the
- * intersection of the endpoints of the given beziers
- * * if the two curves have an infinite number of intersections `undefined` is returned
+ * TODO - make sure below points are correct (add to tests)
+ * * if the two curves have an infinite number of intersections `undefined` is 
+ * returned
  * * TODO the second bezier curve's parameter `t` values are returned; call [[getOtherTs]] to
  * get the first bezier's `t` values.
  * // TODO

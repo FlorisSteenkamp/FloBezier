@@ -5,10 +5,12 @@ import 'mocha';
 import { bezierBezierIntersection } from '../../../src/index';
 
 
-describe('intersections', function() {
-    it('it should find the intersection between two points', 
+describe('bezierBezierIntersection', function() {
+    it('it should find the intersection between two points (given as two points) that overlaps',
     function() {
-        
+        let ps1 = [[1,1],[2,2]];
+        let ps2 = [[1,1],[2,2]];
+        let ts = bezierBezierIntersection(ps1, ps2);
     });
 
     it('it should find intersection between two lines', 

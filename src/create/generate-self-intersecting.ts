@@ -1,6 +1,3 @@
-import { toString } from "..";
-import { ImplicitForm1Coeffs, ImplicitForm2Coeffs } from "../implicit-form/implicit-form-types";
-import { implicitFormIntersection22 } from "../intersection/implicit-form-intersection/implicit-form-intersection22";
 
 /**
  * Returns the cubic bezier curve with given starting, 2nd and 3rd control 
