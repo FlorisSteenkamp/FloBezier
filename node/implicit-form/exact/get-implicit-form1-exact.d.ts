@@ -1,4 +1,4 @@
-import type { ImplicitFormExact1 } from "../implicit-form-types";
+import type { ImplicitFormExact1 } from "../implicit-form-types.js";
 /**
  * Returns the exact implicit form of the given linear bezier curve (a line)
  * or `undefined` if the line is really a point.

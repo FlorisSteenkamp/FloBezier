@@ -1,5 +1,5 @@
 import { getCoeffsCubicDd, getCoeffsQuadraticDd, getCoeffsLinearDd } from './double-double/get-coeffs-dd.js';
-import { getCoeffsCubicExact, getCoeffsQuadraticExact, getCoeffsLinearExact } from './exact/get-coeffs-exact';
+import { getCoeffsCubicExact, getCoeffsQuadraticExact, getCoeffsLinearExact } from './exact/get-coeffs-exact.js';
 import { allRootsCertified } from 'flo-poly';
 import { getCoeffsCubicErrorCounters, getCoeffsLinearErrorCounters, getCoeffsQuadraticErrorCounters } from './get-circle-bezier-intersection-error-counters.js';
 import { γγ } from '../../error-analysis/error-analysis.js';

@@ -1,11 +1,8 @@
-
 import { expect, assert } from 'chai';
-//import { describe } from 'mocha';
-import 'mocha';
-import { bezierBezierIntersection, bezierSelfIntersection } from '../../../src/index';
-// @ts-ignore
+import { describe } from 'mocha';
+import { bezierBezierIntersection, bezierSelfIntersection } from '../../../src/index.js';
 import { performance } from 'perf_hooks';
-import { toGrid } from '../../helpers/to-grid'
+import { toGrid } from '../../helpers/to-grid.js'
 import * as paper from 'paper';
 
 

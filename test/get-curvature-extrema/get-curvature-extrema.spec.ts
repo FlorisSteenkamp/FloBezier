@@ -1,8 +1,6 @@
-
 import { expect, assert } from 'chai';
-//import { describe } from 'mocha';
-import 'mocha';
-import { getCurvatureExtrema, curvature } from '../../src/index';
+import { describe } from 'mocha';
+import { getCurvatureExtrema, curvature } from '../../src/index.js';
 import { rotate, translate } from 'flo-vector2d';
 import { performance } from 'perf_hooks';
 

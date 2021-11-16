@@ -2,7 +2,6 @@
 
 module.exports = {
     extension: ['ts', 'tsx'],
-    // spec: ['./test/intersection/bezier-bezier-intersection/intersection-performance.spec.ts'],
     spec: ['test/**/*.spec.ts'],
     recursive: true,
     loader: ['ts-node/esm'],

@@ -1,7 +1,5 @@
-
 import { expect, assert } from 'chai';
-//import { describe } from 'mocha';
-import 'mocha';
+import { describe } from 'mocha';
 import { getInterfaceCcw } from '../../src/simultaneous-properties/get-interface-ccw';
 import { splitAt } from '../../src/transformation/split-merge-clone/split-at';
 

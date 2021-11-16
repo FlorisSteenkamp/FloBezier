@@ -1,5 +1,5 @@
-import type { __Debug__, IterationExtras } from './debug';
-import type { Iteration } from './iteration';
+import type { __Debug__, IterationExtras } from './debug.js';
+import type { Iteration } from './iteration.js';
 import { checkIntersectionInRanges as _checkIntersectionInRanges } from './check-intersection-in-ranges.js';
 import { bezierBezierIntersection as _bezierBezierIntersection } from '../bezier-bezier-intersection/bezier-bezier-intersection.js';
 

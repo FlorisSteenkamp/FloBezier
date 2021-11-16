@@ -1,12 +1,13 @@
+/* TODO - how does this differ from `coeffs.spec.ts` ??
 import { expect, assert } from 'chai';
 import { eEstimate, eDiff } from 'big-float-ts';
-import { toGrid } from '../../helpers/to-grid'
+import { toGrid } from '../../helpers/to-grid.js'
 import { 
     //getCoeffsBez3Bez3,
     getCoeffsBez3Bez3InclError as getCoeffsBez3Bez3,
     getCoeffsBez3Bez3DdAnyBitlength as getCoeffsBez3Bez3Dd, 
     getCoeffsBez3Bez3ExactAnyBitlength as getCoeffsBez3Bez3Exact,
-} from '../../../src/index';
+} from '../../../src/index.js';
 import { eCompress } from 'big-float-ts';
 
 
@@ -170,3 +171,4 @@ function estimateDd(x: number[]) {
 
     return [ve, vv];
 }
+*/

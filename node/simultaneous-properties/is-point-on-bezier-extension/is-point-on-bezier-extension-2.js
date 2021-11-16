@@ -2,7 +2,7 @@ import { getImplicitForm2 } from "../../implicit-form/double/get-implicit-form2.
 import { getImplicitForm2ErrorCounters } from "../../implicit-form/get-error-counters/get-implicit-form2-error-counters.js";
 import { getImplicitForm2DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form2-dd-with-running-error.js";
 import { getImplicitForm2Exact } from "../../implicit-form/exact/get-implicit-form2-exact.js";
-import { γ, γγ } from '../../../src/error-analysis/error-analysis';
+import { γ, γγ } from '../../../src/error-analysis/error-analysis.js';
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { twoProduct, ddMultDd, ddAddDd } from "double-double";
 import { expansionProduct, fastExpansionSum, eSign, scaleExpansion2, eEstimate, eToDd } from 'big-float-ts';

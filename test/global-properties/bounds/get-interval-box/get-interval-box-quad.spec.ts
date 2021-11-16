@@ -1,9 +1,7 @@
-
 import { expect, assert } from 'chai';
-//import { describe } from 'mocha';
-import 'mocha';
-import { qAddDouble } from 'flo-numerical';
-import { getIntervalBox, getIntervalBoxDd } from '../../../../src/index';
+import { describe } from 'mocha';
+import { ddAddDouble } from 'double-double';
+import { getIntervalBox, getIntervalBoxDd } from '../../../../src/index.js';
 
 
 const eps = Number.EPSILON;
@@ -32,7 +30,7 @@ describe('interval box', function() {
 
 			let i = [
                 one_over_3, 
-                qAddDouble(one_over_3,delta)
+                ddAddDouble(one_over_3,delta)
             ];
 			
 			let r2 = getIntervalBoxDd(ps, i);

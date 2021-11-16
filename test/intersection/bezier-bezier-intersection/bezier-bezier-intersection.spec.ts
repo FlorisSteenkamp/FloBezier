@@ -1,8 +1,6 @@
-
 import { expect, assert } from 'chai';
-//import { describe } from 'mocha';
-import 'mocha';
-import { bezierBezierIntersection } from '../../../src/index';
+import { describe } from 'mocha';
+import { bezierBezierIntersection } from '../../../src/index.js';
 
 
 describe('bezierBezierIntersection', function() {

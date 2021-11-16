@@ -1,4 +1,4 @@
-import type { X } from './x';
+import type { X } from './x.js';
 /**
  * Returns the intersection between two bezier curves up to cubic order (i.e.
  * points, linear, quadratic or cubic bezier curves (i.e. order 0, 1, 2 or 3

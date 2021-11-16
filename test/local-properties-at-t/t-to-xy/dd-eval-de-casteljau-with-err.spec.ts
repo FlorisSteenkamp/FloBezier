@@ -1,11 +1,9 @@
-
 import { expect, assert } from 'chai';
-//import { describe } from 'mocha';
-import 'mocha';
+import { describe } from 'mocha';
 import { 
 	evalDeCasteljauWithErrDd,
 	evaluate_anyBitlength_exact
-} from '../../../src/index';
+} from '../../../src/index.js';
 import { eEstimate } from 'big-float-ts';
 import { manhattanDistanceBetween } from 'flo-vector2d';
 

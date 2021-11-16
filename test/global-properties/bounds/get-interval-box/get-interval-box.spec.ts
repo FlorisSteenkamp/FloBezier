@@ -1,8 +1,6 @@
-
 import { expect, assert } from 'chai';
-//import { describe } from 'mocha';
-import 'mocha';
-import { getIntervalBox } from '../../../../src/index';
+import { describe } from 'mocha';
+import { getIntervalBox } from '../../../../src/index.js';
 //import { getIntervalBox as getIntervalBoxOld } from '../../../../src/graveyard/bounds/get-interval-box/get-interval-box';
 // @ts-ignore
 import { performance } from 'perf_hooks';

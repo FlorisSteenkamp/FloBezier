@@ -1,6 +1,6 @@
 import { allRootsCertified } from 'flo-poly';
 import { getXY2Exact, getXY3Exact } from "../to-power-basis/get-xy/exact/get-xy-exact.js";
-import { getXY1DdWithRunningError, getXY2DdWithRunningError, getXY3DdWithRunningError } from "../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error";
+import { getXY1DdWithRunningError, getXY2DdWithRunningError, getXY3DdWithRunningError } from "../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js";
 import { twoDiff as twoDiff_ } from 'big-float-ts';
 const twoDiff = twoDiff_;
 const min = Math.min;

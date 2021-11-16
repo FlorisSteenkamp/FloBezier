@@ -1,5 +1,5 @@
 import { getImplicitForm2ExactPb } from "../../../../implicit-form/exact/get-implicit-form2-exact.js";
-import { getXY2Exact, getXY3Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact";
+import { getXY2Exact, getXY3Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact.js";
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { twoProduct, expansionProduct, fastExpansionSum, scaleExpansion2, eMultBy2, eSign as _eSign } from "big-float-ts";
 import { getCoeffsBez1Bez3Exact } from "./get-coeffs-bez1-bez3-exact.js";

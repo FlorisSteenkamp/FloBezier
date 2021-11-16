@@ -1,10 +1,10 @@
 import { getImplicitForm3ExactPb } from "../../../../implicit-form/exact/get-implicit-form3-exact.js";
-import { getXY2Exact, getXY3Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact";
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-import { twoProduct, expansionProduct, fastExpansionSum, scaleExpansion2, eMultBy2, eSign as _eSign } from "big-float-ts";
+import { getXY2Exact, getXY3Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact.js";
 import { getCoeffsBez2Bez2Exact } from "./get-coeffs-bez2-bez2-exact.js";
 import { toQuadraticFromCubic } from "../../../../transformation/degree-or-type/to-quad-from-cubic.js";
 import { getCoeffsBez3Bez1Exact } from "./get-coeffs-bez3-bez1-exact.js";
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+import { twoProduct, expansionProduct, fastExpansionSum, scaleExpansion2, eMultBy2, eSign as _eSign } from "big-float-ts";
 const tp = twoProduct; // error -> 0
 const sce = scaleExpansion2;
 const epr = expansionProduct;

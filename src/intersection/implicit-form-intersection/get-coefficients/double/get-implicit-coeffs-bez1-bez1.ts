@@ -1,4 +1,4 @@
-import type { ImplicitForm1Coeffs } from '../../../../implicit-form/implicit-form-types';
+import type { ImplicitForm1Coeffs } from '../../../../implicit-form/implicit-form-types.js';
 
 
 function getImplicitCoeffsBez1Bez1(

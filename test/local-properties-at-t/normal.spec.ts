@@ -1,8 +1,6 @@
-
 import { expect, assert } from 'chai';
-//import { describe } from 'mocha';
-import 'mocha';
-import { normal } from '../../src/index';
+import { describe } from 'mocha';
+import { normal } from '../../src/index.js';
 
 
 describe('normal', function() {

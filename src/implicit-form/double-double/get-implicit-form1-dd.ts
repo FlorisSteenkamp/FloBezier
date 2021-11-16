@@ -9,7 +9,7 @@ const qno = ddNegativeOf;
 
 // TODO - modify
 /**
- * Returns the error-free double-double precision implicit form of the given 
+ * Returns a double-double precision implicit form of the given 
  * linear bezier.
  * 
  * Returned coefficients are subscripted to match their monomial's variables,

@@ -1,42 +1,99 @@
-// Tests input length 47-bit aligned 
+////////////////////////////////////////
+// Tests any bitlength:
 // * double, 
 // * double-double and
 // * exact 
 // versions.
+////////////////////////////////////////
 
 import { expect, assert } from 'chai';
-//import { describe } from 'mocha';
-import 'mocha';
+import { describe } from 'mocha';
 import { 
-    getImplicitForm1InclError,
-    getImplicitForm2InclError, 
-    getImplicitForm3InclError,
+    getImplicitForm1,
+    getImplicitForm2, 
+    getImplicitForm3,
 
-    // TODO - put below back for bitlength 47
-    //getImplicitForm1DdAnyBitlength as getImplicitForm1Dd_,
-    //getImplicitForm2Dd,
-    //getImplicitForm3Dd,
+    getImplicitForm1DdWithRunningError,
+    getImplicitForm2DdWithRunningError,
+    getImplicitForm3DdWithRunningError,
 
-    getImplicitForm1DdAnyBitlength as getImplicitForm1Dd_,
-    getImplicitForm2DdAnyBitlength as getImplicitForm2Dd,
-    getImplicitForm3DdAnyBitlength as getImplicitForm3Dd,
-
-    // TODO - put below back for bitlength 47
-    //getImplicitForm1Exact as getImplicitForm1Exact_, 
-    //getImplicitForm2Exact, 
-    //getImplicitForm3Exact,
-    getImplicitForm1ExactAnyBitlength as getImplicitForm1Exact_, 
-    getImplicitForm2ExactAnyBitlength as getImplicitForm2Exact, 
-    getImplicitForm3ExactAnyBitlength as getImplicitForm3Exact,
-} from '../../src/index';
-import { estimate, expansionDiff } from 'flo-numerical';
-import { toGrid } from '../helpers/to-grid'
-import { γ, γγ } from '../../src/error-analysis/error-analysis';
+    getImplicitForm1Exact, 
+    getImplicitForm2Exact, 
+    getImplicitForm3Exact,
+    getImplicitForm1ErrorCounters,
+    getImplicitForm2ErrorCounters,
+    getImplicitForm3ErrorCounters,
+} from '../../src/index.js';
+import { eEstimate, eDiff } from 'big-float-ts';
+import { γ, γγ } from '../../src/error-analysis/error-analysis.js';
+import { toGrid } from '../helpers/to-grid.js'
+// import { toGrid } from '../../src/index.js';
 import { eCompress } from 'big-float-ts';
 
 
 const γ1 = γ(1);
 const γγ3 = γγ(3);
+
+
+function getImplicitForm1InclError(ps: number[][]): ImplicitFormDouble {
+    const coeffs = getImplicitForm1(ps);
+    const { vₓ, vᵧ, v } = coeffs;
+    const { vₓ_, vᵧ_, v_ } = getImplicitForm1ErrorCounters(ps);
+    const errorBound = {
+        vₓ_: /*γ1**/vₓ_*vₓ,
+        vᵧ_: /*γ1**/vᵧ_*vᵧ,
+        v_ : /*γ1**/v_ *v
+    }
+
+    return {
+        coeffs,
+        errorBound
+    }
+}
+
+
+function getImplicitForm2InclError(ps: number[][]): ImplicitFormDouble {
+    const coeffs = getImplicitForm2(ps);
+    const { vₓₓ,  vₓᵧ,  vᵧᵧ,  vₓ,  vᵧ,  v } = coeffs;
+    const { vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ } = getImplicitForm2ErrorCounters(ps);
+    const errorBound = {
+        vₓₓ_: /*γ1**/vₓₓ_*vₓₓ, 
+        vₓᵧ_: /*γ1**/vₓᵧ_*vₓᵧ, 
+        vᵧᵧ_: /*γ1**/vᵧᵧ_*vᵧᵧ,
+        vₓ_: /*γ1**/vₓ_*vₓ,
+        vᵧ_: /*γ1**/vᵧ_*vᵧ,
+        v_ : /*γ1**/v_ *v
+    }
+
+    return {
+        coeffs,
+        errorBound
+    }
+}
+
+
+function getImplicitForm3InclError(ps: number[][]): ImplicitFormDouble {
+    const coeffs = getImplicitForm3(ps);
+    const { vₓₓₓ,  vₓₓᵧ,  vₓᵧᵧ,  vᵧᵧᵧ,  vₓₓ,  vₓᵧ,  vᵧᵧ,  vₓ,  vᵧ,  v } = coeffs;
+    const { vₓₓₓ_, vₓₓᵧ_, vₓᵧᵧ_, vᵧᵧᵧ_, vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ } = getImplicitForm3ErrorCounters(ps);
+    const errorBound = {
+        vₓₓₓ_: /*γ1**/vₓₓₓ_*vₓₓₓ,
+        vₓₓᵧ_: /*γ1**/vₓₓᵧ_*vₓₓᵧ,
+        vₓᵧᵧ_: /*γ1**/vₓᵧᵧ_*vₓᵧᵧ,
+        vᵧᵧᵧ_: /*γ1**/vᵧᵧᵧ_*vᵧᵧᵧ,
+        vₓₓ_: /*γ1**/vₓₓ_*vₓₓ, 
+        vₓᵧ_: /*γ1**/vₓᵧ_*vₓᵧ, 
+        vᵧᵧ_: /*γ1**/vᵧᵧ_*vᵧᵧ,
+        vₓ_: /*γ1**/vₓ_*vₓ,
+        vᵧ_: /*γ1**/vᵧ_*vᵧ,
+        v_ : /*γ1**/v_ *v
+    }
+
+    return {
+        coeffs,
+        errorBound
+    }
+}
 
 
 type Coeffs<T> = {
@@ -92,26 +149,26 @@ const implFormFs = [,
 ];
 
 
-function getImplicitForm1Dd(ps: number[][]) {
+// function getImplicitForm1Dd(ps: number[][]) {
     //let { vₓ, vᵧ, v } = getImplicitForm1Dd_(ps).coeffs;
     //return {
     //    coeffs: { vₓ: [0,vₓ], vᵧ: [0,vᵧ], v },
     //    errorBound: { }
     //}
 
-    return getImplicitForm1Dd_(ps);
-}
+    // return getImplicitForm1Dd_(ps);
+// }
 
-function getImplicitForm1Exact(ps: number[][]) {
+// function getImplicitForm1Exact(ps: number[][]) {
     //let { vₓ, vᵧ, v } = getImplicitForm1Exact_(ps);
     //return { vₓ: [vₓ], vᵧ: [vᵧ], v };
-    return getImplicitForm1Exact_(ps);
-}
+    // return getImplicitForm1Exact_(ps);
+// }
 
 const implFormDdFs = [,
-    { est: getImplicitForm1Dd, exact: getImplicitForm1Exact },
-    { est: getImplicitForm2Dd, exact: getImplicitForm2Exact },
-    { est: getImplicitForm3Dd, exact: getImplicitForm3Exact },
+    { est: getImplicitForm1DdWithRunningError, exact: getImplicitForm1Exact },
+    { est: getImplicitForm2DdWithRunningError, exact: getImplicitForm2Exact },
+    { est: getImplicitForm3DdWithRunningError, exact: getImplicitForm3Exact },
 ];
 
 describe('implicit form', function() {
@@ -211,8 +268,8 @@ function testImplictForm(
             ? γγ3*(err || 0)
             : γ1 *(err || 0);
 
-        let errActual = Math.abs(estimate(
-            expansionDiff(rExact, rEst)
+        let errActual = Math.abs(eEstimate(
+            eDiff(rExact, rEst)
         ));
 
 
@@ -255,7 +312,7 @@ function estimateDd(x: number[]) {
     const v = eCompress(x);
     const vv = v[v.length-1];
     const v2 = v.slice(0,-1);
-    const ve = estimate(v2);
+    const ve = eEstimate(v2);
 
     return [ve, vv];
 }

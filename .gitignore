@@ -1,6 +1,6 @@
 npm-debug.log
 papers
-research
+research/
 node_modules/
 c.bat
 experiments
@@ -10,3 +10,5 @@ experiments/
 experiments-new/
 notes.txt
 coverage/
+.vscode/
+quokka-test.ts

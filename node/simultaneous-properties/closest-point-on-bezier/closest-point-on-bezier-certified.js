@@ -9,7 +9,7 @@ import { getClosestOnBezier2FromPointErrorCounters } from "./get-coeffs/get-clos
 import { getClosestOnBezier3FromPointErrorCounters } from "./get-coeffs/get-closest-on-bezier-from-point-error-counters.js";
 import { allRootsCertified } from "flo-poly";
 import { getIntervalBox } from "../../global-properties/bounds/get-interval-box/get-interval-box.js";
-import { γγ } from '../../error-analysis/error-analysis';
+import { γγ } from '../../error-analysis/error-analysis.js';
 import { twoDiff, eEstimate, eMult, eAdd } from 'big-float-ts';
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const estimate = eEstimate;

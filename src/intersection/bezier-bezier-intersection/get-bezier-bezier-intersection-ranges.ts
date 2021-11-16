@@ -1,4 +1,4 @@
-import type { X } from './x';
+import type { X } from './x.js';
 import { reduceOrderIfPossible } from './reduce-order-if-possible.js';
 
 

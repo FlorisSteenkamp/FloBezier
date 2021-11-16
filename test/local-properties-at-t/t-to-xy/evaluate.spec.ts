@@ -1,8 +1,6 @@
-
 import { expect, assert } from 'chai';
-//import { describe } from 'mocha';
-import 'mocha';
-import { evaluate, evaluate_anyBitlength_exact } from '../../../src/index';
+import { describe } from 'mocha';
+import { evaluate, evaluate_anyBitlength_exact } from '../../../src/index.js';
 import { eEstimate } from 'big-float-ts';
 
 

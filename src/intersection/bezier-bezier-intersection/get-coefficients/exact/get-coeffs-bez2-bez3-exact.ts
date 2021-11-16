@@ -1,6 +1,6 @@
-import type { ImplicitFormExact2 } from "../../../../implicit-form/implicit-form-types";
+import type { ImplicitFormExact2 } from "../../../../implicit-form/implicit-form-types.js";
 import { getImplicitForm2ExactPb } from "../../../../implicit-form/exact/get-implicit-form2-exact.js";
-import { getXY2Exact, getXY3Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact";
+import { getXY2Exact, getXY3Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact.js";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { 

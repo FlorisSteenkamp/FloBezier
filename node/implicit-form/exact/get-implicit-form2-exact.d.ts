@@ -1,4 +1,4 @@
-import type { ImplicitFormExact2 } from '../implicit-form-types';
+import type { ImplicitFormExact2 } from '../implicit-form-types.js';
 /**
  * Returns the exact implicit form of the given quadratic bezier curve
  * or `undefined` if the curve is really a point.

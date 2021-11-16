@@ -1,4 +1,4 @@
-import type { ImplicitFormExact2 } from '../implicit-form-types';
+import type { ImplicitFormExact2 } from '../implicit-form-types.js';
 import { getXY2Exact } from '../../to-power-basis/get-xy/exact/get-xy-exact.js';
 import { getImplicitForm1ExactPb } from './get-implicit-form1-exact.js';
 

@@ -1,4 +1,4 @@
-import type { ImplicitFormExact3 } from '../implicit-form-types';
+import type { ImplicitFormExact3 } from '../implicit-form-types.js';
 /**
  * Returns the exact implicit form of the given cubic bezier curve
  * or `undefined` if the curve is really a point.

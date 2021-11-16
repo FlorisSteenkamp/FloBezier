@@ -1,5 +1,5 @@
-import type { Iteration } from './iteration';
-import type { IterationExtras, __Debug__ } from './debug';
+import type { Iteration } from './iteration.js';
+import type { IterationExtras, __Debug__ } from './debug.js';
 import { geoClip as _geoClip } from './clip/geo-clip.js';
 import { fromTo as _fromToVect } from 'flo-vector2d';
 import { toLength as _toLength } from 'flo-vector2d';

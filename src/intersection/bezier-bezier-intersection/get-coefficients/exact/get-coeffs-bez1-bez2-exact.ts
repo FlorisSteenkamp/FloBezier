@@ -1,6 +1,6 @@
-import type { ImplicitFormExact1 } from "../../../../implicit-form/implicit-form-types";
+import type { ImplicitFormExact1 } from "../../../../implicit-form/implicit-form-types.js";
 import { getImplicitForm1ExactPb } from "../../../../implicit-form/exact/get-implicit-form1-exact.js";
-import { getXY1Exact, getXY2Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact";
+import { getXY1Exact, getXY2Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact.js";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { expansionProduct, fastExpansionSum, scaleExpansion2, eSign as _eSign } from "big-float-ts";

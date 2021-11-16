@@ -1,8 +1,6 @@
-
 import { expect, assert } from 'chai';
-//import { describe } from 'mocha';
-import 'mocha';
-import { evaluate, evalDeCasteljau } from '../../../src/index';
+import { describe } from 'mocha';
+import { evaluate, evalDeCasteljau } from '../../../src/index.js';
 
 
 describe('eval decasteljau', function() {

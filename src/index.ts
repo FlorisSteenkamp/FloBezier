@@ -28,16 +28,19 @@ import { getInflections } from './global-properties/get-inflections.js';
 import { getCoeffsBezBez } from './intersection/bezier-bezier-intersection/get-coefficients/get-coeffs-bez-bez.js';
 
 import { getImplicitForm3 } from './implicit-form/double/get-implicit-form3.js';
+import { getImplicitForm3Dd } from './implicit-form/double-double/get-implicit-form3-dd.js'
 import { getImplicitForm3ErrorCounters } from './implicit-form/get-error-counters/get-implicit-form3-error-counters.js';
 import { getImplicitForm3DdWithRunningError } from './implicit-form/double-double/get-implicit-form3-dd-with-running-error.js';
 import { getImplicitForm3Exact } from './implicit-form/exact/get-implicit-form3-exact.js';
 
 import { getImplicitForm2 } from './implicit-form/double/get-implicit-form2.js';
+import { getImplicitForm2Dd } from './implicit-form/double-double/get-implicit-form2-dd.js'
 import { getImplicitForm2ErrorCounters } from './implicit-form/get-error-counters/get-implicit-form2-error-counters.js';
 import { getImplicitForm2DdWithRunningError } from './implicit-form/double-double/get-implicit-form2-dd-with-running-error.js';
 import { getImplicitForm2Exact } from './implicit-form/exact/get-implicit-form2-exact.js';
 
 import { getImplicitForm1 } from './implicit-form/double/get-implicit-form1.js';
+import { getImplicitForm1Dd } from './implicit-form/double-double/get-implicit-form1-dd.js'
 import { getImplicitForm1ErrorCounters } from './implicit-form/get-error-counters/get-implicit-form1-error-counters.js';
 import { getImplicitForm1DdWithRunningError } from './implicit-form/double-double/get-implicit-form1-dd-with-running-error.js';
 import { getImplicitForm1Exact } from './implicit-form/exact/get-implicit-form1-exact.js';
@@ -239,16 +242,19 @@ export {
 	toEstimation,
 
 	getImplicitForm3,
+	getImplicitForm3Dd,
 	getImplicitForm3ErrorCounters,
 	getImplicitForm3DdWithRunningError,
 	getImplicitForm3Exact,
 
 	getImplicitForm2,
+	getImplicitForm2Dd,
 	getImplicitForm2ErrorCounters,
 	getImplicitForm2DdWithRunningError,
 	getImplicitForm2Exact,
 
 	getImplicitForm1,
+	getImplicitForm1Dd,
 	getImplicitForm1ErrorCounters,
 	getImplicitForm1DdWithRunningError,
 	getImplicitForm1Exact,
@@ -361,6 +367,34 @@ export {
 
 	getXY3DdWithRunningError as getXYDdAnyBitlength3,
 }
+
+
+//////////////////////////////////////////////////////
+// TODO - removed this - just for testing
+/*
+import { reduceSignificand } from "double-double";
+
+
+function toGrid(
+        a: number, 
+        expMax: number,
+        significantFigures: number): number {
+
+    let expA = Math.floor(Math.log2(Math.abs(a)));
+    let expDif = expMax - expA;
+    let newSig = significantFigures - expDif + 1;
+
+    if (newSig <= 0) { return 0; }
+
+    let res = reduceSignificand(a, newSig);
+
+    return res;
+}
+
+
+export { toGrid }*/
+//////////////////////////////////////////////////////
+
 
 export { 
 	BezierPart,

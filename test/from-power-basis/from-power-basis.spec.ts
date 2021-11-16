@@ -1,8 +1,6 @@
-
 import { expect, assert } from 'chai';
-//import { describe } from 'mocha';
-import 'mocha';
-import { fromPowerBasis, getXY } from '../../src/index';
+import { describe } from 'mocha';
+import { fromPowerBasis, getXY } from '../../src/index.js';
 
 
 function testFromPowerBasis(ps: number[][]) {

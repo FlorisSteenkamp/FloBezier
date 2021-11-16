@@ -1,4 +1,4 @@
-import type { Iteration } from './iteration';
+import type { Iteration } from './iteration.js';
 /**
  * Returns 0, 1 or 2 new narrowed ranges of possible intersections based on the
  * given current iteration's ranges.

@@ -1,4 +1,4 @@
-import type { Iteration } from './iteration';
+import type { Iteration } from './iteration.js';
 /**
  * A type that holds debug information if there exists a global variable
  * named `__debug__` having this type.

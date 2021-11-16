@@ -1,4 +1,4 @@
-import type { Iteration } from './iteration';
+import type { Iteration } from './iteration.js';
 
 
 // Use the below line *before* calling the bezier intersection algorithm to enable debugging
