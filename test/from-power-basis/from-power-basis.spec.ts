@@ -3,6 +3,12 @@ import { describe } from 'mocha';
 import { fromPowerBasis, getXY } from '../../src/index.js';
 
 
+/**
+ * Test `fromPowerBasis` by converting to power basis and then back to 
+ * Bernstein basis and checking the error is small enough.
+ * 
+ * @param ps a bezier curve
+ */
 function testFromPowerBasis(ps: number[][]) {
     const xy = getXY(ps);
     const ps_ = fromPowerBasis(xy);
@@ -27,17 +33,19 @@ function testFromPowerBasis(ps: number[][]) {
 
             let relError = Math.abs(c - c_) / maxAbsCoeff;
 
+            // less than 5 ulps of error
             assert(relError < Number.EPSILON * 2**5);
         }
     }
 }
 
 
-describe('from power basis', function() {
+describe('fromPowerBasis', function() {
     it('it should correctly convert from power basis to Bernstein basis', 
 	function() {
         {
             const pss = [
+                [[3,3]],  // a point
                 [[3,5],[7,1]],  // line
                 [[1,1],[5,7],[3,4]], // quadratic 
                 [[1,1],[5,7],[3,5],[4,7]], // cubic
@@ -50,5 +58,10 @@ describe('from power basis', function() {
                 testFromPowerBasis(ps);
             }
         }
+    });
+    it('it should throw for invalid input', 
+    function() {
+        // TODO
+        // expect(fromPowerBasis([[]])).to.throw();
     });
 });

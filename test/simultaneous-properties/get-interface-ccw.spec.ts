@@ -1,6 +1,7 @@
+/* still an experiment
 import { expect, assert } from 'chai';
 import { describe } from 'mocha';
-import { getInterfaceCcw } from '../../src/simultaneous-properties/get-interface-ccw';
+import { getInterfaceCcw } from '../../src/simultaneous-properties/get-interface-ccw.js';
 import { splitAt } from '../../src/transformation/split-merge-clone/split-at';
 
 
@@ -167,3 +168,4 @@ describe('get interface ccw', function() {
 		}
 	});
 });
+*/

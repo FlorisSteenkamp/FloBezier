@@ -1,6 +1,6 @@
 import { expect, assert } from 'chai';
 import { describe } from 'mocha';
-import { evaluate, evaluate_anyBitlength_exact } from '../../../src/index.js';
+import { evaluate, evaluateExact } from '../../../src/index.js';
 import { eEstimate } from 'big-float-ts';
 
 
@@ -21,7 +21,7 @@ describe('eval decasteljau', function() {
 			
 			for (let ps of pss) {
 				for (let t of ts) {
-					let pExact = evaluate_anyBitlength_exact(ps, t).map(eEstimate);
+					let pExact = evaluateExact(ps, t).map(eEstimate);
 					let r2 = evaluate(ps, t);
 
 					// We check that evaluation using two different methods

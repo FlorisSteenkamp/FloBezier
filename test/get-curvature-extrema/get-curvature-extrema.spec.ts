@@ -1,11 +1,46 @@
-import { expect, assert } from 'chai';
+import { expect, assert, use } from 'chai';
 import { describe } from 'mocha';
-import { getCurvatureExtrema, curvature } from '../../src/index.js';
+import { squares } from 'squares-rng';
 import { rotate, translate } from 'flo-vector2d';
-import { performance } from 'perf_hooks';
+import { getCurvatureExtrema, curvature, Extrema } from '../../src/index.js';
+import { createCubicThatsReallyQuad } from '../helpers/create-cubic-thats-really-quad.js';
+import { nearly } from '../helpers/chai-extend-nearly.js';
 
+use(nearly);
 
 const eps = Number.EPSILON;
+const abs = Math.abs;
+const r = (n: number) => squares(n) / 0xffff_ffff;
+
+
+function isExtremaLikelyCorrect(
+        ps: number[][], 
+        extrema: Extrema): boolean {
+
+    let result = true;
+
+    for (let t of extrema.maxima) {
+        const _t = t - (eps * 2**40);
+        const t_ = t + (eps * 2**40);
+        const c = abs(curvature(ps, t));
+        const _c = abs(curvature(ps, _t));
+        const c_ = abs(curvature(ps, t_));
+
+        result = result && (_c <= c && c_ <= c);
+    }
+
+    for (let t of extrema.minima) {
+        const _t = t - (eps * 2**40);
+        const t_ = t + (eps * 2**40);
+        const c = abs(curvature(ps, t));
+        const _c = abs(curvature(ps, _t));
+        const c_ = abs(curvature(ps, t_));
+
+        result = result && (_c >= c && c_ >= c);
+    }
+
+    return result;
+}
 
 
 describe('getCurvatureExtrema', function() {
@@ -36,7 +71,7 @@ describe('getCurvatureExtrema', function() {
             // simple quadratic
             const ps = [[1,10],[6,0],[11,10]];
             const extrema = getCurvatureExtrema(ps);
-            expect(extrema).to.deep.eq({ minima: [], maxima: [0.5], inflections: [] });
+            expect(extrema).to.be.nearly(2**2, { minima: [], maxima: [0.5], inflections: [] });
         }
         {
             // simple quadratic
@@ -111,6 +146,23 @@ describe('getCurvatureExtrema', function() {
             });  // [-0.16788321167883336],  // <= if t < 0 was not eliminated
         }
     });
+    it('it should find the curvature extrema of quadratic bezier curves disguised as cubics', 
+	function() {
+        {
+            for (let i=0; i<10; i++) {
+                const s = 0;
+                const { quad, cubic } = createCubicThatsReallyQuad(i+s);
+
+                const extrema = getCurvatureExtrema(cubic);
+                
+                assert(isExtremaLikelyCorrect(quad, extrema));
+                assert(isExtremaLikelyCorrect(cubic, extrema));
+
+                assert(extrema.minima.length === 0);
+                assert(extrema.maxima.length <= 1);
+            }
+        }
+    });
     it('it should find the curvature extrema of some cubic bezier curves', 
 	function() {
         {
@@ -126,9 +178,9 @@ describe('getCurvatureExtrema', function() {
 
             const extrema = getCurvatureExtrema(ps);
             //console.log('extrema: ', extrema);
-            expect(extrema).to.deep.eq({ 
+            expect(extrema).to.be.nearly(2**4, { 
                 minima: [], 
-                maxima: [0.15617147171437754, 0.8457091576527159], 
+                maxima: [0.15617147171437748, 0.8457091576527154], 
                 inflections: [0.49374951030401965] 
             });
         }
@@ -145,10 +197,10 @@ describe('getCurvatureExtrema', function() {
 
             const extrema = getCurvatureExtrema(ps);
             //console.log('extrema: ', extrema);
-            expect(extrema).to.deep.eq({ 
+            expect(extrema).to.be.nearly(2**4, { 
                 minima: [], 
-                maxima: [0.14916374172712937, 0.8508362582728706],
-                inflections: [0.5] 
+                maxima: [0.14916374172712923, 0.8508362582728751],
+                inflections: [0.4999999999999999] 
             });
         }
         {
@@ -218,40 +270,45 @@ describe('getCurvatureExtrema', function() {
                 );
             }
 
-            //console.log('extrema: ', extrema);
-            expect(extrema).to.deep.eq({
+            expect(extrema).to.be.nearly(2**6,{
                 minima: [
-                    0.49992314768993035
+                    0.4999231476889932
                 ],
                 maxima: [
-                    0.37298900928385187,
-                    0.6268781560382795
+                    0.3729890092839494, 
+                    0.6268781560395129
                 ],
                 inflections: [] 
             });
         }
-        /*
         {
-            const r = Math.random;
-
-            // this could actually fail sometimes (since 2**32 is just thumb-suck)
+            // TODO
+            // these could potentially fail sometimes (since 2**40 is just thumb-suck)
             for (let i=0; i<1000; i++) {
-                const ps = [[r(),r()],[r(),r()],[r(),r()],[r(),r()]]
+                const s = i+0;
+                const ps = [[r(s),r(s+1)],[r(s+2),r(s+3)],[r(s+4),r(s+5)],[r(s+6),r(s+7)]];
                 const extrema = getCurvatureExtrema(ps);
 
-                for (let t of extrema) {
-                    const _t = t - (eps * 2**32);
-                    const t_ = t + (eps * 2**32);
+                for (let t of extrema.maxima) {
+                    const _t = t - (eps * 2**40);
+                    const t_ = t + (eps * 2**40);
 
                     assert(
-                        (curvature(ps, _t) < curvature(ps, t) && 
-                         curvature(ps, t_) < curvature(ps, t)) ||
-                        (curvature(ps, _t) > curvature(ps, t) && 
-                         curvature(ps, t_) > curvature(ps, t))
+                        abs(curvature(ps, _t)) <= abs(curvature(ps, t)) && 
+                        abs(curvature(ps, t_)) <= abs(curvature(ps, t)) 
+                    );
+                }
+
+                for (let t of extrema.minima) {
+                    const _t = t - (eps * 2**40);
+                    const t_ = t + (eps * 2**40);
+
+                    assert(
+                        abs(curvature(ps, _t)) >= abs(curvature(ps, t)) && 
+                        abs(curvature(ps, t_)) >= abs(curvature(ps, t))
                     );
                 }
             }
         }
-        */
     });
 });

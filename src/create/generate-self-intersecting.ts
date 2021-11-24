@@ -103,8 +103,6 @@
     
     // Note: A self-intersection occurs when:
     // `3*(a1*b3 - a3*b1)**2 + 4*(a2*b1 - a1*b2)*(a2*b3 - a3*b2) <= 0`
-    //console.log(3*(a1*b3 - a3*b1)**2 + 4*(a2*b1 - a1*b2)*(a2*b3 - a3*b2));
-    //console.log(toString([[x0,y0],[x1,y1],[x2,y2],[x3,y3]]));
     
     return [[x0,y0],[x1,y1],[x2,y2],[x3,y3]];
 }

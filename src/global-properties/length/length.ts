@@ -5,7 +5,8 @@ import { lengthBez3 } from './length-bez3.js';
 
 /**
  * Returns the curve length (linear, quadratic or cubic bezier) in the 
- * specified interval calculated using Gaussian Quadrature.
+ * specified interval calculated using Gaussian Quadrature *with* subdividing
+ * for improved accuracy.
  * 
  * @param ps a bezier curve, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * @param interval the paramter interval over which the length is 
@@ -13,13 +14,18 @@ import { lengthBez3 } from './length-bez3.js';
  * 
  * @doc mdx
  */
-function length(interval: number[], ps: number[][]): number {
+function length(
+		interval: number[], 
+		ps: number[][],
+		maxFlatness = 1.1,
+		gaussOrder: 4|16|64 = 16): number {
+
 	if (ps.length === 4) {
-		return lengthBez3(interval, ps);
+		return lengthBez3(interval, ps, maxFlatness, gaussOrder);
 	}
 
 	if (ps.length === 3) {
-		return lengthBez2(interval, ps);
+		return lengthBez2(interval, ps, maxFlatness, gaussOrder);
 	}
 
 	if (ps.length === 2) {

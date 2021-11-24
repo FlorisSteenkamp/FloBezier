@@ -1,8 +1,12 @@
-import { evalDeCasteljauError } from "../eval-de-casteljau-error";
-import { evalDeCasteljau as evalDeCasteljau_ } from "./eval-de-casteljau";
+import { evalDeCasteljauError as evalDeCasteljauError_ } from "../eval-de-casteljau-error.js";
+import { evalDeCasteljau as evalDeCasteljau_ } from "./eval-de-casteljau.js";
+import { γ } from '../../../error-analysis/error-analysis.js';
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const evalDeCasteljau = evalDeCasteljau_;
+const evalDeCasteljauError = evalDeCasteljauError_;
+
+const γ1 = γ(1);
 
 
 /** 
@@ -23,40 +27,21 @@ function evalDeCasteljauWithErr(
 		ps: number[][], 
 		t: number): { p: number[], pE: number[] } {
 
+	const p = evalDeCasteljau(ps, t);
+	const pE = evalDeCasteljauError(ps, [0,t]);
+
 	if (ps.length === 4) {
-		const p = evalDeCasteljau(ps, t);
-		const pE = evalDeCasteljauError(ps, t);
-	} 
-	
-	if (ps.length === 3) {
-		const [[x0,y0], [x1,y1], [x2,y2]] = ps;	
-
-		const a01 = x0 + (x1 - x0)*t;
-		const a11 = x1 + (x2 - x1)*t;
-		const x = a01 + (a11 - a01)*t;
-
-		const b01 = y0 + (y1 - y0)*t;
-		const b11 = y1 + (y2 - y1)*t;
-		const y = b01 + (b11 - b01)*t;
-
-		return [x,y];
-	} 
-	
-	if (ps.length === 2) {
-		const [[x0,y0], [x1,y1]] = ps;	
-
-		const x = x0 + (x1 - x0)*t;
-		const y = y0 + (y1 - y0)*t;
-
-		return [x,y];
-	}
-
-	if (ps.length === 1) {
-		return ps[0];	
+		return { p, pE: pE.map(e => 9*γ1*e) };
+	} else if (ps.length === 3) {
+		return { p, pE: pE.map(e => 6*γ1*e) };
+	} else if (ps.length === 2) {
+		return { p, pE: pE.map(e => 3*γ1*e) };
+	} else if (ps.length === 1) {
+		return { p: ps[0], pE: [0,0] };
 	}
 
 	throw new Error('The given bezier curve is invalid.');
 }
 
 
-export { evalDeCasteljau }
+export { evalDeCasteljauWithErr }

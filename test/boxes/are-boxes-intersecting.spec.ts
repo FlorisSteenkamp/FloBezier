@@ -1,9 +1,9 @@
 import { assert } from 'chai';
 import { describe } from 'mocha';
-import { areBoxesIntersecting } from '../../src/boxes/are-boxes-intersecting.js';
+import { areBoxesIntersecting } from '../../src/index.js';
 
 
-describe('are boxes intersecting', function() {
+describe('areBoxesIntersecting', function() {
     const areBoxesIntersectingOpen = areBoxesIntersecting(false);
     const areBoxesIntersectingClosed = areBoxesIntersecting(true);
 

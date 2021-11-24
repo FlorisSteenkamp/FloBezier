@@ -13,13 +13,17 @@ import { lengthBez3 } from './length-bez3.js';
  * 
  * @doc mdx
  */
- function totalLength(ps: number[][]): number {
+ function totalLength(
+	 	ps: number[][],
+		maxFlatness = 1.01,
+		gaussOrder: 4|16|64 = 16): number {
+
 	if (ps.length === 4) {
-		return lengthBez3([0,1], ps);
+		return lengthBez3([0,1], ps, maxFlatness, gaussOrder);
 	}
 
 	if (ps.length === 3) {
-		return lengthBez2([0,1], ps);
+		return lengthBez2([0,1], ps, maxFlatness, gaussOrder);
 	}
 
     if (ps.length === 2) {

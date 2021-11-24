@@ -1,7 +1,7 @@
-import { isCubicReallyQuad } from '../../global-properties/type/is-cubic-really-quad.js';
+import { isCubicReallyQuad } from '../../global-properties/classification/is-cubic-really-quad.js';
 import { toQuadraticFromCubic } from '../../transformation/degree-or-type/to-quad-from-cubic.js';
-import { isQuadReallyLine } from '../../global-properties/type/is-quad-really-line.js';
-import { isLineReallyPoint } from '../../global-properties/type/is-line-really-point.js';
+import { isQuadReallyLine } from '../../global-properties/classification/is-quad-really-line.js';
+import { isReallyPoint } from '../../global-properties/classification/is-really-point.js';
 
 
 /**
@@ -23,7 +23,7 @@ import { isLineReallyPoint } from '../../global-properties/type/is-line-really-p
     if (ps.length === 3 && isQuadReallyLine(ps)) {
         ps = [ps[0], ps[2]];
     }
-    if (ps.length === 2 && isLineReallyPoint(ps)) {
+    if (ps.length === 2 && isReallyPoint(ps)) {
         ps = [ps[0]];
     }
 

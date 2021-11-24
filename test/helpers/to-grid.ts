@@ -4,11 +4,11 @@ import { reduceSignificand } from "double-double";
 function toGrid(
         a: number, 
         expMax: number,
-        significantFigures: number): number {
+        significantBits: number): number {
 
     let expA = Math.floor(Math.log2(Math.abs(a)));
     let expDif = expMax - expA;
-    let newSig = significantFigures - expDif + 1;
+    let newSig = significantBits - expDif + 1;
 
     if (newSig <= 0) { return 0; }
 

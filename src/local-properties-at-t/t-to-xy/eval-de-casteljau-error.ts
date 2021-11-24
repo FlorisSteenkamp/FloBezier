@@ -5,7 +5,7 @@ const abs = Math.abs;
 // TODO - add an example
 /** 
  * Returns a representation of the error (from which an absolute error bound 
- * can be calculated) of evaluating the given bezier curve at the parameter `t` 
+ * can be calculated) when evaluating the given bezier curve at the parameter `t` 
  * using [De Casteljau's algorithm](https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm).
  * 
  * The returned error representation needs to be multiplied with 
@@ -16,9 +16,14 @@ const abs = Math.abs;
  * p. 68 near the bottom.
  * 
  * (1) G. W. Stewart. Introduction to Matrix Computations. Academic Press, New York,
-*  1973. xiii+441 pp. ISBN 0-12-670350-7
+ *  1973. xiii+441 pp. ISBN 0-12-670350-7
  * 
  * * **precondition**: TODO underflow/overflow
+ * 
+ * * The error counters when calculating in double-double precision will 
+ * actually be slightly less (compared to double precision) but we can use this 
+ * for both double and double-double precision (since doubling the error counter 
+ * only costs 1 bit).
  * 
  * The absolute erros below can be calculated as follows (where `<E>` are the 
  * error counters as indicated in the comments of the return value below): 
@@ -34,18 +39,18 @@ const abs = Math.abs;
  * ```
  * // for cubic bezier curves
  * return [ 
- * 	x_,  // <E> === 3T + 8
- * 	y_   // <E> === 3T + 8
+ * 	x_,  // <E> === 3T + 9
+ * 	y_   // <E> === 3T + 9
  * ];
  * // for quadratic bezier curves
  * return [ 
- * 	x_,  // <E> === 2T + 5
- * 	y_   // <E> === 2T + 5
+ * 	x_,  // <E> === 2T + 6
+ * 	y_   // <E> === 2T + 6
  * ];
  * // for linear bezier curves (i.e. lines)
  * return [ 
- * 	x_,  // <E> === T + 2
- * 	y_   // <E> === T + 2
+ * 	x_,  // <E> === T + 3
+ * 	y_   // <E> === T + 3
  * ];
  * ```
  * 
@@ -84,17 +89,17 @@ function evalDeCasteljauError(
 		const _x3 = abs(x3);  // <0>
 		const _y3 = abs(y3);  // <0>
 
-		// a01<T+2> <-- <T+2>(x0 + <T+1>(<0>(x1 + x0)*t<T>));
+		// a01<T+3> <-- <T+3>(x0 + <T+2>(<1>(x1 + x0)*<T>t));
 		const a01_ = _x0 + (_x1 + _x0)*t_;
-		// a11<T+2> <-- <T+2>(x1 + <1>(<0>(x2 + x1)*t<T>));
+		// a11<T+3> <-- <T+3>(x1 + <1>(<0>(x2 + x1)*<T>t));
 		const a11_ = _x1 + (_x2 + _x1)*t_;
-		// a21<T+2> <-- <T+2>(x2 + <1>(<0>(x3 + x2)*t<T>));
+		// a21<T+3> <-- <T+3>(x2 + <1>(<0>(x3 + x2)*<T>t));
 		const a21_ = _x2 + (_x3 + _x2)*t_;
-		// a02<2T+5> <-- <2T+5>(<T+2>a01 + <2T+4>(<T+3>(<T+2>a11 + <T+2>a01)*t<T>));
+		// a02<2T+6> <-- <2T+6>(<T+3>a01 + <2T+5>(<T+4>(<T+3>a11 + <T+3>a01)*<T>t));
 		const a02_ = a01_ + (a11_ + a01_)*t_;
-		// a12<2T+5> <-- <2T+5>(<T+2>a11 + <2T+4>(<T+3>(<T+2>a21 + <T+2>a11)*t<T>));
+		// a12<2T+6> <-- <2T+6>(<T+3>a11 + <2T+5>(<T+4>(<T+3>a21 + <T+3>a11)*<T>t));
 		const a12_ = a11_ + (a21_ + a11_)*t_;
-		// x<3T+8> <-- <3T+8>(<2T+5>a02 + <3T+7>(<2T+6>(<2T+5>a12 + <2T+5>a02)*t<T>));
+		// x<3T+9> <-- <3T+9>(<2T+6>a02 + <3T+8>(<2T+7>(<2T+6>a12 + <2T+6>a02)*<T>t));
 		const x_ = a02_ + (a12_ + a02_)*t_;
 		
 		const b01_ = _y0 + (_y1 + _y0)*t_;
@@ -117,11 +122,11 @@ function evalDeCasteljauError(
 		const _x2 = abs(x2);
 		const _y2 = abs(y2);
 
-		// <T+2>a01 <-- <T+2>(x0 + <T+1>((x1 + x0)*<T>t));
+		// <T+3>a01 <-- <T+3>(x0 + <T+2>(<1>(x1 + x0)*<T>t));
 		const a01_ = _x0 + (_x1 + _x0)*t_;
-		// <T+2>a11 <-- <T+2>(x1 + <T+1>((x2 + x1)*<T>t));
+		// <T+3>a11 <-- <T+3>(x1 + <T+2>(<1>(x2 + x1)*<T>t));
 		const a11_ = _x1 + (_x2 + _x1)*t_;
-		// <2T+5>x <-- <2T+5>(<T+2>a01 + <2T+4>(<T+3>(<T+2>a11 + <T+2>a01)*<T>t));
+		// <2T+6>x <-- <2T+6>(<T+3>a01 + <2T+5>(<T+4>(<T+3>a11 + <T+3>a01)*<T>t));
 		const x_ = a01_ + (a11_ + a01_)*t_;
 
 		const b01_ = _y0 + (_y1 + _y0)*t_;
@@ -139,7 +144,7 @@ function evalDeCasteljauError(
 		const _x1 = abs(x1);
 		const _y1 = abs(y1);
 
-		// <T+2>x = <T+2>(x0 + <T+1>((x1 + x0)*<T>t));
+		// <T+3>x = <T+3>(x0 + <T+2>(<1>(x1 + x0)*<T>t));
 		const x_ = _x0 + (_x1 + _x0)*t_;
 
 		const y_ = _y0 + (_y1 + _y0)*t_;

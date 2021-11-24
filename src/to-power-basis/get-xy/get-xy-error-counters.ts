@@ -1,6 +1,6 @@
 
 // Note: 
-// Rrror counters of double-double will actually be slightly less but
+// Error counters of double-double will actually be slightly less but
 // we can use this for both double and double-double precision.
 
 // For double precision the error bound === γ * <counter> * `error_`

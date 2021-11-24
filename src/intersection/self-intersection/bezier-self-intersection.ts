@@ -44,7 +44,7 @@ const γ1 = γ(1);
  * the (duplicate) `t` values *will* be returned (if they're in [0,1])
  * 
  * @param ps a bezier curve given as an array of its control points
- * @param inRange If `inRange === true` (the default) then return the 2 `t` 
+ * @param inRange If `inRange === true` (the default) then return the two `t` 
  * parameter values only if both are in [0,1] else return `[]`. 
  * If `inRange === false` then return the (0, 1 or 2) `t` values in [0,1].
  * 
@@ -83,11 +83,13 @@ function bezierSelfIntersection(
         const a3b2 = epr(a3,b2);
 
         if (eCompare(a2b3, a3b2) === 0) {
-            // a === 0 => no roots possible!
+            // a === 0 => no roots possible! (also b === 0 always if a === 0)
 
             // This type of curve is usually shaped like an S where both 
-            // extreme curvatures are identical or sometimes it is shaped 
-            // looking similar to a quadratic bezier curve.
+            // extreme curvatures are identical...
+
+            // ...this is an explicit cubic curve!
+
             return [];
         }
     }

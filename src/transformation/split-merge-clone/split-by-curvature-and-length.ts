@@ -1,5 +1,5 @@
 import { fromTo } from "./from-to.js";
-import { lengthUpperBound } from "../../global-properties/length/length-upper-bound.js";
+import { controlPointLinesLength } from "../../global-properties/length/control-point-lines-length.js";
 import { distanceBetween } from "flo-vector2d";
 
 
@@ -27,7 +27,7 @@ function splitByCurvatureAndLength(
         // Tell TypeScript there *is* something in the stack.
         const ts_ = tStack.pop()!;
         const ps_ = fromTo_(ts_[0], ts_[1]);
-        const l1 = lengthUpperBound(ps_);
+        const l1 = controlPointLinesLength(ps_);
         const l2 = distanceBetween(ps_[0], ps_[ps_.length-1]);
         const flatness_ = 1 + (l1/l2 - 1)*(l1/maxLength);
         if (flatness_ > maxFlatness) {

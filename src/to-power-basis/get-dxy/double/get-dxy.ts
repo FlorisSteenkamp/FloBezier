@@ -24,7 +24,11 @@ function getDxy(ps: number[][]): number[][] {
 		return getDxy1(ps);
 	}
 
-	throw new Error('The bezier curve must be of order 1, 2 or 3.');
+	if (ps.length === 1) {
+		return getDxy0(ps);
+	}
+
+	throw new Error('The bezier curve must be of order 0, 1, 2 or 3.');
 }
 
 
@@ -48,10 +52,10 @@ function getDxy2(ps: number[][]): number[][] {
 
 	return [[
 		2*((x2 + x0) - 2*x1), // t^1 - max bitlength increase 3
-		2*(x1 - x0),          // t^0 - max bitlength increase 2
+		2*(x1 - x0)           // t^0 - max bitlength increase 2
 	], [
 		2*((y2 + y0) - 2*y1), // t^1 - max bitlength increase 3
-		2*(y1 - y0),          // t^0 - max bitlength increase 2
+		2*(y1 - y0)           // t^0 - max bitlength increase 2
 	]];
 }
 
@@ -60,10 +64,17 @@ function getDxy1(ps: number[][]): number[][] {
 	const [[x0,y0], [x1,y1]] = ps;
 
 	return [[
-		x1 - x0,  // t^0 - max bitlength increase 1
+		x1 - x0  // t^0 - max bitlength increase 1
 	], [
-		y1 - y0,  // t^0 - max bitlength increase 1
+		y1 - y0  // t^0 - max bitlength increase 1
 	]];
+}
+
+
+function getDxy0(ps: number[][]): number[][] {
+	const [[x0,y0]] = ps;
+
+	return [[0], [0]];
 }
 
 

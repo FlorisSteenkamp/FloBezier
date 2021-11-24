@@ -1,6 +1,6 @@
 import { squaredDistanceBetween, translate, rotate } from "flo-vector2d";
 import { getBoundingBox } from "./get-bounding-box.js";
-import { lengthSquaredUpperBound } from "../length/length-squared-upper-bound.js";
+import { controlPointLinesLength } from "../length/control-point-lines-length.js";
 import { evalDeCasteljau } from "../../local-properties-at-t/t-to-xy/double/eval-de-casteljau.js";
 
 
@@ -22,8 +22,8 @@ function getBoundingBoxTight(ps: number[][]): number[][] {
 	let cosθ: number;
 
 	// take care of the case the endpoints are close together
-	const len = lengthSquaredUpperBound(ps);
-	if (squaredDistanceBetween(ps[0], ps[ps.length-1]) * 2**8 < len) {
+	const len = controlPointLinesLength(ps);
+	if (squaredDistanceBetween(ps[0], ps[ps.length-1]) * 2**8 < len*len) { 
 		const [xE_, yE_] = evalDeCasteljau(ps, 0.5);
 		const hypotenuse = Math.sqrt((xE_-xS)*(xE_-xS) + (yE_-yS)*(yE_-yS));
 		sinθ = (yE_ - yS) / hypotenuse;

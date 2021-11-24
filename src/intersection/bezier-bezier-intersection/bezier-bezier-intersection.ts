@@ -6,7 +6,7 @@ import { getIntervalBox } from '../../global-properties/bounds/get-interval-box/
 import { intersectBoxes } from '../../boxes/intersect-boxes.js';
 import { bezierSelfIntersection } from '../self-intersection/bezier-self-intersection.js';
 import { getEndpointIntersections } from '../get-endpoint-intersections.js';
-import { isLine } from '../../global-properties/type/is-line.js';
+import { isCollinear } from '../../global-properties/classification/is-collinear.js';
 import { getXY1DdWithRunningError, getXY2DdWithRunningError, getXY3DdWithRunningError } from '../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js';
 import { getDxy2Exact, getDxy3Exact } from '../../to-power-basis/get-dxy/exact/get-dxy-exact.js';
 import { getDxy2Dd, getDxy3Dd } from '../../to-power-basis/get-dxy/double-double/get-dxy-dd.js';
@@ -111,7 +111,7 @@ function handleInfiniteIntersections(
     // At this point there are an infinite number of intersections, i.e.:
     // `bezierBezierIntersectionBoundless(ps1, ps2) === undefined`
     
-    if (isLine(ps1)) {
+    if (isCollinear(ps1)) {
         // `ps2` must also be a line
         return handleCollinearIntersections(ps1,ps2);
     }

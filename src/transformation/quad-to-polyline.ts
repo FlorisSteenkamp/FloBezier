@@ -1,4 +1,4 @@
-import { isQuadFlat } from "../global-properties/type/is-quad-flat.js";
+import { isQuadFlat } from "../global-properties/classification/is-quad-flat.js";
 import { splitAt } from "./split-merge-clone/split-at.js";
 
 

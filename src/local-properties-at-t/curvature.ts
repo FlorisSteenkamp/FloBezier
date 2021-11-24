@@ -3,7 +3,6 @@ import { getDxy } from "../to-power-basis/get-dxy/double/get-dxy.js";
 import { getDdxy } from "../to-power-basis/get-ddxy/double/get-ddxy.js";
 
 
-
 /**
  * Returns the curvature `κ` of the given linear, quadratic or cubic bezier 
  * curve at a specific given parameter value `t`. This function is curried.

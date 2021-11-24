@@ -1,7 +1,6 @@
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { eEstimate, eDiff, scaleExpansion, twoSum } from 'big-float-ts';
 
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const sce = scaleExpansion;
 const edif = eDiff;
 const estimate = eEstimate;

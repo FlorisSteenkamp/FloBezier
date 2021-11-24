@@ -1,9 +1,12 @@
 import { ds } from "../../local-properties-at-t/ds.js";
 import { gaussQuadrature } from "flo-gauss-quadrature";
+import { fromTo2 } from "../../intersection/bezier3-intersection/from-to/from-to-2.js";
+import { splitByMaxCurvature } from "../../index.js";
 
 
 /**
- * Returns the curve length in the specified interval. This function is curried.
+ * Returns the curve length in the specified interval.
+ * 
  * @param ps A quadratic bezier, e.g. [[0,0],[1,1],[2,1]]
  * @param interval The paramter interval over which the length is 
  * to be calculated (often === [0,1]).
@@ -11,16 +14,32 @@ import { gaussQuadrature } from "flo-gauss-quadrature";
  * @internal
  */
  function lengthBez2(
-	 	interval: number[], ps: number[][]): number {
+	 	interval: number[], 
+		ps: number[][],
+		maxFlatness = 1.1,
+		gaussOrder: 4|16|64 = 16): number {
 
-	if (interval[0] === interval[1]) { return 0; }
+	const tS = interval[0];
+	const tE = interval[1];
+
+	if (tS === tE) { return 0; }
 
 	const [[x0, y0], [x1, y1], [x2, y2]] = ps;
 	// Ensure zero length curve returns zero!
 	if (x0 === x1 && x1 === x2 && y0 === y1 && y1 === y2) { return 0; }
 
-	const evDs = ds(ps); 
-	return gaussQuadrature(evDs, interval);
+	const ps_ = fromTo2(ps,tS,tE).ps;
+	const ts = splitByMaxCurvature(ps_, maxFlatness);
+
+	let total = 0;
+	for (let i=0; i<ts.length-1; i++) {
+		const tS = ts[i];
+		const tE = ts[i+1];
+
+		total += gaussQuadrature(ds(ps_), [tS,tE], gaussOrder);
+	}
+
+	return total;
 }
 
 

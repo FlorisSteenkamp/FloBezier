@@ -1,4 +1,4 @@
-import { lengthUpperBound } from "../../global-properties/length/length-upper-bound.js";
+import { controlPointLinesLength } from "../../global-properties/length/control-point-lines-length.js";
 import { fromTo } from "./from-to.js";
 
 
@@ -23,7 +23,7 @@ function splitByMaxCurveLength(
     while (tStack.length) {
         const ts_ = tStack.pop()!;
         const ps_ = fromTo_(ts_[0], ts_[1]);
-        if (lengthUpperBound(ps_) > maxLength) {
+        if (controlPointLinesLength(ps_) > maxLength) {
             const t = (ts_[0] + ts_[1]) / 2;
             tStack.push([ts_[0], t]);
             tStack.push([t, ts_[1]]);

@@ -1,7 +1,9 @@
 import { grahamScan }  from 'flo-graham-scan';
 import { BezierPart } from './bezier-part.js';
 import { length } from './global-properties/length/length.js';
+import { lengthApprox } from './global-properties/length/length-approx.js';
 import { totalLength } from './global-properties/length/total-length.js';
+import { totalLengthApprox } from './global-properties/length/total-length-approx.js';
 import { clone } from './transformation/clone.js';
 import { getTAtLength } from './local-properties-to-t/get-t-at-length.js';
 import { equal } from './simultaneous-properties/equal.js';
@@ -19,6 +21,8 @@ import { intersectBoxes } from './boxes/intersect-boxes.js';
 import { areBoxesIntersecting } from './boxes/are-boxes-intersecting.js';
 import { evalDeCasteljau } from './local-properties-at-t/t-to-xy/double/eval-de-casteljau.js';
 import { evalDeCasteljauError } from './local-properties-at-t/t-to-xy/eval-de-casteljau-error.js';
+import { evalDeCasteljauWithErr } from './local-properties-at-t/t-to-xy/double/eval-de-casteljau-with-err.js';
+import { evalDeCasteljauWithErrDd } from './local-properties-at-t/t-to-xy/double-double/eval-de-casteljau-with-err-dd.js';
 
 import { isPointOnBezierExtension } from './simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension.js';
 import { totalCurvature, totalAbsoluteCurvature } from './global-properties/total-curvature.js';
@@ -81,6 +85,7 @@ import { toEstimation} from './transformation/to-estimation.js';
 import { fromPowerBasis } from './from-power-basis/from-power-basis.js';
 import { getHodograph } from './transformation/get-hodograph.js';
 import { generateCuspAtHalf3 } from './create/generate-cusp-at-half-t.js';
+import { generateSelfIntersecting } from './create/generate-self-intersecting.js';
 import { cubicThroughPointGiven013 } from './create/cubic-through-point-given013.js';
 import { bezierSelfIntersection } from './intersection/self-intersection/bezier-self-intersection.js';
 //import { getEndpointIntersections } from './intersection/get-endpoint-intersections.js';
@@ -104,29 +109,29 @@ import { bezierBezierIntersection } from './intersection/bezier-bezier-intersect
 import { toCubic } from './transformation/degree-or-type/to-cubic.js';
 import { κ, curvature } from './local-properties-at-t/curvature.js';
 import { quadToPolyline } from './transformation/quad-to-polyline.js';
-import { isQuadObtuse } from './global-properties/type/is-quad-obtuse.js';
+import { isQuadObtuse } from './global-properties/classification/is-quad-obtuse.js';
 import { getIntervalBox } from './global-properties/bounds/get-interval-box/get-interval-box.js';
 import { getIntervalBoxDd } from './global-properties/bounds/get-interval-box/get-interval-box-dd.js';
 import { splitAt, splitAtPrecise } from './transformation/split-merge-clone/split-at.js';
+import { getInterfaceRotation } from './simultaneous-properties/get-interface-rotation.js';
 import { closestPointOnBezierCertified } from './simultaneous-properties/closest-point-on-bezier/closest-point-on-bezier-certified.js';
 import { hausdorffDistance, hausdorffDistanceCandidates } from './simultaneous-properties/hausdorff-distance.js';
-import { lengthUpperBound } from './global-properties/length/length-upper-bound.js';
-import { lengthSquaredUpperBound } from './global-properties/length/length-squared-upper-bound.js';
+import { controlPointLinesLength } from './global-properties/length/control-point-lines-length.js';
 import { splitByMaxCurveLength } from './transformation/split-merge-clone/split-by-max-curve-length.js';
-import { getCurvatureExtrema } from './get-curvature-extrema/get-curvature-extrema.js';
+import { getCurvatureExtrema, Extrema } from './get-curvature-extrema/get-curvature-extrema.js';
 import { flatness } from './global-properties/flatness.js';
 import { splitByMaxCurvature } from './transformation/split-merge-clone/split-by-max-curvature.js';
 import { splitByCurvatureAndLength } from './transformation/split-merge-clone/split-by-curvature-and-length.js';
 import { areBeziersInSameKFamily } from './simultaneous-properties/are-beziers-in-same-k-family.js';
-import { isLine, isHorizontalLine, isVerticalLine } from './global-properties/type/is-line.js';
-import { isSelfOverlapping } from './global-properties/type/is-self-overlapping.js';
+import { isCollinear, isHorizontal, isVertical } from './global-properties/classification/is-collinear.js';
+import { isSelfOverlapping } from './global-properties/classification/is-self-overlapping.js';
 import { getBounds } from './global-properties/bounds/get-bounds.js';
 import { getBoundingBoxTight } from './global-properties/bounds/get-bounding-box-tight.js';
 import { getBoundingBox } from './global-properties/bounds/get-bounding-box.js';
 import { toHybridQuadratic } from './transformation/degree-or-type/to-hybrid-quadratic.js';
-import { isCubicReallyQuad } from './global-properties/type/is-cubic-really-quad.js';
-import { isQuadReallyLine } from  './global-properties/type/is-quad-really-line.js';
-import { isLineReallyPoint } from './global-properties/type/is-line-really-point.js';
+import { isCubicReallyQuad } from './global-properties/classification/is-cubic-really-quad.js';
+import { isQuadReallyLine } from  './global-properties/classification/is-quad-really-line.js';
+import { isReallyPoint } from './global-properties/classification/is-really-point.js';
 import { toQuadraticFromCubic } from './transformation/degree-or-type/to-quad-from-cubic.js';
 import { circleBezierIntersection } from './intersection/circle-bezier-intersection/circle-bezier-intersection.js';
 
@@ -183,6 +188,7 @@ function toString(ps: number[][]) {
 
 
 export {
+	Extrema,
 	// -------------------------------------
 	// -- Power basis and its derivatives --
 	// -------------------------------------
@@ -269,8 +275,7 @@ export {
 	getBoundingHull,
 	getBoundingBoxTight,
 	getBoundingBox,
-	lengthUpperBound,
-	lengthSquaredUpperBound,
+	controlPointLinesLength,
 	getIntervalBox,
 
 	// Curvature
@@ -279,12 +284,15 @@ export {
 	totalAbsoluteCurvature,
 
 	length,
+	lengthApprox,
 	totalLength,
+	totalLengthApprox,
 	isQuadObtuse,
 	flatness,
-	isLine, isHorizontalLine, isVerticalLine,
+	isCollinear, isHorizontal, isVertical,
 	isSelfOverlapping,
 	getHodograph,
+	isReallyPoint,
 	isQuadReallyLine,
 	isCubicReallyQuad,
 	toQuadraticFromCubic,
@@ -297,6 +305,7 @@ export {
 	equal,
 	areBeziersInSameKFamily,
 	closestPointOnBezierCertified,
+	getInterfaceRotation,
 	closestPointOnBezier,
 	hausdorffDistance,
 	hausdorffDistanceCandidates,
@@ -320,12 +329,15 @@ export {
 	// --------------------
 	bezierFromPart,
 	generateCuspAtHalf3,
+	generateSelfIntersecting,
 	cubicThroughPointGiven013,
 
 	// TODO - categorize
 	getIntervalBoxDd,
 	evalDeCasteljau,
 	evalDeCasteljauError,
+	evalDeCasteljauWithErr,
+	evalDeCasteljauWithErrDd,
 	evaluateExact,
 	isPointOnBezierExtension,
 
@@ -350,7 +362,7 @@ export {
 	getCoeffsBez1Bez1Exact,
 
 	// self-intersection
-	getCoeffsBez3WithRunningError as getCoeffsBez3,
+	getCoeffsBez3WithRunningError,
 	//getCoeffsBez3Dd,
 	getCoeffsBez3Exact,
 
@@ -365,7 +377,7 @@ export {
 
 	getControlPointBox,
 
-	getXY3DdWithRunningError as getXYDdAnyBitlength3,
+	getXY3DdWithRunningError,
 }
 
 

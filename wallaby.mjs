@@ -23,7 +23,7 @@ export default function(wallaby) {
         },
 
         setup: function () {
-            globalThis.expect = chai.expect;
+            // globalThis.expect = chai.expect;
             // var should = chai.should();
         },
 

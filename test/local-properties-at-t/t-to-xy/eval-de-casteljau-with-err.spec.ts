@@ -1,8 +1,8 @@
 import { expect, assert } from 'chai';
 import { describe } from 'mocha';
 import { 
-	evalDeCasteljauWithErr, 
-	evaluate_anyBitlength_exact
+	evalDeCasteljauWithErr,
+	evaluateExact
 } from '../../../src/index.js';
 import { eEstimate } from 'big-float-ts';
 import { manhattanDistanceBetween } from 'flo-vector2d';
@@ -25,7 +25,7 @@ describe('eval decasteljau', function() {
 
 			for (let ps of pss) {
 				for (let t of ts) {
-					let pExact = evaluate_anyBitlength_exact(ps, t).map(eEstimate);
+					let pExact = evaluateExact(ps, t).map(eEstimate);
 					let { p, pE } = evalDeCasteljauWithErr(ps, t);
 
 					const errBound = pE[0] + pE[1];

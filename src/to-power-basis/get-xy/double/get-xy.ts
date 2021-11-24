@@ -62,12 +62,12 @@ function getXY2(ps: number[][]): number[][] {
 	
 	return [[
 		(x2 + x0) - 2*x1,  // t^2 - max bitlength increase 2
-		2*(x1 - x0),     // t^1 - max bitlength increase 2
-		x0,              // t^0 - max bitlength increase 0
+		2*(x1 - x0),       // t^1 - max bitlength increase 2
+		x0,                // t^0 - max bitlength increase 0
 	], [
 		(y2 + y0) - 2*y1,  // t^2 - max bitlength increase 2
-		2*(y1 - y0),     // t^1 - max bitlength increase 2
-		y0,              // t^0 - max bitlength increase 0            
+		2*(y1 - y0),       // t^1 - max bitlength increase 2
+		y0,                // t^0 - max bitlength increase 0            
 	]];
 }
 
