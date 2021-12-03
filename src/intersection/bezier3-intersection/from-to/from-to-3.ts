@@ -12,10 +12,11 @@ const psErrorFree = [[0,0],[0,0],[0,0],[0,0]];
  * including an error bound (that needs to be multiplied by `11u`, where 
  * `u === Number.EPSILON/2`).
  * 
- * * precondition 1: exact tS, tE, ps
- * * precondition 2: tS, tE ∈ [0,1]
- * * precondition 3: `Number.EPSILON | tS` and `Number.EPSILON | tE`
- * * precondition 4: tE > tS
+ * * ***the below preconditions are only necessary for a correct error bound***
+ * * **precondition 1**: exact tS, tE, ps
+ * * **precondition 2**: tS, tE ∈ [0,1]
+ * * **precondition 3**: `Number.EPSILON/2 | tS` and `Number.EPSILON/2 | tE`
+ * * **precondition 4**: tE > tS
  * 
  * @param ps a cubic bezier curve
  * @param tS the t parameter where the resultant bezier should start
@@ -44,9 +45,10 @@ const psErrorFree = [[0,0],[0,0],[0,0],[0,0]];
  * at `t === 1` including an error bound (that needs to be multiplied 
  * by `11u`, where `u === Number.EPSILON/2`).
  * 
- * * precondition 1: exact `t`, `ps`
- * * precondition 2: t ∈ [0,1)
- * * precondition 3: `Number.EPSILON | t`
+ * * ***the below preconditions are only necessary for a correct error bound***
+ * * **precondition 1**: exact `t`, `ps`
+ * * **precondition 2**: t ∈ [0,1)
+ * * **precondition 3**: `Number.EPSILON/2 | t`
  * 
  * @param ps a cubic bezier curve
  * @param t the t parameter where the resultant bezier should start
@@ -145,9 +147,10 @@ function splitRight3(
  * parameter including an error bound (that needs to be multiplied by `11u`, where 
  * `u === Number.EPSILON/2`).
  * 
- * * precondition 1: exact `t`, `ps`
- * * precondition 2: `t ∈ (0,1]`
- * * precondition 3: `Number.EPSILON | t`  (i.e. `eps` divides `t`)
+ * * ***the below preconditions are only necessary for a correct error bound*** 
+ * * **precondition 1**: exact `t`, `ps`
+ * * **precondition 2**: `t ∈ (0,1]`
+ * * **precondition 3**: `Number.EPSILON/2 | t`  (i.e. `eps/2` divides `t`)
  * 
  * @param ps a cubic bezier curve
  * @param t the `t` parameter where the resultant bezier should end
@@ -244,14 +247,15 @@ function splitLeft3(
  * including an error bound (that needs to be multiplied by `11u`, where 
  * `u === Number.EPSILON/2`). 
  * 
- * * precondition 1: exact `t`, `tE`, `ps`
- * * precondition 2: `tS, tE ∈ (0,1)`
- * * precondition 3: `Number.EPSILON | t (and tE)`  (i.e. `eps` divides `t` and `tE`)
- * * precondition 4: `t > 0 && tE < 1 && t < tE`
+ * * ***the below preconditions are only necessary for a correct error bound***
+ * * **precondition 1**: exact `t`, `tE`, `ps`
+ * * **precondition 2**: `tS, tE ∈ (0,1)`
+ * * **precondition 3**: `Number.EPSILON/2 | t (and tE)`  (i.e. `eps/2` divides `t` and `tE`)
+ * * **precondition 4**: `t > 0 && tE < 1 && t < tE`
  * 
  * @param ps a cubic bezier curve
- * @param t the t parameter where the resultant bezier should start
- * @param tE the t parameter where the resultant bezier should end
+ * @param t the `t` parameter where the resultant bezier should start
+ * @param tE the `t` parameter where the resultant bezier should end
  */
 function splitAtBoth3(
         ps: number[][], 
@@ -276,10 +280,13 @@ function splitAtBoth3(
 
     // splitRight
     const s = 1 - t;  // <0>s <= exact by precondition 3
-    // make v the smallest float > (the true v) such that `eps | v`
-    //const v = (tE - t)/s; 
-    // see the function `getV` below to see why `v` is calculated this way
-    const v   = ((tE - t)/s)*(1 + Number.EPSILON) + 1 - 1;
+    // make v the smallest float > (the true v) such that `eps/2 | v`
+    // see the function `getV` to see why `v` is calculated this way
+    const _v = (tE - t)/s;
+    const r = _v + _v*u;  // add an `ulp` so that `v >= (tE - t)/s` guaranteed
+    const r_ = r + 0.5 - 0.5;  // and *round* to nearest `eps/2`
+    const v = r_ >= r ? r_ : r_ + u;  // ensure exact powers of 2 are handled correctly
+
     const tt  = t*t;   // <1>tt  <= <0>t<0>t   (by counter rule 2)
     const ttt = t*tt;  // <2>ttt <= <0>t<1>tt  (again by counter rule 2)
     const ss  = s*s;   // <1>ss  <= <0>s<0>s
@@ -289,7 +296,7 @@ function splitAtBoth3(
     const tts = tt*s;  // <2>stt <= <0>s<1>tt
 
     // splitLeft
-    const sL   = 1 - v;  // <0>s <= exact by precondition 3 and by construction that `eps | v`
+    const sL   = 1 - v;  // <0>s <= exact by precondition 3 and by construction that `u | v`
     const ttL  = v*v;     // <1>uu <= <0>u<0>u
     const tttL = v*ttL;   // <2>uuu <= <0>u<1>uu
     const ssL  = sL*sL;   // <1>ss  <= <0>s<0>s
@@ -359,45 +366,6 @@ function splitAtBoth3(
             [_xx3, _yy3]
         ]
     };
-}
-
-
-/**
- * Returns the smallest double (call it `v`) such that:
- * * `v > _v_ === (tE - tS)/(1 - tS)` AND
- * * such that `eps | v` (where `eps === Number.EPSILON`)
- * 
- * * this function is for demonstration purposes and was inlined to save a
- * function call
- * 
- * Preconditions:
- *  1. exact `tS`, `tE`
- *  2. `tS, tE ∈ (0,1)`
- *  3. `Number.EPSILON | tS` (and `Number.EPSILON | tE`)
- *  4. `tE > tS`
- * 
- * @internal
- */
-function getV(
-        tS: number, 
-        tE: number) {
-
-    //const numer = tE - tS;  // exact and > 0 due to preconditions 3 and 4
-    //const denom = 1 - tS;  // exact and > 0 due to preconditions 2 and 3
-
-    // Recall: the result of +, -, * and / is exactly rounded; that is, the 
-    // result is computed exactly and then rounded to the nearest 
-    // floating-point number (using round to even).
-    // Therefore: it is guaranteed that `u > 0` and `u < 1`
-    // The `+ 1` and then `- 1` at the end is critical in 
-    // ensuring that `Number.EPSILON | u`. (this also causes `u` to be able to go to `1`)
-    // e.g.:
-    // `function a(a) { return (a*(1+Number.EPSILON) + 1 - 1)/Number.EPSILON; }`
-    // `function b(a) { return (a*(1+Number.EPSILON)        )/Number.EPSILON; }`
-    // `a(0.0000000321276211)  // 144689942`
-    // `b(0.0000000321276211)  // 144689942.41426048`
-    // Also the `(1 + Number.EPSILON)` part ensures that we're rounding up
-    const u = ((tE - tS)/(1 - tS))*(1 + Number.EPSILON) + 1 - 1;
 }
 
 

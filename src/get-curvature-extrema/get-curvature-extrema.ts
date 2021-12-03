@@ -2,7 +2,7 @@ import { allRoots, differentiate, Horner as evaluatePoly } from "flo-poly";
 import { getAbsCurvatureExtremaPolys } from "./get-abs-curvature-extrema-polys.js";
 import { isCollinear } from "../global-properties/classification/is-collinear.js";
 import { isCubicReallyQuad } from "../global-properties/classification/is-cubic-really-quad.js";
-import { toQuadraticFromCubic } from "../transformation/degree-or-type/to-quad-from-cubic.js";
+import { toQuadraticFromCubic } from "../transformation/degree-or-type/to-quadratic-from-cubic.js";
 
 
 /** 
@@ -41,7 +41,7 @@ function getCurvatureExtrema(ps: number[][]): Extrema {
 	}
 
 	if (ps.length === 4 && isCubicReallyQuad(ps)) {
-        ps = toQuadraticFromCubic(ps);
+        ps = toQuadraticFromCubic(ps)!;
 	}
 
 	if (ps.length === 3) {

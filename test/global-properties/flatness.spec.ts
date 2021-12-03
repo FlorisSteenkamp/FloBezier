@@ -18,13 +18,13 @@ describe('flatness', function() {
 		{
 			const ps = [[0,0],[1.0001,1.001],[2.00001,2.00001],[3,3]];
 			const flatness_ = flatness(ps);
-			expect(flatness_).to.be.nearly(2**30, 1.00000025317783);
+			expect(flatness_).to.be.nearly(2**30, 1.000000126588899);
 		}
 
 		{
 			const ps = [[0,0],[2.0001,1.001],[-2.00001,25],[3,3]];
 			const flatness_ = flatness(ps);
-			expect(flatness_).to.be.nearly(2**4, 2.841466807692195);
+			expect(flatness_).to.be.nearly(2**4, 3.086090714014273);
 		}
 	});
 });

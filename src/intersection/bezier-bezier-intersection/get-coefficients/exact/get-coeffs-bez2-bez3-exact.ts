@@ -9,7 +9,7 @@ import {
 } from "big-float-ts";
 import { getCoeffsBez1Bez3Exact } from "./get-coeffs-bez1-bez3-exact.js";
 import { getCoeffsBez2Bez2Exact } from "./get-coeffs-bez2-bez2-exact.js";
-import { toQuadraticFromCubic } from "../../../../transformation/degree-or-type/to-quad-from-cubic.js";
+import { toQuadraticFromCubic } from "../../../../transformation/degree-or-type/to-quadratic-from-cubic.js";
 
 const tp  = twoProduct;    // error -> 0
 const sce = scaleExpansion2;
@@ -55,7 +55,7 @@ function getCoeffsBez2Bez3Exact(ps1: number[][], ps2: number[][]) {
 
     if (eSign(c3) === 0 && eSign(d3) === 0) {
         // the input bezier curve is in fact not cubic but has order < 3
-        return getCoeffsBez2Bez2Exact(ps1, toQuadraticFromCubic(ps2));
+        return getCoeffsBez2Bez2Exact(ps1, toQuadraticFromCubic(ps2)!);
     }
 
     const { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 

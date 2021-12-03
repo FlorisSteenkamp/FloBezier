@@ -1,21 +1,20 @@
-import { from0ToT } from "./split-merge-clone/from-0-to-T.js";
-import { fromTTo1 } from "./split-merge-clone/from-T-to-1.js";
+import { from0ToT } from "./split-and-merge/from-0-to-T.js";
+import { fromTTo1 } from "./split-and-merge/from-T-to-1.js";
 import { evalDeCasteljau } from "../local-properties-at-t/t-to-xy/double/eval-de-casteljau.js";
-import { BezierPart } from "../bezier-part.js";
+import { BezierPiece } from "../bezier-piece.js";
 
 
 /**
- * Returns a new bezier from the given bezier by limiting its t range. 
+ * Returns a new bezier from the given bezier by limiting its `t` range. 
  * 
- * Uses de Casteljau's algorithm.
+ * * uses de Casteljau's algorithm.
  * 
- * @param bezierPart A partial bezier
+ * @param bezierPiece A partial bezier
  * 
  * @doc
  */
-function bezierFromPart(bezierPart: BezierPart) {
-
-	const { ps, ts } = bezierPart;
+function bezierFromPiece(bezierPiece: BezierPiece) {
+	const { ps, ts } = bezierPiece;
 
 	// If ts = [0,1] then return original bezier.
 	if (ts[0] === 0 && ts[1] === 1) {
@@ -25,7 +24,8 @@ function bezierFromPart(bezierPart: BezierPart) {
 	// If ts[0] === ts[1] then return a single point degenerated bezier.
 	if (ts[0] === ts[1]) {
 		const p = evalDeCasteljau(ps,ts[0]);
-		return [p,p,p,p];
+		// return [p,p,p,p];
+		return [p];
 	}
 
 	if (ts[0] === 0) {
@@ -45,4 +45,4 @@ function bezierFromPart(bezierPart: BezierPart) {
 }
 
 
-export { bezierFromPart }
+export { bezierFromPiece }

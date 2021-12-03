@@ -17,7 +17,7 @@ import { lengthBez3 } from './length-bez3.js';
 function length(
 		interval: number[], 
 		ps: number[][],
-		maxFlatness = 1.1,
+		maxFlatness = 1.01,
 		gaussOrder: 4|16|64 = 16): number {
 
 	if (ps.length === 4) {

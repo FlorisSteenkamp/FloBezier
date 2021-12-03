@@ -1,6 +1,6 @@
-import { ds } from "../../local-properties-at-t/ds.js";
 import { gaussQuadrature } from "flo-gauss-quadrature";
-import { splitByMaxCurvature } from "../../index.js";
+import { ds } from "../../local-properties-at-t/ds.js";
+import { splitByMaxCurvature } from "../../transformation/split-and-merge/split-by-max-curvature.js";
 import { fromTo3 } from "../../intersection/bezier3-intersection/from-to/from-to-3.js";
 
 
@@ -16,7 +16,7 @@ import { fromTo3 } from "../../intersection/bezier3-intersection/from-to/from-to
  function lengthBez3(
 	 	interval: number[], 
 		ps: number[][],
-		maxFlatness = 1.1,
+		maxFlatness = 1.01,
 		gaussOrder: 4|16|64 = 16): number {
 
 	const tS = interval[0];

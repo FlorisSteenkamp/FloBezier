@@ -1,10 +1,9 @@
-
 import { getDxy } from '../to-power-basis/get-dxy/double/get-dxy.js';
-import { Horner as evaluatePoly } from 'flo-poly';
+import { Horner } from 'flo-poly';
 
 
 /**
- * Returns the tangent vector (not necessarily of unit length) of an 
+ * Returns a tangent vector (not necessarily of unit length) of an 
  * order 1, 2 or 3 bezier curve at a specific given parameter value `t`. 
  * This function is curried.
  * 
@@ -20,8 +19,8 @@ function tangent(ps: number[][], t?: number) {
 
 	function f(t: number): number[] {
 		return [
-			evaluatePoly(dX,t),
-			evaluatePoly(dY,t)
+			Horner(dX,t),
+			Horner(dY,t)
 		];
 	}
 

@@ -3,13 +3,14 @@ import { describe } from 'mocha';
 import { gaussQuadrature } from 'flo-gauss-quadrature';
 import { 
 	evaluateDdxy, evaluateDxy, getInterfaceRotation, splitByMaxCurvature, tangent, 
-	totalAbsoluteCurvature, totalCurvature, generateSelfIntersecting, fromToPrecise, toString
+	totalAbsoluteCurvature, totalCurvature, generateSelfIntersecting, fromToPrecise, toString, generateCuspAtHalf3
 } from '../../src/index.js';
 import { nearly } from '../helpers/chai-extend-nearly.js';
-import { getRandomBezier } from '../helpers/get-random-bezier.js';
-import { rotate, translate } from 'flo-vector2d';
+import { getRandomBezier, getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../helpers/get-random-bezier.js';
 import { closeTo } from '../helpers/close-to.js';
 import { radToDeg } from '../helpers/rad-to-deg.js';
+import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate';
+
 
 use(nearly);
 
@@ -20,13 +21,15 @@ const 𝜋 = Math.PI;
 
 function totalCurvatureByGauss(
 		ps: number[][], 
-		interval: number[]): number {
+		interval: number[],
+		flatness: number,
+		gaussOrder: number): number {
 
 	if (ps.length === 1) { return 0; }
 
 	const fromTo_ = fromToPrecise(ps);
 
-	const ts = splitByMaxCurvature(ps, 1.1);
+	const ts = splitByMaxCurvature(ps, flatness);
 
 	let total = 0;
 	for (let i=0; i<ts.length-1; i++) {
@@ -34,7 +37,7 @@ function totalCurvatureByGauss(
 		const tE = ts[i+1];
 
 		const ps_ = fromTo_(tS,tE);
-		total += gaussQuadrature(κds(ps_), interval, 64);
+		total += gaussQuadrature(κds(ps_), interval, gaussOrder as 4|16|64);
 	}
 
 	return total;
@@ -55,22 +58,36 @@ function κds(ps: number[][]) {
 
 
 function test(ps: number[][]) {
-	// rotate and translate
-	const sinθ = Math.sin(10);
-	const cosθ = Math.cos(10);
-	 ps = ps.map(p => translate([0.3,-0.1])(rotate(sinθ, cosθ)(p)));
+	{
+		const c = totalCurvature(ps, [0,1]);
+		const d = totalCurvatureByGauss(ps, [0,1], 1.01, 64);
+		// radToDeg(c);
+		// radToDeg(d);
 
-	// calculate
-	const c = totalCurvature(ps, [0,1]);
-	const d = totalCurvatureByGauss(ps, [0,1]);
-	radToDeg(c);
-	radToDeg(d);
+		const ulpsOrEps = 2**32;
+		assert(
+			closeTo([ulpsOrEps])(c - d, 0),
+			// `ps: ${toString(ps)}; Total curvatures don't match: calc deg: ${radToDeg(c)}, gauss deg: ${radToDeg(d)} - calc rad: ${c}, gauss rad: ${d}`
+			`Total curvatures don't match: calc deg: ${radToDeg(c)}, gauss deg: ${radToDeg(d)} - calc rad: ${c}, gauss rad: ${d}`
+		);
+	}
 
-	const ulpsOrEps = 2**32;
-	assert(
-		closeTo([ulpsOrEps])(c - d, 0),
-		`ps: ${toString(ps)}; Total curvatures don't match: calc deg: ${radToDeg(c)}, gauss deg: ${radToDeg(d)} - calc rad: ${c}, gauss rad: ${d}`
-	);
+	{
+		// rotate and translate (to test invariance)
+		ps = randomRotateAndTranslate(0)(ps);
+
+		const c = totalCurvature(ps, [0,1]);
+		const d = totalCurvatureByGauss(ps, [0,1], 1.01, 64);
+		// radToDeg(c);
+		// radToDeg(d);
+
+		const ulpsOrEps = 2**32;
+		assert(
+			closeTo([ulpsOrEps])(c - d, 0),
+			// `ps: ${toString(ps)}; Total curvatures don't match: calc deg: ${radToDeg(c)}, gauss deg: ${radToDeg(d)} - calc rad: ${c}, gauss rad: ${d}`
+			`Total curvatures don't match: calc deg: ${radToDeg(c)}, gauss deg: ${radToDeg(d)} - calc rad: ${c}, gauss rad: ${d}`
+		);
+	}
 }
 
 
@@ -81,8 +98,19 @@ function gaussCompare() {
 	}
 
 	{
+		// crunode
 		const selfIntersecting = [[-0.25,0.10],[0.73,-0.036],[0.44,-0.60],[-574,71]];
 		test(selfIntersecting);
+	}
+
+	{
+		const cusp = generateCuspAtHalf3([0,0], [6,2], [3,0]);
+		// cusp === [[0,0], [9,2.6666666666666665], [6,2.6666666666666665], [3,0]];
+		// We cannot test using Gauss Quadrature since the cusp will always be missed
+		//test(cusp.slice().reverse());
+		//test(cusp);
+		expect(totalCurvature(cusp.slice().reverse())).to.be.nearly(2**4, 2.7030057599586934);
+		expect(totalCurvature(cusp)).to.be.nearly(2**4, -2.7030057599586934);
 	}
 
 	{
@@ -142,11 +170,9 @@ function gaussCompare() {
 function testBeziersInLoop(order: 1 | 2 | 3) {
 	const getRandomBezier_ = getRandomBezier(128, 53)(order);
 
-	const len = 3;
-	const seedCount = 1;
-	const seedSeed = 4;
-
-	let totalTotalWinding = 0;
+	const len = 5;
+	const seedCount = 3;
+	const seedSeed = 0;
 
 	// try with different seed values
 	for (let s=seedSeed; s<seedSeed+seedCount; s++) {
@@ -172,14 +198,12 @@ function testBeziersInLoop(order: 1 | 2 | 3) {
 			const j = (i-1+len)%len 
 			const psI = pss[j];
 			const psO = pss[i];
-			const c = totalCurvature(psO, [0,1]);  //?
-			const d = totalCurvatureByGauss(psO, [0,1]); //?
+			const c = totalCurvature(psO, [0,1]);
+			const d = totalCurvatureByGauss(psO, [0,1], 1.01, 64);
 
-			c+d; //?
-			(Math.PI - (c+d)) / (2*Math.PI) * 360 //?
+			// (Math.PI - (c+d)) / (2*Math.PI) * 360;
 
-
-			expect(c).to.be.nearly(2**48,d)
+			expect(c).to.be.nearly(2**32,d)
 
 			// disconutinuous curvature (turn) at interface between 2 beziers
 			const θ = getInterfaceRotation(
@@ -190,57 +214,59 @@ function testBeziersInLoop(order: 1 | 2 | 3) {
 			total += c + θ;
 		}
 
-		const totalWinding = total / (2*𝜋);  //?
-		totalTotalWinding += totalWinding;
+		const totalWinding = total / (2*𝜋);
 
-		// TODO - put back
-		// expect(totalWinding - Math.round(totalWinding)).to.be.nearly([2**10],0);
+		expect(totalWinding - Math.round(totalWinding)).to.be.nearly([2**8],0);
+	}
+}
+
+
+function testSomeTotalCurvature() {
+	{
+		const ps = getRandomCubic(0);
+		const c = totalCurvature(ps, [0,1]);
+		expect(c).to.be.nearly(2**6, -2.3687733337504726);
 	}
 
-	// totalTotalWinding
+	{
+		const ps = getRandomQuad(0);
+		const c = totalCurvature(ps, [0,1]);
+		expect(c).to.be.nearly(2**6, -0.40711044270202335);
+	}
+
+	{
+		const ps = getRandomCubic(2);
+		const c = totalCurvature(ps, [0,1]);
+		expect(c).to.be.nearly(2**6, -2.6406073156224092);
+		const psr = ps.slice().reverse();
+		const d = totalCurvature(psr, [0,1]);
+		expect(d).to.be.nearly(2**6, 2.6406073156224092);
+	}
+
+	{
+		const ps = getRandomLine(0);
+		const c = totalCurvature(ps, [0,1]);
+		expect(c).to.be.eql(0);
+	}
 }
 
 
 describe('totalCurvature', function() {
-	it('it should calculate total curvature roughly equal to that calculated with Gauss Quadrature for some bezier curves',
+	it('it should calculate total curvature roughly equal to that calculated with Gauss Quadrature for some bezier curves', 
 	function() {
 		gaussCompare();
 	});
 
-	it('it should calculate total curvature a multiple of 2𝜋 if some bezier curves form a closed loop',
+	it('it should calculate total curvature a multiple of 2𝜋 if some bezier curves form a closed loop', 
 	function() {
-		// testBeziersInLoop(3);
+		testBeziersInLoop(1);
+		testBeziersInLoop(2);
+		testBeziersInLoop(3);
 	});
 
-    it('it should calculate the correct total curvature for some bezier curves', 
+    it('it should calculate the correct total curvature for some bezier curves',
 	function() {
-		/*
-		{
-			const ps = getRandomCubic(0);
-			const c = totalCurvature(ps, [0,1]);
-			expect(c).to.be.nearly(2**6, -2.368771502406411);
-		}
-
-		{
-			const ps = getRandomQuad(0);
-			const c = totalCurvature(ps, [0,1]);
-			expect(c).to.be.nearly(2**6, -0.40711044270202335);
-		}
-
-		{
-			const ps = getRandomCubic(2);
-			const c = totalCurvature(ps, [0,1]);
-			expect(c).to.be.nearly(2**6, -2.0675908473763984);
-			const psr = ps.slice().reverse();
-			const d = totalCurvature(psr, [0,1]);
-			expect(d).to.be.nearly(2**6, 2.0675908473763984);
-		}
-
-		{
-			const ps = getRandomLine(0);
-			const c = totalCurvature(ps, [0,1]);
-			expect(c).to.be.eql(0);
-		}*/
+		testSomeTotalCurvature();
 	});
 });
 
@@ -248,24 +274,64 @@ describe('totalCurvature', function() {
 describe('totalAbsoluteCurvature', function() {
     it('it should calculate the correct total absolute curvature for some bezier curves', 
 	function() {
-		/*
 		{
-			const ps = getRandomCubic(0);
-			const c = totalAbsoluteCurvature(ps, [0,1]);
-			expect(c).to.be.nearly(2**6, 2.368771502406411);
+			// straight quadratic bezier
+			const ps = randomRotateAndTranslate(0)([[0,0],[1,1],[3,3]]);
+			const d = totalAbsoluteCurvature(ps, [0,1]);
+			expect(d).to.be.nearly([2**4], 0);
 		}
 
 		{
+			// self-overlapping quadratic bezier
+			const ps = randomRotateAndTranslate(2)([[1,1],[2,2],[1.1,1.1]]);
+			const d = totalAbsoluteCurvature(ps, [0,1]);
+			expect(d).to.be.nearly(2**4, Math.PI);
+		}
+
+		{
+			// `ps` has no inflections
+			const ps = getRandomCubic(0);
+			const d = totalAbsoluteCurvature(ps, [0,1]);
+			const e = totalAbsoluteCurvature(ps.slice().reverse(), [0,1]);
+			expect(d).to.be.nearly(2**6, 2.3687733337504726);
+			expect(e).to.be.nearly(2**6, 2.3687733337504726);
+		}
+
+		{
+			// `ps` has 2 inflections
+			const ps = [[0,0],[3.5,5],[2.5,5],[6,0]];
+			const d = totalAbsoluteCurvature(ps, [0,1]);
+			const e = totalAbsoluteCurvature(ps.slice().reverse(), [0,1]);
+			expect(d).to.be.nearly(2**6, 1.999553581786523);
+			expect(e).to.be.nearly(2**6, 1.999553581786523);
+		}
+
+		{
+			// `ps` is a loop
+			const ps = [[0,0],[11,5],[2.5,5],[6,0]];
+			const d = totalAbsoluteCurvature(ps, [0,1]);
+			const e = totalAbsoluteCurvature(ps.slice().reverse(), [0,1]);
+			expect(d).to.be.nearly(2**6, 4.8964874516470225);
+			expect(e).to.be.nearly(2**6, 4.8964874516470225);
+		}
+
+		{
+			// some quadratic bezier
 			const ps = getRandomQuad(0);
-			const c = totalAbsoluteCurvature(ps, [0,1]);
-			expect(c).to.be.nearly(2**6, 0.40711044270202335);
+			const d = totalAbsoluteCurvature(ps, [0,1]);
+			expect(d).to.be.nearly(2**6, 0.40711044270202335);
 		}
 
 		{
 			const ps = getRandomLine(0);
-			const c = totalAbsoluteCurvature(ps, [0,1]);
-			expect(c).to.be.eql(0);
+			const d = totalAbsoluteCurvature(ps, [0,1]);
+			expect(d).to.be.eql(0);
 		}
-		*/
+
+		{
+			const ps = getRandomPoint(0);
+			const d = totalAbsoluteCurvature(ps, [0,1]);
+			expect(d).to.be.eql(0);
+		}
 	});
 });

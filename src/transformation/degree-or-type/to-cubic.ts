@@ -1,4 +1,4 @@
-import { linearToCubic } from "./linear-to-cubic.js";
+import { lineToCubic } from "./line-to-cubic.js";
 import { quadraticToCubic } from "./quadratic-to-cubic.js";
 
 
@@ -20,7 +20,7 @@ function toCubic(ps: number[][]): number[][] {
 	} 
 
 	if (ps.length === 2) { // Linear
-		return linearToCubic(ps); 
+		return lineToCubic(ps); 
 	}
 	
 	if (ps.length === 1) { // Point

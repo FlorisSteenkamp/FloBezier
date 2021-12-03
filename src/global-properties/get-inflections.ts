@@ -2,7 +2,8 @@ import { allRoots } from "flo-poly";
 
 
 /** 
- * Returns the given order 1, 2 or 3 bezier curve's inflection points. 
+ * Returns the given order 1, 2 or 3 bezier curve's inflection point `t` 
+ * parameter values in ascending order.
  * 
  * * see [Caffeine Owl](http://www.caffeineowl.com/graphics/2d/vectorial/cubic-inflexion.html)
  * 

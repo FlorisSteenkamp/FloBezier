@@ -7,7 +7,7 @@ import {
     eMultBy2, eSign as _eSign
 } from "big-float-ts";
 import { getCoeffsBez2Bez1Exact } from "./get-coeffs-bez2-bez1-exact.js";
-import { toQuadraticFromCubic } from "../../../../transformation/degree-or-type/to-quad-from-cubic.js";
+import { toQuadraticFromCubic } from "../../../../transformation/degree-or-type/to-quadratic-from-cubic.js";
 import { getImplicitForm3ExactPb } from "../../../../implicit-form/exact/get-implicit-form3-exact.js";
 import { isPointOnBezierExtension } from "../../../../simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension.js";
 

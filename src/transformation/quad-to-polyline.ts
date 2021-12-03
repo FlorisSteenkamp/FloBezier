@@ -1,5 +1,5 @@
 import { isQuadFlat } from "../global-properties/classification/is-quad-flat.js";
-import { splitAt } from "./split-merge-clone/split-at.js";
+import { splitAt } from "./split-and-merge/split-at.js";
 
 
 /** Represents a single line in the polyline. */
@@ -15,6 +15,8 @@ interface IPolylineNode {
  * a given tolerance.
  * 
  * @param ps A quadratic bezier curve given as an array of points.
+ * @param tolerance a tolerance given as the maximum Hausdorff distance allowed
+ * between the polyline and the bezier curve
  * 
  * @doc
  */

@@ -31,6 +31,8 @@ const γγ3 = γγ(3);
  * algebraic implicitization of the curves in order to find *guaranteed* 
  * accurate results.
  *
+ * * the returned intersections are *ordered* by `t` value of the first bezier 
+ * curve
  * TODO - make sure below points are correct (add to tests)
  * * if the two curves have an infinite number of intersections `undefined` is 
  * returned
@@ -65,7 +67,7 @@ function bezierBezierIntersection(
 
     if (ris2.length === 0) { return []; }
 
-    // keep TypeScript happy; `ris1` cannot be `undefined` here (bar any 🐛s!)
+    // `ris1` are ordered by inersection `t` values of `ps1`
     const ris1 = bezierBezierIntersectionBoundless(ps2, ps1)!;
 
     if (ris1.length === 0) { return []; }

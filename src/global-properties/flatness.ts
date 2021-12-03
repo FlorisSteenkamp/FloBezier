@@ -2,6 +2,8 @@ import { toUnitVector } from "flo-vector2d";
 
 const abs = Math.abs;
 
+// another (more 'conformal') flatness measure could be the range width of the
+// hodograph.
 
 /**
  * TODO - not calculated that way anymore - deprecate??
@@ -9,6 +11,8 @@ const abs = Math.abs;
  * distance between consecutive control points divided by the distance between
  * the endpoints.
  * 
+ * * flatness is calculated as the sum of the absolute values of the dot products
+ * between consecutive vectors formed by the control points of the curve
  * * the returned flatness, say `f` is such that `1 <= f <= ∞`, where `1` means 
  * maximum flatness (all points collinear with monotone increasing coordinates)
  * and `∞` means minimum flatness (at least 3 points collinear with alternating
@@ -41,7 +45,11 @@ function flatness(ps: number[][]): number {
         total += u[0]*v[0] + u[1]*v[1];
     }
 
-    return (len-1) / abs(total);
+    // change range from [1-len,len-1] to [0,1] by change of variables...
+    total = abs(((total / (len-1)) + 1)/2);
+
+    // ...and then from [0,1] to [1,∞]
+    return 1 / total;
 }
 
 

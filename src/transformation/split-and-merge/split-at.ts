@@ -10,7 +10,6 @@ const fes = fastExpansionSum;
 const sce = scaleExpansion;
 
 
-const splitAtFs = [splitLineAt, splitQuadAt, splitCubicAt];
 /**  
  * Returns 2 new beziers split at the given t parameter, i.e. for the ranges 
  * [0,t] and [t,1].
@@ -21,15 +20,15 @@ const splitAtFs = [splitLineAt, splitQuadAt, splitCubicAt];
  * @doc
  */
 function splitAt(ps: number[][], t: number): number[][][] {
-    return splitAtFs[ps.length-2](ps, t);
+    return [
+        (ps: number[][]) => [ps,ps], 
+        splitLineAt, 
+        splitQuadAt, 
+        splitCubicAt
+    ][ps.length-1](ps, t);
 }
 
 
-const splitAtPreciseFs = [
-    splitLineAtPrecise, 
-    splitQuadAtPrecise, 
-    splitCubicAtPrecise
-];
 /**  
  * Returns 2 new beziers split at the given t parameter, i.e. for the ranges 
  * [0,t] and [t,1].
@@ -43,19 +42,24 @@ const splitAtPreciseFs = [
  * @doc
  */
 function splitAtPrecise(ps: number[][], t: number): number[][][] {
-    return splitAtPreciseFs[ps.length-2](ps, t);
+    return [
+        (ps: number[][]) => [ps,ps],
+        splitLineAtPrecise, 
+        splitQuadAtPrecise, 
+        splitCubicAtPrecise
+    ][ps.length-1](ps, t);
 }
 
 
-const splitAtExactFs = [
-    splitLineAtExact, 
-    splitQuadAtExact, 
-    splitCubicAtExact
-];
 // TODO - currently the bezier returned is exact, but not exactly according
 // to the given ts due to division
 function splitAtExact(ps: number[][][], t: number): number[][][][] {
-    return splitAtExactFs[ps.length-2](ps, t);
+    return [
+        (ps: number[][][]) => [ps,ps],
+        splitLineAtExact, 
+        splitQuadAtExact, 
+        splitCubicAtExact
+    ][ps.length-1](ps, t);
 }
 
 
@@ -72,7 +76,10 @@ function splitAtExact(ps: number[][][], t: number): number[][][][] {
  * 
  * @doc
  */
-function splitCubicAt(ps: number[][], t: number): number[][][] {
+function splitCubicAt(
+        ps: number[][], 
+        t: number): number[][][] {
+
     const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
 		
 	const s = 1-t;
@@ -106,7 +113,10 @@ function splitCubicAt(ps: number[][], t: number): number[][][] {
 }
 
 
-function splitCubicAtExact(ps: number[][][], t: number): number[][][][] {
+function splitCubicAtExact(
+        ps: number[][][], 
+        t: number): number[][][][] {
+
 	const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
 		
 	const s = 1-t;
@@ -214,17 +224,20 @@ function splitCubicAtExact(ps: number[][][], t: number): number[][][][] {
  * @param ps A cubic bezier curve
  * @param t The t parameter where the curve should be split
  */
-function splitCubicAtPrecise(ps: number[][], t: number): number[][][] {
+function splitCubicAtPrecise(
+        ps: number[][], 
+        t: number): number[][][] {
+
 	const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
 		
 	const s = 1 - t;
-    const s2 = tp(s,s);
-    const s3 = sce(s2, s);
-    const t2 = tp(t,t);
-    const t3 = sce(t2,t);
+    const ss = tp(s,s);
+    const sss = sce(ss, s);
+    const tt = tp(t,t);
+    const ttt = sce(tt,t);
     const st = tp(s, t);
-    const st2 = sce(t2, s);
-    const s2t = sce(s2, t);
+    const stt = sce(tt, s);
+    const sst = sce(ss, t);
 
 
     /** The split point */
@@ -232,17 +245,17 @@ function splitCubicAtPrecise(ps: number[][], t: number): number[][][] {
         //x3*t**3 + 3*x2*s*t**2 + 3*x1*s**2*t + x0*s**3,
         //y3*t**3 + 3*y2*s*t**2 + 3*y1*s**2*t + y0*s**3
         estimate(sum([
-            sce(t3, x3),    
-            sce(st2, 3*x2),
-            sce(s2t, 3*x1), 
-            sce(s3, x0)
+            sce(ttt, x3),    
+            sce(stt, 3*x2),
+            sce(sst, 3*x1), 
+            sce(sss, x0)
         ])),
 
         estimate(sum([
-            sce(t3, y3),
-            sce(st2, 3*y2),
-            sce(s2t, 3*y1),
-            sce(s3, y0)
+            sce(ttt, y3),
+            sce(stt, 3*y2),
+            sce(sst, 3*y1),
+            sce(sss, y0)
         ]))
     ];
 
@@ -265,14 +278,14 @@ function splitCubicAtPrecise(ps: number[][], t: number): number[][][] {
             //x2*t**2 + 2*x1*s*t + x0*s**2, 
             //y2*t**2 + 2*y1*s*t + y0*s**2
             estimate(sum([
-                sce(t2, x2),
+                sce(tt, x2),
                 sce(st, 2*x1),
-                sce(s2, x0)
+                sce(ss, x0)
             ])),
             estimate(sum([
-                sce(t2, y2),
+                sce(tt, y2),
                 sce(st, 2*y1),
-                sce(s2, y0)
+                sce(ss, y0)
             ]))
         ],
 		p
@@ -284,14 +297,14 @@ function splitCubicAtPrecise(ps: number[][], t: number): number[][][] {
             //x3*t**2 + 2*x2*t*s + x1*s**2, 
             //y3*t**2 + 2*y2*t*s + y1*s**2
             estimate(sum([
-                sce(t2, x3),
+                sce(tt, x3),
                 sce(st, 2*x2),
-                sce(s2, x1)
+                sce(ss, x1)
             ])),
             estimate(sum([
-                sce(t2, y3),
+                sce(tt, y3),
                 sce(st, 2*y2),
-                sce(s2, y1)
+                sce(ss, y1)
             ]))
         ],
         [
@@ -315,7 +328,7 @@ function splitCubicAtPrecise(ps: number[][], t: number): number[][][] {
 
 function splitQuadAt(
         ps: number[][], 
-        t: number) {
+        t: number): number[][][] {
 
     const [[x0, y0], [x1, y1], [x2, y2]] = ps; 
 		
@@ -405,7 +418,7 @@ function splitQuadAtExact(
  */
 function splitQuadAtPrecise(
         ps: number[][], 
-        t: number) {
+        t: number): number[][][] {
 
     const [[x0, y0], [x1, y1], [x2, y2]] = ps; 
         
@@ -458,11 +471,11 @@ function splitQuadAtPrecise(
 
 function splitLineAt(
         ps: number[][], 
-        t: number) {
+        t: number): number[][][] {
 
     const [[x0, y0], [x1, y1]] = ps; 
         
-    const s = 1-t;
+    const s = 1 - t;
 
     /** The split point */
     const p = [

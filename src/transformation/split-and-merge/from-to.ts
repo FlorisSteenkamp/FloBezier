@@ -1,6 +1,8 @@
 import { splitAt, splitAtPrecise } from './split-at.js';
 import { evalDeCasteljau } from '../../local-properties-at-t/t-to-xy/double/eval-de-casteljau.js';
 
+// TODO - unify all these `fromTo`s
+// TODO - other `fromTo`s has preconditions - add to docs that it is only for error purposes and can be ignored otherwise
 
 /**
  * Returns a bezier curve that starts and ends at the given t parameters. 
@@ -16,7 +18,6 @@ import { evalDeCasteljau } from '../../local-properties-at-t/t-to-xy/double/eval
  * 
  * @doc
  */
-
 function fromTo(ps: number[][]) {
 	return (t1: number, t2: number) => {
 		const reverse = t1 > t2;

@@ -6,7 +6,7 @@
  * 
  * @internal
  */
-function linearToCubic(ps: number[][]) {
+function lineToCubic(ps: number[][]) {
 	const [[x0,y0],[x1,y1]] = ps;
 
 	const xInterval = (x1 - x0)/3;
@@ -21,4 +21,4 @@ function linearToCubic(ps: number[][]) {
 }
 
 
-export { linearToCubic }
+export { lineToCubic }

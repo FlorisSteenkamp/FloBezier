@@ -1,10 +1,7 @@
 
 type NumberObjOrArray = 
     | number 
-    | number[] 
-    | number[][] 
-    | number[][][] 
-    | number[][][][]
+    | NumberObjOrArray[]
     | { [key:string]: NumberObjOrArray };
 
 

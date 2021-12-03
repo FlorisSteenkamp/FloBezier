@@ -1,5 +1,5 @@
 import { isCubicReallyQuad } from '../../global-properties/classification/is-cubic-really-quad.js';
-import { toQuadraticFromCubic } from '../../transformation/degree-or-type/to-quad-from-cubic.js';
+import { toQuadraticFromCubic } from '../../transformation/degree-or-type/to-quadratic-from-cubic.js';
 import { isQuadReallyLine } from '../../global-properties/classification/is-quad-really-line.js';
 import { isReallyPoint } from '../../global-properties/classification/is-really-point.js';
 
@@ -18,7 +18,7 @@ import { isReallyPoint } from '../../global-properties/classification/is-really-
  */
  function reduceOrderIfPossible(ps: number[][]) {
     if (ps.length === 4 && isCubicReallyQuad(ps)) {
-        ps = toQuadraticFromCubic(ps)
+        ps = toQuadraticFromCubic(ps)!
     }
     if (ps.length === 3 && isQuadReallyLine(ps)) {
         ps = [ps[0], ps[2]];

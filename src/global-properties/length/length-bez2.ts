@@ -16,7 +16,7 @@ import { splitByMaxCurvature } from "../../index.js";
  function lengthBez2(
 	 	interval: number[], 
 		ps: number[][],
-		maxFlatness = 1.1,
+		maxFlatness = 1.01,
 		gaussOrder: 4|16|64 = 16): number {
 
 	const tS = interval[0];

@@ -25,9 +25,10 @@ function getRandomBezier(
 }
 
 
+const getRandomPoint = getRandomBezier(128, 50)(0);
 const getRandomLine = getRandomBezier(128, 50)(1);
 const getRandomQuad = getRandomBezier(128, 50)(2);
 const getRandomCubic = getRandomBezier(128, 50)(3);
 
 
-export { getRandomBezier, getRandomLine, getRandomQuad, getRandomCubic }
+export { getRandomPoint, getRandomBezier, getRandomLine, getRandomQuad, getRandomCubic }

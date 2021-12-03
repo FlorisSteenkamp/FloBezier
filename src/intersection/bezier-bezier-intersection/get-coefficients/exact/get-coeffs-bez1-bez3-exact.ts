@@ -1,6 +1,6 @@
 import { getImplicitForm1ExactPb } from "../../../../implicit-form/exact/get-implicit-form1-exact.js";
 import { getXY1Exact, getXY3Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact.js";
-import { toQuadraticFromCubic } from "../../../../transformation/degree-or-type/to-quad-from-cubic.js";
+import { toQuadraticFromCubic } from "../../../../transformation/degree-or-type/to-quadratic-from-cubic.js";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { expansionProduct, fastExpansionSum, scaleExpansion2, eSign as _eSign } from "big-float-ts";
@@ -51,7 +51,7 @@ function getCoeffsBez1Bez3Exact(ps1: number[][], ps2: number[][]) {
 
     if (eSign(c3) === 0 && eSign(d3) === 0) {
         // the input bezier curve is in fact not cubic but has order < 3
-        return getCoeffsBez1Bez2Exact(ps1, toQuadraticFromCubic(ps2));
+        return getCoeffsBez1Bez2Exact(ps1, toQuadraticFromCubic(ps2)!);
     }
 
     // it is a precondition that the curve really has order 1

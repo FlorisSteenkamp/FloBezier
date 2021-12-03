@@ -1,9 +1,16 @@
-import { cross, dot, toUnitVector } from "flo-vector2d";
+import { twoProduct } from "double-double";
+import { ddAddDd as ddAddDd_ } from "double-double";
+import { ddDiffDd as ddDiffDd_ } from "double-double";
+import { toUnitVector } from "flo-vector2d";
 
+const tp = twoProduct;
+const ddAddDd = ddAddDd_;
+const ddDiffDd = ddDiffDd_;
 
 const 𝜋 = Math.PI;
 const asin = Math.asin;
 const acos = Math.acos;
+const abs = Math.abs;
 
 
 /**
@@ -28,10 +35,12 @@ function getInterfaceRotation(
 		return 0;  // zero vector
 	}
 
-	const au = toUnitVector(a);
-	const bu = toUnitVector(b);
-	let cross_ = cross(au, bu);
-	let dot_ = dot(au, bu);
+	const c = toUnitVector(a);
+	const d = toUnitVector(b);
+	// let cross_ = c[0]*d[1] - c[1]*d[0];
+	// let dot_   = c[0]*d[0] + c[1]*d[1];
+	let cross_ = ddDiffDd(tp(c[0],d[1]), tp(c[1],d[0]))[1];
+	let dot_   = ddAddDd (tp(c[0],d[0]), tp(c[1],d[1]))[1];
 
 	// clip `dot_` and `cross_` to ensure `acos` and `asin` exists. (The -1 and
 	// +1 might be overstepped due to inexact calculations during the calls to
@@ -42,16 +51,18 @@ function getInterfaceRotation(
 	if (dot_ > +1) { dot_ = +1; }
 
 	// if `sgn >= 0` then the dot product is numerically more stable, else
-	// the cross product is more stable.
-	const sgn = au[0]*au[1]*bu[0]*bu[1];
-	let θ: number;
-	return dot_ >= 0
+	// the cross product is more stable...
+	// const sgn = c[0]*c[1]*d[0]*d[1];
+	// ...however, then `acos` and `asin` is much less stable
+	const θ = dot_ >= 0
 		? cross_ >= 0
-			? θ = sgn >= 0 ? +acos(dot_) : asin(cross_)   // 1st quadrant
-			: θ = sgn >= 0 ? -acos(dot_) : asin(cross_)  // 4th quadrant
-		: cross_ >= 0 
-			? θ = sgn >= 0 ? +acos(dot_) : +𝜋 - asin(cross_)   // 2nd quadrant
-			: θ = sgn >= 0 ? -acos(dot_) : -𝜋 - asin(cross_) // 3rd quadrant
+			? dot_ <= 0.5 ? +acos(dot_) : asin(cross_)  // 1st quadrant
+			: dot_ <= 0.5 ? -acos(dot_) : asin(cross_)  // 4th quadrant
+		: cross_ >= 0
+			? dot_ >= -0.5 ? +acos(dot_) : +𝜋 - asin(cross_)  // 2nd quadrant
+			: dot_ >= -0.5 ? -acos(dot_) : -𝜋 - asin(cross_)  // 3rd quadrant
+
+	return θ;
 }
 
 

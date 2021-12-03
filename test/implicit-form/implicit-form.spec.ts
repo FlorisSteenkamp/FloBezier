@@ -131,9 +131,9 @@ type ImplicitFormDd = ImplicitForm<number[]>;
 type ImplicitFormExact = Coeffs<number[]>;
 
 
-//const num = 200;
+// const num = 200;
 const num = 0;
-const maxBitLength = 45;
+const maxBitLength = 45; // TODO - make 53??
 const maxCoordinate = 128;
 const expMax = Math.ceil(Math.log2(maxCoordinate));
 const randOnGrid_ = randOnGrid(maxCoordinate, expMax, maxBitLength);

@@ -9,7 +9,7 @@
  * 
  * @doc
  */
-function getHodograph(ps: number[][]) {
+function getHodograph(ps: number[][]): number[][] | undefined {
     if (ps.length === 4) {
         // cubic
         const [[x0,y0],[x1,y1],[x2,y2],[x3,y3]] = ps;
