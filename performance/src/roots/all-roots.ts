@@ -1,7 +1,7 @@
 import { differentiate as differentiate_ } from "flo-poly";
 import { hornerWithRunningError as hornerWithRunningError_ } from "flo-poly";
 import { Horner as Horner_ } from "flo-poly";
-import { brentPoly as brentPoly_ } from "./brent-poly";
+import { brentPoly as brentPoly_ } from "./brent-poly.js";
 import { removeLeadingZeros as removeLeadingZeros_ } from "flo-poly";
 
 

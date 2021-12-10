@@ -9,51 +9,57 @@ const eAdd = _eAdd;
 
 
 /**
- * Returns the exact power basis representation of a line, quadratic or 
- * cubic bezier. 
+ * Returns the exact power basis representation of a bezier curve of order 
+ * cubic or less.
  * 
- * * returns the power basis polynomial from highest power to lowest, 
- * e.g. `at^3 + bt^2 + ct + d` is returned as `[a,b,c,d]`
- * * the precision of the returned coefficients can be high, e.g. for a cubic 
- * the precision can require 6 doubles for the t^3 term.
+ * * returns the resulting power basis x and y coordinate polynomials from 
+ * highest power to lowest, e.g. if `x(t) = at^2 + bt + c` 
+ * and `y(t) = dt^2 + et + f` then  the result is returned 
+ * as `[[a,b,c],[d,e,f]]`, where the `a,b,c,...` are Shewchuk floating point
+ * expansions
  * 
- * @param ps An order 1, 2 or 3 bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ * @param ps an order 0,1,2 or 3 bezier curve given by an ordered array of its
+ * control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * 
  * @doc
  */
 function getXYExact(
-		ps: number[][]): 
-		| [[number[],number[],number[],number],
-		   [number[],number[],number[],number]] 
-		| [[number[],number[],number],
-		   [number[],number[],number]]
-		| [[number[],number],
-		   [number[],number]] {
+		ps: number[][]): number[][][] {
 
 	if (ps.length === 4) {
-		return getXY3Exact(ps);
+		const r = getXY3Exact(ps);
+		(r[0][3] as unknown as number[]) = [r[0][3]];
+		(r[1][3] as unknown as number[]) = [r[1][3]];
+		return r as number[][][];
 	}
 
 	if (ps.length === 3) {
-		return getXY2Exact(ps);
+		const r = getXY2Exact(ps);
+		(r[0][2] as unknown as number[]) = [r[0][2]];
+		(r[1][2] as unknown as number[]) = [r[1][2]];
+		return r as number[][][];
 	}
 
-	return getXY1Exact(ps);
+	if (ps.length === 2) {
+		const r = getXY1Exact(ps);
+		(r[0][1] as unknown as number[]) = [r[0][1]];
+		(r[1][1] as unknown as number[]) = [r[1][1]];
+		return r as number[][][];
+	}
+
+	if (ps.length === 1) {
+		const r = getXY0Exact(ps);
+		(r[0][0] as unknown as number[]) = [r[0][0]];
+		(r[1][0] as unknown as number[]) = [r[1][0]];
+		return r as unknown as number[][][];
+	}
+
+	throw new Error('The given bezier curve must be of order <= cubic.');
 }
 
 
-/**
- * Returns the exact power basis representation of a line, quadratic or 
- * cubic bezier. 
- * 
- * * returns the power basis polynomial from highest power to lowest, 
- * e.g. `at^3 + bt^2 + ct + d` is returned as `[a,b,c,d]`
- * 
- * @param ps A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * 
- * @doc
- */
- function getXY3Exact(
+/** @internal */
+function getXY3Exact(
 	 	ps: number[][]): [
 			 	[number[],number[],number[],number],
 			 	[number[],number[],number[],number]
@@ -89,22 +95,12 @@ function getXYExact(
 }
 
 
-/**
- * Returns the exact power basis representation of a line, quadratic or 
- * cubic bezier. 
- * 
- * * returns the power basis polynomial from highest power to lowest, 
- * e.g. `at^3 + bt^2 + ct + d` is returned as `[a,b,c,d]`
- * 
- * @param ps A quadratic bezier curve, e.g. [[0,0],[1,1],[2,0]]
- * 
- * @doc
- */
- function getXY2Exact(
+/** @internal */
+function getXY2Exact(
 	 	ps: number[][]): [
 			[number[],number[],number],
 			[number[],number[],number]
-		 ] {
+		] {
 
 	const [[x0,y0], [x1,y1], [x2,y2]] = ps;
 	return [[
@@ -122,22 +118,12 @@ function getXYExact(
 }
 
 
-/**
- * Returns the exact power basis representation of a line, quadratic or 
- * cubic bezier. 
- * 
- * * returns the power basis polynomial from highest power to lowest, 
- * e.g. `at^3 + bt^2 + ct + d` is returned as `[a,b,c,d]`
- * 
- * @param ps An order 1 bezier curve (a line), e.g. [[0,0],[1,1],[2,1],[2,0]]
- * 
- * @doc
- */
- function getXY1Exact(
+/** @internal */
+function getXY1Exact(
 	 	ps: number[][]): [
 			[number[],number],
 			[number[],number]
-		 ] {
+		] {
 
 	const [[x0,y0], [x1,y1]] = ps;
 
@@ -153,8 +139,18 @@ function getXYExact(
 }
 
 
+/** @internal */
+function getXY0Exact(
+		ps: number[][]): [[number],[number]] {
+
+	const [[x0,y0]] = ps;
+
+	return [[x0], [y0]];
+}
+
+
 export { 
-	getXY1Exact, getXY2Exact, getXY3Exact,
+	getXY0Exact, getXY1Exact, getXY2Exact, getXY3Exact,
 	getXYExact
 }
 

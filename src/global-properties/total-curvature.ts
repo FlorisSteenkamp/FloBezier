@@ -1,8 +1,6 @@
-import { evaluateDxy } from "../local-properties-at-t/t-to-dxy/double/evaluate-dxy.js";
-import { evaluateDdxy } from "../local-properties-at-t/t-to-ddxy/double/evaluate-ddxy.js";
 import { getInterfaceRotation } from '../simultaneous-properties/get-interface-rotation.js';
-import { fromTo2 } from "../intersection/bezier3-intersection/from-to/from-to-2.js";
-import { fromTo3 } from "../intersection/bezier3-intersection/from-to/from-to-3.js";
+import { fromTo2 } from "../transformation/split/from-to/from-to-2.js";
+import { fromTo3 } from "../transformation/split/from-to/from-to-3.js";
 import { classify } from '../global-properties/classification/classify.js';
 import { getInflections } from "./get-inflections.js";
 
@@ -48,8 +46,6 @@ function totalAbsoluteCurvature(
 }
 
 
-// TODO - replace this function by simply checking tangents at beginning and
-// end of curve.
 /**
  * Returns the total curvature of the bezier over the given interval.
  * 
@@ -117,19 +113,6 @@ function totalCurvature(
 
 	throw new Error('Only bezier curves of order <= 3 are supported');
 }
-
-
-/*
-function κds(ps: number[][], t: number): number {
-	const [dx, dy] = evaluateDxy(ps, t); 
-	const [ddx, ddy] = evaluateDdxy(ps, t);
-
-	const a = dx*ddy - dy*ddx;
-	const b = dx*dx + dy*dy;
-	
-	return a / b; 
-}
-*/
 
 
 export { totalCurvature, totalAbsoluteCurvature }

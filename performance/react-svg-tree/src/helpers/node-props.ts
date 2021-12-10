@@ -1,4 +1,4 @@
-import { TreeGraph } from "./tree-graph";
+import { TreeGraph } from "./tree-graph.js";
 
 
 interface NodeProps<T> {

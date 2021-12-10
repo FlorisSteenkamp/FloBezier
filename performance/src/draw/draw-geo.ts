@@ -1,4 +1,4 @@
-import { drawCircle } from "./draw-circle";
+import { drawCircle } from "./draw-circle.js";
 
 
 function drawGeo(
@@ -11,8 +11,8 @@ function drawGeo(
     return (hq: number[][]) => {
         const [[x0,y0], [x11,y11], [x12,y12], [x2,y2]] = hq;
 
-        ctx.strokeStyle = strokeStyle;
-        ctx.fillStyle = fillStyle;
+        if (strokeStyle) { ctx.strokeStyle = strokeStyle; }
+        if (fillStyle) { ctx.fillStyle = fillStyle; }
 
         ctx.lineWidth = 0.5;
         ctx.beginPath(); 

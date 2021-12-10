@@ -1,10 +1,10 @@
-import { drawCircle } from './draw-circle';
+import { drawCircle } from './draw-circle.js';
 
 
 function drawBezier(
         ctx: CanvasRenderingContext2D,
-        strokeStyle: string,
-        fillStyle: string,
+        strokeStyle: string | undefined,
+        fillStyle: string | undefined,
         dotRadius: number) {
 
     const dot_ = drawCircle(ctx, dotRadius, strokeStyle, strokeStyle);
@@ -21,8 +21,8 @@ function drawBezier(
             const [x2,y2] = p2;
             const [x3,y3] = p3;
 
-            ctx.strokeStyle = strokeStyle;
-            ctx.fillStyle = fillStyle;
+            if (strokeStyle) { ctx.strokeStyle = strokeStyle; }
+            if (fillStyle) { ctx.fillStyle = fillStyle; }
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(x0,y0);
@@ -50,8 +50,8 @@ function drawBezier(
             const [x1,y1] = p1;
             const [x2,y2] = p2;
 
-            ctx.strokeStyle = strokeStyle;
-            ctx.fillStyle = fillStyle;
+            if (strokeStyle) { ctx.strokeStyle = strokeStyle; }
+            if (fillStyle) { ctx.fillStyle = fillStyle; }
             ctx.lineWidth = 2;
             ctx.beginPath();
             ctx.moveTo(x0,y0);
@@ -77,8 +77,8 @@ function drawBezier(
             const [x0,y0] = p0;
             const [x1,y1] = p1;
 
-            ctx.strokeStyle = strokeStyle;
-            ctx.fillStyle = fillStyle;
+            if (strokeStyle) { ctx.strokeStyle = strokeStyle; }
+            if (fillStyle) { ctx.fillStyle = fillStyle; }
             ctx.lineWidth = 2;
             ctx.beginPath();
             ctx.moveTo(x0,y0);

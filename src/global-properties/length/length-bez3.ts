@@ -1,7 +1,7 @@
 import { gaussQuadrature } from "flo-gauss-quadrature";
 import { ds } from "../../local-properties-at-t/ds.js";
-import { splitByMaxCurvature } from "../../transformation/split-and-merge/split-by-max-curvature.js";
-import { fromTo3 } from "../../intersection/bezier3-intersection/from-to/from-to-3.js";
+import { splitByMaxCurvature } from "../../transformation/split/split-by-max-curvature.js";
+import { fromTo3 } from "../../transformation/split/from-to/from-to-3.js";
 
 
 /**

@@ -1,10 +1,9 @@
 import { expect, assert, use } from 'chai';
 import { describe } from 'mocha';
-import { getDxy, getDdxy, curvature } from '../../src/index.js';
+import { curvature } from '../../src/index.js';
 import { nearly } from '../helpers/chai-extend-nearly.js';
-import { Horner } from 'flo-poly';
 import { getRandomBezier } from '../helpers/get-random-bezier.js';
-import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate';
+import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
 
 
 const abs = Math.abs;

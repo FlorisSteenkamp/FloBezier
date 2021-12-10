@@ -1,21 +1,17 @@
 {
     "compilerOptions": {
         "charset": "utf8",
-        "noImplicitAny": true, 
-        "noImplicitThis": true,
-        "alwaysStrict": true,
-        "strictBindCallApply": true,
-        "strictFunctionTypes": true,
-        "module": "commonjs",
+        "strict": true,
+        "module": "es2020",
         "target": "es2020",
         "declaration": false,
         "noEmitOnError": true,
         "sourceMap": false,
+        "moduleResolution": "node",
         "jsx": "react"
     },
     "include": [
         "src/test-bezier-intersection.ts"
-        //"test/**/*.ts"
     ],
     "exclude": [
         "node_modules",

@@ -1,11 +1,11 @@
-import type { __Debug__ } from '../../../src/intersection/bezier3-intersection/debug';
-import { bezier3Intersection, evaluate, toString, X } from '../../../src/index';
-import { settings } from '../settings'; 
-import { draw, ctx } from '../draw-stuff';
-import { unsquashp, untransp } from '../affine';
-import { updDs } from '../upd-ds';
-import { showResults } from '../show-results';
-import { renderTree } from './render-tree';
+import type { __Debug__ } from '../../../src/intersection/bezier3-intersection/debug.js';
+import { bezier3Intersection, evaluate, toString, X } from '../../../src/index.js';
+import { settings } from '../settings.js'; 
+import { draw, ctx } from '../draw-stuff.js';
+import { unsquashp, untransp } from '../affine.js';
+import { updDs } from '../upd-ds.js';
+import { showResults } from '../show-results.js';
+import { renderTree } from './render-tree.js';
 
 
 const { tc, num, timingOnly, showGeoXs, showGeoIters } = settings;
@@ -24,7 +24,7 @@ const __debug__: __Debug__ = (typeof globalThis !== 'undefined' && (globalThis a
  */
 function geo(
         pss: number[][][], 
-        xss: X[][][]) {
+        xss: (X[][] | undefined)[]) {
 
     let total = 0;
     let timing: number;
@@ -46,7 +46,7 @@ function geo(
             const xs = xss[i/2];
             const tss_ = tss.filter(t => t[0] !== undefined);
 
-            const res = updDs(ds, xs, tss_.map(ts => ts[0][0]));
+            const res = updDs(ds, xs!, tss_.map(ts => ts[0][0]));
 
             if (!res) {
                 console.log(toString(ps1));
@@ -62,7 +62,7 @@ function geo(
     //console.log('total', total)
 
     if (__debug__ !== undefined && showGeoIters) {
-        renderTree(__debug__.tree);
+        renderTree(__debug__.tree!);
 
         console.log(__debug__.maxItersCount);
     } 

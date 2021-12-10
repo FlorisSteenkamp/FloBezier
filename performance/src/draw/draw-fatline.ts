@@ -1,5 +1,5 @@
-import { Fatline } from '../../../src/intersection/bezier3-intersection/debug';
 import { fromTo, reverse, toLength, translate } from 'flo-vector2d';
+import { Fatline } from '../../../src/intersection/bezier3-intersection/debug.js';
 
 
 function drawFatline(ctx: CanvasRenderingContext2D,
@@ -12,8 +12,8 @@ function drawFatline(ctx: CanvasRenderingContext2D,
         const psMin_ = makeLong(psMin);
         const psMax_ = makeLong(psMax);
 
-        ctx.strokeStyle = strokeStyle;
-        ctx.fillStyle = fillStyle;
+        if (strokeStyle) { ctx.strokeStyle = strokeStyle; }
+        if (fillStyle) { ctx.fillStyle = fillStyle; }
 
         ctx.lineWidth = 0.7;
         ctx.beginPath(); 

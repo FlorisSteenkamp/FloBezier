@@ -48,7 +48,7 @@ function getCoeffsBez3Bez2Exact(ps1: number[][], ps2: number[][]) {
     // if both polynomials' cubic terms are exactly zero then its really a quadratic
     if (eSign(ps1pb[0][0]) === 0 && eSign(ps1pb[1][0]) === 0) {
         // the input bezier curve is in fact not cubic but has order < 3
-        return getCoeffsBez2Bez2Exact(toQuadraticFromCubic(ps1), ps2);
+        return getCoeffsBez2Bez2Exact(toQuadraticFromCubic(ps1)!, ps2);
     }
 
     const [[c2,c1,c0],[d2,d1,d0]] = getXY2Exact(ps2);

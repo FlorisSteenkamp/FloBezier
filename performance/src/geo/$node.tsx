@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { IterationExtras } from '../../../src/intersection/bezier3-intersection/debug';
-import { Iteration } from '../../../src/intersection/bezier3-intersection/iteration';
-import { NodeProps } from '../../react-svg-tree/src/helpers/node-props';
-import { mapWithParent } from '../../react-svg-tree/src/helpers/tree-graph';
-import { settings } from '../settings';
-import { drawIterClipsToCanvas, drawIterHybridPolyToCanvas } from './draw-iter-to-canvas';
-import { draw, ctx } from '../draw-stuff';
-import { unsquashp, untransp } from '../affine';
-import { bezier3Intersection, evaluate } from '../../../src/index';
+import { IterationExtras } from '../../../src/intersection/bezier3-intersection/debug.js';
+import { Iteration } from '../../../src/intersection/bezier3-intersection/iteration.js';
+import { NodeProps } from '../../react-svg-tree/src/helpers/node-props.js';
+import { mapWithParent } from '../../react-svg-tree/src/helpers/tree-graph.js';
+import { settings } from '../settings.js';
+import { drawIterClipsToCanvas, drawIterHybridPolyToCanvas } from './draw-iter-to-canvas.js';
+import { draw, ctx } from '../draw-stuff.js';
+import { unsquashp, untransp } from '../affine.js';
+import { bezier3Intersection, evaluate } from '../../../src/index.js';
 
 
 const { tc } = settings;
@@ -15,7 +15,7 @@ const { tc } = settings;
 type IterationWithExtras = Iteration & IterationExtras;
 
 
-let prevOver: IterationWithExtras = undefined;
+let prevOver: IterationWithExtras | undefined = undefined;
 
 function onMouseOver(node: IterationWithExtras) {
     if (prevOver === node) { return; }

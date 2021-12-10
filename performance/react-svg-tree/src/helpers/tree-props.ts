@@ -1,4 +1,4 @@
-import { NodeProps } from "./node-props";
+import { NodeProps } from "./node-props.js";
 
 
 /** Extracts optional keys */

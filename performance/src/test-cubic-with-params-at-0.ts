@@ -1,12 +1,12 @@
-import { draw } from './draw-stuff';
-//import { settings } from '../settings'; 
-import { cubicWithParamsAt0 } from '../../experiments-new/create/cubic-with-params-at-0/cubic-with-params-at-0';
-import { drawCircle } from './draw/draw-circle';
-import { drawCross1 } from './draw/draw-cross';
-import { rotate90Degrees, toLength, toUnitVector, translate } from 'flo-vector2d';
-import { settings } from './settings';
-import { ctx } from './draw-stuff';
-import { curvature, evaluate, tangent } from '../../src/index';
+import { rotate90Degrees, toLength, translate } from 'flo-vector2d';
+import { curvature, evaluate, tangent } from '../../src/index.js';
+import { draw } from './draw-stuff.js';
+import { cubicWithParamsAt0 } from '../../experiments-new/create/cubic-with-params-at-0/cubic-with-params-at-0.js';
+import { drawCircle } from './draw/draw-circle.js';
+import { drawCross1 } from './draw/draw-cross.js';
+import { settings } from './settings.js';
+import { ctx } from './draw-stuff.js';
+
 
 const { tc } = settings;
 const abs = Math.abs;

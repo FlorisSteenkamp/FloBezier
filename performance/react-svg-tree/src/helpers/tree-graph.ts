@@ -29,15 +29,15 @@ function createTreeGraph<T>(
 
     const treeGraph: TreeGraph<T> = {
         root,
-        parentMap: undefined,
+        parentMap: undefined!,
         positionMap: new Map([rootNodePosition]),
         leftNeighborMap: new Map(),
         prevNodeMap: new Map(),
         getNodeSize,
         getChildren,
         getNodeKey,
-        xTopAdjustment: undefined,
-        yTopAdjustment: undefined
+        xTopAdjustment: undefined!,
+        yTopAdjustment: undefined!
     }
 
     treeGraph.parentMap = createParentMap(treeGraph);
@@ -52,7 +52,7 @@ function mapWithParent<T>(
 
     const nodesWithParent: { node: T; parent: T }[] = [{
         node: root,
-        parent: undefined
+        parent: undefined!
     }];
 
 
@@ -134,7 +134,7 @@ function leftSiblings<T>(tree: TreeGraph<T>, node: T): T[] {
 }
 
 // The current node's closest sibling node on the right
-function rightSibling<T>(tree: TreeGraph<T>, node: T): T {
+function rightSibling<T>(tree: TreeGraph<T>, node: T): T | null {
     const siblings = getSiblings(tree, node);
     const nodeIndex = siblings.indexOf(node);
     return siblings.length - 1 > nodeIndex ? siblings[nodeIndex + 1] : null;
@@ -178,7 +178,7 @@ function isLeaf<T>(treeGraph: TreeGraph<T>, node: T): boolean {
 // Parent of the node
 function parent<T>(tree: TreeGraph<T>, node: T): T {
     const { parentMap } = tree;
-    return parentMap.get(node);
+    return parentMap.get(node)!;
 }
 
 // Prelim position value of the node
@@ -214,7 +214,7 @@ function modifier<T>(tree: TreeGraph<T>, node: T): number {
 }
 
 // The current node's leftmost offspring
-function firstChild<T>(treeGraph: TreeGraph<T>, node: T): T {
+function firstChild<T>(treeGraph: TreeGraph<T>, node: T): T | null {
     //const { vertexMap } = treeGraph;
     const { getChildren } = treeGraph;
     //const children = vertexMap.get(node) || [];
@@ -225,7 +225,7 @@ function firstChild<T>(treeGraph: TreeGraph<T>, node: T): T {
 // Get the prevNode for a given level
 function prevNode<T>(tree: TreeGraph<T>, level: number): T {
     const { prevNodeMap } = tree;
-    return prevNodeMap.get(level);
+    return prevNodeMap.get(level)!;
 }
 
 function hasLeftSibling<T>(tree: TreeGraph<T>, node: T): boolean {

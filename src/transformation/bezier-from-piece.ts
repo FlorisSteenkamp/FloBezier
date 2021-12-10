@@ -1,3 +1,4 @@
+/*
 import { from0ToT } from "./split-and-merge/from-0-to-T.js";
 import { fromTTo1 } from "./split-and-merge/from-T-to-1.js";
 import { evalDeCasteljau } from "../local-properties-at-t/t-to-xy/double/eval-de-casteljau.js";
@@ -12,7 +13,7 @@ import { BezierPiece } from "../bezier-piece.js";
  * @param bezierPiece A partial bezier
  * 
  * @doc
- */
+ *//*
 function bezierFromPiece(bezierPiece: BezierPiece) {
 	const { ps, ts } = bezierPiece;
 
@@ -46,3 +47,4 @@ function bezierFromPiece(bezierPiece: BezierPiece) {
 
 
 export { bezierFromPiece }
+*/

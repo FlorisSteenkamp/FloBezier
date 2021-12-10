@@ -1,9 +1,9 @@
-import { drawBezier } from '../draw/draw-bezier';
-import { trans } from '../affine';
-import { settings } from '../settings';
-import { randOnGrid } from './rand-on-grid';
-import { getCurvesFromPss } from './get-curves-from-pss';
-import { bezierBezierIntersection, bezierSelfIntersection, evalDeCasteljau, getHodograph, getImplicitForm1, getImplicitForm3, getXY, isQuadReallyLine, toString } from '../../../src';
+import { drawBezier } from '../draw/draw-bezier.js';
+import { trans } from '../affine.js';
+import { settings } from '../settings.js';
+import { randOnGrid } from './rand-on-grid.js';
+import { getCurvesFromPss } from './get-curves-from-pss.js';
+import { getXY, toString } from '../../../src/index.js';
 import { 
     psCCSameAlgebraicallyNonOverlapping,
     get33SameAlgebraicallyNonOverlapping,
@@ -12,10 +12,7 @@ import {
     psCCSameAlgebraicallyNonOverlappingIntersecting,
     psQQBothSelfOverlappingAndOverlapping,
     getCCSameAlgebraicallyOverlapping
-} from '../../../test/intersection/bezier-bezier-intersection/get-curve-pairs';
-import { generateSelfIntersecting } from '../../../src/create/generate-self-intersecting';
-import { getXY2 } from '../../../src/to-power-basis/get-xy/double/get-xy';
-import { rotate, scale } from 'flo-vector2d';
+} from '../../../test/intersection/bezier-bezier-intersection/get-curve-pairs.js';
 
 
 const { num, maxCoordinateX, maxCoordinateY, maxBitLength } = settings;
@@ -185,7 +182,7 @@ function getPss(
     //const d = get33SameAlgebraicallyNonOverlapping(false).map(getHodograph);
     //const d = getCCSameAlgebraicallyOverlapping(false, true).map(getHodograph);
     //const d = getCCSameAlgebraicallyOverlapping(false).map(getHodograph);
-    const d = getCCSameAlgebraicallyOverlapping(false);
+    const d = getCCSameAlgebraicallyOverlapping(false)!;
     console.log(toString(getXY(d[0])))
     console.log(toString(getXY(d[1])))
     let pss: number[][][] = [

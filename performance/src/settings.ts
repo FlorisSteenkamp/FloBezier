@@ -8,8 +8,6 @@
 // * test with expanding grid ?
 // * retest same k family
 // * also test polynomial curves (e.g. normal quadratics and cubics)
-// * update package to use newest version of flo-poly (otherwise overlapping
-//   intersections won't work)
 // * test `isPointOnBezierExtension` where the cubic is really a quad
 // * tests
 // * change tsconfig back to use include files: src or something
@@ -24,14 +22,14 @@ const maxCoordinateX = 1;
 const maxCoordinateY = 1/squashFactor;
 //const expMax = Math.ceil(Math.log2(Math.max(maxCoordinateX, maxCoordinateY)));
 const settings = {
-    timingOnly: false,
+    timingOnly: true,
     /** the number of bezier pairs (=== number of beziers / 2) */
-    num: 1,
+    num: 100000,
     maxBitLength: 53,
 
     showNaive: false,
     showNative: true,
-    showPaper: false,
+    showPaper: true,
     showGeo: true,
     transY: 0,
     maxCoordinateX,

@@ -8,5 +8,5 @@
  *
  * @doc mdx
  */
-declare function totalLength(ps: number[][]): number;
+declare function totalLength(ps: number[][], maxFlatness?: number, gaussOrder?: 4 | 16 | 64): number;
 export { totalLength };

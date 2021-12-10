@@ -1,19 +1,22 @@
-import { twoDiff, scaleExpansion2, eAdd, twoSum, growExpansion } from 'big-float-ts';
+import { twoDiff, scaleExpansion2, eAdd } from 'big-float-ts';
 
 const td = twoDiff;
-const ts = twoSum;
 const sce = scaleExpansion2;
 const eadd = eAdd;
 
 
 /**
- * Returns the 3rd derivative of the power basis representation of a line, 
- * quadratic or cubic bezier's x and y-coordinates.
+ * Returns the exact 3rd derivative of the power basis representation of a 
+ * bezier curve of order cubic or less.
  * 
- * * this is a constant value and the same for all t-values and, in 
- * particular, zero for a line or quadratic bezier curve.
+ * * returns the resulting power basis x and y coordinate polynomials from 
+ * highest power to lowest, e.g. if `x(t) = at^2 + bt + c` 
+ * and `y(t) = dt^2 + et + f` then  the result is returned 
+ * as `[[a,b,c],[d,e,f]]`, where the `a,b,c,...` are Shewchuk floating point
+ * expansions
  * 
- * @param ps An order 1,2 or 3 bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ * @param ps an order 0,1,2 or 3 bezier curve given by an ordered array of its
+ * control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * 
  * @doc
  */
@@ -27,12 +30,14 @@ const eadd = eAdd;
 			sce(6,eadd(td(x3,x0),sce(3,td(x1,x2)))),
 			sce(6,eadd(td(y3,y0),sce(3,td(y1,y2))))
 		];
-	} else if (ps.length === 3 || ps.length === 2) {
+	} else if (ps.length <= 3) {
 		return [[0], [0]];
 	}
 
-	// if x0,x1,x2,x3 <= X (for some X) and t is an element of [0,1], then
+	// Note: if x0,x1,x2,x3 <= X (for some X) and t is an element of [0,1], then
 	// max(dddx)(t) <= 48*X for all t.
+
+	throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 

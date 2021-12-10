@@ -39,8 +39,8 @@ describe('toQuadraticFromCubic', function() {
 			const e1_ = getAbsAreaBetween(ps,r1_);
 			const e2_ = getAbsAreaBetween(ps,r2_);
 
-			expect(e1).to.be.nearly(2**6, e1_);
-			expect(e2).to.be.nearly(2**6, e2_);
+			expect(e1).to.be.nearly(2**8, e1_);
+			expect(e2).to.be.nearly(2**8, e2_);
 		}
 
 		{

@@ -1,6 +1,7 @@
-import { settings } from '../settings';
-import { areBeziersInSameKFamily, from0ToT, fromTTo1, toString } from "../../../src";
+import { settings } from '../settings.js';
+import { areBeziersInSameKFamily, /*from0ToT, fromTTo1,*/ toString } from "../../../src";
 import { randOnGrid } from "./rand-on-grid";
+import { fromTo } from '../../../src/intersection/bezier3-intersection/from-to/from-to.js';
 
 const { maxCoordinateX, maxCoordinateY, maxBitLength } = settings;
 
@@ -24,8 +25,10 @@ function getSameKPss(): number[][][] {
         const t2 = randOnGrid(1, 6)();
         //console.log(t1,t2)
        
-        const bz1 = from0ToT(bz, t1);
-        const bz2 = fromTTo1(bz, t2).reverse();
+        //const bz1 = from0ToT(bz, t1);
+        //const bz2 = fromTTo1(bz, t2).reverse();
+        const bz1 = fromTo(bz, 0, t1).ps;
+        const bz2 = fromTo(bz, t2, 1).ps.reverse();
 
         //console.log(bz);
         //console.log(bz1);

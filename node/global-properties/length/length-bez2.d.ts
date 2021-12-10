@@ -1,12 +1,13 @@
 /**
- * Returns the curve length in the specified interval. This function is curried.
+ * Returns the curve length in the specified interval.
+ *
  * @param ps A quadratic bezier, e.g. [[0,0],[1,1],[2,1]]
  * @param interval The paramter interval over which the length is
  * to be calculated (often === [0,1]).
  *
  * @internal
  */
-declare function lengthBez2(interval: number[], ps: number[][]): number;
+declare function lengthBez2(interval: number[], ps: number[][], maxFlatness?: number, gaussOrder?: 4 | 16 | 64): number;
 /**
  * Returns the curve length in the specified interval. This function is curried.
  * Unused because it is not numerically stable in its current form.

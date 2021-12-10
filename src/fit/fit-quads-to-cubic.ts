@@ -1,8 +1,8 @@
 import { classify } from "../global-properties/classification/classify.js";
-import { bezierSelfIntersection } from "../index.js";
-import { fromTo3 } from "../intersection/bezier3-intersection/from-to/from-to-3.js";
+import { fromTo3 } from "../transformation/split/from-to/from-to-3.js";
 import { toQuadraticFromCubic } from "../transformation/degree-or-type/to-quadratic-from-cubic.js";
 import { getAbsAreaBetween } from './get-abs-area-between.js';
+import { bezierSelfIntersection } from '../intersection/self-intersection/bezier-self-intersection.js';
 
 
 /**

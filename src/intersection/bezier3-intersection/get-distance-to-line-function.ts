@@ -31,7 +31,7 @@ function getDistanceToLineFunction(
 
 function getDistanceToLineFunction(
 		pS: number[],
-		pE: number[]) {
+		pE: number[]): (p: number[], _p: number[]) => { dMin: number; dMax: number; } {
 
 	const xS = pS[0];
 	const yS = pS[1];
@@ -49,7 +49,7 @@ function getDistanceToLineFunction(
 
 	return function(p: number[], _p: number[]) {
 		// error counter assumed <12> 
-		// (the max of <6>,<6>,<10>,<11> and <12> from other functions)
+		// (the max of <3>,<5>,<8> and <12> from other functions (`fromTo3` and `toHybridQuadratic`))
 		const x = p[0];  // <12>x 
 		const y = p[1];  // <12>y
 

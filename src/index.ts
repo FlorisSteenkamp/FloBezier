@@ -6,15 +6,16 @@ import { totalLength } from './global-properties/length/total-length.js';
 import { clone } from './transformation/clone.js';
 import { getTAtLength } from './local-properties-to-t/get-t-at-length.js';
 import { equal } from './simultaneous-properties/equal.js';
-import { bezierFromPiece } from './transformation/bezier-from-piece.js';
 
+import { γ, γγ } from './error-analysis/error-analysis.js'
+
+import { fromTo } from './transformation/split/from-to.js';
 import { fitQuadsToCubic } from './fit/fit-quads-to-cubic.js';
 
 import { getControlPointBox } from './global-properties/bounds/get-control-point-box.js';
 
 import { closestPointOnBezier } from './simultaneous-properties/closest-point-on-bezier/closest-point-on-bezier.js';
 
-// TODO - remove - just for testing
 import { bezier3Intersection } from './intersection/bezier3-intersection/bezier3-intersection.js';
 
 import { intersectBoxes } from './boxes/intersect-boxes.js';
@@ -49,35 +50,28 @@ import { getImplicitForm1ErrorCounters } from './implicit-form/get-error-counter
 import { getImplicitForm1DdWithRunningError } from './implicit-form/double-double/get-implicit-form1-dd-with-running-error.js';
 import { getImplicitForm1Exact } from './implicit-form/exact/get-implicit-form1-exact.js';
 
+/*
 import { getCoeffsBez3Bez3Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez3-dd.js';
 import { getCoeffsBez3Bez3Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez3-exact.js';
-
 import { getCoeffsBez3Bez2Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez2-dd.js';
 import { getCoeffsBez3Bez2Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez2-exact.js';
-
 import { getCoeffsBez3Bez1Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez1-dd.js';
 import { getCoeffsBez3Bez1Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez1-exact.js';
-
 import { getCoeffsBez2Bez3Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez2-bez3-dd.js';
 import { getCoeffsBez2Bez3Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez2-bez3-exact.js';
-
 import { getCoeffsBez2Bez2Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez2-bez2-dd.js';
 import { getCoeffsBez2Bez2Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez2-bez2-exact.js';
-
 import { getCoeffsBez2Bez1Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez2-bez1-dd.js';
 import { getCoeffsBez2Bez1Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez2-bez1-exact.js';
-
 import { getCoeffsBez1Bez3Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez3-dd.js';
 import { getCoeffsBez1Bez3Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez3-exact.js';
-
 import { getCoeffsBez1Bez2Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez2-dd.js';
 import { getCoeffsBez1Bez2Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez2-exact.js';
-
 import { getCoeffsBez1Bez1Dd } from './intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez1-dd.js';
 import { getCoeffsBez1Bez1Exact } from './intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez1-exact.js';
+*/
 
 import { getCoeffsBez3WithRunningError } from './intersection/self-intersection/get-coefficients/double/get-coeffs-bez3-with-running-error.js';
-//import { getCoeffsBez3Dd } from './intersection/self-intersection/get-coefficients/double-double/get-coeffs-bez3-dd.js';
 import { getCoeffsBez3Exact } from './intersection/self-intersection/get-coefficients/exact/get-coeffs-bez3-exact.js';
 
 import { toExpansion } from './transformation/to-expansion.js';
@@ -91,20 +85,33 @@ import { bezierSelfIntersection } from './intersection/self-intersection/bezier-
 //import { getEndpointIntersections } from './intersection/get-endpoint-intersections.js';
 import { tFromXY3 } from './local-properties-to-t/t-from-xy.js';
 
-import { getXY       } from './to-power-basis/get-xy/double/get-xy.js';
-import { getDxy      } from './to-power-basis/get-dxy/double/get-dxy.js';
-import { getDdxy     } from './to-power-basis/get-ddxy/double/get-ddxy.js';
-import { getDxyAt1   } from './local-properties-at-t/t-to-dxy/double/get-dxy-at-1.js';
-import { getDdxyAt1  } from './local-properties-at-t/t-to-ddxy/double/get-ddxy-at-1.js';
-import { getDxyAt0   } from './local-properties-at-t/t-to-dxy/double/get-dxy-at-0.js';
-import { getDdxyAt0  } from './local-properties-at-t/t-to-ddxy/double/get-ddxy-at-0.js';
-import { getDddxy    } from './to-power-basis/get-dddxy/double/get-dddxy.js';
-import { tangent     } from './local-properties-at-t/tangent.js';
-import { normal      } from './local-properties-at-t/normal.js';
-import { from0ToT    } from './transformation/split-and-merge/from-0-to-T.js';
-import { fromTTo1    } from './transformation/split-and-merge/from-T-to-1.js';
-import { fromTo, fromToPrecise } from './transformation/split-and-merge/from-to.js';
-import { getV } from './intersection/bezier3-intersection/from-to/get-v.js';
+import { getXY } from './to-power-basis/get-xy/double/get-xy.js';
+import { getDxy } from './to-power-basis/get-dxy/double/get-dxy.js';
+import { getDdxy } from './to-power-basis/get-ddxy/double/get-ddxy.js';
+import { getDxyAt1 } from './local-properties-at-t/t-to-dxy/double/get-dxy-at-1.js';
+import { getDdxyAt1 } from './local-properties-at-t/t-to-ddxy/double/get-ddxy-at-1.js';
+import { getDxyAt0 } from './local-properties-at-t/t-to-dxy/double/get-dxy-at-0.js';
+import { getDdxyAt0 } from './local-properties-at-t/t-to-ddxy/double/get-ddxy-at-0.js';
+import { getDddxy } from './to-power-basis/get-dddxy/double/get-dddxy.js';
+
+import { getXYDd } from './to-power-basis/get-xy/double-double/get-xy-dd.js';
+import { getDxyDd } from './to-power-basis/get-dxy/double-double/get-dxy-dd.js';
+import { getDdxyDd } from './to-power-basis/get-ddxy/double-double/get-ddxy-dd.js';
+import { getDddxyDd } from './to-power-basis/get-dddxy/double-double/get-dddxy-dd.js';
+
+import { getXYExact } from './to-power-basis/get-xy/exact/get-xy-exact.js';
+import { getDxyExact } from './to-power-basis/get-dxy/exact/get-dxy-exact.js';
+import { getDdxyExact } from './to-power-basis/get-ddxy/exact/get-ddxy-exact.js';
+import { getDddxyExact } from './to-power-basis/get-dddxy/exact/get-dddxy-exact.js';
+
+import { getXYWithRunningError } from './to-power-basis/get-xy/double/get-xy-with-running-error.js';
+import { getXYDdWithRunningError } from './to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js';
+
+import { getXYErrorCounters } from './to-power-basis/get-xy/get-xy-error-counters.js';
+import { getDxyErrorCounters } from './to-power-basis/get-dxy/get-dxy-error-counters.js';
+
+import { tangent } from './local-properties-at-t/tangent.js';
+import { normal } from './local-properties-at-t/normal.js';
 //import { getOtherTs } from './intersection/bezier-bezier-intersection/get-other-ts.js';
 import { bezierBezierIntersection } from './intersection/bezier-bezier-intersection/bezier-bezier-intersection.js';
 import { toCubic } from './transformation/degree-or-type/to-cubic.js';
@@ -113,16 +120,15 @@ import { quadToPolyline } from './transformation/quad-to-polyline.js';
 import { isQuadObtuse } from './global-properties/classification/is-quad-obtuse.js';
 import { getIntervalBox } from './global-properties/bounds/get-interval-box/get-interval-box.js';
 import { getIntervalBoxDd } from './global-properties/bounds/get-interval-box/get-interval-box-dd.js';
-import { splitAt, splitAtPrecise } from './transformation/split-and-merge/split-at.js';
 import { getInterfaceRotation } from './simultaneous-properties/get-interface-rotation.js';
 import { closestPointOnBezierCertified } from './simultaneous-properties/closest-point-on-bezier/closest-point-on-bezier-certified.js';
 import { hausdorffDistance, hausdorffDistanceCandidates } from './simultaneous-properties/hausdorff-distance.js';
 import { controlPointLinesLength } from './global-properties/length/control-point-lines-length.js';
-import { splitByMaxCurveLength } from './transformation/split-and-merge/split-by-max-curve-length.js';
+import { splitByMaxCurveLength } from './transformation/split/split-by-max-curve-length.js';
 import { getCurvatureExtrema, Extrema } from './get-curvature-extrema/get-curvature-extrema.js';
 import { flatness } from './global-properties/flatness.js';
-import { splitByMaxCurvature } from './transformation/split-and-merge/split-by-max-curvature.js';
-import { splitByCurvatureAndLength } from './transformation/split-and-merge/split-by-curvature-and-length.js';
+import { splitByMaxCurvature } from './transformation/split/split-by-max-curvature.js';
+import { splitByCurvatureAndLength } from './transformation/split/split-by-curvature-and-length.js';
 import { areBeziersInSameKFamily } from './simultaneous-properties/are-beziers-in-same-k-family.js';
 import { isCollinear, isHorizontal, isVertical } from './global-properties/classification/is-collinear.js';
 import { isSelfOverlapping } from './global-properties/classification/is-self-overlapping.js';
@@ -142,8 +148,6 @@ import { evaluate } from './local-properties-at-t/t-to-xy/double/evaluate.js';
 import { evaluateDdxy } from './local-properties-at-t/t-to-ddxy/double/evaluate-ddxy.js';
 import { evaluateDxy } from './local-properties-at-t/t-to-dxy/double/evaluate-dxy.js';
 import { getXY3DdWithRunningError } from './to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js';
-import { lineToCubic } from './transformation/degree-or-type/line-to-cubic.js';
-import { quadraticToCubic } from './transformation/degree-or-type/quadratic-to-cubic.js';
 
 
 /** 
@@ -203,6 +207,22 @@ export {
 	getDxyAt0,
 	getDdxyAt0,
 
+	getDddxyDd,
+	getDdxyDd,
+	getDxyDd,
+	getXYDd,
+
+	getXYExact,
+	getDxyExact,
+	getDdxyExact,
+	getDddxyExact,
+
+	getXYWithRunningError,
+	getXYDdWithRunningError,
+
+	getXYErrorCounters,
+	getDxyErrorCounters,
+
 	// -------------------------------
 	// -- Get local properties at t --
 	// -------------------------------
@@ -230,12 +250,7 @@ export {
 
 	// Split, merge and clone
 	reverse,
-	from0ToT,
-	fromTTo1,
 	fromTo,
-	fromToPrecise,
-	splitAt,
-	splitAtPrecise,
 	splitByMaxCurveLength,
 	splitByMaxCurvature,
 	splitByCurvatureAndLength,
@@ -303,6 +318,7 @@ export {
 	// ------------------------------------------
 
 	equal,
+	γ,γγ,
 	areBeziersInSameKFamily,
 	closestPointOnBezierCertified,
 	getInterfaceRotation,
@@ -327,7 +343,6 @@ export {
 	// --------------------
 	// -- Create beziers --
 	// --------------------
-	bezierFromPiece,
 	generateCuspAtHalf3,
 	generateSelfIntersecting,
 	cubicThroughPointGiven013,
@@ -340,9 +355,8 @@ export {
 	evalDeCasteljauWithErrDd,
 	evaluateExact,
 	isPointOnBezierExtension,
-	lineToCubic,
-	quadraticToCubic,
 
+	/*
 	getCoeffsBez3Bez3Dd,
 	getCoeffsBez3Bez2Dd,
 	getCoeffsBez3Bez1Dd,
@@ -362,6 +376,7 @@ export {
 	getCoeffsBez1Bez3Exact,
 	getCoeffsBez1Bez2Exact,
 	getCoeffsBez1Bez1Exact,
+	*/
 
 	// self-intersection
 	getCoeffsBez3WithRunningError,
@@ -380,8 +395,7 @@ export {
 	getControlPointBox,
 	fitQuadsToCubic,
 
-	getXY3DdWithRunningError,
-	getV
+	getXY3DdWithRunningError
 }
 
 

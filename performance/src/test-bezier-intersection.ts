@@ -1,19 +1,18 @@
-(globalThis as any as { __debug__: Partial<__Debug__> | undefined}).__debug__ = { already: false, uid: 0, maxItersCount: 0 };
+(globalThis as any as { __debug__: Partial<__Debug__> | undefined}).__debug__ = 
+    { already: false, uid: 0, maxItersCount: 0 };
 
 
-import type { __Debug__ } from '../../src/intersection/bezier3-intersection/debug';
-import { doPaper } from './-paper';
-//import { performance } from 'perf_hooks';
-//import * as paper from 'paper';
-import { allRoots as _allRoots } from './roots/all-roots';
-import { settings } from './settings';
-import { ctx } from './draw-stuff';
-import { getPss } from './get-pss/get-pss';
-import { native } from './native/-native';
-import { geo } from './geo/-geo';
-import { naive } from './naive/-naive';
-import { curvature, evaluate, tangent, X } from '../../src/index';
-import { testCubicWithParamsAt0 } from './test-cubic-with-params-at-0';
+import type { __Debug__ } from '../../src/intersection/bezier3-intersection/debug.js';
+import { doPaper } from './-paper.js';
+import { allRoots as _allRoots } from './roots/all-roots.js';
+import { settings } from './settings.js';
+import { ctx } from './draw-stuff.js';
+import { getPss } from './get-pss/get-pss.js';
+import { native } from './native/-native.js';
+import { geo } from './geo/-geo.js';
+import { naive } from './naive/-naive.js';
+import { X } from '../../src/index.js';
+// import { testCubicWithParamsAt0 } from './test-cubic-with-params-at-0.js';
 
 
 function test(hot: boolean) {
@@ -31,7 +30,7 @@ function test(hot: boolean) {
 
     const { showNaive, showNative, showPaper, showGeo } = settings;
     
-    let xss: X[][][] = [];
+    let xss: (X[][] | undefined)[] = [];
 
     if (showNative) { xss = native(pss); }
     if (showGeo)    { geo    (pss, xss);  }

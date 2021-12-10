@@ -7,5 +7,5 @@
  *
  * @internal
  */
-declare function lengthBez3(interval: number[], ps: number[][]): number;
+declare function lengthBez3(interval: number[], ps: number[][], maxFlatness?: number, gaussOrder?: 4 | 16 | 64): number;
 export { lengthBez3 };

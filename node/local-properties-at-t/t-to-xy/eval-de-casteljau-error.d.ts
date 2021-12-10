@@ -1,6 +1,6 @@
 /**
  * Returns a representation of the error (from which an absolute error bound
- * can be calculated) of evaluating the given bezier curve at the parameter `t`
+ * can be calculated) when evaluating the given bezier curve at the parameter `t`
  * using [De Casteljau's algorithm](https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm).
  *
  * The returned error representation needs to be multiplied with
@@ -11,9 +11,14 @@
  * p. 68 near the bottom.
  *
  * (1) G. W. Stewart. Introduction to Matrix Computations. Academic Press, New York,
-*  1973. xiii+441 pp. ISBN 0-12-670350-7
+ *  1973. xiii+441 pp. ISBN 0-12-670350-7
  *
  * * **precondition**: TODO underflow/overflow
+ *
+ * * The error counters when calculating in double-double precision will
+ * actually be slightly less (compared to double precision) but we can use this
+ * for both double and double-double precision (since doubling the error counter
+ * only costs 1 bit).
  *
  * The absolute erros below can be calculated as follows (where `<E>` are the
  * error counters as indicated in the comments of the return value below):
@@ -29,18 +34,18 @@
  * ```
  * // for cubic bezier curves
  * return [
- * 	x_,  // <E> === 3T + 8
- * 	y_   // <E> === 3T + 8
+ * 	x_,  // <E> === 3T + 9
+ * 	y_   // <E> === 3T + 9
  * ];
  * // for quadratic bezier curves
  * return [
- * 	x_,  // <E> === 2T + 5
- * 	y_   // <E> === 2T + 5
+ * 	x_,  // <E> === 2T + 6
+ * 	y_   // <E> === 2T + 6
  * ];
  * // for linear bezier curves (i.e. lines)
  * return [
- * 	x_,  // <E> === T + 2
- * 	y_   // <E> === T + 2
+ * 	x_,  // <E> === T + 3
+ * 	y_   // <E> === T + 3
  * ];
  * ```
  *

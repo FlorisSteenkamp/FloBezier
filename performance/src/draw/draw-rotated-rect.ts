@@ -14,8 +14,8 @@ function drawRotatedRect(
 
         const [[x1,y1], [x2,y2], [x3,y3], [x4,y4]] = rect;
 
-        ctx.strokeStyle = strokeStyle;
-        ctx.fillStyle = fillStyle;
+        if (strokeStyle) { ctx.strokeStyle = strokeStyle; }
+        if (fillStyle) { ctx.fillStyle = fillStyle; }
         ctx.beginPath();
 
         ctx.moveTo(x1,y1);

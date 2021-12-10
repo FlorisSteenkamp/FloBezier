@@ -10,6 +10,8 @@ import type { X } from './x.js';
  * algebraic implicitization of the curves in order to find *guaranteed*
  * accurate results.
  *
+ * * the returned intersections are *ordered* by `t` value of the first bezier
+ * curve
  * TODO - make sure below points are correct (add to tests)
  * * if the two curves have an infinite number of intersections `undefined` is
  * returned

@@ -3,10 +3,10 @@
  * including an error bound (that needs to be multiplied by `6u`, where
  * `u === Number.EPSILON/2`).
  *
- * * precondition 1: exact tS, tE, ps
- * * precondition 2: tS, tE ∈ [0,1]
- * * precondition 3: `Number.EPSILON | tS` and `Number.EPSILON | tE`
- * * precondition 4: tE > tS
+ * * **precondition 1**: exact tS, tE, ps
+ * * **precondition 2**: tS, tE ∈ [0,1]
+ * * **precondition 3**: `Number.EPSILON/2 | tS` and `Number.EPSILON/2 | tE`
+ * * **precondition 4**: tE > tS
  *
  * @param ps a quadratic bezier curve
  * @param tS the `t` parameter where the resultant bezier should start

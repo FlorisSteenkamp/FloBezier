@@ -2,7 +2,7 @@ import {
     twoProduct, ddNegativeOf, ddMultBy2, 
     ddMultDouble2, ddMultDd, ddDiffDd, ddAddDd, ddDivBy2
 } from 'double-double';
-import { getXYDdAnyBitlength3 } from './get-xy-dd-any-bitlength';
+import { getXYDdAnyBitlength3 } from './get-xy-dd-any-bitlength.js';
 
 
 const abs = Math.abs;

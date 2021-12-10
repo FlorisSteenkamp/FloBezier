@@ -1,7 +1,7 @@
-import { X } from "../../../src/index";
-import { settings } from '../settings'; 
-import { draw, ctx } from '../draw-stuff';
-import { unsquashp, untransp } from '../affine';
+import { X } from "../../../src/index.js";
+import { settings } from '../settings.js'; 
+import { draw, ctx } from '../draw-stuff.js';
+import { unsquashp, untransp } from '../affine.js';
 
 
 const { tc, num } = settings;

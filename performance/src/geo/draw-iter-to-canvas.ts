@@ -1,11 +1,11 @@
-import { toString } from "../../../src";
-import { Fatline, IterationExtras } from "../../../src/intersection/bezier3-intersection/debug";
-import { Iteration } from "../../../src/intersection/bezier3-intersection/iteration";
-import { draw } from '../draw-stuff';
-import { tcFatline } from './tc-fatline';
-import { tcGeo } from './tc-geo';
-import { tcPs } from './tc-ps';
-import { log } from '../log';
+// import { toString } from "../../../src/index.js";
+import { Fatline, IterationExtras } from "../../../src/intersection/bezier3-intersection/debug.js";
+import { Iteration } from "../../../src/intersection/bezier3-intersection/iteration.js";
+import { draw } from '../draw-stuff.js';
+import { tcFatline } from './tc-fatline.js';
+import { tcGeo } from './tc-geo.js';
+import { tcPs } from './tc-ps.js';
+import { log } from '../log.js';
 
 
 function drawIterClipsToCanvas(
@@ -14,7 +14,7 @@ function drawIterClipsToCanvas(
 
     if (!canvas) { return; }
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d')!;
     ctx.clearRect(0, 0, 1280, 768);
     const { fatline_, geo_, beziers_ } = draw(ctx);
     
@@ -28,7 +28,7 @@ function drawIterClipsToCanvas(
     const { minX, maxX, minY, maxY } = getExtents([
         ...F.ps, 
         ...G.ps, 
-        ...getFatlinePs(fatline),
+        ...getFatlinePs(fatline!),
         ...(fatlinePerp ? getFatlinePs(fatlinePerp) : []),
         ...(hq as number[][])
     ]);
@@ -83,10 +83,10 @@ function drawIterClipsToCanvas(
         tcPs(transformPs_(F.ps)), 
         tcPs(transformPs_(G.ps))
     );
-    fatline_(tcFatline(transformFatline_(fatline)));
+    fatline_(tcFatline(transformFatline_(fatline!)));
     
     if (fatlinePerp) { fatline_(tcFatline(transformFatline_(fatlinePerp))); }
-    geo_(tcGeo(transformGeo_(hq)));
+    geo_(tcGeo(transformGeo_(hq!)));
 }
 
 
@@ -96,7 +96,7 @@ function drawIterHybridPolyToCanvas(
 
     if (!canvas) { return; }
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d')!;
     ctx.clearRect(0, 0, 1280, 768);
     const { fatline_, geo_, beziers_, hybridPoly_ } = draw(ctx);
 
@@ -104,7 +104,7 @@ function drawIterHybridPolyToCanvas(
 
     const { geo, geoPerp } = iter;
 
-    hybridPoly_(geo);
+    hybridPoly_(geo!);
 }
 
 

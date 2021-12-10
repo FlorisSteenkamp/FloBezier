@@ -8,10 +8,17 @@ const ge = growExpansion;
 
 
 /**
- * Returns the derivative of the power basis representation of a line, quadratic
- * or cubic bezier. 
+ * Returns the exact derivative of the power basis representation of a 
+ * bezier curve of order cubic or less.
  * 
- * @param ps An order 1,2 or 3 bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ * * returns the resulting power basis x and y coordinate polynomials from 
+ * highest power to lowest, e.g. if `x(t) = at^2 + bt + c` 
+ * and `y(t) = dt^2 + et + f` then  the result is returned 
+ * as `[[a,b,c],[d,e,f]]`, where the `a,b,c,...` are Shewchuk floating point
+ * expansions
+ * 
+ * @param ps an order 0,1,2 or 3 bezier curve given by an ordered array of its
+ * control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * 
  * @doc
  */
@@ -30,11 +37,15 @@ function getDxyExact(
 		return getDxy1Exact(ps);
 	}
 
-	// TODO - add case of degenerate point
-	throw new Error('The given bezier curve is invalid.');
+	if (ps.length === 1) {
+		return [[[0]], [[0]]];
+	}
+
+	throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 
+/** @internal */ 
 function getDxy3Exact(
 	ps: number[][]): number[][][] {
 
@@ -52,6 +63,7 @@ function getDxy3Exact(
 } 
 
 
+/** @internal */ 
 function getDxy2Exact(
 		ps: number[][]): number[][][] {
 
@@ -67,6 +79,7 @@ function getDxy2Exact(
 }
 
 
+/** @internal */ 
 function getDxy1Exact(
 		ps: number[][]): number[][][] {
 

@@ -36,7 +36,7 @@ declare function getXBoundsTight(ps: number[][]): XBounds;
  */
 declare function getYBoundsTight(ps: number[][]): YBounds;
 /**
- * Returns the axis-aligned bounding box together with the t values where the
+ * Returns an axis-aligned bounding box together with the t values where the
  * bounds on the bezier are reached.
  *
  * @param ps an order 1, 2 or 3 bezier curve given as an array of control

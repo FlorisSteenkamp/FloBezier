@@ -1,5 +1,5 @@
 /**
- * Returns the tangent vector (not necessarily of unit length) of an
+ * Returns a tangent vector (not necessarily of unit length) of an
  * order 1, 2 or 3 bezier curve at a specific given parameter value `t`.
  * This function is curried.
  *

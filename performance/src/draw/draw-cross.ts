@@ -1,6 +1,3 @@
-import { Fatline } from '../../../src/intersection/bezier3-intersection/debug';
-import { fromTo, reverse, toLength, translate } from 'flo-vector2d';
-
 
 function drawCross1(ctx: CanvasRenderingContext2D,
     strokeStyle: string | undefined,
@@ -9,8 +6,8 @@ function drawCross1(ctx: CanvasRenderingContext2D,
     return (p: number[]) => {
         const [x,y] = p;
 
-        ctx.strokeStyle = strokeStyle;
-        ctx.fillStyle = fillStyle;
+        if (strokeStyle) { ctx.strokeStyle = strokeStyle; }
+        if (fillStyle) { ctx.fillStyle = fillStyle; }
 
         const s = 10;
 

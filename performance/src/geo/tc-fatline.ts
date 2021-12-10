@@ -1,6 +1,6 @@
-import { Fatline } from "../../../src/intersection/bezier3-intersection/debug"
-import { settings } from "../settings";
-import { unsquashp, untransp } from '../affine';
+import { Fatline } from "../../../src/intersection/bezier3-intersection/debug.js"
+import { settings } from "../settings.js";
+import { unsquashp, untransp } from '../affine.js';
 
 
 const { tc } = settings;

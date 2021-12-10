@@ -1,9 +1,9 @@
-import { settings } from './settings'; 
-import { draw, ctx } from './draw-stuff';
-import { X } from "../../src";
 import * as Paper from 'paper' ;
-import { showResults } from './show-results';
-import { updDs } from './upd-ds';
+import { settings } from './settings.js'; 
+import { draw, ctx } from './draw-stuff.js';
+import { X } from "../../src/index.js";
+import { showResults } from './show-results.js';
+import { updDs } from './upd-ds.js';
 
 
 const { num, timingOnly } = settings;
@@ -11,7 +11,7 @@ const { num, timingOnly } = settings;
 
 function doPaper(
         curves: any, 
-        xss: X[][][]) {
+        xss: (X[][] | undefined)[]) {
 
     let total = 0;
     const ds: number[] = [];
@@ -28,7 +28,7 @@ function doPaper(
             const ts = _ts.map((t: any) => t.time) as number[];
             const xs = xss[i/2];
 
-            updDs(ds, xs, ts);
+            updDs(ds, xs!, ts);
         }
     }
     timing = performance.now() - timeStart;

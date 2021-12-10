@@ -14,8 +14,8 @@ function drawRect(
 
         const [[x1,y1], [x2,y2]] = rect;
 
-        ctx.strokeStyle = strokeStyle;
-        ctx.fillStyle = fillStyle;
+        if (strokeStyle) { ctx.strokeStyle = strokeStyle; }
+        if (fillStyle) { ctx.fillStyle = fillStyle; }
 
         ctx.beginPath();
         ctx.moveTo(x1,y1);

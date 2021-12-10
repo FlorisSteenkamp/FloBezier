@@ -1,7 +1,7 @@
 import { add, Horner, integrate, multiply, negate, subtract } from "flo-poly";
 import { getXY } from '../to-power-basis/get-xy/double/get-xy.js';
 import { getDxy } from '../to-power-basis/get-dxy/double/get-dxy.js';
-import { splitByMaxCurvature } from "../transformation/split-and-merge/split-by-max-curvature.js";
+import { splitByMaxCurvature } from "../transformation/split/split-by-max-curvature.js";
 import { gaussQuadrature } from "flo-gauss-quadrature";
 
 

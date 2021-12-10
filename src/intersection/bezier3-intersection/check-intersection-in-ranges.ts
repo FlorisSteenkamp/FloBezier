@@ -6,7 +6,7 @@ import { toLength as _toLength } from 'flo-vector2d';
 import { len as _len } from 'flo-vector2d';
 import { translate as _translate } from 'flo-vector2d';
 import { getDistanceToLineFunction as _getDistanceToLineFunction } from "./get-distance-to-line-function.js";
-import { fromTo as _fromTo } from './from-to/from-to.js';
+import { fromTo as _fromTo } from '../../transformation/split/from-to.js';
 
 
 const __debug__: __Debug__ = (typeof globalThis !== 'undefined' && (globalThis as any).__debug__)
@@ -21,7 +21,6 @@ const translate = _translate;
 const toLength = _toLength;
 
 const noIntersection: undefined = undefined;
-const noClip: number[] = [0,1];
 
 /** 
  * the heuristic value indicating the maximum `t` parameter span allowed after
@@ -81,7 +80,7 @@ function checkIntersectionInRanges(
 
 
     // Get the bezier curves (and an error bound) within the narrowed ranges
-    // Note: the error bound need be multiplied by `11u`, where 
+    // Note: the error bound need be multiplied by `8u`, where 
     // `u === Number.EPSILON/2` (see `fromTo3` for details).
     const F_ = fromTo(F, ftMin, ftMax); 
     const G_ = fromTo(G, gtMin, gtMax); 

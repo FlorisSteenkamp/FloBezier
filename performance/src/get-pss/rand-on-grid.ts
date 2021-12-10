@@ -1,4 +1,4 @@
-import { reduceSignificand } from "flo-numerical";
+import { reduceSignificand } from "double-double";
 
 
 function toGrid(

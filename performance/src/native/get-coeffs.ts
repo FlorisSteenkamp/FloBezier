@@ -1,37 +1,37 @@
 import { 
-    getCoeffsBez1Bez1DdAnyBitlength, 
-    getCoeffsBez1Bez2DdAnyBitlength, 
-    getCoeffsBez1Bez3DdAnyBitlength, 
-    getCoeffsBez2Bez1DdAnyBitlength, 
-    getCoeffsBez2Bez2DdAnyBitlength, 
-    getCoeffsBez2Bez3DdAnyBitlength,
-    getCoeffsBez3Bez1DdAnyBitlength, 
-    getCoeffsBez3Bez2DdAnyBitlength, 
-    getCoeffsBez3Bez3DdAnyBitlength 
-} from "../../../src/index";
+    getCoeffsBez1Bez1Dd,
+    getCoeffsBez1Bez2Dd, 
+    getCoeffsBez1Bez3Dd, 
+    getCoeffsBez2Bez1Dd, 
+    getCoeffsBez2Bez2Dd, 
+    getCoeffsBez2Bez3Dd,
+    getCoeffsBez3Bez1Dd, 
+    getCoeffsBez3Bez2Dd, 
+    getCoeffsBez3Bez3Dd 
+} from "../../../src/index.js";
 import { 
-    getCoeffsBez1Bez1ExactAnyBitlength,
-    getCoeffsBez1Bez2ExactAnyBitlength, 
-    getCoeffsBez1Bez3ExactAnyBitlength, 
-    getCoeffsBez2Bez1ExactAnyBitlength, 
-    getCoeffsBez2Bez2ExactAnyBitlength, 
-    getCoeffsBez2Bez3ExactAnyBitlength, 
-    getCoeffsBez3Bez1ExactAnyBitlength, 
-    getCoeffsBez3Bez2ExactAnyBitlength, 
-    getCoeffsBez3Bez3ExactAnyBitlength 
-} from "../../../src/index";
+    getCoeffsBez1Bez1Exact,
+    getCoeffsBez1Bez2Exact, 
+    getCoeffsBez1Bez3Exact, 
+    getCoeffsBez2Bez1Exact, 
+    getCoeffsBez2Bez2Exact, 
+    getCoeffsBez2Bez3Exact, 
+    getCoeffsBez3Bez1Exact, 
+    getCoeffsBez3Bez2Exact, 
+    getCoeffsBez3Bez3Exact 
+} from "../../../src/index.js";
 
 
 const coeffFunctionsDdAnyBitlength = [
-    [getCoeffsBez1Bez1DdAnyBitlength, getCoeffsBez1Bez2DdAnyBitlength, getCoeffsBez1Bez3DdAnyBitlength],
-    [getCoeffsBez2Bez1DdAnyBitlength, getCoeffsBez2Bez2DdAnyBitlength, getCoeffsBez2Bez3DdAnyBitlength],
-    [getCoeffsBez3Bez1DdAnyBitlength, getCoeffsBez3Bez2DdAnyBitlength, getCoeffsBez3Bez3DdAnyBitlength]
+    [getCoeffsBez1Bez1Dd, getCoeffsBez1Bez2Dd, getCoeffsBez1Bez3Dd],
+    [getCoeffsBez2Bez1Dd, getCoeffsBez2Bez2Dd, getCoeffsBez2Bez3Dd],
+    [getCoeffsBez3Bez1Dd, getCoeffsBez3Bez2Dd, getCoeffsBez3Bez3Dd]
 ];
 
 const coeffFunctionsExactAnyBitlength = [
-    [getCoeffsBez1Bez1ExactAnyBitlength, getCoeffsBez1Bez2ExactAnyBitlength, getCoeffsBez1Bez3ExactAnyBitlength],
-    [getCoeffsBez2Bez1ExactAnyBitlength, getCoeffsBez2Bez2ExactAnyBitlength, getCoeffsBez2Bez3ExactAnyBitlength],
-    [getCoeffsBez3Bez1ExactAnyBitlength, getCoeffsBez3Bez2ExactAnyBitlength, getCoeffsBez3Bez3ExactAnyBitlength]
+    [getCoeffsBez1Bez1Exact, getCoeffsBez1Bez2Exact, getCoeffsBez1Bez3Exact],
+    [getCoeffsBez2Bez1Exact, getCoeffsBez2Bez2Exact, getCoeffsBez2Bez3Exact],
+    [getCoeffsBez3Bez1Exact, getCoeffsBez3Bez2Exact, getCoeffsBez3Bez3Exact]
 ];
 
 

@@ -1,6 +1,6 @@
 import { twoProduct, ddMultBy2, ddMultDouble2, ddMultDd, ddAddDd } from "double-double";
-import { getXYDdAnyBitlength3 as _getXYDdAnyBitlength3 } from './get-xy-dd-any-bitlength';
-import { getImplicitForm3DdAnyBitlength as _getImplicitForm3DdAnyBitlength } from './get-implicit-form3-dd-any-bitlength';
+import { getXYDdAnyBitlength3 as _getXYDdAnyBitlength3 } from './get-xy-dd-any-bitlength.js';
+import { getImplicitForm3DdAnyBitlength as _getImplicitForm3DdAnyBitlength } from './get-implicit-form3-dd-any-bitlength.js';
 
 
 const getXYDdAnyBitlength3 = _getXYDdAnyBitlength3;

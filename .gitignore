@@ -12,3 +12,4 @@ notes.txt
 coverage/
 .vscode/
 quokka-test.ts
+*.py

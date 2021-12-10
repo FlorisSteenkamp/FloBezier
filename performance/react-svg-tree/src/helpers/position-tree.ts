@@ -2,8 +2,8 @@ import {
     meanNodeSize, TreeGraph, xCoord, yCoord, prelim, prevNode, isLeaf,
     leftSibling, firstChild, hasRightSibling, rightSibling, leftNeighbor,
     parent, modifier, updatePositionValue
-} from './tree-graph';
-import { TreeProps, TreePropsAllRequired } from './tree-props';
+} from './tree-graph.js';
+import { TreeProps, TreePropsAllRequired } from './tree-props.js';
 
 
 /**
@@ -68,7 +68,7 @@ function firstWalk<T>(
             // 3. The mean size of left sibling and current node.
             const prelim_ =
                 prelim(tree, leftSibling_) +
-                options.siblingSeparation +
+                options.siblingSeparation! +
                 meanNodeSize(tree, [leftSibling_, node]);
 
             updatePositionValue(tree, node, { prelim: prelim_ });
@@ -81,20 +81,20 @@ function firstWalk<T>(
         // recursively for each of its offspring.
         let leftMost = firstChild(tree, node);
         let rightMost = leftMost;
-        firstWalk(tree, leftMost, level + 1, options);
+        firstWalk<T>(tree, leftMost!, level + 1, options);
 
-        while (hasRightSibling(tree, rightMost)) {
-            rightMost = rightSibling(tree, rightMost);
-            firstWalk(tree, rightMost, level + 1, options);
+        while (hasRightSibling<T>(tree, rightMost!)) {
+            rightMost = rightSibling<T>(tree, rightMost!);
+            firstWalk<T>(tree, rightMost!, level + 1, options);
         }
 
-        const midPoint = (prelim(tree, leftMost) + prelim(tree, rightMost)) / 2;
+        const midPoint = (prelim<T>(tree, leftMost!) + prelim<T>(tree, rightMost!)) / 2;
         const leftSibling_ = leftSibling(tree, node);
 
         if (leftSibling_ !== null) {
             const prelim_ =
                 prelim(tree, leftSibling_) +
-                options.siblingSeparation +
+                options.siblingSeparation! +
                 meanNodeSize(tree, [leftSibling_, node]);
                 
             const mod = prelim_ - midPoint;
@@ -123,7 +123,7 @@ function apportion<T>(
 
     let leftMost = firstChild(tree, node);
     // THIS SHOULD BE C BUT IT IS STILL D
-    let neighbor = leftNeighbor(tree, leftMost);
+    let neighbor = leftNeighbor<T>(tree, leftMost!);
     let compareDepth = 1;
 
     while (leftMost !== null && neighbor !== null) {
@@ -132,22 +132,22 @@ function apportion<T>(
         // be with respect to neighbor.
         let leftModsum = 0;
         let rightModsum = 0;
-        let ancestorLeftMost: T = leftMost;
-        let ancestorNeighbor: T = neighbor;
+        let ancestorLeftMost: T | undefined = leftMost;
+        let ancestorNeighbor: T | undefined = neighbor;
 
         for (let i = 0; i < compareDepth; i++) {
-        ancestorLeftMost = parent(tree, ancestorLeftMost);
-        ancestorNeighbor = parent(tree, ancestorNeighbor);
-        rightModsum = rightModsum + modifier(tree, ancestorLeftMost);
-        leftModsum = leftModsum + modifier(tree, ancestorNeighbor);
+            ancestorLeftMost = parent<T>(tree, ancestorLeftMost);
+            ancestorNeighbor = parent<T>(tree, ancestorNeighbor!);
+            rightModsum = rightModsum + modifier(tree, ancestorLeftMost);
+            leftModsum = leftModsum + modifier(tree, ancestorNeighbor);
         }
         // Find the moveDistance, and apply it to Node's subtree.
         // Add appropriate portions to smaller interior subtrees.
         let moveDistance =
-            prelim(tree, neighbor) +
+            prelim<T>(tree, neighbor!) +
             leftModsum +
-            options.subtreeSeparation +
-            meanNodeSize(tree, [leftMost, neighbor]) - (prelim(tree, leftMost) + rightModsum);
+            options.subtreeSeparation! +
+            meanNodeSize<T>(tree, [leftMost, neighbor!]) - (prelim(tree, leftMost) + rightModsum);
 
         if (moveDistance > 0) {
             // Count interior sibling subtrees in LeftSiblings
@@ -155,7 +155,7 @@ function apportion<T>(
             let leftSiblings = 0;
             while (temp !== null && temp !== ancestorNeighbor) {
                 leftSiblings += 1;
-                temp = leftSibling(tree, temp);
+                temp = leftSibling(tree, temp)!;
             }
             if (temp !== null) {
                 // Apply portions to appropriate leftsibling subtrees
@@ -166,7 +166,7 @@ function apportion<T>(
                 const mod = modifier(tree, temp) + moveDistance;
                 moveDistance = moveDistance - portion;
                 updatePositionValue(tree, temp, { prelim: prelim_, mod });
-                temp = leftSibling(tree, temp);
+                temp = leftSibling(tree, temp)!;
                 }
             } else {
                 // Don't need to move anything--it needs to
@@ -183,7 +183,7 @@ function apportion<T>(
         leftMost = isLeaf(tree, leftMost)
         ? getLeftMost(tree, node, 0, compareDepth)
         : firstChild(tree, leftMost);
-        neighbor = leftNeighbor(tree, leftMost);
+        neighbor = leftNeighbor<T>(tree, leftMost!);
     }
 }
 
@@ -205,9 +205,9 @@ function getLeftMost<T>(
     if (level >= depth) return node;
     let leftMost = node;
     while (firstChild(tree, leftMost) === null && hasRightSibling(tree, leftMost)) {
-        leftMost = rightSibling(tree, leftMost);
+        leftMost = rightSibling(tree, leftMost)!;
     }
-    leftMost = firstChild(tree, leftMost);
+    leftMost = firstChild(tree, leftMost)!;
     return getLeftMost(tree, leftMost, level + 1, depth);
 }
 
@@ -237,9 +237,9 @@ function secondWalk<T>(
     updatePositionValue(tree, node, { x: xTemp, y: yTemp });
     if (!isLeaf(tree, node)) {
         // Apply the modifier value for this node to all its offspring
-        result = secondWalk(
+        result = secondWalk<T>(
             tree,
-            firstChild(tree, node),
+            firstChild(tree, node)!,
             level + 1,
             modSum + modifier(tree, node),
             options,
@@ -247,9 +247,9 @@ function secondWalk<T>(
     }
 
     if (result && hasRightSibling(tree, node)) {
-        result = secondWalk(
+        result = secondWalk<T>(
             tree,
-            rightSibling(tree, node),
+            rightSibling(tree, node)!,
             level,
             modSum,
             options,

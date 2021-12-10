@@ -3,13 +3,13 @@ import { describe } from 'mocha';
 import { gaussQuadrature } from 'flo-gauss-quadrature';
 import { 
 	evaluateDdxy, evaluateDxy, getInterfaceRotation, splitByMaxCurvature, tangent, 
-	totalAbsoluteCurvature, totalCurvature, generateSelfIntersecting, fromToPrecise, toString, generateCuspAtHalf3
+	totalAbsoluteCurvature, totalCurvature, generateSelfIntersecting, fromTo, toString, generateCuspAtHalf3
 } from '../../src/index.js';
 import { nearly } from '../helpers/chai-extend-nearly.js';
 import { getRandomBezier, getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../helpers/get-random-bezier.js';
 import { closeTo } from '../helpers/close-to.js';
 import { radToDeg } from '../helpers/rad-to-deg.js';
-import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate';
+import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
 
 
 use(nearly);
@@ -27,8 +27,6 @@ function totalCurvatureByGauss(
 
 	if (ps.length === 1) { return 0; }
 
-	const fromTo_ = fromToPrecise(ps);
-
 	const ts = splitByMaxCurvature(ps, flatness);
 
 	let total = 0;
@@ -36,7 +34,7 @@ function totalCurvatureByGauss(
 		const tS = ts[i];
 		const tE = ts[i+1];
 
-		const ps_ = fromTo_(tS,tE);
+		const ps_ = fromTo(ps,tS,tE).ps;
 		total += gaussQuadrature(κds(ps_), interval, gaussOrder as 4|16|64);
 	}
 

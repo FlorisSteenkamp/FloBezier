@@ -1,8 +1,5 @@
-import { Fatline } from '../../../src/intersection/bezier3-intersection/debug';
-import { fromTo, reverse, toLength, translate } from 'flo-vector2d';
-import { settings } from '../settings';
-import { drawCircle } from './draw-circle';
-import { createContext } from 'react';
+import { settings } from '../settings.js';
+import { drawCircle } from './draw-circle.js';
 
 
 const { tcml } = settings;
@@ -51,8 +48,8 @@ function drawHybridPoly(
         const dH1min = Math.min(dH10.dMin, dH11.dMin);
         const dH1max = Math.max(dH10.dMax, dH11.dMax);
 
-        ctx.strokeStyle = strokeStyleG;
-        ctx.fillStyle = fillStyleG;
+        if (strokeStyleG) { ctx.strokeStyle = strokeStyleG; }
+        if (fillStyleG) { ctx.fillStyle = fillStyleG; }
         
         ctx.lineWidth = 0.5;
         ctx.beginPath();
@@ -73,8 +70,8 @@ function drawHybridPoly(
         if (fillStyleG) { ctx.fill(); }
 
         // FAT LINE
-        ctx.strokeStyle = strokeStyleF;
-        ctx.fillStyle = fillStyleF;
+        if (strokeStyleF) { ctx.strokeStyle = strokeStyleF; }
+        if (fillStyleF) { ctx.fillStyle = fillStyleF; }
         
         const pF1 = tcml([0, 0]) as [number, number];
         const pF2 = tcml([1, 0]) as [number, number];
@@ -99,8 +96,8 @@ function drawHybridPoly(
         ctx.lineTo(...pF2); 
         ctx.stroke();
 
-        ctx.strokeStyle = strokeStyleG;
-        ctx.fillStyle = fillStyleG;
+        if (strokeStyleG) { ctx.strokeStyle = strokeStyleG; }
+        if (fillStyleG) { ctx.fillStyle = fillStyleG; }
 
         //if (inclLines) {
             ctx.lineWidth = 0.5;

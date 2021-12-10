@@ -1,5 +1,5 @@
 import { isQuadFlat } from "../global-properties/classification/is-quad-flat.js";
-import { splitAt } from "./split-and-merge/split-at.js";
+import { fromTo } from "../transformation/split/from-to.js";
 
 
 /** Represents a single line in the polyline. */
@@ -78,7 +78,10 @@ function quadToPolyline(
         
         if (isQuadFlat(node.ps, tolerance)) { continue; }
 
-        const quads = splitAt(node.ps, 0.5);
+        const quads = [
+            fromTo(node.ps, 0, 0.5).ps, 
+            fromTo(node.ps, 0.5, 1).ps
+        ];
         const prev = node.prev;
         const next = node.next;
 

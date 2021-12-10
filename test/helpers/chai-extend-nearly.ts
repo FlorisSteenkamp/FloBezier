@@ -1,13 +1,14 @@
 /// <reference path="../chai-extensions.d.ts" />
 import { closeTo } from "./close-to.js";
+import { ObjOrArray } from "./obj-or-array.js";
 
 
 const nearly: Chai.ChaiPlugin = (chai, utils) => {
 	var Assertion = chai.Assertion;
   
 	utils.addMethod(Assertion.prototype, 'nearly', 
-		function(ulpsOrEps: number | number[], value: NumberObjOrArray) {
-            const obj = this._obj as NumberObjOrArray;
+		function(ulpsOrEps: number | number[], value: ObjOrArray<number>) {
+            const obj = this._obj as ObjOrArray<number>;
 
             let isUlps = !Array.isArray(ulpsOrEps);
 

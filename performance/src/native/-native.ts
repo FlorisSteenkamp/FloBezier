@@ -1,8 +1,8 @@
-import { bezierBezierIntersection, closestPointOnBezierCertified, X } from "../../../src/index";
-import { settings } from '../settings'; 
 import { distanceBetween } from "flo-vector2d";
-import { showResults } from "../show-results";
-import { drawIntersections } from './draw-intersections';
+import { bezierBezierIntersection, closestPointOnBezierCertified, X } from "../../../src/index.js";
+import { settings } from '../settings.js'; 
+import { showResults } from "../show-results.js";
+import { drawIntersections } from './draw-intersections.js';
 
 
 const { num } = settings;
@@ -12,12 +12,12 @@ const { timingOnly, showNativeXs } = settings;
 
 
 function native(
-        pss: number[][][]) {
+        pss: number[][][]): (X[][] | undefined)[] {
 
     let total = 0;
     const ds: number[] = [];
     let timing: number;
-    const xss: X[][][] = [];
+    const xss: (X[][] | undefined)[] = [];
 
     const timeStart = performance.now();
     for (let i=0; i<2*num; i++, i++) {

@@ -2,27 +2,43 @@
 const abs = Math.abs;
 
 
-// TODO - modify docs (the doc below is from `getXY`)
 /**
- * Returns the power basis representation of a line, quadratic or cubic bezier. 
+ * Returns the power basis representation of a bezier curve of order cubic or 
+ * less (with intermediate calculations done in double precision) including a
+ * coefficient-wise absolute error bound that need to be multiplied by `γ(1)`
  * 
- * * **non-exact:** if certain preconditions are met (see below) it returns the 
- * exact result, else round-off may have occured during intermediate calculation.
- * * returns the power basis polynomial from highest power to lowest, 
- * e.g. `at^3 + bt^2 + ct + d` is returned as `[a,b,c,d]`
+ * * returns the resulting power basis x and y coordinate polynomials from 
+ * highest power to lowest, e.g. if `x(t) = at^2 + bt + c` 
+ * and `y(t) = dt^2 + et + f` then  the result is returned 
+ * as `[[a,b,c],[d,e,f]]`
  * 
- * * **bitlength:** If the coordinates of the control points are bit-aligned then:
- *  * max bitlength increase = 4 (for cubics)
- * (due to 'multiplication' by 9 (3x 6x 3x)
- *  * max bitlength increase = 2 (for quadratics)
- * (due to 'multiplication' by 4 (1x 2x 1x)
- *  * max bitlength increase = 1 (for lines)
- * (due to 'multiplication' by 4 (1x 1x)
- * 
- * @param ps an order 1, 2 or 3 bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ * @param ps an order 0,1,2 or 3 bezier curve given by an ordered array of its
+ * control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * 
  * @doc
  */
+function getXYWithRunningError(ps: number[][]) {
+	if (ps.length === 4) {
+		return getXY3WithRunningError(ps);
+	} 
+	
+	if (ps.length === 3) {
+		return getXY2WithRunningError(ps);
+	} 
+	
+	if (ps.length === 2) {
+		return getXY1WithRunningError(ps);
+	}
+
+	if (ps.length === 1) {
+		return getXY0WithRunningError(ps);
+	}
+
+	throw new Error('The given bezier curve must be of order <= 3.');
+}
+
+
+/** @internal */
 function getXY3WithRunningError(
 		ps: number[][]): {
 			coeffs: [[number, number, number, number], [number, number, number, number]];
@@ -100,11 +116,7 @@ function getXY3WithRunningError(
 }
 
 
-
-/**
- * only quadratic monomial coefficient has an error, the others are exact
- * @param ps 
- */
+/** @internal */
 function getXY2WithRunningError(
 		ps: number[][]): {
 			coeffs: [[number, number, number], [number, number, number]];
@@ -150,10 +162,7 @@ function getXY2WithRunningError(
 
 
 
-/**
- * * exact for any bitlength
- * @param ps linear bezier curve
- */
+/** @internal */
 function getXY1WithRunningError(
 		ps: number[][]): {
 			coeffs: [[number, number], [number, number]];
@@ -175,8 +184,25 @@ function getXY1WithRunningError(
 }
 
 
+/** @internal */
+function getXY0WithRunningError(
+		ps: number[][]): {
+			coeffs: [[number], [number]];
+			errorBound: [[0],[0]];
+		} {
+
+	const [[x0,y0]] = ps;
+	
+	return {
+		coeffs: [[x0], [y0]],
+		errorBound: [[0], [0]]
+	}
+}
+
+
 export { 
-	getXY1WithRunningError, 
+	getXYWithRunningError,
+	getXY1WithRunningError,
 	getXY2WithRunningError, 
 	getXY3WithRunningError 
 }

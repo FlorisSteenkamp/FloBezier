@@ -1,11 +1,11 @@
-import { fromTo } from '../../../../src';
-import { drawCircle } from './draw-circle';
+import { fromTo } from '../../../src/index.js';
+import { drawCircle } from './draw-circle.js';
 
 
 function drawPartialBezier(
         ctx: CanvasRenderingContext2D,
-        strokeStyle: string,
-        fillStyle: string) {
+        strokeStyle: string | undefined,
+        fillStyle: string | undefined) {
 
     const dot_ = drawCircle(ctx, 4, strokeStyle, strokeStyle);
 
@@ -25,8 +25,8 @@ function drawPartialBezier(
             const [x2,y2] = p2;
             const [x3,y3] = p3;
 
-            ctx.strokeStyle = strokeStyle;
-            ctx.fillStyle = fillStyle;
+            if (strokeStyle) { ctx.strokeStyle = strokeStyle; }
+            if (fillStyle) { ctx.fillStyle = fillStyle; }
             ctx.lineWidth = 2;
             ctx.beginPath();
             ctx.moveTo(x0,y0);
@@ -81,8 +81,8 @@ function drawPartialBezier(
             const [x0,y0] = p0;
             const [x1,y1] = p1;
 
-            ctx.strokeStyle = strokeStyle;
-            ctx.fillStyle = fillStyle;
+            if (strokeStyle) { ctx.strokeStyle = strokeStyle; }
+            if (fillStyle) { ctx.fillStyle = fillStyle; }
             ctx.lineWidth = 2;
             ctx.beginPath();
             ctx.moveTo(x0,y0);

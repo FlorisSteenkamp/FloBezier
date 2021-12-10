@@ -1,13 +1,11 @@
 import { γγ } from "../../../../error-analysis/error-analysis.js";
-import { twoProduct, ddMultDd, ddAddDd, ddDiffDd, ddMultDouble2 } from "double-double";
+import { ddMultDd, ddAddDd, ddDiffDd } from "double-double";
 import { getXY3DdWithRunningError } from "../../../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const tp  = twoProduct;
 const qmq = ddMultDd;
 const qaq = ddAddDd;
 const qdq = ddDiffDd;
-const qmd = ddMultDouble2;
 
 const abs = Math.abs;
 const γγ3 = γγ(3);

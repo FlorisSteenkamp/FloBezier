@@ -27,4 +27,4 @@ declare type Extrema = {
  * @doc mdx
  */
 declare function getCurvatureExtrema(ps: number[][]): Extrema;
-export { getCurvatureExtrema };
+export { getCurvatureExtrema, Extrema };

@@ -1,14 +1,14 @@
-import { drawCircle } from './draw/draw-circle';
-import { drawRect } from './draw/draw-rect';
-import { drawFatline } from './draw/draw-fatline';
-import { drawGeo } from './draw/draw-geo';
-import { drawBeziers } from './get-pss/get-pss';
-import { drawHybridPoly } from './draw/draw-hybrid-poly';
-import { drawBezier } from './draw/draw-bezier';
+import { drawCircle } from './draw/draw-circle.js';
+import { drawRect } from './draw/draw-rect.js';
+import { drawFatline } from './draw/draw-fatline.js';
+import { drawGeo } from './draw/draw-geo.js';
+import { drawBeziers } from './get-pss/get-pss.js';
+import { drawHybridPoly } from './draw/draw-hybrid-poly.js';
+import { drawBezier } from './draw/draw-bezier.js';
 
 
 const canvas = document.getElementById('canvas1') as HTMLCanvasElement;
-const ctx = canvas.getContext('2d');
+const ctx = canvas.getContext('2d')!;
 
 function draw(ctx: CanvasRenderingContext2D) {
     const dot_ = drawCircle(ctx, 5, undefined, '#00f');

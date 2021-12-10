@@ -1,4 +1,5 @@
-import { closestPointOnBezier, evaluate, getIntervalBox, intersectBoxes } from "../../../src/index";
+import { distanceBetween } from "flo-vector2d";
+import { closestPointOnBezier, evaluate, getIntervalBox, intersectBoxes } from "../../../src/index.js";
 import { 
     getCoeffsBez1Bez1,
     getCoeffsBez1Bez2,
@@ -9,15 +10,14 @@ import {
     getCoeffsBez3Bez1,
     getCoeffsBez3Bez2,
     getCoeffsBez3Bez3
-} from "../../../experiments-new/index";
-import { X } from '../../../src/index';
-import { settings } from '../settings'; 
-import { draw, ctx } from '../draw-stuff';
-import { allRoots as _allRoots } from '../roots/all-roots';
-import { unsquashp, untransp } from '../affine';
-import { distanceBetween } from "flo-vector2d";
-import { showResults } from "../show-results";
-import { updDs } from "../upd-ds";
+} from "../../../experiments-new/index.js";
+import { X } from '../../../src/index.js';
+import { settings } from '../settings.js'; 
+import { draw, ctx } from '../draw-stuff.js';
+import { allRoots as _allRoots } from '../roots/all-roots.js';
+import { unsquashp, untransp } from '../affine.js';
+import { showResults } from "../show-results.js";
+import { updDs } from "../upd-ds.js";
 
 const allRoots = _allRoots;
 
@@ -36,7 +36,7 @@ const coeffFunctionsDouble = [
 
 function naive(
         pss: number[][][], 
-        xss: X[][][]) {
+        xss: (X[][] | undefined)[]) {
 
     let total = 0;
     let timing = 0;
@@ -57,7 +57,7 @@ function naive(
         if (!timingOnly) {
             const xs = xss[i/2];
 
-            updDs(ds, xs, ts.map(x => (x[0].ri.tE + x[0].ri.tS) / 2));
+            updDs(ds, xs!, ts.map(x => (x[0].ri.tE + x[0].ri.tS) / 2));
         }
     }
     timing = performance.now() - timeStart;

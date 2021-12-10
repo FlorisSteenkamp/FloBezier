@@ -12,8 +12,8 @@ function drawCircle(
         fillStyle: string | undefined) {
             
     return (p: number[]) => {
-        ctx.strokeStyle = strokeStyle;
-        ctx.fillStyle = fillStyle;
+        if (strokeStyle) { ctx.strokeStyle = strokeStyle; }
+        if (fillStyle) { ctx.fillStyle = fillStyle; }
         ctx.beginPath();
         ctx.arc(p[0], p[1], radius, 0, 2*Math.PI);
         

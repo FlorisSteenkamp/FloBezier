@@ -1,4 +1,7 @@
 /// <reference path="../chai-extensions.d.ts" />
+
+import { ObjOrArray } from "./obj-or-array";
+
 const eps = Number.EPSILON;
 const abs = Math.abs;
 
@@ -15,8 +18,8 @@ function closeTo(ulpsOrEps: number | number[]) {
     }
 
     function check(
-            expected: NumberObjOrArray,
-            actual: NumberObjOrArray): boolean {
+            expected: ObjOrArray<number>,
+            actual: ObjOrArray<number>): boolean {
 
         if (typeof expected === 'number') {
             if (typeof actual !== 'number') { return false; }

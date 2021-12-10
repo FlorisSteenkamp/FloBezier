@@ -1,5 +1,5 @@
-import { settings } from "../settings";
-import { unsquashp, untransp } from '../affine';
+import { settings } from "../settings.js";
+import { unsquashp, untransp } from '../affine.js';
 
 
 const { tc } = settings;

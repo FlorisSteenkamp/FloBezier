@@ -9,8 +9,8 @@ const library = 'FloBezier';
 
 
 const config_Basic = {
-    // mode: 'development',
     mode: 'production',
+    // mode: 'development',
     entry: './src/index.ts',
     resolve: {
         extensions: [

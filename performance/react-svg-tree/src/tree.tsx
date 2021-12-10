@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { TreeGraph, Position, getCoordinates, createTreeGraph, mapWithParent } from './helpers/tree-graph';
-import { positionTree } from './helpers/position-tree';
-import { TreeProps, OptionalTreeProps, TreePropsAllRequired } from './helpers/tree-props';
+import { TreeGraph, Position, getCoordinates, createTreeGraph, mapWithParent } from './helpers/tree-graph.js';
+import { positionTree } from './helpers/position-tree.js';
+import { TreeProps, OptionalTreeProps, TreePropsAllRequired } from './helpers/tree-props.js';
 
 
 const defaults: OptionalTreeProps = {
