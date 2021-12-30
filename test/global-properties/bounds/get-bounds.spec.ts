@@ -12,7 +12,7 @@ use(nearly);
 describe('getBounds', function() {
 	it('it should find correct bounds for some lines', 
 	function() {
-		const ps = getRandomLine(0); //?
+		const ps = getRandomLine(0);
 
 		expect(getBounds(ps)).to.be.nearly(2**4, { 
 			ts:[[1,0],[0,1]],

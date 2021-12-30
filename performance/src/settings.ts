@@ -24,7 +24,8 @@ const maxCoordinateY = 1/squashFactor;
 const settings = {
     timingOnly: true,
     /** the number of bezier pairs (=== number of beziers / 2) */
-    num: 100000,
+    // num: 100000,
+    num: 10000,
     maxBitLength: 53,
 
     showNaive: false,

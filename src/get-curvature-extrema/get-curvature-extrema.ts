@@ -130,4 +130,4 @@ function getCurvatureExtremaQuadraticPoly(
 }
 
 
-export { getCurvatureExtrema, Extrema }
+export { getCurvatureExtrema, getCurvatureExtremaQuadraticPoly, Extrema }

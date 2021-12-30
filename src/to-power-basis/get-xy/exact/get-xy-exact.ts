@@ -27,10 +27,11 @@ function getXYExact(
 		ps: number[][]): number[][][] {
 
 	if (ps.length === 4) {
-		const r = getXY3Exact(ps);
-		(r[0][3] as unknown as number[]) = [r[0][3]];
-		(r[1][3] as unknown as number[]) = [r[1][3]];
-		return r as number[][][];
+		//const r = getXY3Exact(ps);
+		//(r[0][3] as unknown as number[]) = [r[0][3]];
+		//(r[1][3] as unknown as number[]) = [r[1][3]];
+		//return r as number[][][];
+		return getXY3Exact(ps);
 	}
 
 	if (ps.length === 3) {
@@ -61,8 +62,8 @@ function getXYExact(
 /** @internal */
 function getXY3Exact(
 	 	ps: number[][]): [
-			 	[number[],number[],number[],number],
-			 	[number[],number[],number[],number]
+			 	[number[],number[],number[],number[]],
+			 	[number[],number[],number[],number[]]
 		  	] {
 
 	const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
@@ -83,14 +84,14 @@ function getXY3Exact(
 		sce(3, td(x1, x0)),
 		
 		// x0
-		x0
+		[x0]
 	], [
 		//ge(ge(sce(3, td(y1, y2)), y3), -y0),
 		eAdd(td(y3, y0), sce(3, td(y1, y2))),
 		//sce(3, ge(td(y2, 2*y1), y0)),
 		sce(3, ge(ts(y2, y0), -2*y1)),
 		sce(3, td(y1, y0)),
-		y0
+		[y0]
 	]];
 }
 

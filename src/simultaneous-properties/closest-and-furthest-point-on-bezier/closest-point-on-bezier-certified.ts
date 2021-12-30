@@ -40,7 +40,7 @@ function closestPointOnBezierCertified(
         p: number[]): {
             intervalBox: number[][];
             ri: RootInterval;
-            di: number[];
+            dSquaredI: number[];
         }[] {
 
     const order = ps.length - 1;
@@ -83,7 +83,7 @@ function closestPointOnBezierCertified(
     const infos = ris.map(ri => {
         const intervalBox = getIntervalBox(ps, [ri.tS, ri.tE])
         return {
-            di: rootIntervalToDistanceInterval(intervalBox, p),
+            dSquaredI: rootIntervalToDistanceSquaredInterval(intervalBox, p),
             intervalBox,
             ri
         }
@@ -92,7 +92,7 @@ function closestPointOnBezierCertified(
     /** the minimum max interval value */
     let minMax = Number.POSITIVE_INFINITY;
     for (let i=0; i<infos.length; i++) {
-        const diMax = infos[i].di[1];
+        const diMax = infos[i].dSquaredI[1];
         if (diMax < minMax) {
             minMax = diMax;
         }
@@ -101,12 +101,12 @@ function closestPointOnBezierCertified(
     const closestPointInfos: {
         intervalBox: number[][];
         ri: RootInterval;
-        di: number[]
+        dSquaredI: number[]
     }[] = [];
 
     for (let i=0; i<infos.length; i++) {
         const info = infos[i];
-        if (info.di[0] <= minMax) {
+        if (info.dSquaredI[0] <= minMax) {
             closestPointInfos.push(info);
         }
     }
@@ -116,14 +116,15 @@ function closestPointOnBezierCertified(
 
 
 /**
- * Returns the distance interval from the given root interval (currently
+ * Returns the distance interval squared from the given root interval (currently
  * ignoring multiplicity)
  * 
- * @param ps1 the first bezier
- * @param ps2 the second bezier
- * @param ts2 the `t` values of the second bezier
+ * @param intervalBox
+ * @param p
+ * 
+ * @internal
  */
- function rootIntervalToDistanceInterval(
+ function rootIntervalToDistanceSquaredInterval(
         intervalBox: number[][], 
         p: number[]) {
 
@@ -137,8 +138,8 @@ function closestPointOnBezierCertified(
     const x = p[0];  // <0>
     const y = p[1];  // <0>
     
-    let minD = Number.POSITIVE_INFINITY;
-    let maxD = Number.NEGATIVE_INFINITY;
+    let minDSquared = Number.POSITIVE_INFINITY;
+    let maxDSquared = Number.NEGATIVE_INFINITY;
 
     // for each corner of the interval box
     for (const [a,b] of [[minX,minY],[minX,maxY],[maxX,minY],[maxX,maxY]]) {
@@ -161,16 +162,16 @@ function closestPointOnBezierCertified(
         const dc1Min = dc1*(1 - eps);  // distance minus max error
         const dc1Max = dc1*(1 + eps);  // distance plus max error
         
-        if (dc1Min <= minD) {
-            minD = dc1Min;
+        if (dc1Min <= minDSquared) {
+            minDSquared = dc1Min;
         }
 
-        if (dc1Max >= maxD) {
-            maxD = dc1Max;
+        if (dc1Max >= maxDSquared) {
+            maxDSquared = dc1Max;
         }
     }
 
-    return [minD,maxD];
+    return [minDSquared,maxDSquared];
 }
 
 

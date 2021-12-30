@@ -61,7 +61,7 @@ describe('getDxyExact', function() {
 		}
 		{
 			const ps = getRandomLine(0);
-			const r = getDxyExact(ps);//?
+			const r = getDxyExact(ps);
 			const expected = [[[0, -91.63130285489169]], [[0, 59.86795838080998]]];
 			expect(r).to.be.nearly(2**8, expected);
 

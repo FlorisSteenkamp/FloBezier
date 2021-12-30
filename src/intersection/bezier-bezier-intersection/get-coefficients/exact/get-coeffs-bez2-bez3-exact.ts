@@ -51,7 +51,7 @@ function getCoeffsBez2Bez3Exact(ps1: number[][], ps2: number[][]) {
         return getCoeffsBez1Bez3Exact([ps1[0],ps1[2]], ps2);
     }
 
-    const [[c3,c2,c1,c0],[d3,d2,d1,d0]] = getXY3Exact(ps2);
+    const [[c3,c2,c1,[c0]],[d3,d2,d1,[d0]]] = getXY3Exact(ps2);
 
     if (eSign(c3) === 0 && eSign(d3) === 0) {
         // the input bezier curve is in fact not cubic but has order < 3

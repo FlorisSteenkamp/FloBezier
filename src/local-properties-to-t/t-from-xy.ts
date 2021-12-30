@@ -16,7 +16,9 @@ const min = Math.min;
  * 
  * Returns `undefined` if the point is on the curve and the curve is a point.
  * 
- * **precondition:** `p` must be *exactly* on the curve
+ * **precondition**: `p` must be *exactly* on the curve for the result to be
+ * certified
+ * 
  * * **certified** here means no `t` value can be missed but (in rare cases)
  * an extra 1 or 2 `t`s could be returned (e.g. for self-overlapping curves
  * and when the point is exactly on the point of self-intersection of the curve)
@@ -25,7 +27,8 @@ const min = Math.min;
  * @param p
  */
 function tFromXY(
-        ps: number[][], p: number[]): RootInterval[] | undefined {
+        ps: number[][], 
+        p: number[]): RootInterval[] | undefined {
 
     if (ps.length === 4) {
         return tFromXY3(ps, p);
@@ -39,27 +42,16 @@ function tFromXY(
         return tFromXY1(ps, p);
     }
 
-    // TODO - add case of degenerate point
-    throw new Error('The given bezier curve is invalid.');
+    if (ps.length === 1) {
+        // return [{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }];
+        return undefined;
+    }
+
+    throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 
-// TODO docs
-/**
- * Performs certified inversion, i.e. returns the `t` parameter value 
- * interval(s) for the given `x` and `y` coordinates on the specified bezier 
- * curve.
- * 
- * Returns `undefined` if the point is on the curve and the curve is a point.
- * 
- * **precondition:** `p` must be *exactly* on the curve
- * * **certified** here means no `t` value can be missed but (in rare cases)
- * an extra 1 or 2 `t`s could be returned (e.g. for self-overlapping curves
- * and when the point is exactly on the point of self-intersection of the curve)
- * 
- * @param ps
- * @param p
- */
+/** @internal */
 function tFromXY3(
         ps: number[][], p: number[]): RootInterval[] | undefined {
 
@@ -84,16 +76,16 @@ function tFromXY3(
     const polyDdY = [..._polyDdY, twoDiff(tyDd, y)] as number[][];
 
     let pExactXY: [
-        [number[], number[], number[], number],
-        [number[], number[], number[], number]
+        [number[], number[], number[], number[]],
+        [number[], number[], number[], number[]]
     ] | undefined = undefined;
 
     const getPExactX = (): number[][] => { 
         if (pExactXY === undefined) { pExactXY = getXY3Exact(ps); }
         const _pExactX = pExactXY[0];  // x coordinate
         // pop the constant term off `x(t)`
-        const tx = _pExactX.pop() as number;
-        const pExactX = [..._pExactX, twoDiff(tx, x)] as number[][];
+        const tx = _pExactX.pop() as number[];
+        const pExactX = [..._pExactX, twoDiff(tx[0], x)] as number[][];
 
         return pExactX;
     }
@@ -102,8 +94,8 @@ function tFromXY3(
         if (pExactXY === undefined) { pExactXY = getXY3Exact(ps); }
         const _pExactY = pExactXY[1];  // y coordinate
         // pop the constant term off `y(t)`
-        const ty = _pExactY.pop() as number;
-        const pExactY = [..._pExactY, twoDiff(ty, y)] as number[][];
+        const ty = _pExactY.pop() as number[];
+        const pExactY = [..._pExactY, twoDiff(ty[0], y)] as number[][];
 
         return pExactY;
     }
@@ -139,7 +131,7 @@ function tFromXY3(
 
     // at this point `xrs !== undefined` and `yrs !== undefined`
 
-    let rs: RootInterval[] = [];
+    let ris: RootInterval[] = [];
     for (let i=0; i<xrs.length; i++) {
         let xr = xrs[i];
         for (let j=0; j<yrs.length; j++) {
@@ -147,15 +139,16 @@ function tFromXY3(
             let r = combineRoots(xr,yr);
             
             if (r !== undefined) {
-                rs.push(r);
+                ris.push(r);
             }
         }
     }
 
-    return rs;
+    return ris;
 }
 
 
+/** @internal */
 function tFromXY2(
         ps: number[][], p: number[]): RootInterval[] | undefined {
 
@@ -234,7 +227,7 @@ function tFromXY2(
 
     // at this point `xrs !== undefined` and `yrs !== undefined`
 
-    let rs: RootInterval[] = [];
+    let ris: RootInterval[] = [];
     for (let i=0; i<xrs.length; i++) {
         let xr = xrs[i];
         for (let j=0; j<yrs.length; j++) {
@@ -242,15 +235,16 @@ function tFromXY2(
             let r = combineRoots(xr,yr);
             
             if (r !== undefined) {
-                rs.push(r);
+                ris.push(r);
             }
         }
     }
 
-    return rs;
+    return ris;
 }
 
 
+/** @internal */
 function tFromXY1(
         ps: number[][], 
         p: number[]): RootInterval[] | undefined {
@@ -322,15 +316,20 @@ function tFromXY1(
 }
 
 
+/** @internal */
 function combineRoots(
         r: RootInterval, s: RootInterval): RootInterval | undefined {
 
     // case 1
+    r.tS//?
+    r.tE//?
+    s.tS//?
+    s.tE//?
     if (r.tS <= s.tS) {
         if (r.tE < s.tS) {
             return undefined;  // no overlap
         }
-        return { tS: s.tS, tE: min(r.tE, s.tE), multiplicity: r.multiplicity + s.multiplicity };
+        return { tS: s.tS, tE: min(r.tE, s.tE), multiplicity: Math.min(r.multiplicity, s.multiplicity) };
     }
 
     // case 2 - r.tS > s.tS
@@ -338,8 +337,8 @@ function combineRoots(
         return undefined;  // no overlap
     }
 
-    return { tS: r.tS, tE: min(r.tE, s.tE), multiplicity: r.multiplicity + s.multiplicity };
+    return { tS: r.tS, tE: min(r.tE, s.tE), multiplicity: Math.min(r.multiplicity, s.multiplicity) };
 }
 
 
-export { tFromXY3, tFromXY2, tFromXY1, tFromXY }
+export { tFromXY }

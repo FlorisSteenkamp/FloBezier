@@ -191,7 +191,7 @@ const γγ3 = γγ(3);
         }
     }
 
-    // error still too high - const's go exact
+    // error still too high - let's go exact
     {
         const implictForm = getImplicitForm2Exact(ps);
 
@@ -210,15 +210,15 @@ const γγ3 = γγ(3);
         const h = fes(
             fes(
                 fes(
-                    epr(vₓₓ,tp(x,x)),
-                    epr(vₓᵧ,tp(x,y))
+                    epr(vₓₓ,epr(xe,xe)),
+                    epr(vₓᵧ,epr(xe,ye))
                 ),
-                epr(vᵧᵧ,tp(y,y))
+                epr(vᵧᵧ,epr(ye,ye))
             ),
             fes(
                 fes(
-                    sce(x,vₓ),
-                    sce(y,vᵧ)
+                    epr(xe,vₓ),
+                    epr(ye,vᵧ)
                 ),
                 v
             )

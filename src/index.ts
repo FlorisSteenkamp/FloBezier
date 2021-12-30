@@ -14,7 +14,8 @@ import { fitQuadsToCubic } from './fit/fit-quads-to-cubic.js';
 
 import { getControlPointBox } from './global-properties/bounds/get-control-point-box.js';
 
-import { closestPointOnBezier } from './simultaneous-properties/closest-point-on-bezier/closest-point-on-bezier.js';
+import { closestPointOnBezier } from './simultaneous-properties/closest-and-furthest-point-on-bezier/closest-point-on-bezier.js';
+import { generateQuarterCircle } from './create/generate-quarter-circle.js';
 
 import { bezier3Intersection } from './intersection/bezier3-intersection/bezier3-intersection.js';
 
@@ -83,7 +84,7 @@ import { generateSelfIntersecting } from './create/generate-self-intersecting.js
 import { cubicThroughPointGiven013 } from './create/cubic-through-point-given013.js';
 import { bezierSelfIntersection } from './intersection/self-intersection/bezier-self-intersection.js';
 //import { getEndpointIntersections } from './intersection/get-endpoint-intersections.js';
-import { tFromXY3 } from './local-properties-to-t/t-from-xy.js';
+import { tFromXY } from './local-properties-to-t/t-from-xy.js';
 
 import { getXY } from './to-power-basis/get-xy/double/get-xy.js';
 import { getDxy } from './to-power-basis/get-dxy/double/get-dxy.js';
@@ -121,8 +122,10 @@ import { isQuadObtuse } from './global-properties/classification/is-quad-obtuse.
 import { getIntervalBox } from './global-properties/bounds/get-interval-box/get-interval-box.js';
 import { getIntervalBoxDd } from './global-properties/bounds/get-interval-box/get-interval-box-dd.js';
 import { getInterfaceRotation } from './simultaneous-properties/get-interface-rotation.js';
-import { closestPointOnBezierCertified } from './simultaneous-properties/closest-point-on-bezier/closest-point-on-bezier-certified.js';
-import { hausdorffDistance, hausdorffDistanceCandidates } from './simultaneous-properties/hausdorff-distance.js';
+import { closestPointOnBezierCertified } from './simultaneous-properties/closest-and-furthest-point-on-bezier/closest-point-on-bezier-certified.js';
+import { hausdorffDistanceOneSided } from './simultaneous-properties/hausdorff-distance/hausdorff-distance.js';
+import { hausdorffDistance } from './simultaneous-properties/hausdorff-distance/hausdorff-distance.js';
+// import { hausdorffDistanceCandidates } from './simultaneous-properties/hausdorff-distance.js';
 import { controlPointLinesLength } from './global-properties/length/control-point-lines-length.js';
 import { splitByMaxCurveLength } from './transformation/split/split-by-max-curve-length.js';
 import { getCurvatureExtrema, Extrema } from './get-curvature-extrema/get-curvature-extrema.js';
@@ -148,7 +151,7 @@ import { evaluate } from './local-properties-at-t/t-to-xy/double/evaluate.js';
 import { evaluateDdxy } from './local-properties-at-t/t-to-ddxy/double/evaluate-ddxy.js';
 import { evaluateDxy } from './local-properties-at-t/t-to-dxy/double/evaluate-dxy.js';
 import { getXY3DdWithRunningError } from './to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js';
-
+import { lineToQuadratic } from './transformation/degree-or-type/line-to-quadratic.js';
 
 /** 
  * Returns the convex hull of a bezier's control points. This hull bounds the 
@@ -323,12 +326,14 @@ export {
 	closestPointOnBezierCertified,
 	getInterfaceRotation,
 	closestPointOnBezier,
+	generateQuarterCircle,
+	hausdorffDistanceOneSided,
 	hausdorffDistance,
-	hausdorffDistanceCandidates,
+	// hausdorffDistanceCandidates,
 	//getEndpointIntersections,
 	//inversion01Precise,	
 	//inversion1_BL52_1ULP,
-	tFromXY3,
+	tFromXY,
 
 	// Intersections
 	bezierBezierIntersection, 
@@ -395,7 +400,9 @@ export {
 	getControlPointBox,
 	fitQuadsToCubic,
 
-	getXY3DdWithRunningError
+	getXY3DdWithRunningError,
+
+	lineToQuadratic
 }
 
 

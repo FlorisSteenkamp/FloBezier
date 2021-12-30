@@ -1,4 +1,4 @@
-import { fromTo3 } from '../../../src/intersection/bezier3-intersection/from-to/from-to-3.js';
+import { fromTo3 } from '../../../src/transformation/split/from-to/from-to-3.js';
 import { areBeziersInSameKFamily, bezierSelfIntersection, fromPowerBasis, getHodograph, getXY, toQuadraticFromCubic, toString } from '../../../src/index.js';
 import { generateSelfIntersecting } from '../../../src/create/generate-self-intersecting.js';
 

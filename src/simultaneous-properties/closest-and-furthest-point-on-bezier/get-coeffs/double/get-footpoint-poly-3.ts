@@ -1,5 +1,5 @@
 
-function getClosestOnBezier3FromPoint(
+function getFootpointPoly3(
         ps: number[][], p: number[]): number[] {
 
     //const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
@@ -83,4 +83,4 @@ function getClosestOnBezier3FromPoint(
 }
 
 
-export { getClosestOnBezier3FromPoint }
+export { getFootpointPoly3 }

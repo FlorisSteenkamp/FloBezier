@@ -55,11 +55,11 @@ function getImplicitForm3Exact(
  */
 function getImplicitForm3ExactPb(
         pspb: [
-                [number[], number[], number[], number], 
-                [number[], number[], number[], number]
+                [number[], number[], number[], number[]], 
+                [number[], number[], number[], number[]]
             ]): ImplicitFormExact3 | undefined {
 
-    const [[a3,a2,a1,a0], [b3,b2,b1,b0]] = pspb;
+    const [[a3,a2,a1,[a0]], [b3,b2,b1,[b0]]] = pspb;
 
     if (eSign(a3) === 0 && eSign(b3) === 0) {
         // the input bezier curve is in fact not cubic but has order < 3

@@ -34,11 +34,5 @@ describe('getBoundingBox', function() {
 				[-18.202031865992296, -47.82119616147928]
 			]);
 		}
-
-
-		//for (let i=0; i<10; i++) {
-		//	const ps = getRandomBezier_(i);
-		//	
-		//}
 	});
 });

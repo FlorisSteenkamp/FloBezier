@@ -1,3 +1,4 @@
+/// <reference path="../../chai-extensions.d.ts" />
 import { expect, assert, use } from 'chai';
 import { describe } from 'mocha';
 import { nearly } from '../../helpers/chai-extend-nearly.js';
@@ -5,6 +6,7 @@ import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '..
 import { fromTo } from '../../../src/index.js';
 
 use(nearly);
+
 
 describe('fromTo', function() {
 	it('it should return new bezier curves (including error bound) by limiting the `t` domain of some bezier curves',
@@ -29,6 +31,18 @@ describe('fromTo', function() {
 				  		[701.0449398272265, 1126.3421199004133] 
 					] 
 			});
+
+			const r0 = fromTo(ps, 0, tE).ps;
+			const ra0 = fromTo(ps, 2**-50, tE).ps;
+			expect(r0).to.be.nearly(2**8,ra0);
+
+			const r1 = fromTo(ps, tS, 1).ps;
+			const ra1 = fromTo(ps, tS, 1 - 2**-50).ps;
+			expect(r1).to.be.nearly(2**8,ra1);
+
+			const r01 = fromTo(ps, 0, 1).ps;
+			const ra01 = fromTo(ps, 2**-50, 1 - 2**-50).ps;
+			expect(r01).to.be.nearly(2**8,ra01);
 		}
 		{
 			const tS = 0.31;
@@ -48,6 +62,18 @@ describe('fromTo', function() {
 				  		[326.2185000643129, 488.6883946363174] 
 					] 
 			});
+
+			const r0 = fromTo(ps, 0, tE).ps;
+			const ra0 = fromTo(ps, 2**-50, tE).ps;
+			expect(r0).to.be.nearly(2**8,ra0);
+
+			const r1 = fromTo(ps, tS, 1).ps;
+			const ra1 = fromTo(ps, tS, 1 - 2**-50).ps;
+			expect(r1).to.be.nearly(2**8,ra1);
+
+			const r01 = fromTo(ps, 0, 1).ps;
+			const ra01 = fromTo(ps, 2**-50, 1 - 2**-50).ps;
+			expect(r01).to.be.nearly(2**8,ra01);
 		}
 		{
 			const tS = 0.31;
@@ -64,6 +90,18 @@ describe('fromTo', function() {
 				  		[159.19628967773082, 223.11047481009516]
 					]
 			});
+
+			const r0 = fromTo(ps, 0, tE).ps;
+			const ra0 = fromTo(ps, 2**-50, tE).ps;
+			expect(r0).to.be.nearly(2**8,ra0);
+
+			const r1 = fromTo(ps, tS, 1).ps;
+			const ra1 = fromTo(ps, tS, 1 - 2**-50).ps;
+			expect(r1).to.be.nearly(2**8,ra1);
+
+			const r01 = fromTo(ps, 0, 1).ps;
+			const ra01 = fromTo(ps, 2**-50, 1 - 2**-50).ps;
+			expect(r01).to.be.nearly(2**8,ra01);
 		}
 		{
 			const tS = 0.31;

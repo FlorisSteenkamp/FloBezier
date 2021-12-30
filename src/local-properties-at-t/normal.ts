@@ -20,6 +20,7 @@ function normal(ps: number[][], t?: number) {
 	function f(t: number): number[] {
 		return [
 			evaluatePoly(dY,t),
+			// TODO (should the below be negative??)
 			-evaluatePoly(dX,t)
 		];
 	}
