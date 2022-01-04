@@ -1,14 +1,19 @@
 import { expect, assert, use } from 'chai';
 import { distanceBetween, toUnitVector, translate } from 'flo-vector2d';
 import { describe } from 'mocha';
+import { squares } from 'squares-rng';
 import { 
 	closestPointOnBezier, controlPointLinesLength, curvature, evalDeCasteljau, 
 	fromPowerBasis, fromTo, generateQuarterCircle, hausdorffDistance, 
 	hausdorffDistanceOneSided, lineToQuadratic, normal, toCubic, toString 
 } from '../../src/index.js';
+import { Heap } from '../../src/simultaneous-properties/hausdorff-distance/heap.js';
+// import { hausdorffDistanceOneSided_ } from '../../src/simultaneous-properties/hausdorff-distance/hausdorff-distance.js';
 import { nearly } from '../helpers/chai-extend-nearly.js';
 import { getRandomCubic, getRandomLine, getRandomQuad } from '../helpers/get-random-bezier.js';
+import { heapToStr } from '../helpers/heap-to-str.js';
 // import { HHkm, Hkm } from '../helpers/hausdorff-distance-km.js';
+
 
 use(nearly);
 
@@ -204,6 +209,30 @@ describe('hausdorffDistance', function() {
 		}
 		*/
 		{
+			// Test the heap used with the algorithm
+			const heap = new Heap<number>((a,b) => a - b);
+			const arr: number[] = [];
+			// const source: number[] = [3,2,1];
+			const len = 13;
+			for (let i=0; i<len; i++) {
+				const v = squares(i);
+				// const v = source[i];
+				heap.insert(v);
+				arr.push(v);
+			}
+			const heapArr: number[] = [];
+			while (true) {
+				// heapToStr<number>(v => v.toString())(heap);//?
+				const v = heap.popMax()
+				if (v === undefined) { break; }
+				heapArr.push(v);
+			}
+			heapArr.reverse();
+			arr.sort((a,b) => a - b);
+
+			expect(arr).to.eql(heapArr);
+		}
+		{
 			// Test line to quad - https://www.desmos.com/calculator/uyl4qedxkp
 			const A = [[-1,2],[1,2]];
 			const Bxy = [[0,1,0],[1,0,0]]; // y = x^2 for x ∈ [0,1]
@@ -211,26 +240,30 @@ describe('hausdorffDistance', function() {
 			const k = curvature(B01,0);// 2
 			const B = fromTo(B01,-1,2).ps; // y = x^2 for x ∈ [-1,2]
 			toString(A);//  [[0,0],[1,1]
+			//A[0] = [-1.0001,2];
+			//B[0] = [-0.9999,1];
+			//B[1] = [0.5,-2];
 			toString(B);//  [[-1,1],[0.5,-2],[2,4]]
 
 			//------------------------------------
-			const k0 = curvature(B,0);
-			const k1 = curvature(B,1);
-			const r0 = 1/k0;//?
-			const r1 = 1/k1;//?
-			const v0 = toUnitVector(normal(B,0));//?
-			const v1 = toUnitVector(normal(B,1));//?
+			// const k0 = curvature(B,0);
+			// const k1 = curvature(B,1);
+			// const r0 = 1/k0;//?
+			// const r1 = 1/k1;//?
+			// const v0 = toUnitVector(normal(B,0));//?
+			// const v1 = toUnitVector(normal(B,1));//?
 			// x0 = -1 + (5.5901699437494745 * 0.894427190999916)//?
 			// y0 = 1 + (5.5901699437494745 * 0.447213595499958)//?
 			// x1 = 2 + (-0.9701425001453319 * 35.04639781775011)//?
 			// y1 = 4 + (0.24253562503633297 * 35.04639781775011)//?
-			
 			//------------------------------------
 
 			const tol = 1/1000_000;
 			
-			const h = hausdorffDistanceOneSided(A,B)[0];//?
+			const h = hausdorffDistanceOneSided(A,B);  //?
+			// const h_ = hausdorffDistanceOneSided_(A,B);//?
 			// const h1 = Hkm(A,B,tol);//?
+			1.3749758408573243 - h[0];//?
 
 			// h should be about 1.3749758408573243 occuring at 
 			//   A: t = 0.4718470522694049

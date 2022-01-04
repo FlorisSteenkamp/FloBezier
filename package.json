@@ -32,7 +32,7 @@
         "double-double": "^2.0.5",
         "flo-gauss-quadrature": "^2.1.0",
         "flo-graham-scan": "^2.0.0",
-        "flo-ll-rb-tree": "^0.2.0",
+        "flo-ll-rb-tree": "^0.3.1",
         "flo-poly": "^6.0.3",
         "flo-vector2d": "^4.0.0"
     },

@@ -1,7 +1,6 @@
 (globalThis as any as { __debug__: Partial<__Debug__> | undefined}).__debug__ = 
     { already: false, uid: 0, maxItersCount: 0 };
 
-
 import type { __Debug__ } from '../../src/intersection/bezier3-intersection/debug.js';
 import { doPaper } from './-paper.js';
 import { allRoots as _allRoots } from './roots/all-roots.js';
@@ -58,26 +57,21 @@ function testHauss() {
     */
     
 
-    for (let i=0; i<10000; i++) {
+    for (let i=0; i<1000; i++) {
         const r = Math.random;
-        const e = 2**10;
+        const e = 2**-10;
         const A = [[0,0],[1,1],[2,1],[3,0]].map(p => p.map(r));
-        // const A = [[0,0],[1,1],[2,1]].map(p => p.map(r));
         // const B = A.map(p => p.map(c => c + r()*e));  // perturb slightly
         const B = A.map(p => p.map(r));
-        // const B = [[0,0],[1,1],[2,1]].map(p => p.map(r));
-        //B[0] = A[0];
-        //B[B.length-1] = A[A.length-1];
-        //console.log(A);
-        //console.log(B);
+        // B[0] = A[0];
+        // B[B.length-1] = A[A.length-1];
 
+        // const tol = 1/1000_000_000_000;
         // const tol = 1/1000_000;
-        const hhh = hausdorffDistance(A,B);//
-        // const hhh = Hkm(B,A,tol)
+        const h = hausdorffDistance(A,B);
+        // const h = hausdorffDistance(A,B,tol,100);
     }
 
     const timing = performance.now() - timeStart;
-    console.log('Hauss millis: ' + timing.toFixed(3));//?    
+    console.log('Hauss millis: ' + timing.toFixed(3));
 }
-
-//testCubicWithParamsAt0();
