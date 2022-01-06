@@ -3,8 +3,8 @@ import { controlPointLinesLength } from '../../global-properties/length/control-
 import { evalDeCasteljau } from '../../local-properties-at-t/t-to-xy/double/eval-de-casteljau.js';
 import { fromTo } from '../../transformation/split/from-to.js';
 import { closestPointOnBezier } from '../closest-and-furthest-point-on-bezier/closest-point-on-bezier.js';
+import { furthestPointOnBezier } from '../closest-and-furthest-point-on-bezier/furthest-point-on-bezier.js';
 import { maxAbsCoordinate } from '../../error-analysis/max-abs-coordinate.js';
-import { LlRbTree, treeToStr } from 'flo-ll-rb-tree';
 import { HausdorffInterval } from './hausdorff-interval.js';
 import { getMaxHausdorff } from './get-max-hausdorff.js';
 import { hausdorffCompare } from './hausdorff-compare.js';
@@ -12,8 +12,6 @@ import { Heap } from './heap.js';
 
 
 const max = Math.max;
-
-const treeToStr_ = treeToStr<HausdorffInterval>(node => getMaxHausdorff(node.datum).toString());
 
 // We need to calculate `H(A,B)`, the two sided Hausdorff distance between
 // the bezier curves `A` and `B` which equals `max(h(A,B), h(B,A))`, where
@@ -38,10 +36,8 @@ const treeToStr_ = treeToStr<HausdorffInterval>(node => getMaxHausdorff(node.dat
 
 
 /**
- * Calculates and returns the one-sided Hausdorff distance from the bezier 
- * curve `A` to the bezier curve `B` as `[min,max]` where `min` is the minimum
- * guaranteed and `max` is the maximum guaranteed Hausdorff distance. The `min`
- * value will be a *much* more accurate result in general.
+ * Calculates and returns an accurate approximation to the one-sided Hausdorff 
+ * distance from the bezier curve `A` to the bezier curve `B`.
  * 
  * * partially based off [Computing the Hausdorff distance between two sets of parametric curves](https://www.semanticscholar.org/paper/COMPUTING-THE-HAUSDORFF-DISTANCE-BETWEEN-TWO-SETS-Kim-McLean/d2bd6529c4b118e389e1db209d8f1bf7467f9016)
  * 
@@ -49,180 +45,38 @@ const treeToStr_ = treeToStr<HausdorffInterval>(node => getMaxHausdorff(node.dat
  * @param B a bezier curve (the 'to' curve) given by an ordered array of its control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * @param tolerance defaults to `Math.max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000`;
  * if the calculated absolute error bound is less than this, the result is 
- * returned; this is *not* a hard tolerance and the returned bound can be less
+ * returned; this is *not* a hard tolerance and the bound can be less
  * accurate in hard cases (due to the `maxIterations` parameter). Luckily 
- * however, specifically the lower bound returned will be very accurate due to 
- * its fast convergence is such hard cases (see the paper)
+ * however, specifically the lower bound will be very accurate due to 
+ * its fast convergence in such hard cases (see the paper)
  * @param maxIterations defaults to `50`; if the desired guaranteed error bound 
  * has not been achieved after `maxIterations` then the result will be returned
  * 
  * @doc mdx
  */
-
-
-// Tree based version
-function hausdorffDistanceOneSided_(
-        A: number[][], 
-        B: number[][],
-        tolerance?: number,
-        maxIterations = 50): [number,number] {
-
-    const l = max(maxAbsCoordinate(A),maxAbsCoordinate(B));
-    tolerance = tolerance || l/1000_000;
-
-    // an array of intervals
-    const [eL,eR] = calcHErrorBound(A,0,1);
-    const d0 = closestPointOnBezier(B,A[0]).d;
-    const d1 = closestPointOnBezier(B,A[A.length-1]).d;
-    const initialInterval: HausdorffInterval = {
-        tS: 0, tE: 1,
-        hL: d0, hR: d1, hEL: eL, hER: eR
-    }
-    let tree = new LlRbTree<HausdorffInterval>(hausdorffCompare, false, [initialInterval]);
-
-    let j = 0;
-    let bestHUpper = Number.POSITIVE_INFINITY;
-    let bestHLower = Number.NEGATIVE_INFINITY;
-    while (true) {
-        const interval = tree.max()!;
-        const { tS, tE, hL, hR, hEL, hER } = interval;
-
-        const tM = (tS + tE)/2;
-        const [ELL,ELR] = calcHErrorBound(A,tS,tM);
-        const [ERL,ERR] = calcHErrorBound(A,tM,tE);
-
-        //---- get hM ---------------------------
-        const pM = evalDeCasteljau(A, tM);
-        const pB = closestPointOnBezier(B, pM).p;
-        const hM = distanceBetween(pM, pB);
-        //---------------------------------------
-
-        const h = max(hL, hM, hR);
-        if (h > bestHLower) { bestHLower = h; }
-
-        bestHUpper = getMaxHausdorff(interval);
-        if (bestHUpper - bestHLower < tolerance) {
-            // The lower bound is by far the best approximation for difficult cases (see the paper).
-            return [bestHLower, bestHUpper];
-        }
-
-        if (j++ > maxIterations) {
-            // The lower bound is by far the best approximation for difficult cases (see the paper).
-            return [bestHLower, bestHUpper];
-        }
-
-        const iL = { tS, tE: tM, hL, hR: hM, hEL: ELL, hER: ELR };
-        const iR = { tS: tM, tE, hL: hM, hR, hEL: ERL, hER: ERR };
-
-        tree.remove(interval, false);
-        tree.insert(iL);
-        tree.insert(iR);
-        
-        /*
-        const newTree = new LlRbTree(compare, false);
-        const items = tree.toArrayInOrder();
-        for (let j=0; j<items.length; j++) {
-            const s_ = items[j];
-            const upper_ = getMaxHaus(s_);
-            if (upper_ > bestHLower) {
-                newTree.insert(s_);
-            }
-        }
-        tree = newTree;
-        */
-    }
-}
-
-
-// Stack based version
-function hausdorffDistanceOneSided$(
-        A: number[][], 
-        B: number[][],
-        tolerance?: number,
-        maxIterations = 500): [number,number] {
-
-    const l = max(maxAbsCoordinate(A),maxAbsCoordinate(B));
-    tolerance = tolerance || l/1000_000_000_000;
-
-    // an array of intervals
-    const [eL,eR] = calcHErrorBound(A,0,1);
-    const d0 = closestPointOnBezier(B,A[0]).d;
-    const d1 = closestPointOnBezier(B,A[A.length-1]).d;
-    const initialInterval: HausdorffInterval = {
-        tS: 0, tE: 1,
-        hL: d0, hR: d1, hEL: eL, hER: eR
-    }
-    let stack: HausdorffInterval[] = [initialInterval];
-
-    let j = 0;
-    let bestHUpper = Number.POSITIVE_INFINITY;
-    let bestHLower = Number.NEGATIVE_INFINITY;
-    while (true) {
-        const idx = findBestUpperIdx(stack);
-        const { tS, tE, hL, hR } = stack[idx];
-
-        const tM = (tS + tE)/2;
-        const [ELL,ELR] = calcHErrorBound(A,tS,tM);
-        const [ERL,ERR] = calcHErrorBound(A,tM,tE);
-
-        //---- get hM ---------------------------
-        const pM = evalDeCasteljau(A, tM);
-        const pB = closestPointOnBezier(B, pM).p;
-        const hM = distanceBetween(pM, pB);
-        //---------------------------------------
-
-        const h = max(hL, hM, hR);
-        if (h > bestHLower) { bestHLower = h; }
-
-        bestHUpper = getMaxHausdorff(stack[idx]);
-        if (bestHUpper - bestHLower < tolerance) {
-            // The lower bound is by far the best approximation for difficult cases (see the paper).
-            return [bestHLower, bestHUpper];
-        }
-
-        if (j++ > maxIterations) {
-            // The lower bound is by far the best approximation for difficult cases (see the paper).
-            return [bestHLower, bestHUpper];
-        }
-
-        const iL = { tS, tE: tM, hL, hR: hM, hEL: ELL, hER: ELR };
-        const iR = { tS: tM, tE, hL: hM, hR, hEL: ERL, hER: ERR };
-        stack.splice(idx, 1, iL, iR);
-
-        //const newStack: HausdorffInterval[] = [];
-        //for (let j=0; j<stack.length; j++) {
-        //    const s = stack[j];
-        //    const upper = getMaxHaus(s);
-        //    if (upper > bestHLower) {
-        //        newStack.push(s);
-        //    }
-        //}
-        //stack = newStack;
-    }
-}
-
-
-function findBestUpperIdx(stack: HausdorffInterval[]) {
-    let best = stack[0];
-    let idx = 0;
-    for (let j=1; j<stack.length; j++) {
-        const s = stack[j];
-        if (hausdorffCompare(s,best) > 0) { 
-            best = s;
-            idx = j;
-        }
-    }
-
-    return idx;
-}
-
-
-// Heap based version
 function hausdorffDistanceOneSided(
         A: number[][], 
         B: number[][],
         tolerance?: number,
-        maxIterations = 50): [number,number] {
+        maxIterations = 50): number {
+
+    if (A.length === 1) {
+        return closestPointOnBezier(B,A[0]).d;
+    }
+
+    if (B.length === 1) {
+        return furthestPointOnBezier(A,B[0]).d;
+    }
+
+    if (A.length === 2 && B.length === 2) {
+        // Seperately handle the simple case of two lines
+
+        // Find minimum distance from endpoints of A to B:
+        const EA0 = closestPointOnBezier(B,A[0]).d;
+        const EA1 = closestPointOnBezier(B,A[A.length-1]).d;
+
+        return EA0 > EA1 ? EA0 : EA1;
+    }
 
     const l = max(maxAbsCoordinate(A),maxAbsCoordinate(B));
     tolerance = tolerance || l/1000_000;
@@ -242,9 +96,7 @@ function hausdorffDistanceOneSided(
     let bestHUpper = Number.POSITIVE_INFINITY;
     let bestHLower = Number.NEGATIVE_INFINITY;
     while (true) {
-        // const interval = heap.popMax();
         const interval = heap.heap[0];  // peek max
-        // heap.popMax();
         const { tS, tE, hL, hR } = interval;
 
         const tM = (tS + tE)/2;
@@ -258,17 +110,19 @@ function hausdorffDistanceOneSided(
         //---------------------------------------
 
         const h = max(hL, hM, hR);
-        if (h > bestHLower) { bestHLower = h; }
+        if (h > bestHLower) { 
+            bestHLower = h;
+        }
 
         bestHUpper = getMaxHausdorff(interval);
         if (bestHUpper - bestHLower < tolerance) {
             // The lower bound is by far the best approximation for difficult cases (see the paper).
-            return [bestHLower, bestHUpper];
+            return bestHLower;
         }
 
         if (j++ > maxIterations) {
             // The lower bound is by far the best approximation for difficult cases (see the paper).
-            return [bestHLower, bestHUpper];
+            return bestHLower;
         }
 
         const iL = { tS, tE: tM, hL, hR: hM, hEL: ELL, hER: ELR };
@@ -332,10 +186,13 @@ function hausdorffDistance(
         tolerance?: number,
         maxIterations?: number) {
 
-    const [lowerAB,upperAB] = hausdorffDistanceOneSided(A,B,tolerance,maxIterations);
-    const [lowerBA,upperBA] = hausdorffDistanceOneSided(B,A,tolerance,maxIterations);
+    //const [lowerAB,upperAB] = hausdorffDistanceOneSided(A,B,tolerance,maxIterations);
+    //const [lowerBA,upperBA] = hausdorffDistanceOneSided(B,A,tolerance,maxIterations);
+    const AB = hausdorffDistanceOneSided(A,B,tolerance,maxIterations);
+    const BA = hausdorffDistanceOneSided(B,A,tolerance,maxIterations);
 
-    return [max(lowerAB, lowerBA), max(upperAB, upperBA)];
+    // return [max(lowerAB, lowerBA), max(upperAB, upperBA)];
+    return max(AB, BA);
 }
 
 
