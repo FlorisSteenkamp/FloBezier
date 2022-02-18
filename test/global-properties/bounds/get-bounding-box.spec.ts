@@ -17,9 +17,10 @@ describe('getBoundingBox', function() {
 	function() {
 		{
 			const ps = getRandomBezier_(0);
-			expect(getBoundingBox(ps)).to.be.nearly(2**4, [ 
-				[-1.0501717649547098,-105.98771762335389],
-				[119.30512273109173,88.9937301783342]
+			const r = getBoundingBox(ps);
+			expect(r).to.be.nearly(2**8, [ 
+				[-108.49686506776891, -112.19754035329095],
+  				[124.76385737178953, 2.2882635064333403]
 			]);
 		}
 		{
@@ -29,7 +30,7 @@ describe('getBoundingBox', function() {
 				[80.17857884247292, -101.65036486965846],
 				[-95.539309056601269, -84.89133452900955] 
 			];
-			expect(getBoundingBox(ps)).to.be.nearly(2**4, [ 
+			expect(getBoundingBox(ps)).to.be.nearly(2**8, [ 
 				[-95.53930905660127, -86.68993123068452],
 				[-18.202031865992296, -47.82119616147928]
 			]);

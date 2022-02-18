@@ -5,7 +5,7 @@ import { getIntervalBox } from '../../global-properties/bounds/get-interval-box/
 import { intersectBoxes } from '../../boxes/intersect-boxes.js';
 import { bezierSelfIntersection } from '../self-intersection/bezier-self-intersection.js';
 import { getEndpointIntersections } from '../get-endpoint-intersections.js';
-import { isLine } from '../../global-properties/type/is-line.js';
+import { isCollinear } from '../../global-properties/classification/is-collinear.js';
 import { getXY1DdWithRunningError, getXY2DdWithRunningError, getXY3DdWithRunningError } from '../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js';
 import { getDxy2Exact, getDxy3Exact } from '../../to-power-basis/get-dxy/exact/get-dxy-exact.js';
 import { getDxy2Dd, getDxy3Dd } from '../../to-power-basis/get-dxy/double-double/get-dxy-dd.js';
@@ -27,6 +27,8 @@ const γγ3 = γγ(3);
  * algebraic implicitization of the curves in order to find *guaranteed*
  * accurate results.
  *
+ * * the returned intersections are *ordered* by `t` value of the first bezier
+ * curve
  * TODO - make sure below points are correct (add to tests)
  * * if the two curves have an infinite number of intersections `undefined` is
  * returned
@@ -56,7 +58,7 @@ function bezierBezierIntersection(ps1, ps2) {
     if (ris2.length === 0) {
         return [];
     }
-    // keep TypeScript happy; `ris1` cannot be `undefined` here (bar any 🐛s!)
+    // `ris1` are ordered by inersection `t` values of `ps1`
     const ris1 = bezierBezierIntersectionBoundless(ps2, ps1);
     if (ris1.length === 0) {
         return [];
@@ -94,7 +96,7 @@ function bezierBezierIntersection(ps1, ps2) {
 function handleInfiniteIntersections(ps1, ps2) {
     // At this point there are an infinite number of intersections, i.e.:
     // `bezierBezierIntersectionBoundless(ps1, ps2) === undefined`
-    if (isLine(ps1)) {
+    if (isCollinear(ps1)) {
         // `ps2` must also be a line
         return handleCollinearIntersections(ps1, ps2);
     }

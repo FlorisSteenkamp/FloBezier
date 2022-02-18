@@ -108,9 +108,7 @@ const config_EsmNoMinify = {
     output: {
         filename: 'index.module.js',
         path: path.resolve(__dirname, 'browser'),
-        library: {
-            type: 'module'
-        }
+        library: { type: 'module' }
     },
     optimization: {
         minimize: false

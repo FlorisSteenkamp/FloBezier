@@ -39,6 +39,8 @@ const abs = Math.abs;
  *      t0_   // <7>
  * ];
  * ```
+ * 
+ * @internal
  */
 function getClosestOnBezier3FromPointErrorCounters(ps: number[][], p: number[]) {
     //const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
@@ -177,6 +179,8 @@ function getClosestOnBezier3FromPointErrorCounters(ps: number[][], p: number[]) 
  *      t0_   // <5>
  * ];
  * ```
+ * 
+ * @internal
  */
 function getClosestOnBezier2FromPointErrorCounters(ps: number[][], p: number[]) {
     //const [[x0, y0], [x1, y1], [x2, y2]] = ps;
@@ -275,6 +279,8 @@ function getClosestOnBezier2FromPointErrorCounters(ps: number[][], p: number[]) 
  *     t0   // <5>
  * ];
  * ```
+ * 
+ * @internal
  */
 function getClosestOnBezier1FromPointErrorCounters(ps: number[][], p: number[]) {
     //const [[x0, y0], [x1, y1]] = ps;

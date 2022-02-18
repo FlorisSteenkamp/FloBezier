@@ -42,7 +42,7 @@ function totalAbsoluteCurvature(
 		return total;
 	}
 
-	throw new Error('Only bezier curves of order <= 3 are supported');
+	throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 
@@ -111,7 +111,7 @@ function totalCurvature(
 		return cpθ;
 	}
 
-	throw new Error('Only bezier curves of order <= 3 are supported');
+	throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 

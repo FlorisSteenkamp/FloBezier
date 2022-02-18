@@ -3,7 +3,7 @@ import { getXY3Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exac
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { twoProduct, expansionProduct, fastExpansionSum, scaleExpansion2, eMultBy2, eSign as _eSign } from "big-float-ts";
 import { getCoeffsBez3Bez2Exact } from "./get-coeffs-bez3-bez2-exact.js";
-import { toQuadraticFromCubic } from "../../../../transformation/degree-or-type/to-quad-from-cubic.js";
+import { toQuadraticFromCubic } from "../../../../transformation/degree-or-type/to-quadratic-from-cubic.js";
 import { getCoeffsBez2Bez3Exact } from "./get-coeffs-bez2-bez3-exact.js";
 const tp = twoProduct; // error -> 0
 const sce = scaleExpansion2;
@@ -41,7 +41,7 @@ function getCoeffsBez3Bez3Exact(ps1, ps2) {
         // the input bezier curve is in fact not cubic but has order < 3
         return getCoeffsBez2Bez3Exact(toQuadraticFromCubic(ps1), ps2);
     }
-    const [[c3, c2, c1, c0], [d3, d2, d1, d0]] = getXY3Exact(ps2);
+    const [[c3, c2, c1, [c0]], [d3, d2, d1, [d0]]] = getXY3Exact(ps2);
     if (eSign(c3) === 0 && eSign(d3) === 0) {
         // the input bezier curve is in fact not cubic but has order < 3
         return getCoeffsBez3Bez2Exact(ps1, toQuadraticFromCubic(ps2));

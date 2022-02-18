@@ -166,6 +166,26 @@ function isCubicDegenPoint(ps: number[][]): boolean {
 }
 
 
+const classification = {
+    isPoint,
+    isLineGeneral,
+    isLineDegenPoint,
+    isQuadGeneral,
+    isQuadDegenCollinear,
+    isQuadDegenLine,
+    isQuadDegenPoint,
+    isCubicGeneralCrunode,
+    isCubicGeneralAcnode,
+    isCubicGeneralCusp,
+    isCubicGeneralExplicit,
+    isCubicDegenCollinearCubic,
+    isCubicDegenQuad,
+    isCubicDegenCollinearQuad,
+    isCubicDegenLine,
+    isCubicDegenPoint,
+}
+
+
 /**
  * TODO docs
  * 
@@ -293,10 +313,10 @@ function classifyGeneralCubic(ps: number[][]): GeneralCubic {
 
 
 export { 
-    classify, classifications
-    //isPoint, isLineGeneral, isLineDegenPoint, isQuadGeneral, 
-    //isQuadDegenCollinear, isQuadDegenLine, isQuadDegenPoint, 
-    //isCubicGeneralCrunode, isCubicGeneralAcnode, isCubicGeneralCusp, 
-    //isCubicGeneralExplicit, isCubicDegenCollinearCubic, isCubicDegenQuad, 
-    //isCubicDegenCollinearQuad, isCubicDegenLine, isCubicDegenPoint,
+    ClassificationType,
+    Classification,
+    NodeType,
+    classify,
+    classifications,
+    classification
 }

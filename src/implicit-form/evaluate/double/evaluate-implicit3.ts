@@ -13,7 +13,12 @@ function evaluateImplicit3(
         vₓₓᵧ*x*x*y +
         vₓᵧᵧ*x*y*y +
         vᵧᵧᵧ*y*y*y +
-        vₓₓ*x*x + vₓᵧ*x*y + vᵧᵧ*y*y + vₓ*x + vᵧ*y + v
+        vₓₓ*x*x + 
+        vₓᵧ*x*y + 
+        vᵧᵧ*y*y +
+        vₓ*x + 
+        vᵧ*y + 
+        v
     );
 }
 

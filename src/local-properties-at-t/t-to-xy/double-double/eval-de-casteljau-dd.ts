@@ -52,7 +52,9 @@ function evalDeCasteljauDd(
 		const y   = qaq(b02, qmq(qdq(b12, b02),t));
 
 		return [x,y];
-	} else if (ps.length === 3) {
+	} 
+	
+	if (ps.length === 3) {
 		const [[x0,y0], [x1,y1], [x2,y2]] = ps;	
 
 		const a01 = qaq([0,x0],qmq(td(x1, x0),t));
@@ -64,17 +66,25 @@ function evalDeCasteljauDd(
 		const y = qaq(b01,qmq(qdq(b11,b01),t));
 
 		return [x,y];
-	} else if (ps.length === 2) {
-		const [[x0, y0], [x1,y1]] = ps;	
+	} 
+	
+	if (ps.length === 2) {
+		const [[x0,y0], [x1,y1]] = ps;	
 
 		const x = qad(qmq(td(x1, x0),t), x0);
 		const y = qad(qmq(td(y1, y0),t), y0);
 
 		return [x,y];
-	} else {
-		// TODO - add case of degenerate point
-        throw new Error('The given bezier curve is invalid.');
 	}
+
+	if (ps.length === 1) {
+		const [x,y] = ps[0];
+
+        return [[0,x], [0,y]];
+	}
+	
+	
+    throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 

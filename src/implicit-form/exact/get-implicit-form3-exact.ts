@@ -1,4 +1,4 @@
-import type { ImplicitFormExact3 } from '../implicit-form-types.js';
+import type { ImplicitFormExact1, ImplicitFormExact2, ImplicitFormExact3 } from '../implicit-form-types.js';
 import { getXY3Exact } from '../../to-power-basis/get-xy/exact/get-xy-exact.js';
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
@@ -37,7 +37,7 @@ const eSign = _eSign;
  * @doc mdx - TODO - remove mdx from these functions - they will become too many?
  */
 function getImplicitForm3Exact(
-        ps: number[][]): ImplicitFormExact3 | undefined {
+        ps: number[][]): ImplicitFormExact3 | ImplicitFormExact2 | ImplicitFormExact1 | undefined {
 
     return getImplicitForm3ExactPb(
         getXY3Exact(ps)
@@ -57,18 +57,21 @@ function getImplicitForm3ExactPb(
         pspb: [
                 [number[], number[], number[], number[]], 
                 [number[], number[], number[], number[]]
-            ]): ImplicitFormExact3 | undefined {
+            ]): ImplicitFormExact3 | ImplicitFormExact2 | ImplicitFormExact1 | undefined {
 
     const [[a3,a2,a1,[a0]], [b3,b2,b1,[b0]]] = pspb;
 
     if (eSign(a3) === 0 && eSign(b3) === 0) {
         // the input bezier curve is in fact not cubic but has order < 3
-        const implicitForm = getImplicitForm2ExactPb([[a2,a1,a0], [b2,b1,b0]]);
-        if (implicitForm === undefined) { return undefined; }
-        return { 
-            vₓₓₓ: [0], vₓₓᵧ: [0], vₓᵧᵧ: [0], vᵧᵧᵧ: [0], 
-            ...implicitForm
-        };
+
+        //const implicitForm = getImplicitForm2ExactPb([[a2,a1,a0], [b2,b1,b0]]);
+        //if (implicitForm === undefined) { return undefined; }
+        //return { 
+        //    vₓₓₓ: [0], vₓₓᵧ: [0], vₓᵧᵧ: [0], vᵧᵧᵧ: [0], 
+        //    ...implicitForm
+        //};
+
+        return getImplicitForm2ExactPb([[a2,a1,a0], [b2,b1,b0]]);
     }
 
     const a3b1 = epr(a3,b1);

@@ -133,7 +133,6 @@ function hausdorffDistanceOneSided(
 }
 
 
-
 // Let: ωf(σ) = sup{ |f(t) − f(t′)| : t, t′ ∈ [a,b] with |t − t′| ≤ σ }
 //
 // |h(S,B) − h(A,B)| ≤ ωf(δS/2)
@@ -186,12 +185,9 @@ function hausdorffDistance(
         tolerance?: number,
         maxIterations?: number) {
 
-    //const [lowerAB,upperAB] = hausdorffDistanceOneSided(A,B,tolerance,maxIterations);
-    //const [lowerBA,upperBA] = hausdorffDistanceOneSided(B,A,tolerance,maxIterations);
     const AB = hausdorffDistanceOneSided(A,B,tolerance,maxIterations);
     const BA = hausdorffDistanceOneSided(B,A,tolerance,maxIterations);
 
-    // return [max(lowerAB, lowerBA), max(upperAB, upperBA)];
     return max(AB, BA);
 }
 

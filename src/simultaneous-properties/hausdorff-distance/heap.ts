@@ -7,12 +7,6 @@ class Heap<T> {
 
     constructor(private compare: (a: T, b: T) => number) {}
 
-    public insertMulti(ts: T[]): void {
-        for (let t of ts) {
-            this.insert(t);
-        }
-    }
-
     public insert(t: T): void {
         const heap = this.heap;
 
@@ -87,19 +81,10 @@ class Heap<T> {
     }
 
 
-    public static getParentIdx(i: number) {
-        return (i - 1 - (i+1)%2)/2;
-    }
-
-
-    public static getLeftChild(i: number) {
-        return 2*i + 1;
-    }
-    
-    
-    public static getRightChild(i: number) {
-        return 2*i + 2;
-    }
+    // prefer inlining?
+    //public static getParentIdx(i: number) { return (i - 1 - (i+1)%2)/2; }
+    //public static getLeftChild(i: number) { return 2*i + 1; }
+    //public static getRightChild(i: number) { return 2*i + 2; }
 }
 
 

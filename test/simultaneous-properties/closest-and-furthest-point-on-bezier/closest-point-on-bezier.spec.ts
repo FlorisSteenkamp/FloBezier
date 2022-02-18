@@ -11,7 +11,7 @@ const getRandomBezier_ = getRandomBezier(200, 37);
 
 
 describe('closestPointOnBezier', function() {
-	it('it should ...',
+	it('it should find the closest point on some bezier curves from a given point',
 	function() {
 		for (let order=0;order<=3;order++) {
 			for (let i=0;i<=0;i++) {
@@ -20,16 +20,22 @@ describe('closestPointOnBezier', function() {
 				const { p: bp, t } = closestPointOnBezier(ps,p);
 				let pp = evalDeCasteljau(ps,t);
 				expect(pp).to.be.nearly(2**4,bp);
+				const dClosest = distanceBetween(bp,p);
 				// check against 16 other points on the bezier in [0,1]
 				for (let k=0; k<16+1; k++) {
 					const t_ = k/16;
 					const p_ = evalDeCasteljau(ps,t_);
 
 					const d = distanceBetween(p_,p);
-					const dClosest = distanceBetween(bp,p);
 					expect(d).to.be.greaterThanOrEqual(dClosest);
 				}
 			}
+		}
+
+		{
+			const p = [1,1];
+			const ps = [p,p,p,p,p];
+			expect(() => closestPointOnBezier(ps,p)).to.throw();
 		}
 	});
 });

@@ -12,13 +12,12 @@ describe('toCubic', function() {
 	function() {
 		{
 			let ps = getRandomLine(0);
-			// ps = randomRotateAndTranslate(0)(ps);
 			const r = toCubic(ps);
 			expect(r).to.be.nearly(2**6, [
-				[88.6401864794642, -105.98771762335389],
-				[58.09641886116697, -86.03173149641721],
-				[27.55265124286973, -66.07574536948053],
-				[-2.9911163754275094, -46.119759242543864]
+				[-108.49686506776892, -13.011161175008596],
+  				[-76.66354177089015, -11.005005728531998],
+  				[-44.83021847401138, -8.9988502820554],
+  				[-12.996895177132615, -6.992694835578803]
 			]);
 
 			const [[x0,y0],[x1,y1],[x2,y2],[x3,y3]] = r;
@@ -34,14 +33,12 @@ describe('toCubic', function() {
 
 		{
 			let ps = getRandomQuad(0);
-			// ps = randomRotateAndTranslate(0)(ps);
 			const r = toCubic(ps);
-
 			expect(r).to.be.nearly(2**6, [
-				[88.6401864794642, -105.98771762335389],
-				[27.55265124286973, -66.07574536948053],
-				[-24.687322552786362, -13.359518839052424],
-				[-68.07973490750408, 52.16096196793046]
+				[-108.49686506776892, -13.011161175008596],
+				[-44.83021847401138, -8.9988502820554],
+				[-15.200918356492588, 12.780703862446293],
+				[-19.608964715212537, 52.32750125849648]
 			]);
 
 			const ps_ = toQuadraticFromCubic(r);
@@ -57,19 +54,16 @@ describe('toCubic', function() {
 		}
 		{
 			let ps = getRandomQuad(0);
-			// ps = randomRotateAndTranslate(0)(ps);
 			const r = toCubic(ps);
 			expect(ps).to.be.nearly(2**2, toQuadraticFromCubic(r));
 		}
 		{
 			let ps = getRandomLine(0);
-			// ps = randomRotateAndTranslate(0)(ps);
 			const r = toCubic(ps);
 			expect(ps).to.be.nearly(2**1, [r[0],r[3]]);
 		}
 		{
 			let ps = getRandomPoint(0);
-			// ps = randomRotateAndTranslate(0)(ps);
 			const r = toCubic(ps);
 			const p = ps[0];
 			expect(r).to.be.eql([p,p,p,p]);

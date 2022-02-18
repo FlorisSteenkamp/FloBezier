@@ -27,9 +27,10 @@ const sce = scaleExpansion;
 function getCoeffsCubicExact(circle, ps) {
     const { radius: r, center: c } = circle;
     const [cx, cy] = c;
-    const [[a3, a2, a1, x0], [b3, b2, b1, y0]] = getXY3Exact(ps);
-    const a0 = [x0];
-    const b0 = [y0];
+    //const [[a3,a2,a1,x0], [b3,b2,b1,y0]] = getXY3Exact(ps);
+    //const a0 = [x0];
+    //const b0 = [y0];
+    const [[a3, a2, a1, a0], [b3, b2, b1, b0]] = getXY3Exact(ps);
     // (a3**2 + b3**2)*t**6 + 
     const t6 = calc([
         [a3, a3],

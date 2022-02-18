@@ -11,20 +11,15 @@ import { Horner } from 'flo-poly';
  * 
  * @internal
  */
-function ds(ps: number[][], t: number): number;
-function ds(ps: number[][]): (t: number) => number;
-function ds(ps: number[][], t?: number) {
+function ds(ps: number[][]) {
 	const [dX, dY] = getDxy(ps);
 
-	function f(t: number): number {
+	return function(t: number): number {
 		const dx = Horner(dX, t);
 		const dy = Horner(dY, t);
 		
 		return Math.sqrt(dx*dx + dy*dy);	
 	}
-
-	// Curry
-	return t === undefined ? f : f(t);	
 }
 
 

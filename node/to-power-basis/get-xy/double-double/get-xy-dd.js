@@ -1,31 +1,54 @@
 import { twoDiff, twoSum, ddMultDouble2, ddAddDd, ddAddDouble } from 'double-double';
+// TODO - add ... is too slow for bundlers, e.g. Webpack
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const td = twoDiff; // error -> 0
 const qmd = ddMultDouble2; // error -> 3*u²
 const qaq = ddAddDd;
 const qad = ddAddDouble; // error -> 2*u²
 const ts = twoSum;
-// TODO - modify docs (the doc below is from `getXY`)
 /**
- * Returns the power basis representation of a line, quadratic or cubic bezier.
+ * Returns the power basis representation of a bezier curve of order cubic or
+ * less (with intermediate calculations done in double-double precision).
  *
- * * **non-exact:** if certain preconditions are met (see below) it returns the
- * exact result, else round-off may have occured during intermediate calculation.
- * * returns the power basis polynomial from highest power to lowest,
- * e.g. `at^3 + bt^2 + ct + d` is returned as `[a,b,c,d]`
+ * * returns the power basis x and y coordinate polynomials from highest power
+ * to lowest, e.g. if `x(t) = at^3 + bt^2 + ct + d`
+ * and `y(t) = et^3 + ft^2 + gt + h` then the result is returned
+ * as `[[a,b,c,d],[e,f,g,h]]`, where the `a,b,c,...` are in double-double
+ * precision
  *
- * * **bitlength:** If the coordinates of the control points are bit-aligned then:
- *  * max bitlength increase = 4 (for cubics)
- * (due to 'multiplication' by 9 (3x 6x 3x)
- *  * max bitlength increase = 2 (for quadratics)
- * (due to 'multiplication' by 4 (1x 2x 1x)
- *  * max bitlength increase = 1 (for lines)
- * (due to 'multiplication' by 4 (1x 1x)
- *
- * @param ps an order 1, 2 or 3 bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ * @param ps an order 0,1,2 or 3 bezier curve given by an ordered array of its
+ * control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  *
  * @doc
  */
+function getXYDd(ps) {
+    if (ps.length === 4) {
+        const r = getXY3Dd(ps);
+        r[0][3] = [0, r[0][3]];
+        r[1][3] = [0, r[1][3]];
+        return r;
+    }
+    if (ps.length === 3) {
+        const r = getXY2Dd(ps);
+        r[0][2] = [0, r[0][2]];
+        r[1][2] = [0, r[1][2]];
+        return r;
+    }
+    if (ps.length === 2) {
+        const r = getXY1Dd(ps);
+        r[0][1] = [0, r[0][1]];
+        r[1][1] = [0, r[1][1]];
+        return r;
+    }
+    if (ps.length === 1) {
+        const r = getXY0Dd(ps);
+        r[0][0] = [0, r[0][0]];
+        r[1][0] = [0, r[1][0]];
+        return r;
+    }
+    throw new Error('The given bezier curve must be of order <= cubic.');
+}
+/** @internal */
 function getXY3Dd(ps) {
     const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
     // ----------------------------
@@ -55,8 +78,9 @@ function getXY3Dd(ps) {
     return [[xx3, xx2, xx1, x0], [yy3, yy2, yy1, y0]];
 }
 /**
- * only quadratic monomial coefficient has an error, the others are exact
- * @param ps
+ * Only the quadratic monomial coefficient has an error, the others are exact.
+ *
+ * @internal
  */
 function getXY2Dd(ps) {
     const [[x0, y0], [x1, y1], [x2, y2]] = ps;
@@ -79,8 +103,9 @@ function getXY2Dd(ps) {
     return [[xx2, xx1, x0], [yy2, yy1, y0]];
 }
 /**
- * * exact for any bitlength
- * @param ps linear bezier curve
+ * Exact for any bitlength.
+ *
+ * @internal
  */
 function getXY1Dd(ps) {
     const [[x0, y0], [x1, y1]] = ps;
@@ -92,5 +117,14 @@ function getXY1Dd(ps) {
             y0,
         ]];
 }
-export { getXY1Dd, getXY2Dd, getXY3Dd };
+/**
+ * Exact for any bitlength.
+ *
+ * @internal
+ */
+function getXY0Dd(ps) {
+    const [[x0, y0]] = ps;
+    return [[x0], [y0]];
+}
+export { getXYDd, getXY0Dd, getXY1Dd, getXY2Dd, getXY3Dd };
 //# sourceMappingURL=get-xy-dd.js.map

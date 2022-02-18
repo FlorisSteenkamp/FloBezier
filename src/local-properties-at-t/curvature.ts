@@ -5,9 +5,10 @@ import { getDdxy } from "../to-power-basis/get-ddxy/double/get-ddxy.js";
 
 /**
  * Returns the curvature `κ` of the given linear, quadratic or cubic bezier 
- * curve at a specific given parameter value `t`. This function is curried.
+ * curve at a specific given parameter value `t`. 
  * 
- * * **alias**: [[curvature]]
+ * * returns `Number.NaN` at a cusp - this can be tested for with `Number.isNaN`
+ * * this function is curried
  * 
  * @param ps an order 1, 2 or 3 bezier curve, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * @param t the parameter value where the curvature should be evaluated

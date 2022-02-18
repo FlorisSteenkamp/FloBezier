@@ -252,8 +252,8 @@ function getCoeffsBez3Bez2Exact(ps1: number[][], ps2: number[][]) {
     //    ze*vₓᵧ +
     //    c2*vₓ    +
     //    d2*vᵧ;
-    const oj = sce(3*c0,z1);
-    const ok = sce(3*d0,z2);
+    const oj = epr(tp(3,c0),z1);
+    const ok = epr(tp(3,d0),z2);
     const ol = sce(c0,z6);
     const om = sce(c0,z4);
     const on = sce(d0,z3);
@@ -295,8 +295,8 @@ function getCoeffsBez3Bez2Exact(ps1: number[][], ps2: number[][]) {
     //    2*(c0c1*vₓₓ + d0d1*vᵧᵧ) +
     //    c0d1*vₓᵧ + c1d0*vₓᵧ +
     //    c1*vₓ + d1*vᵧ;
-    const p8 = sce(3*c0,c0c1);
-    const p9 = sce(3*d0,d0d1);
+    const p8 = epr(tp(3,c0),c0c1);
+    const p9 = epr(tp(3,d0),d0d1);
     const pa = sce(c0,zc);
     const pb = sce(d0,zd);
     const pc = epr(c0c1,vₓₓ);
@@ -349,11 +349,6 @@ function getCoeffsBez3Bez2Exact(ps1: number[][], ps2: number[][]) {
     const v0 = fes(ub,v);
 
     const r = [v6, v5, v4, v3, v2, v1, v0];
-
-    // remove leading zero coefficients
-    //while (r.length > 1 && eSign(r[0]) === 0) {
-    //    r.shift();
-    //}
 
     return r;
 }

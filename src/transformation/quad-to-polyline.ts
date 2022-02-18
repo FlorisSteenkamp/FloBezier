@@ -25,7 +25,7 @@ function quadToPolyline(
         tolerance: number): number[][] {
 
     // A quad bezier has the following useful properties (Let the control
-    // points be labeled P0, P1 and P2 respectively and const the point at t = 0.5
+    // points be labeled P0, P1 and P2 respectively and let the point at t = 0.5
     // be labeled M1):
     // -------------------------------------------------------------------------
     // * At t = 0.5 P1 has its maximum influence of 0.5 and P0 and P2 each an 
@@ -75,12 +75,15 @@ function quadToPolyline(
     while (stack.length) {
         // keep TypeScript happy; of course there'se something in the stack
         const node = stack.pop()!;  
-        
-        if (isQuadFlat(node.ps, tolerance)) { continue; }
+        const ps = node.ps;
+
+        if (isQuadFlat(ps, tolerance)) { 
+            continue; 
+        }
 
         const quads = [
-            fromTo(node.ps, 0, 0.5).ps, 
-            fromTo(node.ps, 0.5, 1).ps
+            fromTo(ps, 0, 0.5).ps, 
+            fromTo(ps, 0.5, 1).ps
         ];
         const prev = node.prev;
         const next = node.next;

@@ -1,4 +1,4 @@
-import { γγ } from '../../../src/error-analysis/error-analysis.js';
+import { γγ } from '../../error-analysis/error-analysis.js';
 import { getImplicitForm1DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form1-dd-with-running-error.js";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗

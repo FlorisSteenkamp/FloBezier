@@ -1,8 +1,8 @@
 import { getDdxy } from "../../../to-power-basis/get-ddxy/double/get-ddxy.js";
-import { Horner as polyEvaluate } from 'flo-poly';
+import { Horner } from 'flo-poly';
 function evaluateDdxy(ps, t) {
     const [ddPsX, ddPsY] = getDdxy(ps);
-    const f = (t) => [polyEvaluate(ddPsX, t), polyEvaluate(ddPsY, t)];
+    const f = (t) => [Horner(ddPsX, t), Horner(ddPsY, t)];
     return t === undefined ? f : f(t); // Curry
 }
 export { evaluateDdxy };

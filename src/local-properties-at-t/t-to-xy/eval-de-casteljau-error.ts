@@ -63,7 +63,7 @@ const abs = Math.abs;
  * // `1.3828099999999994 < r[0] < 1.3828100000000003`
  * ```
  * 
- * @doc mdx
+ * @internal
  **/
 function evalDeCasteljauError(
 		ps: number[][], 
@@ -161,7 +161,7 @@ function evalDeCasteljauError(
 		return [0,0];
 	}
 
-	throw new Error('The given bezier curve is invalid.');
+	throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 

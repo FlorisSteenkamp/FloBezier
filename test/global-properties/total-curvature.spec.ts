@@ -79,7 +79,7 @@ function test(ps: number[][]) {
 		// radToDeg(c);
 		// radToDeg(d);
 
-		const ulpsOrEps = 2**32;
+		const ulpsOrEps = 2**34;
 		assert(
 			closeTo([ulpsOrEps])(c - d, 0),
 			// `ps: ${toString(ps)}; Total curvatures don't match: calc deg: ${radToDeg(c)}, gauss deg: ${radToDeg(d)} - calc rad: ${c}, gauss rad: ${d}`
@@ -223,22 +223,22 @@ function testSomeTotalCurvature() {
 	{
 		const ps = getRandomCubic(0);
 		const c = totalCurvature(ps, [0,1]);
-		expect(c).to.be.nearly(2**6, -2.3687733337504726);
+		expect(c).to.be.nearly(2**6, -0.9134823236058587);
 	}
 
 	{
 		const ps = getRandomQuad(0);
 		const c = totalCurvature(ps, [0,1]);
-		expect(c).to.be.nearly(2**6, -0.40711044270202335);
+		expect(c).to.be.nearly(2**6, 1.6188647958793885);
 	}
 
 	{
 		const ps = getRandomCubic(2);
 		const c = totalCurvature(ps, [0,1]);
-		expect(c).to.be.nearly(2**6, -2.6406073156224092);
+		expect(c).to.be.nearly(2**6, -5.178927914200722);
 		const psr = ps.slice().reverse();
 		const d = totalCurvature(psr, [0,1]);
-		expect(d).to.be.nearly(2**6, 2.6406073156224092);
+		expect(d).to.be.nearly(2**6, 5.178927914200722);
 	}
 
 	{
@@ -291,8 +291,8 @@ describe('totalAbsoluteCurvature', function() {
 			const ps = getRandomCubic(0);
 			const d = totalAbsoluteCurvature(ps, [0,1]);
 			const e = totalAbsoluteCurvature(ps.slice().reverse(), [0,1]);
-			expect(d).to.be.nearly(2**6, 2.3687733337504726);
-			expect(e).to.be.nearly(2**6, 2.3687733337504726);
+			expect(d).to.be.nearly(2**6, 1.289670890832218);
+			expect(e).to.be.nearly(2**6, 1.289670890832218);
 		}
 
 		{
@@ -317,7 +317,7 @@ describe('totalAbsoluteCurvature', function() {
 			// some quadratic bezier
 			const ps = getRandomQuad(0);
 			const d = totalAbsoluteCurvature(ps, [0,1]);
-			expect(d).to.be.nearly(2**6, 0.40711044270202335);
+			expect(d).to.be.nearly(2**6, 1.6188647958793885);
 		}
 
 		{
@@ -330,6 +330,38 @@ describe('totalAbsoluteCurvature', function() {
 			const ps = getRandomPoint(0);
 			const d = totalAbsoluteCurvature(ps, [0,1]);
 			expect(d).to.be.eql(0);
+		}
+
+		{
+			const ps = getRandomCubic(0);
+			const d = totalAbsoluteCurvature(ps, [0.5,0.5]);
+			expect(d).to.eql(0);
+
+			const p = [3,3];
+			expect(() => totalAbsoluteCurvature([p,p,p,p,p], [0.5,0.5])).to.throw();
+		}
+
+		{
+			const ps = getRandomCubic(0);
+			const d = totalCurvature(ps, [0.5,0.5]);
+			expect(d).to.eql(0);
+		}
+
+		{
+			const ps = [[0,0],[1,1],[1,1],[2,2]];
+			const d = totalCurvature(ps, [0,1]);
+			expect(d).to.eql(0);
+		}
+
+		{
+			const ps = [[0,0],[1,1],[1,1],[2,0]];
+			const d = totalCurvature(ps, [0,1]);
+			expect(d).to.be.nearly(2**1,-𝜋/2);
+		}
+
+		{
+			const p = [3,3];
+			expect(() => totalCurvature([p,p,p,p,p], [0.5,1.5])).to.throw();
 		}
 	});
 });

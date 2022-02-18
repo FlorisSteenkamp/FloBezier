@@ -30,13 +30,13 @@ declare function getImplicitForm3ExactPb(pspb: [
         number[],
         number[],
         number[],
-        number
+        number[]
     ],
     [
         number[],
         number[],
         number[],
-        number
+        number[]
     ]
 ]): ImplicitFormExact3 | undefined;
 export { getImplicitForm3Exact, getImplicitForm3ExactPb };

@@ -14,8 +14,8 @@ describe('getDxy', function() {
 			const ps = getRandomCubic(0);
 			const r = getDxy(ps);
 			const expected = [
-				[677.7923755435722, 159.25610593689038, -274.89390856467503],
-				[-299.58214748920466, 230.47657697798607, 179.60387514242996]
+				[759.2907931613947, -612.6722365722974, 286.49990967190894],
+  				[-831.4409023815244, 319.81037852787296, 18.05539901828938]
 			];
 			expect(r).to.be.nearly(2**8, expected);
 		}
@@ -23,8 +23,8 @@ describe('getDxy', function() {
 			const ps = getRandomQuad(0);
 			const r = getDxy(ps);
 			const expected = [
-				[53.085368645630126, -183.26260570978337],
-				[76.82552565932869, 119.73591676161996]
+				[-204.22407885743246, 190.99993978127262],
+  				[106.60345950929099, 12.036932678859586]
 			];
 			expect(r).to.be.nearly(2**8, expected);
 		}
@@ -32,8 +32,8 @@ describe('getDxy', function() {
 			const ps = getRandomLine(0);
 			const r = getDxy(ps);
 			const expected = [
-				[-91.63130285489169], 
-				[59.86795838080998]
+				[95.49996989063631],
+				[6.018466339429793]
 			];
 			expect(r).to.be.nearly(2**8, expected);
 		}

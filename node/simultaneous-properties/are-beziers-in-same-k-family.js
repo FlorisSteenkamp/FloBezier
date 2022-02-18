@@ -6,11 +6,8 @@ import { isPointOnBezierExtension } from "./is-point-on-bezier-extension/is-poin
 // TODO - also consider order 1 and 2 (and 0?) cases
 /**
  * Returns true if two beziers are in the same K-family, i.e. when their infinte
- * extensions is the same curve.
+ * extensions are the same curve (when seen as point sets).
  *
- * * probably better to use the bezierBezierIntersection function and see if it
- * returns undefined which is the case iff the two beziers are in the same
- * k-family.
  * * **precondition:** neither given bezier curve may have *all* its control
  * points the same point (i.e. neither bezier curve may effectively be a point)
  * * **precondition:** underflow / overflow
@@ -32,11 +29,12 @@ function areBeziersInSameKFamily(ps1, ps2) {
     for (let i = 1; i < len + 1; i++) {
         // Make each parametric `t`-value an integer power of two to keep the 
         // bitlength a minimum (1 in this case).
-        // For 2 cubics for example we will have t values of:
+        // For 2 cubics for example we will have `t` values of:
         // `[0.0625, 0.125, 0.25, 0.5, 1, 2, 4, 8, 16, 32]`
         const t = 2 ** (i - mid);
         const p = evaluateExact(ps1, t);
-        if (!isPointOnBezierExtension(ps2, p)) {
+        const onExtension = isPointOnBezierExtension(ps2, p);
+        if (!onExtension) {
             return false;
         }
     }

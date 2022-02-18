@@ -2,7 +2,7 @@ import { getImplicitForm2 } from "../../implicit-form/double/get-implicit-form2.
 import { getImplicitForm2ErrorCounters } from "../../implicit-form/get-error-counters/get-implicit-form2-error-counters.js";
 import { getImplicitForm2DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form2-dd-with-running-error.js";
 import { getImplicitForm2Exact } from "../../implicit-form/exact/get-implicit-form2-exact.js";
-import { γ, γγ } from '../../../src/error-analysis/error-analysis.js';
+import { γ, γγ } from '../../error-analysis/error-analysis.js';
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { twoProduct, ddMultDd, ddAddDd } from "double-double";
 import { expansionProduct, fastExpansionSum, eSign, scaleExpansion2, eEstimate, eToDd } from 'big-float-ts';
@@ -145,7 +145,7 @@ function isPointOnBezierExtension2(ps, p) {
             return false; // <-- prefilter applied
         }
     }
-    // error still too high - const's go exact
+    // error still too high - let's go exact
     {
         const implictForm = getImplicitForm2Exact(ps);
         if (implictForm === undefined) {
@@ -157,7 +157,7 @@ function isPointOnBezierExtension2(ps, p) {
         // if it is 0 we are on the curve, else we're not.
         // const h =
         //   vₓₓ*x*x + vₓᵧ*x*y + vᵧᵧ*y*y + vₓ*x + vᵧ*y + v;
-        const h = fes(fes(fes(epr(vₓₓ, tp(x, x)), epr(vₓᵧ, tp(x, y))), epr(vᵧᵧ, tp(y, y))), fes(fes(sce(x, vₓ), sce(y, vᵧ)), v));
+        const h = fes(fes(fes(epr(vₓₓ, epr(xe, xe)), epr(vₓᵧ, epr(xe, ye))), epr(vᵧᵧ, epr(ye, ye))), fes(fes(epr(xe, vₓ), epr(ye, vᵧ)), v));
         return sign(h) === 0; // <= calculation was exact
     }
 }

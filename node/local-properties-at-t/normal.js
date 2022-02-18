@@ -5,6 +5,7 @@ function normal(ps, t) {
     function f(t) {
         return [
             evaluatePoly(dY, t),
+            // TODO (should the below be negative??)
             -evaluatePoly(dX, t)
         ];
     }

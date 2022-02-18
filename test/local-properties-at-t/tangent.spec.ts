@@ -1,32 +1,48 @@
-import { getDxy } from '../to-power-basis/get-dxy/double/get-dxy.js';
-import { Horner } from 'flo-poly';
+import { expect, assert, use } from 'chai';
+import { describe } from 'mocha';
+import { classify, generateCuspAtHalf3, tangent } from '../../src/index.js';
+import { nearly } from '../helpers/chai-extend-nearly.js';
+import { getRandomCubic, getRandomLine, getRandomQuad } from '../helpers/get-random-bezier.js';
+
+use(nearly);
 
 
-/**
- * Returns a tangent vector (not necessarily of unit length) of an 
- * order 1, 2 or 3 bezier curve at a specific given parameter value `t`. 
- * This function is curried.
- * 
- * @param ps a linear, quadratic or cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param t the parameter value where the tangent should be evaluated
- * 
- * @doc mdx
- */
-function tangent(ps: number[][], t: number): number[];
-function tangent(ps: number[][]): (t: number) => number[];
-function tangent(ps: number[][], t?: number) {
-	const [dX, dY] = getDxy(ps);
+describe('tangent', function() {
+	it('it should accurately calculate the tangent of some bezier curves at some `t` values', 
+	function() {
+		{
+			const ps = getRandomLine(0);
+			let ts = [0, 0.1, 0.3, 0.5, 0.7, 0.9, 1];
+			
+			for (let t of ts) {
+				let r = tangent(ps, t);
+				expect(r).to.be.nearly(2**2, [95.49996989063631,6.018466339429793]);
+				expect(tangent(ps, t)).to.eql(tangent(ps)(t));
+			}
+		}
 
-	function f(t: number): number[] {
-		return [
-			Horner(dX,t),
-			Horner(dY,t)
-		];
-	}
+		{
+			const ps = getRandomQuad(0);
+			const t = 0.5;
+			let r = tangent(ps, t);
+			expect(r).to.be.nearly(2**2, [88.88790035255639,65.33866243350508]);
+			expect(tangent(ps, t)).to.eql(tangent(ps)(t));
+		}
 
-	// Curry
-	return t === undefined ? f : f(t);
-}
+		{
+			const ps = getRandomCubic(0);
+			const t = 0.5;
+			let r = tangent(ps, t);
+			expect(r).to.be.nearly(2**2, [169.98648967610893,-29.899637313155253]);
+			expect(tangent(ps, t)).to.eql(tangent(ps)(t));
+		}
 
-
-export { tangent }
+		{
+			const ps = generateCuspAtHalf3([0,0], [6,2], [3,0]);
+			const t = 0.5;
+			let r = tangent(ps, t);
+			// at cusp the tangent vanishes
+			expect(r).to.be.nearly(2**2, [0,0]);
+		}
+	});
+});

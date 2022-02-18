@@ -24,14 +24,10 @@
         if (bx0 > bx1) { [bx0,bx1] = [bx1,bx0] };
 
         return closed
-            ? (
-                ax0 <= bx1 && ax1 >= bx0 && 
-                by0 <= ay1 && by1 >= ay0
-            )
-            : (
-                ax0 < bx1 && ax1 > bx0 && 
-                by0 < ay1 && by1 > ay0
-            )
+            ? ax0 <= bx1 && ax1 >= bx0 && 
+              by0 <= ay1 && by1 >= ay0
+            : ax0 < bx1 && ax1 > bx0 && 
+              by0 < ay1 && by1 > ay0
     }
 }
 

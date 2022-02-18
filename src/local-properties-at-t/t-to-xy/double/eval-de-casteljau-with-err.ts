@@ -32,15 +32,21 @@ function evalDeCasteljauWithErr(
 
 	if (ps.length === 4) {
 		return { p, pE: pE.map(e => 9*γ1*e) };
-	} else if (ps.length === 3) {
+	} 
+	
+	if (ps.length === 3) {
 		return { p, pE: pE.map(e => 6*γ1*e) };
-	} else if (ps.length === 2) {
+	} 
+	
+	if (ps.length === 2) {
 		return { p, pE: pE.map(e => 3*γ1*e) };
-	} else if (ps.length === 1) {
+	} 
+	
+	if (ps.length === 1) {
 		return { p: ps[0], pE: [0,0] };
 	}
 
-	throw new Error('The given bezier curve is invalid.');
+	throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 

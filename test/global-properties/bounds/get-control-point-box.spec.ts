@@ -9,9 +9,9 @@ describe('getControlPointBox', function() {
 	function() {
 		const ps0 = getRandomCubic(0);
 		const box = getControlPointBox(ps0);
-		expect(box).to.be.eql([ 
-			[-68.07973490750408, -105.98771762335389],
-			[119.30512273109173, 88.9937301783342]
+		expect(box).to.be.eql([
+			[-108.49686506776892, -112.1975403532909],
+  			[124.76385737178956, 52.32750125849648]
 		]);
 	});
 });

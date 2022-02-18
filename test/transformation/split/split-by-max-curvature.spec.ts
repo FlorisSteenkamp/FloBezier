@@ -14,9 +14,9 @@ describe('splitByMaxCurvature', function() {
 		const tolerance = 1.01;
 		const minTSpan = 2**-20;
 		{
-			const ps = getRandomCubic(0);
+			const ps = getRandomCubic(5);
 			const r = splitByMaxCurvature(ps, tolerance, minTSpan);
-			const expected = [0,0.25,0.375,0.5,0.5625,0.625,0.6875,0.75,0.875,1];
+			const expected = [0, 0.125, 0.25, 0.28125, 0.3125, 0.34375, 0.359375, 0.375, 0.390625, 0.40625, 0.4375, 0.46875, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.875, 1];
 			expect(r).to.be.eql(expected);
 
 			const ps_ = randomRotateAndTranslate(0)(ps);
@@ -59,7 +59,7 @@ describe('splitByMaxCurvature', function() {
 		{
 			const ps = getRandomQuad(0);
 			const r = splitByMaxCurvature(ps, tolerance, minTSpan);
-			const expected = [0,0.25,0.5,1];
+			const expected = [0, 0.125, 0.25, 0.375, 0.4375, 0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375, 1];
 			expect(r).to.be.eql(expected);
 
 			const ps_ = randomRotateAndTranslate(0)(ps);

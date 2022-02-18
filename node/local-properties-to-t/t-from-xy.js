@@ -11,7 +11,9 @@ const min = Math.min;
  *
  * Returns `undefined` if the point is on the curve and the curve is a point.
  *
- * **precondition:** `p` must be *exactly* on the curve
+ * **precondition**: `p` must be *exactly* on the curve for the result to be
+ * certified
+ *
  * * **certified** here means no `t` value can be missed but (in rare cases)
  * an extra 1 or 2 `t`s could be returned (e.g. for self-overlapping curves
  * and when the point is exactly on the point of self-intersection of the curve)
@@ -29,25 +31,13 @@ function tFromXY(ps, p) {
     if (ps.length === 2) {
         return tFromXY1(ps, p);
     }
-    // TODO - add case of degenerate point
-    throw new Error('The given bezier curve is invalid.');
+    if (ps.length === 1) {
+        // return [{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }];
+        return undefined;
+    }
+    throw new Error('The given bezier curve must be of order <= 3.');
 }
-// TODO docs
-/**
- * Performs certified inversion, i.e. returns the `t` parameter value
- * interval(s) for the given `x` and `y` coordinates on the specified bezier
- * curve.
- *
- * Returns `undefined` if the point is on the curve and the curve is a point.
- *
- * **precondition:** `p` must be *exactly* on the curve
- * * **certified** here means no `t` value can be missed but (in rare cases)
- * an extra 1 or 2 `t`s could be returned (e.g. for self-overlapping curves
- * and when the point is exactly on the point of self-intersection of the curve)
- *
- * @param ps
- * @param p
- */
+/** @internal */
 function tFromXY3(ps, p) {
     const x = p[0];
     const y = p[1];
@@ -70,7 +60,7 @@ function tFromXY3(ps, p) {
         const _pExactX = pExactXY[0]; // x coordinate
         // pop the constant term off `x(t)`
         const tx = _pExactX.pop();
-        const pExactX = [..._pExactX, twoDiff(tx, x)];
+        const pExactX = [..._pExactX, twoDiff(tx[0], x)];
         return pExactX;
     };
     const getPExactY = () => {
@@ -80,7 +70,7 @@ function tFromXY3(ps, p) {
         const _pExactY = pExactXY[1]; // y coordinate
         // pop the constant term off `y(t)`
         const ty = _pExactY.pop();
-        const pExactY = [..._pExactY, twoDiff(ty, y)];
+        const pExactY = [..._pExactY, twoDiff(ty[0], y)];
         return pExactY;
     };
     // max 3 roots
@@ -107,19 +97,20 @@ function tFromXY3(ps, p) {
     // self-intersection), 3 overlaps (for self-overlapping curve (that looks 
     // like a line))
     // at this point `xrs !== undefined` and `yrs !== undefined`
-    let rs = [];
+    let ris = [];
     for (let i = 0; i < xrs.length; i++) {
         let xr = xrs[i];
         for (let j = 0; j < yrs.length; j++) {
             let yr = yrs[j];
             let r = combineRoots(xr, yr);
             if (r !== undefined) {
-                rs.push(r);
+                ris.push(r);
             }
         }
     }
-    return rs;
+    return ris;
 }
+/** @internal */
 function tFromXY2(ps, p) {
     const x = p[0];
     const y = p[1];
@@ -178,19 +169,20 @@ function tFromXY2(ps, p) {
     // - there can be 0 or 1 overlap (the usual case), 2 overlaps (for 
     // self-overlapping curve (that looks like a line))
     // at this point `xrs !== undefined` and `yrs !== undefined`
-    let rs = [];
+    let ris = [];
     for (let i = 0; i < xrs.length; i++) {
         let xr = xrs[i];
         for (let j = 0; j < yrs.length; j++) {
             let yr = yrs[j];
             let r = combineRoots(xr, yr);
             if (r !== undefined) {
-                rs.push(r);
+                ris.push(r);
             }
         }
     }
-    return rs;
+    return ris;
 }
+/** @internal */
 function tFromXY1(ps, p) {
     const x = p[0];
     const y = p[1];
@@ -242,19 +234,24 @@ function tFromXY1(ps, p) {
     }
     return [r];
 }
+/** @internal */
 function combineRoots(r, s) {
     // case 1
+    r.tS; //?
+    r.tE; //?
+    s.tS; //?
+    s.tE; //?
     if (r.tS <= s.tS) {
         if (r.tE < s.tS) {
             return undefined; // no overlap
         }
-        return { tS: s.tS, tE: min(r.tE, s.tE), multiplicity: r.multiplicity + s.multiplicity };
+        return { tS: s.tS, tE: min(r.tE, s.tE), multiplicity: Math.min(r.multiplicity, s.multiplicity) };
     }
     // case 2 - r.tS > s.tS
     if (s.tE < r.tS) {
         return undefined; // no overlap
     }
-    return { tS: r.tS, tE: min(r.tE, s.tE), multiplicity: r.multiplicity + s.multiplicity };
+    return { tS: r.tS, tE: min(r.tE, s.tE), multiplicity: Math.min(r.multiplicity, s.multiplicity) };
 }
-export { tFromXY3, tFromXY2, tFromXY1, tFromXY };
+export { tFromXY };
 //# sourceMappingURL=t-from-xy.js.map

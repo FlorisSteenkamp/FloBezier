@@ -1,5 +1,4 @@
 import { getXY1 } from '../../to-power-basis/get-xy/double/get-xy.js';
-import { ImplicitForm1Coeffs } from '../implicit-form-types.js';
 
 
 /**
@@ -16,7 +15,7 @@ import { ImplicitForm1Coeffs } from '../implicit-form-types.js';
  * 
  * @doc mdx
  */
-function getImplicitForm1(ps: number[][]): ImplicitForm1Coeffs<number> {
+function getImplicitForm1(ps: number[][]) {
     // The implicit form is given by:
     // vₓx + vᵧy + v = 0
 

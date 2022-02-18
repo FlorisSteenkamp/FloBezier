@@ -2,11 +2,12 @@ import { getImplicitForm3 } from "../../implicit-form/double/get-implicit-form3.
 import { getImplicitForm3ErrorCounters } from "../../implicit-form/get-error-counters/get-implicit-form3-error-counters.js";
 import { getImplicitForm3DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form3-dd-with-running-error.js";
 import { getImplicitForm3Exact } from "../../implicit-form/exact/get-implicit-form3-exact.js";
-import { γ, γγ } from '../../../src/error-analysis/error-analysis.js';
+import { γ, γγ } from '../../error-analysis/error-analysis.js';
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { ddMultDd, ddAddDd } from "double-double";
 import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd } from 'big-float-ts';
+import { ImplicitFormExact2, ImplicitFormExact3 } from "../../implicit-form/implicit-form-types.js";
 
 const qmq = ddMultDd;
 const qaq = ddAddDd;
@@ -264,7 +265,20 @@ const γγ3 = γγ(3);
             return isDouble && x === ps[0][0] && y === ps[0][1];
         }
 
-        let { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = implictForm;
+        if (!implictForm.hasOwnProperty('vₓₓₓ')) {
+            (implictForm as ImplicitFormExact3).vₓₓₓ = [0];
+            (implictForm as ImplicitFormExact3).vₓₓᵧ = [0];
+            (implictForm as ImplicitFormExact3).vₓᵧᵧ = [0];
+            (implictForm as ImplicitFormExact3).vᵧᵧᵧ = [0];
+        }
+
+        if (!implictForm.hasOwnProperty('vₓₓ')) {
+            (implictForm as ImplicitFormExact2).vₓₓ = [0];
+            (implictForm as ImplicitFormExact2).vₓᵧ = [0];
+            (implictForm as ImplicitFormExact2).vᵧᵧ = [0];
+        }
+
+        let { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = implictForm as ImplicitFormExact3;
         
         // `h` (say height) is the the result of evaluating the implicit 
         // equation; if it is 0 we are on the curve, else we're not.

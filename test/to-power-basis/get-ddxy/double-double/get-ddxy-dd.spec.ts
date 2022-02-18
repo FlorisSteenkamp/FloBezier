@@ -3,7 +3,7 @@ import { describe } from 'mocha';
 import { nearly } from '../../../helpers/chai-extend-nearly.js';
 import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../../../helpers/get-random-bezier.js';
 import { getDdxy, getDdxyDd } from '../../../../src/index.js';
-import { objOrArrToDouble } from '../../../helpers/obj-or-arr-to-double.js';
+import { eEstimate } from 'big-float-ts';
 
 use(nearly);
 
@@ -16,13 +16,13 @@ describe('getDdxyDd', function() {
 			const r = getDdxyDd(ps);
 			const expected = [ 
 				[
-					[-1.1368683772161603e-13, 1355.5847510871445],
-					[0, 159.25610593689038]
+					[0, 1518.5815863227895],
+					[0, -612.6722365722974]
 				],
-		  		[
-					[-2.842170943040401e-14, -599.1642949784092],
-					[0, 230.47657697798607]
-				] 
+  				[
+					[-1.1368683772161603e-13, -1662.8818047630489],
+    				[0, 319.81037852787296]
+				]
 			];
 			expect(r).to.eql(expected);
 
@@ -31,7 +31,7 @@ describe('getDdxyDd', function() {
 				const r = getDdxyDd(ps);
 				const rd = getDdxy(ps);
 
-				expect(objOrArrToDouble(r)).to.be.nearly(2**0, rd);
+				expect(r.map(v => v.map(eEstimate))).to.be.nearly(2**6, rd);
 			}
 		}
 		{
@@ -40,7 +40,7 @@ describe('getDdxyDd', function() {
 				const r = getDdxyDd(ps);
 				const rd = getDdxy(ps);
 
-				expect(objOrArrToDouble(r)).to.be.nearly(2**0, rd);
+				expect(r.map(v => v.map(eEstimate))).to.be.nearly(2**4, rd);
 			}
 		}
 		{

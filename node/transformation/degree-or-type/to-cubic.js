@@ -1,4 +1,4 @@
-import { linearToCubic } from "./linear-to-cubic.js";
+import { lineToCubic } from "./line-to-cubic.js";
 import { quadraticToCubic } from "./quadratic-to-cubic.js";
 /**
  * Returns a cubic bezier curve that is equivalent to the given linear or
@@ -16,7 +16,7 @@ function toCubic(ps) {
         return quadraticToCubic(ps);
     }
     if (ps.length === 2) { // Linear
-        return linearToCubic(ps);
+        return lineToCubic(ps);
     }
     if (ps.length === 1) { // Point
         const p = ps[0];

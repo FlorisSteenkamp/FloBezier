@@ -48,5 +48,15 @@ describe('length', function() {
 				expect(ll).to.be.nearly(2**40, l);
 			}
 		}
+
+		{
+			expect(length([0,1],[[1,1],[1,1]])).to.eql(0);
+			expect(length([0,1],[[1,1],[1,1],[1,1]])).to.eql(0);
+			expect(length([0,1],[[1,1],[1,1],[1,1],[1,1]])).to.eql(0);
+			const p = [2,3];
+			expect(() => length([0,1],[p,p,p,p,p,p])).to.throw();
+
+			expect(() => totalLength([p,p,p,p,p,p])).to.throw();
+		}
 	});
 });

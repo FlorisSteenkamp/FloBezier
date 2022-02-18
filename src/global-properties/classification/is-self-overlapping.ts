@@ -6,11 +6,9 @@ import { isCollinear } from "./is-collinear.js";
  * intersects itself at an infinite number of points.
  * 
  * * a bezier curve can only intersect itself at an infinite number of 
- * points if is a self-overlapping line.
+ * points if its locus is a 'self-overlapping line'.
  * 
- * * **Robust** via adaptive infinite precision floating point arithmetic.
- * 
- * @param ps An order 1, 2 or 3 bezier curve
+ * @param ps an order 1, 2 or 3 bezier curve
  * 
  * @doc mdx
  */
@@ -26,7 +24,7 @@ function isSelfOverlapping(ps: number[][]) {
 
 /**
  * Returns true if the given array of numbers are non-strict monotone increasing.
- * @param xs An array of numbers
+ * @param xs an array of numbers
  * 
  * @internal
  */
@@ -42,7 +40,7 @@ function isMonotoneIncreasing(xs: number[]) {
 
 /**
  * Returns true if the given array of numbers are non-strict monotone decreasing.
- * @param xs An array of numbers
+ * @param xs an array of numbers
  * 
  * @internal
  */

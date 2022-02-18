@@ -54,9 +54,9 @@ describe('areBeziersInSameKFamily', function() {
 			let c1 = fromTo(c0, -0.25, -0.5625).ps;
 			// expect(areBeziersInSameKFamily(c0,c1)).to.be.true;
 
-			//const c0h = getHodograph(c0);//?
-			//const c1h = getHodograph(c1);//?
-			//areBeziersInSameKFamily(c0h,c1h)//?
+			//const c0h = getHodograph(c0);
+			//const c1h = getHodograph(c1);
+			//areBeziersInSameKFamily(c0h,c1h)
 			// throw new Error('a');
 		}
 		{

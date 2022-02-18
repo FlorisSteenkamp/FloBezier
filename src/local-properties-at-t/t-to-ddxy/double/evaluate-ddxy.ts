@@ -13,14 +13,10 @@ import { Horner } from 'flo-poly';
  * 
  * @doc mdx
  */
-function evaluateDdxy(ps: number[][], t: number): number[];
-function evaluateDdxy(ps: number[][]): (t: number) => number[];
-function evaluateDdxy(ps: number[][], t?: number)  {
+function evaluateDdxy(ps: number[][], t: number): number[] {
 	const [ddPsX, ddPsY] = getDdxy(ps);
 
-	const f = (t: number) => [Horner(ddPsX, t), Horner(ddPsY, t)];
-
-	return t === undefined ? f : f(t); // Curry
+	return [Horner(ddPsX, t), Horner(ddPsY, t)];
 }
 
 

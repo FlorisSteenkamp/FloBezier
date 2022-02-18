@@ -5,13 +5,18 @@ const td = twoDiff; // error -> 0
 const qmd = ddMultDouble2; // error -> 3*u²
 const qaq = ddAddDd;
 const qad = ddAddDouble; // error -> 2*u²
-const abs = Math.abs;
 /**
- * TODO docs
- * Returns the derivative of the power basis representation of a line, quadratic
- * or cubic bezier's.
+ * Returns the derivative of the power basis representation of a bezier
+ * curve of order cubic or less (with intermediate calculations done in
+ * double-double precision).
  *
- * @param ps An order 1,2 or 3 bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ * * returns the resulting power basis x and y coordinate polynomials from
+ * highest power to lowest, e.g. if `x(t) = at^2 + bt + c`
+ * and `y(t) = dt^2 + et + f` then  the result is returned
+ * as `[[a,b,c],[d,e,f]]`, where the `a,b,c,...` are in double-double precision
+ *
+ * @param ps an order 0,1,2 or 3 bezier curve given by an ordered array of its
+ * control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  *
  * @doc
  */
@@ -25,8 +30,15 @@ function getDxyDd(ps) {
     if (ps.length === 2) {
         return getDxy1Dd(ps);
     }
-    throw new Error('The given bezier curve must be of order 1, 2 or 3.');
+    if (ps.length === 2) {
+        return getDxy1Dd(ps);
+    }
+    if (ps.length === 1) {
+        return [[[0, 0]], [[0, 0]]];
+    }
+    throw new Error('The given bezier curve must be of order <= 3.');
 }
+/** @internal */
 function getDxy3Dd(ps) {
     const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
     return [[
@@ -39,6 +51,7 @@ function getDxy3Dd(ps) {
             qmd(3, td(y1, y0))
         ]];
 }
+/** @internal */
 function getDxy2Dd(ps) {
     const [[x0, y0], [x1, y1], [x2, y2]] = ps;
     return [[
@@ -49,6 +62,7 @@ function getDxy2Dd(ps) {
             td(2 * y1, 2 * y0),
         ]];
 }
+/** @internal */
 function getDxy1Dd(ps) {
     const [[x0, y0], [x1, y1]] = ps;
     return [[

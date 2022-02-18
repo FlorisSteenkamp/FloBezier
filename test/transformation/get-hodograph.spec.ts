@@ -2,7 +2,7 @@ import { expect, assert, use } from 'chai';
 import { describe } from 'mocha';
 import { getHodograph } from '../../src/index.js';
 import { nearly } from '../helpers/chai-extend-nearly.js';
-import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../helpers/get-random-bezier.js';
+import { getRandomBezier, getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
 import { randomTranslate } from '../helpers/random-translate.js';
 
@@ -12,42 +12,41 @@ describe('getHodograph', function() {
 	it('it should return the correct hodographs of some bezier curves',
 	function() {
 		{
-			const ps = getRandomCubic(0);
+			const ps = getRandomBezier(128,50)(3)(0);
 			const r = getHodograph(ps);
 			const expected = [
-				[-274.89390856467514, 179.60387514243007],
-	  			[-195.2658555962297, 294.842163631423],
-  				[562.1545729157874, 110.49830463121123]
+				[286.4999096719089, 18.055399018289336],
+  				[-19.83620861423981, 177.9605882822259],
+  				[433.11846626100623, -493.5751248353622]
 			];
-			expect(r).to.be.nearly(2**1, expected);
+			expect(r).to.be.nearly(2**3, expected);
 
 			const ps_ = randomTranslate(0)(ps);
 			const r_ = getHodograph(ps_);
-			expect(r_).to.be.eql(r);
+			expect(r_).to.be.nearly(2**3, r);
 		}
 		{
 			let ps = getRandomQuad(0);
-			// ps = randomRotateAndTranslate(0)(ps);
 			const r = getHodograph(ps);
 			const expected = [
-				[-183.26260570978343, 119.73591676162005],
-  				[-130.17723706415313, 196.56144242094865]
+				[190.99993978127262, 12.036932678859586],
+  				[-13.224139076159844, 118.64039218815057]
 			];
-			expect(r).to.be.nearly(2**8, expected);
+			expect(r).to.be.nearly(2**3, expected);
 
 			const ps_ = randomTranslate(0)(ps);
 			const r_ = getHodograph(ps_);
-			expect(r_).to.be.eql(r);
+			expect(r_).to.be.nearly(2**3,r);
 		}
 		{
 			let ps = getRandomLine(0);
 			const r = getHodograph(ps);
-			const expected = [[-91.63130285489171,59.86795838081002]];
-			expect(r).to.be.nearly(2**8, expected);
+			const expected = [[95.49996989063631,6.018466339429793]];
+			expect(r).to.be.nearly(2**3, expected);
 
 			const ps_ = randomTranslate(0)(ps);
 			const r_ = getHodograph(ps_);
-			expect(r_).to.be.eql(r);
+			expect(r_).to.be.nearly(2**3,r);
 		}
 		{
 			let ps = getRandomPoint(0);

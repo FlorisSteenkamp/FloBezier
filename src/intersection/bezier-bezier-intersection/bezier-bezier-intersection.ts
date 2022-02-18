@@ -231,7 +231,6 @@ function getTurnaroundPoints(ps: number[][]): RootInterval[] {
     //  * quadratic: 0,1
     //  * cubic: 0,1 or 2
 
-    let ris: RootInterval[];
     if (ps.length === 4) {
         const coeffs1 = getDxy3Dd(ps)[0];  // x-coordinate only
         let [dx2_,dx1_,dx0_] = getDxy3ErrorCounters(ps)[0];
@@ -240,30 +239,30 @@ function getTurnaroundPoints(ps: number[][]): RootInterval[] {
         dx0_ = 1*γγ3*dx0_;
 
         // keep TypeScript happy; `allRootsCertified` cannot return `undefined` here
-        ris = allRootsCertified(
+        return allRootsCertified(
             coeffs1, 0, 1, [dx2_,dx1_,dx0_], 
             () => getDxy3Exact(ps)[0]
         )!;
-    } else if (ps.length === 3) {
+    } 
+    
+    if (ps.length === 3) {
         const coeffs1 = getDxy2Dd(ps)[0];  // x-coordinate only
         let [dx1_,dx0_] = getDxy2ErrorCounters(ps)[0];
         dx1_ = γγ3*dx1_;
         dx0_ = 0;
 
         // keep TypeScript happy; `allRootsCertified` cannot return `undefined` here
-        ris = allRootsCertified(
+        return allRootsCertified(
             coeffs1, 0, 1, [dx1_,dx0_], 
             () => getDxy2Exact(ps)[0]
         )!;
-    } else if (ps.length === 2 || ps.length === 1) {
-        ris = [];  // no 'turn-around points' possible (its a line)
-    } else {
-        throw new Error('The given bezier curve is invalid.');
-    }
+    } 
+    
+    if (ps.length === 2 || ps.length === 1) {
+        return [];  // no 'turn-around points' possible (its a line)
+    } 
 
-    // keep TypeScript happy; `ris` cannot be `undefined` here if 
-    // preconditions are met
-    return ris;
+    throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 

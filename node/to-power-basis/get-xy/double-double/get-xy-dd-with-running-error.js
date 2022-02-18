@@ -5,27 +5,61 @@ const qmd = ddMultDouble2; // error -> 3*u²
 const qaq = ddAddDd;
 const qad = ddAddDouble; // error -> 2*u²
 const abs = Math.abs;
-// TODO - modify docs (the doc below is from `getXY`)
 /**
- * Returns the power basis representation of a line, quadratic or cubic bezier.
+ * Returns the power basis representation of a bezier curve of order cubic or
+ * less (with intermediate calculations done in double-double precision)
+ * including a coefficient-wise absolute error bound that need to be multiplied
+ * by `γγ(3)`
  *
- * * **non-exact:** if certain preconditions are met (see below) it returns the
- * exact result, else round-off may have occured during intermediate calculation.
- * * returns the power basis polynomial from highest power to lowest,
- * e.g. `at^3 + bt^2 + ct + d` is returned as `[a,b,c,d]`
+ * * returns the power basis x and y coordinate polynomials from highest power
+ * to lowest, e.g. if `x(t) = at^3 + bt^2 + ct + d`
+ * and `y(t) = et^3 + ft^2 + gt + h` then the result is returned
+ * as `[[a,b,c,d],[e,f,g,h]]`, where the `a,b,c,...` are in double-double
+ * precision
  *
- * * **bitlength:** If the coordinates of the control points are bit-aligned then:
- *  * max bitlength increase = 4 (for cubics)
- * (due to 'multiplication' by 9 (3x 6x 3x)
- *  * max bitlength increase = 2 (for quadratics)
- * (due to 'multiplication' by 4 (1x 2x 1x)
- *  * max bitlength increase = 1 (for lines)
- * (due to 'multiplication' by 4 (1x 1x)
- *
- * @param ps an order 1, 2 or 3 bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ * @param ps an order 0,1,2 or 3 bezier curve given by an ordered array of its
+ * control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  *
  * @doc
  */
+function getXYDdWithRunningError(ps) {
+    if (ps.length === 4) {
+        const res = getXY3DdWithRunningError(ps);
+        const r = res.coeffs;
+        // destructively modify `res`
+        r[0][3] = [0, r[0][3]];
+        r[1][3] = [0, r[1][3]];
+        return res;
+    }
+    if (ps.length === 3) {
+        const res = getXY2DdWithRunningError(ps);
+        const r = res.coeffs;
+        // destructively modify `res`
+        r[0][2] = [0, r[0][2]];
+        r[1][2] = [0, r[1][2]];
+        return res;
+    }
+    if (ps.length === 2) {
+        const r = getXY1DdWithRunningError(ps);
+        r[0][1] = [0, r[0][1]];
+        r[1][1] = [0, r[1][1]];
+        return {
+            coeffs: r,
+            errorBound: [[0, 0], [0, 0]]
+        };
+    }
+    if (ps.length === 1) {
+        const r = getXY0DdWithRunningError(ps);
+        r[0][0] = [0, r[0][0]];
+        r[1][0] = [0, r[1][0]];
+        return {
+            coeffs: r,
+            errorBound: [[0], [0]]
+        };
+    }
+    throw new Error('The given bezier curve must be of order <= cubic.');
+}
+/** @internal */
 function getXY3DdWithRunningError(ps) {
     const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
     // ----------------------------
@@ -83,10 +117,7 @@ function getXY3DdWithRunningError(ps) {
         errorBound: [[xx3_, xx2_, xx1_, 0], [yy3_, yy2_, yy1_, 0]]
     };
 }
-/**
- * only quadratic monomial coefficient has an error, the others are exact
- * @param ps
- */
+/** @internal */
 function getXY2DdWithRunningError(ps) {
     const [[x0, y0], [x1, y1], [x2, y2]] = ps;
     // ---------------------
@@ -116,10 +147,7 @@ function getXY2DdWithRunningError(ps) {
         errorBound: [[xx2_, 0, 0], [yy2_, 0, 0]]
     };
 }
-/**
- * * exact for any bitlength
- * @param ps linear bezier curve
- */
+/** @internal */
 function getXY1DdWithRunningError(ps) {
     const [[x0, y0], [x1, y1]] = ps;
     return [[
@@ -130,5 +158,10 @@ function getXY1DdWithRunningError(ps) {
             y0,
         ]];
 }
-export { getXY1DdWithRunningError, getXY2DdWithRunningError, getXY3DdWithRunningError };
+/** @internal */
+function getXY0DdWithRunningError(ps) {
+    const [[x0, y0]] = ps;
+    return [[x0], [y0]];
+}
+export { getXYDdWithRunningError, getXY1DdWithRunningError, getXY2DdWithRunningError, getXY3DdWithRunningError };
 //# sourceMappingURL=get-xy-dd-with-running-error.js.map

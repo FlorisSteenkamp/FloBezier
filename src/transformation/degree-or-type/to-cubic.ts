@@ -28,7 +28,7 @@ function toCubic(ps: number[][]): number[][] {
 		return [p,p,p,p]; 
 	}
 
-	throw new Error('The given bezier curve is invalid.');
+	throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 

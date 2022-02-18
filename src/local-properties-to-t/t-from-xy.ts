@@ -321,10 +321,6 @@ function combineRoots(
         r: RootInterval, s: RootInterval): RootInterval | undefined {
 
     // case 1
-    r.tS//?
-    r.tE//?
-    s.tS//?
-    s.tE//?
     if (r.tS <= s.tS) {
         if (r.tE < s.tS) {
             return undefined;  // no overlap

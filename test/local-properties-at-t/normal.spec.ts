@@ -1,28 +1,44 @@
-import { expect, assert } from 'chai';
+import { expect, assert, use } from 'chai';
 import { describe } from 'mocha';
-import { normal } from '../../src/index.js';
+import { generateCuspAtHalf3, normal, tangent } from '../../src/index.js';
+import { nearly } from '../helpers/chai-extend-nearly.js';
+import { getRandomBezier } from '../helpers/get-random-bezier.js';
+
+use(nearly);
 
 
 describe('normal', function() {
-	it('it should calculate the normal of some beziers at some t values correctly', 
+	it('it should accurately calculate the normal of some bezier curves at some `t` values', 
 	function() {
-		{
-			const pss = [
-				[[3.33,-1.1221],[2.542234,-1]],
-				[[1.1111,1.2222],[1.54,2]],
-			];
-
-			let ts = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
+		for (let i=0; i<10; i++) {
+			for (let order=1; order<=3; order++) {
+				const ps = getRandomBezier(128,53)(order as 0|1|2|3)(i);
+				let ts = [0, 0.3, 0.9, 1];
 			
-			for (let ps of pss) {
 				for (let t of ts) {
-                    let r1 = normal(ps, t);
-                    
-                    console.log(r1);
+					let r = normal(ps, t);
+					let s = tangent(ps, t);
 
-					//assert(rX < Number.EPSILON * 2**5);
+					expect(r).to.be.nearly(2**2, [-s[1],s[0]]);
+					expect(normal(ps, t)).to.eql(normal(ps)(t));
 				}
 			}
+		}
+
+		{
+			const ps = [[0,0], [3,0]];
+			const t = 0.5;
+			let r = normal(ps, t);
+			// for lines there should still be a normal defined
+			expect(r).to.eql([-0,3]);
+		}
+
+		{
+			const ps = generateCuspAtHalf3([0,0], [6,2], [3,0]);
+			const t = 0.5;
+			let r = normal(ps, t);
+			// at cusp the normal vanishes
+			expect(r).to.eql([-0,0]);
 		}
 	});
 });

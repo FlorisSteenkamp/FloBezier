@@ -1,3 +1,7 @@
+/**
+ *
+ * @param ps
+ */
 function getControlPointBox(ps) {
     let minX = Number.POSITIVE_INFINITY;
     let maxX = Number.NEGATIVE_INFINITY;

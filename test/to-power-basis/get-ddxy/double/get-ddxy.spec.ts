@@ -14,15 +14,15 @@ describe('getDdxy', function() {
 			const ps = getRandomCubic(0);
 			const r = getDdxy(ps);
 			const expected = [
-				[1355.5847510871445, 159.25610593689038],
-				[-599.1642949784093, 230.47657697798607]
+				[1518.5815863227895, -612.6722365722974],
+  				[-1662.8818047630489, 319.81037852787296]
 			];
 			expect(r).to.be.nearly(2**8, expected);
 		}
 		{
 			const ps = getRandomQuad(0);
 			const r = getDdxy(ps);
-			const expected = [[53.085368645630126], [76.82552565932869]];
+			const expected = [[-204.22407885743246],[106.60345950929099]];
 			expect(r).to.be.nearly(2**8, expected);
 		}
 		{

@@ -1,4 +1,4 @@
-import { allRoots, differentiate, Horner as evaluatePoly } from "flo-poly";
+import { allRoots, differentiate, Horner } from "flo-poly";
 import { getAbsCurvatureExtremaPolys } from "./get-abs-curvature-extrema-polys.js";
 import { isCollinear } from "../global-properties/classification/is-collinear.js";
 import { isCubicReallyQuad } from "../global-properties/classification/is-cubic-really-quad.js";
@@ -10,7 +10,7 @@ import { toQuadraticFromCubic } from "../transformation/degree-or-type/to-quadra
  * 
  * @doc
  */
-type Extrema = {
+interface Extrema {
     /** list of paramter t values where minima occur */
     minima: number[],
     /** list of paramter t values where maxima occur */
@@ -72,8 +72,8 @@ function getCurvatureExtrema(ps: number[][]): Extrema {
     for (let i=0; i<ts.length; i++) {
         const t = ts[i];
         
-        const dp2_ = evaluatePoly(dp2, t);
-        const p1_ = evaluatePoly(p1, t);
+        const dp2_ = Horner(dp2, t);
+        const p1_ = Horner(p1, t);
         
         const secondDerivative = p1_*dp2_;
 
@@ -130,4 +130,4 @@ function getCurvatureExtremaQuadraticPoly(
 }
 
 
-export { getCurvatureExtrema, getCurvatureExtremaQuadraticPoly, Extrema }
+export { getCurvatureExtrema, Extrema }

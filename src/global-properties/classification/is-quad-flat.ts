@@ -1,35 +1,52 @@
-import * as vector from 'flo-vector2d';
+import { squaredDistanceBetween } from 'flo-vector2d';
 import { isQuadObtuse } from "./is-quad-obtuse.js";
 import { evalDeCasteljau } from '../../local-properties-at-t/t-to-xy/double/eval-de-casteljau.js';
 
+const { max, abs } = Math;
+
 
 /**
- * Returns true if the given quadratic bezier curve is acute (see isQuadObtuse) 
+ * Returns `true` if the given quadratic bezier curve is acute (see `isQuadObtuse`) 
  * and can be approximated with a line segment with maximum Hausdorff distance 
  * <= the given tolerance.
  * 
- * @param ps A quadratic bezier curve.
+ * @param ps a quadratic bezier curve
+ * @param tolerance a maximum Hausdorff distance tolerance; defaults to `2**-10`
+ * of the maximum coordinate of the given bezier curve
  * 
  * @internal
  */
 function isQuadFlat(
         ps: number[][],
-        tolerance: number) {
+        tolerance?: number | undefined) {
 
-    if (isQuadObtuse(ps)) { return false; }
+    if (isQuadObtuse(ps)) { 
+        return false; 
+    }
 
-    const [[x1,y1],, [x2,y2]] = ps;
+    const [p0,p1,p2] = ps;
+    const [x0,y0] = p0;
+    const [x2,y2] = p2;
 
-    if (x1 === x2 && y1 === y2) { return true; }
+    if (tolerance === undefined) {
+        const [x1,y1] = p1;
+        const maxCoordinate = max(abs(x0),abs(y0),abs(x1),abs(y1),abs(x2),abs(y2));
+        tolerance = maxCoordinate * 2**-10;
+    }
 
-    const [x0,y0] = evalDeCasteljau(ps, 0.5);
+    if (x0 === x2 && y0 === y2) { 
+        const d = squaredDistanceBetween(p0,p1)/4;
+        return d <= tolerance**2;
+    }
 
-    const numerator = ((y2-y1)*x0 - (x2-x1)*y0 + x2*y1 - y2*x1)**2;
-    const denominator = vector.squaredDistanceBetween(ps[0], ps[2]);
+    const [x,y] = evalDeCasteljau(ps, 0.5);
 
-    const dSquared = Math.abs(numerator / denominator);
+    const numerator = ((y2-y0)*x - (x2-x0)*y + x2*y0 - y2*x0)**2;
+    const denominator = squaredDistanceBetween(p0, p2);
 
-    return dSquared < tolerance**2;
+    const dSquared = numerator / denominator;
+
+    return dSquared <= tolerance**2;
 }
 
 

@@ -1,7 +1,7 @@
 import { getImplicitForm3ExactPb } from "../../../../implicit-form/exact/get-implicit-form3-exact.js";
 import { getXY2Exact, getXY3Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact.js";
 import { getCoeffsBez2Bez2Exact } from "./get-coeffs-bez2-bez2-exact.js";
-import { toQuadraticFromCubic } from "../../../../transformation/degree-or-type/to-quad-from-cubic.js";
+import { toQuadraticFromCubic } from "../../../../transformation/degree-or-type/to-quadratic-from-cubic.js";
 import { getCoeffsBez3Bez1Exact } from "./get-coeffs-bez3-bez1-exact.js";
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { twoProduct, expansionProduct, fastExpansionSum, scaleExpansion2, eMultBy2, eSign as _eSign } from "big-float-ts";
@@ -226,8 +226,8 @@ function getCoeffsBez3Bez2Exact(ps1, ps2) {
     //    ze*vₓᵧ +
     //    c2*vₓ    +
     //    d2*vᵧ;
-    const oj = sce(3 * c0, z1);
-    const ok = sce(3 * d0, z2);
+    const oj = epr(tp(3, c0), z1);
+    const ok = epr(tp(3, d0), z2);
     const ol = sce(c0, z6);
     const om = sce(c0, z4);
     const on = sce(d0, z3);
@@ -267,8 +267,8 @@ function getCoeffsBez3Bez2Exact(ps1, ps2) {
     //    2*(c0c1*vₓₓ + d0d1*vᵧᵧ) +
     //    c0d1*vₓᵧ + c1d0*vₓᵧ +
     //    c1*vₓ + d1*vᵧ;
-    const p8 = sce(3 * c0, c0c1);
-    const p9 = sce(3 * d0, d0d1);
+    const p8 = epr(tp(3, c0), c0c1);
+    const p9 = epr(tp(3, d0), d0d1);
     const pa = sce(c0, zc);
     const pb = sce(d0, zd);
     const pc = epr(c0c1, vₓₓ);
@@ -318,10 +318,6 @@ function getCoeffsBez3Bez2Exact(ps1, ps2) {
     const ub = fes(u9, ua);
     const v0 = fes(ub, v);
     const r = [v6, v5, v4, v3, v2, v1, v0];
-    // remove leading zero coefficients
-    //while (r.length > 1 && eSign(r[0]) === 0) {
-    //    r.shift();
-    //}
     return r;
 }
 export { getCoeffsBez3Bez2Exact };

@@ -36,7 +36,7 @@ function toHybridQuadratic(ps: number[][]): [
         ];
     }
 
-    throw new Error('The given bezier curve is invalid (it must be a cubic)')
+    throw new Error('The given bezier curve must be a cubic')
 }
 
 

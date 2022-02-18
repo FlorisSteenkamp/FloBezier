@@ -38,7 +38,7 @@ function getDxyAt1(ps) {
     if (ps.length === 1) {
         return [0, 0];
     }
-    throw new Error('The given bezier curve is invalid.');
+    throw new Error('The given bezier curve must be of order <= 3.');
 }
 export { getDxyAt1 };
 //# sourceMappingURL=get-dxy-at-1.js.map

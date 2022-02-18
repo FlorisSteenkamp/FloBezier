@@ -9,7 +9,7 @@ use(nearly);
 
 
 describe('getTAtLength', function() {
-	it('it should ...',
+	it('it should return an accurate `t` value for the given length for some bezier curves',
 	function() {
         {
             // test zero length
@@ -30,7 +30,7 @@ describe('getTAtLength', function() {
 			const ps = getRandomCubic(0);
             const s = 0.30001;
 			const t = getTAtLength(ps,s);
-			const expectedT = 0.0009136549141963331;
+			const expectedT = 0.0010462085105340864;
 			expect(t).to.be.nearly(2**8, expectedT);
 
 			const ps_ = randomRotateAndTranslate(0)(ps);
@@ -44,7 +44,7 @@ describe('getTAtLength', function() {
 			const ps = getRandomQuad(0);
             const s = 0.30001;
 			const t = getTAtLength(ps,s);
-			const expectedT = 0.0013704781220274396;
+			const expectedT = 0.001568890925324345;
 			expect(t).to.be.nearly(2**8, expectedT);
 
 			const ps_ = randomRotateAndTranslate(0)(ps);
@@ -58,7 +58,7 @@ describe('getTAtLength', function() {
 			const ps = getRandomLine(0);
             const s = 0.30001;
 			const t = getTAtLength(ps,s);
-			const expectedT = 0.0027409356359999254;
+			const expectedT = 0.0031352471590330943;
 			expect(t).to.be.nearly(2**8, expectedT);
 
 			const ps_ = randomRotateAndTranslate(0)(ps);

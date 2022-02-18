@@ -1,74 +1,35 @@
 /**
- * Returns the exact power basis representation of a line, quadratic or
- * cubic bezier.
+ * Returns the exact power basis representation of a bezier curve of order
+ * cubic or less.
  *
- * * returns the power basis polynomial from highest power to lowest,
- * e.g. `at^3 + bt^2 + ct + d` is returned as `[a,b,c,d]`
- * * the precision of the returned coefficients can be high, e.g. for a cubic
- * the precision can require 6 doubles for the t^3 term.
+ * * returns the resulting power basis x and y coordinate polynomials from
+ * highest power to lowest, e.g. if `x(t) = at^2 + bt + c`
+ * and `y(t) = dt^2 + et + f` then  the result is returned
+ * as `[[a,b,c],[d,e,f]]`, where the `a,b,c,...` are Shewchuk floating point
+ * expansions
  *
- * @param ps An order 1, 2 or 3 bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
- *
- * @doc
- */
-declare function getXYExact(ps: number[][]): [
-    [number[], number[], number[], number],
-    [
-        number[],
-        number[],
-        number[],
-        number
-    ]
-] | [
-    [number[], number[], number],
-    [
-        number[],
-        number[],
-        number
-    ]
-] | [
-    [number[], number],
-    [
-        number[],
-        number
-    ]
-];
-/**
- * Returns the exact power basis representation of a line, quadratic or
- * cubic bezier.
- *
- * * returns the power basis polynomial from highest power to lowest,
- * e.g. `at^3 + bt^2 + ct + d` is returned as `[a,b,c,d]`
- *
- * @param ps A cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ * @param ps an order 0,1,2 or 3 bezier curve given by an ordered array of its
+ * control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  *
  * @doc
  */
+declare function getXYExact(ps: number[][]): number[][][];
+/** @internal */
 declare function getXY3Exact(ps: number[][]): [
     [
         number[],
         number[],
         number[],
-        number
+        number[]
     ],
     [
         number[],
         number[],
         number[],
-        number
+        number[]
     ]
 ];
-/**
- * Returns the exact power basis representation of a line, quadratic or
- * cubic bezier.
- *
- * * returns the power basis polynomial from highest power to lowest,
- * e.g. `at^3 + bt^2 + ct + d` is returned as `[a,b,c,d]`
- *
- * @param ps A quadratic bezier curve, e.g. [[0,0],[1,1],[2,0]]
- *
- * @doc
- */
+/** @internal */
 declare function getXY2Exact(ps: number[][]): [
     [
         number[],
@@ -81,17 +42,7 @@ declare function getXY2Exact(ps: number[][]): [
         number
     ]
 ];
-/**
- * Returns the exact power basis representation of a line, quadratic or
- * cubic bezier.
- *
- * * returns the power basis polynomial from highest power to lowest,
- * e.g. `at^3 + bt^2 + ct + d` is returned as `[a,b,c,d]`
- *
- * @param ps An order 1 bezier curve (a line), e.g. [[0,0],[1,1],[2,1],[2,0]]
- *
- * @doc
- */
+/** @internal */
 declare function getXY1Exact(ps: number[][]): [
     [
         number[],
@@ -102,4 +53,6 @@ declare function getXY1Exact(ps: number[][]): [
         number
     ]
 ];
-export { getXY1Exact, getXY2Exact, getXY3Exact, getXYExact };
+/** @internal */
+declare function getXY0Exact(ps: number[][]): [[number], [number]];
+export { getXY0Exact, getXY1Exact, getXY2Exact, getXY3Exact, getXYExact };

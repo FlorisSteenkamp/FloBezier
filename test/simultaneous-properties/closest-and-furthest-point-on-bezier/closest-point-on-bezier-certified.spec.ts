@@ -16,10 +16,10 @@ const getRandomBezier_ = getRandomBezier(maxCoordinate, 37);
 
 
 describe('closestPointOnBezierCertified', function() {
-	it('it should ...',
+	it('it should find the certified closest point(s) on some bezier curves from a given point',
 	function() {
-		for (let order=3;order<=3;order++) {
-			for (let i=0;i<=0;i++) {
+		for (let order=1;order<=3;order++) {
+			for (let i=0;i<=10;i++) {
 				const ps = getRandomBezier_(order as 0|1|2|3)(i);
 				const p = getRandomPoint((i+97)*93)[0];  // some randomish point
 				const cps = closestPointOnBezierCertified(ps,p);
@@ -32,25 +32,37 @@ describe('closestPointOnBezierCertified', function() {
 				expect(ri.multiplicity).to.eql(1);
 				assert(ri.tE - ri.tS < 4*eps);
 				// make sure the distance interval is small
-				assert(di[1] - di[0] < maxCoordinate * 4*eps * 2**4);
+				expect(di[1] - di[0]).to.be.lessThanOrEqual(maxCoordinate * 4*eps * 2**6);
 				/** estimate of the closest point on the bezier */
 				const cpp = [
 					(intervalBox[0][0] + intervalBox[1][0]) / 2,
 					(intervalBox[0][1] + intervalBox[1][1]) / 2
 				];
 				const dEst = distanceBetween(cpp,p);
-				assert(di[0] < dEst && di[1] > dEst);
+				assert(di[0] <= dEst && di[1] >= dEst);
 
 				const { p: bp } = closestPointOnBezier(ps,p);
-				expect(cpp[0]).to.be.nearly(2**8,bp[0]);
-				expect(cpp[1]).to.be.nearly(2**8,bp[1]);
+				expect(cpp[0]).to.be.nearly(2**16,bp[0]);
+				expect(cpp[1]).to.be.nearly(2**16,bp[1]);
+
+				const d2 = distanceBetween(cpp,p);
 
 				for (let k=0; k<16+1; k++) {
 					const t_ = k/16;
 					const p_ = evalDeCasteljau(ps,t_);
-					assert(distanceBetween(p_,p) > distanceBetween(cpp,p));
+					const d1 = distanceBetween(p_,p);
+					assert(d1 >= d2);
 				}
 			}
+		}
+
+		{
+			const p = [1,1];
+			const ps = [p,p,p,p,p];
+			expect(() => closestPointOnBezierCertified(ps,p)).to.throw();
+
+			const r = closestPointOnBezierCertified([[1,1]],p);
+			expect(r).to.eql([]);
 		}
 	});
 });

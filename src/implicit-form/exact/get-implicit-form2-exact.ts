@@ -1,4 +1,4 @@
-import type { ImplicitFormExact2 } from '../implicit-form-types.js';
+import type { ImplicitFormExact1, ImplicitFormExact2 } from '../implicit-form-types.js';
 import { getXY2Exact } from '../../to-power-basis/get-xy/exact/get-xy-exact.js';
 import { getImplicitForm1ExactPb } from './get-implicit-form1-exact.js';
 
@@ -32,10 +32,10 @@ const eno = eNegativeOf;
  * @doc mdx
  */
 function getImplicitForm2Exact(
-        ps: number[][]): ImplicitFormExact2 | undefined {
+        ps: number[][]): ImplicitFormExact2 | ImplicitFormExact1 | undefined {
 
     return getImplicitForm2ExactPb(
-            getXY2Exact(ps)
+        getXY2Exact(ps)
     );
 }
 
@@ -52,18 +52,20 @@ function getImplicitForm2Exact(
         pspb: [
                 [number[], number[], number], 
                 [number[], number[], number]
-            ]): ImplicitFormExact2 | undefined {
+            ]): ImplicitFormExact2 | ImplicitFormExact1 | undefined {
 
     const [[a2,a1,a0], [b2,b1,b0]] = pspb;
 
     if (eSign(a2) === 0 && eSign(b2) === 0) {
-        // the input bezier curve is in fact not cubic but has order < 2
-        const implicitForm = getImplicitForm1ExactPb([[a1,a0], [b1,b0]]);
-        if (implicitForm === undefined) { return undefined; }
-        return {
-            vₓₓ: [0], vₓᵧ: [0], vᵧᵧ: [0],
-            ...implicitForm
-        };
+        // the input bezier curve is in fact not quadratic but has order < 2
+        //const implicitForm = getImplicitForm1ExactPb([[a1,a0], [b1,b0]]);
+        //if (implicitForm === undefined) { return undefined; }
+        //return {
+        //    vₓₓ: [0], vₓᵧ: [0], vᵧᵧ: [0],
+        //    ...implicitForm
+        //};
+
+        return getImplicitForm1ExactPb([[a1,a0], [b1,b0]]);
     }
 
     const a2b1 = epr(a2,b1);

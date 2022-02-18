@@ -37,7 +37,7 @@ function getDistanceToLineFunction(pS, pE) {
     const _v = abs(v);
     return function (p, _p) {
         // error counter assumed <12> 
-        // (the max of <6>,<6>,<10>,<11> and <12> from other functions)
+        // (the max of <3>,<5>,<8> and <12> from other functions (`fromTo3` and `toHybridQuadratic`))
         const x = p[0]; // <12>x 
         const y = p[1]; // <12>y
         //return s*x + t*y + u;

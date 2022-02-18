@@ -40,7 +40,7 @@ const fromTo1 = fromTo1_;
         return { ps, _ps: [[0]] };
     }
 
-    throw new Error('The given bezier curve is invalid; it must be of order 0,1,2 or 3.');
+    throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 

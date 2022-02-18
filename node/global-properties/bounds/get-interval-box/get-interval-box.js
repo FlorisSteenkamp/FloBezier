@@ -327,7 +327,7 @@ function getIntervalBoxAtT(ps, t) {
         pE = [0, 0];
     }
     else {
-        throw new Error('The given bezier curve is invalid.');
+        throw new Error('The given bezier curve must be of order <= 3.');
     }
     return [
         [p[0] - pE[0], p[1] - pE[1]],

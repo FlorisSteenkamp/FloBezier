@@ -1,9 +1,9 @@
-import { getClosestOnBezier3FromPointDd } from "./get-coeffs/double-double/get-closest-on-bezier3-from-point-dd.js";
-import { getClosestOnBezier2FromPointDd } from "./get-coeffs/double-double/get-closest-on-bezier2-from-point-dd.js";
-import { getClosestOnBezier1FromPointDd } from "./get-coeffs/double-double/get-closest-on-bezier1-from-point-dd.js";
-import { getClosestOnBezier3FromPointExact } from "./get-coeffs/exact/get-closest-on-bezier-from-point-exact.js";
-import { getClosestOnBezier2FromPointExact } from "./get-coeffs/exact/get-closest-on-bezier-from-point-exact.js";
-import { getClosestOnBezier1FromPointExact } from "./get-coeffs/exact/get-closest-on-bezier-from-point-exact.js";
+import { getFootpointPoly3Dd } from "./get-coeffs/double-double/get-footpoint-poly-3-dd.js";
+import { getFootpointPoly2Dd } from "./get-coeffs/double-double/get-footpoint-poly-2-dd.js";
+import { getFootpointPoly1Dd } from "./get-coeffs/double-double/get-footpoint-poly-1-dd.js";
+import { getFootpointPoly3Exact } from "./get-coeffs/exact/get-footpoint-poly-3-exact.js";
+import { getFootpointPoly2Exact } from "./get-coeffs/exact/get-footpoint-poly-2-exact.js";
+import { getFootpointPoly1Exact } from "./get-coeffs/exact/get-footpoint-poly-1-exact.js";
 import { getClosestOnBezier1FromPointErrorCounters } from "./get-coeffs/get-closest-on-bezier-from-point-error-counters.js";
 import { getClosestOnBezier2FromPointErrorCounters } from "./get-coeffs/get-closest-on-bezier-from-point-error-counters.js";
 import { getClosestOnBezier3FromPointErrorCounters } from "./get-coeffs/get-closest-on-bezier-from-point-error-counters.js";
@@ -50,31 +50,31 @@ function closestPointOnBezierCertified(
     if (order === 3) {
         // keep TypeScript happy; `ris` cannot be `undefined` here
         ris = allRootsCertified(
-            getClosestOnBezier3FromPointDd(ps, p), 
+            getFootpointPoly3Dd(ps, p), 
             0, 1, 
             getClosestOnBezier3FromPointErrorCounters(ps, p).map(e => 10*γγ6*e), 
-            () => getClosestOnBezier3FromPointExact(ps, p)
+            () => getFootpointPoly3Exact(ps, p)
         )!;
     } else if (order === 2) {
         // keep TypeScript happy; `ris` cannot be `undefined` here
         ris = allRootsCertified(
-            getClosestOnBezier2FromPointDd(ps, p), 
+            getFootpointPoly2Dd(ps, p), 
             0, 1, 
             getClosestOnBezier2FromPointErrorCounters(ps, p).map(e => 8*γγ6*e), 
-            () => getClosestOnBezier2FromPointExact(ps, p)
+            () => getFootpointPoly2Exact(ps, p)
         )!;
     } else if (order === 1) {
         // keep TypeScript happy; `ris` cannot be `undefined` here
         ris = allRootsCertified(
-            getClosestOnBezier1FromPointDd(ps, p), 
+            getFootpointPoly1Dd(ps, p), 
             0, 1, 
             getClosestOnBezier1FromPointErrorCounters(ps, p).map(e => 6*γγ6*e), 
-            () => getClosestOnBezier1FromPointExact(ps, p)
+            () => getFootpointPoly1Exact(ps, p)
         )!;        
     } else if (order === 0) {
-        ris = [];
+        return [];
     } else {
-        throw new Error('The given bezier curve is invalid.');
+        throw new Error('The given bezier curve must be of order <= 3');
     }
 
     ris.push({ tS: 0, tE: 0, multiplicity: 1 });

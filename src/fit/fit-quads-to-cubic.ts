@@ -22,6 +22,10 @@ function fitQuadsToCubic(
         ps: number[][], 
         tolerance: number): number[][][] {
 
+    if (ps.length < 4) {
+        throw new Error('Only cubic bezier curves are supported by this function.');
+    }
+
     const { collinear, realOrder, nodeType } = classify(ps);
 
     // if all points collinear or a line (or point)

@@ -59,9 +59,9 @@ describe('fromPowerBasis', function() {
             }
         }
     });
+
     it('it should throw for invalid input', 
     function() {
-        // TODO
-        // expect(fromPowerBasis([[]])).to.throw();
+        expect(() => fromPowerBasis([[]])).to.throw();
     });
 });

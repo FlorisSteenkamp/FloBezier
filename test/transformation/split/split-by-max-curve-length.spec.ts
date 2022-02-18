@@ -23,17 +23,17 @@ describe('splitByMaxCurveLength', function() {
 			expect(r_).to.be.eql(r);
 		}
 		{
-			const ps = getRandomQuad(0);
+			const ps = getRandomQuad(5);
 			const r = splitByMaxCurveLength(ps, maxLength);
 			expect(r).to.be.eql([0, 0.25, 0.5, 0.75, 1]);
 		}
 		{
-			const ps = getRandomLine(0);
+			const ps = getRandomLine(5);
 			const r = splitByMaxCurveLength(ps, maxLength);
 			expect(r).to.be.eql([0, 0.5, 1]);
 		}
 		{
-			const ps = getRandomPoint(0);
+			const ps = getRandomPoint(5);
 			const r = splitByMaxCurveLength(ps, maxLength);
 			expect(r).to.be.eql([0,1]);
 		}

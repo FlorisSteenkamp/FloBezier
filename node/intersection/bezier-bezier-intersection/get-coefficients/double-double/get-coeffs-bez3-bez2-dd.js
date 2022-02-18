@@ -479,7 +479,7 @@ function getCoeffsBez3Bez2Dd(ps1, ps2) {
     //    (2*c0c2 + c1c1)*vₓₓ +
     //    (2*d0d2 + d1d1)*vᵧᵧ +
     //    (c0d2 + c1d1 + c2d0)*vₓᵧ +
-    //    c2*vₓ    +
+    //    c2*vₓ +
     //    d2*vᵧ;
     //const v2 =
     //    (3*c0*z1)*vₓₓₓ +
@@ -489,7 +489,7 @@ function getCoeffsBez3Bez2Dd(ps1, ps2) {
     //    z3*vₓₓ +
     //    z4*vᵧᵧ +
     //    ze*vₓᵧ +
-    //    c2*vₓ    +
+    //    c2*vₓ +
     //    d2*vᵧ;
     const $q5 = 3 * c0;
     const _q5 = abs($q5);

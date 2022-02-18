@@ -30,7 +30,7 @@ function getPointExactlyOnCurve(order: 0|1|2|3, seed: number) {
 
 
 describe('tFromXY', function() {
-	it('it should ...',
+	it('it should return the correct `t` value given `x` and `y` values for some bezier curves',
 	function() {
 		{
             for (let order=1;order<=3;order++) {
@@ -50,10 +50,88 @@ describe('tFromXY', function() {
                 }
             }
 		}
+
 		{
 			const { ps, p, t: tExact } = getPointExactlyOnCurve(0,0);
 			const ris = tFromXY(ps, p);
             expect(ris).to.be.undefined;
 		}
+
+        {
+            const ps = [[1,2],[3,4],[4,3],[2,1],[2,1]];
+            expect(() => tFromXY(ps,[1,2])).to.throw();
+        }
+
+        // Lines
+        {
+            const ps = [[1,1],[1,1]];
+            const r = tFromXY(ps,[1,1]);
+            expect(r).to.be.undefined;
+        }
+
+        {
+            const ps = [[1,1],[10,1]];
+            const r = tFromXY(ps,[2,1]);
+            expect(r[0].tS).to.be.greaterThanOrEqual(1/9 - 2*eps);
+            expect(r[0].tE).to.be.lessThanOrEqual(1/9 + 2*eps);
+        }
+
+        {
+            const ps = [[1,1],[10,1]];
+            // the precondition isn't met to guarantee certification
+            expect(tFromXY(ps,[2,1.1])).to.eql([]);
+        }
+        
+        {
+            const ps = [[1,1],[3,3]];
+            const r = tFromXY(ps,[2,2]);
+            expect(r[0].tS).to.be.greaterThanOrEqual(0.5 - 2*eps);
+            expect(r[0].tE).to.be.lessThanOrEqual(0.5 + 2*eps);
+        }
+
+        {
+            const ps = [[1,1],[1,3]];
+            const r = tFromXY(ps,[1,2]);
+            expect(r[0].tS).to.be.greaterThanOrEqual(0.5 - 2*eps);
+            expect(r[0].tE).to.be.lessThanOrEqual(0.5 + 2*eps);
+        }
+
+        // quadratics
+        {
+            const ps = [[1,1],[10,1], [20,1]];
+            const r = tFromXY(ps,[2,1]);
+            expect(r.length).to.eql(1);
+        }
+
+        {
+            const ps = [[1,1],[1,10],[1,20]];
+            const r = tFromXY(ps,[1,2]);
+            expect(r.length).to.eql(1);
+        }
+        
+        {
+            const ps = [[1,1],[1,1],[1,1]];
+            const r = tFromXY(ps,[1,1]);
+            expect(r).to.undefined;
+        }
+
+        // cubics
+        {
+            const ps = [[1,1],[10,1],[20,1],[30,1]];
+            const r = tFromXY(ps,[2,1]);
+            expect(r.length).to.eql(1);
+        }
+
+        {
+            const ps = [[1,1],[1,10],[1,20],[1,30]];
+            const r = tFromXY(ps,[1,2]);
+            expect(r.length).to.eql(1);
+        }
+        
+        {
+            const ps = [[1,1],[1,1],[1,1],[1,1]];
+            const r = tFromXY(ps,[1,1]);
+            expect(r).to.undefined;
+        }
 	});
 });

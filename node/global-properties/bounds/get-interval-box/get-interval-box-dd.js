@@ -366,7 +366,7 @@ function getIntervalBoxAtTDd(ps, t) {
     }
     else {
         // TODO - add case of degenerate point
-        throw new Error('The given bezier curve is invalid.');
+        throw new Error('The given bezier curve must be of order <= 3.');
     }
     return [
         [qad(p[0], -pE[0]), qad(p[1], -pE[1])],

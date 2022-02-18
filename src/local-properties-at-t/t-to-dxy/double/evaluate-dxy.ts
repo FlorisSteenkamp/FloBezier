@@ -4,7 +4,7 @@ import { getDxy } from '../../../to-power-basis/get-dxy/double/get-dxy.js';
 
 /**
  * Returns the `[x,y]` value of the once differentiated (with respect to `t`) 
- * bezier curve when evaluated at `t`. This function is curried.
+ * bezier curve when evaluated at `t`.
  * 
  * * uses double precision calculations internally
  * 
@@ -13,14 +13,10 @@ import { getDxy } from '../../../to-power-basis/get-dxy/double/get-dxy.js';
  * 
  * @doc mdx
  */
- function evaluateDxy(ps: number[][], t: number): number[];
- function evaluateDxy(ps: number[][]): (t: number) => number[];
- function evaluateDxy(ps: number[][], t?: number)  {
-     const [dX, dY] = getDxy(ps);
+ function evaluateDxy(ps: number[][], t: number): number[] {
+      const [dX, dY] = getDxy(ps);
 
-     const f = (t: number) => [Horner(dX, t), Horner(dY, t)];
-     
-     return t === undefined ? f : f(t); // Curry
+     return [Horner(dX, t), Horner(dY, t)];
  }
 
 

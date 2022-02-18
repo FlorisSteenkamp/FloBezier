@@ -2,10 +2,10 @@ import { allRootsCertified } from "flo-poly";
 import { getCoeffsBezBez } from './get-coefficients/get-coeffs-bez-bez.js';
 /**
  * Returns the intersection between any of two linear, quadratic or cubic bezier
- * curves without limiting the `t` value in [0,1], i.e. `t ∈ [-∞,+∞]`.
+ * curves without limiting the `t` value of the first given curve in [0,1], i.e. `t ∈ [-∞,+∞]`.
  *
  * * if the two curves have an infinite number of intersections `undefined` is returned
- * * the second bezier curve's parameter `t` values are retuned
+ * * the second bezier curve's parameter `t` values are retuned *ordered* by `t` value
  *
  * * **precondition:** TODO underflow / overflow
  * * **precondition:** cubics are really cubics, etc. TODO

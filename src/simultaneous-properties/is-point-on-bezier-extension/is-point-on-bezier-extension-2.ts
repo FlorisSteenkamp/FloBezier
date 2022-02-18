@@ -2,11 +2,12 @@ import { getImplicitForm2 } from "../../implicit-form/double/get-implicit-form2.
 import { getImplicitForm2ErrorCounters } from "../../implicit-form/get-error-counters/get-implicit-form2-error-counters.js";
 import { getImplicitForm2DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form2-dd-with-running-error.js";
 import { getImplicitForm2Exact } from "../../implicit-form/exact/get-implicit-form2-exact.js";
-import { γ, γγ } from '../../../src/error-analysis/error-analysis.js';
+import { γ, γγ } from '../../error-analysis/error-analysis.js';
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { twoProduct, ddMultDd, ddAddDd, ddMultDouble2 } from "double-double";
 import { expansionProduct, fastExpansionSum, eSign, scaleExpansion2, eEstimate, eToDd } from 'big-float-ts';
+import { ImplicitFormExact2 } from "../../implicit-form/implicit-form-types.js";
 
 const tp  = twoProduct;
 const qmq = ddMultDd;
@@ -193,14 +194,20 @@ const γγ3 = γγ(3);
 
     // error still too high - let's go exact
     {
-        const implictForm = getImplicitForm2Exact(ps);
+        let implictForm = getImplicitForm2Exact(ps);
 
         if (implictForm === undefined) {
             // all ps are the same point
             return isDouble && x === ps[0][0] && y === ps[0][1];
         }
 
-        const { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = implictForm;
+        if (!implictForm.hasOwnProperty('vₓₓ')) {
+            (implictForm as ImplicitFormExact2).vₓₓ = [0];
+            (implictForm as ImplicitFormExact2).vₓᵧ = [0];
+            (implictForm as ImplicitFormExact2).vᵧᵧ = [0];
+        }
+
+        const { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = implictForm as ImplicitFormExact2;
         
         // h (say height) is the the result of evaluating the implicit equation; 
         // if it is 0 we are on the curve, else we're not.

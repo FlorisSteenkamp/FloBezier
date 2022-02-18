@@ -1,16 +1,14 @@
-import { γγ } from '../../../src/error-analysis/error-analysis.js';
+import { γγ } from '../../error-analysis/error-analysis.js';
 import { getImplicitForm1DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form1-dd-with-running-error.js";
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-import { ddAddDd, ddMultDd, ddMultDouble2 } from "double-double";
-import { expansionProduct, fastExpansionSum, eSign, eEstimate, scaleExpansion2, eToDd } from 'big-float-ts';
+import { ddAddDd, ddMultDd } from "double-double";
+import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd } from 'big-float-ts';
 import { getImplicitForm1Exact } from '../../implicit-form/exact/get-implicit-form1-exact.js';
 const qaq = ddAddDd;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
 const sign = eSign;
 const estimate = eEstimate;
-const qmd = ddMultDouble2;
-const sce = scaleExpansion2;
 const qmq = ddMultDd;
 const etodd = eToDd;
 const abs = Math.abs;
@@ -85,7 +83,8 @@ function isPointOnBezierExtension1(ps, p) {
         const { vₓ, vᵧ, v } = implictForm;
         const vₓx = epr(xe, vₓ);
         const vᵧy = epr(ye, vᵧ);
-        const hh = fes(epr(vₓx, vᵧy), v);
+        // const h = vₓ*x + vᵧ*y + v;
+        const hh = fes(fes(vₓx, vᵧy), v);
         return sign(hh) === 0; // <= calculation was exact
     }
 }

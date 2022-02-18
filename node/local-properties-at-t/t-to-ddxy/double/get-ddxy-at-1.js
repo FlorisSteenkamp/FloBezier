@@ -26,10 +26,10 @@ function getDdxyAt1(ps) {
             2 * ((y2 + y0) - 2 * y1), // t^0
         ]; // max bitlength increase 3
     }
-    if (ps.length === 2 || ps.length === 1) {
+    if (ps.length <= 2) {
         return [0, 0]; // max bitlength increase 0
     }
-    throw new Error('The given bezier curve is invalid.');
+    throw new Error('The given bezier curve must be of order 0,1,2 or 3.');
 }
 export { getDdxyAt1 };
 //# sourceMappingURL=get-ddxy-at-1.js.map

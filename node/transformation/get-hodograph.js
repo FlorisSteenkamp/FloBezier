@@ -34,6 +34,11 @@ function getHodograph(ps) {
             [x1 - x0, y1 - y0]
         ];
     }
+    if (ps.length === 1) {
+        // a point
+        return undefined;
+    }
+    throw new Error('The given bezier curve must be of order <= 3.');
 }
 export { getHodograph };
 //# sourceMappingURL=get-hodograph.js.map

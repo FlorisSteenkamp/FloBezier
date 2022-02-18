@@ -12,6 +12,7 @@ import { Heap } from '../../src/simultaneous-properties/hausdorff-distance/heap.
 // import { hausdorffDistanceOneSided_ } from '../../src/simultaneous-properties/hausdorff-distance/hausdorff-distance.js';
 import { nearly } from '../helpers/chai-extend-nearly.js';
 import { getRandomCubic, getRandomLine, getRandomQuad } from '../helpers/get-random-bezier.js';
+import { H, HH } from '../helpers/hausdorff-distance-naive.js';
 import { heapToStr } from '../helpers/heap-to-str.js';
 // import { HHkm, Hkm } from '../helpers/hausdorff-distance-km.js';
 
@@ -36,7 +37,7 @@ describe('hausdorffDistance', function() {
 			}
 			const heapArr: number[] = [];
 			while (true) {
-				// heapToStr<number>(v => v.toString())(heap);//?
+				// heapToStr<number>(v => v.toString())(heap);
 				const v = heap.popMax()
 				if (v === undefined) { break; }
 				heapArr.push(v);
@@ -57,11 +58,11 @@ describe('hausdorffDistance', function() {
 
 			const AB = hausdorffDistanceOneSided(A,B);
 			const BA = hausdorffDistanceOneSided(B,A);
-			const H = hausdorffDistance(A,B);
+			const hd = hausdorffDistance(A,B);
 
 			expect(AB).to.eql(2);
 			expect(BA).to.be.nearly(2**1,(sqrt(3**2 + 2**2)));
-			expect(H).to.eql(BA);
+			expect(hd).to.eql(BA);
 		}
 		{
 			// Test some line-quad
@@ -71,11 +72,16 @@ describe('hausdorffDistance', function() {
 
 			const AB = hausdorffDistanceOneSided(A,B);
 			const BA = hausdorffDistanceOneSided(B,A);
-			const H = hausdorffDistance(A,B);
+			const hd = hausdorffDistance(A,B);
 
 			expect(AB).to.be.nearly(2**20,2);
 			expect(BA).to.be.nearly(2**1,(sqrt(3**2 + 2**2)));
-			expect(H).to.eql(BA);
+			expect(hd).to.eql(BA);
+
+			// estimate Hausdorff distance
+			// TODO - put back
+			//const hh = HH(A,B,10);
+			//expect(hd).to.be.nearly(2**4,hh);
 		}
 		{
 			// Test a crafted line to quad - https://www.desmos.com/calculator/uyl4qedxkp
@@ -83,20 +89,20 @@ describe('hausdorffDistance', function() {
 			const Bxy = [[0,1,0],[1,0,0]]; // y = x^2 for x ∈ [0,1]
 			const B01 = fromPowerBasis(Bxy);
 			const B = fromTo(B01,-1,2).ps; // y = x^2 for x ∈ [-1,2]
-			toString(B);//  [[-1,1],[0.5,-2],[2,4]]
+			toString(B);  //=> [[-1,1],[0.5,-2],[2,4]]
 
 			//------------------------------------
 			// const k = curvature(B01,0);  // 2
 			// const k0 = curvature(B,0);
 			// const k1 = curvature(B,1);
-			// const r0 = 1/k0;//?
-			// const r1 = 1/k1;//?
-			// const v0 = toUnitVector(normal(B,0));//?
-			// const v1 = toUnitVector(normal(B,1));//?
-			// x0 = -1 + (5.5901699437494745 * 0.894427190999916)//?
-			// y0 = 1 + (5.5901699437494745 * 0.447213595499958)//?
-			// x1 = 2 + (-0.9701425001453319 * 35.04639781775011)//?
-			// y1 = 4 + (0.24253562503633297 * 35.04639781775011)//?
+			// const r0 = 1/k0;
+			// const r1 = 1/k1;
+			// const v0 = toUnitVector(normal(B,0));
+			// const v1 = toUnitVector(normal(B,1));
+			// x0 = -1 + (5.5901699437494745 * 0.894427190999916)
+			// y0 = 1 + (5.5901699437494745 * 0.447213595499958)
+			// x1 = 2 + (-0.9701425001453319 * 35.04639781775011)
+			// y1 = 4 + (0.24253562503633297 * 35.04639781775011)
 			//------------------------------------
 
 			const h = hausdorffDistanceOneSided(A,B);
@@ -106,6 +112,10 @@ describe('hausdorffDistance', function() {
 			// h should be 1.3749758408573243 occuring at 
 			//   A: t = 0.4718470522694049
 			//   B: s = 0.73841681234051
+
+			// estimate Hausdorff distance
+			const hAB = H(A,B,0.1);
+			expect(h).to.be.nearly(2**44,hAB);
 		}
 		{
 			// Test some cubic-cubic
@@ -114,14 +124,18 @@ describe('hausdorffDistance', function() {
 			A[0] = B[0];
 			A[A.length-1] = B[B.length-1];
 
-			// const hh = HH(A,B,10);  // estimate Hausdorff distance
-
 			const tol = 1/1000_000_000;
 			const AB = hausdorffDistanceOneSided(A,B);
 			const BA = hausdorffDistanceOneSided(B,A);
 
-			expect(AB).to.be.nearly(2**32,57.378896617476535);
-			expect(BA).to.be.nearly(2**32,73.02250295551828);
+			expect(AB).to.be.nearly(2**32,29.147780233490522);
+			expect(BA).to.be.nearly(2**32,27.36950949488669);
+
+			// estimate Hausdorff distance
+			const hAB = H(A,B,1);
+			const hBA = H(B,A,1);
+			expect(AB).to.be.nearly(2**44,hAB);
+			expect(BA).to.be.nearly(2**44,hBA);
 		}
 		{
 			// Test some quad-quad
@@ -129,8 +143,8 @@ describe('hausdorffDistance', function() {
 			const B = [[-109,-75],[-7,-108],[11,-24]];
 
 			const tol = 1/1000_000_000;
-			const AB = hausdorffDistanceOneSided(A,B);//?
-			const BA = hausdorffDistanceOneSided(B,A);//?
+			const AB = hausdorffDistanceOneSided(A,B);
+			const BA = hausdorffDistanceOneSided(B,A);
 			const h = hausdorffDistance(A,B,tol);
 
 			expect(AB).to.be.nearly(2**32, 29.41592345293623);
@@ -143,15 +157,13 @@ describe('hausdorffDistance', function() {
 			const B = getRandomQuad(1);
 			A[0] = B[0];
 			A[A.length-1] = B[B.length-1];
-			toCubic(A).toString(); // -94.81526242914035,-85.23564826446484,-33.599165059998434,-59.15838891651754,24.73211536387264,-64.62996111824874,80.17857884247289,-101.65036486965846
-			B.toString();          // -94.81526242914035,-85.23564826446484,-99.1015037230918,6.600052566872932,80.17857884247289,-101.65036486965846
 			const tol = 1/1000_000;
 			const maxIterations = 100;
 			const AB = hausdorffDistanceOneSided(A,B,tol,maxIterations);
 			const BA = hausdorffDistanceOneSided(B,A,tol,maxIterations);
 
-			expect(AB).to.be.nearly(2**32,31.22690480805575);
-			expect(BA).to.be.nearly(2**32,31.309189677693016);
+			expect(AB).to.be.nearly(2**32,34.29678192323552);
+			expect(BA).to.be.nearly(2**32,13.860492759353555);
 		}
 		{
 			// Let's create a mildly pathological case (where all distances from
@@ -174,8 +186,6 @@ describe('hausdorffDistance', function() {
 			const B = generateQuarterCircle(99,[0,0]);
 
 			const tol = 1/1000_000_000;
-			const AB = hausdorffDistance(A,B,tol);//?
-			const BA = hausdorffDistance(B,A,tol);//?
 			const h = hausdorffDistance(A,B,tol);
 
 			expect(h).to.be.nearly(2**42,1)
@@ -203,7 +213,7 @@ describe('hausdorffDistance', function() {
 			const tol = 1/1000_000_000;
 			const h = hausdorffDistance(B,A,tol);
 
-			expect(h).to.be.nearly(2**42,0.0004163441673260007);
+			expect(h).to.be.nearly(2**32,0.0004163441673260007);
 		}
 	});
 });

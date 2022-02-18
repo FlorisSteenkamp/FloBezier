@@ -1,8 +1,7 @@
 import { expect, assert, use } from 'chai';
 import { describe } from 'mocha';
-import { area, getXY } from '../../src/index.js';
+import { area } from '../../src/index.js';
 import { nearly } from '../helpers/chai-extend-nearly.js';
-import { getRandomBezier, getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
 
 use(nearly);

@@ -1,11 +1,11 @@
 import { getDxy } from '../to-power-basis/get-dxy/double/get-dxy.js';
-import { Horner as evaluatePoly } from 'flo-poly';
+import { Horner } from 'flo-poly';
 function tangent(ps, t) {
     const [dX, dY] = getDxy(ps);
     function f(t) {
         return [
-            evaluatePoly(dX, t),
-            evaluatePoly(dY, t)
+            Horner(dX, t),
+            Horner(dY, t)
         ];
     }
     // Curry

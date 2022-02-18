@@ -60,7 +60,7 @@ function getIntervalBoxDd(
         ps: number[][], 
         ts: number[][]): number[][][] {
 
-    if (ts[0] !== ts[1]) {
+    if (ts[0][0] !== ts[1][0] || ts[0][1] !== ts[1][1]) {
         if (ps.length === 4) {
             return getIntervalBox3Dd(ps, ts);
         }
@@ -448,15 +448,13 @@ function getIntervalBoxAtTDd(
         pE = evalDeCasteljauError(ps, t).map(c_ => 5*2*γγ3*c_);
     } else if (ps.length === 2) {
         pE = evalDeCasteljauError(ps, t).map(c_ => 2*2*γγ3*c_);
-    } else {
-        // TODO - add case of degenerate point
-        throw new Error('The given bezier curve is invalid.');
-    }
-    
+    } else if (ps.length === 1) {
+        return [p,p];
+    }    
 
     return [
-        [qad(p[0],-pE[0]), qad(p[1],-pE[1])],
-        [qad(p[0],+pE[0]), qad(p[1],+pE[1])]
+        [qad(p[0],-pE![0]), qad(p[1],-pE![1])],
+        [qad(p[0],+pE![0]), qad(p[1],+pE![1])]
     ];
 }
 
