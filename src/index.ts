@@ -99,23 +99,24 @@ import { closestPointOnBezierCertified } from './simultaneous-properties/closest
 import { hausdorffDistanceOneSided } from './simultaneous-properties/hausdorff-distance/hausdorff-distance.js';
 import { hausdorffDistance } from './simultaneous-properties/hausdorff-distance/hausdorff-distance.js';
 import { controlPointLinesLength } from './global-properties/length/control-point-lines-length.js';
-import { splitByMaxCurveLength } from './transformation/split/split-by-max-curve-length.js';
+import { splitByLength } from './transformation/split/split-by-length.js';
 import { getCurvatureExtrema } from './get-curvature-extrema/get-curvature-extrema.js';
-import { flatness } from './global-properties/flatness.js';
-import { splitByMaxCurvature } from './transformation/split/split-by-max-curvature.js';
+import { curviness } from './global-properties/curviness.js';
+import { splitByCurvature } from './transformation/split/split-by-curvature.js';
 import { splitByCurvatureAndLength } from './transformation/split/split-by-curvature-and-length.js';
-import { areBeziersInSameKFamily } from './simultaneous-properties/are-beziers-in-same-k-family.js';
+// import { areBeziersExtensionsIdentical } from './simultaneous-properties/are-bezier-extensions-identical.js';
 import { isCollinear, isHorizontal, isVertical } from './global-properties/classification/is-collinear.js';
 import { isSelfOverlapping } from './global-properties/classification/is-self-overlapping.js';
 import { getBounds } from './global-properties/bounds/get-bounds.js';
 import { getBoundingBoxTight } from './global-properties/bounds/get-bounding-box-tight.js';
 import { getBoundingBox } from './global-properties/bounds/get-bounding-box.js';
-import { toHybridQuadratic } from './transformation/degree-or-type/to-hybrid-quadratic.js';
+import { cubicToHybridQuadratic } from './transformation/degree-or-type/cubic-to-hybrid-quadratic.js';
 import { isCubicReallyLine } from './global-properties/classification/is-cubic-really-line.js';
 import { isCubicReallyQuad } from './global-properties/classification/is-cubic-really-quad.js';
 import { isQuadReallyLine } from  './global-properties/classification/is-quad-really-line.js';
 import { isReallyPoint } from './global-properties/classification/is-really-point.js';
-import { toQuadraticFromCubic } from './transformation/degree-or-type/to-quadratic-from-cubic.js';
+import { cubicToQuadratic } from './transformation/degree-or-type/cubic-to-quadratic.js';
+import { quadraticToCubic } from './transformation/degree-or-type/quadratic-to-cubic.js';
 import { circleBezierIntersection } from './intersection/circle-bezier-intersection/circle-bezier-intersection.js';
 
 // TODO - ADD!!! (to tests? and/or docs?)
@@ -125,6 +126,7 @@ import { evaluateDdxy } from './local-properties-at-t/t-to-ddxy/double/evaluate-
 import { evaluateDxy } from './local-properties-at-t/t-to-dxy/double/evaluate-dxy.js';
 import { getXY3DdWithRunningError } from './to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js';
 import { lineToQuadratic } from './transformation/degree-or-type/line-to-quadratic.js';
+import { lineToCubic } from './transformation/degree-or-type/line-to-cubic.js';
 import { evaluateDxyExact } from './local-properties-at-t/t-to-dxy/exact/evaluate-dxy-exact.js'
 import { evaluateDdxyExact } from './local-properties-at-t/t-to-ddxy/exact/evaluate-ddxy-exact.js'
 import { evaluateDdxyAt0Exact } from './local-properties-at-t/t-to-ddxy/exact/evaluate-ddxy-at-0-exact.js'
@@ -138,6 +140,10 @@ import { getYBoundsTight } from './global-properties/bounds/get-y-bounds-tight.j
 import { getFootpointPolyExact } from "./simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/exact/get-footpoint-poly-exact.js";
 import { getFootpointPoly } from "./simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly.js";
 import { getFootpointPolyDd } from "./simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double-double/get-footpoint-poly-dd.js";
+import { reduceOrderIfPossible } from './transformation/reduce-order-if-possible.js'
+import { getTransformedTs } from './transformation/get-transformed-ts.js';
+import { add1Ulp } from './add-1-ulp.js';
+import { sub1Ulp } from './sub-1-ulp.js';
 
 
 /** 
@@ -211,13 +217,13 @@ export {
 	// Order & type transformation
 	toCubic,
 	fromPowerBasis,
-	toHybridQuadratic,
+	cubicToHybridQuadratic,
 
 	// Split, merge and clone
 	reverse,
 	fromTo,
-	splitByMaxCurveLength,
-	splitByMaxCurvature,
+	splitByLength,
+	splitByCurvature,
 	splitByCurvatureAndLength,
 	clone,
 
@@ -271,7 +277,7 @@ export {
 	area,
 	totalLength,
 	isQuadObtuse,
-	flatness,
+	curviness,
 	isCollinear, isHorizontal, isVertical,
 	isSelfOverlapping,
 	getHodograph,
@@ -279,7 +285,8 @@ export {
 	isQuadReallyLine,
 	isCubicReallyQuad,
 	isCubicReallyLine,
-	toQuadraticFromCubic,
+	cubicToQuadratic,
+	quadraticToCubic,
 	getInflections,
 
 	// ------------------------------------------
@@ -288,7 +295,7 @@ export {
 
 	equal,
 	γ,γγ,
-	areBeziersInSameKFamily,
+	// areBeziersExtensionsIdentical,
 	closestPointOnBezierCertified,
 	getInterfaceRotation,
 	closestPointOnBezier,
@@ -329,7 +336,7 @@ export {
 
 	evaluate,
 
-	/// Add!
+	/// Add! (to tests)
 	evaluateDdxy,
 	evaluateDxy,
 	evaluateDxyExact,
@@ -341,6 +348,7 @@ export {
 	evalDeCasteljauDd,
 	bezierBezierIntersectionBoundless,
 	getEndpointIntersections,
+	reduceOrderIfPossible,
 
 	bezier3Intersection,
 
@@ -350,10 +358,16 @@ export {
 	getXY3DdWithRunningError,
 
 	lineToQuadratic,
+	lineToCubic,
 
 	getFootpointPoly,
 	getFootpointPolyDd,
-	getFootpointPolyExact
+	getFootpointPolyExact,
+
+	getTransformedTs,
+
+	add1Ulp,
+	sub1Ulp
 }
 
 

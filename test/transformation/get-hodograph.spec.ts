@@ -53,5 +53,13 @@ describe('getHodograph', function() {
 			const r = getHodograph(ps);
 			expect(r).to.be.undefined
 		}
+
+		// some edge cases
+		{
+			const p = [1,1];
+			const ps = [p,p,p,p,p];
+
+			expect(() => getHodograph(ps)).to.throw();
+		}
 	});
 });

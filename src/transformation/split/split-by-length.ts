@@ -3,7 +3,7 @@ import { fromTo } from "./from-to.js";
 
 
 /**
- * Split the order 1, 2 or 3 bezier into pieces (given as an array of parameter 
+ * Split the given bezier curve into pieces (given as an array of parameter 
  * `t` values) such that the longest curve length is guaranteed to be lower than
  * the given max length.
  * 
@@ -12,7 +12,7 @@ import { fromTo } from "./from-to.js";
  * 
  * @doc
  */
-function splitByMaxCurveLength(
+function splitByLength(
         ps: number[][], 
         maxLength: number) {
 
@@ -36,4 +36,4 @@ function splitByMaxCurveLength(
 }
 
 
-export { splitByMaxCurveLength }
+export { splitByLength }

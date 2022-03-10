@@ -10,7 +10,7 @@ import { getCoeffsBezBez }  from './get-coefficients/get-coeffs-bez-bez.js';
  * * the second bezier curve's parameter `t` values are retuned *ordered* by `t` value
  *
  * * **precondition:** TODO underflow / overflow
- * * **precondition:** cubics are really cubics, etc. TODO
+ * * **precondition:** cubics are really cubics, etc. TODO (also test that it fails)
  * 
  * @param ps1 
  * @param ps2 
@@ -21,15 +21,7 @@ function bezierBezierIntersectionBoundless(
         ps1: number[][], 
         ps2: number[][]): RootInterval[] | undefined {
    
-    let _coeffs = getCoeffsBezBez(ps1,ps2);
-    if (_coeffs === undefined) { 
-        // infinite number of intersections
-        // TODO
-        //console.log('use endpoint Xs')
-        return undefined;
-    }
-
-    let { coeffs, errBound, getPExact } = _coeffs;
+    const { coeffs, errBound, getPExact } = getCoeffsBezBez(ps1,ps2);;
 
     return allRootsCertified(coeffs, 0, 1, errBound, getPExact, true);
 }

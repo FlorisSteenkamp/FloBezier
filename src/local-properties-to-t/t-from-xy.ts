@@ -1,20 +1,26 @@
-import { allRootsCertified, RootInterval } from 'flo-poly';
+import { allRootsCertified, eHorner, refineK1, RootInterval } from 'flo-poly';
 import { getXY2Exact, getXY3Exact } from "../to-power-basis/get-xy/exact/get-xy-exact.js";
 import { getXY1DdWithRunningError, getXY2DdWithRunningError, getXY3DdWithRunningError } from "../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js";
 import { twoDiff as twoDiff_ } from 'big-float-ts';
+import { γγ } from '../error-analysis/error-analysis.js'
+import { getXY1Dd } from '../to-power-basis/get-xy/double-double/get-xy-dd.js';
 
 
 const twoDiff = twoDiff_;
 
 const min = Math.min;
 
+const γγ3 = γγ(3);
+
 
 /**
  * Performs certified inversion, i.e. returns the `t` parameter value 
  * interval(s) for the given `x` and `y` coordinates on the specified bezier 
- * curve. Only `t` values in `[0,1]` are returned.
+ * curve. 
  * 
- * Returns `undefined` if the point is on the curve and the curve is a point.
+ * * Only `t` values in `[0,1]` are returned.
+ * 
+ * * Returns `undefined` if the point is on the curve and the curve is a point.
  * 
  * **precondition**: `p` must be *exactly* on the curve for the result to be
  * certified
@@ -28,7 +34,7 @@ const min = Math.min;
  */
 function tFromXY(
         ps: number[][], 
-        p: number[]): RootInterval[] | undefined {
+        p: number[]): RootInterval[] {
 
     if (ps.length === 4) {
         return tFromXY3(ps, p);
@@ -43,8 +49,11 @@ function tFromXY(
     }
 
     if (ps.length === 1) {
-        // return [{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }];
-        return undefined;
+        const p1 = ps[0];
+        if (p1[0] === p[0] && p1[1] === p[1]) {
+            return [{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }];
+        }
+        return [];
     }
 
     throw new Error('The given bezier curve must be of order <= 3.');
@@ -53,7 +62,8 @@ function tFromXY(
 
 /** @internal */
 function tFromXY3(
-        ps: number[][], p: number[]): RootInterval[] | undefined {
+        ps: number[][], 
+        p: number[]): RootInterval[] {
 
     const x = p[0];
     const y = p[1];
@@ -82,7 +92,7 @@ function tFromXY3(
 
     const getPExactX = (): number[][] => { 
         if (pExactXY === undefined) { pExactXY = getXY3Exact(ps); }
-        const _pExactX = pExactXY[0];  // x coordinate
+        const _pExactX = pExactXY[0].slice();  // x coordinate
         // pop the constant term off `x(t)`
         const tx = _pExactX.pop() as number[];
         const pExactX = [..._pExactX, twoDiff(tx[0], x)] as number[][];
@@ -92,7 +102,7 @@ function tFromXY3(
 
     const getPExactY = (): number[][] => {
         if (pExactXY === undefined) { pExactXY = getXY3Exact(ps); }
-        const _pExactY = pExactXY[1];  // y coordinate
+        const _pExactY = pExactXY[1].slice();  // y coordinate
         // pop the constant term off `y(t)`
         const ty = _pExactY.pop() as number[];
         const pExactY = [..._pExactY, twoDiff(ty[0], y)] as number[][];
@@ -101,9 +111,10 @@ function tFromXY3(
     }
 
     // max 3 roots
-    const xrs = allRootsCertified(polyDdX, 0, 1, polyX_, getPExactX, true);
+    const xrs = allRootsCertified(polyDdX, 0, 1, polyX_.map(c => γγ3*c), getPExactX, true);
+    // const xrsExp = xrs!.map(xr => refineK1(xr, getPExactX()));
     // max 3 roots
-    const yrs = allRootsCertified(polyDdY, 0, 1, polyY_, getPExactY, true);
+    const yrs = allRootsCertified(polyDdY, 0, 1, polyY_.map(c => γγ3*c), getPExactY, true);
 
     if (xrs === undefined) {
         // the `x` value of the point is on the curve for all `t` values
@@ -111,7 +122,7 @@ function tFromXY3(
         if (yrs === undefined) {
             // the `y` value of the point is on the curve for all `t` values
             // the curve must be a point
-            return undefined;
+            return [{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }];
         }
 
         return yrs; //.map(r => [r.tS, r.tE]);
@@ -121,7 +132,7 @@ function tFromXY3(
         // the `y` value of the point is on the curve for all `t` values
         // the curve must be a 'line' (can also be degenerate quadratic, etc.)        
 
-        return xrs; //.map(r => [r.tS, r.tE]);;
+        return xrs;
     }
 
     // check for `t` value overlap 
@@ -150,7 +161,7 @@ function tFromXY3(
 
 /** @internal */
 function tFromXY2(
-        ps: number[][], p: number[]): RootInterval[] | undefined {
+        ps: number[][], p: number[]): RootInterval[] {
 
     const x = p[0];
     const y = p[1];
@@ -198,9 +209,9 @@ function tFromXY2(
     }
 
     // max 2 roots
-    const xrs = allRootsCertified(polyDdX, 0, 1, polyX_, getPExactX, true);
+    const xrs = allRootsCertified(polyDdX, 0, 1, polyX_.map(c => γγ3*c), getPExactX, true);
     // max 2 roots
-    const yrs = allRootsCertified(polyDdY, 0, 1, polyY_, getPExactY, true);
+    const yrs = allRootsCertified(polyDdY, 0, 1, polyY_.map(c => γγ3*c), getPExactY, true);
 
     if (xrs === undefined) {
         // the `x` value of the point is on the curve for all `t` values
@@ -208,17 +219,17 @@ function tFromXY2(
         if (yrs === undefined) {
             // the `y` value of the point is on the curve for all `t` values
             // the curve must be a point
-            return undefined;
+            return [{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }];
         }
 
-        return yrs; //.map(r => ({ tS: r.tS, tE: r.tE, multiplicity: 1 }));
+        return yrs;
     }
 
     if (yrs === undefined) {
         // the `y` value of the point is on the curve for all `t` values
         // the curve must be a 'line'
 
-        return xrs; //.map(r => ({ tS: r.tS, tE: r.tE, multiplicity: 1 }));
+        return xrs;
     }
 
     // check for `t` value overlap 
@@ -247,14 +258,14 @@ function tFromXY2(
 /** @internal */
 function tFromXY1(
         ps: number[][], 
-        p: number[]): RootInterval[] | undefined {
+        p: number[]): RootInterval[] {
 
     const x = p[0];
     const y = p[1];
 
     // get power basis representation in double-double precision including error
     // bound
-    const [_polyDdX, _polyDdY] = getXY1DdWithRunningError(ps);
+    const [_polyDdX, _polyDdY] = getXY1Dd(ps);
 
     // pop the constant term off `x(t)`
     const txDd = _polyDdX.pop() as number;
@@ -277,10 +288,10 @@ function tFromXY1(
         if (yrs === undefined) {
             // the `y` value of the point is on the curve for all `t` values
             // the curve must be a point
-            return undefined;
+            return [{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }];
         }
 
-        return yrs; //.map(r => ({ tS: r.tS, tE: r.tE, multiplicity: 1 }));
+        return yrs;
     }
 
     if (yrs === undefined) {
@@ -309,7 +320,7 @@ function tFromXY1(
     if (r === undefined) { 
         // this is actually not possible since a precondition is that the point
         // must be *exactly* on the line
-        return undefined; 
+        return [];
     }
 
     return [r];
@@ -319,6 +330,8 @@ function tFromXY1(
 /** @internal */
 function combineRoots(
         r: RootInterval, s: RootInterval): RootInterval | undefined {
+
+    // TODO - IMPORTANT! - combine roots by widening - not narrowing as is currently the case!!!
 
     // case 1
     if (r.tS <= s.tS) {

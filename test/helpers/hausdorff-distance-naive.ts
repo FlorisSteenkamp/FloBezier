@@ -1,5 +1,5 @@
 import { distanceBetween } from 'flo-vector2d';
-import { closestPointOnBezier, evalDeCasteljau, splitByMaxCurveLength } from '../../src/index.js';
+import { closestPointOnBezier, evalDeCasteljau, splitByLength } from '../../src/index.js';
 
 
 /**
@@ -18,7 +18,7 @@ import { closestPointOnBezier, evalDeCasteljau, splitByMaxCurveLength } from '..
         B: number[][],
         maxLength: number): number {
 
-    let ts = splitByMaxCurveLength(A, maxLength);//?
+    let ts = splitByLength(A, maxLength);
     let candidates = [];
     let maxD = Number.NEGATIVE_INFINITY;
     for (let i=0; i<ts.length; i++) {

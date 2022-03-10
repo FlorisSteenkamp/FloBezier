@@ -27,6 +27,7 @@ const ts = twoSum;
 function getXYDd(ps: number[][]): number[][][] {
 	if (ps.length === 4) {
 		const r = getXY3Dd(ps);
+		// TODO - this is ugly - fix
 		(r[0][3] as unknown as number[]) = [0,r[0][3]];
 		(r[1][3] as unknown as number[]) = [0,r[1][3]];
 		return r as number[][][];

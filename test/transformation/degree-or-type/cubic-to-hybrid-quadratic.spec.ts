@@ -2,16 +2,16 @@ import { expect, assert, use } from 'chai';
 import { describe } from 'mocha';
 import { nearly } from '../../helpers/chai-extend-nearly.js';
 import { getRandomCubic } from '../../helpers/get-random-bezier.js';
-import { evalDeCasteljau, toHybridQuadratic } from '../../../src/index.js';
+import { evalDeCasteljau, cubicToHybridQuadratic } from '../../../src/index.js';
 
 use(nearly);
 
-describe('toHybridQuadratic', function() {
-	it('it should ',
+describe('cubicToHybridQuadratic', function() {
+	it('it should correctly convert some cubic bezier curves to hybrid quadratic bezier curves',
 	function() {
 		{
 			let ps = getRandomCubic(0);
-			const r = toHybridQuadratic(ps);
+			const r = cubicToHybridQuadratic(ps);
 			expect(r).to.be.nearly(2**8, [
 				[-108.49686506776892, -13.011161175008596],
   				[
@@ -32,6 +32,13 @@ describe('toHybridQuadratic', function() {
 			], t));
 
 			expect(ps1).to.be.nearly(2**4, ps2);
+		}
+
+		// some edge cases
+		{
+			const p = [1,1];
+			const ps = [p,p,p,p,p];
+			expect(() => cubicToHybridQuadratic(ps)).to.throw();
 		}
 	});
 });

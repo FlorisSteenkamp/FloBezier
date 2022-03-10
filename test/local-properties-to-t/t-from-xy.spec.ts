@@ -1,7 +1,9 @@
+import { eCompress, eEstimate } from 'big-float-ts';
 import { expect, assert, use } from 'chai';
+import { allRootsCertifiedSimplified } from 'flo-poly';
 import { describe } from 'mocha';
 import { squares } from 'squares-rng';
-import { evaluateExact, tFromXY } from '../../src/index.js';
+import { bezierSelfIntersection, classify, evaluateExact, generateSelfIntersecting, isPointOnBezierExtension, tFromXY } from '../../src/index.js';
 import { nearly } from '../helpers/chai-extend-nearly.js';
 import { getRandomBezier } from '../helpers/get-random-bezier.js';
 
@@ -32,6 +34,7 @@ function getPointExactlyOnCurve(order: 0|1|2|3, seed: number) {
 describe('tFromXY', function() {
 	it('it should return the correct `t` value given `x` and `y` values for some bezier curves',
 	function() {
+        /*
 		{
             for (let order=1;order<=3;order++) {
                 for (let i=0;i<=25;i++) {
@@ -52,9 +55,10 @@ describe('tFromXY', function() {
 		}
 
 		{
-			const { ps, p, t: tExact } = getPointExactlyOnCurve(0,0);
+            const ps = getRandomBezier_(0)(0);
+			const p = ps[0];
 			const ris = tFromXY(ps, p);
-            expect(ris).to.be.undefined;
+            expect(ris).to.eql([{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }]);
 		}
 
         {
@@ -66,7 +70,7 @@ describe('tFromXY', function() {
         {
             const ps = [[1,1],[1,1]];
             const r = tFromXY(ps,[1,1]);
-            expect(r).to.be.undefined;
+            expect(r).to.eql([{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }]);
         }
 
         {
@@ -112,7 +116,7 @@ describe('tFromXY', function() {
         {
             const ps = [[1,1],[1,1],[1,1]];
             const r = tFromXY(ps,[1,1]);
-            expect(r).to.undefined;
+            expect(r).to.eql([{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }]);
         }
 
         // cubics
@@ -131,7 +135,53 @@ describe('tFromXY', function() {
         {
             const ps = [[1,1],[1,1],[1,1],[1,1]];
             const r = tFromXY(ps,[1,1]);
-            expect(r).to.undefined;
+            expect(r).to.eql([{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }]);
         }
+        */
+        // self-intersecting
+        {
+            const t1 = 0.25;
+            const t2 = 0.75;
+            const ps = generateSelfIntersecting([0,0],[3,3],[-3,3], [t1,t2]);
+            //=> [[0,0],[3,3],[-3,3],[4.153846153846153,0]]
+            // bezierSelfIntersection(ps);//? (just an estimate)
+
+            const p1e = evaluateExact(ps,t1);//?
+            const p1 = p1e.map(eEstimate);  //=> [0.9086538461538461, 1.6875]
+            // isPointOnBezierExtension(ps,p1e);  //=> true
+            // isPointOnBezierExtension(ps,[[p1[0]],[p1[1]]]);  //=> true
+
+            const p2e = evaluateExact(ps,t2);//?
+            const p2 = p2e.map(eEstimate);  //=> [0.9086538461538459, 1.6875]
+            // isPointOnBezierExtension(ps,p2e);  //=> true
+            // isPointOnBezierExtension(ps,[[p2[0]],[p2[1]]]);  //=> true
+
+            // allRootsCertifiedSimplified([0,-9,9,-1.6875], 0, 1);//?
+
+            // The results below *are* certified due to the preconditions being met.
+            tFromXY(ps,p1);//?
+            // tFromXY(ps,p2);//?
+        }
+        /*
+        {
+            const ps = generateSelfIntersecting([27,27],[-45,18],[63,27], [0.125,0.75]);
+            // [[27,27], [-45,18], [63,27], [-30.767441860468807,23.860465116278824]]
+            // the intersection point is *NOT exactly* at `t === 0.25` and  `t === 0.75`
+
+            const p1e = evaluateExact(ps,0.125).map(eCompress)
+            const p1 = p1e.map(eEstimate);
+            // isPointOnBezierExtension(ps,p1e);  //=> true
+            // isPointOnBezierExtension(ps,[[p1[0]],[p1[1]]]);  //=> false
+
+            const p2e = evaluateExact(ps,0.75).map(eCompress)
+            const p2 = p2e.map(eEstimate);
+            // isPointOnBezierExtension(ps,p2e);  //=> true
+            // isPointOnBezierExtension(ps,[[p2[0]],[p2[1]]]);  //=> false
+
+            // The results below are *not* certified due to the preconditions not being met.
+            tFromXY(ps,p1);  //=> [{ tS: 0.125, tE: 0.125, multiplicity: 1 }]
+            tFromXY(ps,p2);  //=> [{ tS: 0.75,  tE: 0.75,  multiplicity: 1 }]
+        }
+        */
 	});
 });

@@ -1,7 +1,6 @@
 import { evalDeCasteljau } from "../../../local-properties-at-t/t-to-xy/double/eval-de-casteljau.js";
 import { evalDeCasteljauError } from "../../../local-properties-at-t/t-to-xy/eval-de-casteljau-error.js";
 import { γ } from '../../../error-analysis/error-analysis.js';
-import { inspect } from "../../../inspect.js";
 import { fromTo3 } from "../../../transformation/split/from-to/from-to-3.js";
 import { fromTo2 } from "../../../transformation/split/from-to/from-to-2.js";
 import { fromTo1 } from "../../../transformation/split/from-to/from-to-1.js";

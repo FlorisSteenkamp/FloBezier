@@ -12,9 +12,9 @@ function heapToStr<T>(nodeToStrFunc: (node: T) => string) {
         return heapStr;
 
         function f(nodeIdx: number | undefined): void {
-            if (nodeIdx === undefined) { 
-                return; 
-            }
+            //if (nodeIdx === undefined) { 
+            //    return; 
+            //}
 
             heapStr += nodeToStrFunc(heap.heap[nodeIdx]);
 

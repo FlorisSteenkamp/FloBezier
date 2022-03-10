@@ -2,7 +2,7 @@ import { expect, assert, use } from 'chai';
 import { describe } from 'mocha';
 import { gaussQuadrature } from 'flo-gauss-quadrature';
 import { 
-	evaluateDdxy, evaluateDxy, getInterfaceRotation, splitByMaxCurvature, tangent, 
+	evaluateDdxy, evaluateDxy, getInterfaceRotation, splitByCurvature, tangent, 
 	totalAbsoluteCurvature, totalCurvature, generateSelfIntersecting, fromTo, toString, generateCuspAtHalf3
 } from '../../src/index.js';
 import { nearly } from '../helpers/chai-extend-nearly.js';
@@ -27,7 +27,7 @@ function totalCurvatureByGauss(
 
 	if (ps.length === 1) { return 0; }
 
-	const ts = splitByMaxCurvature(ps, flatness);
+	const ts = splitByCurvature(ps, flatness);
 
 	let total = 0;
 	for (let i=0; i<ts.length-1; i++) {

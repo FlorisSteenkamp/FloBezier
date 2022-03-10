@@ -107,5 +107,12 @@ describe('fromTo', function() {
 			const r = fromTo(ps, tS, tE);
 			expect(r).to.be.eql({ ps, _ps: [[0]] });
 		}
+
+		// some edge cases
+		{
+			const p = [1,1];
+			const ps = [p,p,p,p,p];
+			expect(() => fromTo(ps,1,2)).to.throw();
+		}
 	});
 });

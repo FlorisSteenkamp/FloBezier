@@ -27,14 +27,11 @@ function getXYExact(
 		ps: number[][]): number[][][] {
 
 	if (ps.length === 4) {
-		//const r = getXY3Exact(ps);
-		//(r[0][3] as unknown as number[]) = [r[0][3]];
-		//(r[1][3] as unknown as number[]) = [r[1][3]];
-		//return r as number[][][];
 		return getXY3Exact(ps);
 	}
 
 	if (ps.length === 3) {
+		// TODO - symmetrize getXY2Exact, ...
 		const r = getXY2Exact(ps);
 		(r[0][2] as unknown as number[]) = [r[0][2]];
 		(r[1][2] as unknown as number[]) = [r[1][2]];
@@ -70,12 +67,10 @@ function getXY3Exact(
 
 	return [[
 		// (x3 - x0) + 3*(x1 - x2)
-		eAdd(td(x3, x0), sce(3, td(x1, x2)))
-
+		eAdd(td(x3, x0), sce(3, td(x1, x2))),
 		// OR
 		// (x3 - x0) - (2*x2 + x2) + (2*x1 + x1)
 		//eAdd(eAdd(td(x3,x0), ts(-2*x2, -x2)), ts(2*x1, x1))
-		,
 
 		// 3*((x2 + x0) - 2*x1)
 		sce(3, ge(ts(x2, x0), -2*x1)),

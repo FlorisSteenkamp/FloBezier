@@ -42,5 +42,12 @@ describe('getXY', function() {
 			const expected = [[-108.49686506776892], [-13.011161175008596]];
 			expect(r).to.be.nearly(2**8, expected);
 		}
+
+		// some edge cases
+		{
+			const p = [1,1];
+			const ps = [p,p,p,p,p];
+			expect(() => getXY(ps)).to.throw();
+		}
 	});
 });

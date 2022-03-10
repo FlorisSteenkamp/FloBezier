@@ -2,7 +2,7 @@ import { expect, assert, use } from 'chai';
 import { describe } from 'mocha';
 import { getTAtLength, length } from '../../src/index.js';
 import { nearly } from '../helpers/chai-extend-nearly.js';
-import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../helpers/get-random-bezier.js';
+import { getRandomCubic, getRandomLine, getRandomQuad } from '../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
 
 use(nearly);

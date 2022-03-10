@@ -1,6 +1,6 @@
 import { gaussQuadrature } from "flo-gauss-quadrature";
 import { ds } from "../../local-properties-at-t/ds.js";
-import { splitByMaxCurvature } from "../../transformation/split/split-by-max-curvature.js";
+import { splitByCurvature } from "../../transformation/split/split-by-curvature.js";
 import { fromTo3 } from "../../transformation/split/from-to/from-to-3.js";
 
 
@@ -16,7 +16,7 @@ import { fromTo3 } from "../../transformation/split/from-to/from-to-3.js";
  function lengthBez3(
 	 	interval: number[], 
 		ps: number[][],
-		maxFlatness = 1.01,
+		maxCurviness = 0.4,
 		gaussOrder: 4|16|64 = 16): number {
 
 	const tS = interval[0];
@@ -33,7 +33,7 @@ import { fromTo3 } from "../../transformation/split/from-to/from-to-3.js";
 	}
 
 	const ps_ = fromTo3(ps,tS,tE).ps;
-	const ts = splitByMaxCurvature(ps_, maxFlatness);
+	const ts = splitByCurvature(ps_, maxCurviness);
 
 	let total = 0;
 	for (let i=0; i<ts.length-1; i++) {

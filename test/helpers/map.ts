@@ -7,7 +7,6 @@ const abs = Math.abs;
 /**
  * Map a Shewchuck object or array.
  */
-// TODO - this code can be improved especially by improving the typings
 function map<V>(check: (v: any) => v is V) {
     return <T>(f: (v1: V, v2?: V) => ObjOrArray<T>) => {
 
@@ -17,7 +16,9 @@ function map<V>(check: (v: any) => v is V) {
                     return f(obj1);
                 }
 
-                if (!check(obj2)) { throw new Error('Object structures must be the same'); }
+                if (!check(obj2)) { 
+                    throw new Error('Object structures must be the same');
+                }
 
                 return f(obj1, obj2);
             }
@@ -27,26 +28,31 @@ function map<V>(check: (v: any) => v is V) {
                     return mapArr(v1 => map(check)(f)(v1), obj1);
                 }
 
-                if (!Array.isArray(obj2)) { throw new Error('Object structures must be the same'); }
+                //if (!Array.isArray(obj2)) { 
+                //    throw new Error('Object structures must be the same'); 
+                //}
 
-                return mapArr((v1,v2) => map(check)(f)(v1,v2), obj1, obj2);
+                return mapArr((v1,v2) => map(check)(f)(v1,v2), obj1, obj2 as ObjOrArray<V>[]);
             }
             
+            /*
             if (typeof obj1 === 'object') {
                 if (obj2 === undefined) {
                     return mapObj(v1 => map(check)(f)(v1), obj1);
                 }
 
-                if (typeof obj2 !== 'object') { throw new Error('Object structures must be the same'); }
+                if (typeof obj2 !== 'object') { 
+                    throw new Error('Object structures must be the same');
+                }
 
                 return mapObj((v1,v2) => map(check)(f)(v1,v2), obj1, obj2 as { [key: string]: ObjOrArray<V>; });
             }
+            */
 
             throw new Error('Must be an object or array (or either recursively');
         }
     }
 }
-
 
 
 function allTrue(obj: ObjOrArray<boolean>): boolean {
@@ -107,6 +113,7 @@ function mapArr<T,U>(
 }
 
 
+/*
 function mapObj<T,U>(
         f: (t1: T, t2?: T) => U,
         obj1: { [key:string]: T },
@@ -121,6 +128,7 @@ function mapObj<T,U>(
 
     return o;
 }
+*/
 
 
 const mapShewchuk = map<number[]>(isNumberArray);
@@ -139,5 +147,6 @@ export {
     subtractShewchuk, 
     mapDouble,
     mapDoubleToShewchuk,
-    allTrue
+    allTrue,
+    map
 }

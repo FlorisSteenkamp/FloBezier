@@ -1,83 +1,91 @@
-/* TODO
 import { expect, assert, use } from 'chai';
 import { describe } from 'mocha';
 import { nearly } from '../../helpers/chai-extend-nearly.js';
 import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../../helpers/random-rotate-and-translate.js';
-import { splitByCurvatureAndLength } from '../../../src/index.js';
+import { classify, fromTo, generateCuspAtHalf3, splitByCurvatureAndLength } from '../../../src/index.js';
 
 use(nearly);
 
 describe('splitByCurvatureAndLength', function() {
-	it('it should ',
+	it('it should correctly split some bezier curves according to maximum curviness and length',
 	function() {
-		const tolerance = 1.01;
-		const minTSpan = 2**-20;
-		const maxLength = 100;
-
 		{
+			const maxCurviness = 0.4;
+			const maxLength = 100;
+			const minTSpan = 2**-16;
+
 			const ps = getRandomCubic(0);
-			const r = splitByCurvatureAndLength(ps, tolerance, maxLength, minTSpan);
-			const expected = [0,0.25,0.375,0.5,0.5625,0.625,0.6875,0.75,0.875,1];
+			const r = splitByCurvatureAndLength(ps, maxCurviness, maxLength);
+			const expected = [0,0.25,0.375,0.5,0.625,0.75,0.875,1];
 			expect(r).to.be.eql(expected);
 
 			const ps_ = randomRotateAndTranslate(0)(ps);
-			const r_ = splitByCurvatureAndLength(ps_, tolerance, minTSpan);
+			const r_ = splitByCurvatureAndLength(ps_, maxCurviness, maxLength);
 			expect(r_).to.be.eql(r);
 		}
 		{
 			// test cusp
 
-			// [[1,1],[1,4],[5,3],[-3,2]]
-			const ps = generateCuspAtHalf3([1,1], [2,3], [-3,2000001]);
-			const r1 = splitByCurvatureAndLength(ps, tolerance, 2**-10);
-			const r2 = splitByCurvatureAndLength(ps, tolerance, 2**-5);
+			const maxCurviness = 0.4;
+			const maxLength = 0.9;
 
-			expect(r1).to.eql([ 
+			// [[1,1],[1,4],[5,3],[-3,2]]
+			const _ps = generateCuspAtHalf3([1,1], [2,3], [-3,2]);  //=> cusp at t === 0.5
+			const ps = fromTo(_ps,0,0.75).ps;  //=> cusp at t === 2/3 ( [[1,1],[1,3.25],[3.25,3.25],[1,2.6875]] )
+
+			const r = splitByCurvatureAndLength(ps, maxCurviness, maxLength, 2**-10);
+
+			expect(r).to.eql([ 
 				0,
 				0.125,
-				0.15625,
-				0.1640625,
-				0.166015625,
-				0.1669921875,
-				0.16796875,
-				0.171875,
-				0.1875,
 				0.25,
+				0.375,
 				0.5,
-				1 
-			]);
-
-			expect(r2).to.eql([
-				0, 
-				0.125, 
-				0.15625, 
-				0.1875, 
-				0.25, 
-				0.5, 
-				1 
+				0.625,
+				0.65625,
+				0.6640625,
+				0.666015625,
+				0.6669921875,
+				0.66796875,
+				0.671875,
+				0.6875,
+				0.75,
+				0.875,
+				1
 			]);
 		}
 		{
+			const maxCurviness = 0.4;
+			const maxLength = 100;
+			const minTSpan = 2**-16;
+
 			const ps = getRandomQuad(0);
-			const r = splitByCurvatureAndLength(ps, tolerance, minTSpan);
-			const expected = [0,0.25,0.5,1];
+			const r = splitByCurvatureAndLength(ps, maxCurviness, maxLength, minTSpan);
+			const expected = [0,0.25,0.5,0.625,0.75,0.875,1];
 			expect(r).to.be.eql(expected);
 
 			const ps_ = randomRotateAndTranslate(0)(ps);
-			const r_ = splitByCurvatureAndLength(ps_, tolerance, minTSpan);
+			const r_ = splitByCurvatureAndLength(ps_, maxCurviness, maxLength, minTSpan);
 			expect(r_).to.be.eql(r);
 		}
 		{
+			const maxCurviness = 0.4;
+			const maxLength = 50;
+			const minTSpan = 2**-16;
+
 			const ps = getRandomLine(0);
-			const r = splitByCurvatureAndLength(ps, tolerance, minTSpan);
-			expect(r).to.be.eql([0,1]);
+			const r = splitByCurvatureAndLength(ps, maxCurviness, maxLength, minTSpan);
+			expect(r).to.be.eql([0,0.5,1]);
 		}
 		{
+			const maxCurviness = 0.4;
+			const maxLength = 1;
+			const minTSpan = 2**-16;
+
 			const ps = getRandomPoint(0);
-			const r = splitByCurvatureAndLength(ps, tolerance, minTSpan);
+			const r = splitByCurvatureAndLength(ps, maxCurviness, maxLength, minTSpan);
 			expect(r).to.be.eql([0,1]);
 		}
 	});
 });
-*/

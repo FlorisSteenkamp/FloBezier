@@ -8,7 +8,7 @@ import { getRandomBezier, getRandomCubic, getRandomLine, getRandomPoint, getRand
 use(nearly);
 
 describe('toEstimation', function() {
-	it('it should ...',
+	it('it should correctly convert some bezier curves with control point coordinates in Shewchuk expansions to double precision',
 	function() {
 		{
 			// get some bezier with Shewchuk expansion coordinates

@@ -36,10 +36,6 @@ const qad = ddAddDouble;    // error -> 2*u²
 		return getDxy1Dd(ps);
 	}
 
-    if (ps.length === 2) {
-		return getDxy1Dd(ps);
-	}
-
     if (ps.length === 1) {
         return [[[0,0]], [[0,0]]];
     }

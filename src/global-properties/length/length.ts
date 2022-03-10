@@ -17,15 +17,15 @@ import { lengthBez3 } from './length-bez3.js';
 function length(
 		interval: number[], 
 		ps: number[][],
-		maxFlatness = 1.01,
+		maxCurviness = 0.4,
 		gaussOrder: 4|16|64 = 16): number {
 
 	if (ps.length === 4) {
-		return lengthBez3(interval, ps, maxFlatness, gaussOrder);
+		return lengthBez3(interval, ps, maxCurviness, gaussOrder);
 	}
 
 	if (ps.length === 3) {
-		return lengthBez2(interval, ps, maxFlatness, gaussOrder);
+		return lengthBez2(interval, ps, maxCurviness, gaussOrder);
 	}
 
 	if (ps.length === 2) {

@@ -22,14 +22,14 @@ const maxCoordinateX = 1;
 const maxCoordinateY = 1/squashFactor;
 //const expMax = Math.ceil(Math.log2(Math.max(maxCoordinateX, maxCoordinateY)));
 const settings = {
-    timingOnly: true,
+    timingOnly: false,
     /** the number of bezier pairs (=== number of beziers / 2) */
     // num: 100000,
-    num: 10000,
+    num: 1,
     maxBitLength: 53,
 
-    showNaive: false,
-    showNative: true,
+    showNaive: true,
+    showNative: false,
     showPaper: true,
     showGeo: true,
     transY: 0,

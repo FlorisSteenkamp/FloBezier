@@ -4,7 +4,8 @@
  * 
  * @param ps an order 0,1,2 or 3 bezier curve given as an array of control points
  */
- function toString(ps: number[][]) {
+ function toString(ps: number[][]): string {
+	// for (let i=0 )
 	if (ps.length === 4) {
 		const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
 		return `[[${x0},${y0}],[${x1},${y1}],[${x2},${y2}],[${x3},${y3}]]`;
@@ -22,8 +23,10 @@
 
 	if (ps.length === 1) {
 		const [[x0,y0]] = ps;
-		return `[[${x0},${y0}]]`;		
+		return `[[${x0},${y0}]]`;
 	}
+
+	throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 

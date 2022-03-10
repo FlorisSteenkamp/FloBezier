@@ -7,9 +7,9 @@ import { updDs } from '../upd-ds.js';
 import { showResults } from '../show-results.js';
 import { renderTree } from './render-tree.js';
 
-
 const { tc, num, timingOnly, showGeoXs, showGeoIters } = settings;
 
+console.log('BB');
 const __debug__: __Debug__ = (typeof globalThis !== 'undefined' && (globalThis as any).__debug__)
     ? (globalThis as any).__debug__
     : undefined;

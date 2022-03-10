@@ -12,7 +12,7 @@ import {
     psCCSameAlgebraicallyNonOverlappingIntersecting,
     psQQBothSelfOverlappingAndOverlapping,
     getCCSameAlgebraicallyOverlapping
-} from '../../../test/intersection/bezier-bezier-intersection/get-curve-pairs.js';
+} from '../get-curve-pairs.js';
 
 
 const { num, maxCoordinateX, maxCoordinateY, maxBitLength } = settings;
@@ -183,13 +183,24 @@ function getPss(
     //const d = getCCSameAlgebraicallyOverlapping(false, true).map(getHodograph);
     //const d = getCCSameAlgebraicallyOverlapping(false).map(getHodograph);
     const d = getCCSameAlgebraicallyOverlapping(false)!;
-    console.log(toString(getXY(d[0])))
-    console.log(toString(getXY(d[1])))
+    // console.log(toString(getXY(d[0])))
+    // console.log(toString(getXY(d[1])))
+
+    const temp = [ [ [ 0.2143524744699633, 0.5045855184730568 ],
+    [ -0.951521460240019, 0.804893860321009 ],
+    [ -0.9374367393054582, 0.1594076404902527 ],
+    [ -0.518546144985264, 0.1075939234711708 ] ],
+  [ [ 0.2948929912973699, -0.6287386019334029 ],
+    [ 0.3003317774161055, -0.7151828228712397 ],
+    [ 0.8249014050545552, -0.9342640534619419 ],
+    [ -0.44050825694267937, 0.6074474305608206 ] ] ];
+
     let pss: number[][][] = [
+        ...temp
         //...psCCSameAlgebraicallyNonOverlapping
         //b,
         //c,
-        ...d,
+        // ...d,
         //...psQQBothSelfOverlappingAndOverlapping,
         //...a
         //...psEdgeCase1

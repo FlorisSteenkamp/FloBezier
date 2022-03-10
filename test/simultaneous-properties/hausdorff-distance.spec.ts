@@ -63,6 +63,13 @@ describe('hausdorffDistance', function() {
 			expect(AB).to.eql(2);
 			expect(BA).to.be.nearly(2**1,(sqrt(3**2 + 2**2)));
 			expect(hd).to.eql(BA);
+
+			const A_ = A.slice().reverse();
+			const B_ = B.slice().reverse();
+			const AB_ = hausdorffDistanceOneSided(A_,B_);
+			const BA_ = hausdorffDistanceOneSided(B_,A_);
+			expect(AB_).to.eql(2);
+			expect(BA_).to.be.nearly(2**1,(sqrt(3**2 + 2**2)));
 		}
 		{
 			// Test some line-quad
@@ -214,6 +221,17 @@ describe('hausdorffDistance', function() {
 			const h = hausdorffDistance(B,A,tol);
 
 			expect(h).to.be.nearly(2**32,0.0004163441673260007);
+		}
+
+		{
+			// Some special cases 1
+			const A = [[1,1]];
+			const B = [[1,2],[3,4],[4,3],[2,1]];
+			const AB = hausdorffDistanceOneSided(A,B);
+			const BA = hausdorffDistanceOneSided(B,A);
+
+			expect(AB).to.be.nearly(2**4, 1);
+			expect(BA).to.be.nearly(2**4, 2*sqrt(2));
 		}
 	});
 });

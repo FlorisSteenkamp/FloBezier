@@ -37,6 +37,7 @@ function native(
 
         if (showNativeXs && i < 1) {
             drawIntersections(xs);
+            console.log(xs.map(x => x[0].box));
         }
         if (!timingOnly) {
             for (const x of xs) {
@@ -53,7 +54,8 @@ function native(
     }
     timing = performance.now() - timeStart;
 
-    showResults('native', true, timing, ds, total);
+    // showResults('native', true, timing, ds, total);
+    showResults('native', false, timing, ds, total);
 
     return xss;
 }

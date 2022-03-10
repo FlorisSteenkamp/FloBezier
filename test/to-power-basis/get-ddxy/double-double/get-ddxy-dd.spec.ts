@@ -55,5 +55,12 @@ describe('getDdxyDd', function() {
 			const expected = [[[0]],[[0]]];
 			expect(r).to.eql(expected);
 		}
+
+		// some edge cases
+		{
+			const p = [1,1];
+			const ps = [p,p,p,p,p];
+			expect(() => getDdxyDd(ps)).to.throw();
+		}
 	});
 });

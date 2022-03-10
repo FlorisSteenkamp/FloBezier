@@ -4,7 +4,8 @@ export default function(wallaby) {
         files: [
             'package.json',
             'src/**/*.ts',
-            'test/helpers/*.ts'
+            'test/helpers/*.ts',
+            'test/helpers/intersection/*.ts'
         ],
 
         tests: [

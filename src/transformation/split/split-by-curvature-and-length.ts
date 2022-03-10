@@ -1,35 +1,44 @@
 import { distanceBetween } from "flo-vector2d";
 import { fromTo } from "./from-to.js";
 import { controlPointLinesLength } from "../../global-properties/length/control-point-lines-length.js";
+import { curviness } from '../../global-properties/curviness.js';
 
 
 /**
- * Split the order 0,1,2 or 3 bezier into pieces (given as an array of parameter 
+ * Split the given bezier curve into pieces (given as an array of parameter 
  * `t` values) such that each piece is flat within a given tolerance (where
- * curvature is measured by the `flatness` function).
+ * curvature is measured by the `curviness` function).
  * 
  * @param ps 
- * @param maxFlatness
- * @param maxLength
+ * @param maxCurviness maximum curviness (must be > 0) as calculated using 
+ * the `curviness` function (which measures the total angle in radians formed 
+ * by the vectors formed by the ordered control points); defaults to `0.4 radians`
+ * @param maxLength maximum allowed length of any returned piece
+ * @param minTSpan the minimum `t` span that can be returned for a bezier piece;
+ * necessary for cubics otherwise a curve with a cusp would cause an infinite
+ * loop; defaults to `2**-16`
  * 
  * @doc
  */
 function splitByCurvatureAndLength(
         ps: number[][], 
-        maxFlatness: number = 1.001,
-        maxLength: number = 10) {
+        maxCurviness: number = 0.4,
+        maxLength: number = 10,
+        minTSpan = 2**-16) {
 
-    const ts: number[] = [0,1]; // include endpoints
-    const tStack: number[][] = [[0,1]];
+    const ts = [0,1]; // include endpoints
+    const tStack = [[0,1]];
 
     while (tStack.length) {
-        // Tell TypeScript there *is* something in the stack.
         const ts_ = tStack.pop()!;
-        const ps_ = fromTo(ps, ts_[0], ts_[1]).ps;
-        const l1 = controlPointLinesLength(ps_);
-        const l2 = distanceBetween(ps_[0], ps_[ps_.length-1]);
-        const flatness_ = 1 + (l1/l2 - 1)*(l1/maxLength);
-        if (flatness_ > maxFlatness) {
+
+        if (ts_[1] - ts_[0] <= minTSpan) { continue; }
+
+        const ps_ = fromTo(ps,ts_[0], ts_[1]).ps;
+
+        if (controlPointLinesLength(ps_) > maxLength || 
+            curviness(ps_) > maxCurviness) {
+
             const t = (ts_[0] + ts_[1]) / 2;
             tStack.push([ts_[0], t]);
             tStack.push([t, ts_[1]]);

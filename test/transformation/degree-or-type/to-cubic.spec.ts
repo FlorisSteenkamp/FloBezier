@@ -1,14 +1,14 @@
 import { expect, assert, use } from 'chai';
 import { describe } from 'mocha';
-import { toQuadraticFromCubic, toCubic } from '../../../src/index.js';
+import { cubicToQuadratic, lineToCubic, quadraticToCubic, toCubic } from '../../../src/index.js';
 import { nearly } from '../../helpers/chai-extend-nearly.js';
 import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../../helpers/get-random-bezier.js';
-import { randomRotateAndTranslate } from '../../helpers/random-rotate-and-translate.js';
 
 use(nearly);
 
+
 describe('toCubic', function() {
-	it('it should ',
+	it('it should correctly convert some point, line and quadratic bezier curves to cubic bezier curves',
 	function() {
 		{
 			let ps = getRandomLine(0);
@@ -29,6 +29,8 @@ describe('toCubic', function() {
 			expect((x3 - x0)/3).to.be.nearly(2**2, x3 - x2);
 			expect((x3 - x0)/3).to.be.nearly(2**2, x2 - x1);
 			expect((x3 - x0)/3).to.be.nearly(2**2, x1 - x0);
+
+			expect(lineToCubic(ps)).to.eql(toCubic(ps));
 		}
 
 		{
@@ -41,9 +43,11 @@ describe('toCubic', function() {
 				[-19.608964715212537, 52.32750125849648]
 			]);
 
-			const ps_ = toQuadraticFromCubic(r);
+			const ps_ = cubicToQuadratic(r);
 
 			expect(ps).to.be.nearly(2**2,ps_);
+
+			expect(quadraticToCubic(ps)).to.eql(toCubic(ps));
 		}
 
 
@@ -55,7 +59,7 @@ describe('toCubic', function() {
 		{
 			let ps = getRandomQuad(0);
 			const r = toCubic(ps);
-			expect(ps).to.be.nearly(2**2, toQuadraticFromCubic(r));
+			expect(ps).to.be.nearly(2**2, cubicToQuadratic(r));
 		}
 		{
 			let ps = getRandomLine(0);
@@ -67,6 +71,13 @@ describe('toCubic', function() {
 			const r = toCubic(ps);
 			const p = ps[0];
 			expect(r).to.be.eql([p,p,p,p]);
+		}
+
+		// some edge cases
+		{
+			const p = [1,1];
+			const ps = [p,p,p,p,p];
+			expect(() => toCubic(ps)).to.throw();
 		}
 	});
 });

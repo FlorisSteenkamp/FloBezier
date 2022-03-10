@@ -5,7 +5,6 @@ const __debug__: __Debug__ = (typeof globalThis !== 'undefined' && (globalThis a
     ? (globalThis as any).__debug__
     : undefined;
 
-
 const toHybridQuadratic = _toHybridQuadratic;
 
 const min = Math.min;

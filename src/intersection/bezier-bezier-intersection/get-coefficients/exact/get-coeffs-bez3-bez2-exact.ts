@@ -2,7 +2,7 @@ import type { ImplicitFormExact3 } from "../../../../implicit-form/implicit-form
 import { getImplicitForm3ExactPb } from "../../../../implicit-form/exact/get-implicit-form3-exact.js";
 import { getXY2Exact, getXY3Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact.js";
 import { getCoeffsBez2Bez2Exact } from "./get-coeffs-bez2-bez2-exact.js";
-import { toQuadraticFromCubic } from "../../../../transformation/degree-or-type/to-quadratic-from-cubic.js";
+import { cubicToQuadratic } from "../../../../transformation/degree-or-type/cubic-to-quadratic.js";
 import { getCoeffsBez3Bez1Exact } from "./get-coeffs-bez3-bez1-exact.js";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
@@ -48,7 +48,7 @@ function getCoeffsBez3Bez2Exact(ps1: number[][], ps2: number[][]) {
     // if both polynomials' cubic terms are exactly zero then its really a quadratic
     if (eSign(ps1pb[0][0]) === 0 && eSign(ps1pb[1][0]) === 0) {
         // the input bezier curve is in fact not cubic but has order < 3
-        return getCoeffsBez2Bez2Exact(toQuadraticFromCubic(ps1)!, ps2);
+        return getCoeffsBez2Bez2Exact(cubicToQuadratic(ps1)!, ps2);
     }
 
     const [[c2,c1,c0],[d2,d1,d0]] = getXY2Exact(ps2);

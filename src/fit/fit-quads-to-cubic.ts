@@ -1,6 +1,6 @@
 import { classify } from "../global-properties/classification/classify.js";
 import { fromTo3 } from "../transformation/split/from-to/from-to-3.js";
-import { toQuadraticFromCubic } from "../transformation/degree-or-type/to-quadratic-from-cubic.js";
+import { cubicToQuadratic } from "../transformation/degree-or-type/cubic-to-quadratic.js";
 import { getAbsAreaBetween } from './get-abs-area-between.js';
 import { bezierSelfIntersection } from '../intersection/self-intersection/bezier-self-intersection.js';
 
@@ -41,7 +41,7 @@ function fitQuadsToCubic(
         // It is not possible that `toQuadraticFromCubic(ps)` be undefined here
         // since the `real order` is exactly 2 and the control points are *not*
         // collinear.
-        return [toQuadraticFromCubic(ps)!];
+        return [cubicToQuadratic(ps)!];
     }
 
     const stack: number[][] = [];
@@ -75,7 +75,7 @@ function fitQuadsToCubic(
         const [tS,tE] = ts;
         /** the piece of the cubic bezier to approximate */
         const psCubic = fromTo3(ps, tS, tE).ps;
-        const psQuad = toQuadraticFromCubic(psCubic);
+        const psQuad = cubicToQuadratic(psCubic);
         const spanRatio = tE - tS;
         if (psQuad === undefined || 
             spanRatio*getAbsAreaBetween(psQuad, psCubic) > tolerance) {

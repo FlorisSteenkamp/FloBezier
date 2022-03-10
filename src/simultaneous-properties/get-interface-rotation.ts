@@ -31,7 +31,8 @@ function getInterfaceRotation(
         a: number[],
         b: number[]): number {
 
-	if ((a[0] === 0 && a[1]) === 0 || (b[0] === 0 && b[1])) {
+	if ((a[0] === 0 && a[1] === 0) || 
+	    (b[0] === 0 && b[1] === 0)) {
 		return 0;  // zero vector
 	}
 

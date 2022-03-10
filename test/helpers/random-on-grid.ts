@@ -13,10 +13,10 @@ const { ceil, log2 } = Math;
  * @param max 
  * @param n
  */
-function randomCenteredAt0(max: number, n: number) { 
-    return 2*max * ((squares(n) / 0xffff_ffff) - 0.5);
-    // return 2*max * ((squares(n) / 2**32) - 0.5);
-}
+//function randomCenteredAt0(max: number, n: number) { 
+//    return 2*max * ((squares(n) / 0xffff_ffff) - 0.5);
+//    // return 2*max * ((squares(n) / 2**32) - 0.5);
+//}
 
 
 /**
@@ -25,7 +25,7 @@ function randomCenteredAt0(max: number, n: number) {
  * random number is close to zero.
  * 
  * @param max the max absolute value possible; prefer a power of 2
- * @param n
+ * @param n an index to the random number (starting from 0)
  */
 function randomCenteredAt0v2(max: number, n: number) { 
     // get a random sign

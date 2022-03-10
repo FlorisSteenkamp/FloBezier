@@ -13,7 +13,7 @@ import { getDxy2Dd, getDxy3Dd } from '../../to-power-basis/get-dxy/double-double
 import { getDxy2ErrorCounters, getDxy3ErrorCounters } from '../../to-power-basis/get-dxy/get-dxy-error-counters.js'
 import { allRootsCertified, RootInterval } from 'flo-poly';
 import { γγ } from '../../error-analysis/error-analysis.js';
-import { reduceOrderIfPossible } from './reduce-order-if-possible.js';
+import { reduceOrderIfPossible } from '../../transformation/reduce-order-if-possible.js';
 
 const eps = Number.EPSILON;
 const eps2 = 2*eps;
@@ -25,25 +25,21 @@ const γγ3 = γγ(3);
  * points, linear, quadratic or cubic bezier curves (i.e. order 0, 1, 2 or 3
  * curves).
  * 
- * The algorithm employed uses advanced techniques such 
- * as floating point error bounding, adaptive multi-precision floating 
- * point arithmetic, pre-filtering of easy cases, certified root finding and 
- * algebraic implicitization of the curves in order to find *guaranteed* 
- * accurate results.
+ * The algorithm employed uses advanced techniques such as floating point error 
+ * bounding, adaptive multi-precision floating point arithmetic, pre-filtering 
+ * of easy cases, certified root finding and algebraic implicitization of the 
+ * curves in order to find *guaranteed* accurate results.
  *
  * * the returned intersections are *ordered* by `t` value of the first bezier 
  * curve
- * TODO - make sure below points are correct (add to tests)
  * * if the two curves have an infinite number of intersections `undefined` is 
- * returned
- * * TODO the second bezier curve's parameter `t` values are returned; call [[getOtherTs]] to
- * get the first bezier's `t` values.
- * // TODO
- * * * **precondition:** the coordinates of the given bezier curves must be 
+ * returned TODO
+ *
+ * TODO
+ * * **precondition:** the coordinates of the given bezier curves must be 
  * such that underflow / overflow does not occur 
  * * this algorithm is mathematically guaranteed accurate to within 
- * `4 * Number.EPSILON` in the t values of the *second* bezier curve (provided
- * the precondition is met).
+ * `4 * Number.EPSILON` in the `t` values of the bezier curves
  * 
  * @param ps 
  * 
@@ -114,13 +110,15 @@ function handleInfiniteIntersections(
     // `bezierBezierIntersectionBoundless(ps1, ps2) === undefined`
     
     if (isCollinear(ps1)) {
-        // `ps2` must also be a line
+        // `ps2` must also be collinear
         return handleCollinearIntersections(ps1,ps2);
     }
 
+    // Now neither `ps1` nor `ps2` is collinear and they are thus algebraically
+    // identical
     const xPairs: X[][] = [];
 
-    xPairs.push(...getEndpointIntersections(ps1, ps2));
+    xPairs.push(...getEndpointIntersections(ps1, ps2, true));
     xPairs.push(...getCoincidingSelfIntersections(ps1, ps2));
 
     return xPairs;
@@ -182,6 +180,7 @@ function getCoincidingSelfIntersections(
 
 
 /**
+ * * **precondition:** both curves must be of at least order 1 (lines)
  * * **precondition:** the bezier curves must be of lowest possible 
  * representable order
  * * **precondition:** `bezierBezierIntersectionBoundless(ps1, ps2)` must
@@ -204,7 +203,10 @@ function handleCollinearIntersections(
     const ris1 = getTurnaroundPoints(ps1);
     const ris2 = getTurnaroundPoints(ps2);
     
-    //aaa TODO
+    if (ris1.length === 0 && ris2.length === 0) {
+        // the simplest case - we only need to check endpoints
+
+    }
 
     return [];
 }
@@ -226,7 +228,7 @@ function getTurnaroundPoints(ps: number[][]): RootInterval[] {
     // positive infinity.
     // Since we're already constrained to a line we only need look at either
     // `x(t)` or `y(t)`.
-    // # of 'turn-around points': 
+    // # of 'turn-around points': TODO - add all these possibilities as test cases
     //  * line: 0
     //  * quadratic: 0,1
     //  * cubic: 0,1 or 2
@@ -319,7 +321,7 @@ function handlePointDegenerateCases(
         }
         if (isPointOnBezierExtension(ps2, [[p1[0]],[p1[1]]])) {
             // keep TypeScript happy; at this point `tFromXY` cannot return `undefined`
-            return tFromXY(ps2, p1)!.map(ri => [
+            return tFromXY(ps2, p1).map(ri => [
                 { ri: { tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }, kind: 6, box },
                 { ri, kind: 6, box },
             ]);
@@ -331,7 +333,7 @@ function handlePointDegenerateCases(
     const box = [p2,p2];
     if (isPointOnBezierExtension(ps1, [[p2[0]],[p2[1]]])) {
         // keep TypeScript happy; at this point `tFromXY` cannot return `undefined`
-        return tFromXY(ps1, p2)!.map(ri => [
+        return tFromXY(ps1, p2).map(ri => [
             { ri, kind: 6, box },
             { ri: { tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }, kind: 6, box },
         ]);

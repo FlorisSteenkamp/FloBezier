@@ -38,7 +38,7 @@ function isPointOnBezierExtension(
         );
     }
 
-    throw new Error('The given bezier curve is invalid.');
+    throw new Error('The given bezier curve must be of order <= 3');
 }
 
 

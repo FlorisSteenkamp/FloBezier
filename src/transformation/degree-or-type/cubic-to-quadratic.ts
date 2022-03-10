@@ -25,9 +25,9 @@ const ts = twoSum;
  * must also preserve the tangents of the cubic at the initial and final control 
  * points
  * 
- * @doc
+ * @doc mdx
  */
-function toQuadraticFromCubic(
+function cubicToQuadratic(
         psCubic: number[][],
         preserveTangents = false): number[][] | undefined {
 
@@ -125,4 +125,4 @@ function llIntersection(
 }
 
 
-export { toQuadraticFromCubic }
+export { cubicToQuadratic }

@@ -16,7 +16,7 @@
  * 
  * @doc mdx
  */
-function toHybridQuadratic(ps: number[][]): [
+function cubicToHybridQuadratic(ps: number[][]): [
         [number, number], 
         [
             [number, number], 
@@ -40,4 +40,4 @@ function toHybridQuadratic(ps: number[][]): [
 }
 
 
-export { toHybridQuadratic }
+export { cubicToHybridQuadratic }

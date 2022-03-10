@@ -8,6 +8,10 @@ module.exports = {
     mode: 'development',
     entry: './src/test-bezier-intersection.ts',
     resolve: {
+        alias: {
+            // TODO - remove for production
+            // 'flo-poly$': path.resolve(__dirname, projectRoot, '../projects', 'flo-poly/src/index.ts')
+        },
         extensions: [
             '.js', '.mjs', '.cjs', 
             '.jsx', '.cjsx', '.mjsx'

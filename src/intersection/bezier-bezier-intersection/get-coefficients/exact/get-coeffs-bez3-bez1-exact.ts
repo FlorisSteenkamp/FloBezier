@@ -7,7 +7,7 @@ import {
     eMultBy2, eSign as _eSign
 } from "big-float-ts";
 import { getCoeffsBez2Bez1Exact } from "./get-coeffs-bez2-bez1-exact.js";
-import { toQuadraticFromCubic } from "../../../../transformation/degree-or-type/to-quadratic-from-cubic.js";
+import { cubicToQuadratic } from "../../../../transformation/degree-or-type/cubic-to-quadratic.js";
 import { getImplicitForm3ExactPb } from "../../../../implicit-form/exact/get-implicit-form3-exact.js";
 import { isPointOnBezierExtension } from "../../../../simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension.js";
 
@@ -50,7 +50,7 @@ function getCoeffsBez3Bez1Exact(
     // if both polynomials' cubic terms are exactly zero then its really a quadratic
     if (eSign(ps1pb[0][0]) === 0 && eSign(ps1pb[1][0]) === 0) {
         // the input bezier curve is in fact not cubic but has order < 3
-        return getCoeffsBez2Bez1Exact(toQuadraticFromCubic(ps1)!, ps2);
+        return getCoeffsBez2Bez1Exact(cubicToQuadratic(ps1)!, ps2);
     }
 
     const [[c1,c0],[d1,d0]] = getXY1Exact(ps2);

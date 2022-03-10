@@ -29,7 +29,7 @@ function getRotationAround(ps: number[][]) {
 
 
 describe('getInterfaceRotation', function() {
-	it('it should ...',
+	it('it should correctly return the rotation difference between some vectors',
 	function() {
 		for (let seed=0; seed<5; seed++) {
 			const ps = getRandomQuad(seed);  // representing a triangle
@@ -45,6 +45,14 @@ describe('getInterfaceRotation', function() {
 			const r_ = getRotationAround(ps_);
 			
 			expect(r).to.be.nearly([2**6], r_);
+		}
+
+		// some edge cases
+		{
+			const v1 = [0,0];
+			const v2 = [2,2];
+			expect(getInterfaceRotation(v1,v2)).to.eql(0);
+			expect(getInterfaceRotation(v2,v1)).to.eql(0);
 		}
 	});
 });

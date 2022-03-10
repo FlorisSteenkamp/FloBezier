@@ -35,5 +35,12 @@ describe('getXYDdWithRunningError', function() {
 				}
 			}
 		}
+		
+		// some edge cases
+		{
+			const p = [1,1];
+			const ps = [p,p,p,p,p];
+			expect(() => getXYDdWithRunningError(ps)).to.throw();
+		}
 	});
 });

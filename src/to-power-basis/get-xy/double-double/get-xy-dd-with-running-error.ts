@@ -58,6 +58,7 @@ function getXYDdWithRunningError(
 	
 	if (ps.length === 2) {
 		const r = getXY1DdWithRunningError(ps);
+		// TODO this is ugly
 		(r[0][1] as unknown as number[]) = [0,r[0][1]];
 		(r[1][1] as unknown as number[]) = [0,r[1][1]];
 		return {

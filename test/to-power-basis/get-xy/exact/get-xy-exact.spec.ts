@@ -66,5 +66,12 @@ describe('getXYExact', function() {
 				expect(r.map(v => v.map(eEstimate))).to.be.nearly(2**6, rd);
 			}
 		}
+
+		// some edge cases
+		{
+			const p = [1,1];
+			const ps = [p,p,p,p,p];
+			expect(() => getXYExact(ps)).to.throw();
+		}
 	});
 });

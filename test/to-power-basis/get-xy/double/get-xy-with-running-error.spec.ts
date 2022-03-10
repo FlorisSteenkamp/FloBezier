@@ -36,5 +36,12 @@ describe('getXYWithRunningError', function() {
 				}
 			}
 		}
+
+		// some edge cases
+		{
+			const p = [1,1];
+			const ps = [p,p,p,p,p];
+			expect(() => getXYWithRunningError(ps)).to.throw();
+		}
 	});
 });

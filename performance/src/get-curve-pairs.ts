@@ -1,6 +1,10 @@
-import { fromTo3 } from '../../../src/transformation/split/from-to/from-to-3.js';
-import { areBeziersInSameKFamily, bezierSelfIntersection, fromPowerBasis, getHodograph, getXY, toQuadraticFromCubic, toString } from '../../../src/index.js';
-import { generateSelfIntersecting } from '../../../src/create/generate-self-intersecting.js';
+import { fromTo3 } from '../../src/transformation/split/from-to/from-to-3.js';
+import { 
+    bezierSelfIntersection, fromPowerBasis, getHodograph, 
+    getXY, toString, cubicToQuadratic
+} from '../../src/index.js';
+import { generateSelfIntersecting } from '../../src/create/generate-self-intersecting.js';
+import { areIntersectionsInfinte } from './are-intersections-infinite.js';
 
 
 // a bit contrived (next 2)
@@ -414,7 +418,7 @@ const psss: number[][][] = [
 ];
 */
 
-//console.log(toString(toQuadraticFromCubic(psss[1])));
+//console.log(toString(cubicToQuadratic(psss[1])));
 //[
 //    [0.19829218194939946,0.34774513655815453],
 //    [0.2827739881563515,0.0699415209265597],
@@ -616,8 +620,8 @@ for (let i=0; i<psss.length; i++) {
 
 //console.log(toString(toCubic(psss[1])))
 //console.log(isCubicReallyQuad(psss[1]));
-//console.log(isQuadReallyLine(toQuadraticFromCubic(psss[1])));
-//console.log(toQuadraticFromCubic(psss[1]));
+//console.log(isQuadReallyLine(cubicToQuadratic(psss[1])));
+//console.log(cubicToQuadratic(psss[1]));
 //console.log(isQuadReallyLine(psss[2]));
 
 
@@ -722,7 +726,7 @@ function get33SameAlgebraicallyNonOverlapping(
         const ps1 = fromTo3(ps,0,t1).ps;
         const ps2 = fromTo3(ps,t2,1).ps;
 
-        if (areBeziersInSameKFamily(ps1,ps2)) {
+        if (areIntersectionsInfinte(ps1,ps2)) {
             return [ps1,ps2];
         }
     }
@@ -756,7 +760,7 @@ function getCCSameAlgebraicallyOverlapping(
         const ps1 = ps;
         const ps2 = fromTo3(ps,0-t1,1+t2).ps;
 
-        if (areBeziersInSameKFamily(ps1,ps2)) {
+        if (areIntersectionsInfinte(ps1,ps2)) {
             //if (!goodHodo) {
                 return [ps1,ps2];
             //}

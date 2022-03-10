@@ -9,7 +9,7 @@ const getRandomBezier_ = getRandomBezier(200, 37);
 
 
 describe('equal', function() {
-	it('it should ...',
+	it('it should correctly test whether two bezier curves are identical or not',
 	function() {
 		for (let order=0;order<=3;order++) {
 			for (let i=0;i<=3;i++) {
@@ -23,6 +23,19 @@ describe('equal', function() {
 				expect(ps1).not.to.eql(ps3);
 				expect(equal(ps1,ps3)).to.be.false;
 			}
+		}
+
+		// some edge cases
+		{
+			const ps1 = getRandomBezier_(3)(10);
+			const ps2 = ps1;
+			expect(equal(ps1,ps2)).to.be.true;
+		}
+
+		{
+			const ps1 = getRandomBezier_(3)(10);
+			const ps2 = ps1;
+			expect(equal(ps1,[...ps2,[1,1]])).to.be.false;
 		}
 	});
 });

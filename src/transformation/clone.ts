@@ -7,19 +7,13 @@
  * @doc
  */
 function clone(ps: number[][]) {
-	if (ps.length === 4) {
-		const [[x0,y0],[x1,y1],[x2,y2],[x3,y3]] = ps;
-
-		return [[x0,y0],[x1,y1],[x2,y2],[x3,y3]];
-	} else if (ps.length === 3) {
-		const [[x0,y0],[x1,y1],[x2,y2]] = ps;
-
-		return [[x0,y0],[x1,y1],[x2,y2]];
-	} else if (ps.length === 2) {
-		const [[x0,y0],[x1,y1]] = ps;
-
-		return [[x0,y0],[x1,y1]];
+	const ps_: number[][] = [];
+	for (let i=0; i<ps.length; i++) {
+		const p = ps[i];
+		ps_.push([p[0],p[1]]);
 	}
+
+	return ps_;
 }
 
 
