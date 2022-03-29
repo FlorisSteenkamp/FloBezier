@@ -222,7 +222,7 @@ function splitLeft2(
  * `u === Number.EPSILON/2`). 
  * 
  * @param ps a quadratic bezier curve
- * @param t the `t` parameter where the resultant bezier should start
+ * @param tS the `t` parameter where the resultant bezier should start
  * @param tE the `t` parameter where the resultant bezier should end
  * 
  * @internal

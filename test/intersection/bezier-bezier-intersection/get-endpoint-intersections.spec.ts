@@ -1,15 +1,16 @@
-import { eEstimate } from "big-float-ts";
 import { expect, use } from "chai";
-import { reverse } from "dns";
-import { fromTo } from "flo-vector2d";
+import { eEstimate } from "big-float-ts";
 import { 
-    bezierSelfIntersection, evaluate, evaluateExact, generateSelfIntersecting, 
-    getEndpointIntersections, isPointOnBezierExtension, X 
+    bezierSelfIntersection, evaluateExact, fromPowerBasis, generateSelfIntersecting, 
+    getEndpointIntersections, getXY, getXYExact, isPointOnBezierExtension, X 
 } from "../../../src/index.js";
 import { fromTo3 } from "../../../src/transformation/split/from-to/from-to-3.js";
 import { nearly } from "../../helpers/chai-extend-nearly.js";
 import { areIntersectionsInfinte } from "../../helpers/intersection/are-intersections-infinite.js";
-import { swapIntersections } from "../../helpers/intersection/swap-intersections.js";
+import { reverse } from "dns";
+import { fromTo2 } from "../../../src/transformation/split/from-to/from-to-2.js";
+
+const { sqrt } = Math;
 
 use(nearly);
 
@@ -21,25 +22,143 @@ describe('getEndpointIntersections', function() {
         {
             // All possible cases:
             //
+            /*
+            {
+                const t0 = -0.125;  // 1 - (2**40)*Number.EPSILON
+                const t1 = 6.125;
+                // const t1 = 2**20;
+                const psA = [[1,1],[3,2],[4,4]];
+                // 0.484375,0.765625,13.765625,6.234375,-12.015625,50.765625
+                const psB = fromTo2(psA,t0,t1).ps;//?
+
+                const coord = 0;
+
+                const xyA = [
+                    getXYExact(psA)[0].map(eEstimate),
+                    getXYExact(psA)[1].map(eEstimate)
+                ];
+                const xyB = [
+                    getXYExact(psB)[0].map(eEstimate),
+                    getXYExact(psB)[1].map(eEstimate),
+                ];
+
+                const [p2,p1,p0] = xyA[coord];//?
+                const [r2,r1,r0] = xyB[coord];//?
+
+                // (1)   r0 = cc*p0
+                // (2)   r1 = c*p1 + 2*c*d*p0 = c*(p1 + 2*d*p0)
+                // (3)   r2 = p2 + d*p1 + dd*p0
+
+                // (A)   r1**2 = (r0/p0)*(p1**2 - 4*p0*(p2 - r2))   (a perfect square)
+
+                const cc = r2/p2;//?
+                const c1 = sqrt(cc);//?
+                const c2 = -sqrt(cc);//?
+                const rr = p1**2 - 4*p2*(p0 - r0)//?
+                const r = sqrt(rr);//?
+                const d1 = (-p1 + r)/(2*p2);//?
+                const d2 = (-p1 - r)/(2*p2);//?
+
+                [r2,r1,r0];//?
+                const r2_ = cc*p2;           //?
+                const r11 = c1*(p1 + 2*d1*p2);//?
+                const r12 = c2*(p1 + 2*d2*p2);//?
+                const r01 = p0 + d1*p1 + d1*d1*p2;//?
+                const r02 = p0 + d2*p1 + d2*d2*p2;//?
+
+                r1**2;//?
+                (r2/p2)*(p1**2 - 4*p2*(p0 - r0));//?
+                // sqrt(2)**2;//?
+
+                // `t0 = -d/c` (or `t0 = f`)
+                // `t1 = (1 - d)/c` (or `t1 = e + f`)
+                // 0.484375, 0.765625,13.765625,6.234375,-12.015625,50.765625
+                fromPowerBasis([
+                    changeVariablesQuadratic(xyA[0], c1, d1),
+                    changeVariablesQuadratic(xyA[1], c1, d1)
+                ]);
+                // 0.484375,26.265625,13.765625,-5.765625,-12.015625,1.265625
+                fromPowerBasis([
+                    changeVariablesQuadratic(xyA[0], c2, d2),
+                    changeVariablesQuadratic(xyA[1], c2, d2)
+                ]);
+                    
+                // changeVariablesQuadratic(xyB1, c2, d2);//?
+
+                // const t0_1 = -d1/c1;//?
+                // const t1_1 = (1 - d1)/c1;//?
+                const t0_1 = d1;//?
+                const t1_1 = c1 + d1;//?
+                //const t0_2 = -d2/c2;//?
+                //const t1_2 = (1 - d2)/c2;//?
+                const t0_2 = d2;//?
+                const t1_2 = c2 + d2;//?
+
+                // [[0.484375,0.765625], [13.765625,6.234375], [-12.015625,50.765625]]
+                evaluateExact(psA,t0_1);//?
+                evaluateExact(psA,t0_2);//?
+                p2*t0_1**2 + p1*t0_1 + p0;//?
+                p2*t0_2**2 + p1*t0_2 + p0;//?
+                //p2y*t0_1**2 + p1y*t0_1 + p0y;//?
+                //p2y*t0_2**2 + p1y*t0_2 + p0y;//?
+
+                p2*t1_1**2 + p1*t1_1 + p0;//?
+                p2*t1_2**2 + p1*t1_2 + p0;//?
+                //p2y*t1_1**2 + p1y*t1_1 + p0y;//?
+                //p2y*t1_2**2 + p1y*t1_2 + p0y;//?
+
+                
+
+                evaluateExact(psA,t1_1);//?
+                evaluateExact(psA,t1_2);//?
+
+
+                expect(areIntersectionsInfinte(psA,psB)).to.be.true;
+
+                testEndpointXs(psA,psB, [0,1], [0.02,0.18]);
+            }
+            */
+           /*
             // Case 1/2
             // ******      
             //       ******
             {
-                const t0 = 1;  // 1 - (2**40)*Number.EPSILON
+                // cubic
+                const t0 = 1;
                 const t1 = 3;
                 const psA = [[0,0],[6,6],[2,1],[3,3]];
                 const psB = fromTo3(psA,t0,t1).ps;
 
-                testEndpointXs(psA,psB, [1,1], [0,0]);
+                testEndpointXs(psA,psB, [1], [0]);
+            }
+            {
+                // quadratic
+                const t0 = 1;
+                const t1 = 3;
+                // const t1 = 2**20;
+                const psA = [[0,0],[2,1],[3,5]];
+                const psB = fromTo2(psA,t0,t1).ps;
+
+                testEndpointXs(psA,psB, [1], [0]);
             }
             // Case 3/4
             // ******
             //    ******
             {
+                // cubic
                 const t0 = 0.999755859375;  // 1 - (2**40)*Number.EPSILON
                 const t1 = 13;
                 const psA = [[0,0],[6,6],[2,1],[3,3]];
-                const psB = fromTo3(psA,t0,t1).ps;
+                const psB = fromTo3(psA,t0,t1).ps;                
+
+                testEndpointXs(psA,psB, [0.999755859375,1], [0,0.000020344638170610134]);
+            }
+            {
+                // quadratic
+                const t0 = 0.999755859375;  // 1 - (2**40)*Number.EPSILON
+                const t1 = 13;
+                const psA = [[0,0],[2,1],[3,5]];
+                const psB = fromTo2(psA,t0,t1).ps;
 
                 testEndpointXs(psA,psB, [0.999755859375,1], [0,0.000020344638170610134]);
             }
@@ -47,6 +166,7 @@ describe('getEndpointIntersections', function() {
             //   **
             // ******
             {
+                // cubic
                 const t0 = -1;
                 const t1 = 3;
                 const psA = [[0,0],[6,6],[2,1],[3,3]];
@@ -54,10 +174,21 @@ describe('getEndpointIntersections', function() {
 
                 testEndpointXs(psA,psB, [0,1], [0.25,0.5]);
             }
+            {
+                // quadratic
+                const t0 = -1;
+                const t1 = 3;
+                // const t0 = -0.125;  // 1 - (2**40)*Number.EPSILON
+                // const t1 = 6.125;
+                const psA = [[0,0],[2,1],[3,5]];
+                const psB = fromTo2(psA,t0,t1).ps;
+                testEndpointXs(psA,psB, [0,1], [0.25,0.5]);
+            }
             // Case 7/8
             // ******
             //          ******
             {
+                // cubic
                 const t0 = 2;
                 const t1 = 3;
                 const psA = [[0,0],[6,6],[2,1],[3,3]];
@@ -65,22 +196,48 @@ describe('getEndpointIntersections', function() {
 
                 testEndpointXs(psA,psB, [], []);
             }
+            */
+            {
+                // quadratic
+                const t0 = 2;
+                const t1 = 3;
+                const psA = [[0,0],[2,1],[3,5]];
+                const psB = fromTo2(psA,t0,t1).ps;
+
+                testEndpointXs(psA,psB, [], []);
+            }
             // Case 9
             // ******
             // ******
             {
+                // cubic
                 const psA = [[0,0],[6,6],[2,1],[3,3]];
                 const psB = [[0,0],[6,6],[2,1],[3,3]].reverse();
+                testEndpointXs(psA,psB, [0,1], [1,0]);
+            }
+            {
+                // quadratic
+                const psA = [[0,0],[2,1],[3,5]];
+                const psB = [[0,0],[2,1],[3,5]].reverse();
                 testEndpointXs(psA,psB, [0,1], [1,0]);
             }
             // Case 10/11
             // ***
             // ******
             {
+                // cubic
                 const t0 = 0;
                 const t1 = 3;
                 const psA = [[0,0],[6,6],[2,1],[3,3]];
                 const psB = fromTo3(psA,t0,t1).ps;
+                testEndpointXs(psA,psB, [0,1], [0,1/3]);
+            }
+            {
+                // quadratic
+                const t0 = 0;
+                const t1 = 3;
+                const psA = [[0,0],[2,1],[3,5]];
+                const psB = fromTo2(psA,t0,t1).ps;
                 testEndpointXs(psA,psB, [0,1], [0,1/3]);
             }
         }
@@ -99,26 +256,26 @@ describe('getEndpointIntersections', function() {
             // areIntersectionsInfinte(ps,psB);  //=> true
             // areIntersectionsInfinte(psA,psB);  //=> true
 
-            const p1e = evaluateExact(ps,t1);//?
+            const p1e = evaluateExact(ps,t1);
             const p1 = p1e.map(eEstimate);  //=> [0.9086538461538461, 1.6875]
             // isPointOnBezierExtension(ps,p1e);  //=> true
             // isPointOnBezierExtension(ps,[[p1[0]],[p1[1]]]);  //=> true
 
-            const p2e = evaluateExact(ps,t2);//?
+            const p2e = evaluateExact(ps,t2);
             const p2 = p2e.map(eEstimate);  //=> [0.9086538461538459, 1.6875]
             // isPointOnBezierExtension(ps,p2e);  //=> true
             // isPointOnBezierExtension(ps,[[p2[0]],[p2[1]]]);  //=> true
 
             {
                 const R = getEndpointIntersections(ps,psA);
-                const rA = R.map(mapXPairA);
-                expect(rA).to.be.nearly([2**1],[0.25,0.5]);
+                const rA = R.map(mapXPair(0));
+                expect(rA).to.be.nearly(2**1,[0.25,0.5]);
             }
             
             {
                 const R = getEndpointIntersections(ps,psB);
-                const rA = R.map(mapXPairA);
-                expect(rA).to.be.nearly([2**1],[0.5,1]);
+                const rA = R.map(mapXPair(0));
+                expect(rA).to.be.nearly(2**1,[0.5,1]);
             }
        }
     });
@@ -134,8 +291,8 @@ function testEndpointXs(
     // the below is a necessary precondition of `getEndpointIntersections`
     expect(areIntersectionsInfinte(psA,psB)).to.be.true;
 
-    for (let i=1; i<2; i++) {
-    // for (let i=0; i<2; i++) { //TODO - change back
+    // for (let i=0; i<2; i++) {
+    for (let i=0; i<2; i++) { // TODO
         const [A,B,expectedA_,expectedB_] = i === 0 
             ? [psA,psB,expectedA,expectedB]
             : expectedB[0] > expectedB[1]  // required since we always order by the `t` values of `psA`
@@ -144,97 +301,65 @@ function testEndpointXs(
 
         const AR = A.slice().reverse();
         const BR = B.slice().reverse();
-
         // ⇒ ⇒
         {
-            const R = getEndpointIntersections(A,B);
-            if (R.length === 0) {
-                expect(expectedA.length).to.eql(0);
-                expect(expectedB.length).to.eql(0);
-            } else {
-                const rA = R.map(mapXPairA);
-                const rB = R.map(mapXPairB);
-                expect(rA).to.be.nearly([2**1],expectedA_);
-                expect(rB).to.be.nearly([2**1],expectedB_);
+            const r = getEndpointIntersections(A,B);
+            const rA = r.map(mapXPair(0));
+            const rB = r.map(mapXPair(1));
+            expect(rA).to.be.nearly(2**1,expectedA_);
+            expect(rB).to.be.nearly(2**1,expectedB_);
+            for (let j=0; j<r.length; j++) {
                 expect(
-                    evaluateExact(B,expectedB_[0]).map(eEstimate)).to.be.nearly(2**2,
-                    evaluateExact(A,expectedA_[0]).map(eEstimate)
-                );
-                expect(
-                    evaluateExact(B,expectedB_[1]).map(eEstimate)).to.be.nearly(2**2,
-                    evaluateExact(A,expectedA_[1]).map(eEstimate)
+                    evaluateExact(B,expectedB_[j]).map(eEstimate)).to.be.nearly(2**2,
+                    evaluateExact(A,expectedA_[j]).map(eEstimate)
                 );
             }
         }
-
         // ⇐ ⇒  (A reversed)
         {
-            const R = getEndpointIntersections(AR,B);
-            if (R.length === 0) {
-                expect(expectedA.length).to.eql(0);
-                expect(expectedB.length).to.eql(0);
-            } else {
-                const RA = R.map(mapXPairA);
-                const RB = R.map(mapXPairB);
-                const expectedAR = expectedA_.map(v => 1 - v).reverse();
-                const expectedBR = expectedB_.slice().reverse();
-                expect(RA).to.nearly([2**1], expectedAR);
-                expect(RB).to.nearly([2**1], expectedBR);
+            const r = getEndpointIntersections(AR,B);
+            const rA = r.map(mapXPair(0));
+            const rB = r.map(mapXPair(1));
+            const expectedAR = expectedA_.map(v => 1 - v).reverse();
+            const expectedBR = expectedB_.slice().reverse();
+            expect(rA).to.be.nearly(2**1, expectedAR);
+            expect(rB).to.be.nearly(2**1, expectedBR);
+            for (let j=0; j<r.length; j++) {
                 expect(
-                    evaluateExact(B,expectedBR[0]).map(eEstimate)).to.be.nearly(2**2,
-                    evaluateExact(AR,expectedAR[0]).map(eEstimate)
-                );
-                expect(
-                    evaluateExact(B,expectedBR[1]).map(eEstimate)).to.be.nearly(2**2,
-                    evaluateExact(AR,expectedAR[1]).map(eEstimate)
+                    evaluateExact(B,expectedBR[j]).map(eEstimate)).to.be.nearly(2**2,
+                    evaluateExact(AR,expectedAR[j]).map(eEstimate)
                 );
             }
         }
-
         // ⇒ ⇐ (B reversed)
         {
-            const R = getEndpointIntersections(A,BR);
-            if (R.length === 0) {
-                expect(expectedA.length).to.eql(0);
-                expect(expectedB.length).to.eql(0);
-            } else {
-                const RA = R.map(mapXPairA);
-                const RB = R.map(mapXPairB);
-                const expectedAR = expectedA_;
-                const expectedBR = expectedB_.map(v => 1 - v);
-                expect(RA).to.nearly([2**1], expectedAR);
-                expect(RB).to.nearly([2**1], expectedBR);
+            const r = getEndpointIntersections(A,BR);
+            const rA = r.map(mapXPair(0));
+            const rB = r.map(mapXPair(1));
+            const expectedAR = expectedA_;
+            const expectedBR = expectedB_.map(v => 1 - v);
+            expect(rA).to.be.nearly(2**1, expectedAR);
+            expect(rB).to.be.nearly(2**1, expectedBR);
+            for (let j=0; j<r.length; j++) {
                 expect(
-                    evaluateExact(BR,expectedBR[0]).map(eEstimate)).to.be.nearly(2**2,
-                    evaluateExact(A,expectedAR[0]).map(eEstimate)
-                );
-                expect(
-                    evaluateExact(BR,expectedBR[1]).map(eEstimate)).to.be.nearly(2**2,
-                    evaluateExact(A,expectedAR[1]).map(eEstimate)
+                    evaluateExact(BR,expectedBR[j]).map(eEstimate)).to.be.nearly(2**2,
+                    evaluateExact(A,expectedAR[j]).map(eEstimate)
                 );
             }
         }
-
         // ⇐ ⇐ (A and B reversed)
         {
-            const R = getEndpointIntersections(AR,BR);
-            if (R.length === 0) {
-                expect(expectedA.length).to.eql(0);
-                expect(expectedB.length).to.eql(0);
-            } else {
-                const RA = R.map(mapXPairA);
-                const RB = R.map(mapXPairB);
-                const expectedAR = expectedA_.map(v => 1 - v).reverse();
-                const expectedBR = expectedB_.map(v => 1 - v).reverse();
-                expect(RA).to.nearly([2**1], expectedAR);
-                expect(RB).to.nearly([2**1], expectedBR);
+            const r = getEndpointIntersections(AR,BR);
+            const rA = r.map(mapXPair(0));
+            const rB = r.map(mapXPair(1));
+            const expectedAR = expectedA_.map(v => 1 - v).reverse();
+            const expectedBR = expectedB_.map(v => 1 - v).reverse();
+            expect(rA).to.be.nearly(2**1, expectedAR);
+            expect(rB).to.be.nearly(2**1, expectedBR);
+            for (let j=0; j<r.length; j++) {
                 expect(
-                    evaluateExact(BR,expectedBR[0]).map(eEstimate)).to.be.nearly(2**2,
-                    evaluateExact(AR,expectedAR[0]).map(eEstimate)
-                );
-                expect(
-                    evaluateExact(BR,expectedBR[1]).map(eEstimate)).to.be.nearly(2**2,
-                    evaluateExact(AR,expectedAR[1]).map(eEstimate)
+                    evaluateExact(BR,expectedBR[j]).map(eEstimate)).to.be.nearly(2**2,
+                    evaluateExact(AR,expectedAR[j]).map(eEstimate)
                 );
             }
         }
@@ -246,64 +371,74 @@ function testEndpointXs(
  * Maps the given pair of intersections to the first bezier curve intersection
  * details.
  * 
- * @param xPair 
+ * @param bezIdx
  */
-function mapXPairA(xPair: X[]): number {
-    const ri = xPair[0].ri;
-    const t = ri.tE/2 + ri.tS/2;
-    return t;
-}
-
-function mapXPairB(xPair: X[]): number {
-    const ri = xPair[1].ri;
-    const t = ri.tE/2 + ri.tS/2;
-    return t;
+function mapXPair(bezIdx: number) {
+    return (xPair: X[]): number => {
+        const ri = xPair[bezIdx].ri;
+        const t = ri.tE/2 + ri.tS/2;
+        return t;
+    }
 }
 
 
 function changeVariablesLinearCubic(
         p: number[],
-        a: number, 
-        b: number): number[] {
+        c: number, 
+        d: number): number[] {
 
     const [p0,p1,p2,p3] = p;
 
-    const bb = b*b;
-    const aa = a*a;
+    const dd = d*d;
+    const cc = c*c;
+    const ccc = cc*c;
 
-    const r0 = p0*a*aa;
-    const r1 = aa*(3*p0*b + p1);
-    const r2 = a*(3*p0*bb + 2*p1*b + p2);
-    const r3 = bb*(p0*b + p1) + p2*b + p3;
+    const r0 = p0*ccc;
+    const r1 = cc*(3*p0*d + p1);
+    const r2 = c*(3*p0*dd + 2*p1*d + p2);
+    const r3 = dd*(p0*d + p1) + p2*d + p3;
 
     return [r0,r1,r2,r3];
 }
 
 
-function changeVariablesQuadratic(
+function changeVariablesQuadratic  (
         p: number[], 
-        a: number, 
-        b: number): number[] {
+        c: number, 
+        d: number): number[] {
 
     const [p0,p1,p2] = p;
 
-    const r2 = p2 + b*p1 + b*b*p0;
-    const r1 = a*p1 + 2*a*b*p0;
-    const r0 = a*a*p0;
-
+    const r0 = c*c*p0;
+    const r1 = c*p1 + 2*c*d*p0;
+    const r2 = p2 + d*p1 + d*d*p0;
+    
     return [r0,r1,r2];
 }
 
 
 function changeVariablesLinear(
         p: number[], 
-        a: number, 
-        b: number): number[] {
+        c: number, 
+        d: number): number[] {
 
     const [p0,p1] = p;
 
-    const r1 = p1 + b*p0;
-    const r0 = a*p0;
+    const r1 = p1 + d*p0;
+    const r0 = c*p0;
 
     return [r0,r1];
 }
+
+
+
+// sub1Ulp(1);//?
+// add1Ulp(1);//?
+// sub1Ulp(0);//?
+// add1Ulp(0);//?
+// sub1Ulp(Number.EPSILON);//?
+// Number.EPSILON
+// add1Ulp(Number.EPSILON);//?
+// sub1Ulp(Number.MIN_VALUE*2**100);//?
+// Number.MIN_VALUE*2**104          //?
+// add1Ulp(Number.MIN_VALUE*2**104);//?

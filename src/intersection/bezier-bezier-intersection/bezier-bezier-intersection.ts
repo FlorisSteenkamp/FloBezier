@@ -5,7 +5,7 @@ import { tFromXY } from '../../local-properties-to-t/t-from-xy.js';
 import { getIntervalBox } from '../../global-properties/bounds/get-interval-box/get-interval-box.js';
 import { intersectBoxes } from '../../boxes/intersect-boxes.js';
 import { bezierSelfIntersection } from '../self-intersection/bezier-self-intersection.js';
-import { getEndpointIntersections } from '../get-endpoint-intersections.js';
+import { getEndpointIntersections } from '../get-endpoint-intersections/get-endpoint-intersections.js';
 import { isCollinear } from '../../global-properties/classification/is-collinear.js';
 import { getXY1DdWithRunningError, getXY2DdWithRunningError, getXY3DdWithRunningError } from '../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js';
 import { getDxy2Exact, getDxy3Exact } from '../../to-power-basis/get-dxy/exact/get-dxy-exact.js';

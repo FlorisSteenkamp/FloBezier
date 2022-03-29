@@ -63,7 +63,7 @@ import { generateSelfIntersecting } from './create/generate-self-intersecting.js
 import { cubicThroughPointGiven013 } from './create/cubic-through-point-given013.js';
 import { bezierSelfIntersection } from './intersection/self-intersection/bezier-self-intersection.js';
 // TODO
-import { getEndpointIntersections } from './intersection/get-endpoint-intersections.js';
+import { getEndpointIntersections } from './intersection/get-endpoint-intersections/get-endpoint-intersections.js';
 import { tFromXY } from './local-properties-to-t/t-from-xy.js';
 import { getXY } from './to-power-basis/get-xy/double/get-xy.js';
 import { getDxy } from './to-power-basis/get-dxy/double/get-dxy.js';
@@ -141,7 +141,7 @@ import { getFootpointPolyExact } from "./simultaneous-properties/closest-and-fur
 import { getFootpointPoly } from "./simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly.js";
 import { getFootpointPolyDd } from "./simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double-double/get-footpoint-poly-dd.js";
 import { reduceOrderIfPossible } from './transformation/reduce-order-if-possible.js'
-import { getTransformedTs } from './transformation/get-transformed-ts.js';
+// import { getTransformedTs } from './transformation/get-transformed-ts.js';
 import { add1Ulp } from './add-1-ulp.js';
 import { sub1Ulp } from './sub-1-ulp.js';
 
@@ -364,7 +364,7 @@ export {
 	getFootpointPolyDd,
 	getFootpointPolyExact,
 
-	getTransformedTs,
+	// getTransformedTs,
 
 	add1Ulp,
 	sub1Ulp
