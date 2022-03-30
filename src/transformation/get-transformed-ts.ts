@@ -121,9 +121,11 @@ function getLinearTransformation3(
 
 function getLinearTransformation2(
         A: number[][],
-        B: number[][]): { 
-            cds: { c: number[], d: number[] }[], 
-            signsC: number[], 
+        B: number[][]): {
+            c1: number[],
+            d1: number[],
+            c2: number[],
+            d2: number[],
             signsD: number[] } {
 
     const [p2,p1,p0] = A;
@@ -154,7 +156,7 @@ function getLinearTransformation2(
     const [c1,c2] = _cs.map(v => {
         // TODO - the below can simply be replaced by `const a = refineK1(_a,paE)[0].tS` once
         // flo-poly has been updated
-        return v.tE === v.tS ? [0,v.tS] : refineK1(v,polyCExact)[0].tS;    
+        return v.tE === v.tS ? [0,v.tS] : refineK1(v,polyCExact)[0].tS;
     });
 
     //------------------------
@@ -221,15 +223,11 @@ function getLinearTransformation2(
     const signD1 = signN1 * signP2;
     const signD2 = signN2 * signP2;
 
-    // testing (all must be positive)
-    // eSign(d1)*signD1;//?
-    // eSign(d2)*signD2;//?
-
     // If r1 is negative (positive) then c*r must be negative (positive)
     // TODO - consider case where r1 is zero
     return eSign(r1) > 0
-        ? { cds: [{c:c2, d:d2}, {c:c1, d:d1}], signsC: [+1,-1], signsD: [signD2,signD1] }
-        : { cds: [{c:c1, d:d2}, {c:c2, d:d1}], signsC: [-1,+1], signsD: [signD2,signD1] };
+        ? { c1:c2, d1:d2, c2:c1, d2:d1, signsD: [signD2,signD1] }
+        : { c1:c1, d1:d2, c2:c2, d2:d1, signsD: [signD2,signD1] };
 }
 
 

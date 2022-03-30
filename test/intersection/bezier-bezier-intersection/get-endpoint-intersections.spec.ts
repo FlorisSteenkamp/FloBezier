@@ -22,103 +22,6 @@ describe('getEndpointIntersections', function() {
         {
             // All possible cases:
             //
-            /*
-            {
-                const t0 = -0.125;  // 1 - (2**40)*Number.EPSILON
-                const t1 = 6.125;
-                // const t1 = 2**20;
-                const psA = [[1,1],[3,2],[4,4]];
-                // 0.484375,0.765625,13.765625,6.234375,-12.015625,50.765625
-                const psB = fromTo2(psA,t0,t1).ps;//?
-
-                const coord = 0;
-
-                const xyA = [
-                    getXYExact(psA)[0].map(eEstimate),
-                    getXYExact(psA)[1].map(eEstimate)
-                ];
-                const xyB = [
-                    getXYExact(psB)[0].map(eEstimate),
-                    getXYExact(psB)[1].map(eEstimate),
-                ];
-
-                const [p2,p1,p0] = xyA[coord];//?
-                const [r2,r1,r0] = xyB[coord];//?
-
-                // (1)   r0 = cc*p0
-                // (2)   r1 = c*p1 + 2*c*d*p0 = c*(p1 + 2*d*p0)
-                // (3)   r2 = p2 + d*p1 + dd*p0
-
-                // (A)   r1**2 = (r0/p0)*(p1**2 - 4*p0*(p2 - r2))   (a perfect square)
-
-                const cc = r2/p2;//?
-                const c1 = sqrt(cc);//?
-                const c2 = -sqrt(cc);//?
-                const rr = p1**2 - 4*p2*(p0 - r0)//?
-                const r = sqrt(rr);//?
-                const d1 = (-p1 + r)/(2*p2);//?
-                const d2 = (-p1 - r)/(2*p2);//?
-
-                [r2,r1,r0];//?
-                const r2_ = cc*p2;           //?
-                const r11 = c1*(p1 + 2*d1*p2);//?
-                const r12 = c2*(p1 + 2*d2*p2);//?
-                const r01 = p0 + d1*p1 + d1*d1*p2;//?
-                const r02 = p0 + d2*p1 + d2*d2*p2;//?
-
-                r1**2;//?
-                (r2/p2)*(p1**2 - 4*p2*(p0 - r0));//?
-                // sqrt(2)**2;//?
-
-                // `t0 = -d/c` (or `t0 = f`)
-                // `t1 = (1 - d)/c` (or `t1 = e + f`)
-                // 0.484375, 0.765625,13.765625,6.234375,-12.015625,50.765625
-                fromPowerBasis([
-                    changeVariablesQuadratic(xyA[0], c1, d1),
-                    changeVariablesQuadratic(xyA[1], c1, d1)
-                ]);
-                // 0.484375,26.265625,13.765625,-5.765625,-12.015625,1.265625
-                fromPowerBasis([
-                    changeVariablesQuadratic(xyA[0], c2, d2),
-                    changeVariablesQuadratic(xyA[1], c2, d2)
-                ]);
-                    
-                // changeVariablesQuadratic(xyB1, c2, d2);//?
-
-                // const t0_1 = -d1/c1;//?
-                // const t1_1 = (1 - d1)/c1;//?
-                const t0_1 = d1;//?
-                const t1_1 = c1 + d1;//?
-                //const t0_2 = -d2/c2;//?
-                //const t1_2 = (1 - d2)/c2;//?
-                const t0_2 = d2;//?
-                const t1_2 = c2 + d2;//?
-
-                // [[0.484375,0.765625], [13.765625,6.234375], [-12.015625,50.765625]]
-                evaluateExact(psA,t0_1);//?
-                evaluateExact(psA,t0_2);//?
-                p2*t0_1**2 + p1*t0_1 + p0;//?
-                p2*t0_2**2 + p1*t0_2 + p0;//?
-                //p2y*t0_1**2 + p1y*t0_1 + p0y;//?
-                //p2y*t0_2**2 + p1y*t0_2 + p0y;//?
-
-                p2*t1_1**2 + p1*t1_1 + p0;//?
-                p2*t1_2**2 + p1*t1_2 + p0;//?
-                //p2y*t1_1**2 + p1y*t1_1 + p0y;//?
-                //p2y*t1_2**2 + p1y*t1_2 + p0y;//?
-
-                
-
-                evaluateExact(psA,t1_1);//?
-                evaluateExact(psA,t1_2);//?
-
-
-                expect(areIntersectionsInfinte(psA,psB)).to.be.true;
-
-                testEndpointXs(psA,psB, [0,1], [0.02,0.18]);
-            }
-            */
-           /*
             // Case 1/2
             // ******      
             //       ******
@@ -196,7 +99,6 @@ describe('getEndpointIntersections', function() {
 
                 testEndpointXs(psA,psB, [], []);
             }
-            */
             {
                 // quadratic
                 const t0 = 2;
