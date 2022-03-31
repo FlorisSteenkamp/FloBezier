@@ -196,7 +196,7 @@ function testEndpointXs(
     expect(areIntersectionsInfinte(psA,psB)).to.be.true;
 
     // for (let i=0; i<2; i++) {
-    for (let i=0; i<1; i++) { // TODO
+    for (let i=0; i<2; i++) { // TODO
         const [A,B,expectedA_,expectedB_] = i === 0 
             ? [psA,psB,expectedA,expectedB]
             : expectedB[0] > expectedB[1]  // required since we always order by the `t` values of `psA`
