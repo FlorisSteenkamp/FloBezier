@@ -122,11 +122,13 @@ function getLinearTransformation3(
 function getLinearTransformation2(
         A: number[][],
         B: number[][]): {
-            c1: number[],
-            d1: number[],
-            c2: number[],
+            ca: number[],
             d2: number[],
-            signsD: number[] } {
+            cb: number[],
+            d1: number[],
+            signD2: number,
+            signD1: number,
+            signParity: number } {
 
     const [p2,p1,p0] = A;
     const [r2,r1,r0] = B;
@@ -226,8 +228,8 @@ function getLinearTransformation2(
     // If r1 is negative (positive) then c*r must be negative (positive)
     // TODO - consider case where r1 is zero
     return eSign(r1) > 0
-        ? { c1:c2, d1:d2, c2:c1, d2:d1, signsD: [signD2,signD1] }
-        : { c1:c1, d1:d2, c2:c2, d2:d1, signsD: [signD2,signD1] };
+        ? { ca:c2, d2,    cb:c1, d1,    signD2, signD1, signParity: +1 }
+        : { ca:c1, d2,    cb:c2, d1,    signD2, signD1, signParity: -1 };
 }
 
 

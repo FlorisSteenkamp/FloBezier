@@ -3,6 +3,7 @@ import { ddAddDd } from "double-double";
 import { eEstimate } from 'big-float-ts';
 import { getLinearTransformation2 } from "../../transformation/get-transformed-ts.js";
 import { getXYExact } from "../../to-power-basis/get-xy/exact/get-xy-exact.js";
+import { expect } from "chai";
 
 const est = eEstimate;
 
@@ -10,6 +11,9 @@ const eps = Number.EPSILON;
 const u = eps/2;
 const uu = u*u;
 
+const { sqrt } = Math;
+
+// const close = closeTo([2**7]);
 const close = closeTo([2**8]);
 
 function getTransform(
@@ -18,6 +22,7 @@ function getTransform(
         psA: number[][],
         psB: number[][]) {
 
+    let c!: number[];
     let d!: number[];
     let sgnD!: number;
 
@@ -26,62 +31,81 @@ function getTransform(
     //const _xyBR = getXYExact(psBR);
     //////
 
-    for (let i=0; i<2; i++) {
-        const xyA = _xyA[i];
-        const xyB = _xyB[i];
+    const xyA = _xyA[0];
+    const xyB = _xyB[0];
 
-        const { c1, d1, c2, d2, signsD } = getLinearTransformation2(xyA, xyB);
+    const { ca, d2,   cb, d1,   signD2, signD1, signParity } = getLinearTransformation2(xyA, xyB);
 
-        const [p2x,p1x,p0x] = _xyA[0].map(est);
-        const [p2y,p1y,p0y] = _xyA[1].map(est);
+    const [p2x,p1x,p0x] = _xyA[0].map(est);
+    const [p2y,p1y,p0y] = _xyA[1].map(est);
 
-        const [r2x,r1x,r0x] = _xyB[0].map(est);
-        const [r2y,r1y,r0y] = _xyB[1].map(est);
+    const [r2x,r1x,r0x] = _xyB[0].map(est);
+    const [r2y,r1y,r0y] = _xyB[1].map(est);
 
-        // `t0 = -d/c` (or `t0 = f`)
-        // `t1 = (1 - d)/c` (or `t1 = e + f`)
-        const _tA_B0_1 = est(d1);
-        const _tA_B1_1 = est(ddAddDd(c1,d1));
+    // `t0 = -d/c` (or `t0 = f`)
+    // `t1 = (1 - d)/c` (or `t1 = e + f`)
+    const _tA_B0_1 = est(d2);
+    const _tA_B0_2 = est(d1);
 
-        //////
-        //const xyBR = _xyBR[i];
-        //const { d1: d1R, d2: d2R, signsD: signsDR } = getLinearTransformation2(xyA, xyBR);
-        //const _tA_B1_1__ = est(d1R);//?
-        //////
 
-        const _tA_B0_2 = est(d2);
-        const _tA_B1_2 = est(ddAddDd(c2,d2));
+    //////
+    //const xyBR = _xyBR[i];
+    //const { d2: d1R, d1: d2R, signsD: signsDR } = getLinearTransformation2(xyA, xyBR);
+    //const _tA_B1_1__ = est(d1R);//?
+    //////
 
-        // const X0_1 = p2x*_tA_B0_1**2 + p1x*_tA_B0_1 + p0x;
-        // const Y0_1 = p2y*_tA_B0_1**2 + p1y*_tA_B0_1 + p0y;
-        const X0_1 = r0x;
-        const Y0_1 = r0y;
-        const X1_1 = p2x*_tA_B1_1**2 + p1x*_tA_B1_1 + p0x;
-        const Y1_1 = p2y*_tA_B1_1**2 + p1y*_tA_B1_1 + p0y;
+    const rad = sqrt(r2x/p2x)*sqrt(-4*p0x*p2x + p1x**2 + 4*p2x*r0x);
+    //const aX1_1 = signParity === 1 ? r0x + r2x + rad : r0x + r2x - rad;
+    //const aX1_2 = signParity === 1 ? r0x + r2x - rad : r0x + r2x + rad;
+    //const _tA_B0_2 = est(d2);
 
-        //est(d1);//?
-        //est(d2);//?
+    const _tA_B1_1 = est(ddAddDd(ca,d2));
+    const _tA_B1_2 = est(ddAddDd(cb,d1));
+    const _tA_B1_3 = est(ddAddDd(ca,d1));
+    const _tA_B1_4 = est(ddAddDd(cb,d2));
 
-        const psB0 = psB[0];
-        const psB2 = psB[2];
+    
+    const X1_1 = p2x*_tA_B1_1**2 + p1x*_tA_B1_1 + p0x;
+    const Y1_1 = p2y*_tA_B1_1**2 + p1y*_tA_B1_1 + p0y;
+    // const X1_2 = r0x + r2x - sqrt(r2x/p2x)*sqrt(-4*p0x*p2x + p1x**2 + 4*p2x*r0x);
+    const X1_2 = p2x*_tA_B1_2**2 + p1x*_tA_B1_2 + p0x;
+    const Y1_2 = p2y*_tA_B1_2**2 + p1y*_tA_B1_2 + p0y;
+    // const X1_3 = p2x*_tA_B1_3**2 + p1x*_tA_B1_3 + p0x;
+    const Y1_3 = p2y*_tA_B1_3**2 + p1y*_tA_B1_3 + p0y;
+    // const X1_4 = p2x*_tA_B1_4**2 + p1x*_tA_B1_4 + p0x;
+    const Y1_4 = p2y*_tA_B1_4**2 + p1y*_tA_B1_4 + p0y;
 
-        // TODO - remove closeTo and fix (must be *exact*)
-        if (close(psB2[0],X1_1) && close(psB2[1],Y1_1)) {
-            d = d1;
-            sgnD = signsD[0];
-        }
+    // r0x;//?
+    //const X0_1 = p2x*_tA_B0_1**2 + p1x*_tA_B0_1 + p0x;//?
+    const Y0_1 = p2y*_tA_B0_1**2 + p1y*_tA_B0_1 + p0y;//?
+    // const X0_2 = p2x*_tA_B0_2**2 + p1x*_tA_B0_2 + p0x;//?
+    const Y0_2 = p2y*_tA_B0_2**2 + p1y*_tA_B0_2 + p0y;//?
 
-        const X0_2 = r0x;
-        const Y0_2 = r0y;
-        const X1_2 = p2x*_tA_B1_2**2 + p1x*_tA_B1_2 + p0x;
-        const Y1_2 = p2y*_tA_B1_2**2 + p1y*_tA_B1_2 + p0y;
+    const psB0 = psB[0];
+    const psB2 = psB[2];
 
-        // TODO - remove closeTo and fix (must be *exact*)
-        if (close(psB2[0],X1_2) && close(psB2[1],Y1_2)) {
-            d = d2;
-            sgnD = signsD[1];
-        }
+    // TODO - remove closeTo and fix (must be *exact*)
+    if (close(psB0[1],Y0_1) &&
+        close(psB2[0],X1_1) && close(psB2[1],Y1_1)) {
+        d = d2;
+        sgnD = signD2;
+    } 
+    if (close(psB0[1],Y0_2) &&
+        close(psB2[0],X1_2) && close(psB2[1],Y1_2)) {
+        d = d1;
+        sgnD = signD1;
+    } 
+    if (close(psB0[1],Y0_2) &&
+        close(psB2[1],Y1_3)) {
+        d = d1;
+        sgnD = signD1;
+    } 
+    if (close(psB0[1],Y0_1) &&
+        close(psB2[1],Y1_4)) {
+        d = d2;
+        sgnD = signD2;
     }
+
 
     return { d, sgnD };
 }
@@ -99,10 +123,13 @@ function getAB(
     const _xyAR = getXYExact(psAR);
     const _xyBR = getXYExact(psBR);
 
-    const { sgnD, d } = getTransform(_xyA, _xyB, psA, psB);
-    const { sgnD: sgnD_AR } = getTransform(_xyAR,_xyB, psAR, psB);
-    const { sgnD: sgnD_BR, d: d_BR } = getTransform(_xyA,_xyBR, psA, psBR);
-    const { sgnD: sgnD_ARBR } = getTransform(_xyAR,_xyBR, psAR, psBR);
+    
+    // throw new Error('a');
+    const { sgnD, d }                = getTransform(_xyA,  _xyB,  psA,  psB);
+    const { sgnD: sgnD_AR }          = getTransform(_xyAR, _xyB,  psAR, psB);
+    const { sgnD: sgnD_BR, d: d_BR } = getTransform(_xyA,  _xyBR, psA,  psBR);
+    const { sgnD: sgnD_ARBR }        = getTransform(_xyAR, _xyBR, psAR, psBR);
+    
 
     // `t0 = -d/c` (or `t0 = f`)
     // `t1 = (1 - d)/c` (or `t1 = e + f`)
