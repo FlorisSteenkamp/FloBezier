@@ -18,6 +18,13 @@ use(nearly);
 describe('getEndpointIntersections', function() {
     it('it should find intersection intervals pairs of overlapping/non-overlapping algebraically identical bezier curves',
     function() {
+        const psAsQuad = [
+            [[1,1],[2,1.625],[3.5,5]],
+            [[-1,1],[2,-1.625],[3.-5,5]],
+            [[-1,-1],[2,1.625],[-3.5,5]],
+            [[-1,-1],[2,1.625],[-3.5,-5]]
+        ];
+
         // TODO - finish
         {
             // All possible cases:
@@ -29,20 +36,17 @@ describe('getEndpointIntersections', function() {
                 // cubic
                 const t0 = 1;
                 const t1 = 3;
-                const psA = [[0,0],[6,6],[2,1],[3,3]];
-                const psB = fromTo3(psA,t0,t1).ps;
+                const psA = [[-1,1],[6,2.5],[2,1],[3,3]];
 
-                testEndpointXs(psA,psB, [1], [0]);
+                testEndpointXs(t0,t1, psA, [1], [0]);
             }
             {
                 // quadratic
                 const t0 = 1;
                 const t1 = 3;
                 // const t1 = 2**20;
-                const psA = [[0,0],[2,1],[3,5]];
-                const psB = fromTo2(psA,t0,t1).ps;
 
-                testEndpointXs(psA,psB, [1], [0]);
+                for (let psA of psAsQuad) { testEndpointXs(t0,t1, psA, [1], [0]); }
             }
             // Case 3/4
             // ******
@@ -52,18 +56,18 @@ describe('getEndpointIntersections', function() {
                 const t0 = 0.999755859375;  // 1 - (2**40)*Number.EPSILON
                 const t1 = 13;
                 const psA = [[0,0],[6,6],[2,1],[3,3]];
-                const psB = fromTo3(psA,t0,t1).ps;                
 
-                testEndpointXs(psA,psB, [0.999755859375,1], [0,0.000020344638170610134]);
+                testEndpointXs(t0,t1, psA, [0.999755859375,1], [0,0.000020344638170610134]);
             }
             {
                 // quadratic
                 const t0 = 0.999755859375;  // 1 - (2**40)*Number.EPSILON
                 const t1 = 13;
                 const psA = [[0,0],[2,1],[3,5]];
-                const psB = fromTo2(psA,t0,t1).ps;
 
-                testEndpointXs(psA,psB, [0.999755859375,1], [0,0.000020344638170610134]);
+                for (let psA of psAsQuad) { 
+                    testEndpointXs(t0,t1, psA, [0.999755859375,1], [0,0.000020344638170610134]); 
+                }
             }
             // Case 5/6
             //   **
@@ -73,9 +77,8 @@ describe('getEndpointIntersections', function() {
                 const t0 = -1;
                 const t1 = 3;
                 const psA = [[0,0],[6,6],[2,1],[3,3]];
-                const psB = fromTo3(psA,t0,t1).ps;
 
-                testEndpointXs(psA,psB, [0,1], [0.25,0.5]);
+                testEndpointXs(t0,t1, psA, [0,1], [0.25,0.5]);
             }
             {
                 // quadratic
@@ -83,9 +86,7 @@ describe('getEndpointIntersections', function() {
                 const t1 = 3;
                 // const t0 = -0.125;  // 1 - (2**40)*Number.EPSILON
                 // const t1 = 6.125;
-                const psA = [[0,0],[2,1],[3,5]];
-                const psB = fromTo2(psA,t0,t1).ps;
-                testEndpointXs(psA,psB, [0,1], [0.25,0.5]);
+                for (let psA of psAsQuad) { testEndpointXs(t0,t1, psA, [0,1], [0.25,0.5]); }
             }
             // Case 7/8
             // ******
@@ -95,33 +96,31 @@ describe('getEndpointIntersections', function() {
                 const t0 = 2;
                 const t1 = 3;
                 const psA = [[0,0],[6,6],[2,1],[3,3]];
-                const psB = fromTo3(psA,t0,t1).ps;
 
-                testEndpointXs(psA,psB, [], []);
+                testEndpointXs(t0,t1, psA, [], []);
             }
             {
                 // quadratic
                 const t0 = 2;
                 const t1 = 3;
-                const psA = [[0,0],[2,1],[3,5]];
-                const psB = fromTo2(psA,t0,t1).ps;
 
-                testEndpointXs(psA,psB, [], []);
+                for (let psA of psAsQuad) { testEndpointXs(t0,t1, psA, [], []); }
             }
             // Case 9
             // ******
             // ******
             {
                 // cubic
+                const t0 = 1;
+                const t1 = 0;
                 const psA = [[0,0],[6,6],[2,1],[3,3]];
-                const psB = [[0,0],[6,6],[2,1],[3,3]].reverse();
-                testEndpointXs(psA,psB, [0,1], [1,0]);
+                testEndpointXs(t0,t1, psA, [0,1], [1,0]);
             }
             {
                 // quadratic
-                const psA = [[0,0],[2,1],[3,5]];
-                const psB = [[0,0],[2,1],[3,5]].reverse();
-                testEndpointXs(psA,psB, [0,1], [1,0]);
+                const t0 = 1;
+                const t1 = 0;
+                for (let psA of psAsQuad) { testEndpointXs(t0,t1, psA, [0,1], [1,0]); }
             }
             // Case 10/11
             // ***
@@ -131,16 +130,13 @@ describe('getEndpointIntersections', function() {
                 const t0 = 0;
                 const t1 = 3;
                 const psA = [[0,0],[6,6],[2,1],[3,3]];
-                const psB = fromTo3(psA,t0,t1).ps;
-                testEndpointXs(psA,psB, [0,1], [0,1/3]);
+                testEndpointXs(t0,t1, psA, [0,1], [0,1/3]);
             }
             {
                 // quadratic
                 const t0 = 0;
                 const t1 = 3;
-                const psA = [[0,0],[2,1],[3,5]];
-                const psB = fromTo2(psA,t0,t1).ps;
-                testEndpointXs(psA,psB, [0,1], [0,1/3]);
+                for (let psA of psAsQuad) { testEndpointXs(t0,t1, psA, [0,1], [0,1/3]); }
             }
         }
 
@@ -187,10 +183,19 @@ describe('getEndpointIntersections', function() {
 
 
 function testEndpointXs(
+        t0: number,
+        t1: number,
         psA: number[][],
-        psB: number[][],
+        // psB: number[][],
         expectedA: number[],
         expectedB: number[]) {
+
+    const psB = 
+          psA.length === 4 
+        ? fromTo3(psA,t0,t1).ps
+        :  psA.length === 3 
+        ? fromTo2(psA,t0,t1).ps
+        : [];
 
     // the below is a necessary precondition of `getEndpointIntersections`
     expect(areIntersectionsInfinte(psA,psB)).to.be.true;
@@ -214,7 +219,7 @@ function testEndpointXs(
             expect(rB).to.be.nearly(2**1,expectedB_);
             for (let j=0; j<r.length; j++) {
                 expect(
-                    evaluateExact(B,expectedB_[j]).map(eEstimate)).to.be.nearly(2**2,
+                    evaluateExact(B,expectedB_[j]).map(eEstimate)).to.be.nearly(2**4,
                     evaluateExact(A,expectedA_[j]).map(eEstimate)
                 );
             }
@@ -230,7 +235,7 @@ function testEndpointXs(
             expect(rB).to.be.nearly(2**1, expectedBR);
             for (let j=0; j<r.length; j++) {
                 expect(
-                    evaluateExact(B,expectedBR[j]).map(eEstimate)).to.be.nearly(2**2,
+                    evaluateExact(B,expectedBR[j]).map(eEstimate)).to.be.nearly(2**4,
                     evaluateExact(AR,expectedAR[j]).map(eEstimate)
                 );
             }
@@ -246,7 +251,7 @@ function testEndpointXs(
             expect(rB).to.be.nearly(2**1, expectedBR);
             for (let j=0; j<r.length; j++) {
                 expect(
-                    evaluateExact(BR,expectedBR[j]).map(eEstimate)).to.be.nearly(2**2,
+                    evaluateExact(BR,expectedBR[j]).map(eEstimate)).to.be.nearly(2**4,
                     evaluateExact(A,expectedAR[j]).map(eEstimate)
                 );
             }
@@ -262,7 +267,7 @@ function testEndpointXs(
             expect(rB).to.be.nearly(2**1, expectedBR);
             for (let j=0; j<r.length; j++) {
                 expect(
-                    evaluateExact(BR,expectedBR[j]).map(eEstimate)).to.be.nearly(2**2,
+                    evaluateExact(BR,expectedBR[j]).map(eEstimate)).to.be.nearly(2**4,
                     evaluateExact(AR,expectedAR[j]).map(eEstimate)
                 );
             }

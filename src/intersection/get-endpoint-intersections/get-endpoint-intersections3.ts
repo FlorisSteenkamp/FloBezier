@@ -1,7 +1,7 @@
 import { X } from "../bezier-bezier-intersection/x.js";
 import { ddAddDd } from "double-double";
-import { eEstimate, eMult, eSign, eDiff, scaleExpansion, scaleExpansion2 } from 'big-float-ts';
-import { getLinearTransformation3 } from "../../transformation/get-transformed-ts.js";
+import { eEstimate, eMult, eSign, eDiff } from 'big-float-ts';
+import { getLinearTransformation3 } from "./get-transformed-ts3.js";
 import { getXYExact } from "../../to-power-basis/get-xy/exact/get-xy-exact.js";
 
 const est = eEstimate;
@@ -212,39 +212,3 @@ function ensureRange(
 
 
 export { getEndpointIntersections3 }
-
-
-
-
-// TODO - remove - prior attempt at quadratic bezier curves
-
-        // (1)   r0 = cc*p0
-        // (2)   r1 = c*p1 + 2*c*d*p0
-        // (3)   r2 = p2 + d*p1 + dd*p0
-        
-        /*
-        // 2*c*d*p0 = r1 - c*p1, but cc = r0/p0 =>
-        // 2*r0*d = c*r1 - cc*p1 =>
-        // sgn(d) = sgn(c*r1 - cc*p1) * sgn(r0)
-
-        const sgnC = eSign(getLinearTransformation(xyA,xyB).c);
-
-        const sgnA = sgnC * eSign(r1);
-        const sgnB = eSign(p1);
-
-        // sgnAB = sign(cc*r1**2 - cc**2*p1**2), but cc = r0/p0 =>
-        //       = sign((r0/p0)*r1**2 - (r0/p0)**2*p1**2)
-        //       = sign(p0*r0*r1**2 - r0**2*p1**2)
-        //       = sign(p0*r1**2 - r0**p1**2) * sign(r0)
-        const sgnAB = sgnA*sgnB > 0
-            ? eSign(eDiff( eMult(p0,eSquare(r1)), eMult(r0,eSquare(p1)) )) * eSign(r0)
-            : 0;
-
-        const signPart1 = sgnA > 0
-            ? sgnB > 0 ? sgnAB : +1
-            : sgnA < 0
-                ? sgnB < 0 ? -sgnAB : -1
-                : -sgnB;
-
-        return signPart1 * eSign(r0);//?
-        */
