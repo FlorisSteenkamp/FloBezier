@@ -19,10 +19,10 @@ describe('getEndpointIntersections', function() {
     it('it should find intersection intervals pairs of overlapping/non-overlapping algebraically identical bezier curves',
     function() {
         const psAsQuad = [
-            [[1,1],[2,1.625],[3.5,5]],
-            [[-1,1],[2,-1.625],[3.-5,5]],
+            //[[1,1],[2,1.625],[3.5,5]],
+            //[[-1,1],[2,-1.625],[3.-5,5]],
             [[-1,-1],[2,1.625],[-3.5,5]],
-            [[-1,-1],[2,1.625],[-3.5,-5]]
+            //[[-1,-1],[2,1.625],[-3.5,-5]]
         ];
 
         // TODO - finish
@@ -68,8 +68,7 @@ describe('getEndpointIntersections', function() {
                 for (let psA of psAsQuad) { 
                     testEndpointXs(t0,t1, psA, [0.999755859375,1], [0,0.000020344638170610134]); 
                 }
-            }
-            // Case 5/6
+            }            // Case 5/6
             //   **
             // ******
             {

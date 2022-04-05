@@ -1,9 +1,10 @@
 import { allRootsCertified, bGcdInt, eGcdInt, refineK1, RootIntervalExp } from "flo-poly";
-import { bitLength, eCompress, eDiff, eEstimate, eNegativeOf, eSign, eToDd, exponent, scaleExpansion } from 'big-float-ts';
+import { bitLength, eCompare, eCompress, eDiff, eDiv, eEstimate, eMult, eMultBy2, eNegativeOf, eSign, eToDd, exponent, scaleExpansion } from 'big-float-ts';
 import { expect } from "chai";
+import { ddNegativeOf } from "double-double";
 
 const { POSITIVE_INFINITY: inf, EPSILON: eps } = Number;
-const { abs, sqrt } = Math;
+const { abs, sqrt, sign } = Math;
 
 
 function sum(values: bigint[]) {
@@ -132,13 +133,13 @@ function bigintToExpansion(b: bigint): number[] {
  */
 function getLinearTransformation2(
         A: number[][],
-        B: number[][]): {
+        B: number[][])/*: {
             ca: number[],
             D2: { d: number[], sgnD: number }
             cb: number[],
             D1: { d: number[], sgnD: number }
             sgnCA: number
-        } {
+        }*/ {
 
     const [p2,p1,p0] = A;
     const [r2,r1,r0] = B;
@@ -180,8 +181,8 @@ function getLinearTransformation2(
      * where `N` and `D` are Shewchuk expansions
      */
     // const c = (Number(_N)/Number(_D)) * 2**(e/2);
-    const c2 = [N,scaleExpansion(D, 2**(-e/2))];
-    const c1 = [eNegativeOf(c2[0]),c2[1]];
+    const C2 = [N,scaleExpansion(D, 2**(-e/2))];
+    const C1 = [eNegativeOf(C2[0]),C2[1]];
 
     /*
     // polyC = p2*c*c - r2 => cc = r2/p2
@@ -204,10 +205,17 @@ function getLinearTransformation2(
     });
     */
 
+    //eDiv(C2[0],C2[1],5);//?
+    //eCompare(c2,eDiv(C2[0],C2[1],5));//?
+    //expect(abs(eEstimate(eDiff(
+    //    c2,
+    //    eDiv(C2[0],C2[1],5)
+    //)))).to.be.lessThan(2**-98);
 
-    //------------------------
+    /*
+    //-------------------------
     // Calculate `d` using (3)
-    //------------------------
+    //-------------------------
 
     // (3)   r0 = dd*p2 + d*p1 + p0
     const P0minR0 = eDiff(p0,r0);
@@ -271,12 +279,71 @@ function getLinearTransformation2(
 
     const D1 = { d: d1, sgnD: sgnD1 };
     const D2 = { d: d2, sgnD: sgnD2 };
+    //-------------------------
+    */
+
+
+    //-----------------------------------
+    // Calculate `d` *exactly* using (2)
+    //-----------------------------------
+    // (2)   r1 = c*p1 + 2*c*d*p2  =>
+    //       r1 = c*(p1 + 2*d*p2)  =>
+    // dA = (r1/c - p1)/(2*p2)
+    //    = r1/(c*2*p2) - c*p1/(c*2*p2)
+    //    = (r1 - c*p1)/(c*2*p2)
+    //    = (r1 - N*p1/D)/(N*2*p2/D)
+    //    = (D*r1 - N*p1)/(N*2*p2)
+    // dB = (r1/(-c) - p1)/(2*p2)
+    //    = r1/(-c*2*p2) - c*p1/(c*2*p2)
+    //    = (-r1 - c*p1)/(c*2*p2)
+    //    = (-r1 - N*p1/D)/(N*2*p2/D)
+    //    = (-r1*D - N*p1)/(N*2*p2)
+
+    const _DA = eCompress(eDiv(
+        eDiff(
+            eMult(r1,C2[1]),
+            eMult(p1,C2[0]),
+        ),
+        eMult(C2[0],eMultBy2(p2)), 
+        5
+    ));
+
+    const _DB = eCompress(eDiv(
+        eDiff(
+            eMult(r1,eNegativeOf(C2[1])),
+            eMult(p1,C2[0]),
+        ),
+        eMult(C2[0],eMultBy2(p2)), 
+        5
+    ));
+
+    const [DA,DB] = [_DA,_DB].sort(eCompare);
+
+    //expect(abs(eEstimate(eDiff(d1,DA)))).to.be.lessThan(2**-97);
+    //expect(abs(eEstimate(eDiff(d2,DB)))).to.be.lessThan(2**-97);
+    //expect(sign(eSign(DA))).to.equal(sign(sgnD1));
+    //expect(sign(eSign(DB))).to.equal(sign(sgnD2));
+
+    const $D1 = { d: DA, sgnD: eSign(DA) };
+    const $D2 = { d: DB, sgnD: eSign(DB) };
 
     // If r1 is negative (positive) then c*r must be negative (positive)
     // TODO - consider case where r1 is zero
-    return eSign(r1) > 0
-        ? { ca:c2, D2,   cb:c1, D1,   sgnCA: +1 }
-        : { ca:c1, D2,   cb:c2, D1,   sgnCA: -1 };
+    //return eSign(r1) > 0
+    //    ? { ca:c2, D2,   cb:c1, D1,   sgnCA: +1 }
+    //    : { ca:c1, D2,   cb:c2, D1,   sgnCA: -1 };
+
+    // return eSign(r1) > 0
+    // ? { D2, D1 }
+    // : { D2, D1 };
+
+    //D1;//?
+    //$D1;//?
+    //D2;//?
+    //$D2;//?
+
+    // return { D2, D1 };
+    return { D2: $D2, D1: $D1 };
 }
 
 

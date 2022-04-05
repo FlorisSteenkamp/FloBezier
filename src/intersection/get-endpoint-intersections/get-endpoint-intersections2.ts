@@ -20,6 +20,12 @@ function close2(a: number, b: number) {
         closeTo([2**8])(a,b)
     );
 }
+function close3(a: number[], b: number[]) {
+    return (
+        closeTo(2**8)(eEstimate(a),eEstimate(b)) || 
+        closeTo([2**8])(eEstimate(a),eEstimate(b))
+    );
+}
 
 
 function eMultBy4(a: number[]) { 
@@ -29,6 +35,7 @@ function eSquare(a: number[]) {
     return eMult(a,a);
 }
 
+let i = 0;
 
 function getTransform(
         _xyA: number[][][],
@@ -36,23 +43,14 @@ function getTransform(
         psA: number[][],
         psB: number[][]): { d: number[]; sgnD: number; } {
 
-    let c!: number[];
-    let d!: number[];
-    let sgnD!: number;
-
-    //////
-    //const psBR = psB.slice().reverse();
-    //const _xyBR = getXYExact(psBR);
-    //////
-
     const xyAx = _xyA[0];
     const xyBx = _xyB[0];
 
     const xyAy = _xyA[1];
     const xyBy = _xyB[1];
 
-    const { ca: cax, D2: D2x, cb: cbx, D1: D1x, sgnCA: sgnCAx } = getLinearTransformation2(xyAx, xyBx);
-    const { ca: cay, D2: D2y, cb: cby, D1: D1y, sgnCA: sgnCAy } = getLinearTransformation2(xyAy, xyBy);
+    const { /*ca: cax,*/ D2: D2x,/* cb: cbx,*/ D1: D1x/*, sgnCA: sgnCAx*/ } = getLinearTransformation2(xyAx, xyBx);
+    const { /*ca: cay,*/ D2: D2y,/* cb: cby,*/ D1: D1y/*, sgnCA: sgnCAy*/ } = getLinearTransformation2(xyAy, xyBy);
 
     const [p2x,p1x,p0x] = _xyA[0];
     const [p2y,p1y,p0y] = _xyA[1];
@@ -84,14 +82,14 @@ function getTransform(
     const radx = sqrt(p1x_**2 - 4*p2x_*(p0x_ - r0x_));
     const rady = sqrt(p1y_**2 - 4*p2y_*(p0y_ - r0y_));
 
-    expect(est(D1x.d) <= est(D2x.d)).to.be.true;
-    expect(est(D1y.d) <= est(D2y.d)).to.be.true;
+    //expect(est(D1x.d) <= est(D2x.d)).to.be.true;
+    //expect(est(D1y.d) <= est(D2y.d)).to.be.true;
 
-    // const close11 = close(D1x.d,D1y.d);
-    const close11 = close2(
-        p2y_*p1x_ - p2x_*p1y_,
-        p2x_*sign(p2y_)*rady - p2y_*sign(p2x_)*radx
-    );
+    const close11 = close3(D1x.d,D1y.d);
+    //const close11 = close2(
+    //    p2y_*p1x_ - p2x_*p1y_,
+    //    p2x_*sign(p2y_)*rady - p2y_*sign(p2x_)*radx
+    //);
     const aa = p1x_**2 - 4*p2x_*(p0x_ - r0x_);
     if (sqrt(aa)**2 !== aa) {
         const _A = eDiff(
@@ -105,13 +103,13 @@ function getTransform(
     if (close11) {
         return D1x;
     }
-    if (close(D1x.d,D2y.d)) {
+    if (close3(D1x.d,D2y.d)) {
         return D1x;
     }
-    if (close(D2x.d,D1y.d)) {
+    if (close3(D2x.d,D1y.d)) {
         return D2x;
     }
-    if (close(D2x.d,D2y.d)) {
+    if (close3(D2x.d,D2y.d)) {
         return D2x;
     }
 
