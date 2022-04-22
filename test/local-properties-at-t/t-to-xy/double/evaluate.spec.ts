@@ -82,6 +82,7 @@ describe('evaluate / evalDeCasteljau', function() {
             
             const xy = evaluate(ps,t);          // evaluate in power basis
             const xy_ = evalDeCasteljau(ps,t);  // evaluate De Casteljau
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(xy).to.be.nearly(2**2, xy_);
         }
 		{
@@ -91,6 +92,7 @@ describe('evaluate / evalDeCasteljau', function() {
             
             const xy = evaluate(ps,t);          // evaluate in power basis
             const xy_ = evalDeCasteljau(ps,t);  // evaluate De Casteljau
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(xy).to.be.nearly(2**2, xy_);
 		}
 		{
@@ -100,6 +102,7 @@ describe('evaluate / evalDeCasteljau', function() {
             
             const xy = evaluate(ps,t);          // evaluate in power basis
             const xy_ = evalDeCasteljau(ps,t);  // evaluate De Casteljau
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(xy).to.be.nearly(2**2, xy_);
 		}
         {
@@ -109,6 +112,7 @@ describe('evaluate / evalDeCasteljau', function() {
             
             const xy = evaluate(ps,t);          // evaluate in power basis
             const xy_ = evalDeCasteljau(ps,t*2);  // evaluate De Casteljau
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(xy).to.be.nearly(2**2, xy_);
 		}
 	});

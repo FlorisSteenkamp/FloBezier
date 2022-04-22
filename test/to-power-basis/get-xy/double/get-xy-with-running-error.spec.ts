@@ -10,7 +10,7 @@ use(nearly);
 
 const abs = Math.abs;
 const γ1 = γ(1);
-const compareErrors = mapDouble((eActual, eBound) => abs(eActual) <= eBound);
+const compareErrors = mapDouble((eActual, eBound) => abs(eActual) <= eBound!);
 const getRandomBezier_ = getRandomBezier(128, 53);
 
 

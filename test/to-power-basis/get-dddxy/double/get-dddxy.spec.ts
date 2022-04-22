@@ -14,6 +14,7 @@ describe('getDddxy', function() {
 			const ps = getRandomCubic(0);
 			const r = getDddxy(ps);
 			const expected = [1518.5815863227895,-1662.8818047630489];
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**8, expected);
 		}
 		{

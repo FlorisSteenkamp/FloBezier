@@ -141,9 +141,9 @@ const implFormDdFsExclErr = [,
 ];
 
 const implFormExactFs = [,
-    getImplicitForm1Exact,
-    getImplicitForm2Exact,
-    getImplicitForm3Exact,
+    getImplicitForm1Exact!,
+    getImplicitForm2Exact!,
+    getImplicitForm3Exact!,
 ];
 
 
@@ -161,9 +161,9 @@ describe('implicit form', function() {
             ];
             
             for (let j=1; j<=3; j++) {
-                const fD = implFormFs[j];
-                const fExact = implFormExactFs[j];
-                testImplictForm(false, fD, fExact, bzs[j]);
+                const fD = implFormFs[j]!;
+                const fExact = implFormExactFs[j]!;
+                testImplictForm(false, fD, fExact, bzs[j]!);
             }
 
             i++;
@@ -182,10 +182,10 @@ describe('implicit form', function() {
             ];
 
             for (let j=1; j<=3; j++) {
-                const fDd = implFormDdFs[j];
-                const fExact = implFormExactFs[j];
+                const fDd = implFormDdFs[j]!;
+                const fExact = implFormExactFs[j]!;
                 const fDdExclErr = implFormDdFsExclErr[j];
-                testImplictForm(true, fDd, fExact, bzs[j], fDdExclErr);
+                testImplictForm(true, fDd, fExact, bzs[j]!, fDdExclErr);
             }
 
             i++;
@@ -217,8 +217,8 @@ describe('implicit form', function() {
 
         for (let i=0; i<bzs.length; i++) {
             const bz = bzs[i];
-            const fDd = implFormDdFs[bz.length-1];
-            const fExact = implFormExactFs[bz.length-1]
+            const fDd = implFormDdFs[bz.length-1]!;
+            const fExact = implFormExactFs[bz.length-1]!;
             testImplictForm(true, fDd, fExact, bz);
         }
 
@@ -270,13 +270,13 @@ describe('implicit form', function() {
 
 function testImplictForm(
         isDd: boolean,
-        f: (bz: number[][]) => ImplicitFormDouble | ImplicitFormDd,
-        fExact: (bz: number[][]) => ImplicitFormExact,
+        f: (bz: number[][]) => ImplicitFormDouble | ImplicitFormDd | undefined,
+        fExact: (bz: number[][]) => ImplicitFormExact | undefined,
         bz: number[][],
         fExclErr?: (bz: number[][]) => Coeffs<number[]>): void {
 
-    const implEst = f(bz);
-    const implExact = fExact(bz);
+    const implEst = f(bz)!;
+    const implExact = fExact(bz)!;
     const implExclErr = fExclErr === undefined ? undefined : fExclErr(bz);
 
     for (const key_ in implEst.coeffs) {
@@ -284,8 +284,8 @@ function testImplictForm(
         const rEst = isDd 
             ? implEst.coeffs[key] as number[]
             : [implEst.coeffs[key]] as number[];
-        const rExact = implExact[key];
-        const err = implEst.errorBound[key + '_' as CoeffErrKeys<number>];
+        const rExact = implExact[key]!;
+        const err = implEst.errorBound![key + '_' as CoeffErrKeys<number>];
         const errBound = isDd
             ? γγ3*(err || 0)
             : γ1 *(err || 0);

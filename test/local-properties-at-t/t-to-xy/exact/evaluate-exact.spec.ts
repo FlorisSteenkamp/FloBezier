@@ -18,6 +18,7 @@ describe('evaluateExact', function() {
             
             const xy = evaluateExact(ps,t);
             const xy_ = evalDeCasteljau(ps,t);
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(xy.map(eEstimate)).to.be.nearly(2**1, xy_);
             expect(xy.map(eCompress)).to.eql([
                 [-7.925443855678304e-49, 1.8292903554788057e-32, -4.518469353648868e-16, -37.660281243971426],
@@ -31,6 +32,7 @@ describe('evaluateExact', function() {
             
             const xy = evaluateExact(ps,t);
             const xy_ = evalDeCasteljau(ps,t);
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(xy.map(eEstimate)).to.be.nearly(2**1, xy_);
             expect(xy.map(eCompress)).to.eql([
                 [-5.703989169717913e-32, -9.90587696972711e-16, 20.369879913265528], 
@@ -44,6 +46,7 @@ describe('evaluateExact', function() {
             
             const xy = evaluateExact(ps,t);
             const xy_ = evalDeCasteljau(ps,t);
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(xy.map(eEstimate)).to.be.nearly(2**1, xy_);
             expect(xy.map(eCompress)).to.eql([
                 [8.323502119736615e-16, 9.46397942066524],

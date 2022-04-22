@@ -31,13 +31,16 @@ describe('getTAtLength', function() {
             const s = 0.30001;
 			const t = getTAtLength(ps,s);
 			const expectedT = 0.0010462085105340864;
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(t).to.be.nearly(2**8, expectedT);
 
 			const ps_ = randomRotateAndTranslate(0)(ps);
 			const t_ = getTAtLength(ps_,s);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(t_).to.be.nearly(2**10,t);
 
             const sReal = length([0,expectedT],ps);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(sReal).to.be.nearly(2**10,s)
 		}
 		{
@@ -45,13 +48,16 @@ describe('getTAtLength', function() {
             const s = 0.30001;
 			const t = getTAtLength(ps,s);
 			const expectedT = 0.001568890925324345;
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(t).to.be.nearly(2**8, expectedT);
 
 			const ps_ = randomRotateAndTranslate(0)(ps);
 			const t_ = getTAtLength(ps_,s);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(t_).to.be.nearly(2**10,t);
 
             const sReal = length([0,expectedT],ps);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(sReal).to.be.nearly(2**10,s)
 		}
 		{
@@ -59,13 +65,16 @@ describe('getTAtLength', function() {
             const s = 0.30001;
 			const t = getTAtLength(ps,s);
 			const expectedT = 0.0031352471590330943;
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(t).to.be.nearly(2**8, expectedT);
 
 			const ps_ = randomRotateAndTranslate(0)(ps);
 			const t_ = getTAtLength(ps_,s);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(t_).to.be.nearly(2**10,t);
 
             const sReal = length([0,expectedT],ps);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(sReal).to.be.nearly(2**10,s)
 		}
 	});

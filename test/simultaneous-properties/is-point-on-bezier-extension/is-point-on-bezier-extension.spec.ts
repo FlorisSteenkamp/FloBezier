@@ -2,7 +2,7 @@ import { eAdd, eCompress } from 'big-float-ts';
 import { expect, assert, use } from 'chai';
 import { describe } from 'mocha';
 import { squares } from 'squares-rng';
-import { closestPointOnBezier, evaluateExact, isPointOnBezierExtension } from '../../../src/index.js';
+import { closestPointOnBezier, cubicToQuadratic, evaluateExact, isPointOnBezierExtension } from '../../../src/index.js';
 import { nearly } from '../../helpers/chai-extend-nearly.js';
 import { getRandomBezier } from '../../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../../helpers/random-rotate-and-translate.js';
@@ -57,6 +57,7 @@ describe('isPointOnBezierExtension', function() {
 				// just to test the test
 				const $p1_ = p1_.map(c => c[0]);
 				const $p1t_ = closestPointOnBezier(ps_,$p1_).p;
+				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect($p1_).to.be.nearly(2**12,$p1t_);
 
 				// the point is almost but not quite on the curve - it is 
@@ -125,6 +126,18 @@ describe('isPointOnBezierExtension', function() {
 			const ps = [[1,1],[2,2],[3,3],[4,4],[5,6]];
 			const p = [[1.2],[1.2]];
 			expect(() => isPointOnBezierExtension(ps,p)).to.throw();
+		}
+
+		{
+			const ps = cubicToQuadratic([[1,0],[2,1],[3,1],[4,0]])!;  //=> 1,0,2.5,1.5,4,0 
+			const p = [[2.5],[0.75]];
+			expect(isPointOnBezierExtension(ps,p)).to.be.true;
+		}
+
+		{
+			const ps = cubicToQuadratic([[1,0],[2,1],[3,1.00000000000001],[4,0]])!;
+			const p = [[2.5],[0.75]];
+			expect(isPointOnBezierExtension(ps,p)).to.be.false;
 		}
 	});
 });

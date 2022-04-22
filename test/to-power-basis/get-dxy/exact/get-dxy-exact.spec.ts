@@ -26,6 +26,7 @@ describe('getDxyExact', function() {
     				[18.05539901828938]
 				]
 			];
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**8, expected);
 
 			for (let i=0; i<10; i++) {
@@ -33,6 +34,7 @@ describe('getDxyExact', function() {
 				const r = getDxyExact(ps);
 				const rd = getDxy(ps);
 
+				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect(r.map(v => v.map(eEstimate))).to.be.nearly(2**6, rd);
 			}
 		}
@@ -43,6 +45,7 @@ describe('getDxyExact', function() {
 				[[-204.22407885743246], [0, 190.99993978127262]],
 				[[106.60345950929099], [0, 12.036932678859586]]
 			];
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**8, expected);
 
 			for (let i=0; i<10; i++) {
@@ -50,6 +53,7 @@ describe('getDxyExact', function() {
 				const r = getDxyExact(ps);
 				const rd = getDxy(ps);
 
+				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect(r.map(v => v.map(eEstimate))).to.be.nearly(2**6, rd);
 			}
 		}
@@ -57,6 +61,7 @@ describe('getDxyExact', function() {
 			const ps = getRandomLine(0);
 			const r = getDxyExact(ps);
 			const expected = [[[0, 95.49996989063631]], [[0, 6.018466339429793]]];
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**8, expected);
 
 			for (let i=0; i<10; i++) {
@@ -64,6 +69,7 @@ describe('getDxyExact', function() {
 				const r = getDxyExact(ps);
 				const rd = getDxy(ps);
 
+				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect(r.map(v => v.map(eEstimate))).to.be.nearly(2**1, rd);
 			}
 		}

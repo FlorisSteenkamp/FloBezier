@@ -28,6 +28,7 @@ describe('controlPointLinesLength', function() {
         {
             const ps = [[1,1],[2,2],[3,3],[10,3]];
             const r = controlPointLinesLength(ps);
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(r).to.be.nearly(2**1, 2*sqrt(2) + 7);
         }
 	});

@@ -26,30 +26,35 @@ describe('curviness', function() {
 		{
 			const ps = [[0,0],[1.0001,1.001],[2.00001,2.00001],[3,3]];
 			const curviness_ = curviness(ps);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(curviness_).to.be.nearly(2**4, 0.0013502388074583282);
 		}
 
 		{
 			const ps = [[0,0],[2,1],[-2,25],[3,3]];
 			const curviness_ = curviness(ps);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(curviness_).to.be.nearly(2**4, 4.355562125072504);
 		}
 
 		{
 			const ps = [[0,0],[1,1],[0,0],[1,1]];
 			const curviness_ = curviness(ps);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(curviness_).to.be.nearly(2**4, 6.283185307179586);
 		}
 
 		{
 			const ps = [[0,0],[1,0],[0,0],[1,1]];
 			const curviness_ = curviness(ps);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(curviness_).to.be.nearly(2**4, 5.497787143782138);
 		}
 
 		{
 			const ps = [[0,0],[1,0],[0,0],[-1,0]];
 			const curviness_ = curviness(ps);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(curviness_).to.be.nearly(2**4, 3.141592653589793);
 		}
 
@@ -57,6 +62,7 @@ describe('curviness', function() {
 		{
 			const ps = [[0,0],[1,0],[0,0]];
 			const curviness_ = curviness(ps);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(curviness_).to.be.nearly(2**4, 3.141592653589793);
 		}
 

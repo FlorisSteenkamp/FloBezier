@@ -8,9 +8,10 @@ const qdifq = ddDiffDd;
 
 
 /**
- * * **precondition** TODO underflow/overflow
  * @param ps 
  * @param p 
+ * 
+ * @internal
  */
  function getFootpointPoly1Dd(ps: number[][], p: number[]): number[][] {
     const [[x0, y0], [x1, y1]] = ps;

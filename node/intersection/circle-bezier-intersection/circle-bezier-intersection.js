@@ -3,6 +3,8 @@ import { getCoeffsCubicExact, getCoeffsQuadraticExact, getCoeffsLinearExact } fr
 import { allRootsCertified } from 'flo-poly';
 import { getCoeffsCubicErrorCounters, getCoeffsLinearErrorCounters, getCoeffsQuadraticErrorCounters } from './get-circle-bezier-intersection-error-counters.js';
 import { γγ } from '../../error-analysis/error-analysis.js';
+import { getPFromBox, getTFromRi } from '../bezier-bezier-intersection/x.js';
+import { getIntervalBox } from '../../global-properties/bounds/get-interval-box/get-interval-box.js';
 const γγ6 = γγ(6);
 /**
  * Returns the intersection between a circle and linear, quadratic or cubic bezier
@@ -15,7 +17,6 @@ const γγ6 = γγ(6);
  * results (see points below)
  *
  * * the bezier curve's parameter `t` values are retuned
- * * * **precondition:** TODO - underflow/overflow conditions
  * * this algorithm is mathematically guaranteed accurate to within
  * `4 * Number.EPSILON` in the t values of the bezier curve
  *
@@ -44,18 +45,21 @@ function circleBezierIntersection(circle, ps) {
         getCoeffsExact = getCoeffsLinearExact;
     }
     else {
-        // TODO - handle case of bezier curve being degenerate to a point
-        throw new Error('The given bezier curve is invalid');
+        throw new Error('The given bezier curve must be of order 1, 2 or 3.');
     }
     const polyE = _polyE.map(e => γγ6 * e);
-    const ts = allRootsCertified(poly, 0, 1, polyE, () => getCoeffsExact(circle, ps));
-    return ts;
-    //return ts.map(t => {
-    //    return {
-    //        t: mid(t),
-    //        p: evalDeCasteljau(ps, mid(t))
-    //    }
-    //});
+    const ris = (allRootsCertified(poly, 0, 1, polyE, () => getCoeffsExact(circle, ps), true) ||
+        [{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }]);
+    return ris.map(ri => {
+        const box = getIntervalBox(ps, [ri.tS, ri.tE]);
+        return {
+            p: getPFromBox(box),
+            t: getTFromRi(ri),
+            ri,
+            kind: 1,
+            box
+        };
+    });
 }
 export { circleBezierIntersection };
 //# sourceMappingURL=circle-bezier-intersection.js.map

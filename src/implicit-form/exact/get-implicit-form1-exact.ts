@@ -3,7 +3,6 @@ import { getXY1Exact } from "../../to-power-basis/get-xy/exact/get-xy-exact.js";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 import { scaleExpansion2, eDiff, eNegativeOf } from "big-float-ts";
-// TODO - investigate order 1 bezier curves (points!)
 import { eSign as _eSign } from 'big-float-ts';
 
 
@@ -12,16 +11,15 @@ const edif = eDiff;
 const eno = eNegativeOf;
 const eSign = _eSign;
 
-// TODO - consider adding getImplicitForm0
+
 /**
  * Returns the exact implicit form of the given linear bezier curve (a line)
- * or `undefined` if the line is really a point.
+ * or `undefined` if the line degenerates to a point.
  * 
  * Returned coefficients are subscripted to match their monomial's variables,
  * e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
  * 
  * * the implicit form is given by: `vₓx + vᵧy + v = 0`
- * * **precondition:** underflow/overflow
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
  * @param ps 

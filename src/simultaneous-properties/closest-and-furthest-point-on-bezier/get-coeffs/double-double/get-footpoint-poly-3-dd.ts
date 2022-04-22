@@ -11,9 +11,10 @@ const qdq = ddDiffDd;
 
 
 /**
- * * **precondition** TODO underflow/overflow
  * @param ps 
  * @param p 
+ * 
+ * @internal
  */
 function getFootpointPoly3Dd(
         ps: number[][], p: number[]): [number[], number[], number[], number[], number[], number[]] {

@@ -28,27 +28,9 @@ function map<V>(check: (v: any) => v is V) {
                     return mapArr(v1 => map(check)(f)(v1), obj1);
                 }
 
-                //if (!Array.isArray(obj2)) { 
-                //    throw new Error('Object structures must be the same'); 
-                //}
-
                 return mapArr((v1,v2) => map(check)(f)(v1,v2), obj1, obj2 as ObjOrArray<V>[]);
             }
             
-            /*
-            if (typeof obj1 === 'object') {
-                if (obj2 === undefined) {
-                    return mapObj(v1 => map(check)(f)(v1), obj1);
-                }
-
-                if (typeof obj2 !== 'object') { 
-                    throw new Error('Object structures must be the same');
-                }
-
-                return mapObj((v1,v2) => map(check)(f)(v1,v2), obj1, obj2 as { [key: string]: ObjOrArray<V>; });
-            }
-            */
-
             throw new Error('Must be an object or array (or either recursively');
         }
     }
@@ -136,6 +118,7 @@ const mapDouble = map<number>(isNumber);
 
 const mapShewchukToDouble = mapShewchuk(eEstimate);
 const mapShewchukToAbsDouble = mapShewchuk(v => abs(eEstimate(v)));
+// @ts-ignore
 const subtractShewchuk = mapShewchuk<number[]>(eDiff);
 const mapDoubleToShewchuk = mapDouble<number>(v => [v]);
 

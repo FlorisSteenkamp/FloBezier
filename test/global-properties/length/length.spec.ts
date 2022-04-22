@@ -44,7 +44,9 @@ describe('length', function() {
 
 				const ll = approxLengthByLineSegs(ps, 2**6);
 
+				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect(tl).to.be.nearly(2**4, l);
+				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect(ll).to.be.nearly(2**40, l);
 			}
 		}

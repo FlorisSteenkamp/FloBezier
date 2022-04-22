@@ -18,6 +18,7 @@ describe('getBoundingBoxTight', function() {
 				[1, 1],
 				[2, 0]
 			];
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(getBoundingBoxTight(ps)).to.be.nearly(2**4, [ 
 				[0, 0],
 				[2, 0],
@@ -32,6 +33,7 @@ describe('getBoundingBoxTight', function() {
 		{
 			const ps = getRandomCubic(0);
 			const r = getBoundingBoxTight(ps);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**6, [ 
 				[-108.49686506776892, -13.011161175008596],
 				[124.76385737178957, -112.1975403532909],
@@ -48,6 +50,7 @@ describe('getBoundingBoxTight', function() {
 				[80.17857884247292, -101.65036486965846],
 				[-95.539309056601269, -84.89133452900955] 
 			];
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(getBoundingBoxTight(ps)).to.be.nearly(2**8, [
 				[-85.35872924595627, -107.86648402656408],
 				[-15.361552595332611, -76.84984827029443],

@@ -19,7 +19,7 @@ import { evaluateExact, isPointOnBezierExtension } from "../../../src/index.js";
  * 
  * @doc
  */
-function areIntersectionsInfinte(
+ function areIntersectionsInfinte(
         ps1: number[][], 
         ps2: number[][]) {
 
@@ -30,7 +30,7 @@ function areIntersectionsInfinte(
     // 2 cubics) unique points on one curve are also on the other then they 
     // are algebraically identical (provided they are in general position).
 
-    
+
     const len = (ps1.length-1)*(ps2.length-1) + 1;
     const mid = Math.ceil(len/2);
     for (let i=1; i<len+1; i++) {
@@ -42,7 +42,8 @@ function areIntersectionsInfinte(
         const p = evaluateExact(ps1, t);
         const onExtension = isPointOnBezierExtension(ps2, p);
         if (!onExtension) {
-            return false;
+            // ignore coverage
+            return false; 
         }
     }
 

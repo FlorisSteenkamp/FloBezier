@@ -25,7 +25,7 @@ const settings = {
     timingOnly: false,
     /** the number of bezier pairs (=== number of beziers / 2) */
     // num: 100000,
-    num: 1,
+    num: 100,
     maxBitLength: 53,
 
     showNaive: true,

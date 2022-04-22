@@ -11,9 +11,10 @@ const qm4 = ddMultBy4;
 
 
 /**
- * * **precondition** TODO - overflow/underflow
  * @param ps 
  * @param p 
+ * 
+ * @internal
  */
 function getFootpointPoly2Dd(
         ps: number[][], p: number[]): number[][] {

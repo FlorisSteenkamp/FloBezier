@@ -1,5 +1,5 @@
 import { fromTo, reverse, toLength, translate } from 'flo-vector2d';
-import { Fatline } from '../../../src/intersection/bezier3-intersection/debug.js';
+import { Fatline } from '../../../src/intersection/bezier-bezier-intersection-fast/debug.js';
 
 
 function drawFatline(ctx: CanvasRenderingContext2D,

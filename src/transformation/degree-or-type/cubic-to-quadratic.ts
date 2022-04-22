@@ -18,7 +18,7 @@ const ts = twoSum;
  * that of the curve being approximated
  * 
  * * if `preserveTangents` is `true` and the cubic's initial and final tangents
- * are parallel then `undefined` is returned
+ * are parallel (and not coincident) then `undefined` is returned
  * 
  * @param psCubic a cubic bezier curve.
  * @param preserveTangents defaults to `false`; if `true` then the approximation

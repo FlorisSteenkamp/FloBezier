@@ -1,3 +1,4 @@
+/* ignore file coverage - this file is not used currently */
 import { γγ } from "../../../../error-analysis/error-analysis.js";
 import { ddMultDd, ddAddDd, ddDiffDd } from "double-double";
 import { getXY3DdWithRunningError } from "../../../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js";
@@ -20,7 +21,6 @@ const γγ3 = γγ(3);
  * double-double precision floating point numbers from highest to lowest power, 
  * e.g. `[[0,5],[0,-3],[0,0]]` represents the polynomial `5x^2 - 3x`.
  * 
- * * **precondition:** TODO underflow/overflow
  * intermediate calculations are done in double-double precision and this is
  * reflected in the output error bound (which is approximately 
  * `n * (Number.EPSILON**2) * the condition number`, where roughly `1 < n < 100` and 

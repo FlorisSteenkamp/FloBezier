@@ -5,7 +5,7 @@ import { randomOnGrid } from '../random-on-grid.js';
 
 function getPssWithInfiniteXs(): number[][][] {
     let q = 0;
-    const r = randomOnGrid(1, 10);
+    const r = randomOnGrid(1, 30);
 
     while (true && q++ < 1000_000) {
         const qq = q*10;
@@ -18,21 +18,18 @@ function getPssWithInfiniteXs(): number[][][] {
 
         const t1 = randomOnGrid(1,6)(qq+8);
         const t2 = randomOnGrid(1,6)(qq+9);
-        console.log(t1,t2)
        
         const bz1 = fromTo(bz, 0, t1).ps;
         const bz2 = fromTo(bz, t2, 1).ps.reverse();
 
         if (t1 !== 0 && t1 !== 1 && t2 !== 0 && t2 !== 1 &&
             areIntersectionsInfinte(bz1,bz2)) {
-
-            console.log('same found')
-
             return [bz1,bz2];
         }
     }
 
-    throw 'none found'
+    // ignore coverage
+    throw new Error('none found');
 }
 
 

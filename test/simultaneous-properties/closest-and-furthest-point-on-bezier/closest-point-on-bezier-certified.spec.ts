@@ -42,7 +42,9 @@ describe('closestPointOnBezierCertified', function() {
 				assert(di[0] <= dEst && di[1] >= dEst);
 
 				const { p: bp } = closestPointOnBezier(ps,p);
+				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect(cpp[0]).to.be.nearly(2**16,bp[0]);
+				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect(cpp[1]).to.be.nearly(2**16,bp[1]);
 
 				const d2 = distanceBetween(cpp,p);

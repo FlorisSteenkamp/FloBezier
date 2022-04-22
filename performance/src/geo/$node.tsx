@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { IterationExtras } from '../../../src/intersection/bezier3-intersection/debug.js';
-import { Iteration } from '../../../src/intersection/bezier3-intersection/iteration.js';
+import { IterationExtras } from '../../../src/intersection/bezier-bezier-intersection-fast/debug.js';
+import { Iteration } from '../../../src/intersection/bezier-bezier-intersection-fast/iteration.js';
 import { NodeProps } from '../../react-svg-tree/src/helpers/node-props.js';
 import { mapWithParent } from '../../react-svg-tree/src/helpers/tree-graph.js';
 import { settings } from '../settings.js';
 import { drawIterClipsToCanvas, drawIterHybridPolyToCanvas } from './draw-iter-to-canvas.js';
 import { draw, ctx } from '../draw-stuff.js';
 import { unsquashp, untransp } from '../affine.js';
-import { bezier3Intersection, evaluate } from '../../../src/index.js';
+import { bezierBezierIntersectionFast, evaluate } from '../../../src/index.js';
 
 
 const { tc } = settings;
@@ -32,7 +32,7 @@ function onClick(node: IterationWithExtras) {
 function onRightClick(node: IterationWithExtras) {
     drawIterClipsToCanvas(canvas, node);
     if (!node.parent) {
-        const tss = bezier3Intersection(node.F, node.G);
+        const tss = bezierBezierIntersectionFast(node.F, node.G);
         drawIntersectionsGeo(tss, node.F)
     }
 }

@@ -23,7 +23,7 @@
         p: number[],
         t: number): number[][] {
 
-    const [[x0,y0], [x1,y1], ,[x3,y3]] = ps;
+    const [[x0,y0], [x1,y1], [x3,y3]] = ps;
     const [x,y] = p;
 
     const x2 = (t**3*(-x0 + 3*x1 + x3) + 3*t**2*(x0 - 2*x1) - 3*t*(x0 - x1) - x + x0)/(3*t**2*(t - 1));

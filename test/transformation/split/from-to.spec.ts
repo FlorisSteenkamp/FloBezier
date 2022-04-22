@@ -17,6 +17,7 @@ describe('fromTo', function() {
 			const ps = getRandomCubic(0);
 			// ps = randomRotateAndTranslate(0)(ps);
 			const r = fromTo(ps, tS, tE);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**8, { 
 				ps: [[-41.580783363752346, -0.303584098690596],
 				  	 [-15.584747924965303, 5.415004899912785],
@@ -31,14 +32,17 @@ describe('fromTo', function() {
 
 			const r0 = fromTo(ps, 0, tE).ps;
 			const ra0 = fromTo(ps, 2**-50, tE).ps;
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r0).to.be.nearly(2**8,ra0);
 
 			const r1 = fromTo(ps, tS, 1).ps;
 			const ra1 = fromTo(ps, tS, 1 - 2**-50).ps;
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r1).to.be.nearly(2**8,ra1);
 
 			const r01 = fromTo(ps, 0, 1).ps;
 			const ra01 = fromTo(ps, 2**-50, 1 - 2**-50).ps;
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r01).to.be.nearly(2**8,ra01);
 		}
 		{
@@ -47,6 +51,7 @@ describe('fromTo', function() {
 			const ps = getRandomQuad(0);
 			// ps = randomRotateAndTranslate(0)(ps);
 			const r = fromTo(ps, tS, tE);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**8, { 
 				ps: [ 
 						[-59.09985072467404, -4.157415815140692],
@@ -62,14 +67,17 @@ describe('fromTo', function() {
 
 			const r0 = fromTo(ps, 0, tE).ps;
 			const ra0 = fromTo(ps, 2**-50, tE).ps;
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r0).to.be.nearly(2**8,ra0);
 
 			const r1 = fromTo(ps, tS, 1).ps;
 			const ra1 = fromTo(ps, tS, 1 - 2**-50).ps;
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r1).to.be.nearly(2**8,ra1);
 
 			const r01 = fromTo(ps, 0, 1).ps;
 			const ra01 = fromTo(ps, 2**-50, 1 - 2**-50).ps;
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r01).to.be.nearly(2**8,ra01);
 		}
 		{
@@ -77,6 +85,7 @@ describe('fromTo', function() {
 			const tE = 0.77;
 			const ps = getRandomLine(0);
 			const r = fromTo(ps, tS, tE);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**8, { 
 				ps: [
 						[-78.89187440167167,-11.14543660978536],
@@ -90,14 +99,17 @@ describe('fromTo', function() {
 
 			const r0 = fromTo(ps, 0, tE).ps;
 			const ra0 = fromTo(ps, 2**-50, tE).ps;
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r0).to.be.nearly(2**8,ra0);
 
 			const r1 = fromTo(ps, tS, 1).ps;
 			const ra1 = fromTo(ps, tS, 1 - 2**-50).ps;
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r1).to.be.nearly(2**8,ra1);
 
 			const r01 = fromTo(ps, 0, 1).ps;
 			const ra01 = fromTo(ps, 2**-50, 1 - 2**-50).ps;
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r01).to.be.nearly(2**8,ra01);
 		}
 		{

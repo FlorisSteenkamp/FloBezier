@@ -22,7 +22,6 @@ const eSign = _eSign;
  * Shewchuk floating point expansions from highest to lowest power, 
  * e.g. `[[5],[-3],[0]]` represents the polynomial `5x^2 - 3x`.
  * 
- * * **precondition:** TODO - add underflow / overflow conditions
  * * the returned polynomial coefficients are exact (i.e. error-free)
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
@@ -31,8 +30,6 @@ const eSign = _eSign;
  * 
  * @doc mdx
  */
-// TODO - rename all these by chopping off the AnyBitlength part since it
-// is now implied implicitly
 function getCoeffsBez1Bez1Exact(ps1: number[][], ps2: number[][]) {
     /** ps1 in power bases */
     const ps1pb = getXY1Exact(ps1);

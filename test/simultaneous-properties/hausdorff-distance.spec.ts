@@ -61,6 +61,7 @@ describe('hausdorffDistance', function() {
 			const hd = hausdorffDistance(A,B);
 
 			expect(AB).to.eql(2);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(BA).to.be.nearly(2**1,(sqrt(3**2 + 2**2)));
 			expect(hd).to.eql(BA);
 
@@ -69,6 +70,7 @@ describe('hausdorffDistance', function() {
 			const AB_ = hausdorffDistanceOneSided(A_,B_);
 			const BA_ = hausdorffDistanceOneSided(B_,A_);
 			expect(AB_).to.eql(2);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(BA_).to.be.nearly(2**1,(sqrt(3**2 + 2**2)));
 		}
 		{
@@ -81,14 +83,16 @@ describe('hausdorffDistance', function() {
 			const BA = hausdorffDistanceOneSided(B,A);
 			const hd = hausdorffDistance(A,B);
 
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(AB).to.be.nearly(2**20,2);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(BA).to.be.nearly(2**1,(sqrt(3**2 + 2**2)));
 			expect(hd).to.eql(BA);
 
 			// estimate Hausdorff distance
-			// TODO - put back
-			//const hh = HH(A,B,10);
-			//expect(hd).to.be.nearly(2**4,hh);
+			const hh = HH(A,B,10);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
+			expect(hd).to.be.nearly(2**4,hh);
 		}
 		{
 			// Test a crafted line to quad - https://www.desmos.com/calculator/uyl4qedxkp
@@ -114,6 +118,7 @@ describe('hausdorffDistance', function() {
 
 			const h = hausdorffDistanceOneSided(A,B);
 
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(h).to.be.nearly(2**32, 1.3749758408573243);
 
 			// h should be 1.3749758408573243 occuring at 
@@ -122,6 +127,7 @@ describe('hausdorffDistance', function() {
 
 			// estimate Hausdorff distance
 			const hAB = H(A,B,0.1);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(h).to.be.nearly(2**44,hAB);
 		}
 		{
@@ -135,13 +141,17 @@ describe('hausdorffDistance', function() {
 			const AB = hausdorffDistanceOneSided(A,B);
 			const BA = hausdorffDistanceOneSided(B,A);
 
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(AB).to.be.nearly(2**32,29.147780233490522);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(BA).to.be.nearly(2**32,27.36950949488669);
 
 			// estimate Hausdorff distance
 			const hAB = H(A,B,1);
 			const hBA = H(B,A,1);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(AB).to.be.nearly(2**44,hAB);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(BA).to.be.nearly(2**44,hBA);
 		}
 		{
@@ -154,8 +164,11 @@ describe('hausdorffDistance', function() {
 			const BA = hausdorffDistanceOneSided(B,A);
 			const h = hausdorffDistance(A,B,tol);
 
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(AB).to.be.nearly(2**32, 29.41592345293623);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(BA).to.be.nearly(2**32, 92.13090734616078);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(h).to.be.nearly(2**32, 92.13090734616078);
 		}
 		{
@@ -169,7 +182,9 @@ describe('hausdorffDistance', function() {
 			const AB = hausdorffDistanceOneSided(A,B,tol,maxIterations);
 			const BA = hausdorffDistanceOneSided(B,A,tol,maxIterations);
 
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(AB).to.be.nearly(2**32,34.29678192323552);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(BA).to.be.nearly(2**32,13.860492759353555);
 		}
 		{
@@ -183,6 +198,7 @@ describe('hausdorffDistance', function() {
 			const BA = hausdorffDistanceOneSided(B,A,tol);
 			const h = max(AB,BA);
 
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(h).to.be.nearly(2**22,1.2);
 		}
 		{
@@ -195,6 +211,7 @@ describe('hausdorffDistance', function() {
 			const tol = 1/1000_000_000;
 			const h = hausdorffDistance(A,B,tol);
 
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(h).to.be.nearly(2**42,1)
 		}
 		{
@@ -208,6 +225,7 @@ describe('hausdorffDistance', function() {
 			const tol = 1/1000_000_000;
 			const h = hausdorffDistance(B,A,tol);
 
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(h).to.be.nearly(2**0,e);
 		}
 
@@ -220,6 +238,7 @@ describe('hausdorffDistance', function() {
 			const tol = 1/1000_000_000;
 			const h = hausdorffDistance(B,A,tol);
 
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(h).to.be.nearly(2**32,0.0004163441673260007);
 		}
 
@@ -230,7 +249,9 @@ describe('hausdorffDistance', function() {
 			const AB = hausdorffDistanceOneSided(A,B);
 			const BA = hausdorffDistanceOneSided(B,A);
 
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(AB).to.be.nearly(2**4, 1);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(BA).to.be.nearly(2**4, 2*sqrt(2));
 		}
 	});

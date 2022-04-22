@@ -16,6 +16,7 @@ describe('tangent', function() {
 			
 			for (let t of ts) {
 				let r = tangent(ps, t);
+				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect(r).to.be.nearly(2**2, [95.49996989063631,6.018466339429793]);
 				expect(tangent(ps, t)).to.eql(tangent(ps)(t));
 			}
@@ -25,6 +26,7 @@ describe('tangent', function() {
 			const ps = getRandomQuad(0);
 			const t = 0.5;
 			let r = tangent(ps, t);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**2, [88.88790035255639,65.33866243350508]);
 			expect(tangent(ps, t)).to.eql(tangent(ps)(t));
 		}
@@ -33,6 +35,7 @@ describe('tangent', function() {
 			const ps = getRandomCubic(0);
 			const t = 0.5;
 			let r = tangent(ps, t);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**2, [169.98648967610893,-29.899637313155253]);
 			expect(tangent(ps, t)).to.eql(tangent(ps)(t));
 		}
@@ -42,6 +45,7 @@ describe('tangent', function() {
 			const t = 0.5;
 			let r = tangent(ps, t);
 			// at cusp the tangent vanishes
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**2, [0,0]);
 		}
 	});

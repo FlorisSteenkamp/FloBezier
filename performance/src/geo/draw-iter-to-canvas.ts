@@ -1,6 +1,6 @@
 // import { toString } from "../../../src/index.js";
-import { Fatline, IterationExtras } from "../../../src/intersection/bezier3-intersection/debug.js";
-import { Iteration } from "../../../src/intersection/bezier3-intersection/iteration.js";
+import { Fatline, IterationExtras } from "../../../src/intersection/bezier-bezier-intersection-fast/debug.js";
+import { Iteration } from "../../../src/intersection/bezier-bezier-intersection-fast/iteration.js";
 import { draw } from '../draw-stuff.js';
 import { tcFatline } from './tc-fatline.js';
 import { tcGeo } from './tc-geo.js';

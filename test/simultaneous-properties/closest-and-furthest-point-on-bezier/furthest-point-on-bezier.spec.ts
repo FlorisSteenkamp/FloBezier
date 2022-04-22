@@ -19,6 +19,7 @@ describe('furthestPointOnBezier', function() {
 				const p = getRandomPoint((i+97)*93)[0];  // some randomish point
 				const { p: bp, t } = furthestPointOnBezier(ps,p);
 				let pp = evalDeCasteljau(ps,t);
+				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect(pp).to.be.nearly(2**4,bp);
 				const dfurthest = distanceBetween(bp,p);
 				// check against 16 other points on the bezier in [0,1]

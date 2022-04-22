@@ -21,6 +21,7 @@ describe('evaluateDdxyExact', function() {
 
             const dxyEst = evaluateDxy(ps,t);
             const dxy = evaluateDxyExact(ps,t).map(eCompress);
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(dxy.map(eEstimate)).to.be.nearly(2**0, dxyEst);
             expect(dxy).to.eql([
                 [3.552713678800501e-15, 221.77979874351854],
@@ -31,6 +32,7 @@ describe('evaluateDdxyExact', function() {
 
             const ddxyEst = evaluateDdxy(ps,t);
             const ddxy = evaluateDdxyExact(ps,t).map(eCompress);
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(ddxy.map(eEstimate)).to.be.nearly(2**0,ddxyEst);
             expect(ddxy).to.eql([
                 [-422.8495382819487], 
@@ -46,6 +48,7 @@ describe('evaluateDdxyExact', function() {
 
             const dxyEst = evaluateDxy(ps,t);
             const dxy = evaluateDxyExact(ps,t).map(eCompress);
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(dxy.map(eEstimate)).to.be.nearly(2**0, dxyEst);
             expect(dxy).to.eql([
                 [1.4210854715202004e-14, 133.61557809124287],
@@ -56,6 +59,7 @@ describe('evaluateDdxyExact', function() {
 
             const ddxyEst = evaluateDdxy(ps,t);
             const ddxy = evaluateDdxyExact(ps,t).map(eCompress);
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(ddxy.map(eEstimate)).to.be.nearly(2**0,ddxyEst);
             expect(ddxy).to.eql([
                 [-589.1890567792337], 
@@ -71,6 +75,7 @@ describe('evaluateDdxyExact', function() {
 
             const dxyEst = evaluateDxy(ps,t);
             const dxy = evaluateDxyExact(ps,t).map(eCompress);
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(dxy.map(eEstimate)).to.be.nearly(2**0, dxyEst);
             expect(dxy).to.eql([
                 [-44.982865253836025],

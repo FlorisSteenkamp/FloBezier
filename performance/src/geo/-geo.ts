@@ -1,5 +1,5 @@
-import type { __Debug__ } from '../../../src/intersection/bezier3-intersection/debug.js';
-import { bezier3Intersection, evaluate, toString, X } from '../../../src/index.js';
+import type { __Debug__ } from '../../../src/intersection/bezier-bezier-intersection-fast/debug.js';
+import { bezierBezierIntersectionFast, evaluate, toString, X } from '../../../src/index.js';
 import { settings } from '../settings.js'; 
 import { draw, ctx } from '../draw-stuff.js';
 import { unsquashp, untransp } from '../affine.js';
@@ -9,7 +9,6 @@ import { renderTree } from './render-tree.js';
 
 const { tc, num, timingOnly, showGeoXs, showGeoIters } = settings;
 
-console.log('BB');
 const __debug__: __Debug__ = (typeof globalThis !== 'undefined' && (globalThis as any).__debug__)
     ? (globalThis as any).__debug__
     : undefined;
@@ -35,7 +34,7 @@ function geo(
         const ps1 = pss[i];
         const ps2 = pss[i+1];
 
-        const tss = bezier3Intersection(ps1, ps2);
+        const tss = bezierBezierIntersectionFast(ps1, ps2);
 
         total += tss.length;
 
@@ -49,9 +48,9 @@ function geo(
             const res = updDs(ds, xs!, tss_.map(ts => ts[0][0]));
 
             if (!res) {
-                console.log(toString(ps1));
-                console.log(toString(ps2));
-                console.log('----');
+                //console.log(toString(ps1));
+                //console.log(toString(ps2));
+                //console.log('----');
                 //throw 'up'
             }
         }

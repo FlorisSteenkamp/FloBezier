@@ -25,21 +25,19 @@ const qaq = ddAddDd;       // error -> 3*γ²
  * e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
  * 
  * * the implicit form is given by: `vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0`
- * * **precondition:** TODO - add underflow / overflow conditions + docs below
  * * intermediate calculations are done in double-double precision and this is
- * reflected in the output error bound (which is approximately 
- * `n * (Number.EPSILON**2) * the condition number`, where roughly `1 < n < 100` and 
- * depends on the specific calculation)
- * * the error bound returned first needs to be multiplied by `γγ3 === (3*u*u) / (1 - 3*u*u)`,
+ * reflected in the output error bound
+ * * the error bound returned first needs to be scaled by `γγ3 === (3*u*u) / (1 - 3*u*u)`,
  * where `u === Number.EPSILON / 2` before use
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
- * * takes about 15 micro-seconds on a 3rd gen i7 and Chrome 79
  * 
  * @param ps
  * 
  * @doc mdx
  */
 function getImplicitForm3DdWithRunningError(ps: number[][]) {
+    // Takes about 15 micro-seconds on a 3rd gen i7 and Chrome 79.
+
     //--------------------------------------------------------------------------
     // `var` -> a variable
     // `$var` -> the double precision approximation to `var`
@@ -54,7 +52,7 @@ function getImplicitForm3DdWithRunningError(ps: number[][]) {
     // * can use either `$var` or `var[var.length-1]` (the approx value) in error calculations
     //   due to multiplication by 3*γ² and not 3*u²
     //--------------------------------------------------------------------------
-    // examples: (all?)
+    // examples:
     // ----------------
     // let qmd === ddMultDouble2, etc.
     //

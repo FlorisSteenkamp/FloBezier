@@ -14,6 +14,7 @@ describe('getBounds', function() {
 	function() {
 		const ps = getRandomLine(0);
 		const r = getBounds(ps);
+		// @ts-ignore - otherwise TypeScript gives an error on nearly
 		expect(r).to.be.nearly(2**6, { 
 			ts:[[0,0],[1,1]],
 			box: [
@@ -27,6 +28,7 @@ describe('getBounds', function() {
 	function() {
 		const ps = getRandomQuad(0);
 		const r = getBounds(ps);
+		// @ts-ignore - otherwise TypeScript gives an error on nearly
 		expect(r).to.be.nearly(2**6, { 
 			ts: [[0,0],[0.9352469152993877,1]],
   			box: [
@@ -41,6 +43,7 @@ describe('getBounds', function() {
 		const ps = getRandomCubic(0);
 		const r = getBounds(ps);
 
+		// @ts-ignore - otherwise TypeScript gives an error on nearly
 		expect(r).to.be.nearly(2**6, { 
 			ts: [[0, 1], [1, 0.43461189704704933]],
 			box: [ 

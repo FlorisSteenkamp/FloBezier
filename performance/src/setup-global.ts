@@ -1,4 +1,4 @@
-import { __Debug__ } from "../../src/intersection/bezier3-intersection/debug";
+import { __Debug__ } from "../../src/intersection/bezier-bezier-intersection-fast/debug";
 
 
 (globalThis as any as { __debug__: Partial<__Debug__> | undefined}).__debug__ = 

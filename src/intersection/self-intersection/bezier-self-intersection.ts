@@ -1,14 +1,14 @@
+import {
+    expansionProduct, eDiff, scaleExpansion2, fastExpansionSum, growExpansion,
+    eSign, eAbs, eToDd, eMultByNeg2, eEstimate, eCompare
+} from 'big-float-ts';
+import {
+    ddNegativeOf, ddAddDd, ddMultBy2, ddDivDd, twoDiff, twoSum,
+    sqrtWithErr, divWithErr, ddSqrt
+} from 'double-double';
 import { getCoeffsBez3WithRunningError } from "./get-coefficients/double/get-coeffs-bez3-with-running-error.js";
 import { getCoeffsBez3Exact } from "./get-coefficients/exact/get-coeffs-bez3-exact.js";
 import { γ } from "../../error-analysis/error-analysis.js";
-import { operators as bigFloatOperators } from "big-float-ts";
-import { operators as ddOperators } from "double-double";
-import { expansionProduct, eDiff, scaleExpansion2, fastExpansionSum, growExpansion } from 'big-float-ts';
-import { ddNegativeOf, ddAddDd, ddMultBy2, ddDivDd, twoDiff, twoSum } from 'double-double';
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const { eSign, eAbs, eToDd, eMultByNeg2, eEstimate, eCompare } = bigFloatOperators;
-const { sqrtWithErr, divWithErr, ddSqrt } = ddOperators;
 
 
 const edif = eDiff;
@@ -36,7 +36,6 @@ const γ1 = γ(1);
  * parameter below).
  * 
  * * only cubic (or higher order) bezier curves can have unique self-intersections
- * * * **precondition:** TODO - underflow/overflow
  * * this algorithm is mathematically guaranteed accurate to within an absolute
  * error of `4 * Number.EPSILON` for the returned `t` values satisfying `|t| <= 1`
  * or a relative error of the same `4 * Number.EPSILON` otherwise.

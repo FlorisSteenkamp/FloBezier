@@ -13,6 +13,7 @@ describe('quadToPolyline', function() {
 			// let ps = getRandomQuad(0);
 			const ps = [[0,0],[1,1],[2,0]];
 			const r = quadToPolyline(ps, 0.01);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**8, [
 				[0, 0],
 				[0.25, 0.21875],
@@ -27,6 +28,7 @@ describe('quadToPolyline', function() {
 
 			const ps_ = randomRotateAndTranslate(0)(ps);
 			const r_ = quadToPolyline(ps_, 0.01);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r_).to.be.nearly(2**8, [
 				[-8.476317583419448, -1.0164969667975465],
 				[-8.638609461980927, -1.306346770407945],

@@ -1,4 +1,4 @@
-import { type __Debug__ } from '../../src/intersection/bezier3-intersection/debug.js';
+import { type __Debug__ } from '../../src/intersection/bezier-bezier-intersection-fast/debug.js';
 import { DUMMY } from './setup-global.js';
 import { doPaper } from './-paper.js';
 import { allRoots as _allRoots } from './roots/all-roots.js';

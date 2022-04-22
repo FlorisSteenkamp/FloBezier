@@ -11,11 +11,7 @@ function heapToStr<T>(nodeToStrFunc: (node: T) => string) {
 
         return heapStr;
 
-        function f(nodeIdx: number | undefined): void {
-            //if (nodeIdx === undefined) { 
-            //    return; 
-            //}
-
+        function f(nodeIdx: number): void {
             heapStr += nodeToStrFunc(heap.heap[nodeIdx]);
 
             const leftIdx = Heap.getLeftChild(nodeIdx);

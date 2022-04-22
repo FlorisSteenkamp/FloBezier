@@ -17,12 +17,14 @@ describe('getDdxy', function() {
 				[1518.5815863227895, -612.6722365722974],
   				[-1662.8818047630489, 319.81037852787296]
 			];
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**8, expected);
 		}
 		{
 			const ps = getRandomQuad(0);
 			const r = getDdxy(ps);
 			const expected = [[-204.22407885743246],[106.60345950929099]];
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**8, expected);
 		}
 		{

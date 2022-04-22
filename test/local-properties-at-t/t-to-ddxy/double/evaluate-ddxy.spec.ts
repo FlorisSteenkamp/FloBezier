@@ -21,10 +21,12 @@ describe('evaluateDdxy', function() {
 
             const dxyEst = dxyByForwardDifferences(ps,t,δt);
             const dxy = evaluateDxy(ps,t);
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(dxy).to.be.nearly(2**34, dxyEst);
 
             const ddxyEst = ddxyByForwardDifferences(ps,t,δt);
             const ddxy = evaluateDdxy(ps,t);
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(ddxy).to.be.nearly(2**42,ddxyEst);
 
             {
@@ -34,10 +36,12 @@ describe('evaluateDdxy', function() {
 
                 const dxyEst = dxyByForwardDifferences(ps,0,δt);
                 const dxy = evaluateDxyAt0(ps);
+                // @ts-ignore - otherwise TypeScript gives an error on nearly
                 expect(dxy).to.be.nearly(2**36, dxyEst);
 
                 const ddxyEst = ddxyByForwardDifferences(ps,0,δt);
                 const ddxy = evaluateDdxyAt0(ps);
+                // @ts-ignore - otherwise TypeScript gives an error on nearly
                 expect(ddxy).to.be.nearly(2**42,ddxyEst);
             }
             {
@@ -47,10 +51,12 @@ describe('evaluateDdxy', function() {
 
                 const dxyEst = dxyByForwardDifferences(ps,1,δt);
                 const dxy = evaluateDxyAt1(ps);
+                // @ts-ignore - otherwise TypeScript gives an error on nearly
                 expect(dxy).to.be.nearly(2**34, dxyEst);
 
                 const ddxyEst = ddxyByForwardDifferences(ps,1,δt);
                 const ddxy = evaluateDdxyAt1(ps);
+                // @ts-ignore - otherwise TypeScript gives an error on nearly
                 expect(ddxy).to.be.nearly(2**42,ddxyEst);
             }
         }
@@ -62,10 +68,12 @@ describe('evaluateDdxy', function() {
 
             const dxyEst = dxyByForwardDifferences(ps,t,δt);
             const dxy = evaluateDxy(ps,t);
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(dxy).to.be.nearly(2**34, dxyEst);
 
             const ddxyEst = ddxyByForwardDifferences(ps,t,δt);
             const ddxy = evaluateDdxy(ps,t);
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(ddxy).to.be.nearly(2**42,ddxyEst);
             {
                 // Quadratic bezier curve - at `t === 0`
@@ -74,10 +82,12 @@ describe('evaluateDdxy', function() {
 
                 const dxyEst = dxyByForwardDifferences(ps,0,δt);
                 const dxy = evaluateDxyAt0(ps);
+                // @ts-ignore - otherwise TypeScript gives an error on nearly
                 expect(dxy).to.be.nearly(2**34, dxyEst);
 
                 const ddxyEst = ddxyByForwardDifferences(ps,0,δt);
                 const ddxy = evaluateDdxyAt0(ps);
+                // @ts-ignore - otherwise TypeScript gives an error on nearly
                 expect(ddxy).to.be.nearly(2**42,ddxyEst);
             }
             {
@@ -87,10 +97,12 @@ describe('evaluateDdxy', function() {
 
                 const dxyEst = dxyByForwardDifferences(ps,1,δt);
                 const dxy = evaluateDxyAt1(ps);
+                // @ts-ignore - otherwise TypeScript gives an error on nearly
                 expect(dxy).to.be.nearly(2**34, dxyEst);
 
                 const ddxyEst = ddxyByForwardDifferences(ps,1,δt);
                 const ddxy = evaluateDdxyAt1(ps);
+                // @ts-ignore - otherwise TypeScript gives an error on nearly
                 expect(ddxy).to.be.nearly(2**44,ddxyEst);
             }
 		}
@@ -102,6 +114,7 @@ describe('evaluateDdxy', function() {
 
             const dxyEst = dxyByForwardDifferences(ps,t,δt);
             const dxy = evaluateDxy(ps,t);
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(dxy).to.be.nearly(2**20, dxyEst);
 
             const ddxy = evaluateDdxy(ps,t);
@@ -114,6 +127,7 @@ describe('evaluateDdxy', function() {
 
                 const dxyEst = dxyByForwardDifferences(ps,0,δt);
                 const dxy = evaluateDxyAt0(ps);
+                // @ts-ignore - otherwise TypeScript gives an error on nearly
                 expect(dxy).to.be.nearly(2**34, dxyEst);
 
                 const ddxy = evaluateDdxyAt0(ps);
@@ -126,6 +140,7 @@ describe('evaluateDdxy', function() {
 
                 const dxyEst = dxyByForwardDifferences(ps,1,δt);
                 const dxy = evaluateDxyAt1(ps);
+                // @ts-ignore - otherwise TypeScript gives an error on nearly
                 expect(dxy).to.be.nearly(2**34, dxyEst);
 
                 const ddxy = evaluateDdxyAt1(ps);

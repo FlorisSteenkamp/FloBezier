@@ -14,7 +14,6 @@ const γ1 = γ(1);
  * precision floating point numbers from highest to lowest power, 
  * e.g. `[5,-3,0]` represents the polynomial `5x^2 - 3x`.
  * 
- * * **precondition:** TODO - overflow/underflow
  * * intermediate calculations are done in double precision and this is
  * reflected in the output error bound (which is approximately equal to
  * `n * Number.EPSILON * the condition number`, where roughly `1 < n < 100` and 

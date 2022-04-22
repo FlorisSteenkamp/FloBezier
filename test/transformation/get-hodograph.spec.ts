@@ -19,10 +19,12 @@ describe('getHodograph', function() {
   				[-19.83620861423981, 177.9605882822259],
   				[433.11846626100623, -493.5751248353622]
 			];
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**3, expected);
 
 			const ps_ = randomTranslate(0)(ps);
 			const r_ = getHodograph(ps_);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r_).to.be.nearly(2**3, r);
 		}
 		{
@@ -32,26 +34,28 @@ describe('getHodograph', function() {
 				[190.99993978127262, 12.036932678859586],
   				[-13.224139076159844, 118.64039218815057]
 			];
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**3, expected);
 
 			const ps_ = randomTranslate(0)(ps);
 			const r_ = getHodograph(ps_);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r_).to.be.nearly(2**3,r);
 		}
 		{
 			let ps = getRandomLine(0);
 			const r = getHodograph(ps);
 			const expected = [[95.49996989063631,6.018466339429793]];
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**3, expected);
 
 			const ps_ = randomTranslate(0)(ps);
 			const r_ = getHodograph(ps_);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r_).to.be.nearly(2**3,r);
 		}
 		{
-			let ps = getRandomPoint(0);
-			const r = getHodograph(ps);
-			expect(r).to.be.undefined
+			expect(() => getHodograph(getRandomPoint(0))).to.throw();
 		}
 
 		// some edge cases

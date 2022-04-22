@@ -19,19 +19,18 @@ const γγ3 = γγ(3);
 
 
 /**
- * Returns true if the given point is on the given line where 
- * the parameter `t` is allowed to extend to +-infinity, i.e. t is an element of 
- * [-inf, +inf], false otherwise.
+ * Returns `true` if the given point is on the given line where 
+ * the parameter `t` is allowed to extend to ±infinity, i.e. `t` is an 
+ * element of `[-∞, +∞]`, `false` otherwise.
  * 
- * * **Precondition:** TODO - underflow/overflow
  * * there are alternative implementations to this function, e.g. ccw, etc;
- * it is kept for symmetry.
+ * it is kept for symmetry with the order 2 and 3 implementations.
  * 
  * @param ps a linear bezier curve (a line)
- * @param p A point with coordinates given as Shewchuk expansions. If only
- * double precision coordinates need to be provided then wrap it in an array,
- * e.g. for a point with x and y coordinates given as 1 and 2 set 
- * `p === [[1],[2]]`. TODO - link to Schewchuk
+ * @param p a point with coordinates given as Shewchuk expansions; if only
+ * double precision coordinates need to be provided then wrap them in a one
+ * element array, e.g. for a point with x and y coordinates given as 1 and 2 set 
+ * `p === [[1],[2]]`.
  * 
  * @internal
  */
@@ -47,7 +46,7 @@ const γγ3 = γγ(3);
     const isDouble = (lenX === 1 && lenY === 1);
 
     {
-        //---- pre-filter - note all coefficients below vₓ, vᵧ, v are exact
+        //---- pre-filter
         const { 
             coeffs: { vₓ, vᵧ, v },
             errorBound: { v_ }

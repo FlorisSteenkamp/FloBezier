@@ -26,10 +26,8 @@ const γγ3 = γγ(3);
 
 /**
  * Returns true if the given point is on the given quadratic bezier curve where 
- * the parameter t is allowed to extend to +-infinity, i.e. t is an element of 
- * [-inf, +inf], false otherwise.
- * 
- * * **Precondition:** TODO - underflow/overflow
+ * the parameter t is allowed to extend to ±infinity, i.e. `t` is an element of 
+ * [-∞, +∞], false otherwise.
  * 
  * @param ps a quadratic bezier curve
  * @param p A point with coordinates given as Shewchuk expansions. If only

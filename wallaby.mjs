@@ -5,9 +5,9 @@ export default function(wallaby) {
             'package.json',
             'src/**/*.ts',
             'test/helpers/*.ts',
-            'test/helpers/intersection/*.ts'
+            'test/helpers/intersection/*.ts',
+            'test/helpers/intersection-fast/*.ts'
         ],
-
         tests: [
             'test/**/*.spec.ts'
             // 'test/boxes/are-boxes-intersecting.spec.ts'

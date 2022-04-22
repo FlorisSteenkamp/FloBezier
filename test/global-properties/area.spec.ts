@@ -17,6 +17,7 @@ describe('area', function() {
             const al = area(l);
 			const ac = area(ps);
             const a = ac + al;
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(a).to.be.nearly(2**6, -2/3);
 		}
 	});

@@ -41,8 +41,10 @@ describe('getIntervalBoxDd', function() {
 			expect(isPointInBoxE(pS_, boxDd)).to.be.false;
 
 			const box_ = boxDd.map(p => p.map(eEstimate));
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(box).to.be.nearly(2**2,box_);
 
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(boxDd).to.be.nearly(2**6, [
 				[
 					[6.291242630385551e-17, 2.966666666666664],
@@ -55,6 +57,7 @@ describe('getIntervalBoxDd', function() {
 			]);
 
 			const boxDd2 = getIntervalBoxDd(ps, [tS,tS]);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(boxDd2).to.be.nearly(2**2, [
 				[
 					[1.4802973661668677e-16, 2.9666666666666663],
@@ -88,8 +91,10 @@ describe('getIntervalBoxDd', function() {
 			expect(isPointInBoxE(pS_, boxDd)).to.be.false;
 
 			const box_ = boxDd.map(p => p.map(eEstimate));
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(box).to.be.nearly(2**4,box_);
 
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(boxDd).to.be.nearly(2**6, [
 				[
 					[ -1.233585373637137e-16, 2.6333333333333333 ],
@@ -102,6 +107,7 @@ describe('getIntervalBoxDd', function() {
 			]);
 
 			const boxDd2 = getIntervalBoxDd(ps, [tS,tS]);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(boxDd2).to.be.nearly(2**2, [
 				[
 					[-1.233581138472426e-16, 2.6333333333333333],
@@ -136,8 +142,10 @@ describe('getIntervalBoxDd', function() {
 			expect(isPointInBoxE(pS_, boxDd)).to.be.false;
 
 			const box_ = boxDd.map(p => p.map(eEstimate));
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(box).to.be.nearly(2**6,box_);
 
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(boxDd).to.be.nearly(2**6, [
 				[
 					[1.778406314045103e-16, 2.2925925925925923],
@@ -150,6 +158,7 @@ describe('getIntervalBoxDd', function() {
 			]);
 
 			const boxDd2 = getIntervalBoxDd(ps, [tS,tS]);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(boxDd2).to.be.nearly(2**2, [
 				[
 					[1.7784128079642974e-16, 2.2925925925925923],
@@ -174,6 +183,7 @@ describe('getIntervalBoxDd', function() {
 			const i = [tS, tE];
 			const boxDd = getIntervalBoxDd(ps, i);
 			
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(boxDd).to.be.nearly([2**0], [
 				[[0,ps[0][0]],[0,ps[0][1]]],
   				[[0,ps[0][0]],[0,ps[0][1]]]
@@ -188,6 +198,7 @@ describe('getIntervalBoxDd', function() {
 			const i = [tS, tE];
 			const boxDd = getIntervalBoxDd(ps, i);
 			
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(boxDd).to.be.nearly([2**0], [
 				[[0,ps[3][0]],[0,ps[3][1]]],
   				[[0,ps[3][0]],[0,ps[3][1]]]
@@ -210,7 +221,7 @@ describe('getIntervalBoxDd', function() {
 
 		{
 			// error
-			const ps = [];
+			const ps: number[][] = [];
 			const tS = [0,0.125];
 			const tE = [0,0.125];
 			const i = [tS, tE];

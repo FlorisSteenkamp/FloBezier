@@ -34,6 +34,7 @@ describe('getInterfaceRotation', function() {
 		for (let seed=0; seed<5; seed++) {
 			const ps = getRandomQuad(seed);  // representing a triangle
 			const r = getRotationAround(ps);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(abs(r)).to.be.nearly(2**4, 2*𝜋);
 		}
 
@@ -44,6 +45,7 @@ describe('getInterfaceRotation', function() {
 			const r = getRotationAround(ps);
 			const r_ = getRotationAround(ps_);
 			
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly([2**6], r_);
 		}
 

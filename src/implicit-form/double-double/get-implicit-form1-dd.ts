@@ -7,7 +7,6 @@ const qmd = ddMultDouble2;
 const qno = ddNegativeOf;
 
 
-// TODO - modify
 /**
  * Returns a double-double precision implicit form of the given 
  * linear bezier.
@@ -16,7 +15,7 @@ const qno = ddNegativeOf;
  * e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
  * 
  * * the implicit form is given by: `vₓx + vᵧy + v = 0`
- * * **precondition:** TODO - add underflow / overflow conditions + docs below
+ * * intermediate calculations are performed in double-double precision
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
  * @param ps 

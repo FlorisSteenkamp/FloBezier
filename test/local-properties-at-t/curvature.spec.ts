@@ -42,10 +42,13 @@ describe('curvature', function() {
 
             const expected = 0.04118299445542509;
 
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(r1).to.be.nearly(2**8, expected);
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(r2).to.be.nearly(2**8, expected);
 
             const r3 = curvature(ps);
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(r3(t)).to.be.nearly(2**8, expected);
         }
 

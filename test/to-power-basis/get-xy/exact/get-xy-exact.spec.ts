@@ -36,6 +36,7 @@ describe('getXYExact', function() {
 				const r = getXYExact(ps);
 				const rd = getXY(ps);
 
+				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect(r.map(v => v.map(eEstimate))).to.be.nearly(2**6, rd);
 			}
 		}
@@ -45,6 +46,7 @@ describe('getXYExact', function() {
 				const r = getXYExact(ps);
 				const rd = getXY(ps);
 
+				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect(r.map(v => v.map(eEstimate))).to.be.nearly(2**6, rd);
 			}
 		}
@@ -54,6 +56,7 @@ describe('getXYExact', function() {
 				const r = getXYExact(ps);
 				const rd = getXY(ps);
 
+				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect(r.map(v => v.map(eEstimate))).to.be.nearly(2**6, rd);
 			}
 		}
@@ -63,6 +66,7 @@ describe('getXYExact', function() {
 				const r = getXYExact(ps);
 				const rd = getXY(ps);
 
+				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect(r.map(v => v.map(eEstimate))).to.be.nearly(2**6, rd);
 			}
 		}

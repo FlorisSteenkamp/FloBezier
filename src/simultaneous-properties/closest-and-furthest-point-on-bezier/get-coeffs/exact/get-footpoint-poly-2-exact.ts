@@ -28,9 +28,10 @@ const ediff = eDiff;
 
 
 /**
- * * **precondition** TODO underflow/overflow
  * @param ps 
  * @param p 
+ * 
+ * @internal
  */
  function getFootpointPoly2Exact(ps: number[][], p: number[]): number[][] {
     const [[x0, y0], [x1, y1], [x2, y2]] = ps;

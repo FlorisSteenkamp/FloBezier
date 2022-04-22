@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { render } from 'react-dom';
-import { IterationExtras } from '../../../src/intersection/bezier3-intersection/debug.js';
-import { Iteration } from '../../../src/intersection/bezier3-intersection/iteration.js';
+import { IterationExtras } from '../../../src/intersection/bezier-bezier-intersection-fast/debug.js';
+import { Iteration } from '../../../src/intersection/bezier-bezier-intersection-fast/iteration.js';
 import { mapWithParent } from '../../react-svg-tree/src/helpers/tree-graph.js';
 import { $Tree } from '../../react-svg-tree/src/tree.js';
 import { $Node } from './$node.js';

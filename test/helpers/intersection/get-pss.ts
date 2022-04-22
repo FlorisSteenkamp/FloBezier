@@ -1,20 +1,17 @@
-import { settings } from './settings.js';
-import { toString } from '../../../src/index.js';
+// ignore file coverage
 import { randomOnGrid } from '../random-on-grid.js';
 import { getSpecialPss } from './get-special-pss.js';
 
 
-const { num, maxCoordinate, maxBitLength } = settings;
+const num = 1000;
 
-const r = randomOnGrid(maxCoordinate, maxBitLength);
+const r = randomOnGrid(1, 53);
 
 
 function getPss(
         orderss: [1|2|3, 1|2|3][] = [[1,1],[1,2],[1,3], [2,1],[2,2],[2,3], [3,1],[3,2],[3,3]]): number[][][] {
 
-    let pss: number[][][] = [
-        ...getSpecialPss()
-    ];
+    let pss: number[][][] = getSpecialPss();
 
     let i = pss.length;
     for (; i<2*num; i++) {
@@ -30,8 +27,6 @@ function getPss(
             ]);
         }
         pss.push(ps);
-
-        //console.log(toString(ps));
     }
 
     return pss;

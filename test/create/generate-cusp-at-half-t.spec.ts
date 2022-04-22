@@ -9,6 +9,7 @@ use(nearly);
 describe('generateCuspAtHalf3', function() {
     it('it should generate the correct cubic curve with a cusp at `t === 0.5`', 
 	function() {
+        // @ts-ignore - otherwise TypeScript gives an error on nearly
         expect(generateCuspAtHalf3([0,0], [2,2], [3,0])).to.be.nearly(2**4,
             [
                 [0,0],

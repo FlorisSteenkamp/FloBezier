@@ -1,7 +1,6 @@
 import { expect, assert } from 'chai';
 import { describe } from 'mocha';
-import { classification, classifications, classify, fromPowerBasis, toCubic } from '../../../src/index.js';
-
+import { classification, classifications, classify, cubicToQuadratic, fromPowerBasis, getXY, toCubic } from '../../../src/index.js';
 
 // The classifications form an equivalence class, in other words *all* 
 // possible planar polynomial bezier curves (of order <= 3) are represented and 
@@ -87,9 +86,8 @@ describe('classify', function() {
             expect(classify(ps1)).to.eql(classifications.cubicGeneralAcnode);
             expect(classify(ps1)).to.eql({ order: 3, realOrder: 3, collinear: false, nodeType: 'acnode' });
 
-            // TODO edge case (due to numerical roundoff)
-            //const ps2 = [[1,3],[5,-3],[-2,3],[4,-2]];
-            //expect(classification.isCubicGeneralAcnode(ps2)).to.be.true;
+            const ps2 = [[1,3],[5,-3],[-2,3],[4,-2]];
+            expect(classification.isCubicGeneralAcnode(ps2)).to.be.true;
         }
 
         {
@@ -101,9 +99,6 @@ describe('classify', function() {
         }
 
         {
-		    // TODO - quadDegenExplicit??? const ps = toQuadraticFromCubic([[0,0],[1,1],[2,1],[3,0]]);
-            // TODO - make sure of mutual exclusiveniess, especially if above is added
-
             const ps = fromPowerBasis([[0,0,3,0],[6,-9,3,-6]]).map(p => [p[0],p[1] + 6]); 
             //=> [[0,0],[1,1],[2,-1],[3,0]]
 
@@ -121,7 +116,7 @@ describe('classify', function() {
         }
 
         {
-		    // const ps = toQuadraticFromCubic([[0,0],[1,1],[2,1],[3,0]]);
+		    // const ps = cubicToQuadratic([[0,0],[1,1],[2,1],[3,0]]);
             //=> [[0,0],[1.5,1.5],[3,0]]
             const ps = [[0,0],[1,1],[2,1],[3,0]];
 

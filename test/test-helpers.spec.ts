@@ -12,11 +12,20 @@ import { toGrid } from './helpers/to-grid.js';
 import { allTrue, map, subtractShewchuk } from './helpers/map.js';
 
 use(nearly);
+const { POSITIVE_INFINITY: inf } = Number;
 
 
 describe('helpers', function() {
 	it('should make sure the test helpers work as intended',
 	function() {
+        {
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
+            expect(inf).to.be.nearly(2**4, inf);
+        }
+        {
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
+            expect(inf).to.be.nearly([2**4], inf);
+        }
 		{
             const e = 2;
             const a = { a: [1,1] };

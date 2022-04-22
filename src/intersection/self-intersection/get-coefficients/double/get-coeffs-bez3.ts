@@ -1,3 +1,4 @@
+/* ignore file coverage - this file is not used currently */
 import { getXY3 } from "../../../../to-power-basis/get-xy/double/get-xy.js";
 
 

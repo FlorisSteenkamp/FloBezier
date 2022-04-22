@@ -1,14 +1,14 @@
-import { γ } from "../../error-analysis/error-analysis.js";
 import { operators as bigFloatOperators } from "big-float-ts";
 import { twoDiff, twoSum } from 'double-double';
 import { expansionProduct, eDiff, scaleExpansion2, fastExpansionSum, growExpansion } from 'big-float-ts';
+import { γ } from "../../error-analysis/error-analysis.js";
 import { isReallyPoint } from "./is-really-point.js";
 import { isQuadReallyLine } from "./is-quad-really-line.js";
 import { isCubicReallyQuad } from "./is-cubic-really-quad.js";
 import { isCubicReallyLine } from './is-cubic-really-line.js';
 import { isCollinear } from "./is-collinear.js";
-import { getCoeffsBez3Exact } from "../../intersection/self-intersection/get-coefficients/exact/get-coeffs-bez3-exact.js";
 import { getCoeffsBez3WithRunningError } from '../../intersection//self-intersection/get-coefficients/double/get-coeffs-bez3-with-running-error.js';
+import { getCoeffsBez3Exact } from "../../intersection/self-intersection/get-coefficients/exact/get-coeffs-bez3-exact.js";
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const { eSign, eCompare } = bigFloatOperators;
@@ -187,12 +187,17 @@ const classification = {
 
 
 /**
- * TODO docs
- * 
- * * exact
+ * Returns a classification of the given bezier curve.
+ *
+ * * **exact**: not susceptible to floating point round-off
  * 
  * @param ps a bezier curve of order 0, 1, 2 or 3 given as an array of its 
  * control points.
+ * 
+ * @example
+ * ```typescript
+ * classify([[0,0],[3,3],[-3,3],[1,0]]);  // => { order: 3, realOrder: 3, collinear: false, nodeType: 'crunode'  }
+ * ```
  * 
  * @doc mdx
  */

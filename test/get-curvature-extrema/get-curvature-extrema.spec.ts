@@ -71,6 +71,7 @@ describe('getCurvatureExtrema', function() {
             // simple quadratic
             const ps = [[1,10],[6,0],[11,10]];
             const extrema = getCurvatureExtrema(ps);
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(extrema).to.be.nearly(2**2, { minima: [], maxima: [0.5], inflections: [] });
         }
         {
@@ -177,7 +178,7 @@ describe('getCurvatureExtrema', function() {
             ].map(translate_).map(rotate_);
 
             const extrema = getCurvatureExtrema(ps);
-            //console.log('extrema: ', extrema);
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(extrema).to.be.nearly(2**4, { 
                 minima: [], 
                 maxima: [0.15617147171437748, 0.8457091576527154], 
@@ -196,7 +197,7 @@ describe('getCurvatureExtrema', function() {
             ].map(translate_).map(rotate_);
 
             const extrema = getCurvatureExtrema(ps);
-            //console.log('extrema: ', extrema);
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(extrema).to.be.nearly(2**4, { 
                 minima: [], 
                 maxima: [0.14916374172712923, 0.8508362582728751],
@@ -209,7 +210,6 @@ describe('getCurvatureExtrema', function() {
             const ps = [[0,4],[5,4],[7,0],[5,3]];
             
             const extrema = getCurvatureExtrema(ps);
-            //console.log('extrema: ', extrema);
             expect(extrema).to.deep.eq({
                 minima: [0.3256995479375282],
                 maxima: [
@@ -270,6 +270,7 @@ describe('getCurvatureExtrema', function() {
                 );
             }
 
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(extrema).to.be.nearly(2**6,{
                 minima: [
                     0.4999231476889932
@@ -282,8 +283,7 @@ describe('getCurvatureExtrema', function() {
             });
         }
         {
-            // TODO
-            // these could potentially fail sometimes (since 2**40 is just thumb-suck)
+            // these could potentially fail sometimes (since 2**40 is somewhat thumb-suck)
             for (let i=0; i<1000; i++) {
                 const s = i+0;
                 const ps = [[r(s),r(s+1)],[r(s+2),r(s+3)],[r(s+4),r(s+5)],[r(s+6),r(s+7)]];

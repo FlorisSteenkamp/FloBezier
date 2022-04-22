@@ -21,7 +21,7 @@ import { getControlPointBox } from './global-properties/bounds/get-control-point
 import { closestPointOnBezier } from './simultaneous-properties/closest-and-furthest-point-on-bezier/closest-point-on-bezier.js';
 import { furthestPointOnBezier } from './simultaneous-properties/closest-and-furthest-point-on-bezier/furthest-point-on-bezier.js';
 import { generateQuarterCircle } from './create/generate-quarter-circle.js';
-import { bezier3Intersection } from './intersection/bezier3-intersection/bezier3-intersection.js';
+import { bezierBezierIntersectionFast } from './intersection/bezier-bezier-intersection-fast/bezier-bezier-intersection-fast.js';
 import { intersectBoxes } from './boxes/intersect-boxes.js';
 import { areBoxesIntersecting } from './boxes/are-boxes-intersecting.js';
 import { evalDeCasteljau } from './local-properties-at-t/t-to-xy/double/eval-de-casteljau.js';
@@ -104,7 +104,6 @@ import { getCurvatureExtrema } from './get-curvature-extrema/get-curvature-extre
 import { curviness } from './global-properties/curviness.js';
 import { splitByCurvature } from './transformation/split/split-by-curvature.js';
 import { splitByCurvatureAndLength } from './transformation/split/split-by-curvature-and-length.js';
-// import { areBeziersExtensionsIdentical } from './simultaneous-properties/are-bezier-extensions-identical.js';
 import { isCollinear, isHorizontal, isVertical } from './global-properties/classification/is-collinear.js';
 import { isSelfOverlapping } from './global-properties/classification/is-self-overlapping.js';
 import { getBounds } from './global-properties/bounds/get-bounds.js';
@@ -118,8 +117,6 @@ import { isReallyPoint } from './global-properties/classification/is-really-poin
 import { cubicToQuadratic } from './transformation/degree-or-type/cubic-to-quadratic.js';
 import { quadraticToCubic } from './transformation/degree-or-type/quadratic-to-cubic.js';
 import { circleBezierIntersection } from './intersection/circle-bezier-intersection/circle-bezier-intersection.js';
-
-// TODO - ADD!!! (to tests? and/or docs?)
 import { evaluateExact } from './local-properties-at-t/t-to-xy/exact/evaluate-exact.js';
 import { evaluate } from './local-properties-at-t/t-to-xy/double/evaluate.js';
 import { evaluateDdxy } from './local-properties-at-t/t-to-ddxy/double/evaluate-ddxy.js';
@@ -141,7 +138,6 @@ import { getFootpointPolyExact } from "./simultaneous-properties/closest-and-fur
 import { getFootpointPoly } from "./simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly.js";
 import { getFootpointPolyDd } from "./simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double-double/get-footpoint-poly-dd.js";
 import { reduceOrderIfPossible } from './transformation/reduce-order-if-possible.js'
-// import { getTransformedTs } from './transformation/get-transformed-ts.js';
 import { add1Ulp } from './add-1-ulp.js';
 import { sub1Ulp } from './sub-1-ulp.js';
 
@@ -346,11 +342,10 @@ export {
 	evaluateDxyAt0Exact,
 	evaluateDxyAt1Exact,
 	evalDeCasteljauDd,
-	bezierBezierIntersectionBoundless,
-	getEndpointIntersections,
+	bezierBezierIntersectionBoundless, // TODO - remove from here?
 	reduceOrderIfPossible,
 
-	bezier3Intersection,
+	bezierBezierIntersectionFast,
 
 	getControlPointBox,
 	fitQuadsToCubic,
@@ -367,7 +362,10 @@ export {
 	// getTransformedTs,
 
 	add1Ulp,
-	sub1Ulp
+	sub1Ulp,
+
+	// TODO - remove later
+	getEndpointIntersections
 }
 
 

@@ -16,6 +16,7 @@ describe('fitQuadsToCubic', function() {
 			
 			expect(r.length).to.eql(6);
 
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**10, [ 
 				[
 					[-108.49686506776892, -13.011161175008596],

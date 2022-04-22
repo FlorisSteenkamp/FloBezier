@@ -17,13 +17,7 @@ const qdq = ddDiffDd;      // error -> 3*γ²
  * e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
  * 
  * * the implicit form is given by: `vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0`
- * * **precondition:** TODO - add underflow / overflow conditions + docs below
- * * intermediate calculations are done in double-double precision and this is
- * reflected in the output error bound (which is approximately 
- * `n * (Number.EPSILON**2) * the condition number`, where roughly `1 < n < 100` and 
- * depends on the specific calculation)
- * * the error bound returned first needs to be scaled by `γγ3 === (3*u*u) / (1 - 3*u*u)`,
- * where `u === Number.EPSILON / 2` before use
+ * * intermediate calculations are done in double-double precision
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
  * @param ps 

@@ -15,7 +15,6 @@ const qad = ddAddDouble;
  * with intermediate calculations done in double-double precision floating point 
  * arithmetic.
  * 
- * * **precondition**: TODO underflow/overflow
  * * to get an absolute error bound on the result call [[evalDeCasteljauErrorCounters]]
  * 
  * @param ps an order 1, 2 or 3 bezier curve, e.g. `[[0,0],[1,1],[2,1],[2,0]]`

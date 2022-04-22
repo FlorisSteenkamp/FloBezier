@@ -86,8 +86,8 @@ describe('intersection coefficients', function() {
 
             for (let j=1; j<=3; j++) {
                 for (let k=1; k<=3; k++) {
-                    let f = implFormDdFs[j][k];
-                    testCoeffsDd(j,k, f.est, f.exact, bzs1[j], bzs2[k], i);
+                    let f = implFormDdFs[j]![k]!;
+                    testCoeffsDd(j,k, f.est, f.exact, bzs1[j]!, bzs2[k]!, i);
                 }
             }
         }

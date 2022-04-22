@@ -10,7 +10,7 @@ const randOnGrid_ = randomOnGrid(maxCoordinate, maxBitLength);
 // const r = (n: number) => squares(n) / 0xffff_ffff;
 const r = randOnGrid_;
 
-function createCubicThatsReallyQuad(n: number): { quad: number[][], cubic: number[][] } | undefined {
+function createCubicThatsReallyQuad(n: number): { quad: number[][], cubic: number[][] } {
     const s = squares(n);
     for (let i=s; i<100+s; i++) {
         // the `3*` below allows `toCubic` to be exact in most cases
@@ -20,6 +20,8 @@ function createCubicThatsReallyQuad(n: number): { quad: number[][], cubic: numbe
             return { quad: ps, cubic: ps_ };
         };
     }
+
+    throw new Error('Unable to find cubic that\'s really a quad');
 }
 
 

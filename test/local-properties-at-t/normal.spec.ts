@@ -19,6 +19,7 @@ describe('normal', function() {
 					let r = normal(ps, t);
 					let s = tangent(ps, t);
 
+					// @ts-ignore - otherwise TypeScript gives an error on nearly
 					expect(r).to.be.nearly(2**2, [-s[1],s[0]]);
 					expect(normal(ps, t)).to.eql(normal(ps)(t));
 				}

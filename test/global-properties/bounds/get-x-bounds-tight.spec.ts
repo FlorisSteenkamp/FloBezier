@@ -34,7 +34,9 @@ describe('getXBoundsTight', function() {
             }
 		};
 
+        // @ts-ignore - otherwise TypeScript gives an error on nearly
 		expect(r).to.be.nearly(2**6, expected);
+        // @ts-ignore - otherwise TypeScript gives an error on nearly
         expect(rR).to.be.nearly(2**6, reverseXBoundTs(expected));
 	});
 
@@ -61,7 +63,9 @@ describe('getXBoundsTight', function() {
             }
         };
 
+        // @ts-ignore - otherwise TypeScript gives an error on nearly
 		expect(r).to.be.nearly(2**6, expected);
+        // @ts-ignore - otherwise TypeScript gives an error on nearly
         expect(rR).to.be.nearly(2**6, reverseXBoundTs(expected));
 	});
 
@@ -89,7 +93,9 @@ describe('getXBoundsTight', function() {
                 }
             };
 
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(r).to.be.nearly(2**6, expected);
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(rR).to.be.nearly(2**6, reverseXBoundTs(expected));
         }
         {
@@ -104,6 +110,7 @@ describe('getXBoundsTight', function() {
                 maxX: { ts: [0,0], box: [[0,0],[0,0]] }
             };
 
+            // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(r).to.be.nearly(2**6, expected);
         }
 	});

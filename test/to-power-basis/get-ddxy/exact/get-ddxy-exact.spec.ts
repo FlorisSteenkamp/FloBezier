@@ -31,6 +31,7 @@ describe('getDdxyExact', function() {
 				const r = getDdxyExact(ps);
 				const rd = getDdxy(ps);
 
+				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect(r.map(v => v.map(eEstimate))).to.be.nearly(2**6, rd);
 			}
 		}
@@ -40,6 +41,7 @@ describe('getDdxyExact', function() {
 				const r = getDdxyExact(ps);
 				const rd = getDdxy(ps);
 
+				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect(r.map(v => v.map(eEstimate))).to.be.nearly(2**6, rd);
 			}
 		}

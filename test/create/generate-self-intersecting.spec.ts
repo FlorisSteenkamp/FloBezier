@@ -12,7 +12,9 @@ describe('generateSelfIntersecting', function() {
         const ps = generateSelfIntersecting([0,0],[1,1],[3,1], [0.2,0.8]);
 
         const ts = bezierSelfIntersection(ps);
+        // @ts-ignore - otherwise TypeScript gives an error on nearly
         expect(ts[0]).to.be.nearly(2**4, 0.2);
+        // @ts-ignore - otherwise TypeScript gives an error on nearly
         expect(ts[1]).to.be.nearly(2**4, 0.8);
     });
 });

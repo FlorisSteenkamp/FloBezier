@@ -17,6 +17,7 @@ describe('getDxy', function() {
 				[759.2907931613947, -612.6722365722974, 286.49990967190894],
   				[-831.4409023815244, 319.81037852787296, 18.05539901828938]
 			];
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**8, expected);
 		}
 		{
@@ -26,6 +27,7 @@ describe('getDxy', function() {
 				[-204.22407885743246, 190.99993978127262],
   				[106.60345950929099, 12.036932678859586]
 			];
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**8, expected);
 		}
 		{
@@ -35,6 +37,7 @@ describe('getDxy', function() {
 				[95.49996989063631],
 				[6.018466339429793]
 			];
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**8, expected);
 		}
 		{

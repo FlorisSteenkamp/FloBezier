@@ -1,15 +1,16 @@
 /**
- * Returns an approximation of the hodograph of the given bezier curve.
- * * **bitlength**: If the coordinates of the control points are bit-aligned then
- * * max bitlength increase === 3, max shift === 3 (for cubics)
- * * max bitlength increase === 1, max shift === 2 (for quadratics)
- * * max bitlength increase === 1, max shift === 1 (for lines)
+ * Returns the hodograph of the given bezier curve.
  * 
  * @param ps An order 1, 2 or 3 bezier curve.
  * 
  * @doc
  */
-function getHodograph(ps: number[][]): number[][] | undefined {
+function getHodograph(ps: number[][]): number[][] {
+    // * **bitlength**: If the coordinates of the control points are bit-aligned then
+    // * max bitlength increase === 3, max shift === 3 (for cubics)
+    // * max bitlength increase === 1, max shift === 2 (for quadratics)
+    // * max bitlength increase === 1, max shift === 1 (for lines)
+
     if (ps.length === 4) {
         // cubic
         const [[x0,y0],[x1,y1],[x2,y2],[x3,y3]] = ps;
@@ -37,12 +38,7 @@ function getHodograph(ps: number[][]): number[][] | undefined {
         ];
     }
 
-    if (ps.length === 1) {
-        // a point
-        return undefined;
-    }
-
-    throw new Error('The given bezier curve must be of order <= 3.');
+    throw new Error('The given bezier curve must be of order 1, 2 or 3.');
 }
 
 

@@ -4,8 +4,6 @@ const abs = Math.abs;
 
 
 /**
- * * **precondition** TODO - underflow/overflow conditions
- * 
  * @param circle a circle
  * @param ps a cubic bezier curve
  * 
@@ -89,8 +87,6 @@ function getCoeffsCubicErrorCounters(
 
 
 /**
- * * **precondition** TODO - underflow/overflow conditions
- * 
  * @param circle a circle
  * @param ps a quadratic bezier curve
  * 
@@ -146,8 +142,6 @@ function getCoeffsQuadraticErrorCounters(
 
 
 /**
- * * **precondition** TODO - underflow/overflow conditions
- * 
  * @param circle a circle
  * @param ps a linear bezier curve
  * 

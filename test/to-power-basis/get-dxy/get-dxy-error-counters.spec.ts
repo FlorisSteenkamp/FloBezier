@@ -128,11 +128,6 @@ describe('getDxyErrorCounters', function() {
 						expect(realError0Dd <= cE0Dd);
 						expect(realError1Dd <= cE1Dd);
 						expect(realError2Dd <= cE2Dd);
-
-						//cE0 / realError0 ;//?
-						//cE1 / realError1;//?
-						//cE0Dd / realError0Dd;//?
-						//cE1Dd / realError1Dd;//?
 					}
 				}
 			}

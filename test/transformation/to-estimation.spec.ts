@@ -30,6 +30,7 @@ describe('toEstimation', function() {
 			}
 
 			const r = toEstimation(ps);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**0, ps.map(p => p.map(c => c[c.length-1])));
 		}
 	});

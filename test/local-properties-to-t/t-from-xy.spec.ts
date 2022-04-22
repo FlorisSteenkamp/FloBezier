@@ -27,6 +27,7 @@ function getPointExactlyOnCurve(order: 0|1|2|3, seed: number) {
         }
     }
 
+    // ignore coverage
     throw new Error('Couldn\'t find point exactly on curve');
 }
 
@@ -34,7 +35,6 @@ function getPointExactlyOnCurve(order: 0|1|2|3, seed: number) {
 describe('tFromXY', function() {
 	it('it should return the correct `t` value given `x` and `y` values for some bezier curves',
 	function() {
-        /*
 		{
             for (let order=1;order<=3;order++) {
                 for (let i=0;i<=25;i++) {
@@ -137,32 +137,41 @@ describe('tFromXY', function() {
             const r = tFromXY(ps,[1,1]);
             expect(r).to.eql([{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }]);
         }
-        */
         // self-intersecting
         {
             const t1 = 0.25;
             const t2 = 0.75;
             const ps = generateSelfIntersecting([0,0],[3,3],[-3,3], [t1,t2]);
             //=> [[0,0],[3,3],[-3,3],[4.153846153846153,0]]
-            // bezierSelfIntersection(ps);//? (just an estimate)
+            // bezierSelfIntersection(ps);  // (just an estimate)
 
-            const p1e = evaluateExact(ps,t1);//?
+            const p1e = evaluateExact(ps,t1);
             const p1 = p1e.map(eEstimate);  //=> [0.9086538461538461, 1.6875]
             // isPointOnBezierExtension(ps,p1e);  //=> true
             // isPointOnBezierExtension(ps,[[p1[0]],[p1[1]]]);  //=> true
 
-            const p2e = evaluateExact(ps,t2);//?
+            const p2e = evaluateExact(ps,t2);
             const p2 = p2e.map(eEstimate);  //=> [0.9086538461538459, 1.6875]
-            // isPointOnBezierExtension(ps,p2e);  //=> true
+            isPointOnBezierExtension(ps,p2e);  //=> true
             // isPointOnBezierExtension(ps,[[p2[0]],[p2[1]]]);  //=> true
 
-            // allRootsCertifiedSimplified([0,-9,9,-1.6875], 0, 1);//?
-
-            // The results below *are* certified due to the preconditions being met.
-            tFromXY(ps,p1);//?
-            // tFromXY(ps,p2);//?
+            // The results below are *certified* due to the preconditions being met.
+            {
+                const r = tFromXY(ps,p1);
+                // @ts-ignore - otherwise TypeScript gives an error on nearly
+                expect(r).to.be.nearly(2**4, [
+                    { tS: 0.25, tE: 0.25, multiplicity: 1 },
+                    { tS: 0.75, tE: 0.75, multiplicity: 1 }
+                ]);
+            }
+            {
+                const r = tFromXY(ps,p2);
+                // @ts-ignore - otherwise TypeScript gives an error on nearly
+                expect(r).to.be.nearly(2**4, [
+                    { tS: 0.75, tE: 0.75, multiplicity: 1 }
+                ]);
+            }
         }
-        /*
         {
             const ps = generateSelfIntersecting([27,27],[-45,18],[63,27], [0.125,0.75]);
             // [[27,27], [-45,18], [63,27], [-30.767441860468807,23.860465116278824]]
@@ -182,6 +191,5 @@ describe('tFromXY', function() {
             tFromXY(ps,p1);  //=> [{ tS: 0.125, tE: 0.125, multiplicity: 1 }]
             tFromXY(ps,p2);  //=> [{ tS: 0.75,  tE: 0.75,  multiplicity: 1 }]
         }
-        */
 	});
 });

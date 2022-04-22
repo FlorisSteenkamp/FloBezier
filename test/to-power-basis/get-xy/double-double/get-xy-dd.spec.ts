@@ -29,7 +29,9 @@ describe('getXYDd', function() {
 					[0, -13.011161175008596] 
 				]
 			];
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**8, expected);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r.map(v => v.map(eEstimate))).to.be.nearly(2**8, rd);
 
 			for (let i=0; i<10; i++) {
@@ -37,6 +39,7 @@ describe('getXYDd', function() {
 				const r = getXYDd(ps);
 				const rd = getXY(ps);
 
+				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect(r.map(v => v.map(eEstimate))).to.be.nearly(2**6, rd);
 			}
 		}
@@ -46,6 +49,7 @@ describe('getXYDd', function() {
 				const r = getXYDd(ps);
 				const rd = getXY(ps);
 
+				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect(r.map(v => v.map(eEstimate))).to.be.nearly(2**6, rd);
 			}
 		}
@@ -55,6 +59,7 @@ describe('getXYDd', function() {
 				const r = getXYDd(ps);
 				const rd = getXY(ps);
 
+				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect(r.map(v => v.map(eEstimate))).to.be.nearly(2**0, rd);
 			}
 		}
@@ -64,6 +69,7 @@ describe('getXYDd', function() {
 				const r = getXYDd(ps);
 				const rd = getXY(ps);
 
+				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect(r.map(v => v.map(eEstimate))).to.be.nearly(2**0, rd);
 			}
 		}

@@ -34,7 +34,9 @@ describe('getYBoundsTight', function() {
 			}
 		};
 
+		// @ts-ignore - otherwise TypeScript gives an error on nearly
 		expect(r).to.be.nearly(2**6, expected);
+		// @ts-ignore - otherwise TypeScript gives an error on nearly
 		expect(rR).to.be.nearly(2**6, reverseYBoundTs(expected));
 	});
 
@@ -61,7 +63,9 @@ describe('getYBoundsTight', function() {
 			}
 		};
 		
+		// @ts-ignore - otherwise TypeScript gives an error on nearly
 		expect(r).to.be.nearly(2**6, expected);
+		// @ts-ignore - otherwise TypeScript gives an error on nearly
 		expect(rR).to.be.nearly(2**6, reverseYBoundTs(expected));
 	});
 
@@ -88,7 +92,9 @@ describe('getYBoundsTight', function() {
 			}
 		};
 
+		// @ts-ignore - otherwise TypeScript gives an error on nearly
 		expect(r).to.be.nearly(2**8, expected);
+		// @ts-ignore - otherwise TypeScript gives an error on nearly
 		expect(rR).to.be.nearly(2**12, reverseYBoundTs(expected));
 	});
 });

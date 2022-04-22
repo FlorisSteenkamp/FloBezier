@@ -25,6 +25,7 @@ describe('getDddxyExact', function() {
 				const r = getDddxyExact(ps);
 				const rd = getDddxy(ps);
 
+				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect(r.map(eEstimate)).to.be.nearly(2**0, rd);
 			}
 		}

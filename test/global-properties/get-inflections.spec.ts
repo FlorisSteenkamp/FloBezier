@@ -14,6 +14,7 @@ describe('getInflections', function() {
 		{
 			const ps = getRandomCubic(0);
 			const inflections = getInflections(ps);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(inflections).to.be.nearly(2**4, [0.23238451795441775]);
 		}
 

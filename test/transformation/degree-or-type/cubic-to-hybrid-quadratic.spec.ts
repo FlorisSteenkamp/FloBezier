@@ -12,6 +12,7 @@ describe('cubicToHybridQuadratic', function() {
 		{
 			let ps = getRandomCubic(0);
 			const r = cubicToHybridQuadratic(ps);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**8, [
 				[-108.49686506776892, -13.011161175008596],
   				[
@@ -31,6 +32,7 @@ describe('cubicToHybridQuadratic', function() {
 				r[2]
 			], t));
 
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(ps1).to.be.nearly(2**4, ps2);
 		}
 

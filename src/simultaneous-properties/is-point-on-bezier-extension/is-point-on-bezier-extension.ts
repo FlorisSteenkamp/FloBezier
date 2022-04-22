@@ -9,13 +9,11 @@ import { isPointOnBezierExtension3 } from './is-point-on-bezier-extension-3.js';
  * parameter `t` is allowed to extend to ±∞, i.e. `t` is an element of 
  * `(-∞, +∞)`, `false` otherwise.
  * 
- * * **precondition**: TODO - underflow/overflow
- * 
  * @param ps a bezier curve
- * @param p A point with coordinates given as Shewchuk expansions. If only
+ * @param p a point with coordinates given as Shewchuk expansions; if only
  * double precision coordinates need to be provided then wrap it in an array,
  * e.g. for a point with x and y coordinates given as `1` and `2` set 
- * `p === [[1],[2]]`. TODO - link to Schewchuk
+ * `p === [[1],[2]]`
  */
 function isPointOnBezierExtension(
         ps: number[][], p: number[][]): boolean {

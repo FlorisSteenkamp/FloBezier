@@ -1,7 +1,7 @@
 import { settings } from '../settings.js';
 import { areBeziersInSameKFamily, /*from0ToT, fromTTo1,*/ toString } from "../../../src";
 import { randOnGrid } from "./rand-on-grid";
-import { fromTo } from '../../../src/intersection/bezier3-intersection/from-to/from-to.js';
+import { fromTo } from '../../../src/intersection/bezier-bezier-intersection-fast/from-to/from-to.js';
 
 const { maxCoordinateX, maxCoordinateY, maxBitLength } = settings;
 

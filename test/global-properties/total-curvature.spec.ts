@@ -107,7 +107,9 @@ function gaussCompare() {
 		// We cannot test using Gauss Quadrature since the cusp will always be missed
 		//test(cusp.slice().reverse());
 		//test(cusp);
+		// @ts-ignore - otherwise TypeScript gives an error on nearly
 		expect(totalCurvature(cusp.slice().reverse())).to.be.nearly(2**4, 2.7030057599586934);
+		// @ts-ignore - otherwise TypeScript gives an error on nearly
 		expect(totalCurvature(cusp)).to.be.nearly(2**4, -2.7030057599586934);
 	}
 
@@ -201,6 +203,7 @@ function testBeziersInLoop(order: 1 | 2 | 3) {
 
 			// (Math.PI - (c+d)) / (2*Math.PI) * 360;
 
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(c).to.be.nearly(2**32,d)
 
 			// disconutinuous curvature (turn) at interface between 2 beziers
@@ -214,6 +217,7 @@ function testBeziersInLoop(order: 1 | 2 | 3) {
 
 		const totalWinding = total / (2*𝜋);
 
+		// @ts-ignore - otherwise TypeScript gives an error on nearly
 		expect(totalWinding - Math.round(totalWinding)).to.be.nearly([2**8],0);
 	}
 }
@@ -223,21 +227,25 @@ function testSomeTotalCurvature() {
 	{
 		const ps = getRandomCubic(0);
 		const c = totalCurvature(ps, [0,1]);
+		// @ts-ignore - otherwise TypeScript gives an error on nearly
 		expect(c).to.be.nearly(2**6, -0.9134823236058587);
 	}
 
 	{
 		const ps = getRandomQuad(0);
 		const c = totalCurvature(ps, [0,1]);
+		// @ts-ignore - otherwise TypeScript gives an error on nearly
 		expect(c).to.be.nearly(2**6, 1.6188647958793885);
 	}
 
 	{
 		const ps = getRandomCubic(2);
 		const c = totalCurvature(ps, [0,1]);
+		// @ts-ignore - otherwise TypeScript gives an error on nearly
 		expect(c).to.be.nearly(2**6, -5.178927914200722);
 		const psr = ps.slice().reverse();
 		const d = totalCurvature(psr, [0,1]);
+		// @ts-ignore - otherwise TypeScript gives an error on nearly
 		expect(d).to.be.nearly(2**6, 5.178927914200722);
 	}
 
@@ -276,6 +284,7 @@ describe('totalAbsoluteCurvature', function() {
 			// straight quadratic bezier
 			const ps = randomRotateAndTranslate(0)([[0,0],[1,1],[3,3]]);
 			const d = totalAbsoluteCurvature(ps, [0,1]);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(d).to.be.nearly([2**4], 0);
 		}
 
@@ -283,6 +292,7 @@ describe('totalAbsoluteCurvature', function() {
 			// self-overlapping quadratic bezier
 			const ps = randomRotateAndTranslate(2)([[1,1],[2,2],[1.1,1.1]]);
 			const d = totalAbsoluteCurvature(ps, [0,1]);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(d).to.be.nearly(2**4, Math.PI);
 		}
 
@@ -291,7 +301,9 @@ describe('totalAbsoluteCurvature', function() {
 			const ps = getRandomCubic(0);
 			const d = totalAbsoluteCurvature(ps, [0,1]);
 			const e = totalAbsoluteCurvature(ps.slice().reverse(), [0,1]);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(d).to.be.nearly(2**6, 1.289670890832218);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(e).to.be.nearly(2**6, 1.289670890832218);
 		}
 
@@ -300,7 +312,9 @@ describe('totalAbsoluteCurvature', function() {
 			const ps = [[0,0],[3.5,5],[2.5,5],[6,0]];
 			const d = totalAbsoluteCurvature(ps, [0,1]);
 			const e = totalAbsoluteCurvature(ps.slice().reverse(), [0,1]);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(d).to.be.nearly(2**6, 1.999553581786523);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(e).to.be.nearly(2**6, 1.999553581786523);
 		}
 
@@ -309,7 +323,9 @@ describe('totalAbsoluteCurvature', function() {
 			const ps = [[0,0],[11,5],[2.5,5],[6,0]];
 			const d = totalAbsoluteCurvature(ps, [0,1]);
 			const e = totalAbsoluteCurvature(ps.slice().reverse(), [0,1]);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(d).to.be.nearly(2**6, 4.8964874516470225);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(e).to.be.nearly(2**6, 4.8964874516470225);
 		}
 
@@ -317,6 +333,7 @@ describe('totalAbsoluteCurvature', function() {
 			// some quadratic bezier
 			const ps = getRandomQuad(0);
 			const d = totalAbsoluteCurvature(ps, [0,1]);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(d).to.be.nearly(2**6, 1.6188647958793885);
 		}
 
@@ -356,6 +373,7 @@ describe('totalAbsoluteCurvature', function() {
 		{
 			const ps = [[0,0],[1,1],[1,1],[2,0]];
 			const d = totalCurvature(ps, [0,1]);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(d).to.be.nearly(2**1,-𝜋/2);
 		}
 

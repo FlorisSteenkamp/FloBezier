@@ -1,13 +1,15 @@
-import { createRootExact } from "flo-poly";
-import type { X } from "../bezier-bezier-intersection/x.js";
-import { getIntervalBox } from "../../global-properties/bounds/get-interval-box/get-interval-box.js";
+import { getPFromBox, getTFromRi, X } from "../bezier-bezier-intersection/x.js";
 import { reduceOrderIfPossible } from "../../transformation/reduce-order-if-possible.js";
-import { tFromXY } from "../../local-properties-to-t/t-from-xy.js";
-import { getEndpointIntersections3 } from './get-endpoint-intersections3.js';
-import { getEndpointIntersections2 } from './get-endpoint-intersections2.js';
+import { getAB1 } from "./get-ab1.js";
+import { getAB2 } from "./get-ab2.js";
+import { getAB3 } from "./get-ab3.js";
+import { getIntervalBox } from "../../global-properties/bounds/get-interval-box/get-interval-box.js";
+import { sub1Ulp } from "../../sub-1-ulp.js";
+import { add1Ulp } from "../../add-1-ulp.js";
+import { intersectBoxes } from "../../boxes/intersect-boxes.js";
 
 
-// TODO - docs - test with boolean op
+// TODO - test with boolean op
 /**
  * Returns the intersection range (given as 2 pairs of intersections (`X`s) with 
  * the intersection of `ps1` always the first entry of each pair) where the 
@@ -37,20 +39,89 @@ function getEndpointIntersections(
 
     // `psB.length` should equal `psB.length` (due to precondition)
 
-    if (psA.length === 4) {
-        return getEndpointIntersections3(psA, psB);
+    const getABs = [,,getAB1,getAB2,getAB3];
+
+    const [tA_B0,tA_B1] = getABs[psA.length]!(psA,psB);
+    const [tB_A0,tB_A1] = getABs[psA.length]!(psB,psA);
+
+    //------------------------------------------------
+    // Perform a simple unrolled sweep line algorithm
+    //------------------------------------------------
+    const infos = [
+        { tA: tA_B0, tB: 0, bez: 'B' as const, start: true },
+        { tA: tA_B1, tB: 1, bez: 'B' as const, start: false },
+        { tA: 0, tB: tB_A0, bez: 'A' as const, start: true },
+        { tA: 1, tB: tB_A1, bez: 'A' as const, start: false }
+    ].sort((a,b) => a.tA - b.tA);
+
+    if (infos[1].tA === infos[2].tA) {
+        const info = infos[1];
+        const tA = info.tA;  // `tA` will be either exactly `0` or exactly `1`
+        const tB = info.tB;  // `tB` will be either exactly `0` or exactly `1`
+        const box = getIntervalBox(psA, [tA, tA]);
+
+        return [[
+            { p: box[0], t: tA, ri: { tS: tA, tE: tA, multiplicity: 1 }, kind: 4, box },
+            { p: box[0], t: tB, ri: { tS: tB, tE: tB, multiplicity: 1 }, kind: 4, box }
+        ]]
     }
 
-    if (psA.length === 3) {
-        return getEndpointIntersections2(psA, psB);
+    if (infos[0].bez === infos[1].bez) {
+        return [];
     }
 
-    if (psA.length === 2) {
-        // TODO
-        // return getEndpointIntersections1(psA, psB);
-    }
+    const start = infos[1];
+    const end   = infos[2];
 
-    throw new Error('The given bezier curve must be of order 1,2 or 3.');
+    const [tSAMin,tSAMax] = getMinMaxT(start.tA);
+    const [tSBMin,tSBMax] = getMinMaxT(start.tB);
+    const [tEAMin,tEAMax] = getMinMaxT(end.tA);
+    const [tEBMin,tEBMax] = getMinMaxT(end.tB);
+
+    const boxSA = getIntervalBox(psA, [tSAMin, tSAMax]);
+    const boxSB = getIntervalBox(psB, [tSBMin, tSBMax]);
+    const boxEA = getIntervalBox(psA, [tEAMin, tEAMax]);
+    const boxEB = getIntervalBox(psB, [tEBMin, tEBMax]);
+
+    const boxS = intersectBoxes(boxSA,boxSB)!;
+    const boxE = intersectBoxes(boxEA,boxEB)!;
+
+    const riSA = { tS: tSAMin, tE: tSAMax, multiplicity: 1 };
+    const riSB = { tS: tSBMin, tE: tSBMax, multiplicity: 1 };
+    const riEA = { tS: tEAMin, tE: tEAMax, multiplicity: 1 };
+    const riEB = { tS: tEBMin, tE: tEBMax, multiplicity: 1 };
+    return [
+        [
+            { p: getPFromBox(boxS), t: getTFromRi(riSA), ri: riSA, kind: 5, box: boxS },
+            { p: getPFromBox(boxS), t: getTFromRi(riSB), ri: riSB, kind: 5, box: boxS }
+        ],[
+            { p: getPFromBox(boxE), t: getTFromRi(riEA), ri: riEA, kind: 5, box: boxE },
+            { p: getPFromBox(boxE), t: getTFromRi(riEB), ri: riEB, kind: 5, box: boxE }
+        ]
+    ];
+}
+
+
+/** @internal */
+function sub2Ulp(v: number) {
+    return sub1Ulp(sub1Ulp(v));
+}
+
+
+/** @internal */
+function add2Ulp(v: number) {
+    return add1Ulp(add1Ulp(v));
+}
+
+
+/** @internal */
+function getMinMaxT(t: number) {
+    if (t === 0 || t === 1) { return [t,t]; }
+
+    const tMin = sub2Ulp(t);
+    const tMax = add2Ulp(t);
+
+    return [tMin, tMax];
 }
 
 

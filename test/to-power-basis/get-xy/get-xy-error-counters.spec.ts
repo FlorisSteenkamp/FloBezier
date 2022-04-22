@@ -10,7 +10,7 @@ use(nearly);
 
 const abs = Math.abs;
 const γ1 = γ(1);
-const compareErrors = mapDouble((eActual, eBound) => abs(eActual) <= eBound);
+const compareErrors = mapDouble((eActual, eBound) => abs(eActual) <= eBound!);
 const getRandomBezier_ = getRandomBezier(128, 53);
 
 
@@ -70,7 +70,7 @@ describe('getXYWithRunningError', function() {
 					const rE = getXYExact(ps);
 
 					const errorActual = mapShewchukToAbsDouble(subtractShewchuk(rD, rE)) as number[][];
-					const allWithinBounds = allTrue(compareErrors(errorActual, errorBound));
+					const allWithinBounds = allTrue(compareErrors(errorActual, errorBound!));
 
 					assert(allWithinBounds, 'Error not within error bound');
 				}
