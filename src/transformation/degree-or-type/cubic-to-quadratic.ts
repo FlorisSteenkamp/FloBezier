@@ -1,7 +1,7 @@
 import { expansionProduct, twoDiff, eSign, eEstimate, eDiff, scaleExpansion, twoSum } from 'big-float-ts';
 import { isCollinear } from '../..';
 
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const epr = expansionProduct;
 const td = twoDiff;
 const ediff = eDiff;

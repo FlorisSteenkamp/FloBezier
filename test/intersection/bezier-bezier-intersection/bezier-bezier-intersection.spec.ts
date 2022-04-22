@@ -32,7 +32,7 @@ function testBezBezIntersection(
     let total = 0;
     const infos: { d: number; pss: number[][][]; }[] = [];
     let timing: number;
-    const xss: X[][][] = [];
+    const xss: X[][] = [];
     const maxChecks = 20;
     let checkCount = 0;
 
@@ -46,10 +46,10 @@ function testBezBezIntersection(
         total += xs.length;
 
         for (const x of xs) {
-            const tSA = x[0].ri.tS;
-            const tEA = x[0].ri.tE;
-            const tSB = x[1].ri.tS;
-            const tEB = x[1].ri.tE;
+            const tSA = x.ri1.tS;
+            const tEA = x.ri1.tE;
+            const tSB = x.ri2.tS;
+            const tEB = x.ri2.tE;
             
             const tA = tEA/2 + tSA/2;
             const tB = tEB/2 + tSB/2;

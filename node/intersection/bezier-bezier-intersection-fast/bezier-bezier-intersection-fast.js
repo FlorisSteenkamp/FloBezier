@@ -173,14 +173,10 @@ function combineXs(xs) {
     }
 }
 function implicit(ps1, ps2) {
-    return bezierBezierIntersection(ps1, ps2).map(xPair => {
-        const xPair0ri = xPair[0].ri;
-        const xPair1ri = xPair[1].ri;
-        return [
-            [xPair0ri.tS, xPair0ri.tE],
-            [xPair1ri.tS, xPair1ri.tE]
-        ];
-    });
+    return bezierBezierIntersection(ps1, ps2).map(x => [
+        [x.ri1.tS, x.ri1.tE],
+        [x.ri2.tS, x.ri2.tE]
+    ]);
 }
 export { bezierBezierIntersectionFast };
 //# sourceMappingURL=bezier-bezier-intersection-fast.js.map

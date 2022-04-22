@@ -76,12 +76,12 @@ function tFromXY3(
     } = getXY3DdWithRunningError(ps);
 
     // pop the constant term off `x(t)`
-    const txDd = _polyDdX.pop() as number;
+    const txDd = _polyDdX.pop()![1];
     // subtract the x coordinate of the point
     const polyDdX = [..._polyDdX, twoDiff(txDd, x)] as number[][];
 
     // pop the constant term off `y(t)`
-    const tyDd = _polyDdY.pop() as number;
+    const tyDd = _polyDdY.pop()![1];
     // subtract the y coordinate of the point
     const polyDdY = [..._polyDdY, twoDiff(tyDd, y)] as number[][];
 
@@ -174,25 +174,25 @@ function tFromXY2(
     } = getXY2DdWithRunningError(ps);
 
     // pop the constant term off `x(t)`
-    const txDd = _polyDdX.pop() as number;
+    const txDd = _polyDdX.pop()![1];
     // subtract the x coordinate of the point
     const polyDdX = [..._polyDdX, twoDiff(txDd, x)] as number[][];
 
     // pop the constant term off `y(t)`
-    const tyDd = _polyDdY.pop() as number;
+    const tyDd = _polyDdY.pop()![1];
     // subtract the y coordinate of the point
     const polyDdY = [..._polyDdY, twoDiff(tyDd, y)] as number[][];
 
     let pExactXY: [
-        [number[], number[], number],
-        [number[], number[], number]
+        [number[], number[], number[]],
+        [number[], number[], number[]]
     ] | undefined = undefined;
 
     const getPExactX = (): number[][] => { 
         if (pExactXY === undefined) { pExactXY = getXY2Exact(ps); }
         const _pExactX = pExactXY[0];  // x coordinate
         // pop the constant term off `x(t)`
-        const tx = _pExactX.pop() as number;
+        const tx = _pExactX.pop()![0];
         const pExactX = [..._pExactX, twoDiff(tx, x)] as number[][];
 
         return pExactX;
@@ -202,7 +202,7 @@ function tFromXY2(
         if (pExactXY === undefined) { pExactXY = getXY2Exact(ps); }
         const _pExactY = pExactXY[1];  // y coordinate
         // pop the constant term off `y(t)`
-        const ty = _pExactY.pop() as number;
+        const ty = _pExactY.pop()![0];
         const pExactY = [..._pExactY, twoDiff(ty, y)] as number[][];
 
         return pExactY;
@@ -268,12 +268,12 @@ function tFromXY1(
     const [_polyDdX, _polyDdY] = getXY1Dd(ps);
 
     // pop the constant term off `x(t)`
-    const txDd = _polyDdX.pop() as number;
+    const txDd = _polyDdX.pop()![1];
     // subtract the x coordinate of the point
     const polyExactX = [..._polyDdX, twoDiff(txDd, x)] as number[][];
 
     // pop the constant term off `y(t)`
-    const tyDd = _polyDdY.pop() as number;
+    const tyDd = _polyDdY.pop()![1];
     // subtract the y coordinate of the point
     const polyExactY = [..._polyDdY, twoDiff(tyDd, y)] as number[][];
 
@@ -308,8 +308,6 @@ function tFromXY1(
     // at this point `xrs !== undefined` and `yrs !== undefined`
 
     if (xrs.length === 0 || yrs.length === 0) {
-        // this is actually not possible since a precondition is that the point
-        // must be *exactly* on the line
         return [];
     }
 
@@ -318,8 +316,6 @@ function tFromXY1(
     const r = combineRoots(xrs[0], yrs[0]);
 
     if (r === undefined) { 
-        // this is actually not possible since a precondition is that the point
-        // must be *exactly* on the line
         return [];
     }
 
@@ -338,7 +334,7 @@ function combineRoots(
         if (r.tE < s.tS) {
             return undefined;  // no overlap
         }
-        return { tS: s.tS, tE: min(r.tE, s.tE), multiplicity: Math.min(r.multiplicity, s.multiplicity) };
+        return { tS: s.tS, tE: min(r.tE, s.tE), multiplicity: min(r.multiplicity, s.multiplicity) };
     }
 
     // case 2 - r.tS > s.tS
@@ -346,7 +342,7 @@ function combineRoots(
         return undefined;  // no overlap
     }
 
-    return { tS: r.tS, tE: min(r.tE, s.tE), multiplicity: Math.min(r.multiplicity, s.multiplicity) };
+    return { tS: r.tS, tE: min(r.tE, s.tE), multiplicity: min(r.multiplicity, s.multiplicity) };
 }
 
 

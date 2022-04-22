@@ -10,7 +10,7 @@ import { expect } from 'chai';
  */
 function geo(
         pss: number[][][], 
-        xPairss: X[][][]) {
+        xPairss: X[][]) {
 
     let total = 0;
     const ds: number[] = [];

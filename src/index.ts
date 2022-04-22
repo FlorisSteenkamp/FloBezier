@@ -3,6 +3,7 @@ import type { Bound, XBounds, YBounds } from './global-properties/bounds/bounds.
 import type { X } from './intersection/bezier-bezier-intersection/x.js';
 import type { Extrema } from './get-curvature-extrema/get-curvature-extrema.js';
 
+import { rotate as rotate_, translate as translate_ } from 'flo-vector2d';
 import { 
 	ClassificationType, Classification, NodeType, classify, classifications, 
 	classification
@@ -62,7 +63,6 @@ import { generateCuspAtHalf3 } from './create/generate-cusp-at-half-t.js';
 import { generateSelfIntersecting } from './create/generate-self-intersecting.js';
 import { cubicThroughPointGiven013 } from './create/cubic-through-point-given013.js';
 import { bezierSelfIntersection } from './intersection/self-intersection/bezier-self-intersection.js';
-// TODO
 import { getEndpointIntersections } from './intersection/get-endpoint-intersections/get-endpoint-intersections.js';
 import { tFromXY } from './local-properties-to-t/t-from-xy.js';
 import { getXY } from './to-power-basis/get-xy/double/get-xy.js';
@@ -153,6 +153,10 @@ import { sub1Ulp } from './sub-1-ulp.js';
 const getBoundingHull = grahamScan;
 
 
+// TODO
+//rotate,
+//translate,
+
 export {
 	ClassificationType, 
 	Classification, 
@@ -206,7 +210,6 @@ export {
 	// ---------------------------------------------------------
 
 	// Affine transformations
-	// TODO - put back
 	//rotate,
 	//translate,
 

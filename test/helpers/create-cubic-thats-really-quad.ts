@@ -21,6 +21,7 @@ function createCubicThatsReallyQuad(n: number): { quad: number[][], cubic: numbe
         };
     }
 
+    // ignore coverage
     throw new Error('Unable to find cubic that\'s really a quad');
 }
 

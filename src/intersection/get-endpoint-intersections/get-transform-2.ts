@@ -47,7 +47,7 @@ function getTransformedTs2(
     // Calculate `c` *exactly* using (1)
     //-----------------------------------
     // the *exact* positive root `c` is given as the rational number `N/D` 
-    // where `N` and `D` are Shewchuk expansions
+    // where `N` and `D` are [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) expansions
     const [N,D] = calcExactSquareRoot([r2,p2]);
 
     //-----------------------------------

@@ -1,6 +1,6 @@
 import { twoProduct, ddAddDd, ddDiffDd, ddMultByNeg2 } from "double-double";
 
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const tp  = twoProduct;
 const qaq = ddAddDd;
 const qmn2 = ddMultByNeg2;

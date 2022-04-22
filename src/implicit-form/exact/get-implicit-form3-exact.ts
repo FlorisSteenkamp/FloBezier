@@ -1,7 +1,7 @@
 import type { ImplicitFormExact1, ImplicitFormExact2, ImplicitFormExact3 } from '../implicit-form-types.js';
 import { getXY3Exact } from '../../to-power-basis/get-xy/exact/get-xy-exact.js';
 
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 import { 
     expansionProduct, fastExpansionSum, scaleExpansion2, 
     eDiff, eNegativeOf, eMultBy2, eDivBy2

@@ -15,8 +15,8 @@ function getAbsAreaBetween(ps1, ps2) {
     let total = 0;
     for (let i = 0; i < xs.length + 1; i++) {
         const x = xs[i];
-        const tE1 = x === undefined ? 1 : mid(x[0].ri);
-        const tE2 = x === undefined ? 1 : mid(x[1].ri);
+        const tE1 = x === undefined ? 1 : mid(x.ri1);
+        const tE2 = x === undefined ? 1 : mid(x.ri2);
         const piece1 = fromTo(ps1, tS1, tE1).ps;
         const piece2 = fromTo(ps2, tS2, tE2).ps;
         tS1 = tE1;

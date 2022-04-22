@@ -5,7 +5,7 @@ const estimate = eEstimate;
 
 /**
  * Returns the resulting bezier curve when rounding each control point 
- * coordinate (given as Shewchuk expansions) of the given bezier to double 
+ * coordinate (given as [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) expansions) of the given bezier to double 
  * precision.
  * 
  * @param ps 

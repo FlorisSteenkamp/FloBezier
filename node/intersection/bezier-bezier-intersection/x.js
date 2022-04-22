@@ -1,7 +1,3 @@
-function getTFromRi(ri) {
-    // calculated this way for slightly improved accuracy
-    return ri.tS + (ri.tE - ri.tS) / 2;
-}
 function getPFromBox(box) {
     const tl = box[0];
     const br = box[1];
@@ -10,5 +6,5 @@ function getPFromBox(box) {
         (tl[1] + br[1]) / 2,
     ];
 }
-export { getTFromRi, getPFromBox };
+export { getPFromBox };
 //# sourceMappingURL=x.js.map

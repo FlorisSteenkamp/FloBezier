@@ -50,7 +50,7 @@ function getTransformedTs1(
     // (1)   d = (r0 - p0)/p1
 
     // the *exact* `d` is given as the rational number `N/D`
-    // where `N` and `D` are Shewchuk expansions
+    // where `N` and `D` are [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) expansions
     return [eDiff(r0,p0),p1];
 }
 

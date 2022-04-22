@@ -4,7 +4,7 @@ import { getImplicitForm3DdWithRunningError } from "../../implicit-form/double-d
 import { getImplicitForm3Exact } from "../../implicit-form/exact/get-implicit-form3-exact.js";
 import { γ, γγ } from '../../error-analysis/error-analysis.js';
 
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 import { ddMultDd, ddAddDd } from "double-double";
 import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd } from 'big-float-ts';
 import { ImplicitFormExact2, ImplicitFormExact3 } from "../../implicit-form/implicit-form-types.js";
@@ -28,7 +28,7 @@ const γγ3 = γγ(3);
  * `false` otherwise.
  * 
  * @param ps a cubic bezier curve
- * @param p a point with coordinates given as Shewchuk expansions. If only
+ * @param p a point with coordinates given as [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) expansions. If only
  * double precision coordinates need to be provided then wrap them in a one
  * element array, e.g. for a point with x and y coordinates given as 1 and 2 set 
  * `p === [[1],[2]]`.

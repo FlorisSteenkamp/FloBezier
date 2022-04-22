@@ -1,4 +1,4 @@
-import { X } from '../bezier-bezier-intersection/x.js';
+import { RootInterval } from 'flo-poly';
 /**
  * Returns the intersection between a circle and linear, quadratic or cubic bezier
  * curve.
@@ -21,5 +21,11 @@ import { X } from '../bezier-bezier-intersection/x.js';
 declare function circleBezierIntersection(circle: {
     center: number[];
     radius: number;
-}, ps: number[][]): X[];
+}, ps: number[][]): {
+    p: number[];
+    kind: number;
+    box: number[][];
+    t: number;
+    ri: RootInterval;
+}[];
 export { circleBezierIntersection };

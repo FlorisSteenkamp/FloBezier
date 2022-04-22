@@ -114,14 +114,14 @@ describe('getEndpointIntersections', function() {
 
             {
                 const R = getEndpointIntersections(ps,psA);
-                const rA = R.map(mapXPair(0));
+                const rA = R.map(mapX(0));
                 // @ts-ignore - otherwise TypeScript gives an error on nearly
                 expect(rA).to.be.nearly(2**1,[0.25,0.5]);
             }
             
             {
                 const R = getEndpointIntersections(ps,psB);
-                const rA = R.map(mapXPair(0));
+                const rA = R.map(mapX(0));
                 // @ts-ignore - otherwise TypeScript gives an error on nearly
                 expect(rA).to.be.nearly(2**1,[0.5,1]);
             }
@@ -161,8 +161,8 @@ function testEndpointXs(
         // ⇒ ⇒
         {
             const r = getEndpointIntersections(A,B);
-            const rA = r.map(mapXPair(0));
-            const rB = r.map(mapXPair(1));
+            const rA = r.map(mapX(0));
+            const rB = r.map(mapX(1));
             // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(rA).to.be.nearly(2**1,expectedA_);
             // @ts-ignore - otherwise TypeScript gives an error on nearly
@@ -178,8 +178,8 @@ function testEndpointXs(
         // ⇐ ⇒  (A reversed)
         {
             const r = getEndpointIntersections(AR,B);
-            const rA = r.map(mapXPair(0));
-            const rB = r.map(mapXPair(1));
+            const rA = r.map(mapX(0));
+            const rB = r.map(mapX(1));
             const expectedAR = expectedA_.map(v => 1 - v).reverse();
             const expectedBR = expectedB_.slice().reverse();
             // @ts-ignore - otherwise TypeScript gives an error on nearly
@@ -197,8 +197,8 @@ function testEndpointXs(
         // ⇒ ⇐ (B reversed)
         {
             const r = getEndpointIntersections(A,BR);
-            const rA = r.map(mapXPair(0));
-            const rB = r.map(mapXPair(1));
+            const rA = r.map(mapX(0));
+            const rB = r.map(mapX(1));
             const expectedAR = expectedA_;
             const expectedBR = expectedB_.map(v => 1 - v);
             // @ts-ignore - otherwise TypeScript gives an error on nearly
@@ -216,8 +216,8 @@ function testEndpointXs(
         // ⇐ ⇐ (A and B reversed)
         {
             const r = getEndpointIntersections(AR,BR);
-            const rA = r.map(mapXPair(0));
-            const rB = r.map(mapXPair(1));
+            const rA = r.map(mapX(0));
+            const rB = r.map(mapX(1));
             const expectedAR = expectedA_.map(v => 1 - v).reverse();
             const expectedBR = expectedB_.map(v => 1 - v).reverse();
             // @ts-ignore - otherwise TypeScript gives an error on nearly
@@ -237,17 +237,12 @@ function testEndpointXs(
 
 
 /**
- * Maps the given pair of intersections to the first bezier curve intersection
- * details.
+ * Maps the given intersection to the first bezier curve intersection details.
  * 
  * @param bezIdx
  */
-function mapXPair(bezIdx: number) {
-    return (xPair: X[]): number => {
-        const ri = xPair[bezIdx].ri;
-        const t = ri.tE/2 + ri.tS/2;
-        return t;
-    }
+function mapX(bezIdx: number) {
+    return (x: X): number => bezIdx === 0 ? x.t1 : x.t2;
 }
 
 

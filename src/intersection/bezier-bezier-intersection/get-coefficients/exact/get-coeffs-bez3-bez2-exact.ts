@@ -5,7 +5,7 @@ import { getCoeffsBez2Bez2Exact } from "./get-coeffs-bez2-bez2-exact.js";
 import { cubicToQuadratic } from "../../../../transformation/degree-or-type/cubic-to-quadratic.js";
 import { getCoeffsBez3Bez1Exact } from "./get-coeffs-bez3-bez1-exact.js";
 
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 import { 
     twoProduct, expansionProduct, fastExpansionSum, scaleExpansion2, 
     eMultBy2, eSign as _eSign
@@ -28,7 +28,7 @@ const eSign = _eSign;
  * (see [Bézout's theorem](https://en.wikipedia.org/wiki/B%C3%A9zout%27s_theorem))
  * 
  * The returned polynomial coefficients are given densely as an array of 
- * Shewchuk floating point expansions from highest to lowest power, 
+ * [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) floating point expansions from highest to lowest power, 
  * e.g. `[[5],[-3],[0]]` represents the polynomial `5x^2 - 3x`.
  * 
   * * the returned polynomial coefficients are exact (i.e. error-free)
@@ -37,9 +37,11 @@ const eSign = _eSign;
  * @param ps1 
  * @param ps2 
  * 
- * @doc mdx
+ * @internal
  */
-function getCoeffsBez3Bez2Exact(ps1: number[][], ps2: number[][]) {
+function getCoeffsBez3Bez2Exact(
+        ps1: number[][], ps2: number[][]): number[][] {
+
     /** ps1 in power bases */
     const ps1pb = getXY3Exact(ps1);
     

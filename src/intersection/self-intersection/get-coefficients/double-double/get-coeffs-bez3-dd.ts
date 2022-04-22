@@ -3,7 +3,7 @@ import { γγ } from "../../../../error-analysis/error-analysis.js";
 import { ddMultDd, ddAddDd, ddDiffDd } from "double-double";
 import { getXY3DdWithRunningError } from "../../../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js";
 
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const qmq = ddMultDd;
 const qaq = ddAddDd;
 const qdq = ddDiffDd;

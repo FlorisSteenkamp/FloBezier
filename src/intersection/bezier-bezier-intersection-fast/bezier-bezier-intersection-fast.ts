@@ -203,7 +203,7 @@ function combineXs(xs: number[][][]): void {
                     const tMaxBez1 = max(x1min1, x1max1, x2min1, x2max1);
 
                     const x: number[][] = [
-                        [tMinBez1, tMaxBez1], 
+                        [tMinBez1, tMaxBez1],
                         [tMinBez2, tMaxBez2]
                     ];
 
@@ -222,15 +222,10 @@ function implicit(
         ps1: number[][], 
         ps2: number[][]): number[][][] {
 
-    return bezierBezierIntersection(ps1,ps2).map(xPair => {
-        const xPair0ri = xPair[0].ri;
-        const xPair1ri = xPair[1].ri;
-
-        return [
-            [xPair0ri.tS, xPair0ri.tE],
-            [xPair1ri.tS, xPair1ri.tE]
-        ]
-    });
+    return bezierBezierIntersection(ps1,ps2).map(x => [
+        [x.ri1.tS, x.ri1.tE],
+        [x.ri2.tS, x.ri2.tE]
+    ]);
 }
 
 

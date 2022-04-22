@@ -1,15 +1,13 @@
 import { expect, assert, use } from 'chai';
 import { describe } from 'mocha';
-import { clone, fromPowerBasis } from '../src/index.js';
 import { nearly } from './helpers/chai-extend-nearly.js';
-import { getRandomBezier, getRandomCubic } from './helpers/get-random-bezier.js';
 import { closeTo } from './helpers/close-to.js';
 import { HH } from './helpers/hausdorff-distance-naive.js';
 import { heapToStr } from './helpers/heap-to-str.js';
 import { Heap } from '../src/simultaneous-properties/hausdorff-distance/heap.js';
 import { squares } from 'squares-rng';
 import { toGrid } from './helpers/to-grid.js';
-import { allTrue, map, subtractShewchuk } from './helpers/map.js';
+import { allTrue, subtractShewchuk } from './helpers/map.js';
 
 use(nearly);
 const { POSITIVE_INFINITY: inf } = Number;
@@ -103,7 +101,7 @@ describe('helpers', function() {
 
         {
             expect(() => subtractShewchuk([1,2],{ a: [3,4] })).to.throw();
-            expect(() => subtractShewchuk(1 as any, 3  as any)).to.throw();
+            expect(() => subtractShewchuk(1 as any, 3 as any)).to.throw();
         }
 
         {

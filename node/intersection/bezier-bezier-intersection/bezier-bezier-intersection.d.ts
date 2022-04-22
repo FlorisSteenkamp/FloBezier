@@ -26,5 +26,5 @@ import { X } from './x.js';
  *
  * @doc mdx
  */
-declare function bezierBezierIntersection(ps1: number[][], ps2: number[][]): X[][];
+declare function bezierBezierIntersection(ps1: number[][], ps2: number[][]): X[];
 export { bezierBezierIntersection };

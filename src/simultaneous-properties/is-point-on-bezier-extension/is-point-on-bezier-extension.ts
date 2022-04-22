@@ -10,7 +10,7 @@ import { isPointOnBezierExtension3 } from './is-point-on-bezier-extension-3.js';
  * `(-∞, +∞)`, `false` otherwise.
  * 
  * @param ps a bezier curve
- * @param p a point with coordinates given as Shewchuk expansions; if only
+ * @param p a point with coordinates given as [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) expansions; if only
  * double precision coordinates need to be provided then wrap it in an array,
  * e.g. for a point with x and y coordinates given as `1` and `2` set 
  * `p === [[1],[2]]`

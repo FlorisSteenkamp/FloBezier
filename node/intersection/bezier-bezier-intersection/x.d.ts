@@ -8,23 +8,10 @@ import { RootInterval } from 'flo-poly';
  */
 interface X {
     /**
-     * The parameter `t` value of intersection taken as the midpoint of the
-     * root interval `ri` guaranteed to contain the intersection.
-     * (Provided for convencience - use `ri` for guaranteed containment.)
-     */
-    t: number;
-    /**
      * The point of intersection calculated from the root interval `ri`.
      * (Provided for convencience - use `box` for guaranteed containment.)
      */
     p: number[];
-    /**
-     * The root interval guaranteed to contain the correct `t` value in the
-     * form `{ tS, tE, multiplicity }`, where `tS` and `tE` are the start and
-     * end of the interval with `tE - tS` guaranteed to be less than or equal to
-     * `4*Number.EPSILON`
-     */
-    ri: RootInterval;
     /**
      * The kind of intersection:
      * * 1 => general curve-curve intersection (non-self-overlapping)
@@ -42,7 +29,32 @@ interface X {
      * interval `ri`.
      */
     box: number[][];
+    /**
+     * First bezier parameter `t` value of intersection taken as the midpoint of
+     * the root interval `ri` guaranteed to contain the intersection.
+     * (Provided for convencience - use `ri` for guaranteed containment.)
+     */
+    t1: number;
+    /**
+     * First bezier root interval guaranteed to contain the correct `t` value in
+     * the form `{ tS, tE, multiplicity }`, where `tS` and `tE` are the start and
+     * end of the interval with `tE - tS` guaranteed to be less than or equal to
+     * `4*Number.EPSILON`
+     */
+    ri1: RootInterval;
+    /**
+     * Second bezier parameter `t` value of intersection taken as the midpoint of
+     * the root interval `ri` guaranteed to contain the intersection.
+     * (Provided for convencience - use `ri` for guaranteed containment.)
+     */
+    t2: number;
+    /**
+     * Second bezier root interval guaranteed to contain the correct `t` value
+     * in the form `{ tS, tE, multiplicity }`, where `tS` and `tE` are the start
+     * and end of the interval with `tE - tS` guaranteed to be less than or
+     * equal to `4*Number.EPSILON`
+     */
+    ri2: RootInterval;
 }
-declare function getTFromRi(ri: RootInterval): number;
 declare function getPFromBox(box: number[][]): number[];
-export { X, getTFromRi, getPFromBox };
+export { X, getPFromBox };

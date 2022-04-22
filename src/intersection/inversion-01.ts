@@ -6,7 +6,7 @@ import { allRootsCertified, mid } from "flo-poly";
 //import { getTangentPolyFromPointExact } from "../simultaneous-properties/closest-point-on-bezier/get-coeffs/exact/get-closest-on-bezier-from-point-exact.js";
 import { getClosestOnBezierFromPointExact } from "../simultaneous-properties/closest-point-on-bezier/get-coeffs/exact/get-closest-on-bezier-from-point-exact.js";
 
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 import { operators as bigFloatOperators } from "big-float-ts";
 const { eEstimate } = bigFloatOperators;
 

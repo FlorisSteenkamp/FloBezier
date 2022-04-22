@@ -1,6 +1,6 @@
 import { twoDiff, ddMultDouble2, ddAddDd, ddAddDouble } from 'double-double';
 
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const td =  twoDiff;        // error -> 0
 const qmd = ddMultDouble2;  // error -> 3*u²
 const qaq = ddAddDd;
@@ -39,40 +39,20 @@ function getXYDdWithRunningError(
 		} {
 
 	if (ps.length === 4) {
-		const res = getXY3DdWithRunningError(ps);
-		const r = res.coeffs;
-		// destructively modify `res`
-		(r[0][3] as unknown as number[]) = [0,r[0][3]];
-		(r[1][3] as unknown as number[]) = [0,r[1][3]];
-		return res as CoeffsWithError;
+		return getXY3DdWithRunningError(ps);
 	} 
-	
 	if (ps.length === 3) {
-		const res = getXY2DdWithRunningError(ps);
-		const r = res.coeffs;
-		// destructively modify `res`
-		(r[0][2] as unknown as number[]) = [0,r[0][2]];
-		(r[1][2] as unknown as number[]) = [0,r[1][2]];
-		return res as CoeffsWithError;
+		return getXY2DdWithRunningError(ps);
 	} 
-	
 	if (ps.length === 2) {
-		const r = getXY1DdWithRunningError(ps);
-		// TODO this is ugly
-		(r[0][1] as unknown as number[]) = [0,r[0][1]];
-		(r[1][1] as unknown as number[]) = [0,r[1][1]];
 		return {
-			coeffs: r as number[][][],
+			coeffs: getXY1DdWithRunningError(ps),
 			errorBound: [[0,0], [0,0]]
 		};
 	}
-
 	if (ps.length === 1) {
-		const r = getXY0DdWithRunningError(ps);
-		(r[0][0] as unknown as number[]) = [0,r[0][0]];
-		(r[1][0] as unknown as number[]) = [0,r[1][0]];
 		return {
-			coeffs: r as unknown as number[][][],
+			coeffs: getXY0DdWithRunningError(ps),
 			errorBound: [[0], [0]]
 		};
 	}
@@ -84,7 +64,7 @@ function getXYDdWithRunningError(
 /** @internal */
 function getXY3DdWithRunningError(
 		ps: number[][]): {
-			coeffs: [[number[], number[], number[], number], [number[], number[], number[], number]];
+			coeffs: [[number[], number[], number[], number[]], [number[], number[], number[], number[]]];
 			errorBound: [[number,number,number,0],[number,number,number,0]];
 		} {
 
@@ -149,7 +129,7 @@ function getXY3DdWithRunningError(
 	
 
 	return {
-		coeffs: [[xx3, xx2, xx1, x0], [yy3, yy2, yy1, y0]],
+		coeffs: [[xx3, xx2, xx1, [0,x0]], [yy3, yy2, yy1, [0,y0]]],
 		errorBound: [[xx3_, xx2_, xx1_, 0], [yy3_, yy2_, yy1_, 0]]
 	}
 }
@@ -158,7 +138,7 @@ function getXY3DdWithRunningError(
 /** @internal */
 function getXY2DdWithRunningError(
 		ps: number[][]): {
-			coeffs: [[number[], number[], number], [number[], number[], number]];
+			coeffs: [[number[], number[], number[]], [number[], number[], number[]]];
 			errorBound: [[number,0,0],[number,0,0]];
 		} {
 
@@ -192,7 +172,7 @@ function getXY2DdWithRunningError(
 
 
 	return {
-		coeffs: [[xx2, xx1, x0], [yy2, yy1, y0]],
+		coeffs: [[xx2, xx1, [0,x0]], [yy2, yy1, [0,y0]]],
 		errorBound: [[xx2_, 0, 0], [yy2_, 0, 0]]
 	}
 }
@@ -200,26 +180,26 @@ function getXY2DdWithRunningError(
 
 /** @internal */
 function getXY1DdWithRunningError(
-		ps: number[][]): [[number[], number], [number[], number]] {
+		ps: number[][]): [[number[], number[]], [number[], number[]]] {
 
 	const [[x0,y0], [x1,y1]] = ps;
 	return [[
 		td(x1,x0),
-		x0,     
+		[0,x0]
 	], [
 		td(y1,y0),
-		y0,     
+		[0,y0]
 	]];
 }
 
 
 /** @internal */
 function getXY0DdWithRunningError(
-		ps: number[][]): [[number], [number]] {
+		ps: number[][]): [[number[]], [number[]]] {
 
 	const [[x0,y0]] = ps;
 
-	return [[x0], [y0]];
+	return [[[0,x0]], [[0,y0]]];
 }
 
 

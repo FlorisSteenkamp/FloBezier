@@ -134,6 +134,9 @@ function xToTs(
         psB: number[][]) {
 
     return bezierBezierIntersection(psA, psB).map(
-        xPair => xPair.map(x => [mid(x.ri),mid(x.ri)])
+        x => [
+            [x.ri1.tS,x.ri1.tE],
+            [x.ri2.tS,x.ri2.tE]
+        ]
     );
 }

@@ -3,7 +3,7 @@ import { getImplicitForm3DdWithRunningError } from "../../../../implicit-form/do
 import { getXY2DdWithRunningError } from "../../../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js";
 import { twoProduct, ddMultBy2, ddMultDouble2, ddMultDd, ddAddDd } from "double-double";
 
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const tp  = twoProduct;
 const qm2 = ddMultBy2;
 const qmd = ddMultDouble2;
@@ -26,18 +26,13 @@ const γγ3 = γγ(3);
  * double-double precision floating point numbers from highest to lowest power, 
  * e.g. `[[0,5],[0,-3],[0,0]]` represents the polynomial `5x^2 - 3x`.
  * 
- * * **precondition:** none
- * * intermediate calculations are done in double-double precision and this is
- * reflected in the output error bound (which is approximately 
- * `n * (Number.EPSILON**2) * the condition number`, where roughly `1 < n < 100` and 
- * depends on the specific calculation)
- * * the error bound returned need **not** be scaled before use
+ * * intermediate calculations are done in double-double precision
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
  * @param ps1 
  * @param ps2 
  * 
- * @doc mdx
+ * @internal
  */
 function getCoeffsBez3Bez2Dd(ps1: number[][], ps2: number[][]) {
     const { 

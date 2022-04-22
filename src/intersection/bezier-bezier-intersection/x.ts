@@ -14,20 +14,7 @@ interface X {
      * (Provided for convencience - use `box` for guaranteed containment.)
      */
     p: number[];
-    /**
-     * The parameter `t` value of intersection taken as the midpoint of the 
-     * root interval `ri` guaranteed to contain the intersection. 
-     * (Provided for convencience - use `ri` for guaranteed containment.)
-     */
-    t: number;
-    /** 
-     * The root interval guaranteed to contain the correct `t` value in the 
-     * form `{ tS, tE, multiplicity }`, where `tS` and `tE` are the start and
-     * end of the interval with `tE - tS` guaranteed to be less than or equal to
-     * `4*Number.EPSILON`
-     */
 
-    ri: RootInterval;
     /** 
      * The kind of intersection: 
      * * 1 => general curve-curve intersection (non-self-overlapping)
@@ -39,18 +26,43 @@ interface X {
      * * 6 => a point (order 0 bezier) intersecting a bezier curve
      */
     kind: 1|4|5|6;
+
     /** 
      * A small box that is guaranteed to contain the intersection 
      * (given by its top-left and bottom-right corner) calculated from the root
      * interval `ri`.
      */
     box: number[][];
-}
 
+    /**
+     * First bezier parameter `t` value of intersection taken as the midpoint of
+     * the root interval `ri` guaranteed to contain the intersection. 
+     * (Provided for convencience - use `ri` for guaranteed containment.)
+     */
+    t1: number;
 
-function getTFromRi(ri: RootInterval) {
-    // calculated this way for slightly improved accuracy
-    return ri.tS + (ri.tE - ri.tS)/2;  
+    /** 
+     * First bezier root interval guaranteed to contain the correct `t` value in
+     * the form `{ tS, tE, multiplicity }`, where `tS` and `tE` are the start and
+     * end of the interval with `tE - tS` guaranteed to be less than or equal to
+     * `4*Number.EPSILON`
+     */
+    ri1: RootInterval;
+
+    /**
+     * Second bezier parameter `t` value of intersection taken as the midpoint of
+     * the root interval `ri` guaranteed to contain the intersection. 
+     * (Provided for convencience - use `ri` for guaranteed containment.)
+     */
+    t2: number;
+    
+    /** 
+     * Second bezier root interval guaranteed to contain the correct `t` value
+     * in the form `{ tS, tE, multiplicity }`, where `tS` and `tE` are the start
+     * and end of the interval with `tE - tS` guaranteed to be less than or
+     * equal to `4*Number.EPSILON`
+     */
+    ri2: RootInterval;
 }
 
 
@@ -65,4 +77,4 @@ function getPFromBox(box: number[][]) {
 }
 
 
-export { X, getTFromRi, getPFromBox }
+export { X, getPFromBox }

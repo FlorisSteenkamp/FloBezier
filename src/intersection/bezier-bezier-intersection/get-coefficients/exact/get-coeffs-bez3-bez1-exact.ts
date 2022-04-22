@@ -1,7 +1,7 @@
 import type { ImplicitFormExact3 } from "../../../../implicit-form/implicit-form-types.js";
 import { getXY1Exact, getXY3Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact.js";
 
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 import { 
     twoProduct, expansionProduct, fastExpansionSum, scaleExpansion2, 
     eMultBy2, eSign as _eSign
@@ -28,7 +28,7 @@ const eSign = _eSign;
  * (see [Bézout's theorem](https://en.wikipedia.org/wiki/B%C3%A9zout%27s_theorem))
  * 
  * The returned polynomial coefficients are given densely as an array of 
- * Shewchuk floating point expansions from highest to lowest power, 
+ * [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) floating point expansions from highest to lowest power, 
  * e.g. `[[5],[-3],[0]]` represents the polynomial `5x^2 - 3x`.
  * 
   * * the returned polynomial coefficients are exact (i.e. error-free)
@@ -37,7 +37,7 @@ const eSign = _eSign;
  * @param ps1 
  * @param ps2 
  * 
- * @doc mdx
+ * @internal
  */
 function getCoeffsBez3Bez1Exact(
         ps1: number[][], ps2: number[][]): number[][] {
@@ -54,15 +54,10 @@ function getCoeffsBez3Bez1Exact(
 
     const [[c1,c0],[d1,d0]] = getXY1Exact(ps2);
 
-    if (eSign(c1) === 0 && eSign(d1) === 0) {
-        // the input bezier curve is in fact not a line but has order < 1,
-        // i.e. it is a point
-        // TODO
-        const p = ps2[0];
-        return isPointOnBezierExtension(ps1, [[p[0]],[p[1]]])
-            ? [[0]]   // infinite intersections
-            : [[1]];  // no intersections
-    }
+    // if (eSign(c1) === 0 && eSign(d1) === 0) {
+        // The input bezier curve is in fact not a line but has order < 1, i.e. it is a point.
+        // This shouldn't happen due to being checked for earlier.
+    // }
 
     const { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = 
         // this type coercion is justified since we already checked that the
@@ -185,11 +180,6 @@ function getCoeffsBez3Bez1Exact(
     const v0 = fes(fd,v);
 
     const r = [v3, v2, v1, v0];
-    
-    // remove leading zero coefficients
-    //while (r.length > 1 && eSign(r[0]) === 0) {
-    //    r.shift();
-    //}
 
     return r;
 }

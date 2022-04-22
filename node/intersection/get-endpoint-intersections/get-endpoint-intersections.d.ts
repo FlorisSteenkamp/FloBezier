@@ -16,5 +16,5 @@ import { X } from "../bezier-bezier-intersection/x.js";
  *
  * @internal
  */
-declare function getEndpointIntersections(psA: number[][], psB: number[][], orderAlreadyReduced?: boolean): X[][];
+declare function getEndpointIntersections(psA: number[][], psB: number[][], orderAlreadyReduced?: boolean): X[];
 export { getEndpointIntersections };

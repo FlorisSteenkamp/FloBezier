@@ -1,4 +1,4 @@
-import { getPFromBox, getTFromRi } from "../bezier-bezier-intersection/x.js";
+import { getPFromBox } from "../bezier-bezier-intersection/x.js";
 import { reduceOrderIfPossible } from "../../transformation/reduce-order-if-possible.js";
 import { getAB1 } from "./get-ab1.js";
 import { getAB2 } from "./get-ab2.js";
@@ -7,6 +7,7 @@ import { getIntervalBox } from "../../global-properties/bounds/get-interval-box/
 import { sub1Ulp } from "../../sub-1-ulp.js";
 import { add1Ulp } from "../../add-1-ulp.js";
 import { intersectBoxes } from "../../boxes/intersect-boxes.js";
+import { mid } from "flo-poly";
 // TODO - test with boolean op
 /**
  * Returns the intersection range (given as 2 pairs of intersections (`X`s) with
@@ -48,10 +49,11 @@ function getEndpointIntersections(psA, psB, orderAlreadyReduced = false) {
         const tA = info.tA; // `tA` will be either exactly `0` or exactly `1`
         const tB = info.tB; // `tB` will be either exactly `0` or exactly `1`
         const box = getIntervalBox(psA, [tA, tA]);
-        return [[
-                { p: box[0], t: tA, ri: { tS: tA, tE: tA, multiplicity: 1 }, kind: 4, box },
-                { p: box[0], t: tB, ri: { tS: tB, tE: tB, multiplicity: 1 }, kind: 4, box }
-            ]];
+        return [{
+                p: box[0], kind: 4, box,
+                t1: tA, ri1: { tS: tA, tE: tA, multiplicity: 1 },
+                t2: tB, ri2: { tS: tB, tE: tB, multiplicity: 1 }
+            }];
     }
     if (infos[0].bez === infos[1].bez) {
         return [];
@@ -73,13 +75,15 @@ function getEndpointIntersections(psA, psB, orderAlreadyReduced = false) {
     const riEA = { tS: tEAMin, tE: tEAMax, multiplicity: 1 };
     const riEB = { tS: tEBMin, tE: tEBMax, multiplicity: 1 };
     return [
-        [
-            { p: getPFromBox(boxS), t: getTFromRi(riSA), ri: riSA, kind: 5, box: boxS },
-            { p: getPFromBox(boxS), t: getTFromRi(riSB), ri: riSB, kind: 5, box: boxS }
-        ], [
-            { p: getPFromBox(boxE), t: getTFromRi(riEA), ri: riEA, kind: 5, box: boxE },
-            { p: getPFromBox(boxE), t: getTFromRi(riEB), ri: riEB, kind: 5, box: boxE }
-        ]
+        {
+            p: getPFromBox(boxS), kind: 5, box: boxS,
+            t1: mid(riSA), ri1: riSA,
+            t2: mid(riSB), ri2: riSB
+        }, {
+            p: getPFromBox(boxE), kind: 5, box: boxE,
+            t1: mid(riEA), ri1: riEA,
+            t2: mid(riEB), ri2: riEB
+        }
     ];
 }
 /** @internal */

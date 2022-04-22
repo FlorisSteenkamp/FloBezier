@@ -4,15 +4,13 @@ import { getImplicitForm2DdWithRunningError } from "../../implicit-form/double-d
 import { getImplicitForm2Exact } from "../../implicit-form/exact/get-implicit-form2-exact.js";
 import { γ, γγ } from '../../error-analysis/error-analysis.js';
 
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-import { twoProduct, ddMultDd, ddAddDd, ddMultDouble2 } from "double-double";
-import { expansionProduct, fastExpansionSum, eSign, scaleExpansion2, eEstimate, eToDd } from 'big-float-ts';
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
+import { ddMultDd, ddAddDd } from "double-double";
+import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd } from 'big-float-ts';
 import { ImplicitFormExact2 } from "../../implicit-form/implicit-form-types.js";
 
-const tp  = twoProduct;
 const qmq = ddMultDd;
 const qaq = ddAddDd;
-const sce = scaleExpansion2;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
 const sign = eSign;
@@ -30,10 +28,10 @@ const γγ3 = γγ(3);
  * [-∞, +∞], false otherwise.
  * 
  * @param ps a quadratic bezier curve
- * @param p A point with coordinates given as Shewchuk expansions. If only
- * double precision coordinates need to be provided then wrap it in an array,
- * e.g. for a point with x and y coordinates given as 1 and 2 set 
- * `p === [[1],[2]]`. TODO - link to Schewchuk
+ * @param p a point with coordinates given as 
+ * [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) expansions. 
+ * If only double precision coordinates need to be provided then wrap it in an array,
+ * e.g. for a point with x and y coordinates given as 1 and 2 set `p === [[1],[2]]`.
  * 
  * @internal
  */
@@ -46,9 +44,6 @@ const γγ3 = γγ(3);
     const x = xe[lenX-1];  // get higest order double
     const y = ye[lenY-1];  // ...
     const isDouble = (lenX === 1 && lenY === 1)
-
-    //const x_ = abs(x);
-    //const y_ = abs(y);
 
     //---- first pre-filter
     {

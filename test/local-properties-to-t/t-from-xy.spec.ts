@@ -62,6 +62,13 @@ describe('tFromXY', function() {
 		}
 
         {
+            const ps = getRandomBezier_(0)(0);
+			const p = [ps[0][0], ps[0][1] + 0.001];
+			const ris = tFromXY(ps, p);
+            expect(ris).to.eql([]);
+		}
+
+        {
             const ps = [[1,2],[3,4],[4,3],[2,1],[2,1]];
             expect(() => tFromXY(ps,[1,2])).to.throw();
         }

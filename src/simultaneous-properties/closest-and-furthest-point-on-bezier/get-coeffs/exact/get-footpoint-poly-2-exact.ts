@@ -1,6 +1,6 @@
 import { twoDiff, scaleExpansion2, eMultBy2, eAdd, eMult, eDiff } from "big-float-ts";
 
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const td = twoDiff;
 const emult = eMult;
 const sce = scaleExpansion2;
@@ -12,7 +12,7 @@ const ediff = eDiff;
 /**
  * Returns the result of multiplying a floating point expansion by 4.
  * * **error free**
- * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ * * see [[Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
  * 
  * @param e a floating point expansion
  */

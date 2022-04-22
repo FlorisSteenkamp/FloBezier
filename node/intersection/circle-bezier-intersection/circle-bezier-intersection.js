@@ -1,9 +1,9 @@
 import { getCoeffsCubicDd, getCoeffsQuadraticDd, getCoeffsLinearDd } from './double-double/get-coeffs-dd.js';
 import { getCoeffsCubicExact, getCoeffsQuadraticExact, getCoeffsLinearExact } from './exact/get-coeffs-exact.js';
-import { allRootsCertified } from 'flo-poly';
+import { allRootsCertified, mid } from 'flo-poly';
 import { getCoeffsCubicErrorCounters, getCoeffsLinearErrorCounters, getCoeffsQuadraticErrorCounters } from './get-circle-bezier-intersection-error-counters.js';
 import { γγ } from '../../error-analysis/error-analysis.js';
-import { getPFromBox, getTFromRi } from '../bezier-bezier-intersection/x.js';
+import { getPFromBox } from '../bezier-bezier-intersection/x.js';
 import { getIntervalBox } from '../../global-properties/bounds/get-interval-box/get-interval-box.js';
 const γγ6 = γγ(6);
 /**
@@ -53,11 +53,8 @@ function circleBezierIntersection(circle, ps) {
     return ris.map(ri => {
         const box = getIntervalBox(ps, [ri.tS, ri.tE]);
         return {
-            p: getPFromBox(box),
-            t: getTFromRi(ri),
-            ri,
-            kind: 1,
-            box
+            p: getPFromBox(box), kind: 1, box,
+            t: mid(ri), ri,
         };
     });
 }

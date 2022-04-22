@@ -13,7 +13,7 @@ import { γ, γγ } from '../../error-analysis/error-analysis.js';
 import { twoDiff, eEstimate, eMult, eAdd } from 'big-float-ts';
 
 
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const estimate = eEstimate;
 const td = twoDiff;
 const emult = eMult;

@@ -2,7 +2,7 @@ import { evalDeCasteljauError as evalDeCasteljauError_ } from "../eval-de-castel
 import { evalDeCasteljauDd as evalDeCasteljauDd_ } from "./eval-de-casteljau-dd.js";
 import { γγ } from '../../../error-analysis/error-analysis.js';
 
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const evalDeCasteljauDd = evalDeCasteljauDd_;
 const evalDeCasteljauError = evalDeCasteljauError_;
 
@@ -12,11 +12,12 @@ const γγ3 = γγ(3);
 /** 
  * Returns the result of evaluating the given bezier curve at the parameter `t`
  * using [De Casteljau's algorithm](https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm)
- * in double precision floating point arithmetic.
+ * in double-double precision floating point arithmetic.
  * 
- * TODO - finish docs
- * The resulting point `p` is returned as the pair `[x,y]`, where `x` and `y` are 
- * double precision floating point numbers.
+ * The resulting point point is returned as `{ p: number[][], pE: number[] }`, 
+ * where `p` is the point `[x,y]` (with `x` and `y` in double-double precision) 
+ * and `pE` is the corresponding coordinate-wise absolute error bound of the 
+ * calculation.
  * 
  * @param ps an order 1, 2 or 3 bezier curve, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * @param t the parameter value where the bezier should be evaluated

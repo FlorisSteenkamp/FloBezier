@@ -6,7 +6,7 @@ import { eHorner } from 'flo-poly';
  * Returns the result of evaluating the given bezier curve at the parameter `t` 
  * exactly.
  * 
- * * the result is returned as `[x,y]`, where `x` and `y` are Shewchuk floating
+ * * the result is returned as `[x,y]`, where `x` and `y` are [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) floating
  * point expansions
  * 
  * @param ps 
