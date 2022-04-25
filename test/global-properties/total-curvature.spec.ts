@@ -2,8 +2,9 @@ import { expect, assert, use } from 'chai';
 import { describe } from 'mocha';
 import { gaussQuadrature } from 'flo-gauss-quadrature';
 import { 
-	evaluateDdxy, evaluateDxy, getInterfaceRotation, splitByCurvature, tangent, 
-	totalAbsoluteCurvature, totalCurvature, generateSelfIntersecting, fromTo, toString, generateCuspAtHalf3
+	evaluatePowerBasis_2ndDerivative, evaluatePowerBasis_1stDerivative, getInterfaceRotation, splitByCurvature, tangent, 
+	totalAbsoluteCurvature, totalCurvature, generateSelfIntersecting, fromToInclErrorBound, toString, 
+	generateCuspAtHalf3
 } from '../../src/index.js';
 import { nearly } from '../helpers/chai-extend-nearly.js';
 import { getRandomBezier, getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../helpers/get-random-bezier.js';
@@ -34,7 +35,7 @@ function totalCurvatureByGauss(
 		const tS = ts[i];
 		const tE = ts[i+1];
 
-		const ps_ = fromTo(ps,tS,tE).ps;
+		const ps_ = fromToInclErrorBound(ps,tS,tE).ps;
 		total += gaussQuadrature(κds(ps_), interval, gaussOrder as 4|16|64);
 	}
 
@@ -44,8 +45,8 @@ function totalCurvatureByGauss(
 
 function κds(ps: number[][]) {
 	return (t: number): number => {
-		const [dx, dy] = evaluateDxy(ps, t); 
-		const [ddx, ddy] = evaluateDdxy(ps, t);
+		const [dx, dy] = evaluatePowerBasis_1stDerivative(ps, t); 
+		const [ddx, ddy] = evaluatePowerBasis_2ndDerivative(ps, t);
 
 		const a = dx*ddy - dy*ddx;
 		const b = dx*dx + dy*dy;

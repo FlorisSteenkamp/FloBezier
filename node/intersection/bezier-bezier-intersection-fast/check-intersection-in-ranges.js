@@ -3,10 +3,10 @@ import { fromTo as _fromToVect } from 'flo-vector2d';
 import { toLength as _toLength } from 'flo-vector2d';
 import { translate as _translate } from 'flo-vector2d';
 import { getDistanceToLineFunction as _getDistanceToLineFunction } from "./get-distance-to-line-function.js";
-import { fromTo as _fromTo } from '../../transformation/split/from-to.js';
+import { fromToInclErrorBound as _fromToInclErrorBound } from '../../transformation/split/from-to-incl-error-bound.js';
 const getDistanceToLineFunction = _getDistanceToLineFunction;
 const geoClip = _geoClip;
-const fromTo = _fromTo;
+const fromToInclErrorBound = _fromToInclErrorBound;
 const fromToVect = _fromToVect;
 const translate = _translate;
 const toLength = _toLength;
@@ -63,8 +63,8 @@ function checkIntersectionInRanges(iter) {
     // Get the bezier curves (and an error bound) within the narrowed ranges
     // Note: the error bound need be multiplied by `8u`, where 
     // `u === Number.EPSILON/2` (see `fromTo3` for details).
-    const F_ = fromTo(F, ftMin, ftMax);
-    const G_ = fromTo(G, gtMin, gtMax);
+    const F_ = fromToInclErrorBound(F, ftMin, ftMax);
+    const G_ = fromToInclErrorBound(G, gtMin, gtMax);
     const Fps = F_.ps;
     const F_ps = F_._ps;
     if (globalThis.__debug__ !== undefined && !globalThis.__debug__.already) {

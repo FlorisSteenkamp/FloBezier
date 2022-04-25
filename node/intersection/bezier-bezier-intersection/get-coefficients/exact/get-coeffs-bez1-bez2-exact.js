@@ -1,6 +1,6 @@
 import { getImplicitForm1ExactPb } from "../../../../implicit-form/exact/get-implicit-form1-exact.js";
-import { getXY1Exact, getXY2Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact.js";
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+import { toPowerBasis1Exact, toPowerBasis2Exact } from "../../../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 import { expansionProduct, fastExpansionSum, scaleExpansion2, eSign as _eSign } from "big-float-ts";
 import { getCoeffsBez1Bez1Exact } from "./get-coeffs-bez1-bez1-exact.js";
 const sce = scaleExpansion2;
@@ -16,7 +16,7 @@ const eSign = _eSign;
  * (see [Bézout's theorem](https://en.wikipedia.org/wiki/B%C3%A9zout%27s_theorem))
  *
  * The returned polynomial coefficients are given densely as an array of
- * Shewchuk floating point expansions from highest to lowest power,
+ * [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) floating point expansions from highest to lowest power,
  * e.g. `[[5],[-3],[0]]` represents the polynomial `5x^2 - 3x`.
  *
  * * the returned polynomial coefficients are exact (i.e. error-free)
@@ -25,20 +25,17 @@ const eSign = _eSign;
  * @param ps1
  * @param ps2
  *
- * @doc mdx
+ * @internal
  */
 function getCoeffsBez1Bez2Exact(ps1, ps2) {
     /** ps1 in power bases */
-    const ps1pb = getXY1Exact(ps1);
-    //const [[e1,e0],[f1,f0]] = ps1pb;
+    const ps1pb = toPowerBasis1Exact(ps1);
     // if both polynomials' linear terms are exactly zero then it really is a point
-    if (eSign(ps1pb[0][0]) === 0 && eSign(ps1pb[1][0]) === 0) {
-        // the input bezier curve is in fact not a line but has order < 1,
-        // i.e. it is a point
-        // TODO
-        //return getCoeffsBez0Bez3ExactAnyBitlength([ps1[0]], ps2]);
-    }
-    const [[c2, c1, c0], [d2, d1, d0]] = getXY2Exact(ps2);
+    // if (eSign(ps1pb[0][0]) === 0 && eSign(ps1pb[1][0]) === 0) {
+    // The input bezier curve is in fact not a line but has order < 1, i.e. it is a point.
+    // This shouldn't happen due to being checked for earlier.
+    // }
+    const [[c2, c1, [c0]], [d2, d1, [d0]]] = toPowerBasis2Exact(ps2);
     if (eSign(c2) === 0 && eSign(d2) === 0) {
         // the input bezier curve is in fact not quadratic but has order < 2
         return getCoeffsBez1Bez1Exact(ps1, [ps2[0], ps2[2]]);
@@ -64,10 +61,6 @@ function getCoeffsBez1Bez2Exact(ps1, ps2) {
     const p7 = fes(p5, p6);
     const v0 = fes(p7, v);
     const r = [v2, v1, v0];
-    // remove leading zero coefficients
-    //while (r.length > 1 && eSign(r[0]) === 0) {
-    //    r.shift();
-    //}
     return r;
 }
 export { getCoeffsBez1Bez2Exact };

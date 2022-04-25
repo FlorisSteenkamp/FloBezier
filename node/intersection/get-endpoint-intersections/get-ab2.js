@@ -1,10 +1,10 @@
 import { eSign } from 'big-float-ts';
 import { getTransform2 } from "./get-transform-2.js";
-import { getXYExact } from "../../to-power-basis/get-xy/exact/get-xy-exact.js";
+import { toPowerBasisExact } from "../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
 import { getAB1 } from "./get-ab1.js";
 import { getAB } from "./get-ab.js";
 function getAB2(psA, psB) {
-    const _xyA = getXYExact(psA);
+    const _xyA = toPowerBasisExact(psA);
     // Both `_xyB[0][0]` and `_xyB[1][0]` can't be zero else we would have had
     // a lower order bezier curve. Also, if `_xyB[0][0]` is zero 
     // then `_xyA[0][0]` will also be zero (and same with the y coordinate)

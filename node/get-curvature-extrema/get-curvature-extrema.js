@@ -13,8 +13,8 @@ import { cubicToQuadratic } from "../transformation/degree-or-type/cubic-to-quad
  * * see [MvG](https://math.stackexchange.com/a/1956264/130809)'s excellent
  * answer on math.stackexchange
  *
- * @param ps an order 1, 2 or 3 bezier curve given as an array of control
- * points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  *
  * @doc mdx
  */

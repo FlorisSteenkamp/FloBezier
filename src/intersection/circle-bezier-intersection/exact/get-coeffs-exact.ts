@@ -1,4 +1,4 @@
-import { getXY3Exact, getXY2Exact, getXY1Exact } from "../../../to-power-basis/get-xy/exact/get-xy-exact.js";
+import { toPowerBasis3Exact, toPowerBasis2Exact, toPowerBasis1Exact } from "../../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
@@ -34,10 +34,10 @@ function getCoeffsCubicExact(
 
     const { radius: r, center: c } = circle;
     const [cx, cy] = c;
-    //const [[a3,a2,a1,x0], [b3,b2,b1,y0]] = getXY3Exact(ps);
+    //const [[a3,a2,a1,x0], [b3,b2,b1,y0]] = toPowerBasis3Exact(ps);
+    const [[a3,a2,a1,a0], [b3,b2,b1,b0]] = toPowerBasis3Exact(ps);
     //const a0 = [x0];
     //const b0 = [y0];
-    const [[a3,a2,a1,a0], [b3,b2,b1,b0]] = getXY3Exact(ps);
 
     // (a3**2 + b3**2)*t**6 + 
     const t6 = calc([
@@ -106,9 +106,9 @@ function getCoeffsQuadraticExact(
 
     const { radius: r, center: c } = circle;
     const [cx, cy] = c;
-    const [[a2,a1,x0], [b2,b1,y0]] = getXY2Exact(ps);
-    const a0 = [x0];
-    const b0 = [y0];
+    const [[a2,a1,a0], [b2,b1,b0]] = toPowerBasis2Exact(ps);
+    //const a0 = [x0];
+    //const b0 = [y0];
     
 
     // (a2**2 + b2**2)*t**4 + 
@@ -167,9 +167,9 @@ function getCoeffsLinearExact(
 
     const { radius: r, center: c } = circle;
     const [cx, cy] = c;
-    const [[a1,x0], [b1,y0]] = getXY1Exact(ps);
-    const a0 = [x0];
-    const b0 = [y0];
+    const [[a1,a0], [b1,b0]] = toPowerBasis1Exact(ps);
+    //const a0 = [x0];
+    //const b0 = [y0];
 
 
     // (a1**2 + b1**2)*t**2 +

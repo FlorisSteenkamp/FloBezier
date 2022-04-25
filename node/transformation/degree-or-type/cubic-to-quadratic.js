@@ -1,5 +1,5 @@
 import { expansionProduct, twoDiff, eSign, eEstimate, eDiff, scaleExpansion, twoSum } from 'big-float-ts';
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const epr = expansionProduct;
 const td = twoDiff;
 const ediff = eDiff;
@@ -16,21 +16,22 @@ const ts = twoSum;
  * * if `preserveTangents` is `true` and the cubic's initial and final tangents
  * are parallel (and not coincident) then `undefined` is returned
  *
- * @param psCubic a cubic bezier curve.
+ * @param ps a cubic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param preserveTangents defaults to `false`; if `true` then the approximation
  * must also preserve the tangents of the cubic at the initial and final control
  * points
  *
  * @doc mdx
  */
-function cubicToQuadratic(psCubic, preserveTangents = false) {
+function cubicToQuadratic(ps, preserveTangents = false) {
     // Note: if cubic is really a quad then
     //   x3 + 3*(x1 - x2) === x0 && 
     //   y3 + 3*(y1 - y2) === y0
     // Take the midpoint of the moving line of the hybrid quadratic version of 
     // the cubic as the new quadratic's middle control point.
     if (!preserveTangents) {
-        const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = psCubic;
+        const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
         return [
             [x0, y0],
             [
@@ -45,7 +46,7 @@ function cubicToQuadratic(psCubic, preserveTangents = false) {
         ];
     }
     // At this point: `preserveTangents === true`
-    const [p0, p1, p2, p3] = psCubic;
+    const [p0, p1, p2, p3] = ps;
     const l1 = [p0, p1];
     const l2 = [p3, p2];
     const pM = llIntersection(l1, l2);

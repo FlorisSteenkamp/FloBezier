@@ -1,5 +1,5 @@
 import { ddNegativeOf, ddMultBy2, ddMultDouble2, ddMultDd, ddDiffDd } from 'double-double';
-import { getXY2Dd } from '../../to-power-basis/get-xy/double-double/get-xy-dd.js';
+import { toPowerBasis2Dd } from '../../to-power-basis/to-power-basis/double-double/to-power-basis-dd.js';
 
 const qno = ddNegativeOf;    // error -> 0
 const qm2 = ddMultBy2;       // error -> 0 
@@ -28,7 +28,7 @@ function getImplicitForm2Dd(ps: number[][]) {
     // The implicit form is given by:
     // vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0
     
-    const [[a2,a1,a0],[b2,b1,b0]] = getXY2Dd(ps);
+    const [[a2,a1,[,a0]],[b2,b1,[,b0]]] = toPowerBasis2Dd(ps);
 
     const q1 = qdq(qmq(a2,b1),qmq(a1,b2));
     const q2 = qdq(qmd(b0,a2),qmd(a0,b2));

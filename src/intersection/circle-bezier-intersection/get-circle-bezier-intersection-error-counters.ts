@@ -1,4 +1,4 @@
-import { getXY3ErrorCounters, getXY2ErrorCounters, getXY1ErrorCounters } from "../../to-power-basis/get-xy/get-xy-error-counters.js";
+import { toPowerBasis3ErrorCounters, toPowerBasis2ErrorCounters, toPowerBasis1ErrorCounters } from "../../to-power-basis/to-power-basis/to-power-basis-error-counters.js";
 
 const abs = Math.abs;
 
@@ -32,7 +32,7 @@ function getCoeffsCubicErrorCounters(
     const [
         [a3_,a2_,a1_, /*0*/],  // <3>a3_, <3>a2_, <2>a1_, <0>a0_  (a0_ is just abs(a0))
         [b3_,b2_,b1_, /*0*/]   // <3>b3_, <3>b2_, <2>b1_, <0>b0_  (b0_ is just abs(b0))
-    ] = getXY3ErrorCounters(ps);
+    ] = toPowerBasis3ErrorCounters(ps);
 
     const p0 = ps[0];
     const a0_ = abs(p0[0]);
@@ -111,7 +111,7 @@ function getCoeffsQuadraticErrorCounters(
     const [
         [a2_,a1_, /*0*/],  // <2>a2_, <1>a1_, <0>a0_  (a0_ is just abs(a0))
         [b2_,b1_, /*0*/]   // <2>b2_, <1>b1_, <0>b0_  (b0_ is just abs(b0))
-    ] = getXY2ErrorCounters(ps);
+    ] = toPowerBasis2ErrorCounters(ps);
 
     const p0 = ps[0];
     const a0_ = abs(p0[0]);
@@ -163,7 +163,7 @@ function getCoeffsLinearErrorCounters(
     const [
         [a1_, /*0*/],  // <1>a1_, <0>a0_  (a0_ is just abs(a0))
         [b1_, /*0*/]   // <1>b1_, <0>b0_  (b0_ is just abs(b0))
-    ] = getXY1ErrorCounters(ps);
+    ] = toPowerBasis1ErrorCounters(ps);
 
     const p0 = ps[0];
     const a0_ = abs(p0[0]);

@@ -46,7 +46,7 @@ describe('splitByCurvature', function() {
 			// [[1,1],[1,4],[5,3],[-3,2]]
 			const maxCurviness = 0.4;
 			const _ps = generateCuspAtHalf3([1,1], [2,3], [-3,2]);  //=> cusp at t === 0.5
-			const ps = fromTo(_ps,0,0.75).ps;  //=> cusp at t === 2/3 ( [[1,1],[1,3.25],[3.25,3.25],[1,2.6875]] )
+			const ps = fromTo(_ps,0,0.75);  //=> cusp at t === 2/3 ( [[1,1],[1,3.25],[3.25,3.25],[1,2.6875]] )
 			const r = splitByCurvature(ps, maxCurviness, 2**-3);
 			
 			expect(r).to.eql([ 
@@ -60,7 +60,7 @@ describe('splitByCurvature', function() {
 				1
 			]);
 
-			const c = curviness(fromTo(ps, 0.625, 0.75).ps);
+			const c = curviness(fromTo(ps, 0.625, 0.75));
 			const l = length([0.625,0.75],ps);
 			expect(c <= maxCurviness || l <= 2**-3).to.be.true;
 			

@@ -1,4 +1,4 @@
-import { getXY1 } from '../../to-power-basis/get-xy/double/get-xy.js';
+import { toPowerBasis1 } from '../../to-power-basis/to-power-basis/double/to-power-basis.js';
 
 
 /**
@@ -19,7 +19,7 @@ function getImplicitForm1(ps: number[][]) {
     // The implicit form is given by:
     // vₓx + vᵧy + v = 0
 
-    const [[a1,a0], [b1,b0]] = getXY1(ps);
+    const [[a1,a0], [b1,b0]] = toPowerBasis1(ps);
 
     const vₓ = -b1;
     const vᵧ = a1;

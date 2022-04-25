@@ -1,8 +1,8 @@
 import { γγ } from "../../../../error-analysis/error-analysis.js";
 import { getImplicitForm2DdWithRunningError } from "../../../../implicit-form/double-double/get-implicit-form2-dd-with-running-error.js";
-import { getXY3DdWithRunningError } from '../../../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js';
+import { toPowerBasis3DdWithRunningError } from '../../../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js';
 import { twoProduct, ddMultBy2, ddMultDouble2, ddMultDd, ddAddDd } from "double-double";
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const tp = twoProduct;
 const qm2 = ddMultBy2;
 const qmd = ddMultDouble2;
@@ -22,23 +22,18 @@ const γγ3 = γγ(3);
  * double-double precision floating point numbers from highest to lowest power,
  * e.g. `[[0,5],[0,-3],[0,0]]` represents the polynomial `5x^2 - 3x`.
  *
- * * **precondition:** none
- * * intermediate calculations are done in double-double precision and this is
- * reflected in the output error bound (which is approximately
- * `n * (Number.EPSILON**2) * the condition number`, where roughly `1 < n < 100` and
- * depends on the specific calculation)
- * * the error bound returned need **not** be scaled before use
- * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
+ * * intermediate calculations are done in double-double precision
+  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  *
  * @param ps1
  * @param ps2
  *
- * @doc mdx
+ * @internal
  */
 function getCoeffsBez2Bez3Dd(ps1, ps2) {
     const { coeffs: { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v }, errorBound: { vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ } } = getImplicitForm2DdWithRunningError(ps1);
-    const { coeffs: [[c3, c2, c1, c0], [d3, d2, d1, d0]], errorBound: [[c3_, c2_, c1_], [d3_, d2_, d1_]] // c0 and d0 is error free
-     } = getXY3DdWithRunningError(ps2);
+    const { coeffs: [[c3, c2, c1, [, c0]], [d3, d2, d1, [, d0]]], errorBound: [[c3_, c2_, c1_], [d3_, d2_, d1_]] // c0 and d0 is error free
+     } = toPowerBasis3DdWithRunningError(ps2);
     const $vₓₓ = vₓₓ[1];
     const $vₓᵧ = vₓᵧ[1];
     const $vᵧᵧ = vᵧᵧ[1];

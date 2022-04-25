@@ -1,4 +1,4 @@
-import { fromTo, dot } from "flo-vector2d";
+import { fromTo as fromToVect, dot } from "flo-vector2d";
 /**
  * Returns true if the given quadratic bezier is obtuse, false otherwise (i.e.
  * false if acute).
@@ -11,9 +11,9 @@ import { fromTo, dot } from "flo-vector2d";
  * @doc mdx
  */
 function isQuadObtuse(ps) {
-    const v0 = fromTo(ps[0], ps[1]);
-    const v1 = fromTo(ps[1], ps[2]);
-    const v2 = fromTo(ps[2], ps[0]);
+    const v0 = fromToVect(ps[0], ps[1]);
+    const v1 = fromToVect(ps[1], ps[2]);
+    const v2 = fromToVect(ps[2], ps[0]);
     const angleP0Obtuse = dot(v2, v0) > 0;
     const angleP2Obtuse = dot(v1, v2) > 0;
     return angleP0Obtuse || angleP2Obtuse;

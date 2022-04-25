@@ -1,4 +1,4 @@
-import { getDdxyExact } from "../../../to-power-basis/get-ddxy/exact/get-ddxy-exact.js";
+import { toPowerBasis_2ndDerivativeExact } from "../../../to-power-basis/to-power-basis-2nd-derivative/exact/to-power-basis-2nd-derivative-exact.js";
 import { eHorner } from 'flo-poly';
 /**
  * Returns the `[x,y]` value of the twice differentiated (with respect to `t`)
@@ -10,7 +10,7 @@ import { eHorner } from 'flo-poly';
  * @doc mdx
  */
 function evaluateDdxyExact(ps, t) {
-    const [ddPsX, ddPsY] = getDdxyExact(ps);
+    const [ddPsX, ddPsY] = toPowerBasis_2ndDerivativeExact(ps);
     return [eHorner(ddPsX, t), eHorner(ddPsY, t)];
 }
 export { evaluateDdxyExact };

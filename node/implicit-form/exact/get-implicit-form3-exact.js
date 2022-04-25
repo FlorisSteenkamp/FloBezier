@@ -1,5 +1,5 @@
-import { getXY3Exact } from '../../to-power-basis/get-xy/exact/get-xy-exact.js';
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+import { toPowerBasis3Exact } from '../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js';
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 import { expansionProduct, fastExpansionSum, scaleExpansion2, eDiff, eNegativeOf, eMultBy2, eDivBy2 } from "big-float-ts";
 import { eSign as _eSign } from 'big-float-ts';
 import { getImplicitForm2ExactPb } from './get-implicit-form2-exact.js';
@@ -27,13 +27,13 @@ const eSign = _eSign;
  */
 function getImplicitForm3Exact(ps) {
     // Takes about 155 micro-seconds on a 3rd gen i7 and Chrome 79.
-    return getImplicitForm3ExactPb(getXY3Exact(ps));
+    return getImplicitForm3ExactPb(toPowerBasis3Exact(ps));
 }
 /**
  * The power basis version of [[getImplicitForm3ExactAnyBitlength]].
  *
  * @param pspb the power basis representation of a cubic bezier curve that can
- * be found via [[getXYExactAnyBitlength3]]
+ * be found via [[toPowerBasis3Exact]]
  *
  * @internal
  */
@@ -41,13 +41,7 @@ function getImplicitForm3ExactPb(pspb) {
     const [[a3, a2, a1, [a0]], [b3, b2, b1, [b0]]] = pspb;
     if (eSign(a3) === 0 && eSign(b3) === 0) {
         // the input bezier curve is in fact not cubic but has order < 3
-        //const implicitForm = getImplicitForm2ExactPb([[a2,a1,a0], [b2,b1,b0]]);
-        //if (implicitForm === undefined) { return undefined; }
-        //return { 
-        //    vₓₓₓ: [0], vₓₓᵧ: [0], vₓᵧᵧ: [0], vᵧᵧᵧ: [0], 
-        //    ...implicitForm
-        //};
-        return getImplicitForm2ExactPb([[a2, a1, a0], [b2, b1, b0]]);
+        return getImplicitForm2ExactPb([[a2, a1, [a0]], [b2, b1, [b0]]]);
     }
     const a3b1 = epr(a3, b1);
     const a1b3 = epr(a1, b3);

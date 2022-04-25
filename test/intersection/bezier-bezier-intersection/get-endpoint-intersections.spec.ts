@@ -96,8 +96,8 @@ describe('getEndpointIntersections', function() {
             //=> [[0,0],[3,3],[-3,3],[4.153846153846153,0]]
             //bezierSelfIntersection(ps);  //=> [0.25, 0.75]  (estimated)
 
-            const psA = fromTo3(ps,0.25,0.5).ps;
-            const psB = fromTo3(ps,0.5,1).ps;
+            const psA = fromTo3(ps,0.25,0.5);
+            const psB = fromTo3(ps,0.5,1);
             // areIntersectionsInfinte(ps,psA);  //=> true
             // areIntersectionsInfinte(ps,psB);  //=> true
             // areIntersectionsInfinte(psA,psB);  //=> true
@@ -139,11 +139,11 @@ function testEndpointXs(
 
     const psB = 
           psA.length === 4 
-        ? fromTo3(psA,t0,t1).ps
+        ? fromTo3(psA,t0,t1)
         : psA.length === 3 
-        ? fromTo2(psA,t0,t1).ps
+        ? fromTo2(psA,t0,t1)
         : psA.length === 2 
-        ? fromTo1(psA,t0,t1).ps
+        ? fromTo1(psA,t0,t1)
         : [];
 
     // the below is a necessary precondition of `getEndpointIntersections`

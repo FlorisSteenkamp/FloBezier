@@ -18,7 +18,7 @@ declare function getImplicitForm3Exact(ps: number[][]): ImplicitFormExact3 | Imp
  * The power basis version of [[getImplicitForm3ExactAnyBitlength]].
  *
  * @param pspb the power basis representation of a cubic bezier curve that can
- * be found via [[getXYExactAnyBitlength3]]
+ * be found via [[toPowerBasis3Exact]]
  *
  * @internal
  */

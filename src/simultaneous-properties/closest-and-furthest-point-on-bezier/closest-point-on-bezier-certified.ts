@@ -30,7 +30,8 @@ const γγ6 = γγ(6);
  * 
  * * guaranteed accurate to 4 ulps in `t` value
  * 
- * @param ps 
+ * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param p 
  * 
  * @doc
@@ -176,3 +177,55 @@ function closestPointOnBezierCertified(
 
 
 export { closestPointOnBezierCertified }
+
+
+
+/**
+ * Returns the closest point on the bezier to the given point - returns the point
+ * and the t value.
+ * 
+ * * this function also acts as an excellent inversion formula.
+ * 
+ * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param p a point, e.g. `[1,2]`
+ */
+/*
+ function closestPointOnBezierPrecise(
+        ps: number[][], 
+        p: number[]): {
+            p: number[];
+            t: number;
+        } {
+
+    const polyE = getFootpointPolyExact(ps, p);
+    const polyDd = polyE.map(eToDd);
+    const polyErr = polyE.map((c,i) => Math.abs(eEstimate(eDiff(c,polyDd[i]))));
+    function getPExact() { return polyE; }
+
+    let ts = allRootsCertified(
+        polyDd,
+        0, 1,
+        polyErr,
+        getPExact
+    ).map(mid);
+
+    ts.push(0);
+    ts.push(1);
+
+    let ps_ = ts.map(t => ({ p: evaluateExact(ps, t).map(eEstimate), t }));
+
+    // Get point with minimum distance
+    let minD = Number.POSITIVE_INFINITY;
+    let minT: { p: number[], t: number } | undefined = undefined;
+    ps_.forEach(p_ => {
+        let d = squaredDistanceBetween(p_.p, p);
+        if (d < minD) {
+            minD = d;
+            minT = p_;
+        }
+    });
+
+    return minT!;
+}
+*/

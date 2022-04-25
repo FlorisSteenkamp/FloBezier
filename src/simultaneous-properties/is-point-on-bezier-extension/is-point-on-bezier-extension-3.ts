@@ -28,10 +28,10 @@ const γγ3 = γγ(3);
  * `false` otherwise.
  * 
  * @param ps a cubic bezier curve
- * @param p a point with coordinates given as [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) expansions. If only
- * double precision coordinates need to be provided then wrap them in a one
- * element array, e.g. for a point with x and y coordinates given as 1 and 2 set 
- * `p === [[1],[2]]`.
+ * @param p a point with coordinates given as [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) 
+ * expansions; if only double precision coordinates need to be provided then 
+ * wrap them in a one element array, e.g. for a point with `x` and `y` coordinates 
+ * of `1` and `2` set `p === [[1],[2]]`.
  * 
  * @internal
  */

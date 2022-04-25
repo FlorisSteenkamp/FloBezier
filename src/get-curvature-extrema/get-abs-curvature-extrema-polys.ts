@@ -1,6 +1,6 @@
-import { getDxy } from "../to-power-basis/get-dxy/double/get-dxy.js";
-import { getDdxy } from "../to-power-basis/get-ddxy/double/get-ddxy.js";
-import { getDddxy } from "../to-power-basis/get-dddxy/double/get-dddxy.js";
+import { toPowerBasis_1stDerivative } from "../to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.js";
+import { toPowerBasis_2ndDerivative } from "../to-power-basis/to-power-basis-2nd-derivative/double/to-power-basis-2nd-derivative.js";
+import { toPowerBasis_3rdDerivative } from "../to-power-basis/to-power-basis-3rd-derivative/double/to-power-basis-3rd-derivative.js";
 
 
 /**
@@ -29,9 +29,9 @@ function getAbsCurvatureExtremaPolys(
     // Inflection points at: (x′′y′ − x′y′′) === 0
     // Max abs curvature at: ((x′′′y′ − x′y′′′)(x′2 + y′2) − 3(x′x′′ + y′y′′)(x′′y′ − x′y′′)) === 0
     
-    const [[dx2,dx1,dx0],[dy2,dy1,dy0]] = getDxy(ps);    // max bitlength increase === 5
-    const [[ddx1,ddx0],[ddy1,ddy0]] = getDdxy(ps);   // max bitlength increase === 6
-    const [dddx,dddy] = getDddxy(ps); // max bitlength increase === 6
+    const [[dx2,dx1,dx0],[dy2,dy1,dy0]] = toPowerBasis_1stDerivative(ps);    // max bitlength increase === 5
+    const [[ddx1,ddx0],[ddy1,ddy0]] = toPowerBasis_2ndDerivative(ps);   // max bitlength increase === 6
+    const [dddx,dddy] = toPowerBasis_3rdDerivative(ps); // max bitlength increase === 6
 
     // ((x′′′y′ − x′y′′′)(x′2 + y′2) − 3(x′x′′ + y′y′′)(x′′y′ − x′y′′))
     // or 

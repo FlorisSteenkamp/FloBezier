@@ -1,5 +1,5 @@
+import { getBoundingHull } from './global-properties/bounds/get-bounding-hull.js';
 import { classify, classifications, classification } from './global-properties/classification/classify.js';
-import { grahamScan } from 'flo-graham-scan';
 import { area } from './global-properties/area.js';
 import { length } from './global-properties/length/length.js';
 import { totalLength } from './global-properties/length/total-length.js';
@@ -7,6 +7,7 @@ import { clone } from './transformation/clone.js';
 import { getTAtLength } from './local-properties-to-t/get-t-at-length.js';
 import { equal } from './simultaneous-properties/equal.js';
 import { γ, γγ } from './error-analysis/error-analysis.js';
+import { fromToInclErrorBound } from './transformation/split/from-to-incl-error-bound.js';
 import { fromTo } from './transformation/split/from-to.js';
 import { fitQuadsToCubic } from './fit/fit-quads-to-cubic.js';
 import { getControlPointBox } from './global-properties/bounds/get-control-point-box.js';
@@ -16,11 +17,11 @@ import { generateQuarterCircle } from './create/generate-quarter-circle.js';
 import { bezierBezierIntersectionFast } from './intersection/bezier-bezier-intersection-fast/bezier-bezier-intersection-fast.js';
 import { intersectBoxes } from './boxes/intersect-boxes.js';
 import { areBoxesIntersecting } from './boxes/are-boxes-intersecting.js';
-import { evalDeCasteljau } from './local-properties-at-t/t-to-xy/double/eval-de-casteljau.js';
-import { evalDeCasteljauError } from './local-properties-at-t/t-to-xy/eval-de-casteljau-error.js';
-import { evalDeCasteljauWithErr } from './local-properties-at-t/t-to-xy/double/eval-de-casteljau-with-err.js';
-import { evalDeCasteljauWithErrDd } from './local-properties-at-t/t-to-xy/double-double/eval-de-casteljau-with-err-dd.js';
-import { evalDeCasteljauDd } from './local-properties-at-t/t-to-xy/double-double/eval-de-casteljau-dd.js';
+import { evalDeCasteljau } from './local-properties-at-t/evaluate/double/eval-de-casteljau.js';
+import { evalDeCasteljauError } from './local-properties-at-t/evaluate/eval-de-casteljau-error.js';
+import { evalDeCasteljauWithErr } from './local-properties-at-t/evaluate/double/eval-de-casteljau-with-err.js';
+import { evalDeCasteljauWithErrDd } from './local-properties-at-t/evaluate/double-double/eval-de-casteljau-with-err-dd.js';
+import { evalDeCasteljauDd } from './local-properties-at-t/evaluate/double-double/eval-de-casteljau-dd.js';
 import { isPointOnBezierExtension } from './simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension.js';
 import { totalCurvature, totalAbsoluteCurvature } from './global-properties/total-curvature.js';
 import { reverse } from './transformation/reverse.js';
@@ -44,8 +45,6 @@ import { getImplicitForm1Dd } from './implicit-form/double-double/get-implicit-f
 import { getImplicitForm1ErrorCounters } from './implicit-form/get-error-counters/get-implicit-form1-error-counters.js';
 import { getImplicitForm1DdWithRunningError } from './implicit-form/double-double/get-implicit-form1-dd-with-running-error.js';
 import { getImplicitForm1Exact } from './implicit-form/exact/get-implicit-form1-exact.js';
-import { getCoeffsBez3WithRunningError } from './intersection/self-intersection/get-coefficients/double/get-coeffs-bez3-with-running-error.js';
-import { getCoeffsBez3Exact } from './intersection/self-intersection/get-coefficients/exact/get-coeffs-bez3-exact.js';
 import { toExpansion } from './transformation/to-expansion.js';
 import { toEstimation } from './transformation/to-estimation.js';
 import { fromPowerBasis } from './from-power-basis/from-power-basis.js';
@@ -54,29 +53,24 @@ import { generateCuspAtHalf3 } from './create/generate-cusp-at-half-t.js';
 import { generateSelfIntersecting } from './create/generate-self-intersecting.js';
 import { cubicThroughPointGiven013 } from './create/cubic-through-point-given013.js';
 import { bezierSelfIntersection } from './intersection/self-intersection/bezier-self-intersection.js';
-// TODO
 import { getEndpointIntersections } from './intersection/get-endpoint-intersections/get-endpoint-intersections.js';
 import { tFromXY } from './local-properties-to-t/t-from-xy.js';
-import { getXY } from './to-power-basis/get-xy/double/get-xy.js';
-import { getDxy } from './to-power-basis/get-dxy/double/get-dxy.js';
-import { getDdxy } from './to-power-basis/get-ddxy/double/get-ddxy.js';
-import { evaluateDxyAt1 } from './local-properties-at-t/t-to-dxy/double/evaluate-dxy-at-1.js';
-import { evaluateDdxyAt1 } from './local-properties-at-t/t-to-ddxy/double/evaluate-ddxy-at-1.js';
-import { evaluateDxyAt0 } from './local-properties-at-t/t-to-dxy/double/evaluate-dxy-at-0.js';
-import { evaluateDdxyAt0 } from './local-properties-at-t/t-to-ddxy/double/evaluate-ddxy-at-0.js';
-import { getDddxy } from './to-power-basis/get-dddxy/double/get-dddxy.js';
-import { getXYDd } from './to-power-basis/get-xy/double-double/get-xy-dd.js';
-import { getDxyDd } from './to-power-basis/get-dxy/double-double/get-dxy-dd.js';
-import { getDdxyDd } from './to-power-basis/get-ddxy/double-double/get-ddxy-dd.js';
-import { getDddxyDd } from './to-power-basis/get-dddxy/double-double/get-dddxy-dd.js';
-import { getXYExact } from './to-power-basis/get-xy/exact/get-xy-exact.js';
-import { getDxyExact } from './to-power-basis/get-dxy/exact/get-dxy-exact.js';
-import { getDdxyExact } from './to-power-basis/get-ddxy/exact/get-ddxy-exact.js';
-import { getDddxyExact } from './to-power-basis/get-dddxy/exact/get-dddxy-exact.js';
-import { getXYWithRunningError } from './to-power-basis/get-xy/double/get-xy-with-running-error.js';
-import { getXYDdWithRunningError } from './to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js';
-import { getXYErrorCounters } from './to-power-basis/get-xy/get-xy-error-counters.js';
-import { getDxyErrorCounters } from './to-power-basis/get-dxy/get-dxy-error-counters.js';
+import { toPowerBasis } from './to-power-basis/to-power-basis/double/to-power-basis.js';
+import { toPowerBasis_1stDerivative } from './to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.js';
+import { toPowerBasis_2ndDerivative } from './to-power-basis/to-power-basis-2nd-derivative/double/to-power-basis-2nd-derivative.js';
+import { toPowerBasis_3rdDerivative } from './to-power-basis/to-power-basis-3rd-derivative/double/to-power-basis-3rd-derivative.js';
+import { toPowerBasisDd } from './to-power-basis/to-power-basis/double-double/to-power-basis-dd.js';
+import { toPowerBasis_1stDerivativeDd } from './to-power-basis/to-power-basis-1st-derivative/double-double/to-power-basis-1st-derivative-dd.js';
+import { toPowerBasis_2ndDerivativeDd } from './to-power-basis/to-power-basis-2nd-derivative/double-double/to-power-basis-2nd-derivative-dd.js';
+import { toPowerBasis_3rdDerivativeDd } from './to-power-basis/to-power-basis-3rd-derivative/double-double/to-power-basis-3rd-derivative-dd.js';
+import { toPowerBasisExact } from './to-power-basis/to-power-basis/exact/to-power-basis-exact.js';
+import { toPowerBasis_1stDerivativeExact } from './to-power-basis/to-power-basis-1st-derivative/exact/to-power-basis-1st-derivative-exact.js';
+import { toPowerBasis_2ndDerivativeExact } from './to-power-basis/to-power-basis-2nd-derivative/exact/to-power-basis-2nd-derivative-exact.js';
+import { toPowerBasis_3rdDerivativeExact } from './to-power-basis/to-power-basis-3rd-derivative/exact/to-power-basis-3rd-derivative-exact.js';
+import { toPowerBasisWithRunningError } from './to-power-basis/to-power-basis/double/to-power-basis-with-running-error.js';
+import { toPowerBasisDdWithRunningError } from './to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js';
+import { toPowerBasisErrorCounters } from './to-power-basis/to-power-basis/to-power-basis-error-counters.js';
+import { toPowerBasis_1stDerivativeErrorCounters } from './to-power-basis/to-power-basis-1st-derivative/to-power-basis-1st-derivative-error-counters.js';
 import { tangent } from './local-properties-at-t/tangent.js';
 import { normal } from './local-properties-at-t/normal.js';
 import { bezierBezierIntersection } from './intersection/bezier-bezier-intersection/bezier-bezier-intersection.js';
@@ -109,19 +103,22 @@ import { isReallyPoint } from './global-properties/classification/is-really-poin
 import { cubicToQuadratic } from './transformation/degree-or-type/cubic-to-quadratic.js';
 import { quadraticToCubic } from './transformation/degree-or-type/quadratic-to-cubic.js';
 import { circleBezierIntersection } from './intersection/circle-bezier-intersection/circle-bezier-intersection.js';
-import { evaluateExact } from './local-properties-at-t/t-to-xy/exact/evaluate-exact.js';
-import { evaluate } from './local-properties-at-t/t-to-xy/double/evaluate.js';
-import { evaluateDdxy } from './local-properties-at-t/t-to-ddxy/double/evaluate-ddxy.js';
-import { evaluateDxy } from './local-properties-at-t/t-to-dxy/double/evaluate-dxy.js';
-import { getXY3DdWithRunningError } from './to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js';
+import { evaluateExact } from './local-properties-at-t/evaluate/exact/evaluate-exact.js';
+import { evaluate } from './local-properties-at-t/evaluate/double/evaluate.js';
 import { lineToQuadratic } from './transformation/degree-or-type/line-to-quadratic.js';
 import { lineToCubic } from './transformation/degree-or-type/line-to-cubic.js';
-import { evaluateDxyExact } from './local-properties-at-t/t-to-dxy/exact/evaluate-dxy-exact.js';
-import { evaluateDdxyExact } from './local-properties-at-t/t-to-ddxy/exact/evaluate-ddxy-exact.js';
-import { evaluateDdxyAt0Exact } from './local-properties-at-t/t-to-ddxy/exact/evaluate-ddxy-at-0-exact.js';
-import { evaluateDdxyAt1Exact } from './local-properties-at-t/t-to-ddxy/exact/evaluate-ddxy-at-1-exact.js';
-import { evaluateDxyAt0Exact } from './local-properties-at-t/t-to-dxy/exact/evaluate-dxy-at-0-exact.js';
-import { evaluateDxyAt1Exact } from './local-properties-at-t/t-to-dxy/exact/evaluate-dxy-at-1-exact.js';
+import { evaluatePowerBasis_1stDerivative } from './local-properties-at-t/evaluate-power-basis-1st-derivative/double/evaluate-power-basis-1st-derivative.js';
+import { evaluatePowerBasis_2ndDerivative } from './local-properties-at-t/evaluate-power-basis-2nd-derivative/double/evaluate-power-basis-2nd-derivative.js';
+import { evaluatePowerBasis_1stDerivativeExact } from './local-properties-at-t/evaluate-power-basis-1st-derivative/exact/evaluate-power-basis-1st-derivative-exact.js';
+import { evaluatePowerBasis_2ndDerivativeExact } from './local-properties-at-t/evaluate-power-basis-2nd-derivative/exact/evaluate-power-basis-2nd-derivative-exact.js';
+import { evaluatePowerBasis_1stDerivativeAt0Exact } from './local-properties-at-t/evaluate-power-basis-1st-derivative/exact/evaluate-power-basis-1st-derivative-at-0-exact.js';
+import { evaluatePowerBasis_2ndDerivativeAt0Exact } from './local-properties-at-t/evaluate-power-basis-2nd-derivative/exact/evaluate-power-basis-2nd-derivative-at-0-exact.js';
+import { evaluatePowerBasis_1stDerivativeAt1Exact } from './local-properties-at-t/evaluate-power-basis-1st-derivative/exact/evaluate-power-basis-1st-derivative-at-1-exact.js';
+import { evaluatePowerBasis_2ndDerivativeAt1Exact } from './local-properties-at-t/evaluate-power-basis-2nd-derivative/exact/evaluate-power-basis-2nd-derivative-at-1-exact.js';
+import { evaluatePowerBasis_1stDerivativeAt0 } from './local-properties-at-t/evaluate-power-basis-1st-derivative/double/evaluate-power-basis-1st-derivative-at-0.js';
+import { evaluatePowerBasis_2ndDerivativeAt0 } from './local-properties-at-t/evaluate-power-basis-2nd-derivative/double/evaluate-power-basis-2nd-derivative-at-0.js';
+import { evaluatePowerBasis_1stDerivativeAt1 } from './local-properties-at-t/evaluate-power-basis-1st-derivative/double/evaluate-power-basis-1st-derivative-at-1.js';
+import { evaluatePowerBasis_2ndDerivativeAt1 } from './local-properties-at-t/evaluate-power-basis-2nd-derivative/double/evaluate-power-basis-2nd-derivative-at-1.js';
 import { toString } from './transformation/to-string.js';
 import { bezierBezierIntersectionBoundless } from './intersection/bezier-bezier-intersection/bezier-bezier-intersection-boundless.js';
 import { getXBoundsTight } from './global-properties/bounds/get-x-bounds-tight.js';
@@ -132,69 +129,5 @@ import { getFootpointPolyDd } from "./simultaneous-properties/closest-and-furthe
 import { reduceOrderIfPossible } from './transformation/reduce-order-if-possible.js';
 import { add1Ulp } from './add-1-ulp.js';
 import { sub1Ulp } from './sub-1-ulp.js';
-/**
- * Returns the convex hull of a bezier's control points. This hull bounds the
- * bezier curve. Returns an ordered array of convex hull points.
- *
- * The tolerance at which the cross product of two nearly collinear lines of the
- * hull are considered collinear is 1e-12.
- * @param ps a bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]]
- */
-const getBoundingHull = grahamScan;
-export { classify, classifications, classification, 
-// -------------------------------------
-// -- Power basis and its derivatives --
-// -------------------------------------
-getXY, getDxy, getDdxy, getDddxy, evaluateDxyAt1, evaluateDdxyAt1, evaluateDxyAt0, evaluateDdxyAt0, getDddxyDd, getDdxyDd, getDxyDd, getXYDd, getXYExact, getDxyExact, getDdxyExact, getDddxyExact, getXYWithRunningError, getXYDdWithRunningError, getXYErrorCounters, getDxyErrorCounters, 
-// -------------------------------
-// -- Get local properties at t --
-// -------------------------------
-κ, curvature, tangent, normal, 
-// --------------------------------
-// -- Get t for local properties --
-// --------------------------------
-getTAtLength, 
-// ---------------------------------------------------------
-// -- Global transformations, e.g. conversions and splits --
-// ---------------------------------------------------------
-// Affine transformations
-// TODO - put back
-//rotate,
-//translate,
-// Order & type transformation
-toCubic, fromPowerBasis, cubicToHybridQuadratic, 
-// Split, merge and clone
-reverse, fromTo, splitByLength, splitByCurvature, splitByCurvatureAndLength, clone, toString, 
-// Simplification
-quadToPolyline, toExpansion, toEstimation, evaluateImplicit3, getImplicitForm3, getImplicitForm3Dd, getImplicitForm3ErrorCounters, getImplicitForm3DdWithRunningError, getImplicitForm3Exact, evaluateImplicit2, getImplicitForm2, getImplicitForm2Dd, getImplicitForm2ErrorCounters, getImplicitForm2DdWithRunningError, getImplicitForm2Exact, evaluateImplicit1, getImplicitForm1, getImplicitForm1Dd, getImplicitForm1ErrorCounters, getImplicitForm1DdWithRunningError, getImplicitForm1Exact, 
-// -----------------------
-// -- Global properties --
-// -----------------------
-// Bounds
-getBounds, getXBoundsTight, getYBoundsTight, getBoundingHull, getBoundingBoxTight, getBoundingBox, controlPointLinesLength, getIntervalBox, 
-// Curvature
-getCurvatureExtrema, totalCurvature, totalAbsoluteCurvature, length, area, totalLength, isQuadObtuse, curviness, isCollinear, isHorizontal, isVertical, isSelfOverlapping, getHodograph, isReallyPoint, isQuadReallyLine, isCubicReallyQuad, isCubicReallyLine, cubicToQuadratic, quadraticToCubic, getInflections, 
-// ------------------------------------------
-// -- Simultaneous multi-bezier properties --
-// ------------------------------------------
-equal, γ, γγ, 
-// areBeziersExtensionsIdentical,
-closestPointOnBezierCertified, getInterfaceRotation, closestPointOnBezier, furthestPointOnBezier, generateQuarterCircle, hausdorffDistanceOneSided, hausdorffDistance, tFromXY, 
-// Intersections
-bezierBezierIntersection, getCoeffsBezBez, intersectBoxes, areBoxesIntersecting, circleBezierIntersection, bezierSelfIntersection, 
-// --------------------
-// -- Create beziers --
-// --------------------
-generateCuspAtHalf3, generateSelfIntersecting, cubicThroughPointGiven013, 
-// TODO - categorize
-getIntervalBoxDd, evalDeCasteljau, evalDeCasteljauError, evalDeCasteljauWithErr, evalDeCasteljauWithErrDd, evaluateExact, isPointOnBezierExtension, 
-// self-intersection
-getCoeffsBez3WithRunningError, getCoeffsBez3Exact, evaluate, 
-/// Add! (to tests)
-evaluateDdxy, evaluateDxy, evaluateDxyExact, evaluateDdxyExact, evaluateDdxyAt0Exact, evaluateDdxyAt1Exact, evaluateDxyAt0Exact, evaluateDxyAt1Exact, evalDeCasteljauDd, bezierBezierIntersectionBoundless, // TODO - remove from here?
-reduceOrderIfPossible, bezierBezierIntersectionFast, getControlPointBox, fitQuadsToCubic, getXY3DdWithRunningError, lineToQuadratic, lineToCubic, getFootpointPoly, getFootpointPolyDd, getFootpointPolyExact, 
-// getTransformedTs,
-add1Ulp, sub1Ulp, 
-// TODO - remove later
-getEndpointIntersections };
+export { classify, classifications, classification, toPowerBasis, toPowerBasis_1stDerivative, toPowerBasis_2ndDerivative, toPowerBasis_3rdDerivative, evaluatePowerBasis_1stDerivativeAt1, evaluatePowerBasis_2ndDerivativeAt1, evaluatePowerBasis_1stDerivativeAt0, evaluatePowerBasis_2ndDerivativeAt0, toPowerBasis_3rdDerivativeDd, toPowerBasis_2ndDerivativeDd, toPowerBasis_1stDerivativeDd, toPowerBasisDd, toPowerBasisExact, toPowerBasis_1stDerivativeExact, toPowerBasis_2ndDerivativeExact, toPowerBasis_3rdDerivativeExact, toPowerBasisWithRunningError, toPowerBasisDdWithRunningError, toPowerBasisErrorCounters, toPowerBasis_1stDerivativeErrorCounters, κ, curvature, tangent, normal, getTAtLength, toCubic, fromPowerBasis, cubicToHybridQuadratic, reverse, fromToInclErrorBound, fromTo, splitByLength, splitByCurvature, splitByCurvatureAndLength, clone, toString, quadToPolyline, toExpansion, toEstimation, evaluateImplicit3, getImplicitForm3, getImplicitForm3Dd, getImplicitForm3ErrorCounters, getImplicitForm3DdWithRunningError, getImplicitForm3Exact, evaluateImplicit2, getImplicitForm2, getImplicitForm2Dd, getImplicitForm2ErrorCounters, getImplicitForm2DdWithRunningError, getImplicitForm2Exact, evaluateImplicit1, getImplicitForm1, getImplicitForm1Dd, getImplicitForm1ErrorCounters, getImplicitForm1DdWithRunningError, getImplicitForm1Exact, getBounds, getXBoundsTight, getYBoundsTight, getBoundingHull, getBoundingBoxTight, getBoundingBox, controlPointLinesLength, getIntervalBox, getCurvatureExtrema, totalCurvature, totalAbsoluteCurvature, length, area, totalLength, isQuadObtuse, curviness, isCollinear, isHorizontal, isVertical, isSelfOverlapping, getHodograph, isReallyPoint, isQuadReallyLine, isCubicReallyQuad, isCubicReallyLine, cubicToQuadratic, quadraticToCubic, getInflections, equal, γ, γγ, closestPointOnBezierCertified, getInterfaceRotation, closestPointOnBezier, furthestPointOnBezier, generateQuarterCircle, hausdorffDistanceOneSided, hausdorffDistance, tFromXY, bezierBezierIntersection, getCoeffsBezBez, intersectBoxes, areBoxesIntersecting, circleBezierIntersection, bezierSelfIntersection, generateCuspAtHalf3, generateSelfIntersecting, cubicThroughPointGiven013, getIntervalBoxDd, evalDeCasteljau, evalDeCasteljauError, evalDeCasteljauWithErr, evalDeCasteljauWithErrDd, evaluateExact, isPointOnBezierExtension, evaluate, evaluatePowerBasis_2ndDerivative, evaluatePowerBasis_1stDerivative, evaluatePowerBasis_1stDerivativeExact, evaluatePowerBasis_2ndDerivativeExact, evaluatePowerBasis_2ndDerivativeAt0Exact, evaluatePowerBasis_2ndDerivativeAt1Exact, evaluatePowerBasis_1stDerivativeAt0Exact, evaluatePowerBasis_1stDerivativeAt1Exact, evalDeCasteljauDd, bezierBezierIntersectionBoundless, reduceOrderIfPossible, bezierBezierIntersectionFast, getControlPointBox, fitQuadsToCubic, lineToQuadratic, lineToCubic, getFootpointPoly, getFootpointPolyDd, getFootpointPolyExact, add1Ulp, sub1Ulp, getEndpointIntersections };
 //# sourceMappingURL=index.js.map

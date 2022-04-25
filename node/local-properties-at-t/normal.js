@@ -1,7 +1,7 @@
-import { getDxy } from '../to-power-basis/get-dxy/double/get-dxy.js';
+import { toPowerBasis_1stDerivative } from '../to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.js';
 import { Horner } from 'flo-poly';
 function normal(ps, t) {
-    const [dX, dY] = getDxy(ps);
+    const [dX, dY] = toPowerBasis_1stDerivative(ps);
     function f(t) {
         return [
             -Horner(dY, t),

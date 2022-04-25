@@ -1,5 +1,5 @@
 import { twoDiff, scaleExpansion2, eMultBy2, eAdd, eMult, eDiff } from "big-float-ts";
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const td = twoDiff;
 const emult = eMult;
 const sce = scaleExpansion2;
@@ -9,7 +9,7 @@ const ediff = eDiff;
 /**
  * Returns the result of multiplying a floating point expansion by 4.
  * * **error free**
- * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ * * see [[Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
  *
  * @param e a floating point expansion
  */
@@ -21,8 +21,18 @@ function em4(e) {
     return e_;
 }
 /**
- * @param ps
- * @param p
+ * Returns the *exact* polynomial whose roots are all the `t` values on the
+ * given bezier curve such that the line from the given point to the point on
+ * the bezier evaluated at `t` is tangent to the bezier curve at `t`.
+ *
+ * * The returned polynomial coefficients are given densely as an array of
+ * [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) floating
+ * point expansions from highest to lowest power,
+ * e.g. `[[5],[-3],[0]]` represents the polynomial `5x^2 - 3x`.
+ *
+ * @param ps an order 2 curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
+ * @param p a point, e.g. `[1,2]`
  *
  * @internal
  */

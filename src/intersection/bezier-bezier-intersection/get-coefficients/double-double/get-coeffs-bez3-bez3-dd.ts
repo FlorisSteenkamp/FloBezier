@@ -1,6 +1,6 @@
 import { getImplicitForm3DdWithRunningError } from "../../../../implicit-form/double-double/get-implicit-form3-dd-with-running-error.js";
 import { γγ } from "../../../../error-analysis/error-analysis.js";
-import { getXY3DdWithRunningError } from '../../../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js';
+import { toPowerBasis3DdWithRunningError } from '../../../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js';
 import { twoProduct, ddMultBy2, ddMultDouble2, ddMultDd, ddAddDd } from "double-double";
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
@@ -116,9 +116,9 @@ function getCoeffsBez3Bez3Dd(
     } = getImplicitForm3DdWithRunningError(ps1);
 
     const {
-        coeffs: [[c3,c2,c1,c0],[d3,d2,d1,d0]],
+        coeffs: [[c3,c2,c1,[,c0]],[d3,d2,d1,[,d0]]],
         errorBound: [[c3_,c2_,c1_],[d3_,d2_,d1_]]  // c0 and d0 is error free
-    } = getXY3DdWithRunningError(ps2);
+    } = toPowerBasis3DdWithRunningError(ps2);
 
     const $vₓₓₓ = vₓₓₓ[1];
     const $vₓₓᵧ = vₓₓᵧ[1];

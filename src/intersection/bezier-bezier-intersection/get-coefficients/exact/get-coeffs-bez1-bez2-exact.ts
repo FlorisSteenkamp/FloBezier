@@ -1,6 +1,6 @@
 import type { ImplicitFormExact1 } from "../../../../implicit-form/implicit-form-types.js";
 import { getImplicitForm1ExactPb } from "../../../../implicit-form/exact/get-implicit-form1-exact.js";
-import { getXY1Exact, getXY2Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact.js";
+import { toPowerBasis1Exact, toPowerBasis2Exact } from "../../../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 import { expansionProduct, fastExpansionSum, scaleExpansion2, eSign as _eSign } from "big-float-ts";
@@ -34,7 +34,7 @@ const eSign = _eSign;
  */
 function getCoeffsBez1Bez2Exact(ps1: number[][], ps2: number[][]): number[][] {
     /** ps1 in power bases */
-    const ps1pb = getXY1Exact(ps1);
+    const ps1pb = toPowerBasis1Exact(ps1);
         
     // if both polynomials' linear terms are exactly zero then it really is a point
     // if (eSign(ps1pb[0][0]) === 0 && eSign(ps1pb[1][0]) === 0) {
@@ -42,7 +42,7 @@ function getCoeffsBez1Bez2Exact(ps1: number[][], ps2: number[][]): number[][] {
         // This shouldn't happen due to being checked for earlier.
     // }
 
-    const [[c2,c1,c0],[d2,d1,d0]] = getXY2Exact(ps2);
+    const [[c2,c1,[c0]],[d2,d1,[d0]]] = toPowerBasis2Exact(ps2);
 
     if (eSign(c2) === 0 && eSign(d2) === 0) {
         // the input bezier curve is in fact not quadratic but has order < 2

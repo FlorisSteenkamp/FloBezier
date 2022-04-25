@@ -1,5 +1,5 @@
 import { eHorner } from 'flo-poly';
-import { getDxyExact } from '../../../to-power-basis/get-dxy/exact/get-dxy-exact.js';
+import { toPowerBasis_1stDerivativeExact } from '../../../to-power-basis/to-power-basis-1st-derivative/exact/to-power-basis-1st-derivative-exact.js';
 /**
  * Returns the `[x,y]` value of the once differentiated (with respect to `t`)
  * bezier curve when evaluated at `t`. This function is curried.
@@ -12,7 +12,7 @@ import { getDxyExact } from '../../../to-power-basis/get-dxy/exact/get-dxy-exact
  * @doc mdx
  */
 function evaluateDxyExact(ps, t) {
-    const [dX, dY] = getDxyExact(ps);
+    const [dX, dY] = toPowerBasis_1stDerivativeExact(ps);
     return [eHorner(dX, t), eHorner(dY, t)];
 }
 export { evaluateDxyExact };

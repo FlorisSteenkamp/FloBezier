@@ -1,6 +1,6 @@
-import { getXY2Exact } from '../../to-power-basis/get-xy/exact/get-xy-exact.js';
+import { toPowerBasis2Exact } from '../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js';
 import { getImplicitForm1ExactPb } from './get-implicit-form1-exact.js';
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 import { expansionProduct, scaleExpansion2, eDiff, eNegativeOf, eMultBy2, eSign, } from "big-float-ts";
 const sce = scaleExpansion2;
 const em2 = eMultBy2;
@@ -22,27 +22,21 @@ const eno = eNegativeOf;
  * @doc mdx
  */
 function getImplicitForm2Exact(ps) {
-    return getImplicitForm2ExactPb(getXY2Exact(ps));
+    return getImplicitForm2ExactPb(toPowerBasis2Exact(ps));
 }
 /**
  * The power basis version of [[getImplicitForm2ExactAnyBitlength]].
  *
  * @param pspb the power basis representation of a quadratic bezier curve that
- * can be found via [[getXYExactAnyBitlength2]]
+ * can be found via [[toPowerBasis2Exact]]
  *
  * @internal
  */
 function getImplicitForm2ExactPb(pspb) {
-    const [[a2, a1, a0], [b2, b1, b0]] = pspb;
+    const [[a2, a1, [a0]], [b2, b1, [b0]]] = pspb;
     if (eSign(a2) === 0 && eSign(b2) === 0) {
         // the input bezier curve is in fact not quadratic but has order < 2
-        //const implicitForm = getImplicitForm1ExactPb([[a1,a0], [b1,b0]]);
-        //if (implicitForm === undefined) { return undefined; }
-        //return {
-        //    vₓₓ: [0], vₓᵧ: [0], vᵧᵧ: [0],
-        //    ...implicitForm
-        //};
-        return getImplicitForm1ExactPb([[a1, a0], [b1, b0]]);
+        return getImplicitForm1ExactPb([[a1, [a0]], [b1, [b0]]]);
     }
     const a2b1 = epr(a2, b1);
     const a1b2 = epr(a1, b2);

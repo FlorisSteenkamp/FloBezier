@@ -2,7 +2,7 @@ import {
     ddNegativeOf, ddMultBy2, 
     ddMultDouble2, ddMultDd, ddDiffDd, ddAddDd, ddDivBy2
 } from 'double-double';
-import { getXY3DdWithRunningError } from '../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js';
+import { toPowerBasis3DdWithRunningError } from '../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js';
 
 
 const abs = Math.abs;
@@ -111,9 +111,9 @@ function getImplicitForm3DdWithRunningError(ps: number[][]) {
     //--------------------------------------------------------------------------
 
     const {
-        coeffs: [[a3,a2,a1,a0],[b3,b2,b1,b0]],
+        coeffs: [[a3,a2,a1,[,a0]],[b3,b2,b1,[,b0]]],
         errorBound: [[a3_,a2_,a1_],[b3_,b2_,b1_]]  // a0, b0 - error free
-    } = getXY3DdWithRunningError(ps);
+    } = toPowerBasis3DdWithRunningError(ps);
 
     // The implicit form is given by:
     // vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0

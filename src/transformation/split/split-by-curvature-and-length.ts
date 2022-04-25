@@ -1,5 +1,5 @@
 import { distanceBetween } from "flo-vector2d";
-import { fromTo } from "./from-to.js";
+import { fromToInclErrorBound } from "./from-to-incl-error-bound.js";
 import { controlPointLinesLength } from "../../global-properties/length/control-point-lines-length.js";
 import { curviness } from '../../global-properties/curviness.js';
 
@@ -9,9 +9,10 @@ import { curviness } from '../../global-properties/curviness.js';
  * `t` values) such that each piece is flat within a given tolerance (where
  * curvature is measured by the `curviness` function).
  * 
- * @param ps 
+ * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param maxCurviness maximum curviness (must be > 0) as calculated using 
- * the `curviness` function (which measures the total angle in radians formed 
+ * the `curviness` function (that measures the total angle in radians formed 
  * by the vectors formed by the ordered control points); defaults to `0.4 radians`
  * @param maxLength maximum allowed length of any returned piece
  * @param minTSpan the minimum `t` span that can be returned for a bezier piece;
@@ -34,7 +35,7 @@ function splitByCurvatureAndLength(
 
         if (ts_[1] - ts_[0] <= minTSpan) { continue; }
 
-        const ps_ = fromTo(ps,ts_[0], ts_[1]).ps;
+        const ps_ = fromToInclErrorBound(ps,ts_[0], ts_[1]).ps;
 
         if (controlPointLinesLength(ps_) > maxLength || 
             curviness(ps_) > maxCurviness) {

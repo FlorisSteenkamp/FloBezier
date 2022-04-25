@@ -1,5 +1,5 @@
 import { ddAddDd, ddDiffDd, ddMultBy2, ddMultDouble2, ddMultBy4, twoDiff, ddMultDd } from "double-double";
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const td = twoDiff;
 const qaq = ddAddDd;
 const qmd = ddMultDouble2;
@@ -8,8 +8,16 @@ const qm2 = ddMultBy2;
 const qdifq = ddDiffDd;
 const qm4 = ddMultBy4;
 /**
- * @param ps
- * @param p
+ * Returns the polynomial whose roots are all the `t` values on the given bezier
+ * curve such that the line from the given point to the point on the bezier
+ * evaluated at `t` is tangent to the bezier curve at `t`.
+ *
+ * * intermediate calculations are done (and the final result returned in)
+ * double-double precision
+ *
+ * @param ps an order 2 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
+ * @param p a point, e.g. `[1,2]`
  *
  * @internal
  */

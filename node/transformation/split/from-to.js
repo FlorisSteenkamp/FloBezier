@@ -5,12 +5,10 @@ const fromTo3 = fromTo3_;
 const fromTo2 = fromTo2_;
 const fromTo1 = fromTo1_;
 /**
- * Returns a bezier curve that starts and ends at the given `t` parameters
- * including an error bound (that needs to be multiplied by `3u`, `5u` or `8u`
- * (for lines, quadratic or cubic bezier curves respectively),
- * where `u === Number.EPSILON/2`).
+ * Returns a bezier curve that starts and ends at the given `t` parameters.
  *
- * @param ps a bezier curve of order 0,1,2 or 3
+ * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param tS the `t` parameter where the resultant bezier should start
  * @param tE the `t` parameter where the resultant bezier should end
  *
@@ -27,7 +25,7 @@ function fromTo(ps, tS, tE) {
         return fromTo1(ps, tS, tE);
     }
     if (ps.length === 1) {
-        return { ps, _ps: [[0]] };
+        return ps;
     }
     throw new Error('The given bezier curve must be of order <= 3.');
 }

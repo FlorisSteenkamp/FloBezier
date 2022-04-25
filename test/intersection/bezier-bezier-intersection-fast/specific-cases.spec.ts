@@ -1,7 +1,9 @@
 import { expect, use } from 'chai';
-import { bezierBezierIntersectionFast, bezierBezierIntersection, generateSelfIntersecting, evaluateExact } from '../../../src/index.js';
+import { 
+    bezierBezierIntersectionFast, bezierBezierIntersection, 
+    generateSelfIntersecting, evaluateExact
+} from '../../../src/index.js';
 import { nearly } from '../../helpers/chai-extend-nearly.js';
-import { mid } from 'flo-poly';
 import { fromTo3 } from '../../../src/transformation/split/from-to/from-to-3.js';
 import { eEstimate } from 'big-float-ts';
 
@@ -105,8 +107,8 @@ describe('bezierBezierIntersectionFast', function() {
             //=> [[0,0],[3,3],[-3,3],[4.153846153846153,0]]
             //bezierSelfIntersection(ps);  //=> [0.25, 0.75]  (estimated)
 
-            const psA = fromTo3(ps,0.25,0.5).ps;
-            const psB = fromTo3(ps,0.5,1).ps;
+            const psA = fromTo3(ps,0.25,0.5);
+            const psB = fromTo3(ps,0.5,1);
             // areIntersectionsInfinte(ps,psA);  //=> true
             // areIntersectionsInfinte(ps,psB);  //=> true
             // areIntersectionsInfinte(psA,psB);  //=> true

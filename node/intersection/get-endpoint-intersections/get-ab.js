@@ -1,13 +1,13 @@
-import { getXYExact } from "../../to-power-basis/get-xy/exact/get-xy-exact.js";
+import { toPowerBasisExact } from "../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
 import { ensureRange } from "./ensure-range.js";
 import { erEstimate } from "./er-estimate.js";
 import { erSign } from "./er-sign.js";
 function getAB(getTransform) {
     return (psA, psB) => {
-        const xyA = getXYExact(psA);
-        const xyB = getXYExact(psB);
-        const xyAR = getXYExact(psA.slice().reverse());
-        const xyBR = getXYExact(psB.slice().reverse());
+        const xyA = toPowerBasisExact(psA);
+        const xyB = toPowerBasisExact(psB);
+        const xyAR = toPowerBasisExact(psA.slice().reverse());
+        const xyBR = toPowerBasisExact(psB.slice().reverse());
         const d = getTransform(xyA, xyB);
         const d_AR = getTransform(xyAR, xyB);
         const d_BR = getTransform(xyA, xyBR);

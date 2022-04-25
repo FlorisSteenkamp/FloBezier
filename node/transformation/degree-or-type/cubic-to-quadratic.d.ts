@@ -7,12 +7,13 @@
  * * if `preserveTangents` is `true` and the cubic's initial and final tangents
  * are parallel (and not coincident) then `undefined` is returned
  *
- * @param psCubic a cubic bezier curve.
+ * @param ps a cubic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param preserveTangents defaults to `false`; if `true` then the approximation
  * must also preserve the tangents of the cubic at the initial and final control
  * points
  *
  * @doc mdx
  */
-declare function cubicToQuadratic(psCubic: number[][], preserveTangents?: boolean): number[][] | undefined;
+declare function cubicToQuadratic(ps: number[][], preserveTangents?: boolean): number[][] | undefined;
 export { cubicToQuadratic };

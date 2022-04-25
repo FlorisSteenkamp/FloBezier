@@ -1,5 +1,5 @@
 import { γ } from "../../../../error-analysis/error-analysis.js";
-import { getXY3WithRunningError } from "../../../../to-power-basis/get-xy/double/get-xy-with-running-error.js";
+import { toPowerBasis3WithRunningError } from "../../../../to-power-basis/to-power-basis/double/to-power-basis-with-running-error.js";
 
 const abs = Math.abs;
 const γ1 = γ(1);
@@ -29,7 +29,7 @@ function getCoeffsBez3WithRunningError(ps: number[][]) {
     const {
         coeffs: [[a3,a2,a1],[b3,b2,b1]],
         errorBound: [[a3_,a2_],[b3_,b2_]]
-    } = getXY3WithRunningError(ps);
+    } = toPowerBasis3WithRunningError(ps);
 
     const _a3 = abs(a3);
     const _a2 = abs(a2);

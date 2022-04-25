@@ -1,6 +1,6 @@
 import { expect, assert } from 'chai';
 import { describe } from 'mocha';
-import { classification, classifications, classify, cubicToQuadratic, fromPowerBasis, getXY, toCubic } from '../../../src/index.js';
+import { classification, classifications, classify, cubicToQuadratic, fromPowerBasis, toPowerBasis, toCubic } from '../../../src/index.js';
 
 // The classifications form an equivalence class, in other words *all* 
 // possible planar polynomial bezier curves (of order <= 3) are represented and 

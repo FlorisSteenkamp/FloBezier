@@ -1,17 +1,11 @@
 /**
- * Returns the polynomial whose roots are all the t values on the given bezier
+ * Returns the polynomial whose roots are all the `t` values on the given bezier
  * curve such that the line from the given point to the point on the bezier
- * evaluated at t is tangent to the bezier at t.
+ * evaluated at `t` is tangent to the bezier at `t`.
  *
- * @param ps An order 1, 2 or 3 bezier curve given by its control points.
- * @param p
- *
- * @doc
- */
-/**
- *
- * @param ps
- * @param p
+ * @param ps a cubic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param p a point, e.g. `[1,2]`
  *
  * ```
  * return [
@@ -28,9 +22,13 @@
  */
 declare function getClosestOnBezier3FromPointErrorCounters(ps: number[][], p: number[]): number[];
 /**
+ * Returns the polynomial whose roots are all the `t` values on the given bezier
+ * curve such that the line from the given point to the point on the bezier
+ * evaluated at `t` is tangent to the bezier at `t`.
  *
- * @param ps
- * @param p
+ * @param ps a quadratic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
+ * @param p a point, e.g. `[1,2]`
  * ```
  * return [
  *      t3_,  // <7>
@@ -44,9 +42,13 @@ declare function getClosestOnBezier3FromPointErrorCounters(ps: number[][], p: nu
  */
 declare function getClosestOnBezier2FromPointErrorCounters(ps: number[][], p: number[]): number[];
 /**
+ * Returns the polynomial whose roots are all the `t` values on the given bezier
+ * curve such that the line from the given point to the point on the bezier
+ * evaluated at `t` is tangent to the bezier at `t`.
  *
- * @param ps
- * @param p
+ * @param ps a linear bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1]]`
+ * @param p a point, e.g. `[1,2]`
  *
  * ```
  * return [

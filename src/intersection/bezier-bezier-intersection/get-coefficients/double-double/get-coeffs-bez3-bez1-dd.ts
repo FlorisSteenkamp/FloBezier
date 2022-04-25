@@ -1,5 +1,5 @@
 import { γγ } from "../../../../error-analysis/error-analysis.js";
-import { getXY1DdWithRunningError } from "../../../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js";
+import { toPowerBasis1DdWithRunningError } from "../../../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js";
 import { getImplicitForm3DdWithRunningError } from "../../../../implicit-form/double-double/get-implicit-form3-dd-with-running-error.js";
 import { twoProduct, ddMultBy2, ddMultDouble2, ddMultDd, ddAddDd } from "double-double";
 
@@ -40,7 +40,7 @@ function getCoeffsBez3Bez1Dd(ps1: number[][], ps2: number[][]) {
         errorBound: { vₓₓₓ_, vₓₓᵧ_, vₓᵧᵧ_, vᵧᵧᵧ_, vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ }
     } = getImplicitForm3DdWithRunningError(ps1);
 
-    const [[c1,c0],[d1,d0]] = getXY1DdWithRunningError(ps2);
+    const [[c1,[,c0]],[d1,[,d0]]] = toPowerBasis1DdWithRunningError(ps2);
 
     const $vₓₓₓ = vₓₓₓ[1];
     const $vₓₓᵧ = vₓₓᵧ[1];

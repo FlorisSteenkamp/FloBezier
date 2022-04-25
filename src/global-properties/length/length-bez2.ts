@@ -1,6 +1,6 @@
 import { gaussQuadrature } from "flo-gauss-quadrature";
 import { ds } from "../../local-properties-at-t/ds.js";
-import { fromTo2 } from "../../transformation/split/from-to/from-to-2.js";
+import { fromTo2InclErrorBound } from "../../transformation/split/from-to/from-to-2-incl-error-bound.js";
 import { splitByCurvature } from "../../transformation/split/split-by-curvature.js";
 
 
@@ -28,7 +28,7 @@ import { splitByCurvature } from "../../transformation/split/split-by-curvature.
 	// Ensure zero length curve returns zero!
 	if (x0 === x1 && x1 === x2 && y0 === y1 && y1 === y2) { return 0; }
 
-	const ps_ = fromTo2(ps,tS,tE).ps;
+	const ps_ = fromTo2InclErrorBound(ps,tS,tE).ps;
 	const ts = splitByCurvature(ps_, maxCurviness);
 
 	let total = 0;
@@ -44,9 +44,12 @@ import { splitByCurvature } from "../../transformation/split/split-by-curvature.
 
 
 /**
- * Returns the curve length in the specified interval. This function is curried.
- * Unused because it is not numerically stable in its current form.
+ * Returns the curve length in the specified interval.
+ * 
+ * * unused because it is not numerically stable in its current form.
+ * 
  * See https://gist.github.com/tunght13488/6744e77c242cc7a94859
+ * 
  * @param ps - A quadratic bezier, e.g. [[0,0],[1,1],[2,1]]
  * @param interval - The paramter interval over which the length is 
  * to be calculated (often === [0,1]).

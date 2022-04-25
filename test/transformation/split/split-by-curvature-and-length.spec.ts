@@ -32,7 +32,7 @@ describe('splitByCurvatureAndLength', function() {
 
 			// [[1,1],[1,4],[5,3],[-3,2]]
 			const _ps = generateCuspAtHalf3([1,1], [2,3], [-3,2]);  //=> cusp at t === 0.5
-			const ps = fromTo(_ps,0,0.75).ps;  //=> cusp at t === 2/3 ( [[1,1],[1,3.25],[3.25,3.25],[1,2.6875]] )
+			const ps = fromTo(_ps,0,0.75);  //=> cusp at t === 2/3 ( [[1,1],[1,3.25],[3.25,3.25],[1,2.6875]] )
 
 			const r = splitByCurvatureAndLength(ps, maxCurviness, maxLength, 2**-10);
 

@@ -1,29 +1,12 @@
 const abs = Math.abs;
 /**
- * Returns the polynomial whose roots are all the t values on the given bezier
+ * Returns the polynomial whose roots are all the `t` values on the given bezier
  * curve such that the line from the given point to the point on the bezier
- * evaluated at t is tangent to the bezier at t.
+ * evaluated at `t` is tangent to the bezier at `t`.
  *
- * @param ps An order 1, 2 or 3 bezier curve given by its control points.
- * @param p
- *
- * @doc
- */
-//function getClosestOnBezierFromPointErrorCounters(
-//        ps: number[][], p: number[]) {
-//
-//    if (ps.length === 4) {
-//        return getClosestOnBezier3FromPointErrorCounters(ps, p);
-//    } else if (ps.length === 3) {
-//        return getClosestOnBezier2FromPointErrorCounters(ps, p);
-//    } else if (ps.length === 2) {
-//        return getClosestOnBezier1FromPointErrorCounters(ps, p);
-//    }
-//}
-/**
- *
- * @param ps
- * @param p
+ * @param ps a cubic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param p a point, e.g. `[1,2]`
  *
  * ```
  * return [
@@ -144,9 +127,13 @@ function getClosestOnBezier3FromPointErrorCounters(ps, p) {
     ];
 }
 /**
+ * Returns the polynomial whose roots are all the `t` values on the given bezier
+ * curve such that the line from the given point to the point on the bezier
+ * evaluated at `t` is tangent to the bezier at `t`.
  *
- * @param ps
- * @param p
+ * @param ps a quadratic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
+ * @param p a point, e.g. `[1,2]`
  * ```
  * return [
  *      t3_,  // <7>
@@ -230,9 +217,13 @@ function getClosestOnBezier2FromPointErrorCounters(ps, p) {
     ];
 }
 /**
+ * Returns the polynomial whose roots are all the `t` values on the given bezier
+ * curve such that the line from the given point to the point on the bezier
+ * evaluated at `t` is tangent to the bezier at `t`.
  *
- * @param ps
- * @param p
+ * @param ps a linear bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1]]`
+ * @param p a point, e.g. `[1,2]`
  *
  * ```
  * return [

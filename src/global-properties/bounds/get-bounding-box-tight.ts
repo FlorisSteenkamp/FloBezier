@@ -1,7 +1,7 @@
 import { squaredDistanceBetween, translate, rotate } from "flo-vector2d";
 import { getBoundingBox } from "./get-bounding-box.js";
 import { controlPointLinesLength } from "../length/control-point-lines-length.js";
-import { evalDeCasteljau } from "../../local-properties-at-t/t-to-xy/double/eval-de-casteljau.js";
+import { evalDeCasteljau } from "../../local-properties-at-t/evaluate/double/eval-de-casteljau.js";
 
 
 /**

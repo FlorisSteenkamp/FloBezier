@@ -20,13 +20,13 @@ declare function getXY3Dd(ps: number[][]): [
         number[],
         number[],
         number[],
-        number
+        number[]
     ],
     [
         number[],
         number[],
         number[],
-        number
+        number[]
     ]
 ];
 /**
@@ -38,12 +38,12 @@ declare function getXY2Dd(ps: number[][]): [
     [
         number[],
         number[],
-        number
+        number[]
     ],
     [
         number[],
         number[],
-        number
+        number[]
     ]
 ];
 /**
@@ -51,11 +51,11 @@ declare function getXY2Dd(ps: number[][]): [
  *
  * @internal
  */
-declare function getXY1Dd(ps: number[][]): [[number[], number], [number[], number]];
+declare function getXY1Dd(ps: number[][]): [[number[], number[]], [number[], number[]]];
 /**
  * Exact for any bitlength.
  *
  * @internal
  */
-declare function getXY0Dd(ps: number[][]): [[number], [number]];
+declare function getXY0Dd(ps: number[][]): [[number[]], [number[]]];
 export { getXYDd, getXY0Dd, getXY1Dd, getXY2Dd, getXY3Dd };

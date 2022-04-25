@@ -12,7 +12,8 @@
  * * the length of the linear bezier curve mentioned above is a measure of how 
  * closely the cubic can be represented as a quadratic bezier curve.
  * 
- * @param ps a cubic bezier curve.
+ * @param ps a cubic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * 
  * @doc mdx
  */

@@ -1,5 +1,5 @@
 /* ignore file coverage - this file is not used currently */
-import { getXY3 } from "../../../../to-power-basis/get-xy/double/get-xy.js";
+import { toPowerBasis3 } from "../../../../to-power-basis/to-power-basis/double/to-power-basis.js";
 
 
 /** 
@@ -19,7 +19,7 @@ import { getXY3 } from "../../../../to-power-basis/get-xy/double/get-xy.js";
  * @doc
  */
 function getCoeffsBez3(ps: number[][]) {
-    const [[a3,a2,a1],[b3,b2,b1]] = getXY3(ps);
+    const [[a3,a2,a1],[b3,b2,b1]] = toPowerBasis3(ps);
 
     const f4 = a2*b3 - a3*b2;
     const f5 = a1*b3 - a3*b1;

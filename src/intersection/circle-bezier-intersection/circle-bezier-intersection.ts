@@ -1,9 +1,9 @@
 import { getCoeffsCubicDd, getCoeffsQuadraticDd, getCoeffsLinearDd } from './double-double/get-coeffs-dd.js';
 import { getCoeffsCubicExact, getCoeffsQuadraticExact, getCoeffsLinearExact } from './exact/get-coeffs-exact.js';
-import { allRootsCertified, mid, RootInterval } from 'flo-poly';
+import { allRootsCertified, mid } from 'flo-poly';
 import { getCoeffsCubicErrorCounters, getCoeffsLinearErrorCounters, getCoeffsQuadraticErrorCounters } from './get-circle-bezier-intersection-error-counters.js';
 import { γγ } from '../../error-analysis/error-analysis.js';
-import { getPFromBox, X } from '../bezier-bezier-intersection/x.js';
+import { getPFromBox } from '../bezier-bezier-intersection/x.js';
 import { getIntervalBox } from '../../global-properties/bounds/get-interval-box/get-interval-box.js';
 
 const γγ6 = γγ(6);
@@ -25,7 +25,8 @@ const γγ6 = γγ(6);
  * `4 * Number.EPSILON` in the t values of the bezier curve
  * 
  * @param circle 
- * @param ps 
+ * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * 
  * @doc mdx
  */

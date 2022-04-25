@@ -1,6 +1,6 @@
 import { expansionProduct, fastExpansionSum, eDiff } from 'big-float-ts';
-import { getXY3Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact.js";
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+import { toPowerBasis3Exact } from "../../../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const epr = expansionProduct;
 const fes = fastExpansionSum;
 const ediff = eDiff;
@@ -9,7 +9,7 @@ const ediff = eDiff;
  * values of the self-intersection points of the given cubic bezier curve.
  *
  * The returned polynomial coefficients are given densely as an array of
- * Shewchuk floating point expansions from highest to lowest power,
+ * [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) floating point expansions from highest to lowest power,
  * e.g. `[[5],[-3],[0]]` represents the polynomial `5x^2 - 3x`.
  *
  * * the returned polynomial coefficients are exact (i.e. error-free)
@@ -20,7 +20,7 @@ const ediff = eDiff;
  * @doc
  */
 function getCoeffsBez3Exact(ps) {
-    const [[a3, a2, a1], [b3, b2, b1]] = getXY3Exact(ps);
+    const [[a3, a2, a1], [b3, b2, b1]] = toPowerBasis3Exact(ps);
     const a2b3 = epr(a2, b3);
     const a3b2 = epr(a3, b2);
     const a3b1 = epr(a3, b1);

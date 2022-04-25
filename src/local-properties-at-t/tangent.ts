@@ -1,11 +1,12 @@
-import { getDxy } from '../to-power-basis/get-dxy/double/get-dxy.js';
+import { toPowerBasis_1stDerivative } from '../to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.js';
 import { Horner } from 'flo-poly';
 
 
 /**
  * Returns a tangent vector (not necessarily of unit length) of an 
  * order 1, 2 or 3 bezier curve at a specific given parameter value `t`. 
- * This function is curried.
+ * 
+ * * this function is curried
  * 
  * @param ps a linear, quadratic or cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param t the parameter value where the tangent should be evaluated
@@ -15,7 +16,7 @@ import { Horner } from 'flo-poly';
 function tangent(ps: number[][], t: number): number[];
 function tangent(ps: number[][]): (t: number) => number[];
 function tangent(ps: number[][], t?: number) {
-	const [dX, dY] = getDxy(ps);
+	const [dX, dY] = toPowerBasis_1stDerivative(ps);
 
 	function f(t: number): number[] {
 		return [

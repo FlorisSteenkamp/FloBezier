@@ -1,7 +1,7 @@
 import { gaussQuadrature } from "flo-gauss-quadrature";
 import { ds } from "../../local-properties-at-t/ds.js";
 import { splitByCurvature } from "../../transformation/split/split-by-curvature.js";
-import { fromTo3 } from "../../transformation/split/from-to/from-to-3.js";
+import { fromTo3InclErrorBound } from "../../transformation/split/from-to/from-to-3-incl-error-bound.js";
 /**
  * Returns the curve length in the specified interval.
  *
@@ -23,7 +23,7 @@ function lengthBez3(interval, ps, maxCurviness = 0.4, gaussOrder = 16) {
         y0 === y1 && y1 === y2 && y2 === y3) {
         return 0;
     }
-    const ps_ = fromTo3(ps, tS, tE).ps;
+    const ps_ = fromTo3InclErrorBound(ps, tS, tE).ps;
     const ts = splitByCurvature(ps_, maxCurviness);
     let total = 0;
     for (let i = 0; i < ts.length - 1; i++) {

@@ -1,5 +1,5 @@
 /**
- * Returns true if the 2 given axis-aligned rectangular boxes intersect.
+ * Returns `true` if the 2 given axis-aligned rectangular boxes intersect.
  * 
  * * **exact** not susceptible to floating point round-off
  * 

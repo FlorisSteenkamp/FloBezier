@@ -1,8 +1,8 @@
 import { γγ } from "../../../../error-analysis/error-analysis.js";
-import { getXY1DdWithRunningError } from "../../../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js";
+import { toPowerBasis1DdWithRunningError } from "../../../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js";
 import { getImplicitForm3DdWithRunningError } from "../../../../implicit-form/double-double/get-implicit-form3-dd-with-running-error.js";
 import { twoProduct, ddMultBy2, ddMultDouble2, ddMultDd, ddAddDd } from "double-double";
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const tp = twoProduct;
 const qm2 = ddMultBy2;
 const qmd = ddMultDouble2;
@@ -22,22 +22,17 @@ const γγ3 = γγ(3);
  * double-double precision floating point numbers from highest to lowest power,
  * e.g. `[[0,5],[0,-3],[0,0]]` represents the polynomial `5x^2 - 3x`.
  *
- * * **precondition:** none
- * * intermediate calculations are done in double-double precision and this is
- * reflected in the output error bound (which is approximately
- * `n * (Number.EPSILON**2) * the condition number`, where roughly `1 < n < 100` and
- * depends on the specific calculation)
- * * the error bound returned need **not** be scaled before use
+ * * intermediate calculations are done in double-double precision
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  *
  * @param ps1
  * @param ps2
  *
- * @doc mdx
+ * @internal
  */
 function getCoeffsBez3Bez1Dd(ps1, ps2) {
     const { coeffs: { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v }, errorBound: { vₓₓₓ_, vₓₓᵧ_, vₓᵧᵧ_, vᵧᵧᵧ_, vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ } } = getImplicitForm3DdWithRunningError(ps1);
-    const [[c1, c0], [d1, d0]] = getXY1DdWithRunningError(ps2);
+    const [[c1, [, c0]], [d1, [, d0]]] = toPowerBasis1DdWithRunningError(ps2);
     const $vₓₓₓ = vₓₓₓ[1];
     const $vₓₓᵧ = vₓₓᵧ[1];
     const $vₓᵧᵧ = vₓᵧᵧ[1];

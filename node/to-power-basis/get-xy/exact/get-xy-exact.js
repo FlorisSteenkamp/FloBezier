@@ -1,5 +1,5 @@
 import { twoDiff, scaleExpansion2, growExpansion, twoSum, eAdd as _eAdd } from 'big-float-ts';
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const td = twoDiff;
 const ts = twoSum;
 const sce = scaleExpansion2;
@@ -12,7 +12,7 @@ const eAdd = _eAdd;
  * * returns the resulting power basis x and y coordinate polynomials from
  * highest power to lowest, e.g. if `x(t) = at^2 + bt + c`
  * and `y(t) = dt^2 + et + f` then  the result is returned
- * as `[[a,b,c],[d,e,f]]`, where the `a,b,c,...` are Shewchuk floating point
+ * as `[[a,b,c],[d,e,f]]`, where the `a,b,c,...` are [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) floating point
  * expansions
  *
  * @param ps an order 0,1,2 or 3 bezier curve given by an ordered array of its
@@ -25,23 +25,13 @@ function getXYExact(ps) {
         return getXY3Exact(ps);
     }
     if (ps.length === 3) {
-        // TODO - symmetrize getXY2Exact, ...
-        const r = getXY2Exact(ps);
-        r[0][2] = [r[0][2]];
-        r[1][2] = [r[1][2]];
-        return r;
+        return getXY2Exact(ps);
     }
     if (ps.length === 2) {
-        const r = getXY1Exact(ps);
-        r[0][1] = [r[0][1]];
-        r[1][1] = [r[1][1]];
-        return r;
+        return getXY1Exact(ps);
     }
     if (ps.length === 1) {
-        const r = getXY0Exact(ps);
-        r[0][0] = [r[0][0]];
-        r[1][0] = [r[1][0]];
-        return r;
+        return getXY0Exact(ps);
     }
     throw new Error('The given bezier curve must be of order <= cubic.');
 }
@@ -78,11 +68,11 @@ function getXY2Exact(ps) {
             // 2*(x1 - x0)
             td(2 * x1, 2 * x0),
             //x0
-            x0
+            [x0]
         ], [
             ge(ts(y2, y0), -2 * y1),
             td(2 * y1, 2 * y0),
-            y0
+            [y0]
         ]];
 }
 /** @internal */
@@ -92,16 +82,16 @@ function getXY1Exact(ps) {
             //x1 - x0,
             td(x1, x0),
             //x0
-            x0
+            [x0]
         ], [
             td(y1, y0),
-            y0
+            [y0]
         ]];
 }
 /** @internal */
 function getXY0Exact(ps) {
     const [[x0, y0]] = ps;
-    return [[x0], [y0]];
+    return [[[x0]], [[y0]]];
 }
 export { getXY0Exact, getXY1Exact, getXY2Exact, getXY3Exact, getXYExact };
 //# sourceMappingURL=get-xy-exact.js.map

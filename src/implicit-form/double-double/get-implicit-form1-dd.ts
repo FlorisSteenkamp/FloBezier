@@ -1,5 +1,5 @@
 import { ddDiffDd, ddMultDouble2, ddNegativeOf } from 'double-double';
-import { getXY1Dd } from '../../to-power-basis/get-xy/double-double/get-xy-dd.js';
+import { toPowerBasis1Dd } from '../../to-power-basis/to-power-basis/double-double/to-power-basis-dd.js';
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const qdq = ddDiffDd;       // error -> 3*γ²
@@ -26,7 +26,7 @@ function getImplicitForm1Dd(ps: number[][]) {
     // The implicit form is given by:
     // vₓx + vᵧy + v = 0
 
-    const [[a1, a0], [b1, b0]] = getXY1Dd(ps);
+    const [[a1,[,a0]], [b1,[,b0]]] = toPowerBasis1Dd(ps);
 
     const vₓ = qno(b1);  // exact
     const vᵧ = a1;       // exact

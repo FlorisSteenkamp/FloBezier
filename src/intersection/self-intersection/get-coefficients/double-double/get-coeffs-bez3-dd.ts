@@ -1,7 +1,7 @@
 /* ignore file coverage - this file is not used currently */
 import { γγ } from "../../../../error-analysis/error-analysis.js";
 import { ddMultDd, ddAddDd, ddDiffDd } from "double-double";
-import { getXY3DdWithRunningError } from "../../../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js";
+import { toPowerBasis3DdWithRunningError } from "../../../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js";
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const qmq = ddMultDd;
@@ -36,7 +36,7 @@ function getCoeffsBez3Dd(ps: number[][]) {
     const {
         coeffs: [[a3,a2,a1],[b3,b2,b1]],
         errorBound: [[a3_,a2_,a1_],[b3_,b2_,b1_]]
-    } = getXY3DdWithRunningError(ps);
+    } = toPowerBasis3DdWithRunningError(ps);
 
     const $a3 = a3[1];
     const $a2 = a2[1];

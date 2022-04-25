@@ -1,6 +1,6 @@
 import { squaredDistanceBetween } from 'flo-vector2d';
 import { isQuadObtuse } from "./is-quad-obtuse.js";
-import { evalDeCasteljau } from '../../local-properties-at-t/t-to-xy/double/eval-de-casteljau.js';
+import { evalDeCasteljau } from '../../local-properties-at-t/evaluate/double/eval-de-casteljau.js';
 
 const { max, abs } = Math;
 

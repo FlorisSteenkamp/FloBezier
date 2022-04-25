@@ -1,5 +1,5 @@
 import { allRootsCertifiedSimplified } from 'flo-poly';
-import { getDxy } from '../../to-power-basis/get-dxy/double/get-dxy.js'
+import { toPowerBasis_1stDerivative } from '../../to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.js'
 import { YBounds } from "./bounds.js";
 import { getIntervalBox } from './get-interval-box/get-interval-box.js';
 
@@ -28,7 +28,7 @@ import { getIntervalBox } from './get-interval-box/get-interval-box.js';
 
 	if (ps.length === 2) { return { minY, maxY }; }
 
-	const [,dy] = getDxy(ps);
+	const [,dy] = toPowerBasis_1stDerivative(ps);
     const rootsY = allRootsCertifiedSimplified(dy,0,1);
 
 

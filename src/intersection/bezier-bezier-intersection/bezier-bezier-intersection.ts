@@ -14,7 +14,6 @@ const eps = Number.EPSILON;
 const eps2 = 2*eps;
 
 
-// TODO finalize the description below
 /**
  * Returns the intersection between two bezier curves up to cubic order (i.e. 
  * points, linear, quadratic or cubic bezier curves (i.e. order 0,1,2 or 3
@@ -37,8 +36,10 @@ const eps2 = 2*eps;
  * `4 * Number.EPSILON` in the `t` values of the bezier curves (bar 
  * underflow/overflow)
  * 
- * @param ps1
- * @param ps2
+ * @param ps1 an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param ps2 an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * 
  * @doc mdx
  */
@@ -99,8 +100,10 @@ function bezierBezierIntersection(
  * intersections exist
  * * **precondition:** neither bezier curve may be of order 1 (a point)
  * 
- * @param ps1 
- * @param ps2 
+ * @param ps1 an order 1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param ps2 an order 1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * 
  * @internal
  */
@@ -137,8 +140,10 @@ function handleInfiniteIntersections(
  * intersections exist
  * * **precondition:** neither curve is allowed to have all points collinear
  * 
- * @param ps1 
- * @param ps2 
+ * @param ps1 a bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param ps2 a bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * 
  * @internal
  */
@@ -190,8 +195,10 @@ function getCoincidingSelfIntersections(
  * intersections exist
  * * **precondition:** all points (from both curves) must be collinear
  * 
- * @param psA 
- * @param psB 
+ * @param psA an order 1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param psB an order 1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * 
  * @internal
  */
@@ -271,8 +278,10 @@ function handleCollinearIntersections(
  * * **precondition:** the bezier curves must be of lowest possible 
  * representable order
  * 
- * @param ps1 
- * @param ps2 
+ * @param ps1 an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param ps2 an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * 
  * @internal
  */

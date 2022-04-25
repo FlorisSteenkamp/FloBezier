@@ -5,7 +5,7 @@
  * * returns the resulting power basis x and y coordinate polynomials from
  * highest power to lowest, e.g. if `x(t) = at^2 + bt + c`
  * and `y(t) = dt^2 + et + f` then  the result is returned
- * as `[[a,b,c],[d,e,f]]`, where the `a,b,c,...` are Shewchuk floating point
+ * as `[[a,b,c],[d,e,f]]`, where the `a,b,c,...` are [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) floating point
  * expansions
  *
  * @param ps an order 0,1,2 or 3 bezier curve given by an ordered array of its

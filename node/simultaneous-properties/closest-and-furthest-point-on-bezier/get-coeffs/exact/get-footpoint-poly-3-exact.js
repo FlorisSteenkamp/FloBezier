@@ -1,5 +1,5 @@
 import { twoDiff, scaleExpansion2, eMultBy2, eAdd, eMult, eDiff, eMultByNeg2 } from "big-float-ts";
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const td = twoDiff;
 const emult = eMult;
 const sce = scaleExpansion2;
@@ -8,12 +8,18 @@ const emn2 = eMultByNeg2;
 const eadd = eAdd;
 const ediff = eDiff;
 /**
- * Returns the polynomial whose roots are all the `t` values on the given bezier
- * curve such that the line from the given point to the point on the bezier
- * evaluated at `t` is tangent to the bezier curve at `t`.
+ * Returns the *exact* polynomial whose roots are all the `t` values on the
+ * given bezier curve such that the line from the given point to the point on
+ * the bezier evaluated at `t` is tangent to the bezier curve at `t`.
  *
- * @param ps
- * @param p
+ * * The returned polynomial coefficients are given densely as an array of
+ * [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) floating
+ * point expansions from highest to lowest power,
+ * e.g. `[[5],[-3],[0]]` represents the polynomial `5x^2 - 3x`.
+ *
+ * @param ps an order 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param p a point, e.g. `[1,2]`
  */
 function getFootpointPoly3Exact(ps, p) {
     //const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;

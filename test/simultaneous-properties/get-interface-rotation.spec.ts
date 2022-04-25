@@ -1,5 +1,5 @@
 import { expect, assert, use } from 'chai';
-import { fromTo } from 'flo-vector2d';
+import { fromTo as fromToVect } from 'flo-vector2d';
 import { describe } from 'mocha';
 import { getInterfaceRotation } from '../../src/index.js';
 import { nearly } from '../helpers/chai-extend-nearly.js';
@@ -18,8 +18,8 @@ function getRotationAround(ps: number[][]) {
 		const pa = ps[i];
 		const pb = ps[(i+1)%ps.length];
 		const pc = ps[(i+2)%ps.length];
-		const v1 = fromTo(pa,pb);
-		const v2 = fromTo(pb,pc);
+		const v1 = fromToVect(pa,pb);
+		const v2 = fromToVect(pb,pc);
 		const r = getInterfaceRotation(v1,v2);
 		total += r;
 	}

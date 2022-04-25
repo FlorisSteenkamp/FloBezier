@@ -1,4 +1,4 @@
-import { getDdxy } from "../../../to-power-basis/get-ddxy/double/get-ddxy.js";
+import { toPowerBasis_2ndDerivative } from "../../../to-power-basis/to-power-basis-2nd-derivative/double/to-power-basis-2nd-derivative.js";
 import { Horner } from 'flo-poly';
 /**
  * Returns the `[x,y]` value of the twice differentiated (with respect to `t`)
@@ -12,7 +12,7 @@ import { Horner } from 'flo-poly';
  * @doc mdx
  */
 function evaluateDdxy(ps, t) {
-    const [ddPsX, ddPsY] = getDdxy(ps);
+    const [ddPsX, ddPsY] = toPowerBasis_2ndDerivative(ps);
     return [Horner(ddPsX, t), Horner(ddPsY, t)];
 }
 export { evaluateDdxy };

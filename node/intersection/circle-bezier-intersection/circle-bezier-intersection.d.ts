@@ -1,4 +1,3 @@
-import { RootInterval } from 'flo-poly';
 /**
  * Returns the intersection between a circle and linear, quadratic or cubic bezier
  * curve.
@@ -9,12 +8,14 @@ import { RootInterval } from 'flo-poly';
  * algebraic implicitization of the curves in order to find *guaranteed* accurate
  * results (see points below)
  *
- * * the bezier curve's parameter `t` values are retuned
+ * * the bezier curve's parameter `t` values are retuned in objects very
+ * similar to [[X]]
  * * this algorithm is mathematically guaranteed accurate to within
  * `4 * Number.EPSILON` in the t values of the bezier curve
  *
  * @param circle
- * @param ps
+ * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  *
  * @doc mdx
  */
@@ -23,9 +24,8 @@ declare function circleBezierIntersection(circle: {
     radius: number;
 }, ps: number[][]): {
     p: number[];
-    kind: number;
     box: number[][];
     t: number;
-    ri: RootInterval;
+    ri: import("flo-poly/node/roots/certified/root-interval").RootInterval;
 }[];
 export { circleBezierIntersection };

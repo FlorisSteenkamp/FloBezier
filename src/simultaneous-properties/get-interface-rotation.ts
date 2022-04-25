@@ -7,10 +7,7 @@ const tp = twoProduct;
 const ddAddDd = ddAddDd_;
 const ddDiffDd = ddDiffDd_;
 
-const 𝜋 = Math.PI;
-const asin = Math.asin;
-const acos = Math.acos;
-const abs = Math.abs;
+const { PI: 𝜋, asin, acos } = Math;
 
 
 /**

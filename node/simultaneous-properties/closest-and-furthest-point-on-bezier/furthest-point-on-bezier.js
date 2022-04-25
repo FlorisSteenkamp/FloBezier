@@ -3,7 +3,7 @@ import { getFootpointPoly2 } from "./get-coeffs/double/get-footpoint-poly-2.js";
 import { getFootpointPoly1 } from "./get-coeffs/double/get-footpoint-poly-1.js";
 import { distanceBetween, squaredDistanceBetween } from "flo-vector2d";
 import { allRoots } from "flo-poly";
-import { evalDeCasteljau } from "../../local-properties-at-t/t-to-xy/double/eval-de-casteljau.js";
+import { evalDeCasteljau } from "../../local-properties-at-t/evaluate/double/eval-de-casteljau.js";
 const sqrt = Math.sqrt;
 function furthestPointOnBezier(ps, p) {
     let poly;

@@ -1,6 +1,5 @@
 import { twoDiff, twoSum, ddMultDouble2, ddAddDd, ddAddDouble } from 'double-double';
-// TODO - add ... is too slow for bundlers, e.g. Webpack
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const td = twoDiff; // error -> 0
 const qmd = ddMultDouble2; // error -> 3*u²
 const qaq = ddAddDd;
@@ -23,29 +22,16 @@ const ts = twoSum;
  */
 function getXYDd(ps) {
     if (ps.length === 4) {
-        const r = getXY3Dd(ps);
-        // TODO - this is ugly - fix
-        r[0][3] = [0, r[0][3]];
-        r[1][3] = [0, r[1][3]];
-        return r;
+        return getXY3Dd(ps);
     }
     if (ps.length === 3) {
-        const r = getXY2Dd(ps);
-        r[0][2] = [0, r[0][2]];
-        r[1][2] = [0, r[1][2]];
-        return r;
+        return getXY2Dd(ps);
     }
     if (ps.length === 2) {
-        const r = getXY1Dd(ps);
-        r[0][1] = [0, r[0][1]];
-        r[1][1] = [0, r[1][1]];
-        return r;
+        return getXY1Dd(ps);
     }
     if (ps.length === 1) {
-        const r = getXY0Dd(ps);
-        r[0][0] = [0, r[0][0]];
-        r[1][0] = [0, r[1][0]];
-        return r;
+        return getXY0Dd(ps);
     }
     throw new Error('The given bezier curve must be of order <= cubic.');
 }
@@ -76,7 +62,7 @@ function getXY3Dd(ps) {
     // yy1 = 3*(y1 - y0)
     // ----------------------------
     const yy1 = qmd(3, td(y1, y0));
-    return [[xx3, xx2, xx1, x0], [yy3, yy2, yy1, y0]];
+    return [[xx3, xx2, xx1, [0, x0]], [yy3, yy2, yy1, [0, y0]]];
 }
 /**
  * Only the quadratic monomial coefficient has an error, the others are exact.
@@ -101,7 +87,7 @@ function getXY2Dd(ps) {
     // yy1 = 2*(y1 - y0)
     // ---------------------
     const yy1 = td(2 * y1, 2 * y0); // error free
-    return [[xx2, xx1, x0], [yy2, yy1, y0]];
+    return [[xx2, xx1, [0, x0]], [yy2, yy1, [0, y0]]];
 }
 /**
  * Exact for any bitlength.
@@ -112,10 +98,10 @@ function getXY1Dd(ps) {
     const [[x0, y0], [x1, y1]] = ps;
     return [[
             td(x1, x0),
-            x0,
+            [0, x0]
         ], [
             td(y1, y0),
-            y0,
+            [0, y0]
         ]];
 }
 /**
@@ -125,7 +111,7 @@ function getXY1Dd(ps) {
  */
 function getXY0Dd(ps) {
     const [[x0, y0]] = ps;
-    return [[x0], [y0]];
+    return [[[0, x0]], [[0, y0]]];
 }
 export { getXYDd, getXY0Dd, getXY1Dd, getXY2Dd, getXY3Dd };
 //# sourceMappingURL=get-xy-dd.js.map

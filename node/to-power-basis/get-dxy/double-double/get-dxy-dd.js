@@ -1,5 +1,5 @@
 import { twoDiff, ddMultDouble2, ddAddDd, ddAddDouble, twoSum } from 'double-double';
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const ts = twoSum; // error -> 0
 const td = twoDiff; // error -> 0
 const qmd = ddMultDouble2; // error -> 3*u²

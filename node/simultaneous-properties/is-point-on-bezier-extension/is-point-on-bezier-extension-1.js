@@ -1,6 +1,6 @@
 import { γγ } from '../../error-analysis/error-analysis.js';
 import { getImplicitForm1DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form1-dd-with-running-error.js";
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 import { ddAddDd, ddMultDd } from "double-double";
 import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd } from 'big-float-ts';
 import { getImplicitForm1Exact } from '../../implicit-form/exact/get-implicit-form1-exact.js';
@@ -22,10 +22,10 @@ const γγ3 = γγ(3);
  * it is kept for symmetry with the order 2 and 3 implementations.
  *
  * @param ps a linear bezier curve (a line)
- * @param p a point with coordinates given as Shewchuk expansions; if only
- * double precision coordinates need to be provided then wrap them in a one
- * element array, e.g. for a point with x and y coordinates given as 1 and 2 set
- * `p === [[1],[2]]`.
+ * @param p a point with coordinates given as [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ * expansions; if only double precision coordinates need to be provided then
+ * wrap them in a one element array, e.g. for a point with `x` and `y` coordinates
+ * of `1` and `2` set `p === [[1],[2]]`.
  *
  * @internal
  */

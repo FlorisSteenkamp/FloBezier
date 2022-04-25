@@ -1,4 +1,4 @@
-import { getXY2 } from '../../to-power-basis/get-xy/double/get-xy.js';
+import { toPowerBasis2 } from '../../to-power-basis/to-power-basis/double/to-power-basis.js';
 /**
  * Returns the implicit form of the given quadratic bezier.
  *
@@ -16,7 +16,7 @@ import { getXY2 } from '../../to-power-basis/get-xy/double/get-xy.js';
 function getImplicitForm2(ps) {
     // The implicit form is given by:
     // vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0
-    const [[a2, a1, a0], [b2, b1, b0]] = getXY2(ps);
+    const [[a2, a1, a0], [b2, b1, b0]] = toPowerBasis2(ps);
     const q1 = a2 * b1 - a1 * b2;
     const q2 = a2 * b0 - a0 * b2;
     const vₓₓ = -b2 * b2;

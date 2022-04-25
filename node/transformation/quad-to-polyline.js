@@ -1,10 +1,11 @@
 import { isQuadFlat } from "../global-properties/classification/is-quad-flat.js";
-import { fromTo } from "../transformation/split/from-to.js";
+import { fromToInclErrorBound } from "./split/from-to-incl-error-bound.js";
 /**
  * Transforms the given quadratic bezier into a polyline approximation to within
- * a given tolerance.
+ * a given tolerance and returns the result.
  *
- * @param ps A quadratic bezier curve given as an array of points.
+ * @param ps an quadratic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param tolerance a tolerance given as the maximum Hausdorff distance allowed
  * between the polyline and the bezier curve
  *
@@ -63,8 +64,8 @@ function quadToPolyline(ps, tolerance) {
             continue;
         }
         const quads = [
-            fromTo(ps, 0, 0.5).ps,
-            fromTo(ps, 0.5, 1).ps
+            fromToInclErrorBound(ps, 0, 0.5).ps,
+            fromToInclErrorBound(ps, 0.5, 1).ps
         ];
         const prev = node.prev;
         const next = node.next;

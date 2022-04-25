@@ -1,5 +1,5 @@
-import { getXY3Exact, getXY2Exact, getXY1Exact } from "../../../to-power-basis/get-xy/exact/get-xy-exact.js";
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+import { toPowerBasis3Exact, toPowerBasis2Exact, toPowerBasis1Exact } from "../../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 import { twoProduct, eCalculate, scaleExpansion } from "big-float-ts";
 const tp = twoProduct;
 const calc = eCalculate;
@@ -13,7 +13,7 @@ const sce = scaleExpansion;
  * (see [Bézout's theorem](https://en.wikipedia.org/wiki/B%C3%A9zout%27s_theorem))
  *
  * The returned polynomial coefficients are given densely as an array of
- * Shewchuk floating point expansions from highest to lowest power,
+ * [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) floating point expansions from highest to lowest power,
  * e.g. `[[5],[-3],[0]]` represents the polynomial `5x^2 - 3x`.
  *
  * * the returned polynomial coefficients are exact (i.e. error-free)
@@ -26,10 +26,10 @@ const sce = scaleExpansion;
 function getCoeffsCubicExact(circle, ps) {
     const { radius: r, center: c } = circle;
     const [cx, cy] = c;
-    //const [[a3,a2,a1,x0], [b3,b2,b1,y0]] = getXY3Exact(ps);
+    //const [[a3,a2,a1,x0], [b3,b2,b1,y0]] = toPowerBasis3Exact(ps);
+    const [[a3, a2, a1, a0], [b3, b2, b1, b0]] = toPowerBasis3Exact(ps);
     //const a0 = [x0];
     //const b0 = [y0];
-    const [[a3, a2, a1, a0], [b3, b2, b1, b0]] = getXY3Exact(ps);
     // (a3**2 + b3**2)*t**6 + 
     const t6 = calc([
         [a3, a3],
@@ -72,7 +72,7 @@ function getCoeffsCubicExact(circle, ps) {
  * (see [Bézout's theorem](https://en.wikipedia.org/wiki/B%C3%A9zout%27s_theorem))
  *
  * The returned polynomial coefficients are given densely as an array of
- * Shewchuk floating point expansions from highest to lowest power,
+ * [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) floating point expansions from highest to lowest power,
  * e.g. `[[5],[-3],[0]]` represents the polynomial `5x^2 - 3x`.
  *
  * * **precondition:** none
@@ -84,9 +84,9 @@ function getCoeffsCubicExact(circle, ps) {
 function getCoeffsQuadraticExact(circle, ps) {
     const { radius: r, center: c } = circle;
     const [cx, cy] = c;
-    const [[a2, a1, x0], [b2, b1, y0]] = getXY2Exact(ps);
-    const a0 = [x0];
-    const b0 = [y0];
+    const [[a2, a1, a0], [b2, b1, b0]] = toPowerBasis2Exact(ps);
+    //const a0 = [x0];
+    //const b0 = [y0];
     // (a2**2 + b2**2)*t**4 + 
     const t4 = calc([
         [a2, a2],
@@ -121,7 +121,7 @@ function getCoeffsQuadraticExact(circle, ps) {
  * (see [Bézout's theorem](https://en.wikipedia.org/wiki/B%C3%A9zout%27s_theorem))
  *
  * The returned polynomial coefficients are given densely as an array of
- * Shewchuk floating point expansions from highest to lowest power,
+ * [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) floating point expansions from highest to lowest power,
  * e.g. `[[5],[-3],[0]]` represents the polynomial `5x^2 - 3x`.
  *
  * * **precondition:** none
@@ -133,9 +133,9 @@ function getCoeffsQuadraticExact(circle, ps) {
 function getCoeffsLinearExact(circle, ps) {
     const { radius: r, center: c } = circle;
     const [cx, cy] = c;
-    const [[a1, x0], [b1, y0]] = getXY1Exact(ps);
-    const a0 = [x0];
-    const b0 = [y0];
+    const [[a1, a0], [b1, b0]] = toPowerBasis1Exact(ps);
+    //const a0 = [x0];
+    //const b0 = [y0];
     // (a1**2 + b1**2)*t**2 +
     const t2 = calc([
         [a1, a1],

@@ -6,7 +6,8 @@
  * * quadratic bezier curves can always be represented exactly by cubics - the 
  * converse is false
  * 
- * @param ps a quadratic bezier curve.
+ * @param ps an quadratic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * 
  * @internal
  */

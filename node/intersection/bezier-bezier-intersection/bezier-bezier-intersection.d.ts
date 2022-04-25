@@ -21,8 +21,10 @@ import { X } from './x.js';
  * `4 * Number.EPSILON` in the `t` values of the bezier curves (bar
  * underflow/overflow)
  *
- * @param ps1
- * @param ps2
+ * @param ps1 an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param ps2 an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  *
  * @doc mdx
  */

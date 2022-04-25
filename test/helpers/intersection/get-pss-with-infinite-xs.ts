@@ -1,4 +1,4 @@
-import { fromTo } from '../../../src/index.js';
+import { fromToInclErrorBound } from '../../../src/index.js';
 import { areIntersectionsInfinte } from './are-intersections-infinite.js';
 import { randomOnGrid } from '../random-on-grid.js';
 
@@ -19,8 +19,8 @@ function getPssWithInfiniteXs(): number[][][] {
         const t1 = randomOnGrid(1,6)(qq+8);
         const t2 = randomOnGrid(1,6)(qq+9);
        
-        const bz1 = fromTo(bz, 0, t1).ps;
-        const bz2 = fromTo(bz, t2, 1).ps.reverse();
+        const bz1 = fromToInclErrorBound(bz, 0, t1).ps;
+        const bz2 = fromToInclErrorBound(bz, t2, 1).ps.reverse();
 
         if (t1 !== 0 && t1 !== 1 && t2 !== 0 && t2 !== 1 &&
             areIntersectionsInfinte(bz1,bz2)) {

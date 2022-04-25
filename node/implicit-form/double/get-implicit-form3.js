@@ -1,4 +1,4 @@
-import { getXY3 } from '../../to-power-basis/get-xy/double/get-xy.js';
+import { toPowerBasis3 } from '../../to-power-basis/to-power-basis/double/to-power-basis.js';
 /**
  * Returns the implicit form of the given cubic bezier.
  *
@@ -16,7 +16,7 @@ import { getXY3 } from '../../to-power-basis/get-xy/double/get-xy.js';
 function getImplicitForm3(ps) {
     // The implicit form is given by:
     // vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0
-    const [[a3, a2, a1, a0], [b3, b2, b1, b0]] = getXY3(ps);
+    const [[a3, a2, a1, a0], [b3, b2, b1, b0]] = toPowerBasis3(ps);
     const a3b1 = a3 * b1;
     const a1b3 = a1 * b3;
     const a3b2 = a3 * b2;

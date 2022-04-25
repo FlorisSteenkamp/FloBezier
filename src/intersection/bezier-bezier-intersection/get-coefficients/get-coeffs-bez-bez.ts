@@ -47,10 +47,10 @@ const coeffFunctionsExact = [
  * * intermediate calculations are done in double-double precision with 
  * fallback to infinite precision (bar underflow / overflow)
  * 
- * @param ps1 
+ * @param ps1
  * @param ps2 
  * 
- * @doc mdx
+ * @internal but still exported for backwards compatibility
  */
 function getCoeffsBezBez(
         ps1: number[][], 

@@ -3,7 +3,7 @@ import { getImplicitForm3ErrorCounters } from "../../implicit-form/get-error-cou
 import { getImplicitForm3DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form3-dd-with-running-error.js";
 import { getImplicitForm3Exact } from "../../implicit-form/exact/get-implicit-form3-exact.js";
 import { γ, γγ } from '../../error-analysis/error-analysis.js';
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 import { ddMultDd, ddAddDd } from "double-double";
 import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd } from 'big-float-ts';
 const qmq = ddMultDd;
@@ -22,10 +22,10 @@ const γγ3 = γγ(3);
  * `false` otherwise.
  *
  * @param ps a cubic bezier curve
- * @param p a point with coordinates given as Shewchuk expansions. If only
- * double precision coordinates need to be provided then wrap them in a one
- * element array, e.g. for a point with x and y coordinates given as 1 and 2 set
- * `p === [[1],[2]]`.
+ * @param p a point with coordinates given as [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ * expansions; if only double precision coordinates need to be provided then
+ * wrap them in a one element array, e.g. for a point with `x` and `y` coordinates
+ * of `1` and `2` set `p === [[1],[2]]`.
  *
  * @internal
  */

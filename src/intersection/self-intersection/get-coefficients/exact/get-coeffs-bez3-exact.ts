@@ -1,5 +1,5 @@
 import { expansionProduct, fastExpansionSum, eDiff } from 'big-float-ts';
-import { getXY3Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact.js";
+import { toPowerBasis3Exact } from "../../../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const epr = expansionProduct;
@@ -23,7 +23,7 @@ const ediff = eDiff;
  * @doc
  */
 function getCoeffsBez3Exact(ps: number[][]) {
-    const [[a3,a2,a1],[b3,b2,b1]] = getXY3Exact(ps);
+    const [[a3,a2,a1],[b3,b2,b1]] = toPowerBasis3Exact(ps);
 
     const a2b3 = epr(a2,b3);
     const a3b2 = epr(a3,b2);

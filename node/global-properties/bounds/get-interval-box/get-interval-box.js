@@ -1,9 +1,9 @@
-import { evalDeCasteljau } from "../../../local-properties-at-t/t-to-xy/double/eval-de-casteljau.js";
-import { evalDeCasteljauError } from "../../../local-properties-at-t/t-to-xy/eval-de-casteljau-error.js";
+import { evalDeCasteljau } from "../../../local-properties-at-t/evaluate/double/eval-de-casteljau.js";
+import { evalDeCasteljauError } from "../../../local-properties-at-t/evaluate/eval-de-casteljau-error.js";
 import { γ } from '../../../error-analysis/error-analysis.js';
-import { fromTo3 } from "../../../transformation/split/from-to/from-to-3.js";
-import { fromTo2 } from "../../../transformation/split/from-to/from-to-2.js";
-import { fromTo1 } from "../../../transformation/split/from-to/from-to-1.js";
+import { fromTo3InclErrorBound } from "../../../transformation/split/from-to/from-to-3-incl-error-bound.js";
+import { fromTo2InclErrorBound } from "../../../transformation/split/from-to/from-to-2-incl-error-bound.js";
+import { fromTo1InclErrorBound } from "../../../transformation/split/from-to/from-to-1-incl-error-bound.js";
 const eps = Number.EPSILON;
 const u = eps / 2;
 const abs = Math.abs;
@@ -49,7 +49,7 @@ function getIntervalBox(ps, ts) {
  * @param ts
  */
 function getIntervalBox3(ps, ts) {
-    const { ps: psI, _ps: _psI } = fromTo3(ps, ts[0], ts[1]);
+    const { ps: psI, _ps: _psI } = fromTo3InclErrorBound(ps, ts[0], ts[1]);
     const x0 = psI[0][0];
     const x1 = psI[1][0];
     const x2 = psI[2][0];
@@ -86,7 +86,7 @@ function getIntervalBox3(ps, ts) {
  * @internal
  */
 function getIntervalBox2(ps, ts) {
-    const { ps: psI, _ps: _psI } = fromTo2(ps, ts[0], ts[1]);
+    const { ps: psI, _ps: _psI } = fromTo2InclErrorBound(ps, ts[0], ts[1]);
     const x0 = psI[0][0];
     const x1 = psI[1][0];
     const x2 = psI[2][0];
@@ -121,7 +121,7 @@ function getIntervalBox2(ps, ts) {
 function getIntervalBox1(ps, ts) {
     // Implementation for lines kept for symmetry - there are obviously much
     // simpler ways to calculate the required box in the case of a line.
-    const { ps: psI, _ps: _psI } = fromTo1(ps, ts[0], ts[1]);
+    const { ps: psI, _ps: _psI } = fromTo1InclErrorBound(ps, ts[0], ts[1]);
     const x0 = psI[0][0];
     const x1 = psI[1][0];
     const _x0 = 3 * u * _psI[0][0];

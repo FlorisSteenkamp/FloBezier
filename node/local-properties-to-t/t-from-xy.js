@@ -1,11 +1,11 @@
 import { allRootsCertified } from 'flo-poly';
-import { getXY2Exact, getXY3Exact } from "../to-power-basis/get-xy/exact/get-xy-exact.js";
-import { getXY2DdWithRunningError, getXY3DdWithRunningError } from "../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js";
+import { toPowerBasis2Exact, toPowerBasis3Exact } from "../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
+import { toPowerBasis2DdWithRunningError, toPowerBasis3DdWithRunningError } from "../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js";
 import { twoDiff as twoDiff_ } from 'big-float-ts';
 import { γγ } from '../error-analysis/error-analysis.js';
-import { getXY1Dd } from '../to-power-basis/get-xy/double-double/get-xy-dd.js';
+import { toPowerBasis1Dd } from '../to-power-basis/to-power-basis/double-double/to-power-basis-dd.js';
 const twoDiff = twoDiff_;
-const min = Math.min;
+const { min, max } = Math;
 const γγ3 = γγ(3);
 /**
  * Performs certified inversion, i.e. returns the `t` parameter value
@@ -23,8 +23,9 @@ const γγ3 = γγ(3);
  * an extra 1 or 2 `t`s could be returned (e.g. for self-overlapping curves
  * and when the point is exactly on the point of self-intersection of the curve)
  *
- * @param ps
- * @param p
+ * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param p a point, e.g. `[1,2]`
  */
 function tFromXY(ps, p) {
     if (ps.length === 4) {
@@ -51,19 +52,19 @@ function tFromXY3(ps, p) {
     const y = p[1];
     // get power basis representation in double-double precision including error
     // bound
-    const { coeffs: [_polyDdX, _polyDdY], errorBound: [polyX_, polyY_] } = getXY3DdWithRunningError(ps);
+    const { coeffs: [_polyDdX, _polyDdY], errorBound: [polyX_, polyY_] } = toPowerBasis3DdWithRunningError(ps);
     // pop the constant term off `x(t)`
-    const txDd = _polyDdX.pop();
+    const txDd = _polyDdX.pop()[1];
     // subtract the x coordinate of the point
     const polyDdX = [..._polyDdX, twoDiff(txDd, x)];
     // pop the constant term off `y(t)`
-    const tyDd = _polyDdY.pop();
+    const tyDd = _polyDdY.pop()[1];
     // subtract the y coordinate of the point
     const polyDdY = [..._polyDdY, twoDiff(tyDd, y)];
     let pExactXY = undefined;
     const getPExactX = () => {
         if (pExactXY === undefined) {
-            pExactXY = getXY3Exact(ps);
+            pExactXY = toPowerBasis3Exact(ps);
         }
         const _pExactX = pExactXY[0].slice(); // x coordinate
         // pop the constant term off `x(t)`
@@ -73,7 +74,7 @@ function tFromXY3(ps, p) {
     };
     const getPExactY = () => {
         if (pExactXY === undefined) {
-            pExactXY = getXY3Exact(ps);
+            pExactXY = toPowerBasis3Exact(ps);
         }
         const _pExactY = pExactXY[1].slice(); // y coordinate
         // pop the constant term off `y(t)`
@@ -125,33 +126,33 @@ function tFromXY2(ps, p) {
     const y = p[1];
     // get power basis representation in double-double precision including error
     // bound
-    const { coeffs: [_polyDdX, _polyDdY], errorBound: [polyX_, polyY_] } = getXY2DdWithRunningError(ps);
+    const { coeffs: [_polyDdX, _polyDdY], errorBound: [polyX_, polyY_] } = toPowerBasis2DdWithRunningError(ps);
     // pop the constant term off `x(t)`
-    const txDd = _polyDdX.pop();
+    const txDd = _polyDdX.pop()[1];
     // subtract the x coordinate of the point
     const polyDdX = [..._polyDdX, twoDiff(txDd, x)];
     // pop the constant term off `y(t)`
-    const tyDd = _polyDdY.pop();
+    const tyDd = _polyDdY.pop()[1];
     // subtract the y coordinate of the point
     const polyDdY = [..._polyDdY, twoDiff(tyDd, y)];
     let pExactXY = undefined;
     const getPExactX = () => {
         if (pExactXY === undefined) {
-            pExactXY = getXY2Exact(ps);
+            pExactXY = toPowerBasis2Exact(ps);
         }
         const _pExactX = pExactXY[0]; // x coordinate
         // pop the constant term off `x(t)`
-        const tx = _pExactX.pop();
+        const tx = _pExactX.pop()[0];
         const pExactX = [..._pExactX, twoDiff(tx, x)];
         return pExactX;
     };
     const getPExactY = () => {
         if (pExactXY === undefined) {
-            pExactXY = getXY2Exact(ps);
+            pExactXY = toPowerBasis2Exact(ps);
         }
         const _pExactY = pExactXY[1]; // y coordinate
         // pop the constant term off `y(t)`
-        const ty = _pExactY.pop();
+        const ty = _pExactY.pop()[0];
         const pExactY = [..._pExactY, twoDiff(ty, y)];
         return pExactY;
     };
@@ -197,13 +198,13 @@ function tFromXY1(ps, p) {
     const y = p[1];
     // get power basis representation in double-double precision including error
     // bound
-    const [_polyDdX, _polyDdY] = getXY1Dd(ps);
+    const [_polyDdX, _polyDdY] = toPowerBasis1Dd(ps);
     // pop the constant term off `x(t)`
-    const txDd = _polyDdX.pop();
+    const txDd = _polyDdX.pop()[1];
     // subtract the x coordinate of the point
     const polyExactX = [..._polyDdX, twoDiff(txDd, x)];
     // pop the constant term off `y(t)`
-    const tyDd = _polyDdY.pop();
+    const tyDd = _polyDdY.pop()[1];
     // subtract the y coordinate of the point
     const polyExactY = [..._polyDdY, twoDiff(tyDd, y)];
     // max 1 roots
@@ -230,34 +231,29 @@ function tFromXY1(ps, p) {
     // self-overlapping curve (that looks like a line))
     // at this point `xrs !== undefined` and `yrs !== undefined`
     if (xrs.length === 0 || yrs.length === 0) {
-        // this is actually not possible since a precondition is that the point
-        // must be *exactly* on the line
         return [];
     }
     // at this point `xrs.length === 1` and `yrs.length === 1`
     const r = combineRoots(xrs[0], yrs[0]);
     if (r === undefined) {
-        // this is actually not possible since a precondition is that the point
-        // must be *exactly* on the line
         return [];
     }
     return [r];
 }
 /** @internal */
 function combineRoots(r, s) {
-    // TODO - IMPORTANT! - combine roots by widening - not narrowing as is currently the case!!!
     // case 1
     if (r.tS <= s.tS) {
         if (r.tE < s.tS) {
             return undefined; // no overlap
         }
-        return { tS: s.tS, tE: min(r.tE, s.tE), multiplicity: Math.min(r.multiplicity, s.multiplicity) };
+        return { tS: s.tS, tE: max(r.tE, s.tE), multiplicity: min(r.multiplicity, s.multiplicity) };
     }
     // case 2 - r.tS > s.tS
     if (s.tE < r.tS) {
         return undefined; // no overlap
     }
-    return { tS: r.tS, tE: min(r.tE, s.tE), multiplicity: Math.min(r.multiplicity, s.multiplicity) };
+    return { tS: r.tS, tE: max(r.tE, s.tE), multiplicity: min(r.multiplicity, s.multiplicity) };
 }
 export { tFromXY };
 //# sourceMappingURL=t-from-xy.js.map

@@ -1,6 +1,6 @@
 import { allRoots } from "flo-poly";
-import { getDxy } from "../../to-power-basis/get-dxy/double/get-dxy.js";
-import { evalDeCasteljau } from "../../local-properties-at-t/t-to-xy/double/eval-de-casteljau.js";
+import { toPowerBasis_1stDerivative } from "../../to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.js";
+import { evalDeCasteljau } from "../../local-properties-at-t/evaluate/double/eval-de-casteljau.js";
 
 
 /**
@@ -16,7 +16,7 @@ function getBounds(
 		ps: number[][]): { ts: number[][]; box: number[][]; } {
 
 	// Roots of derivative
-	const dxy = getDxy(ps);
+	const dxy = toPowerBasis_1stDerivative(ps);
 	const rootsX = allRoots(dxy[0],0,1);
 	const rootsY = allRoots(dxy[1],0,1);
 		

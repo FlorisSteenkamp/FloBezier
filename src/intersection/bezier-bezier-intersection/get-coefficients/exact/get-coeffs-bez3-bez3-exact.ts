@@ -1,6 +1,6 @@
 import type { ImplicitFormExact3 } from "../../../../implicit-form/implicit-form-types.js";
 import { getImplicitForm3ExactPb } from "../../../../implicit-form/exact/get-implicit-form3-exact.js";
-import { getXY3Exact } from "../../../../to-power-basis/get-xy/exact/get-xy-exact.js";
+import { toPowerBasis3Exact } from "../../../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 import { 
@@ -43,7 +43,7 @@ function getCoeffsBez3Bez3Exact(
         ps1: number[][], ps2: number[][]): number[][] {
 
     /** ps1 in power bases */
-    const ps1pb = getXY3Exact(ps1);
+    const ps1pb = toPowerBasis3Exact(ps1);
     
     //const [[e3,e2,e1,e0],[f3,f2,f1,f0]] = ps1pb;
     // if both polynomials' cubic terms are exactly zero then its really a quadratic
@@ -52,7 +52,7 @@ function getCoeffsBez3Bez3Exact(
         return getCoeffsBez2Bez3Exact(cubicToQuadratic(ps1)!, ps2);
     }
 
-    const [[c3,c2,c1,[c0]],[d3,d2,d1,[d0]]] = getXY3Exact(ps2);
+    const [[c3,c2,c1,[c0]],[d3,d2,d1,[d0]]] = toPowerBasis3Exact(ps2);
 
     if (eSign(c3) === 0 && eSign(d3) === 0) {
         // the input bezier curve is in fact not cubic but has order < 3

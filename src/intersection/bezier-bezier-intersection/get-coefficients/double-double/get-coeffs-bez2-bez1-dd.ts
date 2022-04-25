@@ -1,6 +1,6 @@
 import { γγ } from "../../../../error-analysis/error-analysis.js";
 import { getImplicitForm2DdWithRunningError } from "../../../../implicit-form/double-double/get-implicit-form2-dd-with-running-error.js";
-import { getXY1DdWithRunningError } from "../../../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js";
+import { toPowerBasis1DdWithRunningError } from "../../../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js";
 import { twoProduct, ddMultBy2, ddMultDouble2, ddMultDd, ddAddDd } from "double-double";
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
@@ -40,7 +40,7 @@ function getCoeffsBez2Bez1Dd(ps1: number[][], ps2: number[][]) {
         errorBound: { vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ }
     } = getImplicitForm2DdWithRunningError(ps1);
     
-    const [[c1,c0],[d1,d0]] = getXY1DdWithRunningError(ps2);
+    const [[c1,[,c0]],[d1,[,d0]]] = toPowerBasis1DdWithRunningError(ps2);
 
     const $vₓₓ  = vₓₓ [1];
     const $vₓᵧ  = vₓᵧ [1];

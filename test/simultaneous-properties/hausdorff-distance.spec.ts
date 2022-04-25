@@ -5,7 +5,7 @@ import { squares } from 'squares-rng';
 import { maxAbsCoordinate } from '../../src/error-analysis/max-abs-coordinate.js';
 import { 
 	closestPointOnBezier, controlPointLinesLength, curvature, evalDeCasteljau, 
-	fromPowerBasis, fromTo, generateQuarterCircle, hausdorffDistance, 
+	fromPowerBasis, fromToInclErrorBound, generateQuarterCircle, hausdorffDistance, 
 	hausdorffDistanceOneSided, lineToQuadratic, normal, toCubic, toString 
 } from '../../src/index.js';
 import { Heap } from '../../src/simultaneous-properties/hausdorff-distance/heap.js';
@@ -99,7 +99,7 @@ describe('hausdorffDistance', function() {
 			const A = [[-1,2],[1,2]];
 			const Bxy = [[0,1,0],[1,0,0]]; // y = x^2 for x ∈ [0,1]
 			const B01 = fromPowerBasis(Bxy);
-			const B = fromTo(B01,-1,2).ps; // y = x^2 for x ∈ [-1,2]
+			const B = fromToInclErrorBound(B01,-1,2).ps; // y = x^2 for x ∈ [-1,2]
 			toString(B);  //=> [[-1,1],[0.5,-2],[2,4]]
 
 			//------------------------------------

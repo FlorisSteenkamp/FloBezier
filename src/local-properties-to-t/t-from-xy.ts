@@ -1,14 +1,14 @@
-import { allRootsCertified, eHorner, refineK1, RootInterval } from 'flo-poly';
-import { getXY2Exact, getXY3Exact } from "../to-power-basis/get-xy/exact/get-xy-exact.js";
-import { getXY1DdWithRunningError, getXY2DdWithRunningError, getXY3DdWithRunningError } from "../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js";
+import { allRootsCertified, RootInterval } from 'flo-poly';
+import { toPowerBasis2Exact, toPowerBasis3Exact } from "../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
+import { toPowerBasis2DdWithRunningError, toPowerBasis3DdWithRunningError } from "../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js";
 import { twoDiff as twoDiff_ } from 'big-float-ts';
 import { γγ } from '../error-analysis/error-analysis.js'
-import { getXY1Dd } from '../to-power-basis/get-xy/double-double/get-xy-dd.js';
+import { toPowerBasis1Dd } from '../to-power-basis/to-power-basis/double-double/to-power-basis-dd.js';
 
 
 const twoDiff = twoDiff_;
 
-const min = Math.min;
+const { min, max } = Math;
 
 const γγ3 = γγ(3);
 
@@ -29,8 +29,9 @@ const γγ3 = γγ(3);
  * an extra 1 or 2 `t`s could be returned (e.g. for self-overlapping curves
  * and when the point is exactly on the point of self-intersection of the curve)
  * 
- * @param ps
- * @param p
+ * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param p a point, e.g. `[1,2]`
  */
 function tFromXY(
         ps: number[][], 
@@ -73,7 +74,7 @@ function tFromXY3(
     const {
         coeffs: [_polyDdX, _polyDdY],
         errorBound: [polyX_, polyY_]
-    } = getXY3DdWithRunningError(ps);
+    } = toPowerBasis3DdWithRunningError(ps);
 
     // pop the constant term off `x(t)`
     const txDd = _polyDdX.pop()![1];
@@ -91,7 +92,7 @@ function tFromXY3(
     ] | undefined = undefined;
 
     const getPExactX = (): number[][] => { 
-        if (pExactXY === undefined) { pExactXY = getXY3Exact(ps); }
+        if (pExactXY === undefined) { pExactXY = toPowerBasis3Exact(ps); }
         const _pExactX = pExactXY[0].slice();  // x coordinate
         // pop the constant term off `x(t)`
         const tx = _pExactX.pop() as number[];
@@ -101,7 +102,7 @@ function tFromXY3(
     }
 
     const getPExactY = (): number[][] => {
-        if (pExactXY === undefined) { pExactXY = getXY3Exact(ps); }
+        if (pExactXY === undefined) { pExactXY = toPowerBasis3Exact(ps); }
         const _pExactY = pExactXY[1].slice();  // y coordinate
         // pop the constant term off `y(t)`
         const ty = _pExactY.pop() as number[];
@@ -171,7 +172,7 @@ function tFromXY2(
     const {
         coeffs: [_polyDdX, _polyDdY],
         errorBound: [polyX_, polyY_]
-    } = getXY2DdWithRunningError(ps);
+    } = toPowerBasis2DdWithRunningError(ps);
 
     // pop the constant term off `x(t)`
     const txDd = _polyDdX.pop()![1];
@@ -189,7 +190,7 @@ function tFromXY2(
     ] | undefined = undefined;
 
     const getPExactX = (): number[][] => { 
-        if (pExactXY === undefined) { pExactXY = getXY2Exact(ps); }
+        if (pExactXY === undefined) { pExactXY = toPowerBasis2Exact(ps); }
         const _pExactX = pExactXY[0];  // x coordinate
         // pop the constant term off `x(t)`
         const tx = _pExactX.pop()![0];
@@ -199,7 +200,7 @@ function tFromXY2(
     }
 
     const getPExactY = (): number[][] => {
-        if (pExactXY === undefined) { pExactXY = getXY2Exact(ps); }
+        if (pExactXY === undefined) { pExactXY = toPowerBasis2Exact(ps); }
         const _pExactY = pExactXY[1];  // y coordinate
         // pop the constant term off `y(t)`
         const ty = _pExactY.pop()![0];
@@ -265,7 +266,7 @@ function tFromXY1(
 
     // get power basis representation in double-double precision including error
     // bound
-    const [_polyDdX, _polyDdY] = getXY1Dd(ps);
+    const [_polyDdX, _polyDdY] = toPowerBasis1Dd(ps);
 
     // pop the constant term off `x(t)`
     const txDd = _polyDdX.pop()![1];
@@ -327,14 +328,12 @@ function tFromXY1(
 function combineRoots(
         r: RootInterval, s: RootInterval): RootInterval | undefined {
 
-    // TODO - IMPORTANT! - combine roots by widening - not narrowing as is currently the case!!!
-
     // case 1
     if (r.tS <= s.tS) {
         if (r.tE < s.tS) {
             return undefined;  // no overlap
         }
-        return { tS: s.tS, tE: min(r.tE, s.tE), multiplicity: min(r.multiplicity, s.multiplicity) };
+        return { tS: s.tS, tE: max(r.tE, s.tE), multiplicity: min(r.multiplicity, s.multiplicity) };
     }
 
     // case 2 - r.tS > s.tS
@@ -342,7 +341,7 @@ function combineRoots(
         return undefined;  // no overlap
     }
 
-    return { tS: r.tS, tE: min(r.tE, s.tE), multiplicity: min(r.multiplicity, s.multiplicity) };
+    return { tS: r.tS, tE: max(r.tE, s.tE), multiplicity: min(r.multiplicity, s.multiplicity) };
 }
 
 

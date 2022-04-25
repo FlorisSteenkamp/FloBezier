@@ -10,18 +10,13 @@
  * double-double precision floating point numbers from highest to lowest power,
  * e.g. `[[0,5],[0,-3],[0,0]]` represents the polynomial `5x^2 - 3x`.
  *
- * * **precondition:** none
- * * intermediate calculations are done in double-double precision and this is
- * reflected in the output error bound (which is approximately
- * `n * (Number.EPSILON**2) * the condition number`, where roughly `1 < n < 100` and
- * depends on the specific calculation)
- * * the error bound returned need **not** be scaled before use
- * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
+ * * intermediate calculations are done in double-double precision
+  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  *
  * @param ps1
  * @param ps2
  *
- * @doc mdx
+ * @internal
  */
 declare function getCoeffsBez2Bez3Dd(ps1: number[][], ps2: number[][]): {
     coeffs: number[][];

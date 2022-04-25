@@ -1,6 +1,6 @@
-import { getXY3Dd, getXY2Dd, getXY1Dd } from "../../../to-power-basis/get-xy/double-double/get-xy-dd.js";
+import { toPowerBasis3Dd, toPowerBasis2Dd, toPowerBasis1Dd } from "../../../to-power-basis/to-power-basis/double-double/to-power-basis-dd.js";
 import { twoProduct, ddAddDd, ddMultByNeg2, ddMultBy2, ddDiffDd, ddMultDd, ddMultDouble2 } from "double-double";
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const tp = twoProduct;
 const qaq = ddAddDd;
 const qm2 = ddMultBy2;
@@ -16,7 +16,7 @@ const qmd = ddMultDouble2;
  */
 function getCoeffsCubicDd(circle, ps) {
     const { radius: r, center: [cx, cy] } = circle;
-    const [[a3, a2, a1, a0], [b3, b2, b1, b0]] = getXY3Dd(ps);
+    const [[a3, a2, a1, [, a0]], [b3, b2, b1, [, b0]]] = toPowerBasis3Dd(ps);
     // a3*a3 + b3*b3
     const t6 = qaq(qmq(a3, a3), qmq(b3, b3));
     // 2*(a2*a3 + b2*b3)
@@ -45,7 +45,7 @@ function getCoeffsCubicDd(circle, ps) {
  */
 function getCoeffsQuadraticDd(circle, ps) {
     const { radius: r, center: [cx, cy] } = circle;
-    const [[a2, a1, a0], [b2, b1, b0]] = getXY2Dd(ps);
+    const [[a2, a1, [, a0]], [b2, b1, [, b0]]] = toPowerBasis2Dd(ps);
     // a2*a2 + b2*b2
     const t4 = qaq(qmq(a2, a2), qmq(b2, b2));
     // 2*a1*a2 + 2*b1*b2 
@@ -66,7 +66,7 @@ function getCoeffsQuadraticDd(circle, ps) {
  */
 function getCoeffsLinearDd(circle, ps) {
     const { radius: r, center: [cx, cy] } = circle;
-    const [[a1, a0], [b1, b0]] = getXY1Dd(ps);
+    const [[a1, [, a0]], [b1, [, b0]]] = toPowerBasis1Dd(ps);
     // a1**2 + b1**2
     const t2 = qaq(qmq(a1, a1), qmq(b1, b1));
     // 2*((a0*a1 + b0*b1) - (a1*cx + b1*cy))

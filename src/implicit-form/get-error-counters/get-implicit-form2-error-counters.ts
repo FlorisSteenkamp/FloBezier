@@ -1,4 +1,4 @@
-import { getXY2ErrorCounters } from '../../to-power-basis/get-xy/get-xy-error-counters.js';
+import { toPowerBasis2ErrorCounters } from '../../to-power-basis/to-power-basis/to-power-basis-error-counters.js';
 
 const abs = Math.abs;
 
@@ -50,13 +50,13 @@ function getImplicitForm2ErrorCounters(ps: number[][]) {
     // The implicit form is given by:
     // vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0
     
-    //const [[,,a0],[,,b0]] = getXY(ps);
+    //const [[,,a0],[,,b0]] = toPowerBasis2ErrorCounters(ps);
     const [a0,b0] = ps[0];
 
     const [
         [a2_, a1_],   // <2>a2_, <1>a1_, <0>a0_  (a0_ is just abs(a0))
         [b2_, b1_]    // <2>b2_, <1>b1_, <0>b0_  (b0_ is just abs(b0))
-    ] = getXY2ErrorCounters(ps);
+    ] = toPowerBasis2ErrorCounters(ps);
 
     //-------------------
     // Error calculation

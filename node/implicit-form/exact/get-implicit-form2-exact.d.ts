@@ -18,7 +18,7 @@ declare function getImplicitForm2Exact(ps: number[][]): ImplicitFormExact2 | Imp
  * The power basis version of [[getImplicitForm2ExactAnyBitlength]].
  *
  * @param pspb the power basis representation of a quadratic bezier curve that
- * can be found via [[getXYExactAnyBitlength2]]
+ * can be found via [[toPowerBasis2Exact]]
  *
  * @internal
  */
@@ -26,12 +26,12 @@ declare function getImplicitForm2ExactPb(pspb: [
     [
         number[],
         number[],
-        number
+        number[]
     ],
     [
         number[],
         number[],
-        number
+        number[]
     ]
 ]): ImplicitFormExact2 | ImplicitFormExact1 | undefined;
 export { getImplicitForm2Exact, getImplicitForm2ExactPb };

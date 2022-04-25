@@ -18,8 +18,10 @@
  * reverts to implicitization with strict error bounds to guarantee accuracy
  * and efficiency (implicitization is roughly 5x slower but is rare)
  *
- * @param ps1 a bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param ps2 another bezier curve
+ * @param ps1 an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param ps2 an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  */
 declare function bezierBezierIntersectionFast(ps1: number[][], ps2: number[][]): number[][][];
 export { bezierBezierIntersectionFast };

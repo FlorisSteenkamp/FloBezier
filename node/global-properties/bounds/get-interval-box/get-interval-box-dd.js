@@ -1,5 +1,5 @@
-import { evalDeCasteljauDd } from '../../../local-properties-at-t/t-to-xy/double-double/eval-de-casteljau-dd.js';
-import { evalDeCasteljauError } from '../../../local-properties-at-t/t-to-xy/eval-de-casteljau-error.js';
+import { evalDeCasteljauDd } from '../../../local-properties-at-t/evaluate/double-double/eval-de-casteljau-dd.js';
+import { evalDeCasteljauError } from '../../../local-properties-at-t/evaluate/eval-de-casteljau-error.js';
 import { γγ } from '../../../error-analysis/error-analysis.js';
 import { ddDiffDd as ddDiffDd_, ddDivDdWithError as ddDivDdWithError_, ddAddDouble as ddAddDouble_, ddMultDd as ddMultDd_, ddMultDouble2 as ddMultDouble2_, ddAddDd as ddAddDd_, ddMultBy2 as ddMultBy2_, ddMin as ddMin_, ddMax as ddMax_, } from "double-double";
 const ddDiffDd = ddDiffDd_;

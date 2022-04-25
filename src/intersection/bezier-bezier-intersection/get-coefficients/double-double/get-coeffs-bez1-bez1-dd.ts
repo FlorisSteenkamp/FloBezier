@@ -1,7 +1,7 @@
 import { γγ } from "../../../../error-analysis/error-analysis.js";
 import { ddAddDd, ddMultDouble2, ddMultDd } from "double-double";
 import { getImplicitForm1DdWithRunningError } from "../../../../implicit-form/double-double/get-implicit-form1-dd-with-running-error.js";
-import { getXY1DdWithRunningError } from "../../../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js";
+import { toPowerBasis1DdWithRunningError } from "../../../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js";
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const qaq = ddAddDd;
@@ -27,8 +27,8 @@ const γγ3 = γγ(3);
  * * intermediate calculations are done in double-double precision
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
- * @param ps1 a linear bezier curve
- * @param ps2 another linear bezier curve
+ * @param ps1
+ * @param ps2
  * 
  * @internal
  */
@@ -38,7 +38,7 @@ function getCoeffsBez1Bez1Dd(ps1: number[][], ps2: number[][]) {
         errorBound: { v_ }
     } = getImplicitForm1DdWithRunningError(ps1);
 
-    const [[c1,c0],[d1,d0]] = getXY1DdWithRunningError(ps2);
+    const [[c1,[,c0]],[d1,[,d0]]] = toPowerBasis1DdWithRunningError(ps2);
 
     const $c1 = c1[1];
     const $d1 = d1[1];

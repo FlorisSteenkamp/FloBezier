@@ -11,12 +11,12 @@ import { isReallyPoint } from '../global-properties/classification/is-really-poi
  * Crucially, the reduced order bezier will have exactly the same `t` values
  * at specific `x` and `y` coordinates as the originals.
  * 
- * @param ps1 
- * @param ps2 
+ * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * 
  * @internal
  */
- function reduceOrderIfPossible(ps: number[][]) {
+ function reduceOrderIfPossible(ps: number[][]): number[][] {
     if (ps.length === 4 && isCubicReallyQuad(ps)) {
         ps = cubicToQuadratic(ps)!
     }

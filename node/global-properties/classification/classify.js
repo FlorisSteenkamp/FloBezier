@@ -9,7 +9,7 @@ import { isCubicReallyLine } from './is-cubic-really-line.js';
 import { isCollinear } from "./is-collinear.js";
 import { getCoeffsBez3WithRunningError } from '../../intersection//self-intersection/get-coefficients/double/get-coeffs-bez3-with-running-error.js';
 import { getCoeffsBez3Exact } from "../../intersection/self-intersection/get-coefficients/exact/get-coeffs-bez3-exact.js";
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const { eSign, eCompare } = bigFloatOperators;
 const edif = eDiff;
 const epr = expansionProduct;

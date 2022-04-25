@@ -6,7 +6,7 @@ const { abs } = Math;
  *
  * The returned flatness, say `f` is such that `0 <= f <= (order-1)*𝜋`, where
  * `order` is the order of the bezier curve (e.g. cubics are of order 3); thus,
- * for example, cubics can have a maximum value of `2𝜋` for curviness (the least
+ * for example, cubics can have a maximum value of `2𝜋` for curviness (the most
  * curvy) and a minimum value of `0` (the flattest)
  *
  * This function is useful as a heuristic to test the `flatness` of curves to

@@ -1,7 +1,7 @@
 import { expect, assert, use } from 'chai';
 import { describe } from 'mocha';
 import { ddAddDouble } from 'double-double';
-import { getIntervalBox, getIntervalBoxDd, getXYExact } from '../../../../src/index.js';
+import { getIntervalBox, getIntervalBoxDd, toPowerBasisExact } from '../../../../src/index.js';
 import { eCompress, eDiff, eEstimate, eSign } from 'big-float-ts';
 import { eeHorner } from 'flo-poly';
 import { nearly } from '../../../helpers/chai-extend-nearly.js';
@@ -251,7 +251,7 @@ describe('getIntervalBoxDd', function() {
 function evaluateExactE(
 		ps: number[][], t: number[]): number[][] {
 
-	const [X,Y] = getXYExact(ps);
+	const [X,Y] = toPowerBasisExact(ps);
 
 	return [
 		eeHorner(X,t),

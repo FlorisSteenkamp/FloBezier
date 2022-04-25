@@ -13,7 +13,7 @@ import { RootInterval } from "flo-poly";
  * @param ps1
  * @param ps2
  *
- * @internal
+ * @internal but still exported for backwards compatibility
  */
 declare function bezierBezierIntersectionBoundless(ps1: number[][], ps2: number[][]): RootInterval[] | undefined;
 export { bezierBezierIntersectionBoundless };

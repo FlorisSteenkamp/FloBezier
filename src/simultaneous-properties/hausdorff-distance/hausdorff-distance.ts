@@ -1,7 +1,7 @@
 import { distanceBetween } from 'flo-vector2d';
 import { controlPointLinesLength } from '../../global-properties/length/control-point-lines-length.js';
-import { evalDeCasteljau } from '../../local-properties-at-t/t-to-xy/double/eval-de-casteljau.js';
-import { fromTo } from '../../transformation/split/from-to.js';
+import { evalDeCasteljau } from '../../local-properties-at-t/evaluate/double/eval-de-casteljau.js';
+import { fromToInclErrorBound } from '../../transformation/split/from-to-incl-error-bound.js';
 import { closestPointOnBezier } from '../closest-and-furthest-point-on-bezier/closest-point-on-bezier.js';
 import { furthestPointOnBezier } from '../closest-and-furthest-point-on-bezier/furthest-point-on-bezier.js';
 import { maxAbsCoordinate } from '../../error-analysis/max-abs-coordinate.js';
@@ -151,8 +151,8 @@ function calcHErrorBound(
     // lengths as an upper bound.
 
     const tM = (tE + tS) / 2;  // since the formula says `δS/2` so divide by 2
-    const psL = fromTo(A, tS, tM).ps;
-    const psR = fromTo(A, tM, tE).ps;
+    const psL = fromToInclErrorBound(A, tS, tM).ps;
+    const psR = fromToInclErrorBound(A, tM, tE).ps;
     const eL = controlPointLinesLength(psL);
     const eR = controlPointLinesLength(psR);
 

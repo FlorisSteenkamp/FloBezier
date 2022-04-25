@@ -15,8 +15,9 @@ import { RootInterval } from 'flo-poly';
  * an extra 1 or 2 `t`s could be returned (e.g. for self-overlapping curves
  * and when the point is exactly on the point of self-intersection of the curve)
  *
- * @param ps
- * @param p
+ * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param p a point, e.g. `[1,2]`
  */
 declare function tFromXY(ps: number[][], p: number[]): RootInterval[];
 export { tFromXY };

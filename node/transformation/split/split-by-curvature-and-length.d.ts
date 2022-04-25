@@ -3,9 +3,10 @@
  * `t` values) such that each piece is flat within a given tolerance (where
  * curvature is measured by the `curviness` function).
  *
- * @param ps
+ * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param maxCurviness maximum curviness (must be > 0) as calculated using
- * the `curviness` function (which measures the total angle in radians formed
+ * the `curviness` function (that measures the total angle in radians formed
  * by the vectors formed by the ordered control points); defaults to `0.4 radians`
  * @param maxLength maximum allowed length of any returned piece
  * @param minTSpan the minimum `t` span that can be returned for a bezier piece;

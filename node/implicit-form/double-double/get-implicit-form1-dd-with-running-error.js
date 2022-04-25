@@ -1,7 +1,7 @@
 import { ddDiffDd, ddMultDouble2 } from 'double-double';
 import { eNegativeOf } from 'big-float-ts';
-import { getXY1DdWithRunningError } from '../../to-power-basis/get-xy/double-double/get-xy-dd-with-running-error.js';
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+import { toPowerBasis1DdWithRunningError } from '../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js';
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const qdq = ddDiffDd; // error -> 3*γ²
 const qmd = ddMultDouble2;
 const eno = eNegativeOf;
@@ -27,7 +27,7 @@ const abs = Math.abs;
 function getImplicitForm1DdWithRunningError(ps) {
     // The implicit form is given by:
     // vₓx + vᵧy + v = 0
-    const [[a1, a0], [b1, b0]] = getXY1DdWithRunningError(ps);
+    const [[a1, [, a0]], [b1, [, b0]]] = toPowerBasis1DdWithRunningError(ps);
     const vₓ = eno(b1); // exact
     const vᵧ = a1; // exact
     //const v = a1*b0 - a0*b1;

@@ -1,5 +1,5 @@
 import { Horner } from 'flo-poly';
-import { getDxy } from '../../../to-power-basis/get-dxy/double/get-dxy.js';
+import { toPowerBasis_1stDerivative } from '../../../to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.js';
 /**
  * Returns the `[x,y]` value of the once differentiated (with respect to `t`)
  * bezier curve when evaluated at `t`.
@@ -12,7 +12,7 @@ import { getDxy } from '../../../to-power-basis/get-dxy/double/get-dxy.js';
  * @doc mdx
  */
 function evaluateDxy(ps, t) {
-    const [dX, dY] = getDxy(ps);
+    const [dX, dY] = toPowerBasis_1stDerivative(ps);
     return [Horner(dX, t), Horner(dY, t)];
 }
 export { evaluateDxy };

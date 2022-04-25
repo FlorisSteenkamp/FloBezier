@@ -3,13 +3,11 @@ import { getImplicitForm2ErrorCounters } from "../../implicit-form/get-error-cou
 import { getImplicitForm2DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form2-dd-with-running-error.js";
 import { getImplicitForm2Exact } from "../../implicit-form/exact/get-implicit-form2-exact.js";
 import { γ, γγ } from '../../error-analysis/error-analysis.js';
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-import { twoProduct, ddMultDd, ddAddDd } from "double-double";
-import { expansionProduct, fastExpansionSum, eSign, scaleExpansion2, eEstimate, eToDd } from 'big-float-ts';
-const tp = twoProduct;
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
+import { ddMultDd, ddAddDd } from "double-double";
+import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd } from 'big-float-ts';
 const qmq = ddMultDd;
 const qaq = ddAddDd;
-const sce = scaleExpansion2;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
 const sign = eSign;
@@ -19,15 +17,15 @@ const abs = Math.abs;
 const γ1 = γ(1);
 const γγ3 = γγ(3);
 /**
- * Returns true if the given point is on the given quadratic bezier curve where
- * the parameter t is allowed to extend to ±infinity, i.e. `t` is an element of
- * [-∞, +∞], false otherwise.
+ * Returns `true` if the given point is on the given quadratic bezier curve where
+ * the parameter `t` is allowed to extend to ±infinity, i.e. `t` is an element of
+ * `[-∞, +∞]`, `false` otherwise.
  *
  * @param ps a quadratic bezier curve
- * @param p A point with coordinates given as Shewchuk expansions. If only
- * double precision coordinates need to be provided then wrap it in an array,
- * e.g. for a point with x and y coordinates given as 1 and 2 set
- * `p === [[1],[2]]`. TODO - link to Schewchuk
+ * @param p a point with coordinates given as [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ * expansions; if only double precision coordinates need to be provided then
+ * wrap them in a one element array, e.g. for a point with `x` and `y` coordinates
+ * of `1` and `2` set `p === [[1],[2]]`.
  *
  * @internal
  */
@@ -38,8 +36,6 @@ function isPointOnBezierExtension2(ps, p) {
     const x = xe[lenX - 1]; // get higest order double
     const y = ye[lenY - 1]; // ...
     const isDouble = (lenX === 1 && lenY === 1);
-    //const x_ = abs(x);
-    //const y_ = abs(y);
     //---- first pre-filter
     {
         const { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = getImplicitForm2(ps);

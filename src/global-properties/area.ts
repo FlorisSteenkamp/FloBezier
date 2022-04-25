@@ -1,19 +1,20 @@
 import { integrate, multiply, subtract } from "flo-poly";
-import { getXY } from '../to-power-basis/get-xy/double/get-xy.js';
-import { getDxy } from '../to-power-basis/get-dxy/double/get-dxy.js';
+import { toPowerBasis } from '../to-power-basis/to-power-basis/double/to-power-basis.js';
+import { toPowerBasis_1stDerivative } from '../to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.js';
 
 
 /**
  * Returns the signed area between the given bezier curve and the line between
  * its 1st and last control points.
  * 
- * @param ps 
+ * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  */
 function area(
         ps: number[][]) {
 
-    let [x,y] = getXY(ps);
-    let [dx,dy] = getDxy(ps);
+    let [x,y] = toPowerBasis(ps);
+    let [dx,dy] = toPowerBasis_1stDerivative(ps);
 
     const poly = integrate(
         subtract(

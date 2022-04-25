@@ -1,6 +1,6 @@
 import { eSign, eDiff, scaleExpansion, twoSum } from 'big-float-ts';
 import { isCollinear } from "./is-collinear.js";
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const sce = scaleExpansion;
 const ediff = eDiff;
 const ts = twoSum;

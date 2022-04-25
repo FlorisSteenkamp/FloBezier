@@ -8,23 +8,20 @@ import { sub1Ulp } from "../../sub-1-ulp.js";
 import { add1Ulp } from "../../add-1-ulp.js";
 import { intersectBoxes } from "../../boxes/intersect-boxes.js";
 import { mid } from "flo-poly";
-// TODO - test with boolean op
 /**
- * Returns the intersection range (given as 2 pairs of intersections (`X`s) with
- * the intersection of `ps1` always the first entry of each pair) where the
+ * Returns the intersection range (given as 2 intersections (`X`s)) where the
  * endpoints of the two given *algebraically identical* curves
- * overlap (provided they overlap).
+ * overlap (provided they overlap, else an empty array is returned).
  *
  * * **precondition:** the two given curves must be *algebraically identical*
- * (i.e. identical except possibly for endpoints). This can be checked for by
- * calling [[areBeziersInSameKFamily]]. TODO
+ * (i.e. identical except possibly for endpoints)
  *
  * * **precondition**: not all bezier control points collinear
  *
  * @param psA an order 1,2 or 3 bezier curve
  * @param psB another bezier curve
  *
- * @internal
+ * @internal but still exported for backwards compatibility
  */
 function getEndpointIntersections(psA, psB, orderAlreadyReduced = false) {
     if (!orderAlreadyReduced) {

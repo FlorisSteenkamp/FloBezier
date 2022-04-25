@@ -1,6 +1,6 @@
 import { getInterfaceRotation } from '../simultaneous-properties/get-interface-rotation.js';
-import { fromTo2 } from "../transformation/split/from-to/from-to-2.js";
-import { fromTo3 } from "../transformation/split/from-to/from-to-3.js";
+import { fromTo2InclErrorBound } from "../transformation/split/from-to/from-to-2-incl-error-bound.js";
+import { fromTo3InclErrorBound } from "../transformation/split/from-to/from-to-3-incl-error-bound.js";
 import { classify } from '../global-properties/classification/classify.js';
 import { getInflections } from "./get-inflections.js";
 const 𝜋 = Math.PI;
@@ -25,7 +25,7 @@ function totalAbsoluteCurvature(ps, interval = [0, 1]) {
         if (tS === tE) {
             return 0;
         }
-        const ps_ = fromTo3(ps, tS, tE).ps;
+        const ps_ = fromTo3InclErrorBound(ps, tS, tE).ps;
         const ts = [0, ...getInflections(ps_), 1];
         let total = 0;
         for (let i = 0; i < ts.length - 1; i++) {
@@ -54,7 +54,7 @@ function totalCurvature(ps, interval = [0, 1]) {
         return 0;
     }
     if (ps.length === 3) {
-        const ps_ = fromTo2(ps, tS, tE).ps;
+        const ps_ = fromTo2InclErrorBound(ps, tS, tE).ps;
         const [[x0, y0], [x1, y1], [x2, y2]] = ps_;
         const tanS = [x1 - x0, y1 - y0];
         const tanE = [x2 - x1, y2 - y1];
@@ -63,7 +63,7 @@ function totalCurvature(ps, interval = [0, 1]) {
     }
     if (ps.length === 4) {
         // guaranteed: curvature <= 2𝜋
-        const ps_ = fromTo3(ps, tS, tE).ps;
+        const ps_ = fromTo3InclErrorBound(ps, tS, tE).ps;
         const bezClass = classify(ps_);
         const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps_;
         const tanS = [x1 - x0, y1 - y0];

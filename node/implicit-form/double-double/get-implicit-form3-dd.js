@@ -1,5 +1,5 @@
 import { ddNegativeOf, ddMultBy2, ddMultDouble2, ddMultDd, ddDiffDd, ddAddDd, ddDivBy2 } from 'double-double';
-import { getXY3Dd } from '../../to-power-basis/get-xy/double-double/get-xy-dd.js';
+import { toPowerBasis3Dd } from '../../to-power-basis/to-power-basis/double-double/to-power-basis-dd.js';
 const qno = ddNegativeOf; // error -> 0
 const qm2 = ddMultBy2; // error -> 0 
 const qd2 = ddDivBy2; // error -> 0 
@@ -27,7 +27,7 @@ function getImplicitForm3Dd(ps) {
     // Takes about 15 micro-seconds on a 3rd gen i7 and Chrome 79.
     // The implicit form is given by:
     // vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0
-    const [[a3, a2, a1, a0], [b3, b2, b1, b0]] = getXY3Dd(ps);
+    const [[a3, a2, a1, [, a0]], [b3, b2, b1, [, b0]]] = toPowerBasis3Dd(ps);
     const a3b1 = qmq(a3, b1);
     const a1b3 = qmq(a1, b3);
     const a3b2 = qmq(a3, b2);

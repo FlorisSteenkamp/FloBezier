@@ -1,5 +1,5 @@
 import { allRootsCertifiedSimplified } from 'flo-poly';
-import { getDxy } from '../../to-power-basis/get-dxy/double/get-dxy.js';
+import { toPowerBasis_1stDerivative } from '../../to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.js';
 import { getIntervalBox } from './get-interval-box/get-interval-box.js';
 // import { getLinearRoots, quadRoots } from './get-roots.js';
 /**
@@ -26,7 +26,7 @@ function getXBoundsTight(ps) {
     if (ps.length === 2) {
         return { minX, maxX };
     }
-    const [dx,] = getDxy(ps);
+    const [dx,] = toPowerBasis_1stDerivative(ps);
     const rootsX = allRootsCertifiedSimplified(dx, 0, 1);
     // Test points
     for (let i = 0; i < rootsX.length; i++) {

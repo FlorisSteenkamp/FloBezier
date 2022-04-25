@@ -1,6 +1,6 @@
 import { expect, assert } from 'chai';
 import { describe } from 'mocha';
-import { fromPowerBasis, getXY } from '../../src/index.js';
+import { fromPowerBasis, toPowerBasis } from '../../src/index.js';
 
 
 /**
@@ -10,7 +10,7 @@ import { fromPowerBasis, getXY } from '../../src/index.js';
  * @param ps a bezier curve
  */
 function testFromPowerBasis(ps: number[][]) {
-    const xy = getXY(ps);
+    const xy = toPowerBasis(ps);
     const ps_ = fromPowerBasis(xy);
 
     let maxAbsCoeff = 0;

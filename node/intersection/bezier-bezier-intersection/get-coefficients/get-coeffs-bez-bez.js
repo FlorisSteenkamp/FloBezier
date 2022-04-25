@@ -31,7 +31,8 @@ const coeffFunctionsExact = [
  * precision) of a polynomial in 1 variable whose roots are the parameter values
  * (of the second curve) of the intersection points of two given order 1, 2 or 3 bezier curves (i.e. lines,
  * quadratic and cubic bezier curves), (2) the coefficientwise error bound of the polyomial,
- * and (3) a function that returns the *exact* polynomial coefficients as Shewchuck expansions.
+ * and (3) a function that returns the *exact* polynomial coefficients as
+ * [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) expansions.
  *
  * The returned polynomial coefficients are given densely as an array of
  * double-double precision floating point numbers from highest to lowest power,
@@ -44,7 +45,7 @@ const coeffFunctionsExact = [
  * @param ps1
  * @param ps2
  *
- * @doc mdx
+ * @internal but still exported for backwards compatibility
  */
 function getCoeffsBezBez(ps1, ps2) {
     const { coeffs, errBound } = coeffFunctionsDd[ps1.length - 2][ps2.length - 2](ps1, ps2);

@@ -14,7 +14,7 @@ import { getCoeffsBezBez } from './get-coefficients/get-coeffs-bez-bez.js';
  * @param ps1
  * @param ps2
  *
- * @internal
+ * @internal but still exported for backwards compatibility
  */
 function bezierBezierIntersectionBoundless(ps1, ps2) {
     const { coeffs, errBound, getPExact } = getCoeffsBezBez(ps1, ps2);
