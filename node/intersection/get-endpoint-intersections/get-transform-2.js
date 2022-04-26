@@ -1,6 +1,7 @@
 import { eDiff, eMult, eMultBy2, eNegativeOf } from 'big-float-ts';
 import { erCompare } from './er-compare.js';
 import { calcExactSquareRoot } from './calc-exact-square-root.js';
+/** @internal */
 function getTransform2(xyA, xyB) {
     const [D1x, D2x] = getTransformedTs2(xyA[0], xyB[0]);
     const [D1y, D2y] = getTransformedTs2(xyA[1], xyB[1]);
@@ -15,9 +16,10 @@ function getTransform2(xyA, xyB) {
     throw new Error('An unexpected error occured.');
 }
 /**
- *
  * @param A A coordinate (x or y) of a bezier curve in power basis
  * @param B A coordinate (x or y) of another bezier curve in power basis
+ *
+ * @internal
  */
 function getTransformedTs2(A, B) {
     const [p2, p1] = A;

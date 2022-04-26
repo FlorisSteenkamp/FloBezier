@@ -6,8 +6,7 @@ import type { Iteration } from './iteration.js';
  * * helper function to the geometric interval bezier-bezier intersection
  * algorithm
  *
- * @param F the bezier curve that should be fat line bounded
- * @param G the bezier curve that should be geometric interval bounded
+ * @param iter
  *
  * @internal
  */

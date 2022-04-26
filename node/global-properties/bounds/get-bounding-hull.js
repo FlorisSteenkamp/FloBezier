@@ -5,12 +5,14 @@ import { grahamScan } from 'flo-graham-scan';
  *
  * * see https://en.wikipedia.org/wiki/Graham_scan
  *
- * **robust**: This algorithm is robust via adaptive infinite precision floating
+ * **exact**: this algorithm is robust via adaptive infinite precision floating
  * point arithmetic.
  *
  * @param ps a set of points, e.g. a bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]]
  * @param includeAllBoundaryPoints set this to `true` to if all boundary points
  * should be returned, even redundant ones; defaults to `false`
+ *
+ * @dox mdx
  */
 const getBoundingHull = grahamScan;
 export { getBoundingHull };

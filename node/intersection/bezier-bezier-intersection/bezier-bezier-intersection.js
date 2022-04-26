@@ -12,8 +12,8 @@ import { reduceOrderIfPossible } from '../../transformation/reduce-order-if-poss
 const eps = Number.EPSILON;
 const eps2 = 2 * eps;
 /**
- * Returns the intersection between two bezier curves up to cubic order (i.e.
- * points, linear, quadratic or cubic bezier curves (i.e. order 0,1,2 or 3
+ * Returns an array of intersections between two bezier curves up to cubic order
+ * (i.e. points, linear, quadratic or cubic bezier curves (i.e. order 0,1,2 or 3
  * curves).
  *
  * The algorithm employed uses advanced techniques such as floating point error
@@ -21,17 +21,30 @@ const eps2 = 2 * eps;
  * of easy cases, certified root finding and algebraic implicitization of the
  * curves in order to find *guaranteed* accurate results.
  *
+ * * this algorithm is mathematically guaranteed accurate to within
+ * `4 * Number.EPSILON` in the returned `t` parameter values of the bezier
+ * curves (bar underflow/overflow)
+ *
  * * the returned intersections are *ordered* by `t` parameter value of the
  * first bezier curve
  * * if the two curves have an infinite number of intersections then the
- * intersection of the endpoints of each curve with the other is returned,
- * except in the extreme case of a curve degenerating to a point in which case
- * the intersection `t` value is returned (if any) having `tS === 0`
- * and `tE === 1`
+ * intersection of the endpoints of each curve with the other is returned
+ * instead (and the intersection `kind` property will equal `5`)
  *
- * * this algorithm is mathematically guaranteed accurate to within
- * `4 * Number.EPSILON` in the `t` values of the bezier curves (bar
- * underflow/overflow)
+ * * each intersection in the returned array of intersections is an object with
+ * the following properties (see the type [[X]]`):
+ *      * `p`: point of intersection (calculated from the guaranteed root interval)
+ *      * `t1`: first bezier curve's parameter `t` value (calculated from the guaranteed root interval)
+ *      * `t2`: second bezier curve's parameter `t` value (calculated from the guaranteed root interval)
+ *      * `kind`: kind of intersection (see [[X]] for details)
+ *      * `ri1`: first bezier curve's root interval guaranteed to contain the
+ *               correct `t` value in the form `{ tS, tE, multiplicity }`,
+ *               where `tS` and `tE` are the start and end of the interval
+ *      * `ri2`: second bezier curve's root interval guaranteed to contain the
+ *               correct `t` value in the form `{ tS, tE, multiplicity }`,
+ *               where `tS` and `tE` are the start and end of the interval
+ *      * `box`: small box that is guaranteed to contain the intersection
+ *               (calculated from the guaranteed root interval)
  *
  * @param ps1 an order 0,1,2 or 3 bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
@@ -254,12 +267,12 @@ function handlePointDegenerateCases(ps1, ps2) {
             const p2 = ps2[0];
             if (p1[0] === p2[0] && p1[1] === p2[1]) {
                 // literally the same points - very degenerate
-                const ri = { tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY };
+                const ri = { tS: 0.5, tE: 0.5, multiplicity: 1 };
                 return [
                     {
                         p: p1, kind: 6, box,
-                        t1: 0, ri1: ri,
-                        t2: 0, ri2: ri,
+                        t1: 0.5, ri1: ri,
+                        t2: 0.5, ri2: ri,
                     }
                 ];
             }
@@ -269,7 +282,7 @@ function handlePointDegenerateCases(ps1, ps2) {
             // keep TypeScript happy; at this point `tFromXY` cannot return `undefined`
             return tFromXY(ps2, p1).map(ri => ({
                 p: p1, kind: 6, box,
-                t1: 0, ri1: { tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY },
+                t1: 0.5, ri1: { tS: 0.5, tE: 0.5, multiplicity: 1 },
                 t2: mid(ri), ri2: ri,
             }));
         }
@@ -282,7 +295,7 @@ function handlePointDegenerateCases(ps1, ps2) {
         return tFromXY(ps1, p2).map(ri => ({
             p: p2, kind: 6, box,
             t1: mid(ri), ri1: ri,
-            t2: 0, ri2: { tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY },
+            t2: 0.5, ri2: { tS: 0.5, tE: 0.5, multiplicity: 1 },
         }));
     }
     return [];

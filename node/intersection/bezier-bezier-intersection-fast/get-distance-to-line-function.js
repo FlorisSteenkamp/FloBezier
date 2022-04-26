@@ -23,6 +23,12 @@ function getDistanceToLineFunction(
     }
 }
 */
+/**
+ * @param pS
+ * @param pE
+ *
+ * @internal
+ */
 function getDistanceToLineFunction(pS, pE) {
     const xS = pS[0];
     const yS = pS[1];

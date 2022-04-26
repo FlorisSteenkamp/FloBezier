@@ -2,7 +2,7 @@ import { expect, assert, use } from 'chai';
 import { describe } from 'mocha';
 import { gaussQuadrature } from 'flo-gauss-quadrature';
 import { 
-	evaluatePowerBasis_2ndDerivative, evaluatePowerBasis_1stDerivative, getInterfaceRotation, splitByCurvature, tangent, 
+	evaluate2ndDerivative, getInterfaceRotation, splitByCurvature, tangent, 
 	totalAbsoluteCurvature, totalCurvature, generateSelfIntersecting, fromToInclErrorBound, toString, 
 	generateCuspAtHalf3
 } from '../../src/index.js';
@@ -15,9 +15,7 @@ import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate
 
 use(nearly);
 
-const abs = Math.abs;
-const sqrt = Math.sqrt;
-const 𝜋 = Math.PI;
+const { abs, PI: 𝜋 } = Math;
 
 
 function totalCurvatureByGauss(
@@ -45,8 +43,8 @@ function totalCurvatureByGauss(
 
 function κds(ps: number[][]) {
 	return (t: number): number => {
-		const [dx, dy] = evaluatePowerBasis_1stDerivative(ps, t); 
-		const [ddx, ddy] = evaluatePowerBasis_2ndDerivative(ps, t);
+		const [dx, dy] = tangent(ps, t); 
+		const [ddx, ddy] = evaluate2ndDerivative(ps, t);
 
 		const a = dx*ddy - dy*ddx;
 		const b = dx*dx + dy*dy;

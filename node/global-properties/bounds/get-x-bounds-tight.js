@@ -1,7 +1,6 @@
 import { allRootsCertifiedSimplified } from 'flo-poly';
 import { toPowerBasis_1stDerivative } from '../../to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.js';
 import { getIntervalBox } from './get-interval-box/get-interval-box.js';
-// import { getLinearRoots, quadRoots } from './get-roots.js';
 /**
  * Returns tight x-coordinate bounds of the given bezier curve.
  *

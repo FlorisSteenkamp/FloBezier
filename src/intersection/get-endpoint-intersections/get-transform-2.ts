@@ -3,6 +3,7 @@ import { erCompare } from './er-compare.js';
 import { calcExactSquareRoot } from './calc-exact-square-root.js';
 
 
+/** @internal */
 function getTransform2(
         xyA: number[][][],
         xyB: number[][][]): number[][] {
@@ -24,9 +25,10 @@ function getTransform2(
 
 
 /**
- * 
  * @param A A coordinate (x or y) of a bezier curve in power basis
  * @param B A coordinate (x or y) of another bezier curve in power basis
+ * 
+ * @internal
  */
 function getTransformedTs2(
         A: number[][],

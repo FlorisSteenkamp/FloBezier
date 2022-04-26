@@ -58,7 +58,7 @@ describe('tFromXY', function() {
             const ps = getRandomBezier_(0)(0);
 			const p = ps[0];
 			const ris = tFromXY(ps, p);
-            expect(ris).to.eql([{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }]);
+            expect(ris).to.eql([{ tS: 0.5, tE: 0.5, multiplicity: 1 }]);
 		}
 
         {
@@ -77,7 +77,7 @@ describe('tFromXY', function() {
         {
             const ps = [[1,1],[1,1]];
             const r = tFromXY(ps,[1,1]);
-            expect(r).to.eql([{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }]);
+            expect(r).to.eql([{ tS: 0.5, tE: 0.5, multiplicity: 1 }]);
         }
 
         {
@@ -123,7 +123,7 @@ describe('tFromXY', function() {
         {
             const ps = [[1,1],[1,1],[1,1]];
             const r = tFromXY(ps,[1,1]);
-            expect(r).to.eql([{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }]);
+            expect(r).to.eql([{ tS: 0.5, tE: 0.5, multiplicity: 1 }]);
         }
 
         // cubics
@@ -142,7 +142,7 @@ describe('tFromXY', function() {
         {
             const ps = [[1,1],[1,1],[1,1],[1,1]];
             const r = tFromXY(ps,[1,1]);
-            expect(r).to.eql([{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }]);
+            expect(r).to.eql([{ tS: 0.5, tE: 0.5, multiplicity: 1 }]);
         }
         // self-intersecting
         {

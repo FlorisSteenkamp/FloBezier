@@ -1,3 +1,4 @@
+/** @internal */
 function bAbs(n) {
     return n < 0n ? -n : n;
 }

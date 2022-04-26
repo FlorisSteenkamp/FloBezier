@@ -8,15 +8,13 @@
  * e.g. `[5,-3,0]` represents the polynomial `5x^2 - 3x`.
  *
  * * intermediate calculations are done in double precision and this is
- * reflected in the output error bound (which is approximately equal to
- * `n * Number.EPSILON * the condition number`, where roughly `1 < n < 100` and
- * depends on the specific calculation)
+ * reflected in the error bound
  * * the error bound returned need **not** be scaled before use
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  *
- * @param ps an order 3 bezier curve.
+ * @param ps a cubic bezier curve.
  *
- * @doc
+ * @internal
  */
 declare function getCoeffsBez3WithRunningError(ps: number[][]): {
     coeffs: number[];

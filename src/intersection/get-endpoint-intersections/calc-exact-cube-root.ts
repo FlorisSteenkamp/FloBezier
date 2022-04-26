@@ -14,7 +14,7 @@ import { sumBigints } from './sum-bigints.js';
  * 
  * @internal
  */
- function calcExactCubeRoot(a: number[][]) {
+ function calcExactCubeRoot(a: number[][]): number[][] {
     const [NN,DD] = scaleFloatssToBigintss(a).map(sumBigints);
 
     const gcd = bGcdInt(NN,DD);

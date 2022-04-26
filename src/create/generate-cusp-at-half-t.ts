@@ -1,8 +1,8 @@
 /**
  * Returns the cubic bezier curve control points with a zero tangent vector 
- * (i.e. `[0,0]`) at `t = 0.5` (i.e. a 'cusp') at the given [[Point]] with
- * given starting and ending control [Point]s.
- * * **non-exact** - due to floating-point round-off the cusp is not 
+ * (i.e. `[0,0]`) at `t = 0.5` (i.e. a 'cusp') at the given point with
+ * given starting and ending control points.
+ * * **non-exact**: due to floating-point round-off the cusp is not 
  * necessarily *exactly* at the given point, nor does the tangent vector 
  * necessarily vanish *exactly*.
  * 

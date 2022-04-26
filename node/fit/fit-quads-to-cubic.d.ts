@@ -7,10 +7,12 @@
  * curve and the the tangents of each approximating curve coincide with that of
  * the cubic at each such point
  *
- * @param ps an cubic bezier curve given as an ordered array of its
+ * @param ps a cubic bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param tolerance tolerance given as the maximum total absolute area difference
  * between the two curves
+ *
+ * @doc mdx
  */
 declare function fitQuadsToCubic(ps: number[][], tolerance: number): number[][][];
 export { fitQuadsToCubic };

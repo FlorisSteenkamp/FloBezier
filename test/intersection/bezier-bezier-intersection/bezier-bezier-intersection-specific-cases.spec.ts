@@ -27,8 +27,8 @@ describe('bezierBezierIntersection', function() {
             expect(xs).to.be.nearly(2**4, [
                 { 
                     p: [1.021,1], kind: 6, box: [[1.021,1],[1.021,1]],
-                    t1: 0, ri1: { tS: 0, tE: 1, multiplicity: inf },
-                    t2: 0, ri2: { tS: 0, tE: 1, multiplicity: inf }
+                    t1: 0.5, ri1: { tS: 0.5, tE: 0.5, multiplicity: 1 },
+                    t2: 0.5, ri2: { tS: 0.5, tE: 0.5, multiplicity: 1 }
                 },
             ]);
 
@@ -60,7 +60,7 @@ describe('bezierBezierIntersection', function() {
             expect(xs).to.be.nearly(2**4, [
                 { 
                     p: [2,2], kind: 6, box: [[2,2],[2,2]],
-                    t1: 0, ri1: { tS: 0, tE: 1, multiplicity: inf },
+                    t1: 0.5, ri1: { tS: 0.5, tE: 0.5, multiplicity: 1 },
                     t2: 0.5, ri2: { tS: 0.5, tE: 0.5, multiplicity: 1 },
                 }
             ]);
@@ -93,7 +93,7 @@ describe('bezierBezierIntersection', function() {
                     p: [1,0.5],
                     kind: 6,
                     box: [[1,0.5],[1,0.5]],
-                    t1: 0, ri1: { tS: 0, tE: 1, multiplicity: inf },
+                    t1: 0.5, ri1: { tS: 0.5, tE: 0.5, multiplicity: 1 },
                     t2: 0.5, ri2: { tS: 0.5, tE: 0.5, multiplicity: 1 }
                 }
             ]);
@@ -125,7 +125,7 @@ describe('bezierBezierIntersection', function() {
                 {
                     kind: 6,
                     box: [[1.5,0.75],[1.5,0.75]],
-                    ri1: { tS: 0, tE: 1, multiplicity: inf },
+                    ri1: { tS: 0.5, tE: 0.5, multiplicity: 1 },
                     ri2: { tS: 0.5, tE: 0.5, multiplicity: 1 },
                 }
             ]);

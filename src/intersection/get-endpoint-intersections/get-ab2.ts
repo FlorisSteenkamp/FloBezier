@@ -5,6 +5,7 @@ import { getAB1 } from "./get-ab1.js";
 import { getAB } from "./get-ab.js";
 
 
+/** @internal */
 function getAB2(
         psA: number[][],
         psB: number[][]): number[] {

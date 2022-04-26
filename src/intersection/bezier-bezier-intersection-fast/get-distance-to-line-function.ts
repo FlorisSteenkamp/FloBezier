@@ -29,6 +29,12 @@ function getDistanceToLineFunction(
 */
 
 
+/**
+ * @param pS 
+ * @param pE 
+ * 
+ * @internal
+ */
 function getDistanceToLineFunction(
 		pS: number[],
 		pE: number[]): (p: number[], _p: number[]) => { dMin: number; dMax: number; } {

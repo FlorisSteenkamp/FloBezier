@@ -1,4 +1,5 @@
 import { eDiff, eSign } from 'big-float-ts';
+/** @internal */
 function getTransform1(_xyA, _xyB) {
     // Both `_xyB[0][0]` and `_xyB[1][0]` can't be zero else we would have had
     // a lower order bezier curve. Also, if `_xyB[0][0]` is zero 

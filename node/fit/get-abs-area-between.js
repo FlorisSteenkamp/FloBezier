@@ -5,8 +5,10 @@ import { area } from "../global-properties/area.js";
 /**
  * Returns the *absolute* area between the two given curves.
  *
- * * **precondition**: the first and last control points of each curve must equal
- * * can be used as an error measure of the similarity between the two curves
+ * * **precondition**: the first and last control points of each curve must be equal
+ * * can be used as an excellent error measure of the similarity between the two curves
+ *
+ * @doc mdx
  */
 function getAbsAreaBetween(ps1, ps2) {
     const xs = bezierBezierIntersection(ps1, ps2);

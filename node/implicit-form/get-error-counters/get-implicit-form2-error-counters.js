@@ -5,11 +5,9 @@ const abs = Math.abs;
  * can be calculated) when calculating the implicit form of the given bezier
  * curve (using [[getImplicitForm2]] or [[getImplicitForm2Dd]]).
  *
- * Returned coefficients are subscripted to match their monomial's variables,
+ * * returned coefficients are subscripted to match their monomial's variables,
  * e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
- *
  * * the implicit form is given by: `vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v`
- *
  * * The returned error representation needs to be multiplied with
  * [Stewart error counters¹](https://www.amazon.ca/Introduction-Matrix-Computations-G-Stewart/dp/0126703507)
  * and an appropriate error function, `γ`, depending on the precision used (e.g. double

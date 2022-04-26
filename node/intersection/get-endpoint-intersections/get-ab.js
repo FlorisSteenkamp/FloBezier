@@ -2,6 +2,7 @@ import { toPowerBasisExact } from "../../to-power-basis/to-power-basis/exact/to-
 import { ensureRange } from "./ensure-range.js";
 import { erEstimate } from "./er-estimate.js";
 import { erSign } from "./er-sign.js";
+/** @internal */
 function getAB(getTransform) {
     return (psA, psB) => {
         const xyA = toPowerBasisExact(psA);

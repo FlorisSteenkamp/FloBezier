@@ -1,7 +1,7 @@
 import { fromTo as fromToVect, dot } from "flo-vector2d";
 /**
- * Returns true if the given quadratic bezier is obtuse, false otherwise (i.e.
- * false if acute).
+ * Returns `true` if the given quadratic bezier is obtuse, `false` otherwise (i.e.
+ * `false` if acute).
  *
  * Obtuse here is defined as follows: let the quad form a triangle through its
  * control points P0, P1, P2 where P0 and P2 are the endpoints. If both interior

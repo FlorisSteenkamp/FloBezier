@@ -13,12 +13,12 @@ const eSign = _eSign;
 
 
 /**
- * Returns the exact implicit form of the given linear bezier curve (a line)
- * or `undefined` if the line degenerates to a point.
+ * Returns the *exact* implicit form of the given linear bezier curve (a line 
+ * segment) or `undefined` if the line degenerates to a point.
  * 
- * Returned coefficients are subscripted to match their monomial's variables,
+ * * returned coefficients are subscripted to match their monomial's variables,
  * e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
- * 
+ * * returned coefficients are given *exactly* as [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) expansions
  * * the implicit form is given by: `vₓx + vᵧy + v = 0`
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
@@ -36,7 +36,7 @@ function getImplicitForm1Exact(
 
 
 /**
- * The power basis version of [[getImplicitForm1ExactAnyBitlength]].
+ * The power basis version of [[getImplicitForm1Exact]].
  * 
  * @param pspb the power basis representation of a linear bezier curve that 
  * can be found via [[toPowerBasis1Exact]]

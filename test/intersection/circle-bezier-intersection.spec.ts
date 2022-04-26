@@ -100,7 +100,7 @@ describe('circleBezierIntersection', function() {
                 {
                     p: [2,1],
                     t: 0.5,
-                    ri: { tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY },
+                    ri: { tS: 0.5, tE: 0.5, multiplicity: 1 },
                     box: [[2,1],[2,1]]
                 }
             ]);

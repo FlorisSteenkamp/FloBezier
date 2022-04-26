@@ -11,7 +11,7 @@ const qdq = ddDiffDd;      // error -> 3*γ²
 
 /**
  * Returns a double-double precision implicit form of the given quadratic 
- * bezier and a coefficientwise error bound.
+ * bezier curve and a coefficientwise error bound.
  * 
  * Returned coefficients are subscripted to match their monomial's variables,
  * e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
@@ -20,7 +20,8 @@ const qdq = ddDiffDd;      // error -> 3*γ²
  * * intermediate calculations are done in double-double precision
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
- * @param ps 
+ * @param ps a quadratic bezier curve given as an array of its control points, 
+ * e.g. `[[1,2],[3,4],[5,7]]`
  * 
  * @doc mdx
  */

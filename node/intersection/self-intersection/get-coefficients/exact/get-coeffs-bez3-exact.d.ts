@@ -9,9 +9,9 @@
  * * the returned polynomial coefficients are exact (i.e. error-free)
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  *
- * @param ps An order 3 bezier curve.
+ * @param ps a cubic bezier curve.
  *
- * @doc
+ * @internal
  */
 declare function getCoeffsBez3Exact(ps: number[][]): number[][];
 export { getCoeffsBez3Exact };

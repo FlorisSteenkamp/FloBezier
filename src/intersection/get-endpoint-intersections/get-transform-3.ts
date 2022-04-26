@@ -2,6 +2,7 @@ import { eDiff, eMult, eSign, scaleExpansion2 } from 'big-float-ts';
 import { calcExactCubeRoot } from "./calc-exact-cube-root.js";
 
 
+/** @internal */
 function getTransform3(
         xyA: number[][][],
         xyB: number[][][]): number[][] {
@@ -68,6 +69,7 @@ function getTransformedTs3(
 }
 
 
+/** @internal */
 function eSquare(v: number[]) {
     return eMult(v,v);
 }

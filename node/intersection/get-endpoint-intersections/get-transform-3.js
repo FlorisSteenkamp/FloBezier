@@ -1,5 +1,6 @@
 import { eDiff, eMult, eSign, scaleExpansion2 } from 'big-float-ts';
 import { calcExactCubeRoot } from "./calc-exact-cube-root.js";
+/** @internal */
 function getTransform3(xyA, xyB) {
     // Both `_xyB[0][0]` and `_xyB[1][0]` can't be zero else we would have had
     // a lower order bezier curve. Also, if `_xyB[0][0]` is zero 
@@ -49,6 +50,7 @@ function getTransformedTs3(A, B) {
         eMult(scaleExpansion2(3, p3), NN)
     ];
 }
+/** @internal */
 function eSquare(v) {
     return eMult(v, v);
 }

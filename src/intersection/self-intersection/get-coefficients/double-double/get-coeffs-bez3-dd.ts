@@ -30,7 +30,7 @@ const γγ3 = γγ(3);
  * 
  * @param ps an order 3 bezier curve.
  * 
- * @doc
+ * @internal
  */
 function getCoeffsBez3Dd(ps: number[][]) {
     const {

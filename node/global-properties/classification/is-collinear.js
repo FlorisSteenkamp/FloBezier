@@ -9,9 +9,10 @@ const { orient2d } = operators;
  * order 1 bezier curve (a line) such that the same `(x,y)` point is returned
  * for the same `t` value then use e.g. [[isQuadReallyLine]] instead.
  *
- * * **exact:** for any bitlength of the given coordinates.
+ * * **exact** not susceptible to floating point round-off
  *
- * @param ps An order 0, 1, 2 or 3 bezier curve.
+ * @param ps an order 0,1,2 or 3 bezier curve given as an array of its control
+ * points, e.g. `[[1,2],[3,4],[5,6],[7,8]]`
  *
  * @doc mdx
  */

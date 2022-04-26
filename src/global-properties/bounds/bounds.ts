@@ -28,4 +28,4 @@ interface YBounds {
 };
 
 
-export { Bound, XBounds, YBounds }
+export type { Bound, XBounds, YBounds }

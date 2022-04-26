@@ -2,19 +2,19 @@ import { toPowerBasis_1stDerivative } from "../to-power-basis/to-power-basis-1st
 import { toPowerBasis_2ndDerivative } from "../to-power-basis/to-power-basis-2nd-derivative/double/to-power-basis-2nd-derivative.js";
 import { toPowerBasis_3rdDerivative } from "../to-power-basis/to-power-basis-3rd-derivative/double/to-power-basis-3rd-derivative.js";
 /**
- * Returns the polynomials whose zeros are the t values of the local
+ * Returns the polynomials whose zeros are the `t` values of the local
  * minima / maxima of the absolute curvature for the given bezier curve.
  *
- * The polynomials are in the form p1*p2 where the zeros
- * of p1 are the inflection points and the zeros of p2 are the other minima /
+ * The polynomials are in the form `p1*p2` where the zeros
+ * of `p1` are the inflection points and the zeros of `p2` are the other minima /
  * maxima.
  *
- * * **precondition:** must be a true cubic bezier (not degenerate to line or
+ * * **precondition:** must be a `true` cubic bezier (not degenerate to line or
  * quadratic)
- * * see [MvG](https://math.stackexchange.com/a/1956264/130809)'s excellent
- * * **non-exact:** there is floating point roundof during calculation
+ * * see [MvG](https://math.stackexchange.com/a/1956264/130809)
+ * * **non-exact:** due to floating point roundof during calculation
  *
- * @param ps an order 1, 2 or 3 bezier curve given as an array of control
+ * @param ps an order 1,2 or 3 bezier curve given as an array of its control
  * points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  *
  * @internal

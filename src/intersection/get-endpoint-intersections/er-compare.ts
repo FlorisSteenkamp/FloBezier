@@ -3,6 +3,8 @@ import { eCompare, eMult, eSign } from "big-float-ts";
 
 /**
  * Compares two expansion rationals.
+ * 
+ * @internal
  */
  function erCompare(a: number[][], b: number[][]) {
     return (

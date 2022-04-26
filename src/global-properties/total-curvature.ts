@@ -4,8 +4,7 @@ import { fromTo3InclErrorBound } from "../transformation/split/from-to/from-to-3
 import { classify } from '../global-properties/classification/classify.js';
 import { getInflections } from "./get-inflections.js";
 
-const 𝜋 = Math.PI;
-const abs = Math.abs;
+const { abs, PI: 𝜋 } = Math;
 
 
 /**
@@ -14,7 +13,8 @@ const abs = Math.abs;
  * 
  * * the result is given in radians. 
  * 
- * @param ps a cubic bezier
+ * @param ps an order 0,1,2 or 3 bezier curve given as an array of its control
+ * points, e.g. `[[1,2],[3,4],[5,6],[7,8]]`
  * @param interval
  * 
  * @doc mdx

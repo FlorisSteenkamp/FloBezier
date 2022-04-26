@@ -5,8 +5,8 @@
  * 
  * **in-exact:** the result may not be exact due to floating point round-off
  * 
- * @param ts the 2 t values where the self-intersection should occur
- * @param p0 the bezier's initial control point
+ * @param ts the two `t` values where the self-intersection should occur
+ * @param p0 the bezier's initial control point, e.g. `[1,2]`
  * @param p1 the bezier's 2nd control point
  * @param p2 the bezier's 3rd control point
   * 

@@ -14,9 +14,9 @@ import { toPowerBasis3 } from "../../../../to-power-basis/to-power-basis/double/
  * preferrable to use the version that includes an error bound ([[getCoeffsBez3WithRunningError]]).
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
- * @param ps an order 3 bezier curve.
+ * @param ps a cubic bezier curve.
  * 
- * @doc
+ * @internal
  */
 function getCoeffsBez3(ps: number[][]) {
     const [[a3,a2,a1],[b3,b2,b1]] = toPowerBasis3(ps);

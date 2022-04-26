@@ -72,7 +72,7 @@ type ImplicitFormExact =
 //type CoeffKeys<T> = keyof Coeffs<T>;
 //type CoeffErrorKeys<T> = keyof CoeffErrors<T>;
 
-export { 
+export type { 
     ImplicitForm1, ImplicitForm2, ImplicitForm3, 
     ImplicitForm, ImplicitFormDd, ImplicitFormDouble,
     ImplicitForm1Coeffs, ImplicitForm2Coeffs, ImplicitForm3Coeffs,

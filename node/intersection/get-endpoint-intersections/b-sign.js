@@ -1,3 +1,4 @@
+/** @internal */
 function bSign(v) {
     return v > 0n ? 1n : v < 0n ? -1n : 0n;
 }

@@ -55,4 +55,4 @@ declare type ImplicitFormExact1 = ImplicitForm1Coeffs<number[]>;
 declare type ImplicitFormExact2 = ImplicitForm2Coeffs<number[]>;
 declare type ImplicitFormExact3 = ImplicitForm3Coeffs<number[]>;
 declare type ImplicitFormExact = ImplicitFormExact1 | ImplicitFormExact2 | ImplicitFormExact3;
-export { ImplicitForm1, ImplicitForm2, ImplicitForm3, ImplicitForm, ImplicitFormDd, ImplicitFormDouble, ImplicitForm1Coeffs, ImplicitForm2Coeffs, ImplicitForm3Coeffs, ImplicitForm1CoeffErrors, ImplicitForm2CoeffErrors, ImplicitForm3CoeffErrors, ImplicitFormExact1, ImplicitFormExact2, ImplicitFormExact3, ImplicitFormExact };
+export type { ImplicitForm1, ImplicitForm2, ImplicitForm3, ImplicitForm, ImplicitFormDd, ImplicitFormDouble, ImplicitForm1Coeffs, ImplicitForm2Coeffs, ImplicitForm3Coeffs, ImplicitForm1CoeffErrors, ImplicitForm2CoeffErrors, ImplicitForm3CoeffErrors, ImplicitFormExact1, ImplicitFormExact2, ImplicitFormExact3, ImplicitFormExact };

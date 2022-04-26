@@ -1,11 +1,17 @@
 /**
- * Returns the curve length (linear, quadratic or cubic bezier) in the
- * specified interval calculated using Gaussian Quadrature *with* subdividing
- * for improved accuracy.
+ * Returns the curve length (for a linear, quadratic or cubic bezier curve) in
+ * the specified interval calculated using Gaussian Quadrature *with* adaptive
+ * subdivision for improved accuracy.
  *
- * @param ps a bezier curve, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * @param interval the paramter interval over which the length is
- * to be calculated (typically `=== [0,1]`).
+ * to be calculated (typically `[0,1]`)
+ * @param ps an order 0,1,2 or 3 bezier curve given as an array of its control
+ * points, e.g. `[[1,2],[3,4],[5,6],[7,8]]`
+ * @param maxCurviness optional maximum 'curviness' (defined as the total angle
+ * change between consecutive line segments between the curve control points)
+ * before subdivision occurs; defaults to 0.4 radians
+ * @param gaussOrder the optional order of the Gaussian Quadrature performed
+ * between curve segments; defaults to 16; can be 4,16 or 64
  *
  * @doc mdx
  */

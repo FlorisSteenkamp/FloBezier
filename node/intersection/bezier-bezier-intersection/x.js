@@ -1,3 +1,4 @@
+/** @internal */
 function getPFromBox(box) {
     const tl = box[0];
     const br = box[1];

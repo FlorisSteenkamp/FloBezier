@@ -1,4 +1,5 @@
 
+/** @internal */
 function sumBigints(vs: bigint[]) {
     let total = 0n;
     for (let i=0; i<vs.length; i++) {

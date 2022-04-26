@@ -3,11 +3,18 @@ import { ds } from "../../local-properties-at-t/ds.js";
 import { fromTo2InclErrorBound } from "../../transformation/split/from-to/from-to-2-incl-error-bound.js";
 import { splitByCurvature } from "../../transformation/split/split-by-curvature.js";
 /**
- * Returns the curve length in the specified interval.
+ * Returns the curve length of the given quadratic bezier curve within the
+ * specified parameter interval.
  *
- * @param ps A quadratic bezier, e.g. [[0,0],[1,1],[2,1]]
- * @param interval The paramter interval over which the length is
- * to be calculated (often === [0,1]).
+ * @param interval the paramter interval over which the length is
+ * to be calculated (often `[0,1]`)
+ * @param ps a quadratic bezier curve given by an ordered array of its control
+ * points, e.g. `[[0,0],[1,1],[2,1]]`
+ * @param maxCurviness optional maximum 'curviness' (defined as the total angle
+ * change between consecutive line segments between the curve control points)
+ * before subdivision occurs; defaults to 0.4 radians
+ * @param gaussOrder the optional order of the Gaussian Quadrature performed
+ * between curve segments; defaults to 16; can be 4,16 or 64
  *
  * @internal
  */

@@ -2,10 +2,10 @@ import { allRoots } from "flo-poly";
 import { toPowerBasis_1stDerivative } from "../../to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.js";
 import { evalDeCasteljau } from "../../local-properties-at-t/evaluate/double/eval-de-casteljau.js";
 /**
- * Returns an axis-aligned bounding box together with the t values where the
+ * Returns an axis-aligned bounding box together with the `t` values where the
  * bounds on the bezier are reached.
  *
- * @param ps an order 1, 2 or 3 bezier curve given as an array of control
+ * @param ps an order 1,2 or 3 bezier curve given as an array of its control
  * points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  *
  * @doc mdx

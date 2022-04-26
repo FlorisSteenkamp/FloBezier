@@ -47,9 +47,9 @@ describe('curvature', function() {
             // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(r2).to.be.nearly(2**8, expected);
 
-            const r3 = curvature(ps);
+            const r3 = curvature(ps, t);
             // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(r3(t)).to.be.nearly(2**8, expected);
+            expect(r3).to.be.nearly(2**8, expected);
         }
 
         {
@@ -60,12 +60,6 @@ describe('curvature', function() {
                 // at cusp the curvature is infinite
                 expect(r).to.be.NaN;
             }
-        }
-
-        {
-            const ps = generateCuspAtHalf3([0,0], [6,2], [3,0]);
-            const t = 0.7;
-            expect(curvature(ps, t)).to.eql(curvature(ps)(t));
         }
 	});
 });

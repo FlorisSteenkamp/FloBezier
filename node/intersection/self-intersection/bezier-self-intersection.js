@@ -28,12 +28,13 @@ const γ1 = γ(1);
  * error of `4 * Number.EPSILON` for the returned `t` values satisfying `|t| <= 1`
  * or a relative error of the same `4 * Number.EPSILON` otherwise.
  * * **special case:** a cusp is considered a degenerate self-intersection and
- * the (duplicate) `t` values *will* be returned (if they're in [0,1])
+ * the (duplicate) `t` values will be returned
  *
  * @param ps a bezier curve given as an array of its control points
- * @param inRange If `inRange === true` (the default) then return the two `t`
+ * @param inRange if `inRange === true` (the default) then return the two `t`
  * parameter values only if both are in [0,1] else return `[]`.
- * If `inRange === false` then return the (0, 1 or 2) `t` values in [0,1].
+ * If `inRange === false` then return the (0,1 or 2) `t` values in `[0,1]` even
+ * if only one is in that range.
  *
  * @doc mdx
  */

@@ -18,8 +18,8 @@ function area(
 
     const poly = integrate(
         subtract(
-            multiply(x, dy), 
-            multiply(y, dx)
+            multiply(x,dy), 
+            multiply(y,dx)
         ), 0
     );
 

@@ -17,11 +17,11 @@ const γγ6 = γγ(6);
  * results (see points below)
  *
  * * the bezier curve's parameter `t` values are retuned in objects very
- * similar to [[X]]
+ * similar to the type [[X]]
  * * this algorithm is mathematically guaranteed accurate to within
- * `4 * Number.EPSILON` in the t values of the bezier curve
+ * `4 * Number.EPSILON` in the `t` parameter values of the bezier curve
  *
- * @param circle
+ * @param circle a circle given as the object `{ center: number[], radius: number }`
  * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  *
@@ -51,7 +51,7 @@ function circleBezierIntersection(circle, ps) {
     }
     const polyE = _polyE.map(e => γγ6 * e);
     const ris = (allRootsCertified(poly, 0, 1, polyE, () => getCoeffsExact(circle, ps), true) ||
-        [{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }]);
+        [{ tS: 0.5, tE: 0.5, multiplicity: 1 }]);
     return ris.map(ri => {
         const box = getIntervalBox(ps, [ri.tS, ri.tE]);
         return { p: getPFromBox(box), box, t: mid(ri), ri };

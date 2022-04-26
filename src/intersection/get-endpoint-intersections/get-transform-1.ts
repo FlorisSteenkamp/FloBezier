@@ -1,6 +1,7 @@
 import { eDiff, eSign } from 'big-float-ts';
 
 
+/** @internal */
 function getTransform1(
         _xyA: number[][][],
         _xyB: number[][][]): number[][] {

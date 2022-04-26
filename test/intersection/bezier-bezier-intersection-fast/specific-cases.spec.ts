@@ -25,7 +25,7 @@ describe('bezierBezierIntersectionFast', function() {
             const psB = [[1.021,1]];
             const xs = bezierBezierIntersectionFast(psA, psB);
             // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(xs).to.be.nearly(2**4, [[[0,1],[0,1]]]);
+            expect(xs).to.be.nearly(2**4, [[[0.5,0.5],[0.5,0.5]]]);
         }
     });
 

@@ -2,11 +2,7 @@ import { RootInterval } from 'flo-poly';
 
 
 /** 
- * Represents an intersection point between two bezier curves as 'seen' by one
- * of the curves.
- * 
- * A full description of an intersection is then represented by a pair of `X`s, 
- * as from the point of view of each curve.
+ * Represents an intersection point between two bezier curves.
  */
 interface X {
     /** 
@@ -66,6 +62,7 @@ interface X {
 }
 
 
+/** @internal */
 function getPFromBox(box: number[][]) {
     const tl = box[0];
     const br = box[1];

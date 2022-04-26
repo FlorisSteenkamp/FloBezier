@@ -4,6 +4,8 @@ import { translate } from "flo-vector2d";
  * circle in the first quadrant scaled and then translated.
  *
  * * see: [Approximate a circle with cubic Bézier curves](https://spencermortensen.com/articles/bezier-circle/)
+ *
+ * @doc mdx
  */
 function generateQuarterCircle(scale, translation) {
     // `c` can be made slightly more accurate by calculating a more accurate

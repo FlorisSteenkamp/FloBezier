@@ -4,6 +4,7 @@ import { erEstimate } from "./er-estimate.js";
 import { erSign } from "./er-sign.js";
 
 
+/** @internal */
 function getAB(getTransform: (xyA: number[][][], xyB: number[][][]) => number[][]) {
     return (
             psA: number[][],

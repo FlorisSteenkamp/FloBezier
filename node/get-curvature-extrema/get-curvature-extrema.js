@@ -7,7 +7,7 @@ import { cubicToQuadratic } from "../transformation/degree-or-type/cubic-to-quad
  * Returns the parameter `t` values (in `[0,1]`) of local minimum / maximum
  * absolute curvature for the given bezier curve.
  *
- * If there are an infinite number of such t values (such as is the case for a
+ * If there are an infinite number of such `t` values (such as is the case for a
  * line), an empty array is returned.
  *
  * * see [MvG](https://math.stackexchange.com/a/1956264/130809)'s excellent

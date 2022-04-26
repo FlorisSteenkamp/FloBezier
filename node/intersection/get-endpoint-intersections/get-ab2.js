@@ -3,6 +3,7 @@ import { getTransform2 } from "./get-transform-2.js";
 import { toPowerBasisExact } from "../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
 import { getAB1 } from "./get-ab1.js";
 import { getAB } from "./get-ab.js";
+/** @internal */
 function getAB2(psA, psB) {
     const _xyA = toPowerBasisExact(psA);
     // Both `_xyB[0][0]` and `_xyB[1][0]` can't be zero else we would have had

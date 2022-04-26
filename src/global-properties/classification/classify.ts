@@ -191,7 +191,7 @@ const classification = {
  *
  * * **exact**: not susceptible to floating point round-off
  * 
- * @param ps a bezier curve of order 0, 1, 2 or 3 given as an array of its 
+ * @param ps a bezier curve of order 0,1,2 or 3 given as an array of its 
  * control points.
  * 
  * @example
@@ -245,7 +245,7 @@ type GeneralCubic =
  * Return a complete classification of the given *general* cubic bezier curve as 
  * either having an `acnode`, `crunode`, `cusp` or being an `explicit` curve.
  * 
- * * **precondition:** the given bezier curve is a 'general' cubic, i.e. not all
+ * * **precondition**: the given bezier curve is a 'general' cubic, i.e. not all
  * points collinear and not degenerate to a quadratic curve, line or point.
  * 
  * @param ps 

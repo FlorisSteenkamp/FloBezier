@@ -21,4 +21,4 @@ interface YBounds {
     minY: Bound;
     maxY: Bound;
 }
-export { Bound, XBounds, YBounds };
+export type { Bound, XBounds, YBounds };

@@ -18,9 +18,9 @@ const ediff = eDiff;
  * * the returned polynomial coefficients are exact (i.e. error-free)
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
- * @param ps An order 3 bezier curve.
+ * @param ps a cubic bezier curve.
  * 
- * @doc
+ * @internal
  */
 function getCoeffsBez3Exact(ps: number[][]) {
     const [[a3,a2,a1],[b3,b2,b1]] = toPowerBasis3Exact(ps);

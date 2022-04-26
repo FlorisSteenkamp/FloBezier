@@ -19,7 +19,8 @@ const qaq = ddAddDd; // error -> 3*γ²
  * * intermediate calculations are done in double-double precision
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  *
- * @param ps
+ * @param ps a cubic bezier curve given as an array of its control points,
+ * e.g. `[[1,2],[3,4],[5,7],[0,0]]`
  *
  * @doc mdx
  */

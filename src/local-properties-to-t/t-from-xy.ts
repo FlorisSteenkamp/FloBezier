@@ -52,7 +52,7 @@ function tFromXY(
     if (ps.length === 1) {
         const p1 = ps[0];
         if (p1[0] === p[0] && p1[1] === p[1]) {
-            return [{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }];
+            return [{ tS: 0.5, tE: 0.5, multiplicity: 1 }];
         }
         return [];
     }
@@ -123,7 +123,7 @@ function tFromXY3(
         if (yrs === undefined) {
             // the `y` value of the point is on the curve for all `t` values
             // the curve must be a point
-            return [{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }];
+            return [{ tS: 0.5, tE: 0.5, multiplicity: 1 }];
         }
 
         return yrs; //.map(r => [r.tS, r.tE]);
@@ -220,7 +220,7 @@ function tFromXY2(
         if (yrs === undefined) {
             // the `y` value of the point is on the curve for all `t` values
             // the curve must be a point
-            return [{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }];
+            return [{ tS: 0.5, tE: 0.5, multiplicity: 1 }];
         }
 
         return yrs;
@@ -289,7 +289,7 @@ function tFromXY1(
         if (yrs === undefined) {
             // the `y` value of the point is on the curve for all `t` values
             // the curve must be a point
-            return [{ tS: 0, tE: 1, multiplicity: Number.POSITIVE_INFINITY }];
+            return [{ tS: 0.5, tE: 0.5, multiplicity: 1 }];
         }
 
         return yrs;

@@ -257,7 +257,7 @@ declare const classification: {
  *
  * * **exact**: not susceptible to floating point round-off
  *
- * @param ps a bezier curve of order 0, 1, 2 or 3 given as an array of its
+ * @param ps a bezier curve of order 0,1,2 or 3 given as an array of its
  * control points.
  *
  * @example
