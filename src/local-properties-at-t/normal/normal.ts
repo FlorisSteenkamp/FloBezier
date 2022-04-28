@@ -8,7 +8,10 @@ import { Horner } from 'flo-poly';
  * that point and rotating it by 90 degrees (it is *not* the derivative of the 
  * tangent - for that use e.g. [[evaluate2ndDerivative]])
  * 
- * @param ps a linear, quadratic or cubic bezier curve given by its control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * * uses double precision calculations internally
+ * 
+ * @param ps a linear, quadratic or cubic bezier curve given by its ordered
+ * control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * @param t the parameter value where the normal should be evaluated
  * 
  * @doc mdx

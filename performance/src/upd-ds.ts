@@ -12,7 +12,7 @@ const abs = Math.abs;
  */
 function updDs(
         ds: number[],
-        xs: X[][],
+        xs: X[],
         ts: number[]): boolean {
 
     const xslength = xs ? xs.length : 0;
@@ -28,7 +28,7 @@ function updDs(
         let closest = Number.POSITIVE_INFINITY;
         for (let k=0; k<xslength; k++) {
             const xPair = xs[k];
-            const ri = xPair[0].ri;
+            const ri = xPair.ri1;
             const t = (ri.tE + ri.tS) / 2;
             let delta = abs(t - tP);
             if (delta < closest) { 

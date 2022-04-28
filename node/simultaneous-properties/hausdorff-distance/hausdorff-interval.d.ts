@@ -1,3 +1,4 @@
+/** @internal */
 interface HausdorffInterval {
     tS: number;
     tE: number;

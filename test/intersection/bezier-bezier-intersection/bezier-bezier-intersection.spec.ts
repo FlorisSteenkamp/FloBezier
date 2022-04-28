@@ -2,8 +2,10 @@ import { expect, assert } from 'chai';
 import { describe } from 'mocha';
 import { bezierBezierIntersection, evaluateExact } from '../../../src/index.js';
 import { getPss } from '../../helpers/intersection/get-pss.js';
-import { X, sub1Ulp, add1Ulp } from "../../../src/index.js";
+import { X } from "../../../src/index.js";
 import { eAdd, eDiff, eEstimate, eMult } from 'big-float-ts';
+import { add1Ulp } from '../../../src/add-1-ulp.js';
+import { sub1Ulp } from '../../../src/sub-1-ulp.js';
 
 const eps = Number.EPSILON;
 const { sqrt, abs } = Math;
@@ -54,8 +56,8 @@ function testBezBezIntersection(
             const tA = tEA/2 + tSA/2;
             const tB = tEB/2 + tSB/2;
 
-            assert(tEA - tSA <= 4*eps || tEA - tSA === 1, `expected ${tEA - tSA} to be less than or equal to ${4*eps} (or === 1)`);
-            assert(tEB - tSB <= 4*eps || tEB - tSB === 1, `expected ${tEB - tSB} to be less than or equal to ${4*eps} (or === 1)`);
+            assert(tEA - tSA <= 4*eps, `expected ${tEA - tSA} to be less than or equal to ${4*eps}`);
+            assert(tEB - tSB <= 4*eps, `expected ${tEB - tSB} to be less than or equal to ${4*eps}`);
 
             const pA = evaluateExact(psA,tA);
             const pB = evaluateExact(psB,tB);
@@ -98,7 +100,7 @@ function getUlpRange(
         }
     }
 
-    return [t, ...tsBack.reverse(), ...tsForward];
+    return [...tsBack.reverse(), t, ...tsForward];
 }
 
 
@@ -157,7 +159,10 @@ function ensureResultsAccurate(
         infos: { d: number; pss: number[][][]; }[],
         total: number) {
 
-    if (total === 0) { return; }
+    if (total === 0) { 
+        // ignore coverage
+        return; 
+    }
 
     let sum = 0;
     let max = 0;

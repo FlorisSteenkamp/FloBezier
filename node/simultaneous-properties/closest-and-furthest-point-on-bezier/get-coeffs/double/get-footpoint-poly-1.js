@@ -1,3 +1,4 @@
+/** @internal */
 function getFootpointPoly1(ps, p) {
     const [[x0, y0], [x1, y1]] = ps;
     const [xp, yp] = p;

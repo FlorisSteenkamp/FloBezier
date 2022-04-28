@@ -5,10 +5,10 @@
  * * quadratic bezier curves can always be represented exactly by cubics - the
  * converse is false
  *
- * @param ps an quadratic bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param ps a quadratic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
  *
- * @internal
+ * @doc
  */
 function quadraticToCubic(ps) {
     const [[x0, y0], [x1, y1], [x2, y2]] = ps;

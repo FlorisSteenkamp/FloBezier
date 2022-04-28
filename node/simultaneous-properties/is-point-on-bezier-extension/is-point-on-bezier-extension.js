@@ -8,7 +8,7 @@ import { isPointOnBezierExtension3 } from './is-point-on-bezier-extension-3.js';
  * `(-∞, +∞)`, `false` otherwise.
  *
  * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * control point coordinates, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * @param p a point with coordinates given as [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
  * expansions; if only double precision coordinates need to be provided then
  * wrap them in a one element array, e.g. for a point with `x` and `y` coordinates

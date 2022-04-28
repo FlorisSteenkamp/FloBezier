@@ -13,3 +13,4 @@ coverage/
 .vscode/
 quokka-test.ts
 *.py
+src/__pycache__/

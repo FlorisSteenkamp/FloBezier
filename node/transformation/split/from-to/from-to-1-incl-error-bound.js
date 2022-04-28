@@ -3,10 +3,10 @@ const abs = Math.abs;
 const psErrorFree = [[0, 0], [0, 0]];
 /**
  * Returns a bezier curve that starts and ends at the given `t` parameters
- * including an error bound (that needs to be multiplied by `3u`, where
- * `u === Number.EPSILON/2`).
+ * including an error bound (that needs to be multiplied by `3u` before use,
+ * where `u === Number.EPSILON/2`).
  *
- * @param ps a lineer bezier curve (a line) given as an ordered array of its
+ * @param ps a linear bezier curve (a line) given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1]]`
  * @param tS the `t` parameter where the resultant bezier should start
  * @param tE the `t` parameter where the resultant bezier should end

@@ -8,10 +8,14 @@ const eadd = eAdd;
 const ediff = eDiff;
 /**
  * Returns the result of multiplying a floating point expansion by 4.
+ *
  * * **error free**
+ *
  * * see [[Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
  *
  * @param e a floating point expansion
+ *
+ * @internal
  */
 function em4(e) {
     const e_ = [];

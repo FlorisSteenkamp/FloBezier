@@ -8,14 +8,13 @@ const { tc, num } = settings;
 const { dot_, box_ } = draw(ctx);
 
 
-function drawIntersections(xs: X[][]) {
+function drawIntersections(xs: X[]) {
     //if (!ris) { return; }
     //ris.map(t => dot_1(tc(evaluate(ps2, mid(t)))));
 
     xs.map(x => {
-        const x0 = x[0];
-        const tl = tc(unsquashp(untransp(x0.box[0])));
-        const br = tc(unsquashp(untransp(x0.box[1])));
+        const tl = tc(unsquashp(untransp(x.box[0])));
+        const br = tc(unsquashp(untransp(x.box[1])));
         //dot_(tc(unsquashp(untransp(p))));
         box_([tl,br]);
         //console.log(tl,br)

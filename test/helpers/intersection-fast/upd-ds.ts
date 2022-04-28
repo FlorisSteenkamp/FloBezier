@@ -19,9 +19,7 @@ function updDs(
         for (let k=0; k<xs.length; k++) {
             const x = xs[k];
             const ri = x.ri1;
-            const t = ri.tS === 0 && ri.tE === 1 
-                ? 0 
-                : (ri.tE + ri.tS) / 2;
+            const t = (ri.tE + ri.tS) / 2;
             let delta = abs(t - tP);
             if (delta < closest) { 
                 closest = delta; 

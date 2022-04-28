@@ -27,7 +27,7 @@ function test() {
 
     const { showNaive, showNative, showPaper, showGeo } = settings;
     
-    let xss: (X[][] | undefined)[] = [];
+    let xss: X[][] = [];
 
     if (showNative) { xss = native(pss); }
     if (showGeo)    { geo    (pss, xss);  }

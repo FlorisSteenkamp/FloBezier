@@ -1,7 +1,7 @@
 /**
  * Returns the hybrid quadratic version of the given cubic bezier. For a
- * definition of hybrid quadratic bezier curves please see this paper:
- * http://scholarsarchive.byu.edu/cgi/viewcontent.cgi?article=2206&context=etd
+ * definition of hybrid quadratic bezier curves please see
+ * this [article](http://scholarsarchive.byu.edu/cgi/viewcontent.cgi?article=2206&context=etd)
  *
  * * returns an array of three quadratic bezier points where the
  * middle point is a 'hybrid' point represented as a line (itself represented

@@ -11,7 +11,7 @@ const { num, timingOnly } = settings;
 
 function doPaper(
         curves: any, 
-        xss: (X[][] | undefined)[]) {
+        xss: X[][]) {
 
     let total = 0;
     const ds: number[] = [];

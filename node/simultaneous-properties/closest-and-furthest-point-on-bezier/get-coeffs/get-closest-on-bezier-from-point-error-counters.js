@@ -1,8 +1,9 @@
 const abs = Math.abs;
 /**
- * Returns the polynomial whose roots are all the `t` values on the given bezier
- * curve such that the line from the given point to the point on the bezier
- * evaluated at `t` is tangent to the bezier at `t`.
+ * Returns a representation of the error when calculating the polynomial whose
+ * roots are all the `t` values on the given bezier curve such that the line
+ * from the given point to the point on the bezier evaluated at `t` is tangent
+ * to the bezier at `t`.
  *
  * @param ps a cubic bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
@@ -127,9 +128,10 @@ function getClosestOnBezier3FromPointErrorCounters(ps, p) {
     ];
 }
 /**
- * Returns the polynomial whose roots are all the `t` values on the given bezier
- * curve such that the line from the given point to the point on the bezier
- * evaluated at `t` is tangent to the bezier at `t`.
+ * Returns a representation of the error when calculating the polynomial whose
+ * roots are all the `t` values on the given bezier curve such that the line
+ * from the given point to the point on the bezier evaluated at `t` is tangent
+ * to the bezier at `t`.
  *
  * @param ps a quadratic bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
@@ -217,9 +219,10 @@ function getClosestOnBezier2FromPointErrorCounters(ps, p) {
     ];
 }
 /**
- * Returns the polynomial whose roots are all the `t` values on the given bezier
- * curve such that the line from the given point to the point on the bezier
- * evaluated at `t` is tangent to the bezier at `t`.
+ * Returns a representation of the error when calculating the polynomial whose
+ * roots are all the `t` values on the given bezier curve such that the line
+ * from the given point to the point on the bezier evaluated at `t` is tangent
+ * to the bezier at `t`.
  *
  * @param ps a linear bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1]]`

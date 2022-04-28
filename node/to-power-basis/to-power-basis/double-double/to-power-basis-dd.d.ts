@@ -1,7 +1,8 @@
 /**
  * Returns the power basis representation of a bezier curve of order cubic or
- * less (with intermediate calculations done in double-double precision).
+ * less.
  *
+ * * intermediate calculations are done in double-double precision
  * * returns the power basis x and y coordinate polynomials from highest power
  * to lowest, e.g. if `x(t) = at^3 + bt^2 + ct + d`
  * and `y(t) = et^3 + ft^2 + gt + h` then the result is returned

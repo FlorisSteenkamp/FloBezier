@@ -1,5 +1,5 @@
 /**
- * Returns the normal, i.e. returns the `[x,y]` value of the twice
+ * Returns the *exact* normal, i.e. returns the `[x,y]` value of the twice
  * differentiated (with respect to `t`) bezier curve's power basis when
  * evaluated at `t`.
  *

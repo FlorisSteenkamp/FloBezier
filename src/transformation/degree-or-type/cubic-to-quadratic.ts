@@ -1,5 +1,4 @@
 import { expansionProduct, twoDiff, eSign, eEstimate, eDiff, scaleExpansion, twoSum } from 'big-float-ts';
-import { isCollinear } from '../..';
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const epr = expansionProduct;
@@ -22,7 +21,7 @@ const ts = twoSum;
  * 
  * @param ps a cubic bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- * @param preserveTangents defaults to `false`; if `true` then the approximation
+ * @param preserveTangents optional; defaults to `false`; if `true` then the approximation
  * must also preserve the tangents of the cubic at the initial and final control 
  * points
  * 

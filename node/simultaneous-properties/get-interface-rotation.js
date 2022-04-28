@@ -17,7 +17,8 @@ const { PI: 𝜋, asin, acos } = Math;
  * Intermediate calculations are done in double precision in a numerically
  * stable manner.
  *
- * @param a the first 2d vector
+ * @param a the first 2d vector given as `[x,y]` where `x` and `y` are the
+ * coordinates, e.g. `[2,3]`
  * @param b the second 2d vector
  */
 function getInterfaceRotation(a, b) {

@@ -21,7 +21,8 @@ const abs = Math.abs;
  *  * double precision: `<E> * (γ(1)) * result_`
  *  * double-double precision: `<E> * (2*γγ(3)) * result_`
  * 
- * where [[γ]] and [[γγ]] are the usual error functions.
+ * where [[γ]] and [[γγ]] are the usual error functions with `γ(1) === 1.1102230246251568e-16` 
+ * and `γγ(3) === 3.697785493223493e-32`.
  * The `T` in the error counter formula is the input error given as an error 
  * counter on `t`. For example, if the exact `t` (let's call it `te`) is bounded 
  * by `(|t| - 5u) < |te| < (|t| + 5u)` where `u === Number.EPSILON/2` then `T` 

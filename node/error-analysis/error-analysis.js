@@ -11,4 +11,6 @@ function γγ(n) {
     return nuu / (1 - nuu);
 }
 export { γ, γγ };
+γ(1); //=> 1.1102230246251568e-16
+γγ(3); //=> 3.697785493223493e-32
 //# sourceMappingURL=error-analysis.js.map

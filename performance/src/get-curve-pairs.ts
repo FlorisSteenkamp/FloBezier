@@ -1,10 +1,11 @@
 import { fromTo3 } from '../../src/transformation/split/from-to/from-to-3.js';
 import { 
     bezierSelfIntersection, fromPowerBasis, getHodograph, 
-    getXY, toString, cubicToQuadratic
+    toString, cubicToQuadratic, toPowerBasis
 } from '../../src/index.js';
 import { generateSelfIntersecting } from '../../src/create/generate-self-intersecting.js';
 import { areIntersectionsInfinte } from './are-intersections-infinite.js';
+import { toPowerBasis3 } from '../../src/to-power-basis/to-power-basis/double/to-power-basis.js';
 
 
 // a bit contrived (next 2)
@@ -723,8 +724,8 @@ function get33SameAlgebraicallyNonOverlapping(
         [t1,t2] = t1 < t2 ? [t1,t2] : [t2,t1];
        
 
-        const ps1 = fromTo3(ps,0,t1).ps;
-        const ps2 = fromTo3(ps,t2,1).ps;
+        const ps1 = fromTo3(ps,0,t1);
+        const ps2 = fromTo3(ps,t2,1);
 
         if (areIntersectionsInfinte(ps1,ps2)) {
             return [ps1,ps2];
@@ -758,7 +759,7 @@ function getCCSameAlgebraicallyOverlapping(
         let t2 = Math.random() + 2**45 - 2**45;
 
         const ps1 = ps;
-        const ps2 = fromTo3(ps,0-t1,1+t2).ps;
+        const ps2 = fromTo3(ps,0-t1,1+t2);
 
         if (areIntersectionsInfinte(ps1,ps2)) {
             //if (!goodHodo) {
@@ -866,12 +867,12 @@ function get3A2B3EqA3B2() {
             () => getRandomDoubleFrom0To1() + 2**11 - 2**11
         );
     
-        const [[a3,a2,a1,a0],[b3,b2,b1,b0]] = getXY(ps);
+        const [[a3,a2,a1,a0],[b3,b2,b1,b0]] = toPowerBasis3(ps);
         const a3_ = a2*b3/b2;
 
         if (a2*b3 === a3_*b2) {
             const ps_ = fromPowerBasis([[a3_,a2,a1,a0],[b3,b2,b1,b0]]);
-            const [[_a3,_a2,_a1,_a0_],[_b3,_b2,_b1,_b0_]] = getXY(ps_);
+            const [[_a3,_a2,_a1,_a0_],[_b3,_b2,_b1,_b0_]] = toPowerBasis3(ps_);
             if (_a2*_b3 === _a3*_b2) {
                 console.log(i);
                 return ps_;

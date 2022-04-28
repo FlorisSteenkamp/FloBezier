@@ -1,8 +1,10 @@
 import { toPowerBasis } from "../../../to-power-basis/to-power-basis/double/to-power-basis.js";
 import { Horner } from 'flo-poly';
 /**
- * Returns the result of evaluating the given bezier curve at the parameter `t`
- * using power bases conversion and subsequently [Horner's Method](https://en.wikipedia.org/wiki/Horner%27s_method)
+ * Returns the resulting point of evaluating the given bezier curve at the
+ * given parameter `t`.
+ *
+ * * uses power bases conversion and subsequently [Horner's Method](https://en.wikipedia.org/wiki/Horner%27s_method)
  * to evaluate the polynomial in double precision floating point arithmetic.
  *
  * The resulting point `p` is returned as the pair `[x,y]`, where `x` and `y` are

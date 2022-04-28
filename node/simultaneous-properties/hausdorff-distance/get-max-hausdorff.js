@@ -1,3 +1,4 @@
+/** @internal */
 function getMaxHausdorff(i) {
     return Math.max(i.hL + i.hEL, i.hR + i.hER);
 }

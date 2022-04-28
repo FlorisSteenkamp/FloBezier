@@ -1,5 +1,7 @@
 /**
  * see [Wikipedia](https://en.wikipedia.org/wiki/Heap_(data_structure))
+ *
+ * @internal
  */
 declare class Heap<T> {
     private compare;

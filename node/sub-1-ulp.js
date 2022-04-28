@@ -1,8 +1,15 @@
-const eps = Number.EPSILON;
+const { EPSILON: eps } = Number;
 const u = eps / 2;
-/** @internal */
+const es = (eps ** 2) / 2;
+const ups = u + es;
+/**
+ * Subtract one unit in the last place (ulp) from the given number
+ *
+ * * subnormal numbers (and 0) are returned unaltered
+ * @internal
+ */
 function sub1Ulp(n) {
-    return n - n * (u + eps ** 2);
+    return n > 0 ? n - n * ups : n + n * ups;
 }
 export { sub1Ulp };
 //# sourceMappingURL=sub-1-ulp.js.map

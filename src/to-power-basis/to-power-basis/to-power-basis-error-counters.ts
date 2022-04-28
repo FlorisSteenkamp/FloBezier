@@ -28,7 +28,8 @@ const abs = Math.abs;
  *  * double precision: `<E> * (γ(1)) * result_`
  *  * double-double precision: `<E> * (γγ(3)) * result_`
  * 
- * where [[γ]] and [[γγ]] are the usual error functions.
+ * where [[γ]] and [[γγ]] are the usual error functions with `γ(1) === 1.1102230246251568e-16` 
+ * and `γγ(3) === 3.697785493223493e-32`.
  * 
  * ```
  * // for cubic bezier curves

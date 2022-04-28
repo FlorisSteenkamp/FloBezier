@@ -1,4 +1,5 @@
 
+/** @internal */
 function getFootpointPoly3(
         ps: number[][], p: number[]): number[] {
 

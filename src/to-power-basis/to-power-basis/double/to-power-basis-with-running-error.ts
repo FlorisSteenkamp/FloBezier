@@ -4,9 +4,11 @@ const abs = Math.abs;
 
 /**
  * Returns the power basis representation of a bezier curve of order cubic or 
- * less (with intermediate calculations done in double precision) including a
- * coefficient-wise absolute error bound that need to be multiplied by `γ(1)`
+ * less including a coefficient-wise absolute error bound.
  * 
+ * * intermediate calculations are done in double precision
+ * * the error bound need to be multiplied by `γ(1) === u/(1-u)` 
+ * where `u = Number.EPSILON/2` before use
  * * returns the resulting power basis x and y coordinate polynomials from 
  * highest power to lowest, e.g. if `x(t) = at^2 + bt + c` 
  * and `y(t) = dt^2 + et + f` then  the result is returned 

@@ -6,7 +6,7 @@ import { RootInterval } from 'flo-poly';
  *
  * * Only `t` values in `[0,1]` are returned.
  *
- * * Returns `undefined` if the point is on the curve and the curve is a point.
+ * * see also [[closestPointOnBezier]] and [[closestPointOnBezierCertified]]
  *
  * **precondition**: `p` must be *exactly* on the curve for the result to be
  * certified

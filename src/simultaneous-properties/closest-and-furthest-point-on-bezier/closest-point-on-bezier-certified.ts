@@ -7,10 +7,11 @@ import { getFootpointPoly1Exact } from "./get-coeffs/exact/get-footpoint-poly-1-
 import { getClosestOnBezier1FromPointErrorCounters } from "./get-coeffs/get-closest-on-bezier-from-point-error-counters.js";
 import { getClosestOnBezier2FromPointErrorCounters } from "./get-coeffs/get-closest-on-bezier-from-point-error-counters.js";
 import { getClosestOnBezier3FromPointErrorCounters } from "./get-coeffs/get-closest-on-bezier-from-point-error-counters.js";
-import { allRootsCertified, RootInterval } from "flo-poly";
+import { allRootsCertified, mid, RootInterval } from "flo-poly";
 import { getIntervalBox } from "../../global-properties/bounds/get-interval-box/get-interval-box.js";
-import { γ, γγ } from '../../error-analysis/error-analysis.js';
+import { γγ } from '../../error-analysis/error-analysis.js';
 import { twoDiff, eEstimate, eMult, eAdd } from 'big-float-ts';
+import { getPFromBox } from "../../intersection/bezier-bezier-intersection/x.js";
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
@@ -20,26 +21,41 @@ const emult = eMult;
 const eadd = eAdd;
 
 const eps = Number.EPSILON;
+const { sqrt } = Math;
 
 const γγ6 = γγ(6);
 
 
 /**
  * Returns the closest point(s) (and parameter `t` value(s)) on the given 
- * bezier curve to the given point.
+ * bezier curve to the given point (with `t ∈ [0,1]`).
  * 
- * * guaranteed accurate to 4 ulps in `t` value
+ * * guaranteed accurate to within `4*Number.EPSILON` in the returned `t` 
+ * value(s)
+ * * in some cases there can be more than one closest point, e.g. on the axis
+ * of symmetry of a parabola
+ * * the returned point(s) are objects with the following properties:
+ *     * `p`: the best estimate point on the bezier curve (calculated from the root interval `ri`)
+ *     * `t`: the best estimate `t` parameter value (calculated from the root interval `ri`)
+ *     * `d`: the best estimate closest distance from the point to the bezier curve (calculated from the root interval `ri`)
+ *     * `ri`: a root interval guaranteed to contain the actual `t` value
+ *     * `box`: a small box guaranteed to contain the relevant point on the bezier curve
+ *     * `dSquaredI`: a small squared distance interval guaranteed to contain the actual distance squared
+ *        between the point and the bezier curve
  * 
  * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- * @param p 
+ * @param p a point, e.g. `[1,2]`
  * 
  * @doc
  */
 function closestPointOnBezierCertified(
         ps: number[][], 
         p: number[]): {
-            intervalBox: number[][];
+            p: number[];
+            t: number;
+            d: number;
+            box: number[][];
             ri: RootInterval;
             dSquaredI: number[];
         }[] {
@@ -82,10 +98,14 @@ function closestPointOnBezierCertified(
     ris.push({ tS: 1, tE: 1, multiplicity: 1 });
 
     const infos = ris.map(ri => {
-        const intervalBox = getIntervalBox(ps, [ri.tS, ri.tE])
+        const box = getIntervalBox(ps, [ri.tS, ri.tE])
+        const dSquaredI = rootIntervalToDistanceSquaredInterval(box, p);
         return {
-            dSquaredI: rootIntervalToDistanceSquaredInterval(intervalBox, p),
-            intervalBox,
+            p: getPFromBox(box),
+            t: mid(ri),
+            d: (sqrt(dSquaredI[0]) + sqrt(dSquaredI[1]))/2,
+            dSquaredI,
+            box,
             ri
         }
     });
@@ -100,7 +120,10 @@ function closestPointOnBezierCertified(
     }
 
     const closestPointInfos: {
-        intervalBox: number[][];
+        p: number[];
+        t: number;
+        d: number;
+        box: number[][];
         ri: RootInterval;
         dSquaredI: number[]
     }[] = [];
@@ -117,20 +140,20 @@ function closestPointOnBezierCertified(
 
 
 /**
- * Returns the distance interval squared from the given root interval (currently
+ * Returns the distance interval squared given the root interval (currently
  * ignoring multiplicity)
  * 
- * @param intervalBox
+ * @param box
  * @param p
  * 
  * @internal
  */
  function rootIntervalToDistanceSquaredInterval(
-        intervalBox: number[][], 
+        box: number[][], 
         p: number[]) {
 
-    const bl = intervalBox[0];
-    const tr = intervalBox[1];
+    const bl = box[0];
+    const tr = box[1];
     const minX = bl[0];
     const minY = bl[1];
     const maxX = tr[0];

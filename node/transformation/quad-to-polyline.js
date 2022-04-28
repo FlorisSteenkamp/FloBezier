@@ -1,10 +1,10 @@
 import { isQuadFlat } from "../global-properties/classification/is-quad-flat.js";
 import { fromToInclErrorBound } from "./split/from-to-incl-error-bound.js";
 /**
- * Transforms the given quadratic bezier into a polyline approximation to within
- * a given tolerance and returns the result.
+ * Transforms the given quadratic bezier curve into a polyline approximation to
+ * within a given tolerance and returns the result.
  *
- * @param ps an quadratic bezier curve given as an ordered array of its
+ * @param ps a quadratic bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param tolerance a tolerance given as the maximum Hausdorff distance allowed
  * between the polyline and the bezier curve

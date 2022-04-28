@@ -1,6 +1,6 @@
 /**
- * Returns the *exact* result of evaluating the given bezier curve at the
- * given `t` parameter.
+ * Returns the *exact* resulting point of evaluating the given bezier curve at
+ * the given `t` parameter.
  *
  * * the result is returned as `[x,y]`, where `x` and `y` are [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) floating
  * point expansions

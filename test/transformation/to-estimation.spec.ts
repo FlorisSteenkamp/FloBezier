@@ -1,9 +1,9 @@
 import { scaleExpansion } from 'big-float-ts';
 import { expect, assert, use } from 'chai';
 import { describe } from 'mocha';
-import { toEstimation } from '../../src/index.js';
 import { nearly } from '../helpers/chai-extend-nearly.js';
 import { getRandomBezier, getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../helpers/get-random-bezier.js';
+import { toEstimation } from '../../src/transformation/to-estimation.js';
 
 use(nearly);
 

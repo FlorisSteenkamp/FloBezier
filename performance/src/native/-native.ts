@@ -12,12 +12,12 @@ const { timingOnly, showNativeXs } = settings;
 
 
 function native(
-        pss: number[][][]): (X[][] | undefined)[] {
+        pss: number[][][]): X[][] {
 
     let total = 0;
     const ds: number[] = [];
     let timing: number;
-    const xss: (X[][] | undefined)[] = [];
+    const xss: X[][] = [];
 
     const timeStart = performance.now();
     for (let i=0; i<2*num; i++, i++) {
@@ -26,22 +26,15 @@ function native(
 
         const xs = bezierBezierIntersection(ps1, ps2);
 
-        if (!xs) { 
-            if (!timingOnly) {
-                xss.push(undefined)
-            }
-            continue; 
-        } 
-
         total += xs.length;
 
         if (showNativeXs && i < 1) {
             drawIntersections(xs);
-            console.log(xs.map(x => x[0].box));
+            console.log(xs.map(x => x.box));
         }
         if (!timingOnly) {
             for (const x of xs) {
-                const box = x[0].box;
+                const box = x.box;
                 const px = (box[1][0] + box[0][0])/2;
                 const py = (box[1][1] + box[0][1])/2;
                 const p = [px,py];

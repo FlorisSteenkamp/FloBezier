@@ -1,6 +1,8 @@
 
 /**
  * see [Wikipedia](https://en.wikipedia.org/wiki/Heap_(data_structure))
+ * 
+ * @internal
  */
 class Heap<T> {
     public heap: T[] = [];

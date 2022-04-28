@@ -1,5 +1,8 @@
 
-function getFootpointPoly2(ps: number[][], p: number[]) {
+/** @internal */
+function getFootpointPoly2(
+        ps: number[][], p: number[]) {
+
     //const [[x0, y0], [x1, y1], [x2, y2]] = ps;
     //const [xp, yp] = p;
 

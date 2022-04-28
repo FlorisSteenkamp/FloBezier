@@ -23,7 +23,7 @@ const __debug__: __Debug__ = (typeof globalThis !== 'undefined' && (globalThis a
  */
 function geo(
         pss: number[][][], 
-        xss: (X[][] | undefined)[]) {
+        xss: X[][]) {
 
     let total = 0;
     let timing: number;
@@ -45,7 +45,7 @@ function geo(
             const xs = xss[i/2];
             const tss_ = tss.filter(t => t[0] !== undefined);
 
-            const res = updDs(ds, xs!, tss_.map(ts => ts[0][0]));
+            const res = updDs(ds, xs, tss_.map(ts => ts[0][0]));
 
             if (!res) {
                 //console.log(toString(ps1));

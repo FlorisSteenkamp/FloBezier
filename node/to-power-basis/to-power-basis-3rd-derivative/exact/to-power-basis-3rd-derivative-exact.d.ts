@@ -1,5 +1,5 @@
 /**
- * Returns the exact 3rd derivative of the power basis representation of a
+ * Returns the *exact* 3rd derivative of the power basis representation of a
  * bezier curve of order cubic or less.
  *
  * * returns the resulting power basis x and y coordinate polynomials from

@@ -1,3 +1,21 @@
+/**
+ * Returns the closest point(s) (and parameter `t` value(s)) on the given
+ * bezier curve to the given point (with `t ∈ [0,1]`).
+ *
+ * * intermediate calculations are done in double precision
+ * * in some cases there can be more than one closest point, e.g. on the axis
+ * of symmetry of a parabola
+ * * the returned point(s) are objects with the following properties:
+ *     * `p`: the closest point on the bezier curve
+ *     * `t`: the `t` parameter value of the point on the bezier curve
+ *     * `d`: the closest distance between the point and the bezier curve
+ *
+ * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param p a point, e.g. `[1,2]`
+ *
+ * @doc mdx
+ */
 declare function closestPointOnBezier(ps: number[][], p: number[]): {
     p: number[];
     t: number;

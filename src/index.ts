@@ -51,8 +51,6 @@ import { getImplicitForm1Dd } from './implicit-form/double-double/get-implicit-f
 import { getImplicitForm1ErrorCounters } from './implicit-form/get-error-counters/get-implicit-form1-error-counters.js';
 import { getImplicitForm1DdWithRunningError } from './implicit-form/double-double/get-implicit-form1-dd-with-running-error.js';
 import { getImplicitForm1Exact } from './implicit-form/exact/get-implicit-form1-exact.js';
-import { toExpansion } from './transformation/to-expansion.js';
-import { toEstimation} from './transformation/to-estimation.js';
 import { fromPowerBasis } from './from-power-basis/from-power-basis.js';
 import { getHodograph } from './transformation/get-hodograph.js';
 import { generateCuspAtHalf3 } from './create/generate-cusp-at-half-t.js';
@@ -132,8 +130,6 @@ import { getFootpointPolyExact } from "./simultaneous-properties/closest-and-fur
 import { getFootpointPoly } from "./simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly.js";
 import { getFootpointPolyDd } from "./simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double-double/get-footpoint-poly-dd.js";
 import { reduceOrderIfPossible } from './transformation/reduce-order-if-possible.js'
-import { add1Ulp } from './add-1-ulp.js';
-import { sub1Ulp } from './sub-1-ulp.js';
 
 
 export {
@@ -187,8 +183,6 @@ export {
 	toString,
 
 	quadToPolyline,
-	toExpansion,
-	toEstimation,
 
 	evaluateImplicit3,
 	getImplicitForm3,
@@ -294,9 +288,6 @@ export {
 	getFootpointPoly,
 	getFootpointPolyDd,
 	getFootpointPolyExact,
-
-	add1Ulp,
-	sub1Ulp,
 
 	getEndpointIntersections
 }

@@ -24,7 +24,8 @@ const abs = Math.abs;
  *  * double-double precision: `<E> * (2*γγ(3)) * result_`
  *
  * where [[γ]] and [[γγ]] are the usual error functions (provided in this library
- * as functions with the same name).
+ * as functions with the same name) with `γ(1) === 1.1102230246251568e-16`
+ * and `γγ(3) === 3.697785493223493e-32`.
  *
  * ```
  * errorBound: {
