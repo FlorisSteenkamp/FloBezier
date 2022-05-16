@@ -3,7 +3,7 @@
  *
  * @param ps a 2d line represented by two points
  *
- * @doc
+ * @doc mdx
  */
 declare function lineToCubic(ps: number[][]): number[][];
 export { lineToCubic };

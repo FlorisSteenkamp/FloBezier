@@ -428,5 +428,6 @@ function testXs(
     expect(ordered).to.be.true;
     expect(orderedR).to.be.true;
 
+    // @ts-ignore
     expect(xs).to.be.nearly(2**16, xsR_);
 }

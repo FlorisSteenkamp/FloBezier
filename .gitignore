@@ -14,3 +14,4 @@ coverage/
 quokka-test.ts
 *.py
 src/__pycache__/
+copydocs.bat

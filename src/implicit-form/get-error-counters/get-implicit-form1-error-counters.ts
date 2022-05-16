@@ -42,7 +42,9 @@ const abs = Math.abs;
  * 
  * @doc
  */
-function getImplicitForm1ErrorCounters(ps: number[][]) {
+function getImplicitForm1ErrorCounters(
+        ps: number[][]): { vₓ_: number; vᵧ_: number; v_: number; } {
+
     // The implicit form is given by:
     // vₓx + vᵧy + v = 0
 

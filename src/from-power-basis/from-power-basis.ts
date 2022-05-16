@@ -1,6 +1,7 @@
 /**
  * Returns the Bernstein basis representation (i.e. control points) of a line, 
  * quadratic or cubic bezier given its power bases. 
+ * 
  * * **non-exact**: due to floating-point round-off (see implementation to 
  * understand under what conditions the result would be exact)
  * 

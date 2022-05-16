@@ -9,7 +9,7 @@
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param t
  *
- * @doc
+ * @doc mdx
  */
 declare function evaluateExact(ps: number[][], t: number): number[][];
 export { evaluateExact };

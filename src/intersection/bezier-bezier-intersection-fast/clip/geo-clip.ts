@@ -215,7 +215,7 @@ function geoClip(
  * quadraticRoots([1, -3, 2]); //=> [1,2]
  * ```
  * 
- * @doc
+ * @internal
  */
 function quadraticRoots(
         a: number, 

@@ -12,6 +12,7 @@ import { X } from '../../src/index.js';
 
 const _DUMMY = DUMMY;  // There must be a better way?
  
+
 function test() {
     ctx.clearRect(0, 0, 2*640, 2*384);
 
@@ -28,7 +29,6 @@ function test() {
     const { showNaive, showNative, showPaper, showGeo } = settings;
     
     let xss: X[][] = [];
-
     if (showNative) { xss = native(pss); }
     if (showGeo)    { geo    (pss, xss);  }
     if (showNaive)  { naive  (pss, xss);  }

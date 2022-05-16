@@ -31,7 +31,12 @@ const eno = eNegativeOf;
  * @doc mdx
  */
 function getImplicitForm2Exact(
-        ps: number[][]): ImplicitFormExact2 | ImplicitFormExact1 | undefined {
+        ps: number[][]): {
+            vₓₓ: number[]; vₓᵧ: number[]; vᵧᵧ: number[];
+            vₓ: number[]; vᵧ: number[]; v: number[];
+        } | { 
+            vₓ: number[]; vᵧ: number[]; v: number[];
+        } | undefined {
 
     return getImplicitForm2ExactPb(
         toPowerBasis2Exact(ps)

@@ -1,11 +1,12 @@
 import { getCoeffsCubicDd, getCoeffsQuadraticDd, getCoeffsLinearDd } from './double-double/get-coeffs-dd.js';
 import { getCoeffsCubicExact, getCoeffsQuadraticExact, getCoeffsLinearExact } from './exact/get-coeffs-exact.js';
-import { allRootsCertified, mid, type RootInterval } from 'flo-poly';
+import { allRootsCertified, mid, RootInterval } from 'flo-poly';
 import { getCoeffsCubicErrorCounters, getCoeffsLinearErrorCounters, getCoeffsQuadraticErrorCounters } from './get-circle-bezier-intersection-error-counters.js';
 import { γγ } from '../../error-analysis/error-analysis.js';
 import { getPFromBox } from '../bezier-bezier-intersection/x.js';
 import { getIntervalBox } from '../../global-properties/bounds/get-interval-box/get-interval-box.js';
 
+/** @internal */
 const γγ6 = γγ(6);
 
 

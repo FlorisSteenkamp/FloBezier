@@ -16,9 +16,15 @@ import { ImplicitForm3Coeffs } from "../../implicit-form-types.js";
  * @param cs the polynomial to evaluate
  * @param x the `x` variable at which to evaluate
  * @param y the `y` variable at which to evaluate
-  */
+ * 
+ * @doc
+ */
 function evaluateImplicit3(
-        cs: ImplicitForm3Coeffs<number>,
+        cs: {
+            vₓₓₓ: number; vₓₓᵧ: number; vₓᵧᵧ: number; vᵧᵧᵧ: number;
+            vₓₓ: number; vₓᵧ: number; vᵧᵧ: number;
+            vₓ: number; vᵧ: number; v: number;
+        },
         x: number,
         y: number): number {
 

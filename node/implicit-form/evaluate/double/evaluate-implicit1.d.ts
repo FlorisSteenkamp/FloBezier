@@ -1,4 +1,3 @@
-import { ImplicitForm1Coeffs } from "../../implicit-form-types.js";
 /**
  * Evaluates and returns the result of evaluating the given implicit function
  * (a degree 1 bivariate polynomial in `x` and `y`) at the point `[x,y]`.
@@ -14,6 +13,12 @@ import { ImplicitForm1Coeffs } from "../../implicit-form-types.js";
  * @param cs the polynomial to evaluate
  * @param x the `x` variable at which to evaluate
  * @param y the `y` variable at which to evaluate
-  */
-declare function evaluateImplicit1(cs: ImplicitForm1Coeffs<number>, x: number, y: number): number;
+ *
+ * @doc
+ */
+declare function evaluateImplicit1(cs: {
+    vₓ: number;
+    vᵧ: number;
+    v: number;
+}, x: number, y: number): number;
 export { evaluateImplicit1 };

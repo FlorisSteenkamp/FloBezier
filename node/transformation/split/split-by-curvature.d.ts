@@ -13,7 +13,7 @@
  * can be returned for a bezier piece; necessary for cubics otherwise a curve
  * with a cusp would cause an infinite loop
  *
- * @doc
+ * @doc mdx
  */
 declare function splitByCurvature(ps: number[][], maxCurviness?: number, minTSpan?: number): number[];
 export { splitByCurvature };

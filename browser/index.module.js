@@ -68,6 +68,7 @@ __webpack_require__.d(__webpack_exports__, {
   "Gc": () => (/* reexport */ generateCuspAtHalf3),
   "MM": () => (/* reexport */ generateQuarterCircle),
   "W9": () => (/* reexport */ generateSelfIntersecting),
+  "OP": () => (/* reexport */ getAbsAreaBetween),
   "A5": () => (/* reexport */ getBoundingBox),
   "FZ": () => (/* reexport */ getBoundingBoxTight),
   "vT": () => (/* reexport */ getBoundingHull),
@@ -119,8 +120,8 @@ __webpack_require__.d(__webpack_exports__, {
   "w2": () => (/* reexport */ lineToCubic),
   "L8": () => (/* reexport */ lineToQuadratic),
   "mJ": () => (/* reexport */ normal),
-  "uQ": () => (/* reexport */ quadToPolyline),
   "d3": () => (/* reexport */ quadraticToCubic),
+  "q8": () => (/* reexport */ quadraticToPolyline),
   "Ut": () => (/* reexport */ reduceOrderIfPossible),
   "GY": () => (/* reexport */ reverse),
   "ZP": () => (/* reexport */ splitByCurvature),
@@ -4267,11 +4268,6 @@ const classification = {
  *
  * @param ps a bezier curve of order 0,1,2 or 3 given as an array of its
  * control points.
- *
- * @example
- * ```typescript
- * classify([[0,0],[3,3],[-3,3],[1,0]]);  // => { order: 3, realOrder: 3, collinear: false, nodeType: 'crunode'  }
- * ```
  *
  * @doc mdx
  */
@@ -12820,545 +12816,6 @@ function splitAtBoth2(ps, tS, tE) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/split/from-to/from-to-3-incl-error-bound.ts
-const from_to_3_incl_error_bound_abs = Math.abs;
-/** error free error bounds */
-const from_to_3_incl_error_bound_psErrorFree = [[0, 0], [0, 0], [0, 0], [0, 0]];
-/**
- * Returns a bezier curve that starts and ends at the given t parameters
- * including an error bound (that needs to be multiplied by `9u`, where
- * `u === Number.EPSILON/2`).
- *
- * @param ps a cubic bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- * @param tS the `t` parameter where the resultant bezier should start
- * @param tE the `t` parameter where the resultant bezier should end
- *
- * @internal
- */
-function fromTo3InclErrorBound(ps, tS, tE) {
-    if (tS === 0) {
-        if (tE === 1) {
-            return { ps, _ps: from_to_3_incl_error_bound_psErrorFree };
-        }
-        return splitLeft3(ps, tE);
-    }
-    if (tE === 1) {
-        return splitRight3(ps, tS);
-    }
-    return splitAtBoth3(ps, tS, tE);
-}
-/**
- * Returns a bezier curve that starts at the given t parameter and ends
- * at `t === 1` including an error bound (that needs to be multiplied
- * by `9u`, where `u === Number.EPSILON/2`).
- *
- * @param ps a cubic bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- * @param t the `t` parameter where the resultant bezier should start
- *
- * @internal
- */
-function splitRight3(ps, t) {
-    // --------------------------------------------------------
-    // const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
-    const p0 = ps[0];
-    const p1 = ps[1];
-    const p2 = ps[2];
-    const p3 = ps[3];
-    const x00 = p0[0];
-    const y00 = p0[1];
-    const x10 = p1[0];
-    const y10 = p1[1];
-    const x20 = p2[0];
-    const y20 = p2[1];
-    const x30 = p3[0];
-    const y30 = p3[1];
-    // --------------------------------------------------------
-    // error bound using counters <k>:
-    // counter rules:
-    //   1. <k>a + <l>b = <max(k,l) + 1>(a + b)
-    //   2. <k>a<l>b = <k + l + 1>ab
-    //   3. fl(a) === <1>a
-    const x01 = x00 - t * (x00 - x10);
-    const x11 = x10 - t * (x10 - x20);
-    const x21 = x20 - t * (x20 - x30);
-    const x02 = x01 - t * (x01 - x11);
-    const x12 = x11 - t * (x11 - x21);
-    const x03 = x02 - t * (x02 - x12);
-    const y01 = y00 - t * (y00 - y10);
-    const y11 = y10 - t * (y10 - y20);
-    const y21 = y20 - t * (y20 - y30);
-    const y02 = y01 - t * (y01 - y11);
-    const y12 = y11 - t * (y11 - y21);
-    const y03 = y02 - t * (y02 - y12);
-    // -----------------------
-    // Calculate error bounds
-    // -----------------------
-    const _t = from_to_3_incl_error_bound_abs(t);
-    const _x00 = from_to_3_incl_error_bound_abs(x00);
-    const _x10 = from_to_3_incl_error_bound_abs(x10);
-    const _x20 = from_to_3_incl_error_bound_abs(x20);
-    const _x30 = from_to_3_incl_error_bound_abs(x30);
-    const _y00 = from_to_3_incl_error_bound_abs(y00);
-    const _y10 = from_to_3_incl_error_bound_abs(y10);
-    const _y20 = from_to_3_incl_error_bound_abs(y20);
-    const _y30 = from_to_3_incl_error_bound_abs(y30);
-    const _x01 = _x00 + _t * (_x00 + _x10); // <3>x01 = <3>(x00 - <2>(t*<1>(x00 - x10)))
-    const _x11 = _x10 + _t * (_x10 + _x20); // <3>x11
-    const _x21 = _x20 + _t * (_x20 + _x30); // <3>x21
-    const _x02 = _x01 + _t * (_x01 + _x11); // <6>x02 = <6>(x01 - <5>(t*<4>(<3>x01 - <3>x11)))
-    const _x12 = _x11 + _t * (_x11 + _x21); // <6>x12
-    const _x03 = _x02 + _t * (_x02 + _x12); // <9>x03 = <9>(x02 - <8>(t*<7>(<6>x02 - <6>x12)))
-    const _y01 = _y00 + _t * (_y00 + _y10);
-    const _y11 = _y10 + _t * (_y10 + _y20);
-    const _y21 = _y20 + _t * (_y20 + _y30);
-    const _y02 = _y01 + _t * (_y01 + _y11);
-    const _y12 = _y11 + _t * (_y11 + _y21);
-    const _y03 = _y02 + _t * (_y02 + _y12);
-    return {
-        ps: [[x03, y03], [x12, y12], [x21, y21], [x30, y30]],
-        _ps: [
-            // the coordinate-wise error bounds
-            [_x03, _y03],
-            [_x12, _y12],
-            [_x21, _y21],
-            [0, 0] // [0, 0],
-        ]
-    };
-}
-/**
- * Returns a bezier curve that starts at `t === 0` and ends at the given t
- * parameter including an error bound (that needs to be multiplied by `9u`, where
- * `u === Number.EPSILON/2`).
- *
- * @param ps a cubic bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- * @param t the `t` parameter where the resultant bezier should end
- *
- * @internal
- */
-function splitLeft3(ps, t) {
-    // --------------------------------------------------------
-    // const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
-    const p0 = ps[0];
-    const p1 = ps[1];
-    const p2 = ps[2];
-    const p3 = ps[3];
-    const x00 = p0[0];
-    const y00 = p0[1];
-    const x10 = p1[0];
-    const y10 = p1[1];
-    const x20 = p2[0];
-    const y20 = p2[1];
-    const x30 = p3[0];
-    const y30 = p3[1];
-    // --------------------------------------------------------
-    // error bound using counters <k>:
-    // counter rules:
-    //   1. <k>a + <l>b = <max(k,l) + 1>(a + b)
-    //   2. <k>a<l>b = <k + l + 1>ab
-    //   3. fl(a) === <1>a
-    const x01 = x00 - t * (x00 - x10);
-    const x11 = x10 - t * (x10 - x20);
-    const x21 = x20 - t * (x20 - x30);
-    const x02 = x01 - t * (x01 - x11);
-    const x12 = x11 - t * (x11 - x21);
-    const x03 = x02 - t * (x02 - x12);
-    const y01 = y00 - t * (y00 - y10);
-    const y11 = y10 - t * (y10 - y20);
-    const y21 = y20 - t * (y20 - y30);
-    const y02 = y01 - t * (y01 - y11);
-    const y12 = y11 - t * (y11 - y21);
-    const y03 = y02 - t * (y02 - y12);
-    // -----------------------
-    // Calculate error bounds
-    // -----------------------
-    const _t = from_to_3_incl_error_bound_abs(t);
-    const _x00 = from_to_3_incl_error_bound_abs(x00);
-    const _x10 = from_to_3_incl_error_bound_abs(x10);
-    const _x20 = from_to_3_incl_error_bound_abs(x20);
-    const _x30 = from_to_3_incl_error_bound_abs(x30);
-    const _y00 = from_to_3_incl_error_bound_abs(y00);
-    const _y10 = from_to_3_incl_error_bound_abs(y10);
-    const _y20 = from_to_3_incl_error_bound_abs(y20);
-    const _y30 = from_to_3_incl_error_bound_abs(y30);
-    const _x01 = _x00 + _t * (_x00 + _x10); // <3>x01 = <3>(x00 - <2>(t*<1>(x00 - x10)))
-    const _x11 = _x10 + _t * (_x10 + _x20); // <3>x11
-    const _x21 = _x20 + _t * (_x20 + _x30); // <3>x21
-    const _x02 = _x01 + _t * (_x01 + _x11); // <6>x02 = <6>(x01 - <5>(t*<4>(<3>x01 - <3>x11)))
-    const _x12 = _x11 + _t * (_x11 + _x21); // <6>x12
-    const _x03 = _x02 + _t * (_x02 + _x12); // <9>x03 = <9>(x02 - <8>(t*<7>(<6>x02 - <6>x12)))
-    const _y01 = _y00 + _t * (_y00 + _y10);
-    const _y11 = _y10 + _t * (_y10 + _y20);
-    const _y21 = _y20 + _t * (_y20 + _y30);
-    const _y02 = _y01 + _t * (_y01 + _y11);
-    const _y12 = _y11 + _t * (_y11 + _y21);
-    const _y03 = _y02 + _t * (_y02 + _y12);
-    return {
-        ps: [[x00, y00], [x01, y01], [x02, y02], [x03, y03]],
-        _ps: [
-            // the coordinate-wise error bounds
-            [0, 0],
-            [_x01, _y01],
-            [_x02, _y02],
-            [_x03, _y03] // [9*u*_x03, 9*u*_y03]
-        ]
-    };
-}
-/**
- * Returns a bezier curve that starts and ends at the given `t` parameters
- * including an error bound (that needs to be multiplied by `8u`, where
- * `u === Number.EPSILON/2`).
- *
- * @param ps a cubic bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- * @param tS the `t` parameter where the resultant bezier should start
- * @param tE the `t` parameter where the resultant bezier should end
- *
- * @internal
- */
-function splitAtBoth3(ps, tS, tE) {
-    // --------------------------------------------------------
-    // const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
-    const p0 = ps[0];
-    const p1 = ps[1]; // exact
-    const p2 = ps[2];
-    const p3 = ps[3]; // exact
-    const x0 = p0[0];
-    const y0 = p0[1]; // exact
-    const x1 = p1[0];
-    const y1 = p1[1]; // exact
-    const x2 = p2[0];
-    const y2 = p2[1]; // exact
-    const x3 = p3[0];
-    const y3 = p3[1]; // exact
-    // --------------------------------------------------------
-    // error bound using counters <k>:
-    // counter rules:
-    //   1. <k>a + <l>b = <max(k,l) + 1>(a + b)
-    //   2. <k>a<l>b = <k + l + 1>ab
-    //   3. fl(a) === <1>a
-    const ttS = tS * tS; // <1>ttS  <= <0>tS<0>tS   (by counter rule 2)
-    const tttS = tS * ttS; // <2>tttS <= <0>tS<1>ttS  (again by counter rule 2)
-    const ttE = tE * tE; // ...
-    const tttE = tE * ttE; // ...
-    const tStE = tS * tE; // <1>tStE
-    const xA = x0 - x1; // <1>xA
-    const xB = x2 - x1; // <1>xB
-    const xC = x3 - x0; // <1>xC
-    const xD = xA + xB; // <2>xD
-    const tSxA = tS * xA; // <2>tSxA
-    const tExA = tE * xA; // <2>tExA
-    const xC3xB = xC - 3 * xB; // <3>xC3xB = <3>(<1>xC - <2>(3*<1>xB))
-    const yA = y0 - y1;
-    const yB = y2 - y1;
-    const yC = y3 - y0;
-    const yD = yA + yB;
-    const tSyA = tS * yA;
-    const tEyA = tE * yA;
-    const yC3yB = yC - 3 * yB;
-    const xx0 = tttS * xC3xB + (3 * tS * (tS * xD - xA) + x0);
-    const xx1 = tStE * (tS * xC3xB + 2 * xD) + ((ttS * xD + x0) - (tExA + 2 * tSxA));
-    const xx2 = tStE * (tE * xC3xB + 2 * xD) + ((ttE * xD + x0) - (2 * tExA + tSxA));
-    const xx3 = tttE * xC3xB + (3 * tE * (tE * xD - xA) + x0);
-    const yy0 = tttS * yC3yB + (3 * tS * (tS * yD - yA) + y0);
-    const yy1 = tStE * (tS * yC3yB + 2 * yD) + ((ttS * yD + y0) - (tEyA + 2 * tSyA));
-    const yy2 = tStE * (tE * yC3yB + 2 * yD) + ((ttE * yD + y0) - (2 * tEyA + tSyA));
-    const yy3 = tttE * yC3yB + (3 * tE * (tE * yD - yA) + y0);
-    // ----------------------------------------------
-    // Calculate error bounds
-    // ----------------------------------------------
-    const _tS = from_to_3_incl_error_bound_abs(tS);
-    const _tE = from_to_3_incl_error_bound_abs(tE);
-    const _tStE = from_to_3_incl_error_bound_abs(tStE);
-    const _tttS = from_to_3_incl_error_bound_abs(tttS);
-    const _tttE = from_to_3_incl_error_bound_abs(tttE);
-    const _x0 = from_to_3_incl_error_bound_abs(x0);
-    const _x1 = from_to_3_incl_error_bound_abs(x1);
-    const _x2 = from_to_3_incl_error_bound_abs(x2);
-    const _xA = _x0 + _x1;
-    const _xB = _x2 + _x1;
-    const _xD = _xA + _xB;
-    const _tSxA = _tS * _xA;
-    const _tExA = _tE * _xA;
-    const _xC3xB = from_to_3_incl_error_bound_abs(xC) + 3 * _xB;
-    const _y0 = from_to_3_incl_error_bound_abs(y0);
-    const _y1 = from_to_3_incl_error_bound_abs(y1);
-    const _y2 = from_to_3_incl_error_bound_abs(y2);
-    const _yA = _y0 + _y1;
-    const _yB = _y2 + _y1;
-    const _yD = _yA + _yB;
-    const _tSyA = _tS * _yA;
-    const _tEyA = _tE * _yA;
-    const _yC3yB = from_to_3_incl_error_bound_abs(yC) + 3 * _yB;
-    // <8>xx0 = <8>(<6>(<2>tttS*<3>xC3xB) + <7>(<6>(<1>(3*tS)*(<4>(<3>(tS*<2>xD) - <1>xA))) + x0));
-    const _xx0 = _tttS * _xC3xB + (3 * _tS * (_tS * _xD + _xA) + _x0);
-    // <7>xx1 = <7>(<6>(<1>tStE*<5>(<4>(tS*<3>xC3xB) + <2>(2*xD))) + <6>(<5>(<4>(<1>ttS*<2>xD) + x0) - <3>(<2>tExA + <2>(2*tSxA))));
-    const _xx1 = _tStE * (_tS * _xC3xB + 2 * _xD) + ((ttS * _xD + _x0) + (_tExA + 2 * _tSxA));
-    // <7>xx2 = <7>(<6>(<1>tStE*<5>(<4>(tE*<3>xC3xB) + <2>(2*xD))) + <6>(<5>(<4>(<1>ttE*<2>xD) + x0) - <3>(<2>(2*tExA) + <2>tSxA)));
-    const _xx2 = _tStE * (_tE * _xC3xB + 2 * _xD) + ((ttE * _xD + _x0) + (2 * _tExA + _tSxA));
-    // <8>xx3 = <8>(<6>(<2>tttE*<3>xC3xB) + <7>(<6>(<1>(3*tE)*(<4>(<3>(tE*<2>xD) - <1>xA))) + x0));
-    const _xx3 = _tttE * _xC3xB + (3 * _tE * (_tE * _xD + _xA) + _x0);
-    const _yy0 = _tttS * _yC3yB + (3 * _tS * (_tS * _yD + _yA) + _y0);
-    const _yy1 = _tStE * (_tS * _yC3yB + 2 * _yD) + ((ttS * _yD + _y0) + (_tEyA + 2 * _tSyA));
-    const _yy2 = _tStE * (_tE * _yC3yB + 2 * _yD) + ((ttE * _yD + _y0) + (2 * _tEyA + _tSyA));
-    const _yy3 = _tttE * _yC3yB + (3 * _tE * (_tE * _yD + _yA) + _y0);
-    return {
-        ps: [[xx0, yy0], [xx1, yy1], [xx2, yy2], [xx3, yy3]],
-        _ps: [
-            [_xx0, _yy0],
-            [_xx1, _yy1],
-            [_xx2, _yy2],
-            [_xx3, _yy3] // [8*u*_xx3, 8*u*_yy3]
-        ]
-    };
-}
-
-
-;// CONCATENATED MODULE: ./src/transformation/split/from-to/from-to-1-incl-error-bound.ts
-const from_to_1_incl_error_bound_abs = Math.abs;
-/** error free error bounds */
-const from_to_1_incl_error_bound_psErrorFree = [[0, 0], [0, 0]];
-/**
- * Returns a bezier curve that starts and ends at the given `t` parameters
- * including an error bound (that needs to be multiplied by `3u` before use,
- * where `u === Number.EPSILON/2`).
- *
- * @param ps a linear bezier curve (a line) given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1]]`
- * @param tS the `t` parameter where the resultant bezier should start
- * @param tE the `t` parameter where the resultant bezier should end
- *
- * @internal
- */
-function fromTo1InclErrorBound(ps, tS, tE) {
-    if (tS === 0) {
-        if (tE === 1) {
-            return { ps, _ps: from_to_1_incl_error_bound_psErrorFree };
-        }
-        return splitLeft1(ps, tE);
-    }
-    if (tE === 1) {
-        return splitRight1(ps, tS);
-    }
-    return splitAtBoth1(ps, tS, tE);
-}
-/**
- * Returns a bezier curve that starts at the given `t` parameter and ends
- * at `t === 1` including an error bound (that needs to be multiplied
- * by `3u`, where `u === Number.EPSILON/2`).
- *
- * @param ps a lineer bezier curve (a line) given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1]]`
- * @param t the `t` parameter where the resultant bezier should start
- *
- * @internal
- */
-function splitRight1(ps, t) {
-    // --------------------------------------------------------
-    // const [[x0, y0], [x1, y1]] = ps; 
-    const p0 = ps[0]; // exact
-    const p1 = ps[1]; // exact
-    const x0 = p0[0];
-    const y0 = p0[1]; // exact
-    const x1 = p1[0];
-    const y1 = p1[1]; // exact
-    // --------------------------------------------------------
-    // error bound using counters <k>:
-    // counter rules:
-    //   1. <k>a + <l>b = <max(k,l) + 1>(a + b)
-    //   2. <k>a<l>b = <k + l + 1>ab
-    //   3. fl(a) === <1>a
-    const psR = [
-        [t * (x1 - x0) + x0,
-            t * (y1 - y0) + y0],
-        [x1,
-            y1] // yy1
-    ];
-    // -----------------------
-    // Calculate error bounds
-    // -----------------------
-    const _t = from_to_1_incl_error_bound_abs(t);
-    const _x0 = from_to_1_incl_error_bound_abs(x0);
-    const _x1 = from_to_1_incl_error_bound_abs(x1);
-    const _y0 = from_to_1_incl_error_bound_abs(y0);
-    const _y1 = from_to_1_incl_error_bound_abs(y1);
-    // <3>xx0 <= <3>(<2>(t*<1>(x1 - x0)) + x0)
-    const _xx0 = _t * (_x1 + _x0) + _x0;
-    const _yy0 = _t * (_y1 + _y0) + _y0;
-    /** the coordinate-wise error bound */
-    //const psR_ = [
-    //    [3*u*_xx0, 3*u*_yy0],
-    //    [0, 0]
-    //];
-    const psR_ = [
-        [_xx0, _yy0],
-        [0, 0]
-    ];
-    return {
-        ps: psR,
-        _ps: psR_
-    };
-}
-/**
- * Returns a bezier curve that starts at `t === 0` and ends at the given `t`
- * parameter including an error bound (that needs to be multiplied by `3u`,
- * where `u === Number.EPSILON/2`).
- *
- * @param ps a lineer bezier curve (a line) given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1]]`
- * @param t the `t` parameter where the resultant bezier should end
- *
- * @internal
- */
-function splitLeft1(ps, t) {
-    // --------------------------------------------------------
-    // const [[x0, y0], [x1, y1]] = ps; 
-    const p0 = ps[0]; // exact 
-    const p1 = ps[1]; // exact
-    const x0 = p0[0];
-    const y0 = p0[1]; // exact
-    const x1 = p1[0];
-    const y1 = p1[1]; // exact
-    // --------------------------------------------------------
-    // error bound using counters <k>:
-    // counter rules:
-    //   1. <k>a + <l>b = <max(k,l) + 1>(a + b)
-    //   2. <k>a<l>b = <k + l + 1>ab
-    //   3. fl(a) === <1>a
-    const psL = [
-        [x0,
-            y0],
-        [t * (x1 - x0) + x0,
-            t * (y1 - y0) + y0] // yy1
-    ];
-    // -----------------------
-    // Calculate error bounds
-    // -----------------------
-    const _t = from_to_1_incl_error_bound_abs(t);
-    const _x0 = from_to_1_incl_error_bound_abs(x0);
-    const _x1 = from_to_1_incl_error_bound_abs(x1);
-    const _y0 = from_to_1_incl_error_bound_abs(y0);
-    const _y1 = from_to_1_incl_error_bound_abs(y1);
-    // <3>xx1 <= <3>(<2>(t*<1>(x1 - x0)) + x0)
-    const _xx1 = _t * (_x1 + _x0) + _x0;
-    const _yy1 = _t * (_y1 + _y0) + _y0;
-    /** the coordinate-wise error bound */
-    //const psL_ = [
-    //    [0, 0],
-    //    [3*u*_xx1, 3*u*_yy1],
-    //];
-    const psL_ = [
-        [0, 0],
-        [_xx1, _yy1],
-    ];
-    return {
-        ps: psL,
-        _ps: psL_
-    };
-}
-/**
- * Returns a bezier curve that starts and ends at the given `t` parameters
- * including an error bound (that needs to be multiplied by `3u`, where
- * `u === Number.EPSILON/2`).
- *
- * @param ps a lineer bezier curve (a line) given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1]]`
- * @param tS the `t` parameter where the resultant bezier should start
- * @param tE the `t` parameter where the resultant bezier should end
- *
- * @internal
- */
-function splitAtBoth1(ps, tS, tE) {
-    // --------------------------------------------------------
-    // const [[x0, y0], [x1, y1]] = ps; 
-    const p0 = ps[0]; // exact
-    const p1 = ps[1]; // exact
-    const x0 = p0[0];
-    const y0 = p0[1]; // exact
-    const x1 = p1[0];
-    const y1 = p1[1]; // exact
-    // --------------------------------------------------------
-    // error bound using counters <k>:
-    // counter rules:
-    //   1. <k>a + <l>b = <max(k,l) + 1>(a + b)
-    //   2. <k>a<l>b = <k + l + 1>ab
-    //   3. fl(a) === <1>a
-    const psB = [
-        [tS * (x1 - x0) + x0,
-            tS * (y1 - y0) + y0],
-        [tE * (x1 - x0) + x0,
-            tE * (y1 - y0) + y0] // yy1
-    ];
-    // -----------------------
-    // Calculate error bounds
-    // -----------------------
-    const _tS = from_to_1_incl_error_bound_abs(tS);
-    const _tE = from_to_1_incl_error_bound_abs(tE);
-    const _x0 = from_to_1_incl_error_bound_abs(x0);
-    const _x1 = from_to_1_incl_error_bound_abs(x1);
-    const _y0 = from_to_1_incl_error_bound_abs(y0);
-    const _y1 = from_to_1_incl_error_bound_abs(y1);
-    // <3>xx0 <= <3>(<2>(tS*<1>(x1 - x0)) + x0)
-    const _xx0 = _tS * (_x1 + _x0) + _x0;
-    // <3>xx1
-    const _xx1 = _tE * (_x1 + _x0) + _x0;
-    const _yy0 = _tS * (_y1 + _y0) + _y0;
-    const _yy1 = _tE * (_y1 + _y0) + _y0;
-    /** the coordinate-wise error bound */
-    //const psR_ = [
-    //    [3*u*_xx0, 3*u*_yy0],
-    //    [0, 0]
-    //];
-    const psB_ = [
-        [_xx0, _yy0],
-        [_xx1, _yy1]
-    ];
-    return {
-        ps: psB,
-        _ps: psB_
-    };
-}
-
-
-;// CONCATENATED MODULE: ./src/transformation/split/from-to-incl-error-bound.ts
-
-
-
-const fromTo3 = fromTo3InclErrorBound;
-const fromTo2 = fromTo2InclErrorBound;
-const fromTo1 = fromTo1InclErrorBound;
-/**
- * Returns a bezier curve (`ps`) that starts and ends at the given `t` parameters
- * including an error bound (`_ps`, that needs to be multiplied by `3u`, `5u` or `8u`
- * (for lines, quadratic or cubic bezier curves respectively) before use,
- * where `u === Number.EPSILON/2`).
- *
- * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- * @param tS the `t` parameter where the resultant bezier should start
- * @param tE the `t` parameter where the resultant bezier should end
- *
- * @doc
- */
-function fromToInclErrorBound(ps, tS, tE) {
-    if (ps.length === 4) {
-        return fromTo3(ps, tS, tE);
-    }
-    if (ps.length === 3) {
-        return fromTo2(ps, tS, tE);
-    }
-    if (ps.length === 2) {
-        return fromTo1(ps, tS, tE);
-    }
-    if (ps.length === 1) {
-        return { ps, _ps: [[0]] };
-    }
-    throw new Error('The given bezier curve must be of order <= 3.');
-}
-
-
 ;// CONCATENATED MODULE: ./src/simultaneous-properties/get-interface-rotation.ts
 
 
@@ -13468,6 +12925,443 @@ function curviness(ps) {
 }
 
 
+;// CONCATENATED MODULE: ./src/transformation/split/from-to/from-to-3.ts
+/**
+ * Returns a bezier curve that starts and ends at the given t parameters.
+ *
+ * @param ps a cubic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param tS the `t` parameter where the resultant bezier should start
+ * @param tE the `t` parameter where the resultant bezier should end
+ *
+ * @internal
+ */
+function fromTo3(ps, tS, tE) {
+    if (tS === 0) {
+        if (tE === 1) {
+            return ps;
+        }
+        return splitLeft3(ps, tE);
+    }
+    if (tE === 1) {
+        return splitRight3(ps, tS);
+    }
+    return splitAtBoth3(ps, tS, tE);
+}
+/**
+ * Returns a bezier curve that starts at the given t parameter and ends
+ * at `t === 1`.
+ *
+ * @param ps a cubic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param t the `t` parameter where the resultant bezier should start
+ *
+ * @internal
+ */
+function splitRight3(ps, t) {
+    // --------------------------------------------------------
+    // const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const p2 = ps[2];
+    const p3 = ps[3];
+    const x00 = p0[0];
+    const y00 = p0[1];
+    const x10 = p1[0];
+    const y10 = p1[1];
+    const x20 = p2[0];
+    const y20 = p2[1];
+    const x30 = p3[0];
+    const y30 = p3[1];
+    // --------------------------------------------------------
+    const x01 = x00 - t * (x00 - x10);
+    const x11 = x10 - t * (x10 - x20);
+    const x21 = x20 - t * (x20 - x30);
+    const x02 = x01 - t * (x01 - x11);
+    const x12 = x11 - t * (x11 - x21);
+    const x03 = x02 - t * (x02 - x12);
+    const y01 = y00 - t * (y00 - y10);
+    const y11 = y10 - t * (y10 - y20);
+    const y21 = y20 - t * (y20 - y30);
+    const y02 = y01 - t * (y01 - y11);
+    const y12 = y11 - t * (y11 - y21);
+    const y03 = y02 - t * (y02 - y12);
+    return [[x03, y03], [x12, y12], [x21, y21], [x30, y30]];
+}
+/**
+ * Returns a bezier curve that starts at `t === 0` and ends at the given t
+ * parameter.
+ *
+ * @param ps a cubic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param t the `t` parameter where the resultant bezier should end
+ *
+ * @internal
+ */
+function splitLeft3(ps, t) {
+    // --------------------------------------------------------
+    // const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const p2 = ps[2];
+    const p3 = ps[3];
+    const x00 = p0[0];
+    const y00 = p0[1];
+    const x10 = p1[0];
+    const y10 = p1[1];
+    const x20 = p2[0];
+    const y20 = p2[1];
+    const x30 = p3[0];
+    const y30 = p3[1];
+    // --------------------------------------------------------
+    const x01 = x00 - t * (x00 - x10);
+    const x11 = x10 - t * (x10 - x20);
+    const x21 = x20 - t * (x20 - x30);
+    const x02 = x01 - t * (x01 - x11);
+    const x12 = x11 - t * (x11 - x21);
+    const x03 = x02 - t * (x02 - x12);
+    const y01 = y00 - t * (y00 - y10);
+    const y11 = y10 - t * (y10 - y20);
+    const y21 = y20 - t * (y20 - y30);
+    const y02 = y01 - t * (y01 - y11);
+    const y12 = y11 - t * (y11 - y21);
+    const y03 = y02 - t * (y02 - y12);
+    return [[x00, y00], [x01, y01], [x02, y02], [x03, y03]];
+}
+/**
+ * Returns a bezier curve that starts and ends at the given `t` parameters.
+ *
+ * @param ps a cubic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param tS the `t` parameter where the resultant bezier should start
+ * @param tE the `t` parameter where the resultant bezier should end
+ *
+ * @internal
+ */
+function splitAtBoth3(ps, tS, tE) {
+    // --------------------------------------------------------
+    // const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const p2 = ps[2];
+    const p3 = ps[3];
+    const x0 = p0[0];
+    const y0 = p0[1];
+    const x1 = p1[0];
+    const y1 = p1[1];
+    const x2 = p2[0];
+    const y2 = p2[1];
+    const x3 = p3[0];
+    const y3 = p3[1];
+    // --------------------------------------------------------
+    const ttS = tS * tS;
+    const tttS = tS * ttS;
+    const ttE = tE * tE;
+    const tttE = tE * ttE;
+    const tStE = tS * tE;
+    const xA = x0 - x1;
+    const xB = x2 - x1;
+    const xC = x3 - x0;
+    const xD = xA + xB;
+    const tSxA = tS * xA;
+    const tExA = tE * xA;
+    const xC3xB = xC - 3 * xB;
+    const yA = y0 - y1;
+    const yB = y2 - y1;
+    const yC = y3 - y0;
+    const yD = yA + yB;
+    const tSyA = tS * yA;
+    const tEyA = tE * yA;
+    const yC3yB = yC - 3 * yB;
+    const xx0 = tttS * xC3xB + (3 * tS * (tS * xD - xA) + x0);
+    const xx1 = tStE * (tS * xC3xB + 2 * xD) + ((ttS * xD + x0) - (tExA + 2 * tSxA));
+    const xx2 = tStE * (tE * xC3xB + 2 * xD) + ((ttE * xD + x0) - (2 * tExA + tSxA));
+    const xx3 = tttE * xC3xB + (3 * tE * (tE * xD - xA) + x0);
+    const yy0 = tttS * yC3yB + (3 * tS * (tS * yD - yA) + y0);
+    const yy1 = tStE * (tS * yC3yB + 2 * yD) + ((ttS * yD + y0) - (tEyA + 2 * tSyA));
+    const yy2 = tStE * (tE * yC3yB + 2 * yD) + ((ttE * yD + y0) - (2 * tEyA + tSyA));
+    const yy3 = tttE * yC3yB + (3 * tE * (tE * yD - yA) + y0);
+    return [[xx0, yy0], [xx1, yy1], [xx2, yy2], [xx3, yy3]];
+}
+
+
+;// CONCATENATED MODULE: ./src/transformation/split/from-to/from-to-2.ts
+/**
+ * Returns a bezier curve that starts and ends at the given `t` parameters.
+ *
+ * @param ps a quadratic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
+ * @param tS the `t` parameter where the resultant bezier should start
+ * @param tE the `t` parameter where the resultant bezier should end
+ *
+ * @internal
+ */
+function fromTo2(ps, tS, tE) {
+    if (tS === 0) {
+        if (tE === 1) {
+            return ps;
+        }
+        return from_to_2_splitLeft2(ps, tE);
+    }
+    if (tE === 1) {
+        return from_to_2_splitRight2(ps, tS);
+    }
+    return from_to_2_splitAtBoth2(ps, tS, tE);
+}
+/**
+ * Returns a bezier curve that starts at the given t parameter and ends
+ * at `t === 1`.
+ *
+ * @param ps a quadratic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
+ * @param t the `t` parameter where the resultant bezier should start
+ *
+ * @internal
+ */
+function from_to_2_splitRight2(ps, t) {
+    // --------------------------------------------------------
+    // const [[x0, y0], [x1, y1], [x2, y2]] = ps; 
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const p2 = ps[2];
+    const x0 = p0[0];
+    const y0 = p0[1];
+    const x1 = p1[0];
+    const y1 = p1[1];
+    const x2 = p2[0];
+    const y2 = p2[1];
+    // --------------------------------------------------------
+    const tt = t * t;
+    const xA = x0 - x1;
+    const xB = x2 - x1;
+    const yA = y0 - y1;
+    const yB = y2 - y1;
+    return [
+        [tt * (xA + xB) - (2 * t * xA - x0),
+            tt * (yA + yB) - (2 * t * yA - y0)],
+        [t * xB + x1,
+            t * yB + y1],
+        [x2,
+            y2] // yy2
+    ];
+}
+/**
+ * Returns a bezier curve that starts at `t === 0` and ends at the given `t`
+ * parameter.
+ *
+ * @param ps a quadratic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
+ * @param t the `t` parameter where the resultant bezier should end
+ *
+ * @internal
+ */
+function from_to_2_splitLeft2(ps, t) {
+    // --------------------------------------------------------
+    // const [[x0, y0], [x1, y1], [x2, y2]] = ps; 
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const p2 = ps[2];
+    const x0 = p0[0];
+    const y0 = p0[1];
+    const x1 = p1[0];
+    const y1 = p1[1];
+    const x2 = p2[0];
+    const y2 = p2[1];
+    // --------------------------------------------------------
+    const tt = t * t;
+    const xA = x0 - x1;
+    const yA = y0 - y1;
+    return [
+        [x0,
+            y0],
+        [-t * xA + x0,
+            -t * yA + y0],
+        [tt * (xA + (x2 - x1)) - (2 * t * xA - x0),
+            tt * (yA + (y2 - y1)) - (2 * t * yA - y0)] // yy2 - split point y
+    ];
+}
+/**
+ * Returns a bezier curve that starts and ends at the given `t` parameters.
+ *
+ * @param ps a quadratic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
+ * @param tS the `t` parameter where the resultant bezier should start
+ * @param tE the `t` parameter where the resultant bezier should end
+ *
+ * @internal
+ */
+function from_to_2_splitAtBoth2(ps, tS, tE) {
+    // --------------------------------------------------------
+    // const [[x0, y0], [x1, y1], [x2, y2]] = ps; 
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const p2 = ps[2];
+    const x0 = p0[0];
+    const y0 = p0[1];
+    const x1 = p1[0];
+    const y1 = p1[1];
+    const x2 = p2[0];
+    const y2 = p2[1];
+    // --------------------------------------------------------
+    const ttS = tS * tS;
+    const ttE = tE * tE;
+    const tStE = tS * tE;
+    const xA = x0 - x1;
+    const xB = x2 - x1;
+    const xC = xA + xB;
+    const yA = y0 - y1;
+    const yB = y2 - y1;
+    const yC = yA + yB;
+    const xx0 = ttS * xC - (2 * tS * xA - x0);
+    const xx1 = tStE * xC - (xA * (tE + tS) - x0);
+    const xx2 = ttE * xC - (2 * tE * xA - x0);
+    const yy0 = ttS * yC - (2 * tS * yA - y0);
+    const yy1 = tStE * yC - (yA * (tE + tS) - y0);
+    const yy2 = ttE * yC - (2 * tE * yA - y0);
+    return [[xx0, yy0], [xx1, yy1], [xx2, yy2]];
+}
+
+
+;// CONCATENATED MODULE: ./src/transformation/split/from-to/from-to-1.ts
+/**
+ * Returns a bezier curve that starts and ends at the given `t` parameters.
+ *
+ * @param ps a lineer bezier curve (a line) given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1]]`
+ * @param tS the `t` parameter where the resultant bezier should start
+ * @param tE the `t` parameter where the resultant bezier should end
+ *
+ * @internal
+ */
+function fromTo1(ps, tS, tE) {
+    if (tS === 0) {
+        if (tE === 1) {
+            return ps;
+        }
+        return splitLeft1(ps, tE);
+    }
+    if (tE === 1) {
+        return splitRight1(ps, tS);
+    }
+    return splitAtBoth1(ps, tS, tE);
+}
+/**
+ * Returns a bezier curve that starts at the given `t` parameter and ends
+ * at `t === 1`.
+ *
+ * @param ps a lineer bezier curve (a line) given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1]]`
+ * @param t the `t` parameter where the resultant bezier should start
+ *
+ * @internal
+ */
+function splitRight1(ps, t) {
+    // --------------------------------------------------------
+    // const [[x0, y0], [x1, y1]] = ps; 
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const x0 = p0[0];
+    const y0 = p0[1];
+    const x1 = p1[0];
+    const y1 = p1[1];
+    // --------------------------------------------------------
+    return [
+        [t * (x1 - x0) + x0,
+            t * (y1 - y0) + y0],
+        [x1,
+            y1] // yy1
+    ];
+}
+/**
+ * Returns a bezier curve that starts at `t === 0` and ends at the given `t`
+ * parameter.
+ *
+ * @param ps a lineer bezier curve (a line) given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1]]`
+ * @param t the `t` parameter where the resultant bezier should end
+ *
+ * @internal
+ */
+function splitLeft1(ps, t) {
+    // --------------------------------------------------------
+    // const [[x0, y0], [x1, y1]] = ps; 
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const x0 = p0[0];
+    const y0 = p0[1];
+    const x1 = p1[0];
+    const y1 = p1[1];
+    // --------------------------------------------------------
+    return [
+        [x0,
+            y0],
+        [t * (x1 - x0) + x0,
+            t * (y1 - y0) + y0] // yy1
+    ];
+}
+/**
+ * Returns a bezier curve that starts and ends at the given `t` parameters.
+ *
+ * @param ps a lineer bezier curve (a line) given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1]]`
+ * @param tS the `t` parameter where the resultant bezier should start
+ * @param tE the `t` parameter where the resultant bezier should end
+ *
+ * @internal
+ */
+function splitAtBoth1(ps, tS, tE) {
+    // --------------------------------------------------------
+    // const [[x0, y0], [x1, y1]] = ps; 
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const x0 = p0[0];
+    const y0 = p0[1];
+    const x1 = p1[0];
+    const y1 = p1[1];
+    // --------------------------------------------------------
+    return [
+        [tS * (x1 - x0) + x0,
+            tS * (y1 - y0) + y0],
+        [tE * (x1 - x0) + x0,
+            tE * (y1 - y0) + y0] // yy1
+    ];
+}
+
+
+;// CONCATENATED MODULE: ./src/transformation/split/from-to.ts
+
+
+
+const from_to_fromTo3 = fromTo3;
+const from_to_fromTo2 = fromTo2;
+const from_to_fromTo1 = fromTo1;
+/**
+ * Returns a bezier curve that starts and ends at the given `t` parameters.
+ *
+ * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param tS the `t` parameter where the resultant bezier should start
+ * @param tE the `t` parameter where the resultant bezier should end
+ *
+ * @doc mdx
+ */
+function from_to_fromTo(ps, tS, tE) {
+    if (ps.length === 4) {
+        return from_to_fromTo3(ps, tS, tE);
+    }
+    if (ps.length === 3) {
+        return from_to_fromTo2(ps, tS, tE);
+    }
+    if (ps.length === 2) {
+        return from_to_fromTo1(ps, tS, tE);
+    }
+    if (ps.length === 1) {
+        return ps;
+    }
+    throw new Error('The given bezier curve must be of order <= 3.');
+}
+
+
 ;// CONCATENATED MODULE: ./src/transformation/split/split-by-curvature.ts
 
 
@@ -13486,7 +13380,7 @@ function curviness(ps) {
  * can be returned for a bezier piece; necessary for cubics otherwise a curve
  * with a cusp would cause an infinite loop
  *
- * @doc
+ * @doc mdx
  */
 function splitByCurvature(ps, maxCurviness = 0.4, minTSpan = 2 ** -16) {
     const ts = [0, 1]; // include endpoints
@@ -13496,7 +13390,7 @@ function splitByCurvature(ps, maxCurviness = 0.4, minTSpan = 2 ** -16) {
         if (ts_[1] - ts_[0] <= minTSpan) {
             continue;
         }
-        const ps_ = fromToInclErrorBound(ps, ts_[0], ts_[1]).ps;
+        const ps_ = from_to_fromTo(ps, ts_[0], ts_[1]);
         const curviness_ = curviness(ps_);
         if (curviness_ > maxCurviness) {
             const t = (ts_[0] + ts_[1]) / 2;
@@ -13597,6 +13491,302 @@ function lengthBez2(interval: number[], ps: number[][]) {
     ) / (4*A_32);
 }
 */
+
+
+;// CONCATENATED MODULE: ./src/transformation/split/from-to/from-to-3-incl-error-bound.ts
+const from_to_3_incl_error_bound_abs = Math.abs;
+/** error free error bounds */
+const from_to_3_incl_error_bound_psErrorFree = [[0, 0], [0, 0], [0, 0], [0, 0]];
+/**
+ * Returns a bezier curve that starts and ends at the given t parameters
+ * including an error bound (that needs to be multiplied by `9u`, where
+ * `u === Number.EPSILON/2`).
+ *
+ * @param ps a cubic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param tS the `t` parameter where the resultant bezier should start
+ * @param tE the `t` parameter where the resultant bezier should end
+ *
+ * @internal
+ */
+function fromTo3InclErrorBound(ps, tS, tE) {
+    if (tS === 0) {
+        if (tE === 1) {
+            return { ps, _ps: from_to_3_incl_error_bound_psErrorFree };
+        }
+        return from_to_3_incl_error_bound_splitLeft3(ps, tE);
+    }
+    if (tE === 1) {
+        return from_to_3_incl_error_bound_splitRight3(ps, tS);
+    }
+    return from_to_3_incl_error_bound_splitAtBoth3(ps, tS, tE);
+}
+/**
+ * Returns a bezier curve that starts at the given t parameter and ends
+ * at `t === 1` including an error bound (that needs to be multiplied
+ * by `9u`, where `u === Number.EPSILON/2`).
+ *
+ * @param ps a cubic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param t the `t` parameter where the resultant bezier should start
+ *
+ * @internal
+ */
+function from_to_3_incl_error_bound_splitRight3(ps, t) {
+    // --------------------------------------------------------
+    // const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const p2 = ps[2];
+    const p3 = ps[3];
+    const x00 = p0[0];
+    const y00 = p0[1];
+    const x10 = p1[0];
+    const y10 = p1[1];
+    const x20 = p2[0];
+    const y20 = p2[1];
+    const x30 = p3[0];
+    const y30 = p3[1];
+    // --------------------------------------------------------
+    // error bound using counters <k>:
+    // counter rules:
+    //   1. <k>a + <l>b = <max(k,l) + 1>(a + b)
+    //   2. <k>a<l>b = <k + l + 1>ab
+    //   3. fl(a) === <1>a
+    const x01 = x00 - t * (x00 - x10);
+    const x11 = x10 - t * (x10 - x20);
+    const x21 = x20 - t * (x20 - x30);
+    const x02 = x01 - t * (x01 - x11);
+    const x12 = x11 - t * (x11 - x21);
+    const x03 = x02 - t * (x02 - x12);
+    const y01 = y00 - t * (y00 - y10);
+    const y11 = y10 - t * (y10 - y20);
+    const y21 = y20 - t * (y20 - y30);
+    const y02 = y01 - t * (y01 - y11);
+    const y12 = y11 - t * (y11 - y21);
+    const y03 = y02 - t * (y02 - y12);
+    // -----------------------
+    // Calculate error bounds
+    // -----------------------
+    const _t = from_to_3_incl_error_bound_abs(t);
+    const _x00 = from_to_3_incl_error_bound_abs(x00);
+    const _x10 = from_to_3_incl_error_bound_abs(x10);
+    const _x20 = from_to_3_incl_error_bound_abs(x20);
+    const _x30 = from_to_3_incl_error_bound_abs(x30);
+    const _y00 = from_to_3_incl_error_bound_abs(y00);
+    const _y10 = from_to_3_incl_error_bound_abs(y10);
+    const _y20 = from_to_3_incl_error_bound_abs(y20);
+    const _y30 = from_to_3_incl_error_bound_abs(y30);
+    const _x01 = _x00 + _t * (_x00 + _x10); // <3>x01 = <3>(x00 - <2>(t*<1>(x00 - x10)))
+    const _x11 = _x10 + _t * (_x10 + _x20); // <3>x11
+    const _x21 = _x20 + _t * (_x20 + _x30); // <3>x21
+    const _x02 = _x01 + _t * (_x01 + _x11); // <6>x02 = <6>(x01 - <5>(t*<4>(<3>x01 - <3>x11)))
+    const _x12 = _x11 + _t * (_x11 + _x21); // <6>x12
+    const _x03 = _x02 + _t * (_x02 + _x12); // <9>x03 = <9>(x02 - <8>(t*<7>(<6>x02 - <6>x12)))
+    const _y01 = _y00 + _t * (_y00 + _y10);
+    const _y11 = _y10 + _t * (_y10 + _y20);
+    const _y21 = _y20 + _t * (_y20 + _y30);
+    const _y02 = _y01 + _t * (_y01 + _y11);
+    const _y12 = _y11 + _t * (_y11 + _y21);
+    const _y03 = _y02 + _t * (_y02 + _y12);
+    return {
+        ps: [[x03, y03], [x12, y12], [x21, y21], [x30, y30]],
+        _ps: [
+            // the coordinate-wise error bounds
+            [_x03, _y03],
+            [_x12, _y12],
+            [_x21, _y21],
+            [0, 0] // [0, 0],
+        ]
+    };
+}
+/**
+ * Returns a bezier curve that starts at `t === 0` and ends at the given t
+ * parameter including an error bound (that needs to be multiplied by `9u`, where
+ * `u === Number.EPSILON/2`).
+ *
+ * @param ps a cubic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param t the `t` parameter where the resultant bezier should end
+ *
+ * @internal
+ */
+function from_to_3_incl_error_bound_splitLeft3(ps, t) {
+    // --------------------------------------------------------
+    // const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const p2 = ps[2];
+    const p3 = ps[3];
+    const x00 = p0[0];
+    const y00 = p0[1];
+    const x10 = p1[0];
+    const y10 = p1[1];
+    const x20 = p2[0];
+    const y20 = p2[1];
+    const x30 = p3[0];
+    const y30 = p3[1];
+    // --------------------------------------------------------
+    // error bound using counters <k>:
+    // counter rules:
+    //   1. <k>a + <l>b = <max(k,l) + 1>(a + b)
+    //   2. <k>a<l>b = <k + l + 1>ab
+    //   3. fl(a) === <1>a
+    const x01 = x00 - t * (x00 - x10);
+    const x11 = x10 - t * (x10 - x20);
+    const x21 = x20 - t * (x20 - x30);
+    const x02 = x01 - t * (x01 - x11);
+    const x12 = x11 - t * (x11 - x21);
+    const x03 = x02 - t * (x02 - x12);
+    const y01 = y00 - t * (y00 - y10);
+    const y11 = y10 - t * (y10 - y20);
+    const y21 = y20 - t * (y20 - y30);
+    const y02 = y01 - t * (y01 - y11);
+    const y12 = y11 - t * (y11 - y21);
+    const y03 = y02 - t * (y02 - y12);
+    // -----------------------
+    // Calculate error bounds
+    // -----------------------
+    const _t = from_to_3_incl_error_bound_abs(t);
+    const _x00 = from_to_3_incl_error_bound_abs(x00);
+    const _x10 = from_to_3_incl_error_bound_abs(x10);
+    const _x20 = from_to_3_incl_error_bound_abs(x20);
+    const _x30 = from_to_3_incl_error_bound_abs(x30);
+    const _y00 = from_to_3_incl_error_bound_abs(y00);
+    const _y10 = from_to_3_incl_error_bound_abs(y10);
+    const _y20 = from_to_3_incl_error_bound_abs(y20);
+    const _y30 = from_to_3_incl_error_bound_abs(y30);
+    const _x01 = _x00 + _t * (_x00 + _x10); // <3>x01 = <3>(x00 - <2>(t*<1>(x00 - x10)))
+    const _x11 = _x10 + _t * (_x10 + _x20); // <3>x11
+    const _x21 = _x20 + _t * (_x20 + _x30); // <3>x21
+    const _x02 = _x01 + _t * (_x01 + _x11); // <6>x02 = <6>(x01 - <5>(t*<4>(<3>x01 - <3>x11)))
+    const _x12 = _x11 + _t * (_x11 + _x21); // <6>x12
+    const _x03 = _x02 + _t * (_x02 + _x12); // <9>x03 = <9>(x02 - <8>(t*<7>(<6>x02 - <6>x12)))
+    const _y01 = _y00 + _t * (_y00 + _y10);
+    const _y11 = _y10 + _t * (_y10 + _y20);
+    const _y21 = _y20 + _t * (_y20 + _y30);
+    const _y02 = _y01 + _t * (_y01 + _y11);
+    const _y12 = _y11 + _t * (_y11 + _y21);
+    const _y03 = _y02 + _t * (_y02 + _y12);
+    return {
+        ps: [[x00, y00], [x01, y01], [x02, y02], [x03, y03]],
+        _ps: [
+            // the coordinate-wise error bounds
+            [0, 0],
+            [_x01, _y01],
+            [_x02, _y02],
+            [_x03, _y03] // [9*u*_x03, 9*u*_y03]
+        ]
+    };
+}
+/**
+ * Returns a bezier curve that starts and ends at the given `t` parameters
+ * including an error bound (that needs to be multiplied by `8u`, where
+ * `u === Number.EPSILON/2`).
+ *
+ * @param ps a cubic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param tS the `t` parameter where the resultant bezier should start
+ * @param tE the `t` parameter where the resultant bezier should end
+ *
+ * @internal
+ */
+function from_to_3_incl_error_bound_splitAtBoth3(ps, tS, tE) {
+    // --------------------------------------------------------
+    // const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
+    const p0 = ps[0];
+    const p1 = ps[1]; // exact
+    const p2 = ps[2];
+    const p3 = ps[3]; // exact
+    const x0 = p0[0];
+    const y0 = p0[1]; // exact
+    const x1 = p1[0];
+    const y1 = p1[1]; // exact
+    const x2 = p2[0];
+    const y2 = p2[1]; // exact
+    const x3 = p3[0];
+    const y3 = p3[1]; // exact
+    // --------------------------------------------------------
+    // error bound using counters <k>:
+    // counter rules:
+    //   1. <k>a + <l>b = <max(k,l) + 1>(a + b)
+    //   2. <k>a<l>b = <k + l + 1>ab
+    //   3. fl(a) === <1>a
+    const ttS = tS * tS; // <1>ttS  <= <0>tS<0>tS   (by counter rule 2)
+    const tttS = tS * ttS; // <2>tttS <= <0>tS<1>ttS  (again by counter rule 2)
+    const ttE = tE * tE; // ...
+    const tttE = tE * ttE; // ...
+    const tStE = tS * tE; // <1>tStE
+    const xA = x0 - x1; // <1>xA
+    const xB = x2 - x1; // <1>xB
+    const xC = x3 - x0; // <1>xC
+    const xD = xA + xB; // <2>xD
+    const tSxA = tS * xA; // <2>tSxA
+    const tExA = tE * xA; // <2>tExA
+    const xC3xB = xC - 3 * xB; // <3>xC3xB = <3>(<1>xC - <2>(3*<1>xB))
+    const yA = y0 - y1;
+    const yB = y2 - y1;
+    const yC = y3 - y0;
+    const yD = yA + yB;
+    const tSyA = tS * yA;
+    const tEyA = tE * yA;
+    const yC3yB = yC - 3 * yB;
+    const xx0 = tttS * xC3xB + (3 * tS * (tS * xD - xA) + x0);
+    const xx1 = tStE * (tS * xC3xB + 2 * xD) + ((ttS * xD + x0) - (tExA + 2 * tSxA));
+    const xx2 = tStE * (tE * xC3xB + 2 * xD) + ((ttE * xD + x0) - (2 * tExA + tSxA));
+    const xx3 = tttE * xC3xB + (3 * tE * (tE * xD - xA) + x0);
+    const yy0 = tttS * yC3yB + (3 * tS * (tS * yD - yA) + y0);
+    const yy1 = tStE * (tS * yC3yB + 2 * yD) + ((ttS * yD + y0) - (tEyA + 2 * tSyA));
+    const yy2 = tStE * (tE * yC3yB + 2 * yD) + ((ttE * yD + y0) - (2 * tEyA + tSyA));
+    const yy3 = tttE * yC3yB + (3 * tE * (tE * yD - yA) + y0);
+    // ----------------------------------------------
+    // Calculate error bounds
+    // ----------------------------------------------
+    const _tS = from_to_3_incl_error_bound_abs(tS);
+    const _tE = from_to_3_incl_error_bound_abs(tE);
+    const _tStE = from_to_3_incl_error_bound_abs(tStE);
+    const _tttS = from_to_3_incl_error_bound_abs(tttS);
+    const _tttE = from_to_3_incl_error_bound_abs(tttE);
+    const _x0 = from_to_3_incl_error_bound_abs(x0);
+    const _x1 = from_to_3_incl_error_bound_abs(x1);
+    const _x2 = from_to_3_incl_error_bound_abs(x2);
+    const _xA = _x0 + _x1;
+    const _xB = _x2 + _x1;
+    const _xD = _xA + _xB;
+    const _tSxA = _tS * _xA;
+    const _tExA = _tE * _xA;
+    const _xC3xB = from_to_3_incl_error_bound_abs(xC) + 3 * _xB;
+    const _y0 = from_to_3_incl_error_bound_abs(y0);
+    const _y1 = from_to_3_incl_error_bound_abs(y1);
+    const _y2 = from_to_3_incl_error_bound_abs(y2);
+    const _yA = _y0 + _y1;
+    const _yB = _y2 + _y1;
+    const _yD = _yA + _yB;
+    const _tSyA = _tS * _yA;
+    const _tEyA = _tE * _yA;
+    const _yC3yB = from_to_3_incl_error_bound_abs(yC) + 3 * _yB;
+    // <8>xx0 = <8>(<6>(<2>tttS*<3>xC3xB) + <7>(<6>(<1>(3*tS)*(<4>(<3>(tS*<2>xD) - <1>xA))) + x0));
+    const _xx0 = _tttS * _xC3xB + (3 * _tS * (_tS * _xD + _xA) + _x0);
+    // <7>xx1 = <7>(<6>(<1>tStE*<5>(<4>(tS*<3>xC3xB) + <2>(2*xD))) + <6>(<5>(<4>(<1>ttS*<2>xD) + x0) - <3>(<2>tExA + <2>(2*tSxA))));
+    const _xx1 = _tStE * (_tS * _xC3xB + 2 * _xD) + ((ttS * _xD + _x0) + (_tExA + 2 * _tSxA));
+    // <7>xx2 = <7>(<6>(<1>tStE*<5>(<4>(tE*<3>xC3xB) + <2>(2*xD))) + <6>(<5>(<4>(<1>ttE*<2>xD) + x0) - <3>(<2>(2*tExA) + <2>tSxA)));
+    const _xx2 = _tStE * (_tE * _xC3xB + 2 * _xD) + ((ttE * _xD + _x0) + (2 * _tExA + _tSxA));
+    // <8>xx3 = <8>(<6>(<2>tttE*<3>xC3xB) + <7>(<6>(<1>(3*tE)*(<4>(<3>(tE*<2>xD) - <1>xA))) + x0));
+    const _xx3 = _tttE * _xC3xB + (3 * _tE * (_tE * _xD + _xA) + _x0);
+    const _yy0 = _tttS * _yC3yB + (3 * _tS * (_tS * _yD + _yA) + _y0);
+    const _yy1 = _tStE * (_tS * _yC3yB + 2 * _yD) + ((ttS * _yD + _y0) + (_tEyA + 2 * _tSyA));
+    const _yy2 = _tStE * (_tE * _yC3yB + 2 * _yD) + ((ttE * _yD + _y0) + (2 * _tEyA + _tSyA));
+    const _yy3 = _tttE * _yC3yB + (3 * _tE * (_tE * _yD + _yA) + _y0);
+    return {
+        ps: [[xx0, yy0], [xx1, yy1], [xx2, yy2], [xx3, yy3]],
+        _ps: [
+            [_xx0, _yy0],
+            [_xx1, _yy1],
+            [_xx2, _yy2],
+            [_xx3, _yy3] // [8*u*_xx3, 8*u*_yy3]
+        ]
+    };
+}
 
 
 ;// CONCATENATED MODULE: ./src/global-properties/length/length-bez3.ts
@@ -13762,7 +13952,7 @@ function getTAtLength(ps, s) {
 ;// CONCATENATED MODULE: ./src/simultaneous-properties/equal.ts
 /**
  * Returns `true` if the two given bezier curves are exactly equal when compared
- * by value (deep equality)
+ * by value (deep equality), `false` otherwise
  *
  * @param ps1 an order 0,1,2 or 3 bezier curve given as an ordered array of its
  * control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
@@ -13786,329 +13976,38 @@ function equal_equal(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/split/from-to/from-to-3.ts
+;// CONCATENATED MODULE: ./src/transformation/split/from-to/from-to-1-incl-error-bound.ts
+const from_to_1_incl_error_bound_abs = Math.abs;
+/** error free error bounds */
+const from_to_1_incl_error_bound_psErrorFree = [[0, 0], [0, 0]];
 /**
- * Returns a bezier curve that starts and ends at the given t parameters.
+ * Returns a bezier curve that starts and ends at the given `t` parameters
+ * including an error bound (that needs to be multiplied by `3u` before use,
+ * where `u === Number.EPSILON/2`).
  *
- * @param ps a cubic bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- * @param tS the `t` parameter where the resultant bezier should start
- * @param tE the `t` parameter where the resultant bezier should end
- *
- * @internal
- */
-function from_to_3_fromTo3(ps, tS, tE) {
-    if (tS === 0) {
-        if (tE === 1) {
-            return ps;
-        }
-        return from_to_3_splitLeft3(ps, tE);
-    }
-    if (tE === 1) {
-        return from_to_3_splitRight3(ps, tS);
-    }
-    return from_to_3_splitAtBoth3(ps, tS, tE);
-}
-/**
- * Returns a bezier curve that starts at the given t parameter and ends
- * at `t === 1`.
- *
- * @param ps a cubic bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- * @param t the `t` parameter where the resultant bezier should start
- *
- * @internal
- */
-function from_to_3_splitRight3(ps, t) {
-    // --------------------------------------------------------
-    // const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
-    const p0 = ps[0];
-    const p1 = ps[1];
-    const p2 = ps[2];
-    const p3 = ps[3];
-    const x00 = p0[0];
-    const y00 = p0[1];
-    const x10 = p1[0];
-    const y10 = p1[1];
-    const x20 = p2[0];
-    const y20 = p2[1];
-    const x30 = p3[0];
-    const y30 = p3[1];
-    // --------------------------------------------------------
-    const x01 = x00 - t * (x00 - x10);
-    const x11 = x10 - t * (x10 - x20);
-    const x21 = x20 - t * (x20 - x30);
-    const x02 = x01 - t * (x01 - x11);
-    const x12 = x11 - t * (x11 - x21);
-    const x03 = x02 - t * (x02 - x12);
-    const y01 = y00 - t * (y00 - y10);
-    const y11 = y10 - t * (y10 - y20);
-    const y21 = y20 - t * (y20 - y30);
-    const y02 = y01 - t * (y01 - y11);
-    const y12 = y11 - t * (y11 - y21);
-    const y03 = y02 - t * (y02 - y12);
-    return [[x03, y03], [x12, y12], [x21, y21], [x30, y30]];
-}
-/**
- * Returns a bezier curve that starts at `t === 0` and ends at the given t
- * parameter.
- *
- * @param ps a cubic bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- * @param t the `t` parameter where the resultant bezier should end
- *
- * @internal
- */
-function from_to_3_splitLeft3(ps, t) {
-    // --------------------------------------------------------
-    // const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
-    const p0 = ps[0];
-    const p1 = ps[1];
-    const p2 = ps[2];
-    const p3 = ps[3];
-    const x00 = p0[0];
-    const y00 = p0[1];
-    const x10 = p1[0];
-    const y10 = p1[1];
-    const x20 = p2[0];
-    const y20 = p2[1];
-    const x30 = p3[0];
-    const y30 = p3[1];
-    // --------------------------------------------------------
-    const x01 = x00 - t * (x00 - x10);
-    const x11 = x10 - t * (x10 - x20);
-    const x21 = x20 - t * (x20 - x30);
-    const x02 = x01 - t * (x01 - x11);
-    const x12 = x11 - t * (x11 - x21);
-    const x03 = x02 - t * (x02 - x12);
-    const y01 = y00 - t * (y00 - y10);
-    const y11 = y10 - t * (y10 - y20);
-    const y21 = y20 - t * (y20 - y30);
-    const y02 = y01 - t * (y01 - y11);
-    const y12 = y11 - t * (y11 - y21);
-    const y03 = y02 - t * (y02 - y12);
-    return [[x00, y00], [x01, y01], [x02, y02], [x03, y03]];
-}
-/**
- * Returns a bezier curve that starts and ends at the given `t` parameters.
- *
- * @param ps a cubic bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- * @param tS the `t` parameter where the resultant bezier should start
- * @param tE the `t` parameter where the resultant bezier should end
- *
- * @internal
- */
-function from_to_3_splitAtBoth3(ps, tS, tE) {
-    // --------------------------------------------------------
-    // const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
-    const p0 = ps[0];
-    const p1 = ps[1];
-    const p2 = ps[2];
-    const p3 = ps[3];
-    const x0 = p0[0];
-    const y0 = p0[1];
-    const x1 = p1[0];
-    const y1 = p1[1];
-    const x2 = p2[0];
-    const y2 = p2[1];
-    const x3 = p3[0];
-    const y3 = p3[1];
-    // --------------------------------------------------------
-    const ttS = tS * tS;
-    const tttS = tS * ttS;
-    const ttE = tE * tE;
-    const tttE = tE * ttE;
-    const tStE = tS * tE;
-    const xA = x0 - x1;
-    const xB = x2 - x1;
-    const xC = x3 - x0;
-    const xD = xA + xB;
-    const tSxA = tS * xA;
-    const tExA = tE * xA;
-    const xC3xB = xC - 3 * xB;
-    const yA = y0 - y1;
-    const yB = y2 - y1;
-    const yC = y3 - y0;
-    const yD = yA + yB;
-    const tSyA = tS * yA;
-    const tEyA = tE * yA;
-    const yC3yB = yC - 3 * yB;
-    const xx0 = tttS * xC3xB + (3 * tS * (tS * xD - xA) + x0);
-    const xx1 = tStE * (tS * xC3xB + 2 * xD) + ((ttS * xD + x0) - (tExA + 2 * tSxA));
-    const xx2 = tStE * (tE * xC3xB + 2 * xD) + ((ttE * xD + x0) - (2 * tExA + tSxA));
-    const xx3 = tttE * xC3xB + (3 * tE * (tE * xD - xA) + x0);
-    const yy0 = tttS * yC3yB + (3 * tS * (tS * yD - yA) + y0);
-    const yy1 = tStE * (tS * yC3yB + 2 * yD) + ((ttS * yD + y0) - (tEyA + 2 * tSyA));
-    const yy2 = tStE * (tE * yC3yB + 2 * yD) + ((ttE * yD + y0) - (2 * tEyA + tSyA));
-    const yy3 = tttE * yC3yB + (3 * tE * (tE * yD - yA) + y0);
-    return [[xx0, yy0], [xx1, yy1], [xx2, yy2], [xx3, yy3]];
-}
-
-
-;// CONCATENATED MODULE: ./src/transformation/split/from-to/from-to-2.ts
-/**
- * Returns a bezier curve that starts and ends at the given `t` parameters.
- *
- * @param ps a quadratic bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
- * @param tS the `t` parameter where the resultant bezier should start
- * @param tE the `t` parameter where the resultant bezier should end
- *
- * @internal
- */
-function from_to_2_fromTo2(ps, tS, tE) {
-    if (tS === 0) {
-        if (tE === 1) {
-            return ps;
-        }
-        return from_to_2_splitLeft2(ps, tE);
-    }
-    if (tE === 1) {
-        return from_to_2_splitRight2(ps, tS);
-    }
-    return from_to_2_splitAtBoth2(ps, tS, tE);
-}
-/**
- * Returns a bezier curve that starts at the given t parameter and ends
- * at `t === 1`.
- *
- * @param ps a quadratic bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
- * @param t the `t` parameter where the resultant bezier should start
- *
- * @internal
- */
-function from_to_2_splitRight2(ps, t) {
-    // --------------------------------------------------------
-    // const [[x0, y0], [x1, y1], [x2, y2]] = ps; 
-    const p0 = ps[0];
-    const p1 = ps[1];
-    const p2 = ps[2];
-    const x0 = p0[0];
-    const y0 = p0[1];
-    const x1 = p1[0];
-    const y1 = p1[1];
-    const x2 = p2[0];
-    const y2 = p2[1];
-    // --------------------------------------------------------
-    const tt = t * t;
-    const xA = x0 - x1;
-    const xB = x2 - x1;
-    const yA = y0 - y1;
-    const yB = y2 - y1;
-    return [
-        [tt * (xA + xB) - (2 * t * xA - x0),
-            tt * (yA + yB) - (2 * t * yA - y0)],
-        [t * xB + x1,
-            t * yB + y1],
-        [x2,
-            y2] // yy2
-    ];
-}
-/**
- * Returns a bezier curve that starts at `t === 0` and ends at the given `t`
- * parameter.
- *
- * @param ps a quadratic bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
- * @param t the `t` parameter where the resultant bezier should end
- *
- * @internal
- */
-function from_to_2_splitLeft2(ps, t) {
-    // --------------------------------------------------------
-    // const [[x0, y0], [x1, y1], [x2, y2]] = ps; 
-    const p0 = ps[0];
-    const p1 = ps[1];
-    const p2 = ps[2];
-    const x0 = p0[0];
-    const y0 = p0[1];
-    const x1 = p1[0];
-    const y1 = p1[1];
-    const x2 = p2[0];
-    const y2 = p2[1];
-    // --------------------------------------------------------
-    const tt = t * t;
-    const xA = x0 - x1;
-    const yA = y0 - y1;
-    return [
-        [x0,
-            y0],
-        [-t * xA + x0,
-            -t * yA + y0],
-        [tt * (xA + (x2 - x1)) - (2 * t * xA - x0),
-            tt * (yA + (y2 - y1)) - (2 * t * yA - y0)] // yy2 - split point y
-    ];
-}
-/**
- * Returns a bezier curve that starts and ends at the given `t` parameters.
- *
- * @param ps a quadratic bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
- * @param tS the `t` parameter where the resultant bezier should start
- * @param tE the `t` parameter where the resultant bezier should end
- *
- * @internal
- */
-function from_to_2_splitAtBoth2(ps, tS, tE) {
-    // --------------------------------------------------------
-    // const [[x0, y0], [x1, y1], [x2, y2]] = ps; 
-    const p0 = ps[0];
-    const p1 = ps[1];
-    const p2 = ps[2];
-    const x0 = p0[0];
-    const y0 = p0[1];
-    const x1 = p1[0];
-    const y1 = p1[1];
-    const x2 = p2[0];
-    const y2 = p2[1];
-    // --------------------------------------------------------
-    const ttS = tS * tS;
-    const ttE = tE * tE;
-    const tStE = tS * tE;
-    const xA = x0 - x1;
-    const xB = x2 - x1;
-    const xC = xA + xB;
-    const yA = y0 - y1;
-    const yB = y2 - y1;
-    const yC = yA + yB;
-    const xx0 = ttS * xC - (2 * tS * xA - x0);
-    const xx1 = tStE * xC - (xA * (tE + tS) - x0);
-    const xx2 = ttE * xC - (2 * tE * xA - x0);
-    const yy0 = ttS * yC - (2 * tS * yA - y0);
-    const yy1 = tStE * yC - (yA * (tE + tS) - y0);
-    const yy2 = ttE * yC - (2 * tE * yA - y0);
-    return [[xx0, yy0], [xx1, yy1], [xx2, yy2]];
-}
-
-
-;// CONCATENATED MODULE: ./src/transformation/split/from-to/from-to-1.ts
-/**
- * Returns a bezier curve that starts and ends at the given `t` parameters.
- *
- * @param ps a lineer bezier curve (a line) given as an ordered array of its
+ * @param ps a linear bezier curve (a line) given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1]]`
  * @param tS the `t` parameter where the resultant bezier should start
  * @param tE the `t` parameter where the resultant bezier should end
  *
  * @internal
  */
-function from_to_1_fromTo1(ps, tS, tE) {
+function fromTo1InclErrorBound(ps, tS, tE) {
     if (tS === 0) {
         if (tE === 1) {
-            return ps;
+            return { ps, _ps: from_to_1_incl_error_bound_psErrorFree };
         }
-        return from_to_1_splitLeft1(ps, tE);
+        return from_to_1_incl_error_bound_splitLeft1(ps, tE);
     }
     if (tE === 1) {
-        return from_to_1_splitRight1(ps, tS);
+        return from_to_1_incl_error_bound_splitRight1(ps, tS);
     }
-    return from_to_1_splitAtBoth1(ps, tS, tE);
+    return from_to_1_incl_error_bound_splitAtBoth1(ps, tS, tE);
 }
 /**
  * Returns a bezier curve that starts at the given `t` parameter and ends
- * at `t === 1`.
+ * at `t === 1` including an error bound (that needs to be multiplied
+ * by `3u`, where `u === Number.EPSILON/2`).
  *
  * @param ps a lineer bezier curve (a line) given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1]]`
@@ -14116,26 +14015,56 @@ function from_to_1_fromTo1(ps, tS, tE) {
  *
  * @internal
  */
-function from_to_1_splitRight1(ps, t) {
+function from_to_1_incl_error_bound_splitRight1(ps, t) {
     // --------------------------------------------------------
     // const [[x0, y0], [x1, y1]] = ps; 
-    const p0 = ps[0];
-    const p1 = ps[1];
+    const p0 = ps[0]; // exact
+    const p1 = ps[1]; // exact
     const x0 = p0[0];
-    const y0 = p0[1];
+    const y0 = p0[1]; // exact
     const x1 = p1[0];
-    const y1 = p1[1];
+    const y1 = p1[1]; // exact
     // --------------------------------------------------------
-    return [
+    // error bound using counters <k>:
+    // counter rules:
+    //   1. <k>a + <l>b = <max(k,l) + 1>(a + b)
+    //   2. <k>a<l>b = <k + l + 1>ab
+    //   3. fl(a) === <1>a
+    const psR = [
         [t * (x1 - x0) + x0,
             t * (y1 - y0) + y0],
         [x1,
             y1] // yy1
     ];
+    // -----------------------
+    // Calculate error bounds
+    // -----------------------
+    const _t = from_to_1_incl_error_bound_abs(t);
+    const _x0 = from_to_1_incl_error_bound_abs(x0);
+    const _x1 = from_to_1_incl_error_bound_abs(x1);
+    const _y0 = from_to_1_incl_error_bound_abs(y0);
+    const _y1 = from_to_1_incl_error_bound_abs(y1);
+    // <3>xx0 <= <3>(<2>(t*<1>(x1 - x0)) + x0)
+    const _xx0 = _t * (_x1 + _x0) + _x0;
+    const _yy0 = _t * (_y1 + _y0) + _y0;
+    /** the coordinate-wise error bound */
+    //const psR_ = [
+    //    [3*u*_xx0, 3*u*_yy0],
+    //    [0, 0]
+    //];
+    const psR_ = [
+        [_xx0, _yy0],
+        [0, 0]
+    ];
+    return {
+        ps: psR,
+        _ps: psR_
+    };
 }
 /**
  * Returns a bezier curve that starts at `t === 0` and ends at the given `t`
- * parameter.
+ * parameter including an error bound (that needs to be multiplied by `3u`,
+ * where `u === Number.EPSILON/2`).
  *
  * @param ps a lineer bezier curve (a line) given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1]]`
@@ -14143,25 +14072,56 @@ function from_to_1_splitRight1(ps, t) {
  *
  * @internal
  */
-function from_to_1_splitLeft1(ps, t) {
+function from_to_1_incl_error_bound_splitLeft1(ps, t) {
     // --------------------------------------------------------
     // const [[x0, y0], [x1, y1]] = ps; 
-    const p0 = ps[0];
-    const p1 = ps[1];
+    const p0 = ps[0]; // exact 
+    const p1 = ps[1]; // exact
     const x0 = p0[0];
-    const y0 = p0[1];
+    const y0 = p0[1]; // exact
     const x1 = p1[0];
-    const y1 = p1[1];
+    const y1 = p1[1]; // exact
     // --------------------------------------------------------
-    return [
+    // error bound using counters <k>:
+    // counter rules:
+    //   1. <k>a + <l>b = <max(k,l) + 1>(a + b)
+    //   2. <k>a<l>b = <k + l + 1>ab
+    //   3. fl(a) === <1>a
+    const psL = [
         [x0,
             y0],
         [t * (x1 - x0) + x0,
             t * (y1 - y0) + y0] // yy1
     ];
+    // -----------------------
+    // Calculate error bounds
+    // -----------------------
+    const _t = from_to_1_incl_error_bound_abs(t);
+    const _x0 = from_to_1_incl_error_bound_abs(x0);
+    const _x1 = from_to_1_incl_error_bound_abs(x1);
+    const _y0 = from_to_1_incl_error_bound_abs(y0);
+    const _y1 = from_to_1_incl_error_bound_abs(y1);
+    // <3>xx1 <= <3>(<2>(t*<1>(x1 - x0)) + x0)
+    const _xx1 = _t * (_x1 + _x0) + _x0;
+    const _yy1 = _t * (_y1 + _y0) + _y0;
+    /** the coordinate-wise error bound */
+    //const psL_ = [
+    //    [0, 0],
+    //    [3*u*_xx1, 3*u*_yy1],
+    //];
+    const psL_ = [
+        [0, 0],
+        [_xx1, _yy1],
+    ];
+    return {
+        ps: psL,
+        _ps: psL_
+    };
 }
 /**
- * Returns a bezier curve that starts and ends at the given `t` parameters.
+ * Returns a bezier curve that starts and ends at the given `t` parameters
+ * including an error bound (that needs to be multiplied by `3u`, where
+ * `u === Number.EPSILON/2`).
  *
  * @param ps a lineer bezier curve (a line) given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1]]`
@@ -14170,54 +14130,91 @@ function from_to_1_splitLeft1(ps, t) {
  *
  * @internal
  */
-function from_to_1_splitAtBoth1(ps, tS, tE) {
+function from_to_1_incl_error_bound_splitAtBoth1(ps, tS, tE) {
     // --------------------------------------------------------
     // const [[x0, y0], [x1, y1]] = ps; 
-    const p0 = ps[0];
-    const p1 = ps[1];
+    const p0 = ps[0]; // exact
+    const p1 = ps[1]; // exact
     const x0 = p0[0];
-    const y0 = p0[1];
+    const y0 = p0[1]; // exact
     const x1 = p1[0];
-    const y1 = p1[1];
+    const y1 = p1[1]; // exact
     // --------------------------------------------------------
-    return [
+    // error bound using counters <k>:
+    // counter rules:
+    //   1. <k>a + <l>b = <max(k,l) + 1>(a + b)
+    //   2. <k>a<l>b = <k + l + 1>ab
+    //   3. fl(a) === <1>a
+    const psB = [
         [tS * (x1 - x0) + x0,
             tS * (y1 - y0) + y0],
         [tE * (x1 - x0) + x0,
             tE * (y1 - y0) + y0] // yy1
     ];
+    // -----------------------
+    // Calculate error bounds
+    // -----------------------
+    const _tS = from_to_1_incl_error_bound_abs(tS);
+    const _tE = from_to_1_incl_error_bound_abs(tE);
+    const _x0 = from_to_1_incl_error_bound_abs(x0);
+    const _x1 = from_to_1_incl_error_bound_abs(x1);
+    const _y0 = from_to_1_incl_error_bound_abs(y0);
+    const _y1 = from_to_1_incl_error_bound_abs(y1);
+    // <3>xx0 <= <3>(<2>(tS*<1>(x1 - x0)) + x0)
+    const _xx0 = _tS * (_x1 + _x0) + _x0;
+    // <3>xx1
+    const _xx1 = _tE * (_x1 + _x0) + _x0;
+    const _yy0 = _tS * (_y1 + _y0) + _y0;
+    const _yy1 = _tE * (_y1 + _y0) + _y0;
+    /** the coordinate-wise error bound */
+    //const psR_ = [
+    //    [3*u*_xx0, 3*u*_yy0],
+    //    [0, 0]
+    //];
+    const psB_ = [
+        [_xx0, _yy0],
+        [_xx1, _yy1]
+    ];
+    return {
+        ps: psB,
+        _ps: psB_
+    };
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/split/from-to.ts
+;// CONCATENATED MODULE: ./src/transformation/split/from-to-incl-error-bound.ts
 
 
 
-const from_to_fromTo3 = from_to_3_fromTo3;
-const from_to_fromTo2 = from_to_2_fromTo2;
-const from_to_fromTo1 = from_to_1_fromTo1;
+const from_to_incl_error_bound_fromTo3 = fromTo3InclErrorBound;
+const from_to_incl_error_bound_fromTo2 = fromTo2InclErrorBound;
+const from_to_incl_error_bound_fromTo1 = fromTo1InclErrorBound;
 /**
- * Returns a bezier curve that starts and ends at the given `t` parameters.
+ * Returns a bezier curve, `ps`, that starts and ends at the given `t` parameters
+ * (starting at `tS` and ending at `tE`) including a matching coordinate-wise
+ * error bound, `_ps`, that needs to be multiplied by `3u`, `5u` or `8u` (for
+ * lines, quadratic or cubic bezier curves respectively) before use,
+ * where `u === Number.EPSILON/2`.
  *
  * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param tS the `t` parameter where the resultant bezier should start
  * @param tE the `t` parameter where the resultant bezier should end
  *
- * @doc
+ * @doc mdx
  */
-function from_to_fromTo(ps, tS, tE) {
+function fromToInclErrorBound(ps, tS, tE) {
     if (ps.length === 4) {
-        return from_to_fromTo3(ps, tS, tE);
+        return from_to_incl_error_bound_fromTo3(ps, tS, tE);
     }
     if (ps.length === 3) {
-        return from_to_fromTo2(ps, tS, tE);
+        return from_to_incl_error_bound_fromTo2(ps, tS, tE);
     }
     if (ps.length === 2) {
-        return from_to_fromTo1(ps, tS, tE);
+        return from_to_incl_error_bound_fromTo1(ps, tS, tE);
     }
     if (ps.length === 1) {
-        return ps;
+        return { ps, _ps: [[0]] };
     }
     throw new Error('The given bezier curve must be of order <= 3.');
 }
@@ -14504,7 +14501,7 @@ const get_implicit_form1_dd_with_running_error_abs = Math.abs;
  * * the implicit form is given by: `vₓx + vᵧy + v = 0`
  * * intermediate calculations are done in double-double precision and this is
  * reflected in the error bound
- * * the error bound returned first needs to be scaled by `γγ3 === (3*u*u) / (1 - 3*u*u)`,
+ * * the error bound returned first needs to be scaled by `γγ3 === (3*u*u) / (1 - 3*u*u) === 3.697785493223493e-32`,
  * where `u === Number.EPSILON / 2` before use
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  *
@@ -14630,7 +14627,7 @@ const get_implicit_form2_dd_with_running_error_abs = Math.abs;
  * * the implicit form is given by: `vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0`
  * * intermediate calculations are done in double-double precision and this is
  * reflected in the error bound
- * * the error bound returned first needs to be scaled by `γγ3 === (3*u*u) / (1 - 3*u*u)`,
+ * * the error bound returned first needs to be scaled by `γγ3 === (3*u*u) / (1 - 3*u*u) === 3.697785493223493e-32`,
  * where `u === Number.EPSILON / 2` before use
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  *
@@ -14943,7 +14940,7 @@ const get_implicit_form3_dd_with_running_error_qaq = node_ddAddDd; // error -> 3
  * * the implicit form is given by: `vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0`
  * * intermediate calculations are done in double-double precision and this is
  * reflected in the error bound
- * * the error bound returned first needs to be scaled by `γγ3 === (3*u*u) / (1 - 3*u*u)`,
+ * * the error bound returned first needs to be scaled by `γγ3 === (3*u*u) / (1 - 3*u*u) === 3.697785493223493e-32`,
  * where `u === Number.EPSILON / 2` before use
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  *
@@ -18857,7 +18854,7 @@ const get_implicit_form3_exact_eSign = e_sign_eSign;
  *
  * @param ps
  *
- * @doc
+ * @doc mdx
  */
 function getImplicitForm3Exact(ps) {
     // Takes about 155 micro-seconds on a 3rd gen i7 and Chrome 79.
@@ -20456,7 +20453,7 @@ const coeffFunctionsExact = [
  * @param ps1
  * @param ps2
  *
- * @internal but still exported for backwards compatibility
+ * @doc mdx
  */
 function getCoeffsBezBez(ps1, ps2) {
     const { coeffs, errBound } = coeffFunctionsDd[ps1.length - 2][ps2.length - 2](ps1, ps2);
@@ -22542,7 +22539,7 @@ function bezierSelfIntersection(ps, inRange = true) {
  * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  *
- * @doc
+ * @doc mdx
  */
 function reduceOrderIfPossible(ps) {
     if (ps.length === 4 && isCubicReallyQuad(ps)) {
@@ -23466,6 +23463,8 @@ function handlePointDegenerateCases(ps1, ps2) {
  * Returns the *absolute* area between the two given curves.
  *
  * * **precondition**: the first and last control points of each curve must be equal
+ * * **precondition**: neither curve should have self-intersections else the results
+ * are ambiguous
  * * can be used as an excellent error measure of the similarity between the two curves
  *
  * @doc mdx
@@ -23479,8 +23478,8 @@ function getAbsAreaBetween(ps1, ps2) {
         const x = xs[i];
         const tE1 = x === undefined ? 1 : mid(x.ri1);
         const tE2 = x === undefined ? 1 : mid(x.ri2);
-        const piece1 = fromToInclErrorBound(ps1, tS1, tE1).ps;
-        const piece2 = fromToInclErrorBound(ps2, tS2, tE2).ps;
+        const piece1 = from_to_fromTo(ps1, tS1, tE1);
+        const piece2 = from_to_fromTo(ps2, tS2, tE2);
         tS1 = tE1;
         tS2 = tE2;
         total += Math.abs(area_area(piece1) - area_area(piece2));
@@ -23757,10 +23756,10 @@ const closest_point_on_bezier_sqrt = Math.sqrt;
  *
  * * intermediate calculations are done in double precision
  * * in some cases there can be more than one closest point, e.g. on the axis
- * of symmetry of a parabola
+ * of symmetry of a parabola (in which case only one of the points are returned)
  * * the returned point(s) are objects with the following properties:
  *     * `p`: the closest point on the bezier curve
- *     * `t`: the `t` parameter value of the point on the bezier curve
+ *     * `t`: the parameter value of the point on the bezier curve
  *     * `d`: the closest distance between the point and the bezier curve
  *
  * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
@@ -23819,10 +23818,10 @@ const furthest_point_on_bezier_sqrt = Math.sqrt;
  *
  * * intermediate calculations are done in double precision
  * * in some cases there can be more than one furthest point, e.g. on parts of
- * the axis of symmetry of a parabola
+ * the axis of symmetry of a parabola (in which case only one of the points are returned)
  * * the returned point(s) are objects with the following properties:
  *     * `p`: the furthest point on the bezier curve
- *     * `t`: the `t` parameter value of the point on the bezier curve
+ *     * `t`: the parameter value of the point on the bezier curve
  *     * `d`: the furthest distance between the point and the bezier curve
  *
  * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
@@ -24141,7 +24140,7 @@ function geoClip(G, dF, dMin, dMax) {
  * quadraticRoots([1, -3, 2]); //=> [1,2]
  * ```
  *
- * @doc
+ * @internal
  */
 function geo_clip_quadraticRoots(a, b, c) {
     if (a === 0) {
@@ -24594,7 +24593,7 @@ const bezier_bezier_intersection_fast_abs = Math.abs;
  * The guarantee in accuracy of the `t` parameter value chosen to be reasonable
  * for this type of intersection algorithm.
  */
-const δ = 2 ** (-33); // 2**(-33) === 1.1641532182693481e-10
+const δ = 2 ** -33; // 2**(-33) === 1.1641532182693481e-10
 /** a heuristic value for the minimum t-span of the final iteration */
 const Δ = 2 ** (-43); // 2**(-43) === 1.1368683772161603e-13
 /**
@@ -24603,6 +24602,9 @@ const Δ = 2 ** (-43); // 2**(-43) === 1.1368683772161603e-13
  *
  * * returns an array that contains the `t` paramater pairs at intersection
  * of the first and second bezier curves respectively.
+ *
+ * * Each returned `t` paramter value is mathematically guaranteed to be
+ * accurate to within 2**-33 or about ten billionths of a unit.
  *
  * * the algorithm is based on a paper at http://scholarsarchive.byu.edu/cgi/viewcontent.cgi?article=2206&context=etd
  * that finds the intersection of a fat line and a so-called geometric interval
@@ -24613,7 +24615,7 @@ const Δ = 2 ** (-43); // 2**(-43) === 1.1368683772161603e-13
  * extremely slow due to sub-linear convergence (and similarly for *all* fatline
  * algorithms) in those cases; luckily this algorithm detects those cases and
  * reverts to implicitization with strict error bounds to guarantee accuracy
- * and efficiency (implicitization is roughly 5x slower but is rare)
+ * and efficiency (implicitization is roughly 5x slower but is very rare)
  *
  * @param ps1 an order 0,1,2 or 3 bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
@@ -24628,7 +24630,7 @@ function bezierBezierIntersectionFast(ps1, ps2) {
         return implicit(ps1, ps2);
     }
     /** Intersection `t` values for both beziers */
-    let xs = [];
+    let ts = [];
     /** an iteration still left to check for intersections */
     let iteration = {
         F: ps1,
@@ -24672,7 +24674,7 @@ function bezierBezierIntersectionFast(ps1, ps2) {
                     // revert to implicitization
                     return implicit(ps1, ps2);
                 }
-                xs.push(iter.F === ps2
+                ts.push(iter.F === ps2
                     ? [fRange, lfRange]
                     : [lfRange, fRange]);
                 // else if this iteration is precise enough
@@ -24712,9 +24714,9 @@ function bezierBezierIntersectionFast(ps1, ps2) {
     //---------------------------------------------------------------
     // check for possible duplicate intersections at split points
     //---------------------------------------------------------------
-    xs.sort((x1, x2) => x1[0][0] - x2[0][0]);
-    combineXs(xs);
-    return xs;
+    ts.sort((t1, t2) => t1[0][0] - t2[0][0]);
+    combineXs(ts);
+    return ts.map(tPair => tPair.map(t => (t[0] + t[1]) / 2));
 }
 function combineXs(xs) {
     let testAgain = true;
@@ -24760,10 +24762,7 @@ function combineXs(xs) {
     }
 }
 function implicit(ps1, ps2) {
-    return bezier_bezier_intersection_fast_bezierBezierIntersection(ps1, ps2).map(x => [
-        [x.ri1.tS, x.ri1.tE],
-        [x.ri2.tS, x.ri2.tE]
-    ]);
+    return bezier_bezier_intersection_fast_bezierBezierIntersection(ps1, ps2).map(x => [x.t1, x.t2]);
 }
 
 
@@ -24824,7 +24823,7 @@ const eval_de_casteljau_with_err_1 = γ(1);
  * * uses [De Casteljau's algorithm](https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm)
  * in double precision floating point arithmetic
  *
- * The resulting point point is returned as `{ p: number[], pE: number[] }`,
+ * The resulting point is returned as `{ p: number[], pE: number[] }`,
  * where `p` is the point `[x,y]` and `pE` is the corresponding coordinate-wise
  * absolute error bound of the calculation.
  *
@@ -24940,7 +24939,7 @@ const eval_de_casteljau_with_err_dd_3 = γγ(3);
  * * uses [De Casteljau's algorithm](https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm)
  * in double-double precision floating point arithmetic.
  *
- * The resulting point point is returned as `{ p: number[][], pE: number[] }`,
+ * The resulting point is returned as `{ p: number[][], pE: number[] }`,
  * where `p` is the point `[x,y]` (with `x` and `y` in double-double precision)
  * and `pE` is the corresponding coordinate-wise absolute error bound of the
  * calculation.
@@ -25005,13 +25004,13 @@ function getInflections(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/total-curvature.ts
+;// CONCATENATED MODULE: ./src/global-properties/total-absolute-curvature.ts
 
 
 
 
 
-const { abs: total_curvature_abs, PI: total_curvature_ } = Math;
+const { abs: total_absolute_curvature_abs, PI: total_absolute_curvature_ } = Math;
 /**
  * Returns the total absolute curvature of the given bezier curve over the
  * given interval
@@ -25026,7 +25025,7 @@ const { abs: total_curvature_abs, PI: total_curvature_ } = Math;
  */
 function totalAbsoluteCurvature(ps, interval = [0, 1]) {
     if (ps.length <= 3) {
-        return total_curvature_abs(totalCurvature(ps, interval));
+        return total_absolute_curvature_abs(totalCurvature(ps, interval));
     }
     if (ps.length === 4) {
         const [tS, tE] = interval;
@@ -25037,7 +25036,7 @@ function totalAbsoluteCurvature(ps, interval = [0, 1]) {
         const ts = [0, ...getInflections(ps_), 1];
         let total = 0;
         for (let i = 0; i < ts.length - 1; i++) {
-            total += total_curvature_abs(totalCurvature(ps_, [ts[i], ts[i + 1]]));
+            total += total_absolute_curvature_abs(totalCurvature(ps_, [ts[i], ts[i + 1]]));
         }
         return total;
     }
@@ -25085,10 +25084,10 @@ function totalCurvature(ps, interval = [0, 1]) {
             getInterfaceRotation(tanM, tanE);
         if (bezClass.nodeType === 'acnode' ||
             bezClass.nodeType === 'cusp') {
-            return cpθ <= -total_curvature_
-                ? cpθ + 2 * total_curvature_
-                : cpθ >= +total_curvature_
-                    ? cpθ - 2 * total_curvature_
+            return cpθ <= -total_absolute_curvature_
+                ? cpθ + 2 * total_absolute_curvature_
+                : cpθ >= +total_absolute_curvature_
+                    ? cpθ - 2 * total_absolute_curvature_
                     : cpθ;
         }
         return cpθ;
@@ -25099,13 +25098,11 @@ function totalCurvature(ps, interval = [0, 1]) {
 
 ;// CONCATENATED MODULE: ./src/transformation/reverse.ts
 /**
- * Returns the given points (e.g. bezier) in reverse order.
+ * Returns the given points (e.g. bezier curve) in reverse order.
  *
  * Implementation details:
  * ```
- * function reverse(ps: number[][]) {
- *		return ps.slice().reverse();
- * }
+ * const reverse = ps => ps.slice().reverse()
  * ```
  *
  * @param ps a bezier curve given as an ordered array of its
@@ -25134,7 +25131,9 @@ function reverse(ps) {
  * @param cs the polynomial to evaluate
  * @param x the `x` variable at which to evaluate
  * @param y the `y` variable at which to evaluate
-  */
+ *
+ * @doc
+ */
 function evaluateImplicit3(cs, x, y) {
     const { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = cs;
     return (vₓₓₓ * x * x * x +
@@ -25254,7 +25253,9 @@ function getImplicitForm3Dd(ps) {
  * @param cs the polynomial to evaluate
  * @param x the `x` variable at which to evaluate
  * @param y the `y` variable at which to evaluate
-  */
+ *
+ * @doc
+ */
 function evaluateImplicit2(cs, x, y) {
     const { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = cs;
     return vₓₓ * x * x + vₓᵧ * x * y + vᵧᵧ * y * y + vₓ * x + vᵧ * y + v;
@@ -25343,7 +25344,9 @@ function getImplicitForm2Dd(ps) {
  * @param cs the polynomial to evaluate
  * @param x the `x` variable at which to evaluate
  * @param y the `y` variable at which to evaluate
-  */
+ *
+ * @doc
+ */
 function evaluateImplicit1(cs, x, y) {
     const { vₓ, vᵧ, v } = cs;
     return vₓ * x + vᵧ * y + v;
@@ -25477,6 +25480,7 @@ function getImplicitForm1ErrorCounters(ps) {
 /**
  * Returns the Bernstein basis representation (i.e. control points) of a line,
  * quadratic or cubic bezier given its power bases.
+ *
  * * **non-exact**: due to floating-point round-off (see implementation to
  * understand under what conditions the result would be exact)
  *
@@ -25541,7 +25545,7 @@ function fromPowerBasis(cs) {
  * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  *
- * @doc
+ * @doc mdx
  */
 function getHodograph(ps) {
     // * **bitlength**: If the coordinates of the control points are bit-aligned then
@@ -25654,13 +25658,13 @@ e + 2*f + 4*g + 8*h = 8*yz
  * Returns the cubic bezier curve with given starting, 2nd and 3rd control
  * points such that there is a self-intersection.
  *
- * **in-exact:** the result may not be exact due to floating point round-off
+ * * **in-exact:** the result may not be exact due to floating point round-off
  *
  * @param ts the two `t` values where the self-intersection should occur
  * @param p0 the bezier's initial control point, e.g. `[1,2]`
  * @param p1 the bezier's 2nd control point
  * @param p2 the bezier's 3rd control point
-  *
+ *
  * @doc mdx
  */
 function generateSelfIntersecting(p0, p1, p2, ts) {
@@ -25681,7 +25685,7 @@ function generateSelfIntersecting(p0, p1, p2, ts) {
     // a = f4*f4;
     // b = f4*f5;
     // c = f4*f6 + f5*f5;
-    // The self-intersection is given by the roots of `at^2 + bt + c = 0`
+    // The self-intersection is given by the roots of `at^2 + bt + c`
     const vₓ = b2 * (a1 * b2 - a2 * b1);
     const vᵧ = -a2 * (a1 * b2 - a2 * b1);
     // a3**2* (b1**2 + b1*b2*t1 + b2**2*t1**2) +
@@ -25742,12 +25746,6 @@ function generateSelfIntersecting(p0, p1, p2, ts) {
  * @param p a point through which the bezier should go, e.g. `[4.5,6.1]`
  * @param t a `t` parameter value at which the bezier should go through the
  * point - this is necessary due to a degree of freedom still left
- *
- * @example
- * ```typescript
- * cubicThroughPointGiven013([[1,1], [10.53125,4.8125], [18,0.5]], [14.6875,3.34375], 0.75);
- * //=> [[1, 1], [10.53125, 4.8125], [13.26736111111111, 5.784722222222222], [18, 0.5]]
- * ```
  *
  * @doc mdx
  */
@@ -26312,8 +26310,7 @@ function toPowerBasis3_1stDerivativeErrorCounters(ps) {
 /**
  * Returns a normal vector (not necessarily of unit length) of a bezier curve
  * at a specific given parameter value `t` by simply taking the `tangent` at
- * that point and rotating it by 90 degrees (it is *not* the derivative of the
- * tangent - for that use e.g. [[evaluate2ndDerivative]])
+ * that point and rotating it by 90 degrees.
  *
  * * uses double precision calculations internally
  *
@@ -26338,7 +26335,7 @@ function normal(ps, t) {
  *
  * @param ps a 2d line represented by two points
  *
- * @doc
+ * @doc mdx
  */
 function lineToCubic(ps) {
     const [[x0, y0], [x1, y1]] = ps;
@@ -26364,7 +26361,7 @@ function lineToCubic(ps) {
  * @param ps a quadratic bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
  *
- * @doc
+ * @doc mdx
  */
 function quadraticToCubic(ps) {
     const [[x0, y0], [x1, y1], [x2, y2]] = ps;
@@ -26517,21 +26514,31 @@ function isQuadFlat(ps, tolerance) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/quad-to-polyline.ts
+;// CONCATENATED MODULE: ./src/fit/quadratic-to-polyline.ts
 
 
+const { abs: quadratic_to_polyline_abs, max: quadratic_to_polyline_max } = Math;
 /**
  * Transforms the given quadratic bezier curve into a polyline approximation to
  * within a given tolerance and returns the result.
  *
  * @param ps a quadratic bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- * @param tolerance a tolerance given as the maximum Hausdorff distance allowed
+ * @param tolerance defaults to `2**-10` of the maximum coordinate of the given
+ * bezier curve; a tolerance given as the maximum Hausdorff distance allowed
  * between the polyline and the bezier curve
  *
- * @doc
+ * @doc mdx
  */
-function quadToPolyline(ps, tolerance) {
+function quadraticToPolyline(ps, tolerance) {
+    if (tolerance === undefined || tolerance === 0) {
+        const [p0, p1, p2] = ps;
+        const [x0, y0] = p0;
+        const [x1, y1] = p1;
+        const [x2, y2] = p2;
+        const maxCoordinate = quadratic_to_polyline_max(quadratic_to_polyline_abs(x0), quadratic_to_polyline_abs(y0), quadratic_to_polyline_abs(x1), quadratic_to_polyline_abs(y1), quadratic_to_polyline_abs(x2), quadratic_to_polyline_abs(y2));
+        tolerance = maxCoordinate * 2 ** -10;
+    }
     // A quad bezier has the following useful properties (Let the control
     // points be labeled P0, P1 and P2 respectively and let the point at t = 0.5
     // be labeled M1):
@@ -26584,8 +26591,8 @@ function quadToPolyline(ps, tolerance) {
             continue;
         }
         const quads = [
-            fromToInclErrorBound(ps, 0, 0.5).ps,
-            fromToInclErrorBound(ps, 0.5, 1).ps
+            from_to_fromTo(ps, 0, 0.5),
+            from_to_fromTo(ps, 0.5, 1)
         ];
         const prev = node.prev;
         const next = node.next;
@@ -28069,14 +28076,14 @@ class Heap {
         this.heap[0] = t;
         this.swimDown();
     }
-    // prefer inlining?
-    //public static getParentIdx(i: number) { return (i - 1 - (i+1)%2)/2; }
+    /* ignore coverage */
+    static getParentIdx(i) { return (i - 1 - (i + 1) % 2) / 2; }
     static getLeftChild(i) { return 2 * i + 1; }
     static getRightChild(i) { return 2 * i + 2; }
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/hausdorff-distance/hausdorff-distance.ts
+;// CONCATENATED MODULE: ./src/simultaneous-properties/hausdorff-distance/hausdorff-distance-one-sided.ts
 
 
 
@@ -28088,7 +28095,7 @@ class Heap {
 
 
 /** @internal */
-const hausdorff_distance_max = Math.max;
+const hausdorff_distance_one_sided_max = Math.max;
 // We need to calculate `H(A,B)`, the two sided Hausdorff distance between
 // the bezier curves `A` and `B` which equals `max(h(A,B), h(B,A))`, where
 // `h(A,B)` is the one sided Hausdorff distance from `A` to `B`
@@ -28139,7 +28146,7 @@ function hausdorffDistanceOneSided(A, B, tolerance, maxIterations = 50) {
         const EA1 = closestPointOnBezier(B, A[A.length - 1]).d;
         return EA0 > EA1 ? EA0 : EA1;
     }
-    const l = hausdorff_distance_max(maxAbsCoordinate(A), maxAbsCoordinate(B));
+    const l = hausdorff_distance_one_sided_max(maxAbsCoordinate(A), maxAbsCoordinate(B));
     tolerance = tolerance || l / 1000000;
     // an array of intervals
     const [eL, eR] = calcHErrorBound(A, 0, 1);
@@ -28165,7 +28172,7 @@ function hausdorffDistanceOneSided(A, B, tolerance, maxIterations = 50) {
         const pB = closestPointOnBezier(B, pM).p;
         const hM = distanceBetween(pM, pB);
         //---------------------------------------
-        const h = hausdorff_distance_max(hL, hM, hR);
+        const h = hausdorff_distance_one_sided_max(hL, hM, hR);
         if (h > bestHLower) {
             bestHLower = h;
         }
@@ -28197,12 +28204,18 @@ function calcHErrorBound(A, tS, tE) {
     // absolute tangent values on curve segments or use the control point 
     // lengths as an upper bound.
     const tM = (tE + tS) / 2; // since the formula says `δS/2` so divide by 2
-    const psL = fromToInclErrorBound(A, tS, tM).ps;
-    const psR = fromToInclErrorBound(A, tM, tE).ps;
+    const psL = from_to_fromTo(A, tS, tM);
+    const psR = from_to_fromTo(A, tM, tE);
     const eL = controlPointLinesLength(psL);
     const eR = controlPointLinesLength(psR);
     return [eL, eR];
 }
+
+
+;// CONCATENATED MODULE: ./src/simultaneous-properties/hausdorff-distance/hausdorff-distance.ts
+
+/** @internal */
+const hausdorff_distance_max = Math.max;
 /**
  * Calculates and returns the (two-sided) Hausdorff distance between the bezier
  * curves `A` and `B` as `[min,max]` where `min` is the minimum
@@ -28218,9 +28231,11 @@ function calcHErrorBound(A, tS, tE) {
  * returned; this is *not* a hard tolerance and the returned bound can be less
  * accurate in hard cases (due to the `maxIterations` parameter). Luckily
  * however, specifically the lower bound returned will be very accurate due to
- * its fast convergence is such hard cases (see the paper)
+ * its fast convergence in such hard cases (see the paper)
  * @param maxIterations optional; defaults to `50`; if the desired guaranteed error bound
  * has not been achieved after `maxIterations` then the result will be returned
+ *
+ * @doc mdx
  */
 function hausdorffDistance(A, B, tolerance, maxIterations) {
     const AB = hausdorffDistanceOneSided(A, B, tolerance, maxIterations);
@@ -28241,14 +28256,14 @@ function hausdorffDistance(A, B, tolerance, maxIterations) {
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param maxLength
  *
- * @doc
+ * @doc mdx
  */
 function splitByLength(ps, maxLength) {
     const ts = [0, 1]; // include endpoints
     const tStack = [[0, 1]];
     while (tStack.length) {
         const ts_ = tStack.pop();
-        const ps_ = fromToInclErrorBound(ps, ts_[0], ts_[1]).ps;
+        const ps_ = from_to_fromTo(ps, ts_[0], ts_[1]);
         if (controlPointLinesLength(ps_) > maxLength) {
             const t = (ts_[0] + ts_[1]) / 2;
             tStack.push([ts_[0], t]);
@@ -28494,12 +28509,12 @@ function getCurvatureExtremaQuadraticPoly(ps) {
  * (must be > 0) as calculated using
  * the `curviness` function (that measures the total angle in radians formed
  * by the vectors formed by the ordered control points)
- * @param maxLength maximum allowed length of any returned piece
+ * @param maxLength optional; defaults to `10`; maximum allowed length of any returned piece
  * @param minTSpan optional; defaults to `2**-16`; the minimum `t` span that can
  * be returned for a bezier piece; necessary for cubics otherwise a curve with a
  * cusp would cause an infinite loop
  *
- * @doc
+ * @doc mdx
  */
 function splitByCurvatureAndLength(ps, maxCurviness = 0.4, maxLength = 10, minTSpan = 2 ** -16) {
     const ts = [0, 1]; // include endpoints
@@ -28509,7 +28524,7 @@ function splitByCurvatureAndLength(ps, maxCurviness = 0.4, maxLength = 10, minTS
         if (ts_[1] - ts_[0] <= minTSpan) {
             continue;
         }
-        const ps_ = fromToInclErrorBound(ps, ts_[0], ts_[1]).ps;
+        const ps_ = from_to_fromTo(ps, ts_[0], ts_[1]);
         if (controlPointLinesLength(ps_) > maxLength ||
             curviness(ps_) > maxCurviness) {
             const t = (ts_[0] + ts_[1]) / 2;
@@ -29251,6 +29266,7 @@ function getCoeffsLinearErrorCounters(circle, ps) {
 
 
 
+/** @internal */
 const circle_bezier_intersection_6 = γγ(6);
 /**
  * Returns the intersection between a circle and linear, quadratic or cubic bezier
@@ -29319,7 +29335,7 @@ function circleBezierIntersection(circle, ps) {
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param t
  *
- * @doc
+ * @doc mdx
  */
 function evaluateExact(ps, t) {
     if (t === 0) {
@@ -29376,7 +29392,7 @@ function evaluate(ps, t) {
  *
  * @param ps a 2d line represented by two points, e.g. `[[1,2],[3,4]]`
  *
- * @doc
+ * @doc mdx
  */
 function lineToQuadratic(ps) {
     const [[x0, y0], [x1, y1]] = ps;
@@ -29417,9 +29433,8 @@ function tangent(ps, t) {
 
 
 /**
- * Returns the normal, i.e. returns the `[x,y]` value of the twice
- * differentiated (with respect to `t`) bezier curve's power basis when
- * evaluated at `t`.
+ * Returns the `[x,y]` value of the twice differentiated (with respect to `t`)
+ * bezier curve's power basis when evaluated at `t`.
  *
  * * uses double precision calculations internally
  *
@@ -29430,7 +29445,10 @@ function tangent(ps, t) {
  */
 function evaluate2ndDerivative(ps, t) {
     const [ddPsX, ddPsY] = toPowerBasis_2ndDerivative(ps);
-    return [Horner(ddPsX, t), Horner(ddPsY, t)];
+    return [
+        Horner(ddPsX, t),
+        Horner(ddPsY, t)
+    ];
 }
 
 
@@ -29458,9 +29476,8 @@ function tangentExact(ps, t) {
 
 
 /**
- * Returns the *exact* normal, i.e. returns the `[x,y]` value of the twice
- * differentiated (with respect to `t`) bezier curve's power basis when
- * evaluated at `t`.
+ * Returns the *exact* result, `[x,y]`, of evaluating the 2nd derivative of a
+ * linear, quadratic or cubic bezier curve's power basis at `t`.
  *
  * @param ps a cubic bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * @param t the t parameter
@@ -29522,9 +29539,8 @@ const evaluate_2nd_derivative_at_0_exact_ts = two_sum_twoSum;
 const evaluate_2nd_derivative_at_0_exact_sce = scaleExpansion2;
 const evaluate_2nd_derivative_at_0_exact_ge = growExpansion;
 /**
- * Returns the *exact* normal, i.e. returns the result, `[x,y]`, of evaluating
- * the 2nd derivative of a linear, quadratic or cubic bezier curve's power basis
- * at `t === 0`.
+ * Returns the *exact* result, `[x,y]`, of evaluating the 2nd derivative of a
+ * linear, quadratic or cubic bezier curve's power basis at `t === 0`.
  *
  * @param ps An order 0,1,2 or 3 bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  *
@@ -29603,11 +29619,10 @@ const evaluate_2nd_derivative_at_1_exact_ts = two_sum_twoSum;
 const evaluate_2nd_derivative_at_1_exact_sce = scaleExpansion2;
 const evaluate_2nd_derivative_at_1_exact_ge = growExpansion;
 /**
- * Returns the *exact* normal, i.e. returns the result (`[x,y]`) of evaluating
- * the 2nd derivative of a linear, quadratic or cubic bezier curve's power basis
- * at `t === 1`.
+ * Returns the *exact* result, `[x,y]`, of evaluating the 2nd derivative of a
+ * linear, quadratic or cubic bezier curve's power basis at `t === 1`.
  *
- * @param ps An order 1,2 or 3 bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param ps An order 0,1,2 or 3 bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  *
  * @doc
  */
@@ -29681,9 +29696,8 @@ function tangentAt0(ps) {
 
 ;// CONCATENATED MODULE: ./src/local-properties-at-t/evaluate-2nd-derivative/double/evaluate-2nd-derivative-at-0.ts
 /**
- * Returns the normal, i.e. returns the result, `[x,y]`, of evaluating the 2nd
- * derivative of a linear, quadratic or cubic bezier curve's power basis
- * at `t === 0`.
+ * Returns the result, `[x,y]`, of evaluating the 2nd derivative of a linear,
+ * quadratic or cubic bezier curve's power basis at `t === 0`.
  *
  * * uses double precision calculations internally
  *
@@ -29767,9 +29781,8 @@ function tangentAt1(ps) {
 
 ;// CONCATENATED MODULE: ./src/local-properties-at-t/evaluate-2nd-derivative/double/evaluate-2nd-derivative-at-1.ts
 /**
- * Returns the normal, i.e. returns the result, `[x,y]`, of evaluating the 2nd
- * derivative of a linear, quadratic or cubic bezier curve's power basis
- * at `t === 1`.
+ * Returns the result, `[x,y]`, of evaluating the 2nd derivative of a linear,
+ * quadratic or cubic bezier curve's power basis at `t === 1`.
  *
  * * uses double precision calculations internally
  *
@@ -29805,30 +29818,15 @@ function evaluate2ndDerivativeAt1(ps) {
 
 ;// CONCATENATED MODULE: ./src/transformation/to-string.ts
 /**
- * Returns a human readable string representation of the given bezier curve.
+ * Returns a 'human readable' string representation of the given bezier curve.
  *
- * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * @param ps a bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ *
+ * @doc
  */
 function to_string_toString(ps) {
-    // for (let i=0 )
-    if (ps.length === 4) {
-        const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
-        return `[[${x0},${y0}],[${x1},${y1}],[${x2},${y2}],[${x3},${y3}]]`;
-    }
-    if (ps.length === 3) {
-        const [[x0, y0], [x1, y1], [x2, y2]] = ps;
-        return `[[${x0},${y0}],[${x1},${y1}],[${x2},${y2}]]`;
-    }
-    if (ps.length === 2) {
-        const [[x0, y0], [x1, y1]] = ps;
-        return `[[${x0},${y0}],[${x1},${y1}]]`;
-    }
-    if (ps.length === 1) {
-        const [[x0, y0]] = ps;
-        return `[[${x0},${y0}]]`;
-    }
-    throw new Error('The given bezier curve must be of order <= 3.');
+    return `[${ps.map(p => `[${p.join(',')}]`).join(',')}]`;
 }
 
 
@@ -30055,6 +30053,7 @@ function getFootpointPolyDd(ps, p) {
 
 
 
+
 var __webpack_exports__areBoxesIntersecting = __webpack_exports__.y2;
 var __webpack_exports__area = __webpack_exports__.SO;
 var __webpack_exports__bezierBezierIntersection = __webpack_exports__.Cn;
@@ -30099,6 +30098,7 @@ var __webpack_exports__furthestPointOnBezier = __webpack_exports__.ZL;
 var __webpack_exports__generateCuspAtHalf3 = __webpack_exports__.Gc;
 var __webpack_exports__generateQuarterCircle = __webpack_exports__.MM;
 var __webpack_exports__generateSelfIntersecting = __webpack_exports__.W9;
+var __webpack_exports__getAbsAreaBetween = __webpack_exports__.OP;
 var __webpack_exports__getBoundingBox = __webpack_exports__.A5;
 var __webpack_exports__getBoundingBoxTight = __webpack_exports__.FZ;
 var __webpack_exports__getBoundingHull = __webpack_exports__.vT;
@@ -30150,8 +30150,8 @@ var __webpack_exports__length = __webpack_exports__.kE;
 var __webpack_exports__lineToCubic = __webpack_exports__.w2;
 var __webpack_exports__lineToQuadratic = __webpack_exports__.L8;
 var __webpack_exports__normal = __webpack_exports__.mJ;
-var __webpack_exports__quadToPolyline = __webpack_exports__.uQ;
 var __webpack_exports__quadraticToCubic = __webpack_exports__.d3;
+var __webpack_exports__quadraticToPolyline = __webpack_exports__.q8;
 var __webpack_exports__reduceOrderIfPossible = __webpack_exports__.Ut;
 var __webpack_exports__reverse = __webpack_exports__.GY;
 var __webpack_exports__splitByCurvature = __webpack_exports__.ZP;
@@ -30188,4 +30188,4 @@ var __webpack_exports__totalLength = __webpack_exports__.Cv;
 var __webpack_exports___ = __webpack_exports__.H8;
 var __webpack_exports___ = __webpack_exports__.Uv;
 var __webpack_exports___ = __webpack_exports__.Ef;
-export { __webpack_exports__areBoxesIntersecting as areBoxesIntersecting, __webpack_exports__area as area, __webpack_exports__bezierBezierIntersection as bezierBezierIntersection, __webpack_exports__bezierBezierIntersectionBoundless as bezierBezierIntersectionBoundless, __webpack_exports__bezierBezierIntersectionFast as bezierBezierIntersectionFast, __webpack_exports__bezierSelfIntersection as bezierSelfIntersection, __webpack_exports__circleBezierIntersection as circleBezierIntersection, __webpack_exports__classification as classification, __webpack_exports__classifications as classifications, __webpack_exports__classify as classify, __webpack_exports__clone as clone, __webpack_exports__closestPointOnBezier as closestPointOnBezier, __webpack_exports__closestPointOnBezierCertified as closestPointOnBezierCertified, __webpack_exports__controlPointLinesLength as controlPointLinesLength, __webpack_exports__cubicThroughPointGiven013 as cubicThroughPointGiven013, __webpack_exports__cubicToHybridQuadratic as cubicToHybridQuadratic, __webpack_exports__cubicToQuadratic as cubicToQuadratic, __webpack_exports__curvature as curvature, __webpack_exports__curviness as curviness, __webpack_exports__equal as equal, __webpack_exports__evalDeCasteljau as evalDeCasteljau, __webpack_exports__evalDeCasteljauDd as evalDeCasteljauDd, __webpack_exports__evalDeCasteljauError as evalDeCasteljauError, __webpack_exports__evalDeCasteljauWithErr as evalDeCasteljauWithErr, __webpack_exports__evalDeCasteljauWithErrDd as evalDeCasteljauWithErrDd, __webpack_exports__evaluate as evaluate, __webpack_exports__evaluate2ndDerivative as evaluate2ndDerivative, __webpack_exports__evaluate2ndDerivativeAt0 as evaluate2ndDerivativeAt0, __webpack_exports__evaluate2ndDerivativeAt0Exact as evaluate2ndDerivativeAt0Exact, __webpack_exports__evaluate2ndDerivativeAt1 as evaluate2ndDerivativeAt1, __webpack_exports__evaluate2ndDerivativeAt1Exact as evaluate2ndDerivativeAt1Exact, __webpack_exports__evaluate2ndDerivativeExact as evaluate2ndDerivativeExact, __webpack_exports__evaluateExact as evaluateExact, __webpack_exports__evaluateImplicit1 as evaluateImplicit1, __webpack_exports__evaluateImplicit2 as evaluateImplicit2, __webpack_exports__evaluateImplicit3 as evaluateImplicit3, __webpack_exports__fitQuadsToCubic as fitQuadsToCubic, __webpack_exports__fromPowerBasis as fromPowerBasis, __webpack_exports__fromTo as fromTo, __webpack_exports__fromToInclErrorBound as fromToInclErrorBound, __webpack_exports__furthestPointOnBezier as furthestPointOnBezier, __webpack_exports__generateCuspAtHalf3 as generateCuspAtHalf3, __webpack_exports__generateQuarterCircle as generateQuarterCircle, __webpack_exports__generateSelfIntersecting as generateSelfIntersecting, __webpack_exports__getBoundingBox as getBoundingBox, __webpack_exports__getBoundingBoxTight as getBoundingBoxTight, __webpack_exports__getBoundingHull as getBoundingHull, __webpack_exports__getBounds as getBounds, __webpack_exports__getCoeffsBezBez as getCoeffsBezBez, __webpack_exports__getControlPointBox as getControlPointBox, __webpack_exports__getCurvatureExtrema as getCurvatureExtrema, __webpack_exports__getEndpointIntersections as getEndpointIntersections, __webpack_exports__getFootpointPoly as getFootpointPoly, __webpack_exports__getFootpointPolyDd as getFootpointPolyDd, __webpack_exports__getFootpointPolyExact as getFootpointPolyExact, __webpack_exports__getHodograph as getHodograph, __webpack_exports__getImplicitForm1 as getImplicitForm1, __webpack_exports__getImplicitForm1Dd as getImplicitForm1Dd, __webpack_exports__getImplicitForm1DdWithRunningError as getImplicitForm1DdWithRunningError, __webpack_exports__getImplicitForm1ErrorCounters as getImplicitForm1ErrorCounters, __webpack_exports__getImplicitForm1Exact as getImplicitForm1Exact, __webpack_exports__getImplicitForm2 as getImplicitForm2, __webpack_exports__getImplicitForm2Dd as getImplicitForm2Dd, __webpack_exports__getImplicitForm2DdWithRunningError as getImplicitForm2DdWithRunningError, __webpack_exports__getImplicitForm2ErrorCounters as getImplicitForm2ErrorCounters, __webpack_exports__getImplicitForm2Exact as getImplicitForm2Exact, __webpack_exports__getImplicitForm3 as getImplicitForm3, __webpack_exports__getImplicitForm3Dd as getImplicitForm3Dd, __webpack_exports__getImplicitForm3DdWithRunningError as getImplicitForm3DdWithRunningError, __webpack_exports__getImplicitForm3ErrorCounters as getImplicitForm3ErrorCounters, __webpack_exports__getImplicitForm3Exact as getImplicitForm3Exact, __webpack_exports__getInflections as getInflections, __webpack_exports__getInterfaceRotation as getInterfaceRotation, __webpack_exports__getIntervalBox as getIntervalBox, __webpack_exports__getIntervalBoxDd as getIntervalBoxDd, __webpack_exports__getTAtLength as getTAtLength, __webpack_exports__getXBoundsTight as getXBoundsTight, __webpack_exports__getYBoundsTight as getYBoundsTight, __webpack_exports__hausdorffDistance as hausdorffDistance, __webpack_exports__hausdorffDistanceOneSided as hausdorffDistanceOneSided, __webpack_exports__intersectBoxes as intersectBoxes, __webpack_exports__isCollinear as isCollinear, __webpack_exports__isCubicReallyLine as isCubicReallyLine, __webpack_exports__isCubicReallyQuad as isCubicReallyQuad, __webpack_exports__isHorizontal as isHorizontal, __webpack_exports__isPointOnBezierExtension as isPointOnBezierExtension, __webpack_exports__isQuadObtuse as isQuadObtuse, __webpack_exports__isQuadReallyLine as isQuadReallyLine, __webpack_exports__isReallyPoint as isReallyPoint, __webpack_exports__isSelfOverlapping as isSelfOverlapping, __webpack_exports__isVertical as isVertical, __webpack_exports__length as length, __webpack_exports__lineToCubic as lineToCubic, __webpack_exports__lineToQuadratic as lineToQuadratic, __webpack_exports__normal as normal, __webpack_exports__quadToPolyline as quadToPolyline, __webpack_exports__quadraticToCubic as quadraticToCubic, __webpack_exports__reduceOrderIfPossible as reduceOrderIfPossible, __webpack_exports__reverse as reverse, __webpack_exports__splitByCurvature as splitByCurvature, __webpack_exports__splitByCurvatureAndLength as splitByCurvatureAndLength, __webpack_exports__splitByLength as splitByLength, __webpack_exports__tFromXY as tFromXY, __webpack_exports__tangent as tangent, __webpack_exports__tangentAt0 as tangentAt0, __webpack_exports__tangentAt0Exact as tangentAt0Exact, __webpack_exports__tangentAt1 as tangentAt1, __webpack_exports__tangentAt1Exact as tangentAt1Exact, __webpack_exports__tangentExact as tangentExact, __webpack_exports__toCubic as toCubic, __webpack_exports__toPowerBasis as toPowerBasis, __webpack_exports__toPowerBasisDd as toPowerBasisDd, __webpack_exports__toPowerBasisDdWithRunningError as toPowerBasisDdWithRunningError, __webpack_exports__toPowerBasisErrorCounters as toPowerBasisErrorCounters, __webpack_exports__toPowerBasisExact as toPowerBasisExact, __webpack_exports__toPowerBasisWithRunningError as toPowerBasisWithRunningError, __webpack_exports__toPowerBasis_1stDerivative as toPowerBasis_1stDerivative, __webpack_exports__toPowerBasis_1stDerivativeDd as toPowerBasis_1stDerivativeDd, __webpack_exports__toPowerBasis_1stDerivativeErrorCounters as toPowerBasis_1stDerivativeErrorCounters, __webpack_exports__toPowerBasis_1stDerivativeExact as toPowerBasis_1stDerivativeExact, __webpack_exports__toPowerBasis_2ndDerivative as toPowerBasis_2ndDerivative, __webpack_exports__toPowerBasis_2ndDerivativeDd as toPowerBasis_2ndDerivativeDd, __webpack_exports__toPowerBasis_2ndDerivativeExact as toPowerBasis_2ndDerivativeExact, __webpack_exports__toPowerBasis_3rdDerivative as toPowerBasis_3rdDerivative, __webpack_exports__toPowerBasis_3rdDerivativeDd as toPowerBasis_3rdDerivativeDd, __webpack_exports__toPowerBasis_3rdDerivativeExact as toPowerBasis_3rdDerivativeExact, __webpack_exports__toString as toString, __webpack_exports__totalAbsoluteCurvature as totalAbsoluteCurvature, __webpack_exports__totalCurvature as totalCurvature, __webpack_exports__totalLength as totalLength, __webpack_exports___ as γ, __webpack_exports___ as γγ, __webpack_exports___ as κ };
+export { __webpack_exports__areBoxesIntersecting as areBoxesIntersecting, __webpack_exports__area as area, __webpack_exports__bezierBezierIntersection as bezierBezierIntersection, __webpack_exports__bezierBezierIntersectionBoundless as bezierBezierIntersectionBoundless, __webpack_exports__bezierBezierIntersectionFast as bezierBezierIntersectionFast, __webpack_exports__bezierSelfIntersection as bezierSelfIntersection, __webpack_exports__circleBezierIntersection as circleBezierIntersection, __webpack_exports__classification as classification, __webpack_exports__classifications as classifications, __webpack_exports__classify as classify, __webpack_exports__clone as clone, __webpack_exports__closestPointOnBezier as closestPointOnBezier, __webpack_exports__closestPointOnBezierCertified as closestPointOnBezierCertified, __webpack_exports__controlPointLinesLength as controlPointLinesLength, __webpack_exports__cubicThroughPointGiven013 as cubicThroughPointGiven013, __webpack_exports__cubicToHybridQuadratic as cubicToHybridQuadratic, __webpack_exports__cubicToQuadratic as cubicToQuadratic, __webpack_exports__curvature as curvature, __webpack_exports__curviness as curviness, __webpack_exports__equal as equal, __webpack_exports__evalDeCasteljau as evalDeCasteljau, __webpack_exports__evalDeCasteljauDd as evalDeCasteljauDd, __webpack_exports__evalDeCasteljauError as evalDeCasteljauError, __webpack_exports__evalDeCasteljauWithErr as evalDeCasteljauWithErr, __webpack_exports__evalDeCasteljauWithErrDd as evalDeCasteljauWithErrDd, __webpack_exports__evaluate as evaluate, __webpack_exports__evaluate2ndDerivative as evaluate2ndDerivative, __webpack_exports__evaluate2ndDerivativeAt0 as evaluate2ndDerivativeAt0, __webpack_exports__evaluate2ndDerivativeAt0Exact as evaluate2ndDerivativeAt0Exact, __webpack_exports__evaluate2ndDerivativeAt1 as evaluate2ndDerivativeAt1, __webpack_exports__evaluate2ndDerivativeAt1Exact as evaluate2ndDerivativeAt1Exact, __webpack_exports__evaluate2ndDerivativeExact as evaluate2ndDerivativeExact, __webpack_exports__evaluateExact as evaluateExact, __webpack_exports__evaluateImplicit1 as evaluateImplicit1, __webpack_exports__evaluateImplicit2 as evaluateImplicit2, __webpack_exports__evaluateImplicit3 as evaluateImplicit3, __webpack_exports__fitQuadsToCubic as fitQuadsToCubic, __webpack_exports__fromPowerBasis as fromPowerBasis, __webpack_exports__fromTo as fromTo, __webpack_exports__fromToInclErrorBound as fromToInclErrorBound, __webpack_exports__furthestPointOnBezier as furthestPointOnBezier, __webpack_exports__generateCuspAtHalf3 as generateCuspAtHalf3, __webpack_exports__generateQuarterCircle as generateQuarterCircle, __webpack_exports__generateSelfIntersecting as generateSelfIntersecting, __webpack_exports__getAbsAreaBetween as getAbsAreaBetween, __webpack_exports__getBoundingBox as getBoundingBox, __webpack_exports__getBoundingBoxTight as getBoundingBoxTight, __webpack_exports__getBoundingHull as getBoundingHull, __webpack_exports__getBounds as getBounds, __webpack_exports__getCoeffsBezBez as getCoeffsBezBez, __webpack_exports__getControlPointBox as getControlPointBox, __webpack_exports__getCurvatureExtrema as getCurvatureExtrema, __webpack_exports__getEndpointIntersections as getEndpointIntersections, __webpack_exports__getFootpointPoly as getFootpointPoly, __webpack_exports__getFootpointPolyDd as getFootpointPolyDd, __webpack_exports__getFootpointPolyExact as getFootpointPolyExact, __webpack_exports__getHodograph as getHodograph, __webpack_exports__getImplicitForm1 as getImplicitForm1, __webpack_exports__getImplicitForm1Dd as getImplicitForm1Dd, __webpack_exports__getImplicitForm1DdWithRunningError as getImplicitForm1DdWithRunningError, __webpack_exports__getImplicitForm1ErrorCounters as getImplicitForm1ErrorCounters, __webpack_exports__getImplicitForm1Exact as getImplicitForm1Exact, __webpack_exports__getImplicitForm2 as getImplicitForm2, __webpack_exports__getImplicitForm2Dd as getImplicitForm2Dd, __webpack_exports__getImplicitForm2DdWithRunningError as getImplicitForm2DdWithRunningError, __webpack_exports__getImplicitForm2ErrorCounters as getImplicitForm2ErrorCounters, __webpack_exports__getImplicitForm2Exact as getImplicitForm2Exact, __webpack_exports__getImplicitForm3 as getImplicitForm3, __webpack_exports__getImplicitForm3Dd as getImplicitForm3Dd, __webpack_exports__getImplicitForm3DdWithRunningError as getImplicitForm3DdWithRunningError, __webpack_exports__getImplicitForm3ErrorCounters as getImplicitForm3ErrorCounters, __webpack_exports__getImplicitForm3Exact as getImplicitForm3Exact, __webpack_exports__getInflections as getInflections, __webpack_exports__getInterfaceRotation as getInterfaceRotation, __webpack_exports__getIntervalBox as getIntervalBox, __webpack_exports__getIntervalBoxDd as getIntervalBoxDd, __webpack_exports__getTAtLength as getTAtLength, __webpack_exports__getXBoundsTight as getXBoundsTight, __webpack_exports__getYBoundsTight as getYBoundsTight, __webpack_exports__hausdorffDistance as hausdorffDistance, __webpack_exports__hausdorffDistanceOneSided as hausdorffDistanceOneSided, __webpack_exports__intersectBoxes as intersectBoxes, __webpack_exports__isCollinear as isCollinear, __webpack_exports__isCubicReallyLine as isCubicReallyLine, __webpack_exports__isCubicReallyQuad as isCubicReallyQuad, __webpack_exports__isHorizontal as isHorizontal, __webpack_exports__isPointOnBezierExtension as isPointOnBezierExtension, __webpack_exports__isQuadObtuse as isQuadObtuse, __webpack_exports__isQuadReallyLine as isQuadReallyLine, __webpack_exports__isReallyPoint as isReallyPoint, __webpack_exports__isSelfOverlapping as isSelfOverlapping, __webpack_exports__isVertical as isVertical, __webpack_exports__length as length, __webpack_exports__lineToCubic as lineToCubic, __webpack_exports__lineToQuadratic as lineToQuadratic, __webpack_exports__normal as normal, __webpack_exports__quadraticToCubic as quadraticToCubic, __webpack_exports__quadraticToPolyline as quadraticToPolyline, __webpack_exports__reduceOrderIfPossible as reduceOrderIfPossible, __webpack_exports__reverse as reverse, __webpack_exports__splitByCurvature as splitByCurvature, __webpack_exports__splitByCurvatureAndLength as splitByCurvatureAndLength, __webpack_exports__splitByLength as splitByLength, __webpack_exports__tFromXY as tFromXY, __webpack_exports__tangent as tangent, __webpack_exports__tangentAt0 as tangentAt0, __webpack_exports__tangentAt0Exact as tangentAt0Exact, __webpack_exports__tangentAt1 as tangentAt1, __webpack_exports__tangentAt1Exact as tangentAt1Exact, __webpack_exports__tangentExact as tangentExact, __webpack_exports__toCubic as toCubic, __webpack_exports__toPowerBasis as toPowerBasis, __webpack_exports__toPowerBasisDd as toPowerBasisDd, __webpack_exports__toPowerBasisDdWithRunningError as toPowerBasisDdWithRunningError, __webpack_exports__toPowerBasisErrorCounters as toPowerBasisErrorCounters, __webpack_exports__toPowerBasisExact as toPowerBasisExact, __webpack_exports__toPowerBasisWithRunningError as toPowerBasisWithRunningError, __webpack_exports__toPowerBasis_1stDerivative as toPowerBasis_1stDerivative, __webpack_exports__toPowerBasis_1stDerivativeDd as toPowerBasis_1stDerivativeDd, __webpack_exports__toPowerBasis_1stDerivativeErrorCounters as toPowerBasis_1stDerivativeErrorCounters, __webpack_exports__toPowerBasis_1stDerivativeExact as toPowerBasis_1stDerivativeExact, __webpack_exports__toPowerBasis_2ndDerivative as toPowerBasis_2ndDerivative, __webpack_exports__toPowerBasis_2ndDerivativeDd as toPowerBasis_2ndDerivativeDd, __webpack_exports__toPowerBasis_2ndDerivativeExact as toPowerBasis_2ndDerivativeExact, __webpack_exports__toPowerBasis_3rdDerivative as toPowerBasis_3rdDerivative, __webpack_exports__toPowerBasis_3rdDerivativeDd as toPowerBasis_3rdDerivativeDd, __webpack_exports__toPowerBasis_3rdDerivativeExact as toPowerBasis_3rdDerivativeExact, __webpack_exports__toString as toString, __webpack_exports__totalAbsoluteCurvature as totalAbsoluteCurvature, __webpack_exports__totalCurvature as totalCurvature, __webpack_exports__totalLength as totalLength, __webpack_exports___ as γ, __webpack_exports___ as γγ, __webpack_exports___ as κ };

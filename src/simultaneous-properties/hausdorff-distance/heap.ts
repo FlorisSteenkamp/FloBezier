@@ -82,9 +82,8 @@ class Heap<T> {
         this.swimDown();
     }
 
-
-    // prefer inlining?
-    //public static getParentIdx(i: number) { return (i - 1 - (i+1)%2)/2; }
+    /* ignore coverage */
+    public static getParentIdx(i: number) { return (i - 1 - (i+1)%2)/2; }
     public static getLeftChild(i: number) { return 2*i + 1; }
     public static getRightChild(i: number) { return 2*i + 2; }
 }

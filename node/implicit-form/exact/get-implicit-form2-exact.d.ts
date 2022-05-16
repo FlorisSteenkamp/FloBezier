@@ -13,7 +13,18 @@ import type { ImplicitFormExact1, ImplicitFormExact2 } from '../implicit-form-ty
  *
  * @doc mdx
  */
-declare function getImplicitForm2Exact(ps: number[][]): ImplicitFormExact2 | ImplicitFormExact1 | undefined;
+declare function getImplicitForm2Exact(ps: number[][]): {
+    vₓₓ: number[];
+    vₓᵧ: number[];
+    vᵧᵧ: number[];
+    vₓ: number[];
+    vᵧ: number[];
+    v: number[];
+} | {
+    vₓ: number[];
+    vᵧ: number[];
+    v: number[];
+} | undefined;
 /**
  * The power basis version of [[getImplicitForm2Exact]].
  *

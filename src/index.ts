@@ -29,7 +29,7 @@ import { evalDeCasteljauWithErr } from './local-properties-at-t/evaluate/double/
 import { evalDeCasteljauWithErrDd } from './local-properties-at-t/evaluate/double-double/eval-de-casteljau-with-err-dd.js';
 import { evalDeCasteljauDd } from './local-properties-at-t/evaluate/double-double/eval-de-casteljau-dd.js';
 import { isPointOnBezierExtension } from './simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension.js';
-import { totalCurvature, totalAbsoluteCurvature } from './global-properties/total-curvature.js';
+import { totalCurvature, totalAbsoluteCurvature } from './global-properties/total-absolute-curvature.js';
 import { reverse } from './transformation/reverse.js';
 import { getInflections } from './global-properties/get-inflections.js';
 import { getCoeffsBezBez } from './intersection/bezier-bezier-intersection/get-coefficients/get-coeffs-bez-bez.js';
@@ -79,13 +79,13 @@ import { normal } from './local-properties-at-t/normal/normal.js';
 import { bezierBezierIntersection } from './intersection/bezier-bezier-intersection/bezier-bezier-intersection.js';
 import { toCubic } from './transformation/degree-or-type/to-cubic.js';
 import { κ, curvature } from './local-properties-at-t/curvature.js';
-import { quadToPolyline } from './transformation/quad-to-polyline.js';
+import { quadraticToPolyline } from './fit/quadratic-to-polyline.js';
 import { isQuadObtuse } from './global-properties/classification/is-quad-obtuse.js';
 import { getIntervalBox } from './global-properties/bounds/get-interval-box/get-interval-box.js';
 import { getIntervalBoxDd } from './global-properties/bounds/get-interval-box/get-interval-box-dd.js';
 import { getInterfaceRotation } from './simultaneous-properties/get-interface-rotation.js';
 import { closestPointOnBezierCertified } from './simultaneous-properties/closest-and-furthest-point-on-bezier/closest-point-on-bezier-certified.js';
-import { hausdorffDistanceOneSided } from './simultaneous-properties/hausdorff-distance/hausdorff-distance.js';
+import { hausdorffDistanceOneSided } from './simultaneous-properties/hausdorff-distance/hausdorff-distance-one-sided.js';
 import { hausdorffDistance } from './simultaneous-properties/hausdorff-distance/hausdorff-distance.js';
 import { controlPointLinesLength } from './global-properties/length/control-point-lines-length.js';
 import { splitByLength } from './transformation/split/split-by-length.js';
@@ -130,6 +130,7 @@ import { getFootpointPolyExact } from "./simultaneous-properties/closest-and-fur
 import { getFootpointPoly } from "./simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly.js";
 import { getFootpointPolyDd } from "./simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double-double/get-footpoint-poly-dd.js";
 import { reduceOrderIfPossible } from './transformation/reduce-order-if-possible.js'
+import { getAbsAreaBetween } from './fit/get-abs-area-between.js';
 
 
 export {
@@ -182,7 +183,7 @@ export {
 
 	toString,
 
-	quadToPolyline,
+	quadraticToPolyline,
 
 	evaluateImplicit3,
 	getImplicitForm3,
@@ -289,7 +290,8 @@ export {
 	getFootpointPolyDd,
 	getFootpointPolyExact,
 
-	getEndpointIntersections
+	getEndpointIntersections,
+	getAbsAreaBetween
 }
 
 

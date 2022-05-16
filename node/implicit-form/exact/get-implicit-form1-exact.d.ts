@@ -13,7 +13,11 @@ import type { ImplicitFormExact1 } from "../implicit-form-types.js";
  *
  * @doc mdx
  */
-declare function getImplicitForm1Exact(ps: number[][]): ImplicitFormExact1 | undefined;
+declare function getImplicitForm1Exact(ps: number[][]): {
+    vₓ: number[];
+    vᵧ: number[];
+    v: number[];
+} | undefined;
 /**
  * The power basis version of [[getImplicitForm1Exact]].
  *

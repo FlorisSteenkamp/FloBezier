@@ -194,11 +194,6 @@ const classification = {
  * @param ps a bezier curve of order 0,1,2 or 3 given as an array of its 
  * control points.
  * 
- * @example
- * ```typescript
- * classify([[0,0],[3,3],[-3,3],[1,0]]);  // => { order: 3, realOrder: 3, collinear: false, nodeType: 'crunode'  }
- * ```
- * 
  * @doc mdx
  */
 function classify(ps: number[][]): Classification {

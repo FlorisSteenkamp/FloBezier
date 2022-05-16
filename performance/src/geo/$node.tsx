@@ -37,13 +37,13 @@ function onRightClick(node: IterationWithExtras) {
     }
 }
 
-function drawIntersectionsGeo(tss: number[][][], ps: number[][]) {
+function drawIntersectionsGeo(tss: number[][], ps: number[][]) {
     //if (!ris) { return; }
     //ris.map(t => dot_1(tc(evaluate(ps2, mid(t)))));
     const { dot_ } = draw(ctx);
 
     tss.map(ts => {
-        const _p = evaluate(ps, ts[0][0]);
+        const _p = evaluate(ps, ts[0]);
         const p = tc(unsquashp(untransp(_p)));
 
         dot_(p);

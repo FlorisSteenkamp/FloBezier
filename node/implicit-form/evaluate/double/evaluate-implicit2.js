@@ -13,7 +13,9 @@
  * @param cs the polynomial to evaluate
  * @param x the `x` variable at which to evaluate
  * @param y the `y` variable at which to evaluate
-  */
+ *
+ * @doc
+ */
 function evaluateImplicit2(cs, x, y) {
     const { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = cs;
     return vₓₓ * x * x + vₓᵧ * x * y + vᵧᵧ * y * y + vₓ * x + vᵧ * y + v;

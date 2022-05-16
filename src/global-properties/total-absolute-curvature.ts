@@ -1,7 +1,7 @@
 import { getInterfaceRotation } from '../simultaneous-properties/get-interface-rotation.js';
 import { fromTo2InclErrorBound } from "../transformation/split/from-to/from-to-2-incl-error-bound.js";
 import { fromTo3InclErrorBound } from "../transformation/split/from-to/from-to-3-incl-error-bound.js";
-import { classify } from '../global-properties/classification/classify.js';
+import { classify } from './classification/classify.js';
 import { getInflections } from "./get-inflections.js";
 
 const { abs, PI: 𝜋 } = Math;

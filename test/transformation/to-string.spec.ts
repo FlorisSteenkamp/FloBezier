@@ -11,8 +11,8 @@ describe('toString', function() {
 	it('should correctly convert some bezier curves to a string representation',
 	function() {
         {
-            let ps = getRandomBezier(111,53)(3)(111);
-            const str = toString(ps);
+            let ps = getRandomBezier(111,53)(3)(111);//?
+            const str = toString(ps);//?
 
             expect(str).to.be.eql('[[-14.878605829961458,89.67146996556471],[-61.585825159466665,49.30543474305688],[98.8187776673874,-6.765616949577037],[-103.41331953825963,-14.77320899071367]]');
         }
@@ -33,12 +33,6 @@ describe('toString', function() {
             const str = toString(ps);
 
             expect(str).to.be.eql('[[-14.878605829961458,89.67146996556471]]');
-        }
-
-        {
-            const p = [1,1];
-            const ps = [p,p,p,p,p];
-            expect(() => toString(ps)).to.throw();
         }
 	});
 });

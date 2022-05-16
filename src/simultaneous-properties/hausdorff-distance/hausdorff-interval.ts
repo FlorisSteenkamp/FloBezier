@@ -10,4 +10,4 @@ interface HausdorffInterval {
 }
 
 
-export { type HausdorffInterval }
+export { HausdorffInterval }

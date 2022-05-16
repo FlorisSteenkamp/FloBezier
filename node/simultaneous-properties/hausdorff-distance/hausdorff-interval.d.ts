@@ -7,4 +7,4 @@ interface HausdorffInterval {
     hEL: number;
     hER: number;
 }
-export { type HausdorffInterval };
+export { HausdorffInterval };

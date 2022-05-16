@@ -4,10 +4,11 @@
  *
  * @param ps a quadratic bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- * @param tolerance a tolerance given as the maximum Hausdorff distance allowed
+ * @param tolerance defaults to `2**-10` of the maximum coordinate of the given
+ * bezier curve; a tolerance given as the maximum Hausdorff distance allowed
  * between the polyline and the bezier curve
  *
- * @doc
+ * @doc mdx
  */
-declare function quadToPolyline(ps: number[][], tolerance: number): number[][];
-export { quadToPolyline };
+declare function quadraticToPolyline(ps: number[][], tolerance?: number): number[][];
+export { quadraticToPolyline };

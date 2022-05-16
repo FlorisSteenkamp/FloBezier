@@ -23,7 +23,9 @@ const qno = ddNegativeOf;
  * 
  * @doc mdx
  */
-function getImplicitForm1Dd(ps: number[][]) {
+function getImplicitForm1Dd(
+        ps: number[][]): { vₓ: number[]; vᵧ: number[]; v: number[]; } {
+
     // The implicit form is given by:
     // vₓx + vᵧy + v = 0
 

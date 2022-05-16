@@ -1,8 +1,7 @@
 /**
  * Returns a normal vector (not necessarily of unit length) of a bezier curve
  * at a specific given parameter value `t` by simply taking the `tangent` at
- * that point and rotating it by 90 degrees (it is *not* the derivative of the
- * tangent - for that use e.g. [[evaluate2ndDerivative]])
+ * that point and rotating it by 90 degrees.
  *
  * * uses double precision calculations internally
  *

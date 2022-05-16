@@ -31,10 +31,19 @@ const eSign = _eSign;
  * 
  * @param ps
  * 
- * @doc
+ * @doc mdx
  */
 function getImplicitForm3Exact(
-        ps: number[][]): ImplicitFormExact3 | ImplicitFormExact2 | ImplicitFormExact1 | undefined {
+        ps: number[][]): {
+                vₓₓₓ: number[]; vₓₓᵧ: number[]; vₓᵧᵧ: number[]; vᵧᵧᵧ: number[];
+                vₓₓ: number[]; vₓᵧ: number[]; vᵧᵧ: number[];
+                vₓ: number[]; vᵧ: number[]; v: number[];
+            } | {
+                vₓₓ: number[]; vₓᵧ: number[]; vᵧᵧ: number[];
+                vₓ: number[]; vᵧ: number[]; v: number[];
+            } | { 
+                vₓ: number[]; vᵧ: number[]; v: number[];
+            } | undefined {
 
     // Takes about 155 micro-seconds on a 3rd gen i7 and Chrome 79.
     return getImplicitForm3ExactPb(

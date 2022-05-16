@@ -11,9 +11,31 @@ import type { ImplicitFormExact1, ImplicitFormExact2, ImplicitFormExact3 } from 
  *
  * @param ps
  *
- * @doc
+ * @doc mdx
  */
-declare function getImplicitForm3Exact(ps: number[][]): ImplicitFormExact3 | ImplicitFormExact2 | ImplicitFormExact1 | undefined;
+declare function getImplicitForm3Exact(ps: number[][]): {
+    vₓₓₓ: number[];
+    vₓₓᵧ: number[];
+    vₓᵧᵧ: number[];
+    vᵧᵧᵧ: number[];
+    vₓₓ: number[];
+    vₓᵧ: number[];
+    vᵧᵧ: number[];
+    vₓ: number[];
+    vᵧ: number[];
+    v: number[];
+} | {
+    vₓₓ: number[];
+    vₓᵧ: number[];
+    vᵧᵧ: number[];
+    vₓ: number[];
+    vᵧ: number[];
+    v: number[];
+} | {
+    vₓ: number[];
+    vᵧ: number[];
+    v: number[];
+} | undefined;
 /**
  * The power basis version of [[getImplicitForm3Exact]].
  *

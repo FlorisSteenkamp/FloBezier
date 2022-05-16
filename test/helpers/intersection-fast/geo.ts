@@ -25,7 +25,7 @@ function geo(
 
         expect(xPairs.length).to.eql(tss.length);
         
-        updDs(ds, xPairs, tss.map(ts => ts[0][0]));
+        updDs(ds, xPairs, tss.map(ts => ts[0]));
     }
 
     checkResults(ds, total);

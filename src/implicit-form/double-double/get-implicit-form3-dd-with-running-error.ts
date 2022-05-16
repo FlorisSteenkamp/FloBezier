@@ -27,7 +27,7 @@ const qaq = ddAddDd;       // error -> 3*γ²
  * * the implicit form is given by: `vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0`
  * * intermediate calculations are done in double-double precision and this is
  * reflected in the error bound
- * * the error bound returned first needs to be scaled by `γγ3 === (3*u*u) / (1 - 3*u*u)`,
+ * * the error bound returned first needs to be scaled by `γγ3 === (3*u*u) / (1 - 3*u*u) === 3.697785493223493e-32`,
  * where `u === Number.EPSILON / 2` before use
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
@@ -36,7 +36,22 @@ const qaq = ddAddDd;       // error -> 3*γ²
  * 
  * @doc mdx
  */
-function getImplicitForm3DdWithRunningError(ps: number[][]) {
+function getImplicitForm3DdWithRunningError(
+        ps: number[][]): {
+            coeffs: {
+                vₓₓₓ: number[]; vₓₓᵧ: number[]; vₓᵧᵧ: number[]; vᵧᵧᵧ: number[];
+                vₓₓ: number[]; vₓᵧ: number[]; vᵧᵧ: number[];
+                vₓ: number[]; vᵧ: number[];
+                v: number[];
+            };
+            errorBound: {
+                vₓₓₓ_: number; vₓₓᵧ_: number; vₓᵧᵧ_: number; vᵧᵧᵧ_: number;
+                vₓₓ_: number; vₓᵧ_: number; vᵧᵧ_: number;
+                vₓ_: number; vᵧ_: number;
+                v_: number;
+            };
+        } {
+
     // Takes about 15 micro-seconds on a 3rd gen i7 and Chrome 79.
 
     //--------------------------------------------------------------------------

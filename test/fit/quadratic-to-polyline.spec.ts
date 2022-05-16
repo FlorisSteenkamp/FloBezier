@@ -1,6 +1,6 @@
 import { expect, assert, use } from 'chai';
 import { describe } from 'mocha';
-import { quadToPolyline } from '../../src/index.js';
+import { quadraticToPolyline } from '../../src/index.js';
 import { nearly } from '../helpers/chai-extend-nearly.js';
 import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
 
@@ -12,7 +12,7 @@ describe('quadToPolyline', function() {
 		{
 			// let ps = getRandomQuad(0);
 			const ps = [[0,0],[1,1],[2,0]];
-			const r = quadToPolyline(ps, 0.01);
+			const r = quadraticToPolyline(ps, 0.01);
 			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**8, [
 				[0, 0],
@@ -27,7 +27,7 @@ describe('quadToPolyline', function() {
 			]);
 
 			const ps_ = randomRotateAndTranslate(0)(ps);
-			const r_ = quadToPolyline(ps_, 0.01);
+			const r_ = quadraticToPolyline(ps_, 0.01);
 			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r_).to.be.nearly(2**8, [
 				[-8.476317583419448, -1.0164969667975465],

@@ -23,7 +23,7 @@ const eSign = _eSign;
  *
  * @param ps
  *
- * @doc
+ * @doc mdx
  */
 function getImplicitForm3Exact(ps) {
     // Takes about 155 micro-seconds on a 3rd gen i7 and Chrome 79.

@@ -19,7 +19,7 @@ const abs = Math.abs;
  * * the implicit form is given by: `vₓx + vᵧy + v = 0`
  * * intermediate calculations are done in double-double precision and this is
  * reflected in the error bound
- * * the error bound returned first needs to be scaled by `γγ3 === (3*u*u) / (1 - 3*u*u)`,
+ * * the error bound returned first needs to be scaled by `γγ3 === (3*u*u) / (1 - 3*u*u) === 3.697785493223493e-32`,
  * where `u === Number.EPSILON / 2` before use
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
@@ -28,7 +28,12 @@ const abs = Math.abs;
  * 
  * @doc mdx
  */
-function getImplicitForm1DdWithRunningError(ps: number[][]) {
+function getImplicitForm1DdWithRunningError(
+        ps: number[][]): {
+            coeffs: { vₓ: number[]; vᵧ: number[]; v: number[]; };
+            errorBound: { v_: number; };
+        } {
+
     // The implicit form is given by:
     // vₓx + vᵧy + v = 0
 

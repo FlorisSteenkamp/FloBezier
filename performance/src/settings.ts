@@ -24,12 +24,11 @@ const maxCoordinateY = 1/squashFactor;
 const settings = {
     timingOnly: false,
     /** the number of bezier pairs (=== number of beziers / 2) */
-    // num: 100000,
-    num: 100,
+    num: 100_000,
     maxBitLength: 53,
 
     showNaive: true,
-    showNative: false,
+    showNative: true,
     showPaper: true,
     showGeo: true,
     transY: 0,

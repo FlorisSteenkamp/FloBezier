@@ -4,7 +4,7 @@
  * 
  * @param ps a 2d line represented by two points, e.g. `[[1,2],[3,4]]`
  * 
- * @doc
+ * @doc mdx
  */
 function lineToQuadratic(ps: number[][]) {
 	const [[x0,y0],[x1,y1]] = ps;

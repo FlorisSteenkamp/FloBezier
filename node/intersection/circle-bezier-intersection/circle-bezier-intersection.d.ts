@@ -1,4 +1,4 @@
-import { type RootInterval } from 'flo-poly';
+import { RootInterval } from 'flo-poly';
 /**
  * Returns the intersection between a circle and linear, quadratic or cubic bezier
  * curve.

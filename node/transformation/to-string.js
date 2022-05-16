@@ -1,28 +1,13 @@
 /**
- * Returns a human readable string representation of the given bezier curve.
+ * Returns a 'human readable' string representation of the given bezier curve.
  *
- * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * @param ps a bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ *
+ * @doc
  */
 function toString(ps) {
-    // for (let i=0 )
-    if (ps.length === 4) {
-        const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
-        return `[[${x0},${y0}],[${x1},${y1}],[${x2},${y2}],[${x3},${y3}]]`;
-    }
-    if (ps.length === 3) {
-        const [[x0, y0], [x1, y1], [x2, y2]] = ps;
-        return `[[${x0},${y0}],[${x1},${y1}],[${x2},${y2}]]`;
-    }
-    if (ps.length === 2) {
-        const [[x0, y0], [x1, y1]] = ps;
-        return `[[${x0},${y0}],[${x1},${y1}]]`;
-    }
-    if (ps.length === 1) {
-        const [[x0, y0]] = ps;
-        return `[[${x0},${y0}]]`;
-    }
-    throw new Error('The given bezier curve must be of order <= 3.');
+    return `[${ps.map(p => `[${p.join(',')}]`).join(',')}]`;
 }
 export { toString };
 //# sourceMappingURL=to-string.js.map

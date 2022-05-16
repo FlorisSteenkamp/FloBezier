@@ -11,12 +11,6 @@
  * @param t a `t` parameter value at which the bezier should go through the
  * point - this is necessary due to a degree of freedom still left
  *
- * @example
- * ```typescript
- * cubicThroughPointGiven013([[1,1], [10.53125,4.8125], [18,0.5]], [14.6875,3.34375], 0.75);
- * //=> [[1, 1], [10.53125, 4.8125], [13.26736111111111, 5.784722222222222], [18, 0.5]]
- * ```
- *
  * @doc mdx
  */
 declare function cubicThroughPointGiven013(ps: number[][], p: number[], t: number): number[][];

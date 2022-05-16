@@ -6,7 +6,7 @@
  * @param tS the `t` parameter where the resultant bezier should start
  * @param tE the `t` parameter where the resultant bezier should end
  *
- * @doc
+ * @doc mdx
  */
 declare function fromTo(ps: number[][], tS: number, tE: number): number[][];
 export { fromTo };

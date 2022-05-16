@@ -3,7 +3,7 @@
  *
  * @param ps a 2d line represented by two points, e.g. `[[1,2],[3,4]]`
  *
- * @doc
+ * @doc mdx
  */
 declare function lineToQuadratic(ps: number[][]): number[][];
 export { lineToQuadratic };

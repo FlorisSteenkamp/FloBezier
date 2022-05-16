@@ -1,9 +1,8 @@
 import { toPowerBasis_2ndDerivative } from "../../../to-power-basis/to-power-basis-2nd-derivative/double/to-power-basis-2nd-derivative.js";
 import { Horner } from 'flo-poly';
 /**
- * Returns the normal, i.e. returns the `[x,y]` value of the twice
- * differentiated (with respect to `t`) bezier curve's power basis when
- * evaluated at `t`.
+ * Returns the `[x,y]` value of the twice differentiated (with respect to `t`)
+ * bezier curve's power basis when evaluated at `t`.
  *
  * * uses double precision calculations internally
  *
@@ -14,7 +13,10 @@ import { Horner } from 'flo-poly';
  */
 function evaluate2ndDerivative(ps, t) {
     const [ddPsX, ddPsY] = toPowerBasis_2ndDerivative(ps);
-    return [Horner(ddPsX, t), Horner(ddPsY, t)];
+    return [
+        Horner(ddPsX, t),
+        Horner(ddPsY, t)
+    ];
 }
 export { evaluate2ndDerivative };
 //# sourceMappingURL=evaluate-2nd-derivative.js.map

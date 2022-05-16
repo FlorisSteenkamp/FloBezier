@@ -11,7 +11,7 @@ import { eHorner } from 'flo-poly';
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param t
  *
- * @doc
+ * @doc mdx
  */
 function evaluateExact(ps, t) {
     if (t === 0) {

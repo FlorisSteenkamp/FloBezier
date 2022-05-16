@@ -65,8 +65,8 @@ class Heap {
         this.heap[0] = t;
         this.swimDown();
     }
-    // prefer inlining?
-    //public static getParentIdx(i: number) { return (i - 1 - (i+1)%2)/2; }
+    /* ignore coverage */
+    static getParentIdx(i) { return (i - 1 - (i + 1) % 2) / 2; }
     static getLeftChild(i) { return 2 * i + 1; }
     static getRightChild(i) { return 2 * i + 2; }
 }

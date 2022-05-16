@@ -9,7 +9,7 @@ const abs = Math.abs;
  * The guarantee in accuracy of the `t` parameter value chosen to be reasonable
  * for this type of intersection algorithm.
  */
-const δ = 2 ** (-33); // 2**(-33) === 1.1641532182693481e-10
+const δ = 2 ** -33; // 2**(-33) === 1.1641532182693481e-10
 /** a heuristic value for the minimum t-span of the final iteration */
 const Δ = 2 ** (-43); // 2**(-43) === 1.1368683772161603e-13
 /**
@@ -18,6 +18,9 @@ const Δ = 2 ** (-43); // 2**(-43) === 1.1368683772161603e-13
  *
  * * returns an array that contains the `t` paramater pairs at intersection
  * of the first and second bezier curves respectively.
+ *
+ * * Each returned `t` paramter value is mathematically guaranteed to be
+ * accurate to within 2**-33 or about ten billionths of a unit.
  *
  * * the algorithm is based on a paper at http://scholarsarchive.byu.edu/cgi/viewcontent.cgi?article=2206&context=etd
  * that finds the intersection of a fat line and a so-called geometric interval
@@ -28,7 +31,7 @@ const Δ = 2 ** (-43); // 2**(-43) === 1.1368683772161603e-13
  * extremely slow due to sub-linear convergence (and similarly for *all* fatline
  * algorithms) in those cases; luckily this algorithm detects those cases and
  * reverts to implicitization with strict error bounds to guarantee accuracy
- * and efficiency (implicitization is roughly 5x slower but is rare)
+ * and efficiency (implicitization is roughly 5x slower but is very rare)
  *
  * @param ps1 an order 0,1,2 or 3 bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
@@ -43,7 +46,7 @@ function bezierBezierIntersectionFast(ps1, ps2) {
         return implicit(ps1, ps2);
     }
     /** Intersection `t` values for both beziers */
-    let xs = [];
+    let ts = [];
     /** an iteration still left to check for intersections */
     let iteration = {
         F: ps1,
@@ -87,7 +90,7 @@ function bezierBezierIntersectionFast(ps1, ps2) {
                     // revert to implicitization
                     return implicit(ps1, ps2);
                 }
-                xs.push(iter.F === ps2
+                ts.push(iter.F === ps2
                     ? [fRange, lfRange]
                     : [lfRange, fRange]);
                 // else if this iteration is precise enough
@@ -127,9 +130,9 @@ function bezierBezierIntersectionFast(ps1, ps2) {
     //---------------------------------------------------------------
     // check for possible duplicate intersections at split points
     //---------------------------------------------------------------
-    xs.sort((x1, x2) => x1[0][0] - x2[0][0]);
-    combineXs(xs);
-    return xs;
+    ts.sort((t1, t2) => t1[0][0] - t2[0][0]);
+    combineXs(ts);
+    return ts.map(tPair => tPair.map(t => (t[0] + t[1]) / 2));
 }
 function combineXs(xs) {
     let testAgain = true;
@@ -175,10 +178,7 @@ function combineXs(xs) {
     }
 }
 function implicit(ps1, ps2) {
-    return bezierBezierIntersection(ps1, ps2).map(x => [
-        [x.ri1.tS, x.ri1.tE],
-        [x.ri2.tS, x.ri2.tE]
-    ]);
+    return bezierBezierIntersection(ps1, ps2).map(x => [x.t1, x.t2]);
 }
 export { bezierBezierIntersectionFast };
 //# sourceMappingURL=bezier-bezier-intersection-fast.js.map

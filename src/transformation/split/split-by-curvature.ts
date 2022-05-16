@@ -1,5 +1,5 @@
-import { fromToInclErrorBound } from './from-to-incl-error-bound.js';
 import { curviness } from '../../global-properties/curviness.js';
+import { fromTo } from './from-to.js';
 
 
 /**
@@ -17,7 +17,7 @@ import { curviness } from '../../global-properties/curviness.js';
  * can be returned for a bezier piece; necessary for cubics otherwise a curve
  * with a cusp would cause an infinite loop
  * 
- * @doc
+ * @doc mdx
  */
 function splitByCurvature(
         ps: number[][], 
@@ -32,7 +32,7 @@ function splitByCurvature(
 
         if (ts_[1] - ts_[0] <= minTSpan) { continue; }
 
-        const ps_ = fromToInclErrorBound(ps,ts_[0], ts_[1]).ps;
+        const ps_ = fromTo(ps,ts_[0], ts_[1]);
         const curviness_ = curviness(ps_);
         if (curviness_ > maxCurviness) {
             const t = (ts_[0] + ts_[1]) / 2;

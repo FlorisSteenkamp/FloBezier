@@ -4,7 +4,7 @@
  * 
  * @param ps a 2d line represented by two points
  * 
- * @doc
+ * @doc mdx
  */
 function lineToCubic(ps: number[][]) {
 	const [[x0,y0],[x1,y1]] = ps;

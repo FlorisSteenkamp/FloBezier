@@ -27,7 +27,14 @@ const qaq = ddAddDd;       // error -> 3*γ²
  * 
  * @doc mdx
  */
-function getImplicitForm3Dd(ps: number[][]) {
+function getImplicitForm3Dd(
+        ps: number[][]): {
+            vₓₓₓ: number[]; vₓₓᵧ: number[]; vₓᵧᵧ: number[]; vᵧᵧᵧ: number[];
+            vₓₓ: number[]; vₓᵧ: number[]; vᵧᵧ: number[];
+            vₓ: number[]; vᵧ: number[];
+            v: number[];
+        } {
+
     // Takes about 15 micro-seconds on a 3rd gen i7 and Chrome 79.
 
     // The implicit form is given by:

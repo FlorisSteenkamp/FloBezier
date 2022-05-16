@@ -45,7 +45,7 @@ const coeffFunctionsExact = [
  * @param ps1
  * @param ps2
  *
- * @internal but still exported for backwards compatibility
+ * @doc mdx
  */
 function getCoeffsBezBez(ps1, ps2) {
     const { coeffs, errBound } = coeffFunctionsDd[ps1.length - 2][ps2.length - 2](ps1, ps2);

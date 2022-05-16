@@ -32,6 +32,7 @@ function native(
             drawIntersections(xs);
             console.log(xs.map(x => x.box));
         }
+        
         if (!timingOnly) {
             for (const x of xs) {
                 const box = x.box;
@@ -39,7 +40,7 @@ function native(
                 const py = (box[1][1] + box[0][1])/2;
                 const p = [px,py];
                 const bp = closestPointOnBezierCertified(ps2, p)[0];
-                const d = distanceBetween(p, bp.intervalBox[0]);
+                const d = distanceBetween(p, bp.box[0]);
                 ds.push(d);
             }
             xss.push(xs);
@@ -47,8 +48,7 @@ function native(
     }
     timing = performance.now() - timeStart;
 
-    // showResults('native', true, timing, ds, total);
-    showResults('native', false, timing, ds, total);
+    showResults('native', timingOnly, timing, ds, total);
 
     return xss;
 }

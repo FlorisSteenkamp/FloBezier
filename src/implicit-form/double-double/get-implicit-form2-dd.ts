@@ -25,7 +25,13 @@ const qdq = ddDiffDd;      // error -> 3*γ²
  * 
  * @doc mdx
  */
-function getImplicitForm2Dd(ps: number[][]) {
+function getImplicitForm2Dd(
+        ps: number[][]): {
+            vₓₓ: number[]; vₓᵧ: number[]; vᵧᵧ: number[];
+            vₓ: number[]; vᵧ: number[];
+            v: number[];
+        } {
+
     // The implicit form is given by:
     // vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0
     

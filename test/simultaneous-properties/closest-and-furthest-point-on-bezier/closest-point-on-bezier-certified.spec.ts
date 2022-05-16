@@ -31,9 +31,11 @@ describe('closestPointOnBezierCertified', function() {
 				// again, it could be more but is unlikely for a random bezier and point
 				expect(ri.multiplicity).to.eql(1);
 				assert(ri.tE - ri.tS < 4*eps);
+				// @ts-ignore
 				expect((ri.tE + ri.tS)/2).to.be.nearly(2**4, t);
 				// make sure the distance interval is small
 				expect(di[1] - di[0]).to.be.lessThanOrEqual(maxCoordinate * 4*eps * 2**6);
+				// @ts-ignore
 				expect((di[1] + di[0])/2).to.be.nearly(2**0, d);
 				/** estimate of the closest point on the bezier */
 				const cpp = [
@@ -49,6 +51,7 @@ describe('closestPointOnBezierCertified', function() {
 				// @ts-ignore - otherwise TypeScript gives an error on nearly
 				expect(cpp[1]).to.be.nearly(2**16,bp[1]);
 
+				// @ts-ignore
 				expect(cpp).to.be.nearly(2**4,p);
 
 				const d2 = distanceBetween(cpp,point);

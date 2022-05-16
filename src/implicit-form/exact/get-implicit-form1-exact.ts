@@ -27,7 +27,7 @@ const eSign = _eSign;
  * @doc mdx
  */
 function getImplicitForm1Exact(
-        ps: number[][]): ImplicitFormExact1 | undefined {
+        ps: number[][]): { vₓ: number[]; vᵧ: number[]; v: number[]; } | undefined {
 
     return getImplicitForm1ExactPb(
         toPowerBasis1Exact(ps)

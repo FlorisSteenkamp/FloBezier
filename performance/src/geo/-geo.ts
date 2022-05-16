@@ -45,7 +45,7 @@ function geo(
             const xs = xss[i/2];
             const tss_ = tss.filter(t => t[0] !== undefined);
 
-            const res = updDs(ds, xs, tss_.map(ts => ts[0][0]));
+            const res = updDs(ds, xs, tss_.map(ts => ts[0]));
 
             if (!res) {
                 //console.log(toString(ps1));
@@ -58,7 +58,6 @@ function geo(
     timing = performance.now() - timeStart;
 
     showResults('geo', timingOnly, timing, ds, total);
-    //console.log('total', total)
 
     if (__debug__ !== undefined && showGeoIters) {
         renderTree(__debug__.tree!);
@@ -68,13 +67,13 @@ function geo(
 }
 
 
-function drawIntersectionsGeo(tss: number[][][], ps: number[][]) {
+function drawIntersectionsGeo(tss: number[][], ps: number[][]) {
     //if (!ris) { return; }
     //ris.map(t => dot_1(tc(evaluate(ps2, mid(t)))));
     const { dot_ } = draw(ctx);
 
     tss.map(ts => {
-        const _p = evaluate(ps, ts[0][0]);
+        const _p = evaluate(ps, ts[0]);
         const p = tc(unsquashp(untransp(_p)));
 
         dot_(p);

@@ -45,7 +45,13 @@ const abs = Math.abs;
  * 
  * @doc
  */
-function getImplicitForm2ErrorCounters(ps: number[][]) {
+function getImplicitForm2ErrorCounters(
+        ps: number[][]): {
+            vₓₓ_: number; vₓᵧ_: number; vᵧᵧ_: number;
+            vₓ_: number; vᵧ_: number;
+            v_: number;
+        } {
+
     // The implicit form is given by:
     // vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0
     

@@ -48,7 +48,14 @@ const abs = Math.abs;
  * 
  * @doc
  */
-function getImplicitForm3ErrorCounters(ps: number[][]) {
+function getImplicitForm3ErrorCounters(
+        ps: number[][]): {
+            vₓₓₓ_: number; vₓₓᵧ_: number; vₓᵧᵧ_: number; vᵧᵧᵧ_: number;
+            vₓₓ_: number; vₓᵧ_: number; vᵧᵧ_: number;
+            vₓ_: number; vᵧ_: number;
+            v_: number;
+        } {
+
     // Takes about 1.2 micro-seconds on a 3rd gen i7 and Chrome 79.
 
     // The implicit form is given by:

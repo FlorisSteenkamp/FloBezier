@@ -25,7 +25,7 @@ describe('bezierBezierIntersectionFast', function() {
             const psB = [[1.021,1]];
             const xs = bezierBezierIntersectionFast(psA, psB);
             // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(xs).to.be.nearly(2**4, [[[0.5,0.5],[0.5,0.5]]]);
+            expect(xs).to.be.nearly(2**4, [[0.5,0.5]]);
         }
     });
 
@@ -42,10 +42,10 @@ describe('bezierBezierIntersectionFast', function() {
             const xs = bezierBezierIntersectionFast(psA, psB);
             // @ts-ignore - otherwise TypeScript gives an error on nearly
             expect(xs).to.be.nearly(2**4, [
-                [[0.16142255626725333,0.16142255626730329],
-                 [0.4154959056656018,0.4154959056658596]],
-                [[0.23384178251805765,0.2338417825181156],
-                 [0.4531565219986007, 0.4531565219988556]]
+                [(0.16142255626725333 + 0.16142255626730329)/2,
+                 (0.4154959056656018 + 0.4154959056658596)/2],
+                [(0.23384178251805765 + 0.2338417825181156)/2,
+                 (0.4531565219986007 +  0.4531565219988556)/2]
             ]);
         }
     });
@@ -93,7 +93,7 @@ describe('bezierBezierIntersectionFast', function() {
             const psB = [[1,1],[2,2],[3,1],[1,0.5]];
             const xs = bezierBezierIntersectionFast(psA, psB);
             // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(xs).to.be.nearly(2**4, [[[0,0],[0,0]],[[1,1],[1,1]]]);
+            expect(xs).to.be.nearly(2**4, [[0,0],[1,1]]);
         }
     });
 
@@ -125,7 +125,7 @@ describe('bezierBezierIntersectionFast', function() {
 
             const xs = bezierBezierIntersectionFast(psA, psB);
             // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(xs).to.be.nearly([2**4], [[[0,0],[0.5,0.5]],[[1,1],[0,0]]]);
+            expect(xs).to.be.nearly([2**4], [[0,0.5],[1,0]]);
         }
     });
 });
@@ -136,9 +136,6 @@ function xToTs(
         psB: number[][]) {
 
     return bezierBezierIntersection(psA, psB).map(
-        x => [
-            [x.ri1.tS,x.ri1.tE],
-            [x.ri2.tS,x.ri2.tE]
-        ]
+        x => [x.t1, x.t2]
     );
 }

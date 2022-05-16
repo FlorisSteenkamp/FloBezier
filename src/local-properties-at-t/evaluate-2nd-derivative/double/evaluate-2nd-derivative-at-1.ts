@@ -1,7 +1,6 @@
 /**
- * Returns the normal, i.e. returns the result, `[x,y]`, of evaluating the 2nd 
- * derivative of a linear, quadratic or cubic bezier curve's power basis 
- * at `t === 1`.
+ * Returns the result, `[x,y]`, of evaluating the 2nd derivative of a linear,
+ * quadratic or cubic bezier curve's power basis at `t === 1`.
  * 
  * * uses double precision calculations internally
  * 

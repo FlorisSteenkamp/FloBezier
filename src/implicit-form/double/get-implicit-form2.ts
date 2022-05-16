@@ -15,7 +15,13 @@ import { toPowerBasis2 } from '../../to-power-basis/to-power-basis/double/to-pow
  * 
  * @doc mdx
  */
-function getImplicitForm2(ps: number[][]) {
+function getImplicitForm2(
+        ps: number[][]): { 
+            vₓₓ: number; vₓᵧ: number; vᵧᵧ: number;
+            vₓ: number; vᵧ: number;
+            v: number;
+        } {
+
     // The implicit form is given by:
     // vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0
     

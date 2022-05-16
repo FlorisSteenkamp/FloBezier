@@ -7,7 +7,7 @@
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param maxLength
  *
- * @doc
+ * @doc mdx
  */
 declare function splitByLength(ps: number[][], maxLength: number): number[];
 export { splitByLength };

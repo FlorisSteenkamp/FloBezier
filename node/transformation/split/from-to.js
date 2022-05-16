@@ -12,7 +12,7 @@ const fromTo1 = fromTo1_;
  * @param tS the `t` parameter where the resultant bezier should start
  * @param tE the `t` parameter where the resultant bezier should end
  *
- * @doc
+ * @doc mdx
  */
 function fromTo(ps, tS, tE) {
     if (ps.length === 4) {

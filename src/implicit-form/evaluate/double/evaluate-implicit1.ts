@@ -16,9 +16,11 @@ import { ImplicitForm1Coeffs } from "../../implicit-form-types.js";
  * @param cs the polynomial to evaluate
  * @param x the `x` variable at which to evaluate
  * @param y the `y` variable at which to evaluate
-  */
+ * 
+ * @doc
+ */
 function evaluateImplicit1(
-        cs: ImplicitForm1Coeffs<number>,
+        cs: { vₓ: number; vᵧ: number; v: number; },
         x: number,
         y: number): number {
 

@@ -1,6 +1,6 @@
-import { fromToInclErrorBound } from "./from-to-incl-error-bound.js";
 import { controlPointLinesLength } from "../../global-properties/length/control-point-lines-length.js";
 import { curviness } from '../../global-properties/curviness.js';
+import { fromTo } from "./from-to.js";
 /**
  * Split the given bezier curve into pieces (given as an array of parameter
  * `t` values) such that each piece is flat within a given tolerance (where
@@ -12,12 +12,12 @@ import { curviness } from '../../global-properties/curviness.js';
  * (must be > 0) as calculated using
  * the `curviness` function (that measures the total angle in radians formed
  * by the vectors formed by the ordered control points)
- * @param maxLength maximum allowed length of any returned piece
+ * @param maxLength optional; defaults to `10`; maximum allowed length of any returned piece
  * @param minTSpan optional; defaults to `2**-16`; the minimum `t` span that can
  * be returned for a bezier piece; necessary for cubics otherwise a curve with a
  * cusp would cause an infinite loop
  *
- * @doc
+ * @doc mdx
  */
 function splitByCurvatureAndLength(ps, maxCurviness = 0.4, maxLength = 10, minTSpan = 2 ** -16) {
     const ts = [0, 1]; // include endpoints
@@ -27,7 +27,7 @@ function splitByCurvatureAndLength(ps, maxCurviness = 0.4, maxLength = 10, minTS
         if (ts_[1] - ts_[0] <= minTSpan) {
             continue;
         }
-        const ps_ = fromToInclErrorBound(ps, ts_[0], ts_[1]).ps;
+        const ps_ = fromTo(ps, ts_[0], ts_[1]);
         if (controlPointLinesLength(ps_) > maxLength ||
             curviness(ps_) > maxCurviness) {
             const t = (ts_[0] + ts_[1]) / 2;

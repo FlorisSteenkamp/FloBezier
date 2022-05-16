@@ -3,7 +3,7 @@ import { expect, assert, use } from 'chai';
 import { allRootsCertifiedSimplified } from 'flo-poly';
 import { describe } from 'mocha';
 import { squares } from 'squares-rng';
-import { bezierSelfIntersection, classify, evaluateExact, generateSelfIntersecting, isPointOnBezierExtension, tFromXY } from '../../src/index.js';
+import { bezierBezierIntersectionFast, bezierSelfIntersection, classify, evaluate, evaluateExact, generateSelfIntersecting, isPointOnBezierExtension, tFromXY } from '../../src/index.js';
 import { nearly } from '../helpers/chai-extend-nearly.js';
 import { getRandomBezier } from '../helpers/get-random-bezier.js';
 
@@ -36,6 +36,15 @@ describe('tFromXY', function() {
 	it('it should return the correct `t` value given `x` and `y` values for some bezier curves',
 	function() {
 		{
+
+            const cubic1 = [[6.4, 4.8], [15, 5], [1, 4], [10, 4]];
+const cubic2 = [[9.4, 0.4], [9.3, 10.3], [8.1, 0.1], [7.53125, 5.5]];
+const xs = bezierBezierIntersectionFast(cubic1, cubic2); //=> [[0.054810011880009446, 0.9516779285879586], ...
+// xs.length === 9
+const p1 = evaluate(cubic1,xs[0][0]);//?
+const p2 = evaluate(cubic2,xs[0][1]);//?
+// p === [7.617926141015109, 4.822433357454532]
+
             for (let order=1;order<=3;order++) {
                 for (let i=0;i<=25;i++) {
                     const { ps, p, t: tExact } = getPointExactlyOnCurve(order as 0|1|2|3,i);

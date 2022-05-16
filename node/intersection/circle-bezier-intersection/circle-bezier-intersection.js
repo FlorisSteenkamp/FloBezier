@@ -5,6 +5,7 @@ import { getCoeffsCubicErrorCounters, getCoeffsLinearErrorCounters, getCoeffsQua
 import { γγ } from '../../error-analysis/error-analysis.js';
 import { getPFromBox } from '../bezier-bezier-intersection/x.js';
 import { getIntervalBox } from '../../global-properties/bounds/get-interval-box/get-interval-box.js';
+/** @internal */
 const γγ6 = γγ(6);
 /**
  * Returns the intersection between a circle and linear, quadratic or cubic bezier

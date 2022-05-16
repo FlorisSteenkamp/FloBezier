@@ -1,34 +1,27 @@
 import { isQuadFlat } from "../global-properties/classification/is-quad-flat.js";
-import { fromToInclErrorBound } from "./split/from-to-incl-error-bound.js";
-
-
-/**
- * Represents a single line in the polyline.
- * 
- * @internal
- */
-interface IPolylineNode {
-    ps: number[][],
-    prev: IPolylineNode;
-    next: IPolylineNode;
-}
-
-
+import { fromTo } from "../transformation/split/from-to.js";
+const { abs, max } = Math;
 /**
  * Transforms the given quadratic bezier curve into a polyline approximation to
  * within a given tolerance and returns the result.
- * 
+ *
  * @param ps a quadratic bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- * @param tolerance a tolerance given as the maximum Hausdorff distance allowed
+ * @param tolerance defaults to `2**-10` of the maximum coordinate of the given
+ * bezier curve; a tolerance given as the maximum Hausdorff distance allowed
  * between the polyline and the bezier curve
- * 
- * @doc
+ *
+ * @doc mdx
  */
-function quadToPolyline(
-        ps: number[][],
-        tolerance: number): number[][] {
-
+function quadraticToPolyline(ps, tolerance) {
+    if (tolerance === undefined || tolerance === 0) {
+        const [p0, p1, p2] = ps;
+        const [x0, y0] = p0;
+        const [x1, y1] = p1;
+        const [x2, y2] = p2;
+        const maxCoordinate = max(abs(x0), abs(y0), abs(x1), abs(y1), abs(x2), abs(y2));
+        tolerance = maxCoordinate * 2 ** -10;
+    }
     // A quad bezier has the following useful properties (Let the control
     // points be labeled P0, P1 and P2 respectively and let the point at t = 0.5
     // be labeled M1):
@@ -50,7 +43,6 @@ function quadToPolyline(
     // furthest away from the line P0-P2.
     // Note: In our algorithm the above property can be used to measure the 
     // flatness of the quad reliably.
-
     // The algorithm: q: quad => lines[] such that the Hausdorff distance 
     // between the polyline and the quad < tolerance.
     // Strategy: Use linked list for polyline - makes splitting easier
@@ -65,67 +57,60 @@ function quadToPolyline(
     //     yes : do nothing
     //     no  : split quad at t = 0.5 and push both halves onto the stack
     // Loop end
-
     // Stack with nodes still to be checked
-    const stack: IPolylineNode[] = [];
-
+    const stack = [];
     // Polyline linked list
-    let head: IPolylineNode = {
+    let head = {
         ps,
-        prev: undefined!,  // keep TypeScript happy - it's ok, we'll set it later
-        next: undefined!   // keep TypeScript happy - it's ok, we'll set it later
+        prev: undefined,
+        next: undefined // keep TypeScript happy - it's ok, we'll set it later
     };
-
     stack.push(head);
     while (stack.length) {
         // keep TypeScript happy; of course there'se something in the stack
-        const node = stack.pop()!;  
+        const node = stack.pop();
         const ps = node.ps;
-
-        if (isQuadFlat(ps, tolerance)) { 
-            continue; 
+        if (isQuadFlat(ps, tolerance)) {
+            continue;
         }
-
         const quads = [
-            fromToInclErrorBound(ps, 0, 0.5).ps, 
-            fromToInclErrorBound(ps, 0.5, 1).ps
+            fromTo(ps, 0, 0.5),
+            fromTo(ps, 0.5, 1)
         ];
         const prev = node.prev;
         const next = node.next;
-
-        const node1: IPolylineNode = {
-            ps: quads[0], 
+        const node1 = {
+            ps: quads[0],
             prev,
-            next: undefined! // keep TypeScript happy - it's ok, we'll set it later
+            next: undefined // keep TypeScript happy - it's ok, we'll set it later
         };
-        const node2: IPolylineNode = {
-            ps: quads[1], 
-            prev: undefined!, // keep TypeScript happy - it's ok, we'll set it later
+        const node2 = {
+            ps: quads[1],
+            prev: undefined,
             next
         };
-
         node1.next = node2;
         node2.prev = node1;
-
-        if (prev) { prev.next = node1; }
-        if (next) { next.prev = node2; }
-
-        if (head === node) { head = node1; }
-
+        if (prev) {
+            prev.next = node1;
+        }
+        if (next) {
+            next.prev = node2;
+        }
+        if (head === node) {
+            head = node1;
+        }
         stack.push(node1);
         stack.push(node2);
     }
-
-    const linePs: number[][] = [];
+    const linePs = [];
     let node = head;
     linePs.push(head.ps[0]);
     while (node) {
         linePs.push(node.ps[2]);
         node = node.next;
     }
-    
     return linePs;
 }
-
-
-export { quadToPolyline }
+export { quadraticToPolyline };
+//# sourceMappingURL=quadratic-to-polyline.js.map

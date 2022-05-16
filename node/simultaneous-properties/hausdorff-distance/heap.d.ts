@@ -11,6 +11,7 @@ declare class Heap<T> {
     popMax(): T;
     private swimDown;
     swapMax(t: T): void;
+    static getParentIdx(i: number): number;
     static getLeftChild(i: number): number;
     static getRightChild(i: number): number;
 }

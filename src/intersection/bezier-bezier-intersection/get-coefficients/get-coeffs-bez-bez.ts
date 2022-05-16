@@ -50,7 +50,7 @@ const coeffFunctionsExact = [
  * @param ps1
  * @param ps2 
  * 
- * @internal but still exported for backwards compatibility
+ * @doc mdx
  */
 function getCoeffsBezBez(
         ps1: number[][], 
