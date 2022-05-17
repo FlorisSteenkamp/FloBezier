@@ -2105,9 +2105,10 @@ function swap(arr, a, b) {
  *
  * Robust: This algorithm is robust via adaptive infinite precision floating
  * point arithmetic.
+ *
  * @param ps A set of points
  * @param includeAllBoundaryPoints Set this to true to if all boundary points
- * should be returned, even redundant ones - defaults to false
+ * should be returned, even redundant ones - defaults to `false`
  */
 function grahamScan(ps, includeAllBoundaryPoints = false) {
     if (!ps.length) {
@@ -2946,7 +2947,7 @@ function basic_two_sum_twoSum(a, b) {
  * Truncates a floating point value's significand and returns the result.
  * Similar to split, but with the ability to specify the number of bits to keep.
  *
- * Theorem 17 (Veltkamp-Dekker): Let a be a p-bit floating-point number, where
+ * **Theorem 17 (Veltkamp-Dekker)**: Let a be a p-bit floating-point number, where
  * p >= 3. Choose a splitting point s such that p/2 <= s <= p-1. Then the
  * following algorithm will produce a (p-s)-bit value a_hi and a
  * nonoverlapping (s-1)-bit value a_lo such that abs(a_hi) >= abs(a_lo) and
@@ -10056,6 +10057,13 @@ function refineK1(ri, p) {
     const tS = ri.tS;
     // scale is exact by the precondition put on `RootInterval`
     const δ = ri.tE - tS;
+    if (δ === 0) {
+        return [{
+                tS: [0, tS],
+                tE: [0, tS],
+                multiplicity: ri.multiplicity
+            }];
+    }
     // Translate the polynomial such that the root is within δ from 0, then
     // scale it such that the roots stay <= 1, i.e. is in [0,1]
     const pExactK1 = refine_k1_eChangeVariablesLinear(p, δ, tS);
@@ -12018,6 +12026,9 @@ function dot(a, b) {
 //# sourceMappingURL=dot.js.map
 ;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/lines-and-segments/seg-seg-intersection.js
 
+
+const seg_seg_intersection_epr = (/* unused pure expression or super */ null && (expansionProduct));
+const seg_seg_intersection_td = (/* unused pure expression or super */ null && (twoDiff));
 /**
 * Returns the point where two line segments intersect or undefined if they
 * don't intersect or if they intersect at infinitely many points.
@@ -12034,11 +12045,11 @@ function segSegIntersection(ab, cd) {
     let [c0, c1] = c;
     let [d0, d1] = d;
     //let denom  = (b[0] - a[0])*(d[1] - c[1]) - (b[1] - a[1])*(d[0] - c[0]);
-    let denom = eDiff(expansionProduct(twoDiff(b0, a0), twoDiff(d1, c1)), expansionProduct(twoDiff(b1, a1), twoDiff(d0, c0)));
+    let denom = eDiff(seg_seg_intersection_epr(seg_seg_intersection_td(b0, a0), seg_seg_intersection_td(d1, c1)), seg_seg_intersection_epr(seg_seg_intersection_td(b1, a1), seg_seg_intersection_td(d0, c0)));
     //let rNumer = (a[1] - c[1])*(d[0] - c[0]) - (a[0] - c[0])*(d[1] - c[1]);
-    let rNumer = eDiff(expansionProduct(twoDiff(a1, c1), twoDiff(d0, c0)), expansionProduct(twoDiff(a0, c0), twoDiff(d1, c1)));
+    let rNumer = eDiff(seg_seg_intersection_epr(seg_seg_intersection_td(a1, c1), seg_seg_intersection_td(d0, c0)), seg_seg_intersection_epr(seg_seg_intersection_td(a0, c0), seg_seg_intersection_td(d1, c1)));
     //let sNumer = (a[1] - c[1]) * (b[0] - a[0]) - (a[0] - c[0]) * (b[1] - a[1]); 
-    let sNumer = eDiff(expansionProduct(twoDiff(a1, c1), twoDiff(b0, a0)), expansionProduct(twoDiff(a0, c0), twoDiff(b1, a1)));
+    let sNumer = eDiff(seg_seg_intersection_epr(seg_seg_intersection_td(a1, c1), seg_seg_intersection_td(b0, a0)), seg_seg_intersection_epr(seg_seg_intersection_td(a0, c0), seg_seg_intersection_td(b1, a1)));
     if (denom[denom.length - 1] === 0) {
         // parallel
         if (rNumer[rNumer.length - 1] === 0) {
@@ -12057,8 +12068,8 @@ function segSegIntersection(ab, cd) {
         let r = eEstimate(rNumer) / eEstimate(denom);
         //return [a0 + r*(b0 - a0), a1 + r*(b1 - a1)];
         return [
-            eEstimate(twoSum(eEstimate(expansionProduct(twoDiff(b0, a0), rNumer)) / eEstimate(denom), a0)),
-            eEstimate(twoSum(eEstimate(expansionProduct(twoDiff(b1, a1), rNumer)) / eEstimate(denom), a1))
+            eEstimate(twoSum(eEstimate(seg_seg_intersection_epr(seg_seg_intersection_td(b0, a0), rNumer)) / eEstimate(denom), a0)),
+            eEstimate(twoSum(eEstimate(seg_seg_intersection_epr(seg_seg_intersection_td(b1, a1), rNumer)) / eEstimate(denom), a1))
         ];
     }
     return undefined;
@@ -12308,9 +12319,12 @@ function lengthBez1(interval, ps) {
 ;// CONCATENATED MODULE: ./node_modules/flo-gauss-quadrature/node/index.js
 // TODO A future improvement can be to use the Gauss–Kronrod rules
 // to estimate the error and thus choose a number of constants based
-// on the error.
+// on the error. Maybe not.
 // TODO In future, the constants can be calculated and cached so we can
 // choose any value for the order.
+// TODO - to limit rounding error do pairwise addition of terms
+// TODO order abscissas
+// TODO - auto calc abscissas and weights (on first call to function only)
 /**
  * Numerically integrates the given function using the Gaussian Quadrature
  * method.
