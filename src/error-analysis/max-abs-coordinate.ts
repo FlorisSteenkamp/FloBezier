@@ -6,7 +6,7 @@
  * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * 
- * @internal
+ * @doc
  */
 function maxAbsCoordinate(ps: number[][]) {
     let m = Number.NEGATIVE_INFINITY;

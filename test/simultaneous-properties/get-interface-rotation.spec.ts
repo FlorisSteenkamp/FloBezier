@@ -9,7 +9,7 @@ import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate
 use(nearly);
 
 const 𝜋 = Math.PI;
-const abs = Math.abs;
+const { abs } = Math;
 
 
 function getRotationAround(ps: number[][]) {

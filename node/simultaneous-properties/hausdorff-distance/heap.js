@@ -4,9 +4,10 @@
  * @internal
  */
 class Heap {
+    compare;
+    heap = [];
     constructor(compare) {
         this.compare = compare;
-        this.heap = [];
     }
     insert(t) {
         const heap = this.heap;

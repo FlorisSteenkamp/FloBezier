@@ -7,7 +7,7 @@ const tp = twoProduct;
 const ddAddDd = ddAddDd_;
 const ddDiffDd = ddDiffDd_;
 
-const { PI: 𝜋, asin, acos } = Math;
+const { atan2 } = Math;
 
 
 /**
@@ -25,43 +25,19 @@ const { PI: 𝜋, asin, acos } = Math;
  * coordinates, e.g. `[2,3]`
  * @param b the second 2d vector
  */
-function getInterfaceRotation(
-        a: number[],
-        b: number[]): number {
+ function getInterfaceRotation(
+		a: number[],
+		b: number[]): number {
 
-	if ((a[0] === 0 && a[1] === 0) || 
-	    (b[0] === 0 && b[1] === 0)) {
-		return 0;  // zero vector
-	}
+	const v1 = a[0];
+	const v2 = a[1];
+	const w1 = b[0];
+	const w2 = b[1];
 
-	const c = toUnitVector(a);
-	const d = toUnitVector(b);
-	// let cross_ = c[0]*d[1] - c[1]*d[0];
-	// let dot_   = c[0]*d[0] + c[1]*d[1];
-	let cross_ = ddDiffDd(tp(c[0],d[1]), tp(c[1],d[0]))[1];
-	let dot_   = ddAddDd (tp(c[0],d[0]), tp(c[1],d[1]))[1];
+	let A = ddDiffDd(tp(w2,v1), tp(w1,v2))[1];
+	let B = ddAddDd(tp(w1,v1), tp(w2,v2))[1];
 
-	// clip `dot_` and `cross_` to ensure `acos` and `asin` exists. (The -1 and
-	// +1 might be overstepped due to inexact calculations during the calls to
-	// `toUnitVector` and is not avoidable in double precision)
-	if (cross_ < -1) { cross_ = -1; }
-	if (cross_ > +1) { cross_ = +1; }
-	if (dot_ < -1) { dot_ = -1; }
-	if (dot_ > +1) { dot_ = +1; }
-
-	// if `sgn >= 0` then the dot product is numerically more stable, else
-	// the cross product is more stable...
-	// const sgn = c[0]*c[1]*d[0]*d[1];
-	// ...however, then `acos` and `asin` is much less stable
-	const θ = dot_ >= 0
-		? cross_ >= 0
-			? dot_ <= 0.5 ? +acos(dot_) : asin(cross_)  // 1st quadrant
-			: dot_ <= 0.5 ? -acos(dot_) : asin(cross_)  // 4th quadrant
-		: cross_ >= 0
-			? dot_ >= -0.5 ? +acos(dot_) : +𝜋 - asin(cross_)  // 2nd quadrant
-			: dot_ >= -0.5 ? -acos(dot_) : -𝜋 - asin(cross_)  // 3rd quadrant
-
-	return θ;
+	return atan2(A,B);
 }
 
 

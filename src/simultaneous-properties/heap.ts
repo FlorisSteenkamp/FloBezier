@@ -77,7 +77,7 @@ class Heap<T> {
     }
 
 
-    public swapMax(t: T): void {
+    public swapMinOrMax(t: T): void {
         this.heap[0] = t;
         this.swimDown();
     }

@@ -21,7 +21,6 @@ import { getCoeffsBezBez } from './get-coefficients/get-coeffs-bez-bez.js';
  */
 function bezierBezierIntersectionBoundless(ps1, ps2) {
     const { coeffs, errBound, getPExact } = getCoeffsBezBez(ps1, ps2);
-    ;
     return allRootsCertified(coeffs, 0, 1, errBound, getPExact, true);
 }
 export { bezierBezierIntersectionBoundless };

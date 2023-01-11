@@ -20,11 +20,10 @@ const { abs, PI: 𝜋 } = Math;
 
 function totalCurvatureByGauss(
 		ps: number[][], 
-		interval: number[],
 		flatness: number,
 		gaussOrder: number): number {
 
-	if (ps.length === 1) { return 0; }
+	if (ps.length <= 2) { return 0; }
 
 	const ts = splitByCurvature(ps, flatness);
 
@@ -34,19 +33,21 @@ function totalCurvatureByGauss(
 		const tE = ts[i+1];
 
 		const ps_ = fromToInclErrorBound(ps,tS,tE).ps;
-		total += gaussQuadrature(κds(ps_), interval, gaussOrder as 4|16|64);
+		total += gaussQuadrature(κi(ps_), [0,1], gaussOrder as 4|16|64);
 	}
 
 	return total;
 }
 
 
-function κds(ps: number[][]) {
+// https://faculty.sites.iastate.edu/jia/files/inline-files/curvature.pdf
+function κi(ps: number[][]) {
 	return (t: number): number => {
 		const [dx, dy] = tangent(ps, t); 
 		const [ddx, ddy] = evaluate2ndDerivative(ps, t);
 
 		const a = dx*ddy - dy*ddx;
+		// const b = Math.sqrt((dx*dx + dy*dy)**3);
 		const b = dx*dx + dy*dy;
 
 		return a/b;
@@ -57,7 +58,7 @@ function κds(ps: number[][]) {
 function test(ps: number[][]) {
 	{
 		const c = totalCurvature(ps, [0,1]);
-		const d = totalCurvatureByGauss(ps, [0,1], 1.01, 64);
+		const d = totalCurvatureByGauss(ps, 1.01, 64);
 		// radToDeg(c);
 		// radToDeg(d);
 
@@ -74,7 +75,7 @@ function test(ps: number[][]) {
 		ps = randomRotateAndTranslate(0)(ps);
 
 		const c = totalCurvature(ps, [0,1]);
-		const d = totalCurvatureByGauss(ps, [0,1], 1.01, 64);
+		const d = totalCurvatureByGauss(ps, 1.01, 64);
 		// radToDeg(c);
 		// radToDeg(d);
 
@@ -198,7 +199,7 @@ function testBeziersInLoop(order: 1 | 2 | 3) {
 			const psI = pss[j];
 			const psO = pss[i];
 			const c = totalCurvature(psO, [0,1]);
-			const d = totalCurvatureByGauss(psO, [0,1], 1.01, 64);
+			const d = totalCurvatureByGauss(psO, 1.01, 64);
 
 			// (Math.PI - (c+d)) / (2*Math.PI) * 360;
 

@@ -10,7 +10,6 @@ export default function(wallaby) {
         ],
         tests: [
             'test/**/*.spec.ts'
-            // 'test/boxes/are-boxes-intersecting.spec.ts'
         ],
 
         testFramework: 'mocha',

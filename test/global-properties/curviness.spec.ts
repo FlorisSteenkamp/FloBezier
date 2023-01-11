@@ -27,7 +27,7 @@ describe('curviness', function() {
 			const ps = [[0,0],[1.0001,1.001],[2.00001,2.00001],[3,3]];
 			const curviness_ = curviness(ps);
 			// @ts-ignore - otherwise TypeScript gives an error on nearly
-			expect(curviness_).to.be.nearly(2**4, 0.0013502388074583282);
+			expect(curviness_).to.be.nearly(2**8, 0.0013502388074583282);
 		}
 
 		{
@@ -78,7 +78,7 @@ describe('curviness', function() {
 			const ps1 = [[0,0],[1,1],[1,1],[2,3]];
 			const ps2 = [[0,0],[1,1],[2,3]];
 			const curviness_ = curviness(ps1);
-			expect(curviness_).to.eql(0.32175055439664213);
+			expect(curviness_).to.eql(0.3217505543966422);
 
 			expect(curviness(ps1)).to.eql(curviness(ps2));
 		}

@@ -10,7 +10,7 @@ import { fromTo } from './from-to.js';
  * @param maxCurviness optional; defaults to `0.4 radians`; maximum curviness
  * (must be > 0) as calculated using
  * the `curviness` function (which measures the total angle in radians formed
- * by the vectors formed by the ordered control points);
+ * by the vectors formed by the ordered control points)
  * @param minTSpan optional; defaults to `2**-16`; the minimum `t` span that
  * can be returned for a bezier piece; necessary for cubics otherwise a curve
  * with a cusp would cause an infinite loop

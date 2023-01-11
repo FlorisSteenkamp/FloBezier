@@ -18,10 +18,10 @@ function curvature(ps: number[][], t: number): number {
     const [dX,dY] = toPowerBasis_1stDerivative(ps);
     const [ddX,ddY] = toPowerBasis_2ndDerivative(ps);
 
-	const dx  = Horner(dX, t); 
-	const dy  = Horner(dY, t); 
-	const ddx = Horner(ddX, t); 
-	const ddy = Horner(ddY, t); 
+	const dx  = Horner(dX, t);
+	const dy  = Horner(dY, t);
+	const ddx = Horner(ddX, t);
+	const ddy = Horner(ddY, t);
 	
 	const a = dx*ddy - dy*ddx;
 	const b = Math.sqrt((dx*dx + dy*dy)**3);

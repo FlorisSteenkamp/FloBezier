@@ -16,11 +16,11 @@ import { toPowerBasis_1stDerivative } from '../../../to-power-basis/to-power-bas
  * @doc mdx
  */
  function tangent(ps: number[][], t: number): number[] {
-      const [dX,dY] = toPowerBasis_1stDerivative(ps);
+    const [dX,dY] = toPowerBasis_1stDerivative(ps);
 
-     return [
-         Horner(dX, t),
-         Horner(dY, t)
+    return [
+        Horner(dX, t),
+        Horner(dY, t)
     ];
  }
 

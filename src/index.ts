@@ -131,6 +131,14 @@ import { getFootpointPoly } from "./simultaneous-properties/closest-and-furthest
 import { getFootpointPolyDd } from "./simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double-double/get-footpoint-poly-dd.js";
 import { reduceOrderIfPossible } from './transformation/reduce-order-if-possible.js'
 import { getAbsAreaBetween } from './fit/get-abs-area-between.js';
+import { getBendingEnergy } from './global-properties/get-bending-energy.js';
+import { AnglesAndSpeeds } from './angles-and-speeds/angles-and-speeds.js';
+import { cubicFromAnglesAndSpeeds } from './angles-and-speeds/bezier-by-angles-and-speeds/cubic-from-angles-and-speeds.js';
+import { cubicToAnglesAndSpeeds } from './angles-and-speeds/bezier-by-angles-and-speeds/cubic-to-angles-and-speeds.js';
+import { getCubicSpeeds } from './angles-and-speeds/bezier-by-angles-and-speeds/get-cubic-speeds.js';
+import { setCubicSpeeds } from './angles-and-speeds/bezier-by-angles-and-speeds/set-cubic-speeds.js';
+import { closestPointsBetweenBeziers } from './simultaneous-properties/closest-distance-between-beziers/closest-distance-between-beziers.js';
+import { maxAbsCoordinate } from './error-analysis/max-abs-coordinate.js';
 
 
 export {
@@ -219,6 +227,7 @@ export {
 	totalAbsoluteCurvature,
 
 	length,
+	getBendingEnergy,
 	area,
 	totalLength,
 	isQuadObtuse,
@@ -291,7 +300,15 @@ export {
 	getFootpointPolyExact,
 
 	getEndpointIntersections,
-	getAbsAreaBetween
+	getAbsAreaBetween,
+
+	cubicFromAnglesAndSpeeds,
+	cubicToAnglesAndSpeeds,
+	getCubicSpeeds,
+	setCubicSpeeds,
+
+	closestPointsBetweenBeziers,
+	maxAbsCoordinate
 }
 
 
@@ -303,4 +320,5 @@ export type {
 	ClassificationType,
 	Classification,
 	NodeType,
+	AnglesAndSpeeds
 }

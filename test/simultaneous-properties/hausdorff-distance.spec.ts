@@ -51,6 +51,24 @@ describe('hausdorffDistance', function() {
 	it('it should find accurate approximate hausdorff distances for some curves',
 	function() {
 		{
+			const A = [
+				[-0.490590559784323,0.4700336614623666],
+				[-0.4844732536017821,0.39528111773933156],
+				[-0.3550743653512093,0.06666619155599329],
+				[-0.2819309411570433,0.08326148381456788]
+			];
+			const B = [
+				[-0.3116935109719634,0.05215876316651702],
+				[-0.29430396390165803,0.1677451716773273],
+				[-0.886019985785059,0.20060425215062785],
+				[-0.9510351778008026,0.29774146946147256]
+			];
+
+			const hd = hausdorffDistance(A,B);
+			// @ts-ignore - otherwise TypeScript gives an error on nearly
+			expect(hd).to.be.nearly(2**1,0.4867916480715152);
+		}
+		{
 			// Test some line-lines
 
 			const A = [[1,1],[2,2]];
