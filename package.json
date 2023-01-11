@@ -1,5 +1,6 @@
 {
     "name": "flo-bezier3",
+    "sideEffects": false,
     "description": "Purely functional linear, quadratic and cubic bezier library, including accurate, robust bezier intersection.",
     "version": "4.1.0",
     "author": {
