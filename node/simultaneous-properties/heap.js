@@ -62,7 +62,7 @@ class Heap {
             i = swapIdx;
         }
     }
-    swapMax(t) {
+    swapMinOrMax(t) {
         this.heap[0] = t;
         this.swimDown();
     }

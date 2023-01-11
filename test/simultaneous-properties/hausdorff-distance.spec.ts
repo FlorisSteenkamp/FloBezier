@@ -8,7 +8,7 @@ import {
 	fromPowerBasis, fromToInclErrorBound, generateQuarterCircle, hausdorffDistance, 
 	hausdorffDistanceOneSided, lineToQuadratic, normal, toCubic, toString 
 } from '../../src/index.js';
-import { Heap } from '../../src/simultaneous-properties/hausdorff-distance/heap.js';
+import { Heap } from '../../src/simultaneous-properties/heap.js';
 // import { hausdorffDistanceOneSided_ } from '../../src/simultaneous-properties/hausdorff-distance/hausdorff-distance.js';
 import { nearly } from '../helpers/chai-extend-nearly.js';
 import { getRandomCubic, getRandomLine, getRandomQuad } from '../helpers/get-random-bezier.js';

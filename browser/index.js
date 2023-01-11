@@ -53,8 +53,11 @@ __webpack_require__.d(__webpack_exports__, {
   "clone": () => (/* reexport */ clone),
   "closestPointOnBezier": () => (/* reexport */ closestPointOnBezier),
   "closestPointOnBezierCertified": () => (/* reexport */ closestPointOnBezierCertified),
+  "closestPointsBetweenBeziers": () => (/* reexport */ closestPointsBetweenBeziers),
   "controlPointLinesLength": () => (/* reexport */ controlPointLinesLength),
+  "cubicFromAnglesAndSpeeds": () => (/* reexport */ cubicFromAnglesAndSpeeds),
   "cubicThroughPointGiven013": () => (/* reexport */ cubicThroughPointGiven013),
+  "cubicToAnglesAndSpeeds": () => (/* reexport */ cubicToAnglesAndSpeeds),
   "cubicToHybridQuadratic": () => (/* reexport */ cubicToHybridQuadratic),
   "cubicToQuadratic": () => (/* reexport */ cubicToQuadratic),
   "curvature": () => (/* reexport */ curvature),
@@ -85,12 +88,14 @@ __webpack_require__.d(__webpack_exports__, {
   "generateQuarterCircle": () => (/* reexport */ generateQuarterCircle),
   "generateSelfIntersecting": () => (/* reexport */ generateSelfIntersecting),
   "getAbsAreaBetween": () => (/* reexport */ getAbsAreaBetween),
+  "getBendingEnergy": () => (/* reexport */ getBendingEnergy),
   "getBoundingBox": () => (/* reexport */ getBoundingBox),
   "getBoundingBoxTight": () => (/* reexport */ getBoundingBoxTight),
   "getBoundingHull": () => (/* reexport */ getBoundingHull),
   "getBounds": () => (/* reexport */ getBounds),
   "getCoeffsBezBez": () => (/* reexport */ getCoeffsBezBez),
   "getControlPointBox": () => (/* reexport */ getControlPointBox),
+  "getCubicSpeeds": () => (/* reexport */ getCubicSpeeds),
   "getCurvatureExtrema": () => (/* reexport */ getCurvatureExtrema),
   "getEndpointIntersections": () => (/* reexport */ getEndpointIntersections),
   "getFootpointPoly": () => (/* reexport */ getFootpointPoly),
@@ -135,11 +140,13 @@ __webpack_require__.d(__webpack_exports__, {
   "length": () => (/* reexport */ length_length),
   "lineToCubic": () => (/* reexport */ lineToCubic),
   "lineToQuadratic": () => (/* reexport */ lineToQuadratic),
+  "maxAbsCoordinate": () => (/* reexport */ maxAbsCoordinate),
   "normal": () => (/* reexport */ normal),
   "quadraticToCubic": () => (/* reexport */ quadraticToCubic),
   "quadraticToPolyline": () => (/* reexport */ quadraticToPolyline),
   "reduceOrderIfPossible": () => (/* reexport */ reduceOrderIfPossible),
-  "reverse": () => (/* reexport */ reverse),
+  "reverse": () => (/* reexport */ reverse_reverse),
+  "setCubicSpeeds": () => (/* reexport */ setCubicSpeeds),
   "splitByCurvature": () => (/* reexport */ splitByCurvature),
   "splitByCurvatureAndLength": () => (/* reexport */ splitByCurvatureAndLength),
   "splitByLength": () => (/* reexport */ splitByLength),
@@ -12122,17 +12129,27 @@ function rotate(sinθ, cosθ, p) {
 }
 
 //# sourceMappingURL=rotate.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/distance-and-length/to-unit-vector.js
+;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/affine-transformations/linear/scale.js
 /**
- * Returns the given 2-vector scaled to a length of one.
+ * Returns a scaled version of the given 2-vector.
  * @param p a vector
+ * @param c a scale factor
  */
-function toUnitVector(p) {
-    let scaleFactor = 1 / (Math.sqrt(p[0] * p[0] + p[1] * p[1]));
-    return [p[0] * scaleFactor, p[1] * scaleFactor];
+function scale(p, c) {
+    return [c * p[0], c * p[1]];
 }
 
-//# sourceMappingURL=to-unit-vector.js.map
+//# sourceMappingURL=scale.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/affine-transformations/linear/reverse.js
+/**
+ * Returns the given 2-vector reversed (i.e. scaled by -1).
+ * @param p a vector
+ */
+function reverse(p) {
+    return [-p[0], -p[1]];
+}
+
+//# sourceMappingURL=reverse.js.map
 ;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/distance-and-length/to-length.js
 /**
  * Returns the given 2-vector scaled to the given length.
@@ -12158,6 +12175,16 @@ function distanceBetween(p, q) {
 }
 
 //# sourceMappingURL=distance-between.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/distance-and-length/len.js
+/**
+ * Returns the length of the given 2-vector.
+ * @param p a 2d vector
+ */
+function len(p) {
+    return Math.sqrt(p[0] * p[0] + p[1] * p[1]);
+}
+
+//# sourceMappingURL=len.js.map
 ;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/distance-and-length/squared-distance-between.js
 /**
  * Returns the squared distance between two 2d points.
@@ -12850,11 +12877,10 @@ function splitAtBoth2(ps, tS, tE) {
 
 
 
-
 const get_interface_rotation_tp = node_twoProduct;
 const get_interface_rotation_ddAddDd = node_ddAddDd;
 const get_interface_rotation_ddDiffDd = node_ddDiffDd;
-const { PI: 𝜋, asin, acos } = Math;
+const { atan2 } = Math;
 /**
  * Returns the rotation angle (-𝜋 <= θ <= 𝜋 *guaranteed*) from some vector to
  * another vector considering them to both start at the same point.
@@ -12871,43 +12897,13 @@ const { PI: 𝜋, asin, acos } = Math;
  * @param b the second 2d vector
  */
 function getInterfaceRotation(a, b) {
-    if ((a[0] === 0 && a[1] === 0) ||
-        (b[0] === 0 && b[1] === 0)) {
-        return 0; // zero vector
-    }
-    const c = toUnitVector(a);
-    const d = toUnitVector(b);
-    // let cross_ = c[0]*d[1] - c[1]*d[0];
-    // let dot_   = c[0]*d[0] + c[1]*d[1];
-    let cross_ = get_interface_rotation_ddDiffDd(get_interface_rotation_tp(c[0], d[1]), get_interface_rotation_tp(c[1], d[0]))[1];
-    let dot_ = get_interface_rotation_ddAddDd(get_interface_rotation_tp(c[0], d[0]), get_interface_rotation_tp(c[1], d[1]))[1];
-    // clip `dot_` and `cross_` to ensure `acos` and `asin` exists. (The -1 and
-    // +1 might be overstepped due to inexact calculations during the calls to
-    // `toUnitVector` and is not avoidable in double precision)
-    if (cross_ < -1) {
-        cross_ = -1;
-    }
-    if (cross_ > +1) {
-        cross_ = +1;
-    }
-    if (dot_ < -1) {
-        dot_ = -1;
-    }
-    if (dot_ > +1) {
-        dot_ = +1;
-    }
-    // if `sgn >= 0` then the dot product is numerically more stable, else
-    // the cross product is more stable...
-    // const sgn = c[0]*c[1]*d[0]*d[1];
-    // ...however, then `acos` and `asin` is much less stable
-    const θ = dot_ >= 0
-        ? cross_ >= 0
-            ? dot_ <= 0.5 ? +acos(dot_) : asin(cross_) // 1st quadrant
-            : dot_ <= 0.5 ? -acos(dot_) : asin(cross_) // 4th quadrant
-        : cross_ >= 0
-            ? dot_ >= -0.5 ? +acos(dot_) : +𝜋 - asin(cross_) // 2nd quadrant
-            : dot_ >= -0.5 ? -acos(dot_) : -𝜋 - asin(cross_); // 3rd quadrant
-    return θ;
+    const v1 = a[0];
+    const v2 = a[1];
+    const w1 = b[0];
+    const w2 = b[1];
+    let A = get_interface_rotation_ddDiffDd(get_interface_rotation_tp(w2, v1), get_interface_rotation_tp(w1, v2))[1];
+    let B = get_interface_rotation_ddAddDd(get_interface_rotation_tp(w1, v1), get_interface_rotation_tp(w2, v2))[1];
+    return atan2(A, B);
 }
 
 
@@ -13405,7 +13401,7 @@ function from_to_fromTo(ps, tS, tE) {
  * @param maxCurviness optional; defaults to `0.4 radians`; maximum curviness
  * (must be > 0) as calculated using
  * the `curviness` function (which measures the total angle in radians formed
- * by the vectors formed by the ordered control points);
+ * by the vectors formed by the ordered control points)
  * @param minTSpan optional; defaults to `2**-16`; the minimum `t` span that
  * can be returned for a bezier piece; necessary for cubics otherwise a curve
  * with a cusp would cause an infinite loop
@@ -13413,23 +13409,31 @@ function from_to_fromTo(ps, tS, tE) {
  * @doc mdx
  */
 function splitByCurvature(ps, maxCurviness = 0.4, minTSpan = 2 ** -16) {
-    const ts = [0, 1]; // include endpoints
-    const tStack = [[0, 1]];
-    while (tStack.length) {
-        const ts_ = tStack.pop();
-        if (ts_[1] - ts_[0] <= minTSpan) {
-            continue;
-        }
+    let head = { r: [0, 1] };
+    let n = head;
+    while (n !== undefined) {
+        const ts_ = n.r;
         const ps_ = from_to_fromTo(ps, ts_[0], ts_[1]);
         const curviness_ = curviness(ps_);
-        if (curviness_ > maxCurviness) {
-            const t = (ts_[0] + ts_[1]) / 2;
-            tStack.push([ts_[0], t]);
-            tStack.push([t, ts_[1]]);
-            ts.push(t);
+        if (curviness_ <= maxCurviness || ts_[1] - ts_[0] <= minTSpan) {
+            n = n.next;
+            continue;
         }
+        const t = (ts_[0] + ts_[1]) / 2;
+        const L = [ts_[0], t];
+        const R = [t, ts_[1]];
+        n.r = L;
+        n.next = { r: R, next: n.next };
     }
-    ts.sort((a, b) => a - b);
+    n = head;
+    const ts = [];
+    while (n !== undefined) {
+        ts.push(n.r[0]);
+        if (n.next === undefined) {
+            ts.push(n.r[1]);
+        }
+        n = n.next;
+    }
     return ts;
 }
 
@@ -20516,7 +20520,6 @@ function getCoeffsBezBez(ps1, ps2) {
  */
 function bezierBezierIntersectionBoundless(ps1, ps2) {
     const { coeffs, errBound, getPExact } = getCoeffsBezBez(ps1, ps2);
-    ;
     return allRootsCertified(coeffs, 0, 1, errBound, getPExact, true);
 }
 
@@ -23909,7 +23912,8 @@ function furthestPointOnBezier(ps, p) {
 function generateQuarterCircle(scale, translation) {
     // `c` can be made slightly more accurate by calculating a more accurate
     // value of 
-    const c = 0.551915024494;
+    // const c = 0.551915024494;
+    const c = 0.5519150244935105707435627;
     const s = scale;
     return [[0, s], [s * c, s], [s, s * c], [s, 0]].map(translate(translation));
 }
@@ -25040,7 +25044,7 @@ function getInflections(ps) {
 
 
 
-const { abs: total_absolute_curvature_abs, PI: total_absolute_curvature_ } = Math;
+const { abs: total_absolute_curvature_abs, PI: 𝜋 } = Math;
 /**
  * Returns the total absolute curvature of the given bezier curve over the
  * given interval
@@ -25114,10 +25118,10 @@ function totalCurvature(ps, interval = [0, 1]) {
             getInterfaceRotation(tanM, tanE);
         if (bezClass.nodeType === 'acnode' ||
             bezClass.nodeType === 'cusp') {
-            return cpθ <= -total_absolute_curvature_
-                ? cpθ + 2 * total_absolute_curvature_
-                : cpθ >= +total_absolute_curvature_
-                    ? cpθ - 2 * total_absolute_curvature_
+            return cpθ <= -𝜋
+                ? cpθ + 2 * 𝜋
+                : cpθ >= +𝜋
+                    ? cpθ - 2 * 𝜋
                     : cpθ;
         }
         return cpθ;
@@ -25140,7 +25144,7 @@ function totalCurvature(ps, interval = [0, 1]) {
  *
  * @doc
  */
-function reverse(ps) {
+function reverse_reverse(ps) {
     return ps.slice().reverse();
 }
 
@@ -27992,7 +27996,7 @@ function controlPointLinesLength(ps) {
  * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  *
- * @internal
+ * @doc
  */
 function maxAbsCoordinate(ps) {
     let m = Number.NEGATIVE_INFINITY;
@@ -28038,16 +28042,17 @@ function hausdorffCompare(a, b) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/hausdorff-distance/heap.ts
+;// CONCATENATED MODULE: ./src/simultaneous-properties/heap.ts
 /**
  * see [Wikipedia](https://en.wikipedia.org/wiki/Heap_(data_structure))
  *
  * @internal
  */
 class Heap {
+    compare;
+    heap = [];
     constructor(compare) {
         this.compare = compare;
-        this.heap = [];
     }
     insert(t) {
         const heap = this.heap;
@@ -28102,7 +28107,7 @@ class Heap {
             i = swapIdx;
         }
     }
-    swapMax(t) {
+    swapMinOrMax(t) {
         this.heap[0] = t;
         this.swimDown();
     }
@@ -28217,7 +28222,7 @@ function hausdorffDistanceOneSided(A, B, tolerance, maxIterations = 50) {
         }
         const iL = { tS, tE: tM, hL, hR: hM, hEL: ELL, hER: ELR };
         const iR = { tS: tM, tE, hL: hM, hR, hEL: ERL, hER: ERR };
-        heap.swapMax(iL);
+        heap.swapMinOrMax(iL);
         heap.insert(iR);
     }
 }
@@ -28289,19 +28294,30 @@ function hausdorffDistance(A, B, tolerance, maxIterations) {
  * @doc mdx
  */
 function splitByLength(ps, maxLength) {
-    const ts = [0, 1]; // include endpoints
-    const tStack = [[0, 1]];
-    while (tStack.length) {
-        const ts_ = tStack.pop();
+    let head = { r: [0, 1] };
+    let n = head;
+    while (n !== undefined) {
+        const ts_ = n.r;
         const ps_ = from_to_fromTo(ps, ts_[0], ts_[1]);
-        if (controlPointLinesLength(ps_) > maxLength) {
-            const t = (ts_[0] + ts_[1]) / 2;
-            tStack.push([ts_[0], t]);
-            tStack.push([t, ts_[1]]);
-            ts.push(t);
+        if (controlPointLinesLength(ps_) <= maxLength) {
+            n = n.next;
+            continue;
         }
+        const t = (ts_[0] + ts_[1]) / 2;
+        const L = [ts_[0], t];
+        const R = [t, ts_[1]];
+        n.r = L;
+        n.next = { r: R, next: n.next };
     }
-    ts.sort((a, b) => a - b);
+    n = head;
+    const ts = [];
+    while (n !== undefined) {
+        ts.push(n.r[0]);
+        if (n.next === undefined) {
+            ts.push(n.r[1]);
+        }
+        n = n.next;
+    }
     return ts;
 }
 
@@ -28547,23 +28563,31 @@ function getCurvatureExtremaQuadraticPoly(ps) {
  * @doc mdx
  */
 function splitByCurvatureAndLength(ps, maxCurviness = 0.4, maxLength = 10, minTSpan = 2 ** -16) {
-    const ts = [0, 1]; // include endpoints
-    const tStack = [[0, 1]];
-    while (tStack.length) {
-        const ts_ = tStack.pop();
-        if (ts_[1] - ts_[0] <= minTSpan) {
+    let head = { r: [0, 1] };
+    let n = head;
+    while (n !== undefined) {
+        const ts_ = n.r;
+        const ps_ = from_to_fromTo(ps, ts_[0], ts_[1]);
+        if ((controlPointLinesLength(ps_) <= maxLength &&
+            curviness(ps_) <= maxCurviness) || ts_[1] - ts_[0] <= minTSpan) {
+            n = n.next;
             continue;
         }
-        const ps_ = from_to_fromTo(ps, ts_[0], ts_[1]);
-        if (controlPointLinesLength(ps_) > maxLength ||
-            curviness(ps_) > maxCurviness) {
-            const t = (ts_[0] + ts_[1]) / 2;
-            tStack.push([ts_[0], t]);
-            tStack.push([t, ts_[1]]);
-            ts.push(t);
-        }
+        const t = (ts_[0] + ts_[1]) / 2;
+        const L = [ts_[0], t];
+        const R = [t, ts_[1]];
+        n.r = L;
+        n.next = { r: R, next: n.next };
     }
-    ts.sort((a, b) => a - b);
+    n = head;
+    const ts = [];
+    while (n !== undefined) {
+        ts.push(n.r[0]);
+        if (n.next === undefined) {
+            ts.push(n.r[1]);
+        }
+        n = n.next;
+    }
     return ts;
 }
 
@@ -29954,7 +29978,487 @@ function getFootpointPolyDd(ps, p) {
 }
 
 
+;// CONCATENATED MODULE: ./src/global-properties/get-bending-energy.ts
+
+
+
+
+
+const { sqrt: get_bending_energy_sqrt } = Math;
+/**
+ * Returns an accurate approximation of the bending energy of the given bezier
+ * curve.
+ *
+ * @param maxCurviness defaults to 1.125
+ * @param gaussOrder defaults to 4
+ * @param ps a cubic bezier curve given by an ordered array of its
+ * control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ *
+ * @doc mdx
+ */
+function getBendingEnergy(ps, maxCurviness = 1.125, gaussOrder = 4) {
+    // return getBendingEnergyByGauss(ps, maxCurviness, gaussOrder);
+    const c = classify(ps);
+    if (c.collinear) {
+        if (isSelfOverlapping(ps)) {
+            return Number.POSITIVE_INFINITY;
+        }
+        return 0;
+    }
+    if (c.realOrder === 3) {
+        if (c.nodeType === 'cusp') {
+            return Number.POSITIVE_INFINITY;
+        }
+        // it is a well behaved 'acnode', 'crunode' or 'explicit'
+        return getBendingEnergyByGauss(κi3, ps, maxCurviness, gaussOrder);
+    }
+    if (c.realOrder === 2) {
+        // it is a well behaved 'quadratic'
+        return getBendingEnergyByGauss(κi2, ps, maxCurviness, gaussOrder);
+    }
+    return 0;
+}
+/**
+ * Returns an estimate of the bending energy of the given bezier curve.
+ *
+ * @param ps
+ * @param maxCurviness maximum curviness (must be > 0) as calculated using the
+ * curviness function (which measures the total angle in radians formed by the
+ * vectors formed by the ordered control points)
+ * @param gaussOrder
+ */
+function getBendingEnergyByGauss(κi, ps, maxCurviness, gaussOrder) {
+    const ts = splitByCurvature(ps, maxCurviness);
+    let total = 0;
+    for (let i = 0; i < ts.length - 1; i++) {
+        const tS = ts[i];
+        const tE = ts[i + 1];
+        const ps_ = from_to_fromTo(ps, tS, tE);
+        total += gaussQuadrature(κi(ps_), [0, 1], gaussOrder);
+    }
+    return total;
+}
+/**
+ * * For insight: https://faculty.sites.iastate.edu/jia/files/inline-files/curvature.pdf
+ * * cubic version
+ *
+ * @param ps
+ */
+function κi3(ps) {
+    /*
+    return (t: number): number => {
+        const [dx, dy] = tangent(ps, t);
+        const [ddx, ddy] = evaluate2ndDerivative(ps, t);
+
+        const a = (dx*ddy - dy*ddx)**2;
+        const b = sqrt((dx*dx + dy*dy)**5);
+
+        return a/b;
+    }
+    */
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const p2 = ps[2];
+    const p3 = ps[3];
+    const x0 = p0[0];
+    const y0 = p0[1];
+    const x1 = p1[0];
+    const y1 = p1[1];
+    const x2 = p2[0];
+    const y2 = p2[1];
+    const x3 = p3[0];
+    const y3 = p3[1];
+    const A = ((x3 - x0) + 3 * (x1 - x2));
+    const B = ((y3 - y0) + 3 * (y1 - y2));
+    const C = ((x2 + x0) - 2 * x1);
+    const D = ((y2 + y0) - 2 * y1);
+    return (t) => {
+        const tt = t * t;
+        const dx_3 = tt * A + 2 * t * C + (x1 - x0);
+        const dy_3 = tt * B + 2 * t * D + (y1 - y0);
+        const ddx_6 = t * A + C;
+        const ddy_6 = t * B + D;
+        const a = dx_3 * ddy_6 - dy_3 * ddx_6;
+        const c = dx_3 * dx_3 + dy_3 * dy_3;
+        const b = c * c * get_bending_energy_sqrt(c);
+        return (4 / 3) * a * a / b;
+    };
+}
+/**
+ * * For insight: https://faculty.sites.iastate.edu/jia/files/inline-files/curvature.pdf
+ * * quadratic version
+ *
+ * @param ps
+ */
+function κi2(ps) {
+    /*
+    return (t: number): number => {
+        const [dx, dy] = tangent(ps, t);
+        const [ddx, ddy] = evaluate2ndDerivative(ps, t);
+
+        const a = (dx*ddy - dy*ddx)**2;
+        const b = sqrt((dx*dx + dy*dy)**5);
+
+        return a/b;
+    }
+    */
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const p2 = ps[2];
+    const x0 = p0[0];
+    const y0 = p0[1];
+    const x1 = p1[0];
+    const y1 = p1[1];
+    const x2 = p2[0];
+    const y2 = p2[1];
+    const A = x2 - 2 * x1 + x0;
+    const B = y2 - 2 * y1 + y0;
+    return (t) => {
+        const dx = A * t + (x1 - x0);
+        const dy = B * t + (y1 - y0);
+        const ddx = A;
+        const ddy = B;
+        const a = dx * ddy - dy * ddx;
+        const c = dx * dx + dy * dy;
+        const b = c * c * get_bending_energy_sqrt(c);
+        return 0.5 * a * a / b;
+    };
+}
+
+
+;// CONCATENATED MODULE: ./src/angles-and-speeds/bezier-by-angles-and-speeds/cubic-from-angles-and-speeds.ts
+
+
+const { cos, sin } = Math;
+/**
+ * Returns a cubic bezier curve (given by its control points) with the given
+ * angles-and-speeds parameters.
+ *
+ * @param α initial tangent angle in radians
+ * @param β terminal tangent angle in radians
+ * @param s0 inital speed
+ * @param s1 terminal speed
+ * @param L distance between initial and final point (cannot be 0)
+ * @param rot rotation of entire curve
+ * @param p initial position offset
+ */
+function cubicFromAnglesAndSpeeds(anglesAndSpeeds) {
+    const { α, β, s0, s1, L, rot, p } = anglesAndSpeeds;
+    const x3 = L * (-2 + s0 * cos(α) + s1 * cos(β));
+    const x2 = L * (3 - 2 * s0 * cos(α) - s1 * cos(β));
+    const x1 = L * (s0 * cos(α));
+    const x0 = L * (0);
+    const y3 = L * (s0 * sin(α) + s1 * sin(β));
+    const y2 = L * (-2 * s0 * sin(α) - s1 * sin(β));
+    const y1 = L * (s0 * sin(α));
+    const y0 = L * (0);
+    return fromPowerBasis([[x3, x2, x1, x0], [y3, y2, y1, y0]])
+        .map(rotate(sin(rot), cos(rot)))
+        .map(translate(p));
+}
+
+
+;// CONCATENATED MODULE: ./src/angles-and-speeds/bezier-by-angles-and-speeds/cubic-to-angles-and-speeds.ts
+
+const { cos: cubic_to_angles_and_speeds_cos, sin: cubic_to_angles_and_speeds_sin, atan2: cubic_to_angles_and_speeds_atan2 } = Math;
+/**
+ * For the given bernstein cubic bezier curve basis return the angles-and-speeds
+ * basis coefficients, i.e.
+ * * α   -> initial tangent angle in degrees
+ * * β   -> terminal tangent angle in degrees
+ * * s0  -> inital speed
+ * * s1  -> terminal speed
+ * * L   -> distance between initial and final point (cannot be 0)
+ * * rot -> rotation of entire curve
+ * * p   -> initial position offset
+ *
+ * @param ps an order 3 (cubic) bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ */
+function cubicToAnglesAndSpeeds(ps) {
+    // [_x1,_y1],[_x2,_y2],[_x3,_y3]
+    const p = ps[0];
+    // move ps to origin
+    ps = ps.map(translate(reverse(p)));
+    const [x, y] = [ps[3][0], ps[3][1]];
+    const rot = cubic_to_angles_and_speeds_atan2(y, x);
+    ps = ps.map(rotate(cubic_to_angles_and_speeds_sin(-rot), cubic_to_angles_and_speeds_cos(-rot)));
+    const L = ps[3][0];
+    ps = ps.map(p => scale(p, 1 / L));
+    // TS -> tangent vector at `t === 0`
+    const TS = ps[1];
+    // TE -> tangent vector at `t === 1`
+    const TE = [1 - ps[2][0], -ps[2][1]];
+    // const h2 = sqrt(x1**2 + y1**2);
+    const α = cubic_to_angles_and_speeds_atan2(TS[1], TS[0]);
+    const β = cubic_to_angles_and_speeds_atan2(TE[1], TE[0]);
+    const s0 = 3 * len(TS);
+    const s1 = 3 * len(TE);
+    return { α, β, s0, s1, L, rot, p };
+}
+
+
+;// CONCATENATED MODULE: ./src/angles-and-speeds/bezier-by-angles-and-speeds/get-cubic-speeds.ts
+
+/**
+ * For the given bernstein basis cubic bezier curve return its initial and
+ * terminal speeds in the form `[s0,s1]`.
+ *
+ * @param ps an order 3 (cubic) bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ */
+function getCubicSpeeds(ps) {
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const p2 = ps[2];
+    const p3 = ps[3];
+    const v = [p3[0] - p0[0], p3[1] - p0[1]]; // vector from 1st to last point
+    const L = len(v);
+    const v01 = fromTo(p0, p1);
+    ;
+    const v32 = fromTo(p3, p2);
+    ;
+    const s0 = 3 * len(v01) / L;
+    const s1 = 3 * len(v32) / L;
+    return [s0, s1];
+}
+
+
+;// CONCATENATED MODULE: ./src/angles-and-speeds/bezier-by-angles-and-speeds/set-cubic-speeds.ts
+
+/**
+ * For the given bernstein basis cubic bezier curve return a new cubic bezier
+ * curve with its initial and terminal speeds modified.
+ *
+ * * only the 2nd and 3rd control points are modified
+ * * call the original curve `A` and the returned curve `B` then it will be
+ * true that `A[0] === B[0]` and `A[3] === B[3]`
+ *
+ * @param ps an order 3 (cubic) bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ */
+function setCubicSpeeds(ps, s0, s1) {
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const p2 = ps[2];
+    const p3 = ps[3];
+    const v = [p3[0] - p0[0], p3[1] - p0[1]]; // vector from 1st to last point
+    const L = len(v);
+    const v01 = fromTo(p0, p1);
+    const v32 = fromTo(p3, p2);
+    const v01_ = toLength(v01, s0 / 3 * L);
+    const p1_ = translate(p0, v01_);
+    const v32_ = toLength(v32, s1 / 3 * L);
+    const p2_ = translate(p3, v32_);
+    return [p0, p1_, p2_, p3]; // keep reference to first and last points
+}
+
+
+;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-distance-between-beziers/get-min-max-distance.ts
+const { min: get_min_max_distance_min, max: get_min_max_distance_max } = Math;
+/** @internal */
+function get_min_max_distance_getMaxDistance(i) {
+    return get_min_max_distance_max(i.dL + i.eL, i.dR + i.eR);
+}
+/** @internal */
+function getMinDistance(i) {
+    return get_min_max_distance_min(i.dL - i.eL, i.dR - i.eR);
+}
+
+
+;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-distance-between-beziers/distance-compare.ts
+
+/**
+ * @param a
+ * @param b
+ *
+ * @internal
+ */
+function distanceCompareMaxAsc(a, b) {
+    let diff = (getMaxDistance(a) - getMaxDistance(b));
+    if (diff !== 0) {
+        return diff;
+    }
+    return a.tS - b.tS;
+}
+/** @internal */
+function distanceCompareMinDesc(a, b) {
+    let diff = (getMinDistance(b) - getMinDistance(a));
+    if (diff !== 0) {
+        return diff;
+    }
+    return a.tS - b.tS;
+}
+
+
+;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-distance-between-beziers/closest-distance-between-beziers.ts
+
+
+
+
+
+
+
+
+
+/** @internal */
+const { min: closest_distance_between_beziers_min, max: closest_distance_between_beziers_max } = Math;
+// We need to calculate `dMin(A,B)`, the minimum distance between
+// bezier curves `A` and `B`.
+// Let: ωf(σ) = sup{ |f(t) − f(t′)| : t, t′ ∈ [a,b] with |t − t′| ≤ σ }
+// where: δS = max[ (1 ≤ i ≤ M+1)(ti − ti−1) ] is the maximum distance between 
+// two consecutive parameter values
+// Lemma 2.1: 
+//   h(A,S) ≤ ωf(δS/2) and
+//   h(B,T) ≤ ωg(δT/2)
+// Theorem 2.3: (both curves discretized)
+//   |h(S,T) − h(A,B)| ≤ max[ h(A,S), h(B,T) ] 
+//                     ≤ max[ ωf(δS/2), ωg(δT/2) ]
+// (only A discretized)
+// |h(S,B) − h(A,B)| ≤ ωf(δS/2)
+/**
+ * Calculates and returns an accurate approximation to the minimum distance
+ * between the two given bezier curves. (Actually returns the parameter values
+ * from which the distance can then easily be calculated.)
+ *
+ * * partially based off [Computing the Hausdorff distance between two sets of parametric curves](https://www.semanticscholar.org/paper/COMPUTING-THE-HAUSDORFF-DISTANCE-BETWEEN-TWO-SETS-Kim-McLean/d2bd6529c4b118e389e1db209d8f1bf7467f9016)
+ *
+ * @param A a bezier curve given by an ordered array of its
+ * control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param B a bezier curve given by an ordered array of its
+ * control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param tolerance optional; defaults to `Math.max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000`;
+ * if the calculated absolute error bound is less than this, the result is
+ * returned; this is *not* a hard tolerance and the bound can be less
+ * accurate in hard cases (due to the `maxIterations` parameter). Luckily
+ * however, specifically the upper bound will be very accurate due to
+ * its fast convergence in such hard cases (see the paper)
+ * @param maxIterations optional; defaults to `50`; if the desired guaranteed error bound
+ * has not been achieved after `maxIterations` then the result will be returned
+ *
+ * @doc mdx
+ */
+function closestPointsBetweenBeziers(A, B, tolerance, maxIterations = 50) {
+    if (A.length === 1) {
+        const cp = closestPointOnBezier(B, A[0]);
+        return [{ pA: { p: A[0], t: 0 }, pB: cp, d: cp.d }];
+    }
+    if (B.length === 1) {
+        const cp = closestPointOnBezier(A, B[0]);
+        return [{ pA: cp, pB: { p: B[0], t: 0 }, d: cp.d }];
+    }
+    if (A.length === 2 && B.length === 2) {
+        // Seperately handle the simple case of two lines
+        // Find minimum distance from endpoints of A to B:
+        const EA0 = closestPointOnBezier(B, A[0]);
+        const EA1 = closestPointOnBezier(B, A[1]);
+        // Find minimum distance from endpoints of B to A:
+        const EB0 = closestPointOnBezier(A, B[0]);
+        const EB1 = closestPointOnBezier(A, B[1]);
+        const cps = [EA0, EA1, EB0, EB1].sort((a, b) => a.d - b.d);
+        const d = cps[0].d;
+        const pwds = [];
+        if (EA0.d === d) {
+            pwds.push({ pA: { p: A[0], t: 0 }, pB: EA0, d });
+        }
+        if (EA1.d === d) {
+            pwds.push({ pA: { p: A[1], t: 1 }, pB: EA1, d });
+        }
+        if (EB0.d === d) {
+            pwds.push({ pA: EB0, pB: { p: B[0], t: 0 }, d });
+        }
+        if (EB1.d === d) {
+            pwds.push({ pA: EB1, pB: { p: B[1], t: 1 }, d });
+        }
+        return pwds;
+    }
+    const l = closest_distance_between_beziers_max(maxAbsCoordinate(A), maxAbsCoordinate(B));
+    tolerance = tolerance || l / 1000000;
+    // an array of intervals
+    const [eL, eR] = closest_distance_between_beziers_calcHErrorBound(A, 0, 1);
+    const dL = closestPointOnBezier(B, A[0]).d;
+    const dR = closestPointOnBezier(B, A[A.length - 1]).d;
+    const initialInterval = {
+        tS: 0, tE: 1, dL, dR, eL, eR, pL: A[0], pR: A[A.length - 1]
+    };
+    // const heap = new Heap(distanceCompareMaxAsc);
+    const heap = new Heap(distanceCompareMinDesc);
+    heap.insert(initialInterval);
+    let j = 0;
+    let bestUpperD = Number.POSITIVE_INFINITY;
+    let bestLowerD = Number.NEGATIVE_INFINITY;
+    let bestUpper;
+    while (true) {
+        // const interval = heap.heap[0];  // peek max
+        const interval = heap.heap[0]; // peek min
+        const { tS, tE, dL, dR, pL, pR } = interval;
+        const tM = (tS + tE) / 2;
+        const [eLL, eLR] = closest_distance_between_beziers_calcHErrorBound(A, tS, tM);
+        const [eRL, eRR] = closest_distance_between_beziers_calcHErrorBound(A, tM, tE);
+        //---- get dM ---------------------------
+        const pM = evalDeCasteljau(A, tM);
+        const pB = closestPointOnBezier(B, pM);
+        const dM = distanceBetween(pM, pB.p);
+        //---------------------------------------
+        // const h = max(dL, dM, dR);
+        const d = closest_distance_between_beziers_min(dL, dM, dR);
+        if (d < bestUpperD) {
+            bestUpperD = d;
+            if (dL <= dM && dL <= dR) {
+                bestUpper = { pA: { p: pL, t: tS }, pB, d };
+            }
+            else if (dM <= dL && dM <= dR) {
+                bestUpper = { pA: { p: pM, t: tM }, pB, d };
+            }
+            else if (dR <= dL && dR <= dM) {
+                bestUpper = { pA: { p: pR, t: tE }, pB, d };
+            }
+        }
+        // bestHUpper = getMaxDistance(interval);
+        bestLowerD = getMinDistance(interval);
+        if (bestUpperD - bestLowerD < tolerance) {
+            // The upper bound is by far the best approximation for difficult cases (see the paper).
+            return [bestUpper];
+        }
+        if (j++ > maxIterations) {
+            // The upper bound is by far the best approximation for difficult cases (see the paper).
+            return [bestUpper];
+        }
+        const iL = { tS: tS, tE: tM, dL: dL, dR: dM, eL: eLL, eR: eLR, pL: pL, pR: pM };
+        const iR = { tS: tM, tE: tE, dL: dM, dR: dR, eL: eRL, eR: eRR, pL: pM, pR: pR };
+        heap.swapMinOrMax(iL);
+        heap.insert(iR);
+    }
+}
+// Let: ωf(σ) = sup{ |f(t) − f(t′)| : t, t′ ∈ [a,b] with |t − t′| ≤ σ }
+//
+// |h(S,B) − h(A,B)| ≤ ωf(δS/2)
+// where: δS = max_(1≤i≤M+1)[ (ti − ti−1) ] is the maximum distance between 
+// two consecutive parameter values
+/**
+ * @internal
+ */
+function closest_distance_between_beziers_calcHErrorBound(A, tS, tE) {
+    // To calculate an upper bound for ωf(δS/2) we can either check the max 
+    // absolute tangent values on curve segments or use the control point 
+    // lengths as an upper bound.
+    const tM = (tE + tS) / 2; // since the formula says `δS/2` so divide by 2
+    const psL = from_to_fromTo(A, tS, tM);
+    const psR = from_to_fromTo(A, tM, tE);
+    const eL = controlPointLinesLength(psL);
+    const eR = controlPointLinesLength(psR);
+    return [eL, eR];
+}
+
+
 ;// CONCATENATED MODULE: ./src/index.ts
+
+
+
+
+
+
+
 
 
 

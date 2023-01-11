@@ -12,19 +12,30 @@ import { fromTo } from "./from-to.js";
  * @doc mdx
  */
 function splitByLength(ps, maxLength) {
-    const ts = [0, 1]; // include endpoints
-    const tStack = [[0, 1]];
-    while (tStack.length) {
-        const ts_ = tStack.pop();
+    let head = { r: [0, 1] };
+    let n = head;
+    while (n !== undefined) {
+        const ts_ = n.r;
         const ps_ = fromTo(ps, ts_[0], ts_[1]);
-        if (controlPointLinesLength(ps_) > maxLength) {
-            const t = (ts_[0] + ts_[1]) / 2;
-            tStack.push([ts_[0], t]);
-            tStack.push([t, ts_[1]]);
-            ts.push(t);
+        if (controlPointLinesLength(ps_) <= maxLength) {
+            n = n.next;
+            continue;
         }
+        const t = (ts_[0] + ts_[1]) / 2;
+        const L = [ts_[0], t];
+        const R = [t, ts_[1]];
+        n.r = L;
+        n.next = { r: R, next: n.next };
     }
-    ts.sort((a, b) => a - b);
+    n = head;
+    const ts = [];
+    while (n !== undefined) {
+        ts.push(n.r[0]);
+        if (n.next === undefined) {
+            ts.push(n.r[1]);
+        }
+        n = n.next;
+    }
     return ts;
 }
 export { splitByLength };

@@ -10,7 +10,8 @@ import { translate } from "flo-vector2d";
 function generateQuarterCircle(scale, translation) {
     // `c` can be made slightly more accurate by calculating a more accurate
     // value of 
-    const c = 0.551915024494;
+    // const c = 0.551915024494;
+    const c = 0.5519150244935105707435627;
     const s = scale;
     return [[0, s], [s * c, s], [s, s * c], [s, 0]].map(translate(translation));
 }

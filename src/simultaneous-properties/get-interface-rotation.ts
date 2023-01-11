@@ -1,7 +1,6 @@
 import { twoProduct } from "double-double";
 import { ddAddDd as ddAddDd_ } from "double-double";
 import { ddDiffDd as ddDiffDd_ } from "double-double";
-import { toUnitVector } from "flo-vector2d";
 
 const tp = twoProduct;
 const ddAddDd = ddAddDd_;

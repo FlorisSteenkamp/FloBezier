@@ -6,7 +6,7 @@ import { furthestPointOnBezier } from '../closest-and-furthest-point-on-bezier/f
 import { maxAbsCoordinate } from '../../error-analysis/max-abs-coordinate.js';
 import { getMaxHausdorff } from './get-max-hausdorff.js';
 import { hausdorffCompare } from './hausdorff-compare.js';
-import { Heap } from './heap.js';
+import { Heap } from '../heap.js';
 import { fromTo } from '../../transformation/split/from-to.js';
 /** @internal */
 const max = Math.max;
@@ -101,7 +101,7 @@ function hausdorffDistanceOneSided(A, B, tolerance, maxIterations = 50) {
         }
         const iL = { tS, tE: tM, hL, hR: hM, hEL: ELL, hER: ELR };
         const iR = { tS: tM, tE, hL: hM, hR, hEL: ERL, hER: ERR };
-        heap.swapMax(iL);
+        heap.swapMinOrMax(iL);
         heap.insert(iR);
     }
 }

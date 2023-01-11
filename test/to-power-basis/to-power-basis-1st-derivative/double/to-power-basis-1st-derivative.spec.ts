@@ -1,5 +1,5 @@
 import { expect, assert, use } from 'chai';
-import { describe } from 'mocha';
+import { describe, it } from 'mocha';
 import { nearly } from '../../../helpers/chai-extend-nearly.js';
 import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../../../helpers/get-random-bezier.js';
 import { toPowerBasis_1stDerivative } from '../../../../src/index.js';

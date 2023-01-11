@@ -10,7 +10,7 @@ declare class Heap<T> {
     insert(t: T): void;
     popMax(): T;
     private swimDown;
-    swapMax(t: T): void;
+    swapMinOrMax(t: T): void;
     static getParentIdx(i: number): number;
     static getLeftChild(i: number): number;
     static getRightChild(i: number): number;

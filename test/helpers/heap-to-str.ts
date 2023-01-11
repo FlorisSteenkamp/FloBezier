@@ -1,4 +1,4 @@
-import { Heap } from "../../src/simultaneous-properties/hausdorff-distance/heap.js";
+import { Heap } from "../../src/simultaneous-properties/heap.js";
 
 
 function heapToStr<T>(nodeToStrFunc: (node: T) => string) {

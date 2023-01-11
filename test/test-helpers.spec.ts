@@ -4,7 +4,7 @@ import { nearly } from './helpers/chai-extend-nearly.js';
 import { closeTo } from './helpers/close-to.js';
 import { HH } from './helpers/hausdorff-distance-naive.js';
 import { heapToStr } from './helpers/heap-to-str.js';
-import { Heap } from '../src/simultaneous-properties/hausdorff-distance/heap.js';
+import { Heap } from '../src/simultaneous-properties/heap.js';
 import { squares } from 'squares-rng';
 import { toGrid } from './helpers/to-grid.js';
 import { allTrue, subtractShewchuk } from './helpers/map.js';
