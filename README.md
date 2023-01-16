@@ -57,7 +57,7 @@ For in-depth interactive documentation please [read the docs!](https://florisste
 ## Installation
 
 ```cli
-npm install flo-bezier
+npm install flo-bezier3
 ```
 
 This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
@@ -79,7 +79,7 @@ list of available functions.
 
 ### Node.js
 ```js
-import { fitQuadsToCubic } from 'flo-bezier';
+import { fitQuadsToCubic } from 'flo-bezier3';
 
 // some cubic bezier curve given by an array of its control points
 const cubic = [[1, 1], [5.125, 8], [15.375, 0.875], [13.6875, 7.71875]];
@@ -100,7 +100,7 @@ if (quads.length === 4) {
 <html lang="en">
 <head>
     <script type="module">
-        import { fitQuadsToCubic } from "./node_modules/flo-bezier/browser/index.module.min.js";
+        import { fitQuadsToCubic } from "./node_modules/flo-bezier3/browser/index.module.min.js";
 
         // some cubic bezier curve given by an array of its control points
         const cubic = [[1, 1], [5.125, 8], [15.375, 0.875], [13.6875, 7.71875]];
@@ -126,7 +126,7 @@ if (quads.length === 4) {
 
 <html lang="en">
 <head>
-    <script src="./node_modules/flo-bezier/browser/index.min.js"></script>
+    <script src="./node_modules/flo-bezier3/browser/index.min.js"></script>
     <script>
         const { fitQuadsToCubic } = FloBezier;
         
