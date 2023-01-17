@@ -12,7 +12,7 @@ function distanceCompareMaxAsc(
         a: DistanceInterval,
         b: DistanceInterval) {
 
-    let diff = (getMaxDistance(a) - getMaxDistance(b));
+    const diff = (getMaxDistance(a) - getMaxDistance(b));
     if (diff !== 0) {
         return diff;
     }
@@ -26,7 +26,7 @@ function distanceCompareMinDesc(
         a: DistanceInterval,
         b: DistanceInterval) {
 
-    let diff = (getMinDistance(b) - getMinDistance(a));
+    const diff = (getMinDistance(b) - getMinDistance(a));
     if (diff !== 0) {
         return diff;
     }

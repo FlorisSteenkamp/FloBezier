@@ -9,8 +9,8 @@ import { toPowerBasis_1stDerivative } from '../to-power-basis/to-power-basis-1st
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  */
 function area(ps) {
-    let [x, y] = toPowerBasis(ps);
-    let [dx, dy] = toPowerBasis_1stDerivative(ps);
+    const [x, y] = toPowerBasis(ps);
+    const [dx, dy] = toPowerBasis_1stDerivative(ps);
     const poly = integrate(subtract(multiply(x, dy), multiply(y, dx)), 0);
     // the below is exactly te same as: Horner(poly,1) - Horner(poly,0)
     let total = 0;

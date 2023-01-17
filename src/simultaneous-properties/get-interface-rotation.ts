@@ -33,8 +33,8 @@ const { atan2 } = Math;
 	const w1 = b[0];
 	const w2 = b[1];
 
-	let A = ddDiffDd(tp(w2,v1), tp(w1,v2))[1];
-	let B = ddAddDd(tp(w1,v1), tp(w2,v2))[1];
+	const A = ddDiffDd(tp(w2,v1), tp(w1,v2))[1];
+	const B = ddAddDd(tp(w1,v1), tp(w2,v2))[1];
 
 	return atan2(A,B);
 }

@@ -79,19 +79,19 @@ function bezierBezierIntersection(
 
     if (ris1.length === 0) { return []; }
 
-    let is1 = ris1.map(ri => getIntervalBox(ps1, [ri.tS, ri.tE]));
-    let is2 = ris2.map(ri => getIntervalBox(ps2, [ri.tS, ri.tE]));
+    const is1 = ris1.map(ri => getIntervalBox(ps1, [ri.tS, ri.tE]));
+    const is2 = ris2.map(ri => getIntervalBox(ps2, [ri.tS, ri.tE]));
 
-    let xs: X[] = [];
+    const xs: X[] = [];
     for (let i=0; i<ris1.length; i++) {
-        let box1 = is1[i];
+        const box1 = is1[i];
         for (let j=0; j<ris2.length; j++) {
-            let box2 = is2[j];
-            let box = intersectBoxes(box1,box2);
+            const box2 = is2[j];
+            const box = intersectBoxes(box1,box2);
             if (box !== undefined) {
                 const ri1 = ris1[i];
                 const ri2 = ris2[j];
-                let x: X = { 
+                const x: X = { 
                     p: getPFromBox(box), kind: 1, box,
                     t1: mid(ri1), ri1: ri1, 
                     t2: mid(ri2), ri2: ri2
@@ -177,8 +177,8 @@ function getCoincidingSelfIntersections(
     const xs: X[] = [];
 
     // this is a *very* rare case
-    for (let t1 of ts1) {
-        for (let t2 of ts2) {
+    for (const t1 of ts1) {
+        for (const t2 of ts2) {
             const ri1 = { tS: t1-eps2, tE: t1+eps2, multiplicity: 1 };
             const ri2 = { tS: t2-eps2, tE: t2+eps2, multiplicity: 1 };
             const box = getIntervalBox(ps1, [t1-eps2, t1+eps2]);

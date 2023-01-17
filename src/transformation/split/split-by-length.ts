@@ -18,7 +18,7 @@ function splitByLength(
         ps: number[][], 
         maxLength: number) {
 
-    let head: LlNode<number[]> = { r: [0,1] };
+    const head: LlNode<number[]> = { r: [0,1] };
     let n = head;
     while (n !== undefined) {
         const ts_ = n.r;

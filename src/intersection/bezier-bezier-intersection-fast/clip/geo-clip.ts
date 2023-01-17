@@ -1,7 +1,7 @@
 import type { __Debug__ } from '../debug.js';
 import { toHybridQuadratic as _toHybridQuadratic } from './to-hybrid-quadratic.js';
 
-declare var globalThis: typeof global & { __debug__: __Debug__ };
+declare const globalThis: typeof global & { __debug__: __Debug__ };
 
 
 const toHybridQuadratic = _toHybridQuadratic;
@@ -15,7 +15,7 @@ const onemin = 1 - eps;
 const onemax = 1 + eps;
 
 
-const noIntersection: undefined = undefined;
+const noIntersection = undefined;
 const noClip: number[] = [0,1];
 
 

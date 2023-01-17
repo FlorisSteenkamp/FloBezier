@@ -63,12 +63,8 @@ npm install flo-bezier3
 This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
 It can be used in `Node.js` or in a browser.
 
-Additionally, self-contained `ECMAScript Module` (ESM) files `index.module.js` and
-`index.module.min.js` in the `./browser` folder is provided.
-
-Or, if you need a legacy browser script there is also `index.js`
-and `index.min.js` in the `./browser` folder. Either script exposes a global 
-variable called `FloBezier`.
+Additionally, self-contained `ECMAScript Module` (ESM) files `index.js` and
+`index.min.js` in the `./browser` folder are provided.
 
 ## Usage
 
@@ -92,7 +88,9 @@ if (quads.length === 4) {
 }
 ```
 
-### Browsers - ESM - (Chrome 61+, Safari 11+, Firefox 60+, Opera 48+, Edge 16+, ~~Internet Explorer~~)
+### Browsers - directly, without a bundler, using the pre-bundled minified .js file
+
+Please note that no tree shaking will take place in this case.
 
 ```html
 <!doctype html>
@@ -100,41 +98,13 @@ if (quads.length === 4) {
 <html lang="en">
 <head>
     <script type="module">
-        import { fitQuadsToCubic } from "./node_modules/flo-bezier3/browser/index.module.min.js";
+        import { fitQuadsToCubic } from "./node_modules/flo-bezier3/browser/index.min.js";
 
         // some cubic bezier curve given by an array of its control points
         const cubic = [[1, 1], [5.125, 8], [15.375, 0.875], [13.6875, 7.71875]];
         const quads = fitQuadsToCubic(cubic, 0.1); //=> [[[1, 1], [2.617431640625, 3.5152587890625], ...
 
         if (quads.length === 4) {
-            console.log('success! 😁');  // we should get to here!
-        } else {
-            console.log('failure! 😥');  // ...and not here
-        }
-    </script>
-</head>
-
-<body>Check the console.</body>
-
-</html>
-```
-
-### Browsers (older) - Legacy Scripts
-
-```html
-<!doctype html>
-
-<html lang="en">
-<head>
-    <script src="./node_modules/flo-bezier3/browser/index.min.js"></script>
-    <script>
-        const { fitQuadsToCubic } = FloBezier;
-        
-        // some cubic bezier curve given by an array of its control points
-        const cubic = [[1, 1], [5.125, 8], [15.375, 0.875], [13.6875, 7.71875]];
-        const quads = fitQuadsToCubic(cubic, 0.1); //=> [[[1, 1], [2.617431640625, 3.5152587890625], ...
-
-        if (roots.length === 4) {
             console.log('success! 😁');  // we should get to here!
         } else {
             console.log('failure! 😥');  // ...and not here
@@ -173,7 +143,7 @@ Additionally, follow this [guide](https://gist.github.com/sindresorhus/a39789f98
 
 The MIT License (MIT)
 
-Copyright © 2022 Floris Steenkamp
+Copyright © 2023 Floris Steenkamp
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

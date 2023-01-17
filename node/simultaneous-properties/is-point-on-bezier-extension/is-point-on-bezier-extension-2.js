@@ -141,7 +141,7 @@ function isPointOnBezierExtension2(ps, p) {
     }
     // error still too high - let's go exact
     {
-        let implictForm = getImplicitForm2Exact(ps);
+        const implictForm = getImplicitForm2Exact(ps);
         if (implictForm === undefined) {
             // all ps are the same point
             return isDouble && x === ps[0][0] && y === ps[0][1];

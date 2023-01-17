@@ -143,12 +143,12 @@ function tFromXY3(
 
     // at this point `xrs !== undefined` and `yrs !== undefined`
 
-    let ris: RootInterval[] = [];
+    const ris: RootInterval[] = [];
     for (let i=0; i<xrs.length; i++) {
-        let xr = xrs[i];
+        const xr = xrs[i];
         for (let j=0; j<yrs.length; j++) {
-            let yr = yrs[j];
-            let r = combineRoots(xr,yr);
+            const yr = yrs[j];
+            const r = combineRoots(xr,yr);
             
             if (r !== undefined) {
                 ris.push(r);
@@ -239,12 +239,12 @@ function tFromXY2(
 
     // at this point `xrs !== undefined` and `yrs !== undefined`
 
-    let ris: RootInterval[] = [];
+    const ris: RootInterval[] = [];
     for (let i=0; i<xrs.length; i++) {
-        let xr = xrs[i];
+        const xr = xrs[i];
         for (let j=0; j<yrs.length; j++) {
-            let yr = yrs[j];
-            let r = combineRoots(xr,yr);
+            const yr = yrs[j];
+            const r = combineRoots(xr,yr);
             
             if (r !== undefined) {
                 ris.push(r);

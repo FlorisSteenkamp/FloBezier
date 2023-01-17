@@ -16,8 +16,8 @@ function calcExactCubeRoot(a) {
     const gcd = bGcdInt(NN, DD);
     // the *exact* positive root `c` is given as the rational number `N/D` 
     // where `N` and `D` are [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) expansions
-    let N = bigintToExpansion(bCbrt(NN / gcd));
-    let D = bigintToExpansion(bCbrt(DD / gcd));
+    const N = bigintToExpansion(bCbrt(NN / gcd));
+    const D = bigintToExpansion(bCbrt(DD / gcd));
     return [N, D];
 }
 export { calcExactCubeRoot };

@@ -187,7 +187,7 @@ const γγ3 = γγ(3);
 
     // error still too high - let's go exact
     {
-        let implictForm = getImplicitForm2Exact(ps);
+        const implictForm = getImplicitForm2Exact(ps);
 
         if (implictForm === undefined) {
             // all ps are the same point

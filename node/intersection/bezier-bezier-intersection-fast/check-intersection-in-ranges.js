@@ -72,29 +72,29 @@ function checkIntersectionInRanges(iter) {
     }
     const lenF = Fps.length;
     // Q will be fat line bounded. Get start and endpoint of curve
-    let FS = Fps[0];
-    let FE = Fps[lenF - 1];
+    const FS = Fps[0];
+    const FE = Fps[lenF - 1];
     // Note: The case where `FS` and `FE` are the same point will result in
     // `geoClip` not clipping and returning 'no intersection' so we don't
     // explicitly test for it here.
     // Get the implict line equation for the line defined by the first and 
     // last control point of Q. This equation gives the distance between any 
     // point and the line (but scaled for efficiency *and* robustness).
-    let dF = getDistanceToLineFunction(FS, FE);
+    const dF = getDistanceToLineFunction(FS, FE);
     // Signed distances to cubic mid control points *plus* the first and last
     // control points since there is an error bound involved that need to
     // be included to ensure robustness
-    let dF0 = dF(Fps[0], F_ps[0]);
-    let dF1 = dF(Fps[1], F_ps[1]);
-    let dF2 = dF(Fps[2], F_ps[2]);
-    let dF3 = lenF === 4 ? dF(Fps[3], F_ps[3]) : { dMin: 0, dMax: 0 };
+    const dF0 = dF(Fps[0], F_ps[0]);
+    const dF1 = dF(Fps[1], F_ps[1]);
+    const dF2 = dF(Fps[2], F_ps[2]);
+    const dF3 = lenF === 4 ? dF(Fps[3], F_ps[3]) : { dMin: 0, dMax: 0 };
     // Calculate the fat line of F.
     // Calculate the distance from the control points of F to the line.
     //let C = len === 4 ? (dF1*dF2 > 0) ? 3/4 : 4/9 : 1/2;
     // The above calculation of C has been replaced by the one below so we can
     // ensure robustness (`dF1` and `dF2` are not simply numbers but also have
     // an error bound associated with them)
-    let C = lenF === 4 ? 3 / 4 : 1 / 2;
+    const C = lenF === 4 ? 3 / 4 : 1 / 2;
     const dMin = C * Math.min(0, dF0.dMin, dF1.dMin, dF2.dMin, dF3.dMin);
     const dMax = C * Math.max(0, dF0.dMax, dF1.dMax, dF2.dMax, dF3.dMax);
     // Add fatline debug info
@@ -114,7 +114,6 @@ function checkIntersectionInRanges(iter) {
         if (!clipPerp()) {
             return [];
         }
-        ;
     }
     if (!last && tMax - tMin > maxClipTSpan) {
         return split();
@@ -147,14 +146,14 @@ function checkIntersectionInRanges(iter) {
         const FEy = FE[1];
         // rotate [FS,FE] 90 degrees about FS
         const V = [FSx + FSy - FEy, FSy + FEx - FSx];
-        let dQ_ = getDistanceToLineFunction(FS, V);
+        const dQ_ = getDistanceToLineFunction(FS, V);
         // Signed distances to other 3 control points *plus* the first
         // control point since there is an error bound involved that need to
         // be included to ensure robustness
-        let dF0_ = dQ_(Fps[0], F_ps[0]);
-        let dF1_ = dQ_(Fps[1], F_ps[1]);
-        let dF2_ = dQ_(Fps[2], F_ps[2]);
-        let dF3_ = lenF === 4 ? dQ_(Fps[3], F_ps[3]) : { dMin: 0, dMax: 0 };
+        const dF0_ = dQ_(Fps[0], F_ps[0]);
+        const dF1_ = dQ_(Fps[1], F_ps[1]);
+        const dF2_ = dQ_(Fps[2], F_ps[2]);
+        const dF3_ = lenF === 4 ? dQ_(Fps[3], F_ps[3]) : { dMin: 0, dMax: 0 };
         const dMin_ = Math.min(0, dF0_.dMin, dF1_.dMin, dF2_.dMin, dF3_.dMin);
         const dMax_ = Math.max(0, dF0_.dMax, dF1_.dMax, dF2_.dMax, dF3_.dMax);
         // Add fatline debug info
@@ -206,22 +205,22 @@ function checkIntersectionInRanges(iter) {
     }
 }
 function getFatlineDebugInfo(FS, FE, dMin, dMax) {
-    let vF = fromToVect(FS, FE); // Move [FS, FE] to the origin
-    let vFr = [-vF[1], vF[0]]; // Rotate vector by -90 degrees
+    const vF = fromToVect(FS, FE); // Move [FS, FE] to the origin
+    const vFr = [-vF[1], vF[0]]; // Rotate vector by -90 degrees
     // get scale factor `d` to scale back to actual distances 
     // (not perfectly accurate due to rounding)
     const xS = FS[0];
     const yS = FS[1];
     const xE = FE[0];
     const yE = FE[1];
-    let s = yS - yE;
-    let t = xE - xS;
-    let u = xS * yE - xE * yS;
-    let d = Math.sqrt(s ** 2 + t ** 2);
-    let offsetMin = toLength(vFr, dMin / d);
-    let offsetMax = toLength(vFr, dMax / d);
-    let psMin = [translate(FS, offsetMin), translate(FE, offsetMin)];
-    let psMax = [translate(FS, offsetMax), translate(FE, offsetMax)];
+    const s = yS - yE;
+    const t = xE - xS;
+    const u = xS * yE - xE * yS;
+    const d = Math.sqrt(s ** 2 + t ** 2);
+    const offsetMin = toLength(vFr, dMin / d);
+    const offsetMax = toLength(vFr, dMax / d);
+    const psMin = [translate(FS, offsetMin), translate(FE, offsetMin)];
+    const psMax = [translate(FS, offsetMax), translate(FE, offsetMax)];
     return {
         psBase: [FS, FE],
         psMin, psMax

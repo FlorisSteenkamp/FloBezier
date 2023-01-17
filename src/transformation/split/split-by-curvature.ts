@@ -25,7 +25,7 @@ import { LlNode } from './linked-list/linked-list-node.js';
         maxCurviness = 0.4,
         minTSpan = 2**-16): number[] {
 
-    let head: LlNode<number[]> = { r: [0,1] };
+    const head: LlNode<number[]> = { r: [0,1] };
     let n = head;
     while (n !== undefined) {
         const ts_ = n.r;

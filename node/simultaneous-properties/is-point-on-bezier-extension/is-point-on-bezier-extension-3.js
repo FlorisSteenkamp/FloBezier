@@ -221,7 +221,7 @@ function isPointOnBezierExtension3(ps, p) {
             implictForm.vₓᵧ = [0];
             implictForm.vᵧᵧ = [0];
         }
-        let { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = implictForm;
+        const { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = implictForm;
         // `h` (say height) is the the result of evaluating the implicit 
         // equation; if it is 0 we are on the curve, else we're not.
         // const h =

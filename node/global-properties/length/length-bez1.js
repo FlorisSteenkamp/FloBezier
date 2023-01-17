@@ -11,10 +11,10 @@ import { distanceBetween } from "flo-vector2d";
  * @internal
  */
 function lengthBez1(interval, ps) {
-    let [t1, t2] = interval;
-    let [[x0, y0], [x1, y1]] = ps;
-    let p1 = [x0 + t1 * (x1 - x0), y0 + t1 * (y1 - y0)];
-    let p2 = [x0 + t2 * (x1 - x0), y0 + t2 * (y1 - y0)];
+    const [t1, t2] = interval;
+    const [[x0, y0], [x1, y1]] = ps;
+    const p1 = [x0 + t1 * (x1 - x0), y0 + t1 * (y1 - y0)];
+    const p2 = [x0 + t2 * (x1 - x0), y0 + t2 * (y1 - y0)];
     return distanceBetween(p1, p2);
 }
 export { lengthBez1 };

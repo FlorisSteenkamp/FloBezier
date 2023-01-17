@@ -12,7 +12,7 @@ import { fromTo } from "./from-to.js";
  * @doc mdx
  */
 function splitByLength(ps, maxLength) {
-    let head = { r: [0, 1] };
+    const head = { r: [0, 1] };
     let n = head;
     while (n !== undefined) {
         const ts_ = n.r;

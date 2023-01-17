@@ -107,12 +107,12 @@ function tFromXY3(ps, p) {
     // self-intersection), 3 overlaps (for self-overlapping curve (that looks 
     // like a line))
     // at this point `xrs !== undefined` and `yrs !== undefined`
-    let ris = [];
+    const ris = [];
     for (let i = 0; i < xrs.length; i++) {
-        let xr = xrs[i];
+        const xr = xrs[i];
         for (let j = 0; j < yrs.length; j++) {
-            let yr = yrs[j];
-            let r = combineRoots(xr, yr);
+            const yr = yrs[j];
+            const r = combineRoots(xr, yr);
             if (r !== undefined) {
                 ris.push(r);
             }
@@ -179,12 +179,12 @@ function tFromXY2(ps, p) {
     // - there can be 0 or 1 overlap (the usual case), 2 overlaps (for 
     // self-overlapping curve (that looks like a line))
     // at this point `xrs !== undefined` and `yrs !== undefined`
-    let ris = [];
+    const ris = [];
     for (let i = 0; i < xrs.length; i++) {
-        let xr = xrs[i];
+        const xr = xrs[i];
         for (let j = 0; j < yrs.length; j++) {
-            let yr = yrs[j];
-            let r = combineRoots(xr, yr);
+            const yr = yrs[j];
+            const r = combineRoots(xr, yr);
             if (r !== undefined) {
                 ris.push(r);
             }

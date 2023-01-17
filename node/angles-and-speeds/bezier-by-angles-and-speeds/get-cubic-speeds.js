@@ -14,9 +14,7 @@ function getCubicSpeeds(ps) {
     const v = [p3[0] - p0[0], p3[1] - p0[1]]; // vector from 1st to last point
     const L = len(v);
     const v01 = fromToVec(p0, p1);
-    ;
     const v32 = fromToVec(p3, p2);
-    ;
     const s0 = 3 * len(v01) / L;
     const s1 = 3 * len(v32) / L;
     return [s0, s1];

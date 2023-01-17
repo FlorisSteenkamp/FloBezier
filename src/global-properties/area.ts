@@ -13,8 +13,8 @@ import { toPowerBasis_1stDerivative } from '../to-power-basis/to-power-basis-1st
 function area(
         ps: number[][]) {
 
-    let [x,y] = toPowerBasis(ps);
-    let [dx,dy] = toPowerBasis_1stDerivative(ps);
+    const [x,y] = toPowerBasis(ps);
+    const [dx,dy] = toPowerBasis_1stDerivative(ps);
 
     const poly = integrate(
         subtract(

@@ -298,7 +298,7 @@ function classifyGeneralCubic(ps: number[][]): GeneralCubic {
     }
 
     // we need to check exactly - (a !== 0) at this point - tested for earlier
-    let [A,B,C] = getCoeffsBez3Exact(ps);
+    const [A,B,C] = getCoeffsBez3Exact(ps);
 
     // exact - Discr = b^2 - 4ac
     const eDiscr = edif(epr(B,B), sce(4,epr(A,C)));

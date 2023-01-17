@@ -6,7 +6,7 @@ import { getMaxHausdorff } from "./get-max-hausdorff.js";
  * @internal
  */
 function hausdorffCompare(a, b) {
-    let diff = (getMaxHausdorff(a) - getMaxHausdorff(b));
+    const diff = (getMaxHausdorff(a) - getMaxHausdorff(b));
     if (diff !== 0) {
         return diff;
     }

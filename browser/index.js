@@ -1,567 +1,212 @@
-var FloBezier;
-/******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
-/******/ 	// The require scope
-/******/ 	var __webpack_require__ = {};
-/******/ 	
+/******/ // The require scope
+/******/ var __webpack_require__ = {};
+/******/ 
 /************************************************************************/
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
+/******/ /* webpack/runtime/define property getters */
+/******/ (() => {
+/******/ 	// define getter functions for harmony exports
+/******/ 	__webpack_require__.d = (exports, definition) => {
+/******/ 		for(var key in definition) {
+/******/ 			if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 				Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
+/******/ 		}
+/******/ 	};
+/******/ })();
+/******/ 
+/******/ /* webpack/runtime/hasOwnProperty shorthand */
+/******/ (() => {
+/******/ 	__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ })();
+/******/ 
 /************************************************************************/
 var __webpack_exports__ = {};
-// ESM COMPAT FLAG
-__webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "areBoxesIntersecting": () => (/* reexport */ areBoxesIntersecting),
-  "area": () => (/* reexport */ area_area),
-  "bezierBezierIntersection": () => (/* reexport */ bezierBezierIntersection),
-  "bezierBezierIntersectionBoundless": () => (/* reexport */ bezierBezierIntersectionBoundless),
-  "bezierBezierIntersectionFast": () => (/* reexport */ bezierBezierIntersectionFast),
-  "bezierSelfIntersection": () => (/* reexport */ bezierSelfIntersection),
-  "circleBezierIntersection": () => (/* reexport */ circleBezierIntersection),
-  "classification": () => (/* reexport */ classification),
-  "classifications": () => (/* reexport */ classifications),
-  "classify": () => (/* reexport */ classify),
-  "clone": () => (/* reexport */ clone),
-  "closestPointOnBezier": () => (/* reexport */ closestPointOnBezier),
-  "closestPointOnBezierCertified": () => (/* reexport */ closestPointOnBezierCertified),
-  "closestPointsBetweenBeziers": () => (/* reexport */ closestPointsBetweenBeziers),
-  "controlPointLinesLength": () => (/* reexport */ controlPointLinesLength),
-  "cubicFromAnglesAndSpeeds": () => (/* reexport */ cubicFromAnglesAndSpeeds),
-  "cubicThroughPointGiven013": () => (/* reexport */ cubicThroughPointGiven013),
-  "cubicToAnglesAndSpeeds": () => (/* reexport */ cubicToAnglesAndSpeeds),
-  "cubicToHybridQuadratic": () => (/* reexport */ cubicToHybridQuadratic),
-  "cubicToQuadratic": () => (/* reexport */ cubicToQuadratic),
-  "curvature": () => (/* reexport */ curvature),
-  "curviness": () => (/* reexport */ curviness),
-  "equal": () => (/* reexport */ equal_equal),
-  "evalDeCasteljau": () => (/* reexport */ evalDeCasteljau),
-  "evalDeCasteljauDd": () => (/* reexport */ evalDeCasteljauDd),
-  "evalDeCasteljauError": () => (/* reexport */ evalDeCasteljauError),
-  "evalDeCasteljauWithErr": () => (/* reexport */ evalDeCasteljauWithErr),
-  "evalDeCasteljauWithErrDd": () => (/* reexport */ evalDeCasteljauWithErrDd),
-  "evaluate": () => (/* reexport */ evaluate),
-  "evaluate2ndDerivative": () => (/* reexport */ evaluate2ndDerivative),
-  "evaluate2ndDerivativeAt0": () => (/* reexport */ evaluate2ndDerivativeAt0),
-  "evaluate2ndDerivativeAt0Exact": () => (/* reexport */ evaluate2ndDerivativeAt0Exact),
-  "evaluate2ndDerivativeAt1": () => (/* reexport */ evaluate2ndDerivativeAt1),
-  "evaluate2ndDerivativeAt1Exact": () => (/* reexport */ evaluate2ndDerivativeAt1Exact),
-  "evaluate2ndDerivativeExact": () => (/* reexport */ evaluate2ndDerivativeExact),
-  "evaluateExact": () => (/* reexport */ evaluateExact),
-  "evaluateImplicit1": () => (/* reexport */ evaluateImplicit1),
-  "evaluateImplicit2": () => (/* reexport */ evaluateImplicit2),
-  "evaluateImplicit3": () => (/* reexport */ evaluateImplicit3),
-  "fitQuadsToCubic": () => (/* reexport */ fitQuadsToCubic),
-  "fromPowerBasis": () => (/* reexport */ fromPowerBasis),
-  "fromTo": () => (/* reexport */ from_to_fromTo),
-  "fromToInclErrorBound": () => (/* reexport */ fromToInclErrorBound),
-  "furthestPointOnBezier": () => (/* reexport */ furthestPointOnBezier),
-  "generateCuspAtHalf3": () => (/* reexport */ generateCuspAtHalf3),
-  "generateQuarterCircle": () => (/* reexport */ generateQuarterCircle),
-  "generateSelfIntersecting": () => (/* reexport */ generateSelfIntersecting),
-  "getAbsAreaBetween": () => (/* reexport */ getAbsAreaBetween),
-  "getBendingEnergy": () => (/* reexport */ getBendingEnergy),
-  "getBoundingBox": () => (/* reexport */ getBoundingBox),
-  "getBoundingBoxTight": () => (/* reexport */ getBoundingBoxTight),
-  "getBoundingHull": () => (/* reexport */ getBoundingHull),
-  "getBounds": () => (/* reexport */ getBounds),
-  "getCoeffsBezBez": () => (/* reexport */ getCoeffsBezBez),
-  "getControlPointBox": () => (/* reexport */ getControlPointBox),
-  "getCubicSpeeds": () => (/* reexport */ getCubicSpeeds),
-  "getCurvatureExtrema": () => (/* reexport */ getCurvatureExtrema),
-  "getEndpointIntersections": () => (/* reexport */ getEndpointIntersections),
-  "getFootpointPoly": () => (/* reexport */ getFootpointPoly),
-  "getFootpointPolyDd": () => (/* reexport */ getFootpointPolyDd),
-  "getFootpointPolyExact": () => (/* reexport */ getFootpointPolyExact),
-  "getHodograph": () => (/* reexport */ getHodograph),
-  "getImplicitForm1": () => (/* reexport */ getImplicitForm1),
-  "getImplicitForm1Dd": () => (/* reexport */ getImplicitForm1Dd),
-  "getImplicitForm1DdWithRunningError": () => (/* reexport */ getImplicitForm1DdWithRunningError),
-  "getImplicitForm1ErrorCounters": () => (/* reexport */ getImplicitForm1ErrorCounters),
-  "getImplicitForm1Exact": () => (/* reexport */ getImplicitForm1Exact),
-  "getImplicitForm2": () => (/* reexport */ getImplicitForm2),
-  "getImplicitForm2Dd": () => (/* reexport */ getImplicitForm2Dd),
-  "getImplicitForm2DdWithRunningError": () => (/* reexport */ getImplicitForm2DdWithRunningError),
-  "getImplicitForm2ErrorCounters": () => (/* reexport */ getImplicitForm2ErrorCounters),
-  "getImplicitForm2Exact": () => (/* reexport */ getImplicitForm2Exact),
-  "getImplicitForm3": () => (/* reexport */ getImplicitForm3),
-  "getImplicitForm3Dd": () => (/* reexport */ getImplicitForm3Dd),
-  "getImplicitForm3DdWithRunningError": () => (/* reexport */ getImplicitForm3DdWithRunningError),
-  "getImplicitForm3ErrorCounters": () => (/* reexport */ getImplicitForm3ErrorCounters),
-  "getImplicitForm3Exact": () => (/* reexport */ getImplicitForm3Exact),
-  "getInflections": () => (/* reexport */ getInflections),
-  "getInterfaceRotation": () => (/* reexport */ getInterfaceRotation),
-  "getIntervalBox": () => (/* reexport */ getIntervalBox),
-  "getIntervalBoxDd": () => (/* reexport */ getIntervalBoxDd),
-  "getTAtLength": () => (/* reexport */ getTAtLength),
-  "getXBoundsTight": () => (/* reexport */ getXBoundsTight),
-  "getYBoundsTight": () => (/* reexport */ getYBoundsTight),
-  "hausdorffDistance": () => (/* reexport */ hausdorffDistance),
-  "hausdorffDistanceOneSided": () => (/* reexport */ hausdorffDistanceOneSided),
-  "intersectBoxes": () => (/* reexport */ intersectBoxes),
-  "isCollinear": () => (/* reexport */ isCollinear),
-  "isCubicReallyLine": () => (/* reexport */ isCubicReallyLine),
-  "isCubicReallyQuad": () => (/* reexport */ isCubicReallyQuad),
-  "isHorizontal": () => (/* reexport */ isHorizontal),
-  "isPointOnBezierExtension": () => (/* reexport */ isPointOnBezierExtension),
-  "isQuadObtuse": () => (/* reexport */ isQuadObtuse),
-  "isQuadReallyLine": () => (/* reexport */ isQuadReallyLine),
-  "isReallyPoint": () => (/* reexport */ isReallyPoint),
-  "isSelfOverlapping": () => (/* reexport */ isSelfOverlapping),
-  "isVertical": () => (/* reexport */ isVertical),
-  "length": () => (/* reexport */ length_length),
-  "lineToCubic": () => (/* reexport */ lineToCubic),
-  "lineToQuadratic": () => (/* reexport */ lineToQuadratic),
-  "maxAbsCoordinate": () => (/* reexport */ maxAbsCoordinate),
-  "normal": () => (/* reexport */ normal),
-  "quadraticToCubic": () => (/* reexport */ quadraticToCubic),
-  "quadraticToPolyline": () => (/* reexport */ quadraticToPolyline),
-  "reduceOrderIfPossible": () => (/* reexport */ reduceOrderIfPossible),
-  "reverse": () => (/* reexport */ reverse_reverse),
-  "setCubicSpeeds": () => (/* reexport */ setCubicSpeeds),
-  "splitByCurvature": () => (/* reexport */ splitByCurvature),
-  "splitByCurvatureAndLength": () => (/* reexport */ splitByCurvatureAndLength),
-  "splitByLength": () => (/* reexport */ splitByLength),
-  "tFromXY": () => (/* reexport */ tFromXY),
-  "tangent": () => (/* reexport */ tangent),
-  "tangentAt0": () => (/* reexport */ tangentAt0),
-  "tangentAt0Exact": () => (/* reexport */ tangentAt0Exact),
-  "tangentAt1": () => (/* reexport */ tangentAt1),
-  "tangentAt1Exact": () => (/* reexport */ tangentAt1Exact),
-  "tangentExact": () => (/* reexport */ tangentExact),
-  "toCubic": () => (/* reexport */ toCubic),
-  "toPowerBasis": () => (/* reexport */ toPowerBasis),
-  "toPowerBasisDd": () => (/* reexport */ toPowerBasisDd),
-  "toPowerBasisDdWithRunningError": () => (/* reexport */ toPowerBasisDdWithRunningError),
-  "toPowerBasisErrorCounters": () => (/* reexport */ toPowerBasisErrorCounters),
-  "toPowerBasisExact": () => (/* reexport */ toPowerBasisExact),
-  "toPowerBasisWithRunningError": () => (/* reexport */ toPowerBasisWithRunningError),
-  "toPowerBasis_1stDerivative": () => (/* reexport */ toPowerBasis_1stDerivative),
-  "toPowerBasis_1stDerivativeDd": () => (/* reexport */ toPowerBasis_1stDerivativeDd),
-  "toPowerBasis_1stDerivativeErrorCounters": () => (/* reexport */ toPowerBasis_1stDerivativeErrorCounters),
-  "toPowerBasis_1stDerivativeExact": () => (/* reexport */ toPowerBasis_1stDerivativeExact),
-  "toPowerBasis_2ndDerivative": () => (/* reexport */ toPowerBasis_2ndDerivative),
-  "toPowerBasis_2ndDerivativeDd": () => (/* reexport */ toPowerBasis_2ndDerivativeDd),
-  "toPowerBasis_2ndDerivativeExact": () => (/* reexport */ toPowerBasis_2ndDerivativeExact),
-  "toPowerBasis_3rdDerivative": () => (/* reexport */ toPowerBasis_3rdDerivative),
-  "toPowerBasis_3rdDerivativeDd": () => (/* reexport */ toPowerBasis_3rdDerivativeDd),
-  "toPowerBasis_3rdDerivativeExact": () => (/* reexport */ toPowerBasis_3rdDerivativeExact),
-  "toString": () => (/* reexport */ to_string_toString),
-  "totalAbsoluteCurvature": () => (/* reexport */ totalAbsoluteCurvature),
-  "totalCurvature": () => (/* reexport */ totalCurvature),
-  "totalLength": () => (/* reexport */ totalLength),
-  "γ": () => (/* reexport */ γ),
-  "γγ": () => (/* reexport */ γγ),
-  "κ": () => (/* reexport */ κ)
+  "y2": () => (/* reexport */ areBoxesIntersecting),
+  "SO": () => (/* reexport */ area_area),
+  "Cn": () => (/* reexport */ bezierBezierIntersection),
+  "ii": () => (/* reexport */ bezierBezierIntersectionBoundless),
+  "uw": () => (/* reexport */ bezierBezierIntersectionFast),
+  "Vr": () => (/* reexport */ bezierSelfIntersection),
+  "bG": () => (/* reexport */ circleBezierIntersection),
+  "Gm": () => (/* reexport */ classification),
+  "xt": () => (/* reexport */ classifications),
+  "xk": () => (/* reexport */ classify),
+  "d9": () => (/* reexport */ clone),
+  "jd": () => (/* reexport */ closestPointOnBezier),
+  "Ay": () => (/* reexport */ closestPointOnBezierCertified),
+  "Ek": () => (/* reexport */ closestPointsBetweenBeziers),
+  "Sx": () => (/* reexport */ controlPointLinesLength),
+  "vC": () => (/* reexport */ cubicFromAnglesAndSpeeds),
+  "hI": () => (/* reexport */ cubicThroughPointGiven013),
+  "GY": () => (/* reexport */ cubicToAnglesAndSpeeds),
+  "Wb": () => (/* reexport */ cubicToHybridQuadratic),
+  "kP": () => (/* reexport */ cubicToQuadratic),
+  "Ne": () => (/* reexport */ curvature),
+  "oj": () => (/* reexport */ curviness),
+  "Dg": () => (/* reexport */ equal),
+  "su": () => (/* reexport */ evalDeCasteljau),
+  "ue": () => (/* reexport */ evalDeCasteljauDd),
+  "WQ": () => (/* reexport */ evalDeCasteljauError),
+  "T_": () => (/* reexport */ evalDeCasteljauWithErr),
+  "K5": () => (/* reexport */ evalDeCasteljauWithErrDd),
+  "ku": () => (/* reexport */ evaluate),
+  "Rf": () => (/* reexport */ evaluate2ndDerivative),
+  "ok": () => (/* reexport */ evaluate2ndDerivativeAt0),
+  "Bv": () => (/* reexport */ evaluate2ndDerivativeAt0Exact),
+  "CH": () => (/* reexport */ evaluate2ndDerivativeAt1),
+  "Q$": () => (/* reexport */ evaluate2ndDerivativeAt1Exact),
+  "mz": () => (/* reexport */ evaluate2ndDerivativeExact),
+  "Lb": () => (/* reexport */ evaluateExact),
+  "fV": () => (/* reexport */ evaluateImplicit1),
+  "fK": () => (/* reexport */ evaluateImplicit2),
+  "CS": () => (/* reexport */ evaluateImplicit3),
+  "Go": () => (/* reexport */ fitQuadsToCubic),
+  "jX": () => (/* reexport */ fromPowerBasis),
+  "JQ": () => (/* reexport */ fromTo),
+  "RU": () => (/* reexport */ fromToInclErrorBound),
+  "ZL": () => (/* reexport */ furthestPointOnBezier),
+  "Gc": () => (/* reexport */ generateCuspAtHalf3),
+  "MM": () => (/* reexport */ generateQuarterCircle),
+  "W9": () => (/* reexport */ generateSelfIntersecting),
+  "OP": () => (/* reexport */ getAbsAreaBetween),
+  "so": () => (/* reexport */ getBendingEnergy),
+  "A5": () => (/* reexport */ getBoundingBox),
+  "FZ": () => (/* reexport */ getBoundingBoxTight),
+  "vT": () => (/* reexport */ getBoundingHull),
+  "zX": () => (/* reexport */ getBounds),
+  "Gb": () => (/* reexport */ getCoeffsBezBez),
+  "zs": () => (/* reexport */ getControlPointBox),
+  "D": () => (/* reexport */ getCubicSpeeds),
+  "cQ": () => (/* reexport */ getCurvatureExtrema),
+  "Fx": () => (/* reexport */ getEndpointIntersections),
+  "w9": () => (/* reexport */ getFootpointPoly),
+  "c1": () => (/* reexport */ getFootpointPolyDd),
+  "Fi": () => (/* reexport */ getFootpointPolyExact),
+  "v2": () => (/* reexport */ getHodograph),
+  "_z": () => (/* reexport */ getImplicitForm1),
+  "xV": () => (/* reexport */ getImplicitForm1Dd),
+  "Kd": () => (/* reexport */ getImplicitForm1DdWithRunningError),
+  "sp": () => (/* reexport */ getImplicitForm1ErrorCounters),
+  "MA": () => (/* reexport */ getImplicitForm1Exact),
+  "pr": () => (/* reexport */ getImplicitForm2),
+  "i2": () => (/* reexport */ getImplicitForm2Dd),
+  "HL": () => (/* reexport */ getImplicitForm2DdWithRunningError),
+  "AI": () => (/* reexport */ getImplicitForm2ErrorCounters),
+  "LX": () => (/* reexport */ getImplicitForm2Exact),
+  "q3": () => (/* reexport */ getImplicitForm3),
+  "wj": () => (/* reexport */ getImplicitForm3Dd),
+  "pt": () => (/* reexport */ getImplicitForm3DdWithRunningError),
+  "Vh": () => (/* reexport */ getImplicitForm3ErrorCounters),
+  "gt": () => (/* reexport */ getImplicitForm3Exact),
+  "Qi": () => (/* reexport */ getInflections),
+  "Nl": () => (/* reexport */ getInterfaceRotation),
+  "mk": () => (/* reexport */ getIntervalBox),
+  "I3": () => (/* reexport */ getIntervalBoxDd),
+  "n": () => (/* reexport */ getTAtLength),
+  "vx": () => (/* reexport */ getXBoundsTight),
+  "pJ": () => (/* reexport */ getYBoundsTight),
+  "OT": () => (/* reexport */ hausdorffDistance),
+  "sn": () => (/* reexport */ hausdorffDistanceOneSided),
+  "wN": () => (/* reexport */ intersectBoxes),
+  "cp": () => (/* reexport */ isCollinear),
+  "Hz": () => (/* reexport */ isCubicReallyLine),
+  "gd": () => (/* reexport */ isCubicReallyQuad),
+  "wE": () => (/* reexport */ isHorizontal),
+  "Xn": () => (/* reexport */ isPointOnBezierExtension),
+  "p0": () => (/* reexport */ isQuadObtuse),
+  "NI": () => (/* reexport */ isQuadReallyLine),
+  "GV": () => (/* reexport */ isReallyPoint),
+  "_2": () => (/* reexport */ isSelfOverlapping),
+  "Ll": () => (/* reexport */ isVertical),
+  "kE": () => (/* reexport */ length_length),
+  "w2": () => (/* reexport */ lineToCubic),
+  "L8": () => (/* reexport */ lineToQuadratic),
+  "he": () => (/* reexport */ maxAbsCoordinate),
+  "mJ": () => (/* reexport */ normal),
+  "d3": () => (/* reexport */ quadraticToCubic),
+  "q8": () => (/* reexport */ quadraticToPolyline),
+  "Ut": () => (/* reexport */ reduceOrderIfPossible),
+  "S3": () => (/* reexport */ reverse),
+  "Bm": () => (/* reexport */ setCubicSpeeds),
+  "ZP": () => (/* reexport */ splitByCurvature),
+  "xO": () => (/* reexport */ splitByCurvatureAndLength),
+  "GQ": () => (/* reexport */ splitByLength),
+  "Uo": () => (/* reexport */ tFromXY),
+  "s6": () => (/* reexport */ tangent),
+  "Cz": () => (/* reexport */ tangentAt0),
+  "Vo": () => (/* reexport */ tangentAt0Exact),
+  "LC": () => (/* reexport */ tangentAt1),
+  "Tb": () => (/* reexport */ tangentAt1Exact),
+  "x_": () => (/* reexport */ tangentExact),
+  "rA": () => (/* reexport */ toCubic),
+  "iq": () => (/* reexport */ toPowerBasis),
+  "rQ": () => (/* reexport */ toPowerBasisDd),
+  "l7": () => (/* reexport */ toPowerBasisDdWithRunningError),
+  "XK": () => (/* reexport */ toPowerBasisErrorCounters),
+  "K_": () => (/* reexport */ toPowerBasisExact),
+  "jU": () => (/* reexport */ toPowerBasisWithRunningError),
+  "iN": () => (/* reexport */ toPowerBasis_1stDerivative),
+  "iv": () => (/* reexport */ toPowerBasis_1stDerivativeDd),
+  "bn": () => (/* reexport */ toPowerBasis_1stDerivativeErrorCounters),
+  "oh": () => (/* reexport */ toPowerBasis_1stDerivativeExact),
+  "O6": () => (/* reexport */ toPowerBasis_2ndDerivative),
+  "Kr": () => (/* reexport */ toPowerBasis_2ndDerivativeDd),
+  "hJ": () => (/* reexport */ toPowerBasis_2ndDerivativeExact),
+  "ai": () => (/* reexport */ toPowerBasis_3rdDerivative),
+  "J8": () => (/* reexport */ toPowerBasis_3rdDerivativeDd),
+  "_A": () => (/* reexport */ toPowerBasis_3rdDerivativeExact),
+  "BB": () => (/* reexport */ to_string_toString),
+  "_G": () => (/* reexport */ totalAbsoluteCurvature),
+  "Ce": () => (/* reexport */ totalCurvature),
+  "Cv": () => (/* reexport */ totalLength),
+  "H8": () => (/* reexport */ γ),
+  "Uv": () => (/* reexport */ γγ),
+  "Ef": () => (/* reexport */ κ)
 });
 
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-sign.js
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/basic/two-product.js
+const f = 134217729; // 2**27 + 1;
 /**
- * Returns the sign of the given expansion.
+ * Returns the exact result of multiplying two doubles.
  *
- * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ * * the resulting array is the reverse of the standard twoSum in the literature.
  *
- * From Shewchuk: "A nonoverlapping expansion is desirable because it is easy to
- * determine its sign (take the sign of the largest component) ... "
+ * Theorem 18 (Shewchuk): Let a and b be p-bit floating-point numbers, where
+ * p >= 6. Then the following algorithm will produce a nonoverlapping expansion
+ * x + y such that ab = x + y, where x is an approximation to ab and y
+ * represents the roundoff error in the calculation of x. Furthermore, if
+ * round-to-even tiebreaking is used, x and y are non-adjacent.
  *
- * @param e A floating point expansion with zeroes eliminated.
- */
-function e_sign_eSign(e) {
-    return e[e.length - 1];
-}
-
-//# sourceMappingURL=e-sign.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/double-to-octets.js
-// Modified from https://github.com/bartaz/ieee754-visualization/
-// under the MIT license
-// Copyright 2013 Bartek Szopka (original author)
-/**
- * Returns the ieee-574 8 bytes composing the given double, starting from the
- * sign bit and ending in the lsb of the significand.
- * e.g. 123.456 -> [64, 94, 221, 47, 26, 159, 190, 119]
- */
-function doubleToOctets(number) {
-    var buffer = new ArrayBuffer(8);
-    new DataView(buffer).setFloat64(0, number, false);
-    return Array.from(new Uint8Array(buffer));
-}
-
-//# sourceMappingURL=double-to-octets.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/double-to-binary-string.js
-// Modified from https://github.com/bartaz/ieee754-visualization/
-// under the MIT license
-// Copyright 2013 Bartek Szopka (original author)
-
-function doubleToBinaryString(number) {
-    return octetsToBinaryString(doubleToOctets(number));
-}
-/**
- * @param octets The 8 bytes composing a double (msb first)
- */
-function octetsToBinaryString(octets) {
-    return octets
-        .map(int8ToBinaryString)
-        .join('');
-}
-/**
- * intToBinaryString(8) -> "00001000"
- */
-function int8ToBinaryString(i) {
-    let iStr = i.toString(2);
-    for (; iStr.length < 8; iStr = "0" + iStr)
-        ;
-    return iStr;
-}
-
-//# sourceMappingURL=double-to-binary-string.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/parse-double.js
-// Modified from https://github.com/bartaz/ieee754-visualization/
-// under the MIT license
-// Copyright 2013 Bartek Szopka (original author)
-
-
-/**
- * Returns the relevant parts of the given IEEE-754 double. The returned
- * exponent has been normalized (i.e. 1023 ha been subtracted) and the
- * significand has the hidden bit added if appropriate.
- * See https://github.com/bartaz/ieee754-visualization
- */
-function parseDouble(x) {
-    let parts = doubleToOctets(x);
-    let p0 = parts[0];
-    let p1 = parts[1];
-    let sign = p0 >> 7;
-    let exponent_ = ((p0 & 127) << 4) + ((p1 & 0b11110000) >> 4);
-    //---- Check for negative / positive zero / denormalized numbers.
-    let hiddenMsb = exponent_ === 0 ? 0 : 16;
-    // Note: exponent === 0 => 0 or denormalized number (a.k.a. subnormal number).
-    let exponent = exponent_ === 0
-        ? exponent_ - 1022 // Subnormals use a biased exponent of 1 (not 0!)
-        : exponent_ - 1023;
-    //---- Break up the significand into bytes
-    let significand = parts.slice(1);
-    significand[0] = (p1 & 15) + hiddenMsb;
-    return {
-        sign,
-        exponent,
-        significand
-    };
-}
-/**
- * Returns the relevant parts of the given IEEE-754 double.
- * See https://github.com/bartaz/ieee754-visualization.
- * This is a slower version of parseDouble that gives binary string
- * representations of the components.
- */
-function parseDoubleDetailed(x) {
-    let str = doubleToBinaryString(x);
-    // sign{1} exponent{11} fraction{52} === 64 bits (+1 hidden!)
-    let [, sign, exponent, significand] = str.match(/^(.)(.{11})(.{52})$/);
-    let exponent_ = parseInt(exponent, 2);
-    let hidden = exponent_ === 0 ? "0" : "1";
-    return {
-        full: sign + exponent + hidden + significand,
-        sign,
-        exponent,
-        hidden,
-        significand
-    };
-}
-
-//# sourceMappingURL=parse-double.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/significand.js
-
-/**
- * Return the significand of the given double with the hidden bit added (in case
- * a is not subnormal or 0, etc.)
+ * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
  * @param a A double
+ * @param b Another double
  */
-function significand(a) {
-    return parseDouble(a).significand;
-}
-
-//# sourceMappingURL=significand.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/get-max-set-bit.js
-
-/**
- * Returns the lowest set bit of the given value in [1, (2**31)-1],
- * i.e. from 1 up to 2147483647 else if no bit is set (input === 0) returns
- * NaN, otherwise if the number is out of range returns a non-finite
- * number.
- * See https://stackoverflow.com/a/35190288/2010061
- */
-function getLowestSetBit_(a) {
-    return Math.log2(a & -a);
-}
-/**
- * Returns the lowest set bit of the given number's significand (where the lsb
- * is bit 0 and the msb is bit 52). If no bit is set (input === 0 or +-inf or
- * NaN) returns NaN.
- * See https://stackoverflow.com/a/35190288/2010061
- */
-function getLowestSetBit(a) {
-    if (a === 0 || !Number.isFinite(a)) {
-        // There is no lowest set bit
-        return NaN;
-    }
-    // Note: the significand includes the hidden bit!
-    let s = significand(a);
-    let len = s.length;
-    for (let i = len - 1; i >= 0; i--) {
-        if (s[i] === 0) {
-            continue;
-        }
-        let l = getLowestSetBit_(s[i]);
-        if (Number.isFinite(l)) {
-            return (8 * (len - i - 1)) + l;
-        }
-    }
-    return NaN;
-}
-/**
- * Returns the highest set bit of the given value in [1, 255], i.e. from 1 up
- * to 255. If the input number === 0 returns NaN.
- * See https://stackoverflow.com/a/35190288/2010061
- */
-function getHighestSetBit_(a) {
-    return a >= 128 ? 7
-        : a >= 64 ? 6
-            : a >= 32 ? 5
-                : a >= 16 ? 4
-                    : a >= 8 ? 3
-                        : a >= 4 ? 2
-                            : a >= 2 ? 1
-                                : a >= 1 ? 0
-                                    : NaN;
-}
-/**
- * Returns the highest set bit of the given double. If no bit is set (input
- * === 0 or +/-inf or NaN) returns NaN.
- * See https://stackoverflow.com/a/35190288/2010061
- */
-function getHighestSetBit(a) {
-    if (a === 0 || !Number.isFinite(a)) {
-        // There is no lowest set bit
-        return NaN;
-    }
-    // At this point there must be a highest set bit (always === 52 if the 
-    // number is not a subnormal.
-    let s = significand(a);
-    let len = s.length;
-    for (let i = 0; i < len; i++) {
-        let l = getHighestSetBit_(s[i]);
-        if (Number.isFinite(l)) {
-            return (8 * (len - i - 1)) + l;
-        }
-    }
-    return NaN;
-}
-
-//# sourceMappingURL=get-max-set-bit.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/exponent.js
-
-/**
- * Returns the normalized exponent of the given number.
- * @param a A double
- */
-function exponent(a) {
-    return parseDouble(a).exponent;
-}
-
-//# sourceMappingURL=exponent.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/msb-exponent.js
-
-
-/**
- * Returns the true exponent of the msb that is set of the given number or
- * NaN if a === 0 or +-inf or NaN.
- * @param a An array of numbers to check
- */
-function msbExponent(a) {
-    if (a === 0 || !Number.isFinite(a)) {
-        return NaN;
-    }
-    let e = exponent(a);
-    // Will return e for all but subnormal numbers
-    return getHighestSetBit(a) - 52 + e;
-}
-
-//# sourceMappingURL=msb-exponent.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-compress.js
-/**
- * Returns the result of compressing the given floating point expansion.
- *
- * * primarily for internal library use
- *
- * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
- *
- * Theorem 23 (Shewchuck): Let e = sum_(i=1)^m(e_i) be a nonoverlapping
- * expansion of m p-bit components, where m >= 3. Suppose that the components of
- * e are sorted in order of increasing magnitude, except that any of the e_i may
- * be zero. Then the following algorithm will produce a nonoverlapping expansion
- * (nonadjacent if round-to even tiebreaking is used) such that
- * h = sum_(i=1)^n(h_i) = e, where the components h_i are in order of increasing
- * magnitude. If h != 0, none of the h_i will be zero. Furthermore, the largest
- * component h_n approximates h with an error smaller than ulp(h_n).
- */
-function e_compress_eCompress(e) {
-    //return e;
-    const e_ = e.slice();
-    const m = e_.length;
-    if (m === 1) {
-        return e_;
-    }
-    let Q = e_[m - 1];
-    let bottom = m;
-    for (let i = m - 2; i >= 0; --i) {
-        const a = Q;
-        const b = e_[i];
-        Q = a + b;
-        const bv = Q - a;
-        const q = b - bv;
-        if (q) {
-            e_[--bottom] = Q;
-            Q = q;
-        }
-    }
-    let top = 0;
-    for (let i = bottom; i < m; ++i) {
-        const a = e_[i];
-        const b = Q;
-        Q = a + b;
-        const bv = Q - a;
-        const q = b - bv;
-        if (q) {
-            e_[top++] = q;
-        }
-    }
-    e_[top++] = Q;
-    e_.length = top;
-    return e_;
-}
-
-//# sourceMappingURL=e-compress.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/basic/reduce-significand.js
-/**
- * Truncates a floating point value's significand and returns the result.
- * Similar to split, but with the ability to specify the number of bits to keep.
- *
- * Theorem 17 (Veltkamp-Dekker): Let a be a p-bit floating-point number, where
- * p >= 3. Choose a splitting point s such that p/2 <= s <= p-1. Then the
- * following algorithm will produce a (p-s)-bit value a_hi and a
- * nonoverlapping (s-1)-bit value a_lo such that abs(a_hi) >= abs(a_lo) and
- * a = a_hi + a_lo.
- *
- * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
- *
- * @param a a double
- * @param bits the number of significand bits to leave intact
- */
-function reduceSignificand(a, bits) {
-    const s = 53 - bits;
-    const f = 2 ** s + 1;
+function two_product_twoProduct(a, b) {
+    const x = a * b;
+    //const [ah, al] = split(a);
     const c = f * a;
-    const r = c - (c - a);
-    return r;
+    const ah = c - (c - a);
+    const al = a - ah;
+    //const [bh, bl] = split(b);
+    const d = f * b;
+    const bh = d - (d - b);
+    const bl = b - bh;
+    const y = (al * bl) - ((x - (ah * bh)) - (al * bh) - (ah * bl));
+    //const err1 = x - (ah * bh);
+    //const err2 = err1 - (al * bh);
+    //const err3 = err2 - (ah * bl);
+    //const y = (al * bl) - err3;
+    return [y, x];
 }
 
-//# sourceMappingURL=reduce-significand.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-to-bitlength.js
-
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const sign = e_sign_eSign;
-const compress = e_compress_eCompress;
-/**
- * Returns a floating point expansion accurate to the given number of bits.
- * Extraneous bits are discarded.
- * @param a a floating point expansion
- * @param l the number of accurate bits to keep
- */
-// TODO - make faster
-function eToBitlength(a, l) {
-    a = compress(a);
-    if (sign(a) === 0) {
-        return [0];
-    }
-    let maxMsb = msbExponent(a[a.length - 1]);
-    let msb = maxMsb;
-    let i = a.length - 1; // start at most significant byte
-    while (i > 0) {
-        let msb_ = msbExponent(a[i - 1]);
-        if (maxMsb - msb_ > l) {
-            break;
-        }
-        msb = msb_;
-        i--;
-    }
-    let keepBits = Math.min(l - (maxMsb - msb), 53);
-    let b = a[i];
-    b = reduceSignificand(b, keepBits);
-    let result = a.slice(i);
-    result[0] = b;
-    return result;
-}
-
-//# sourceMappingURL=e-to-bitlength.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-estimate.js
-/**
- * Returns the result of the given floating point expansion rounded to a double
- * floating point number.
- *
- * The result is within 1 ulps of the actual value, e.g. imagine the worst case
- * situation where we add (in 4dot4) 1111.1000 + 0.000011111111... The result
- * will be 1111.1000 whereas as the correct result should be 1111.1001 and we
- * thus lost 1 ulp of accuracy. It does not matter that the expansion contain
- * several floats since none is overlapping.
- *
- * See Shewchuk https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
- *
- * @param e a floating point expansion
- */
-function e_estimate_eEstimate(e) {
-    let Q = e[0];
-    for (let i = 1; i < e.length; i++) {
-        Q += e[i];
-    }
-    return Q;
-}
-
-//# sourceMappingURL=e-estimate.js.map
+//# sourceMappingURL=two-product.js.map
 ;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/fast-expansion-sum.js
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const fast_expansion_sum_compress = (/* unused pure expression or super */ null && (eCompress));
+const compress = (/* unused pure expression or super */ null && (eCompress));
 /**
  * Returns the result of adding two expansions.
  *
@@ -631,7 +276,6 @@ function fastExpansionSum(e, f) {
     if (hh !== 0) {
         h.push(hh);
     }
-    ;
     //let j = 0;
     j = 0;
     for (let i = 2; i < len; i++) {
@@ -704,12 +348,660 @@ function merge(e, f) {
 }
 
 //# sourceMappingURL=fast-expansion-sum.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-negative-of.js
+/**
+ * Returns the negative of the given floating point expansion.
+ * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ *
+ * @param e a floating point expansion
+ */
+function eNegativeOf(e) {
+    const m = e.length;
+    const h = new Array(m);
+    for (let i = 0; i < m; i++) {
+        h[i] = -e[i];
+    }
+    return h;
+}
+
+//# sourceMappingURL=e-negative-of.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-diff.js
+
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
+const negativeOf = eNegativeOf;
+const add = fastExpansionSum;
+/**
+ * Returns the difference between two floating point expansions, i.e. e - f.
+ *
+ * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ *
+ * @param e a floating point expansion
+ * @param f another floating point expansion
+ */
+function eDiff(e, f) {
+    const g = negativeOf(f);
+    return add(e, g);
+}
+
+//# sourceMappingURL=e-diff.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-estimate.js
+/**
+ * Returns the result of the given floating point expansion rounded to a double
+ * floating point number.
+ *
+ * The result is within 1 ulps of the actual value, e.g. imagine the worst case
+ * situation where we add (in 4dot4) 1111.1000 + 0.000011111111... The result
+ * will be 1111.1000 whereas as the correct result should be 1111.1001 and we
+ * thus lost 1 ulp of accuracy. It does not matter that the expansion contain
+ * several floats since none is overlapping.
+ *
+ * See Shewchuk https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
+ *
+ * @param e a floating point expansion
+ */
+function eEstimate(e) {
+    let Q = e[0];
+    for (let i = 1; i < e.length; i++) {
+        Q += e[i];
+    }
+    return Q;
+}
+
+//# sourceMappingURL=e-estimate.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/basic/two-diff.js
+/**
+ * Returns the exact result of subtracting b from a (as a floating point
+ * expansion).
+ * @param a
+ * @param b
+ */
+function twoDiff(a, b) {
+    const x = a - b;
+    const bvirt = a - x;
+    const y = (a - (x + bvirt)) + (bvirt - b);
+    return [y, x];
+}
+
+//# sourceMappingURL=two-diff.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-compress.js
+/**
+ * Returns the result of compressing the given floating point expansion.
+ *
+ * * primarily for internal library use
+ *
+ * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ *
+ * Theorem 23 (Shewchuck): Let e = sum_(i=1)^m(e_i) be a nonoverlapping
+ * expansion of m p-bit components, where m >= 3. Suppose that the components of
+ * e are sorted in order of increasing magnitude, except that any of the e_i may
+ * be zero. Then the following algorithm will produce a nonoverlapping expansion
+ * (nonadjacent if round-to even tiebreaking is used) such that
+ * h = sum_(i=1)^n(h_i) = e, where the components h_i are in order of increasing
+ * magnitude. If h != 0, none of the h_i will be zero. Furthermore, the largest
+ * component h_n approximates h with an error smaller than ulp(h_n).
+ */
+function e_compress_eCompress(e) {
+    //return e;
+    const e_ = e.slice();
+    const m = e_.length;
+    if (m === 1) {
+        return e_;
+    }
+    let Q = e_[m - 1];
+    let bottom = m;
+    for (let i = m - 2; i >= 0; --i) {
+        const a = Q;
+        const b = e_[i];
+        Q = a + b;
+        const bv = Q - a;
+        const q = b - bv;
+        if (q) {
+            e_[--bottom] = Q;
+            Q = q;
+        }
+    }
+    let top = 0;
+    for (let i = bottom; i < m; ++i) {
+        const a = e_[i];
+        const b = Q;
+        Q = a + b;
+        const bv = Q - a;
+        const q = b - bv;
+        if (q) {
+            e_[top++] = q;
+        }
+    }
+    e_[top++] = Q;
+    e_.length = top;
+    return e_;
+}
+
+//# sourceMappingURL=e-compress.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/geometric-primitives/orient2d.js
+
+
+
+
+
+
+const ccwerrboundA = 3.330669073875472e-16;
+const ccwerrboundB = 2.220446049250315e-16;
+const ccwerrboundC = 1.109335647967049e-31;
+const resulterrbound = 3.330669073875471e-16;
+/**
+ * * Ported from [Shewchuk](http://docs.ros.org/kinetic/api/asr_approx_mvbb/html/Predicates_8cpp_source.html)
+ * * see also https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
+ *
+ * * Adaptive exact 2d orientation test.
+ *
+ * * Robust.
+ *
+ * Return a positive value if the points pa, pb, and pc occur in
+ * counterclockwise order; a negative value if they occur in clockwise order;
+ * and zero if they are collinear.  The result is also a rough approximation of
+ * twice the signed area of the triangle defined by the three points.
+ *
+ * The result returned is the determinant of a matrix. This determinant is
+ * computed adaptively, in the sense that exact arithmetic is used only to the
+ * degree it is needed to ensure that the returned value has the correct sign.
+ * Hence, orient2d() is usually quite fast, but will run more slowly when the
+ * input points are collinear or nearly so.
+ */
+function orient2d_orient2d(A, B, C) {
+    const detleft = (A[0] - C[0]) * (B[1] - C[1]);
+    const detright = (A[1] - C[1]) * (B[0] - C[0]);
+    const det = detleft - detright;
+    let detsum;
+    if (detleft > 0) {
+        if (detright <= 0) {
+            // Anti-clockwise
+            return det;
+        }
+        else {
+            detsum = detleft + detright;
+        }
+    }
+    else if (detleft < 0) {
+        if (detright >= 0) {
+            // Clockwise
+            return det;
+        }
+        else {
+            detsum = -detleft - detright;
+        }
+    }
+    else {
+        // Anti-clockwise, clockwise or straight
+        return det;
+    }
+    if (Math.abs(det) >= ccwerrboundA * detsum) {
+        // Anti-clockwise or clockwise
+        return det;
+    }
+    return orient2dAdapt(A, B, C, detsum);
+}
+function orient2dAdapt(A, B, C, detsum) {
+    const acx = A[0] - C[0];
+    const bcx = B[0] - C[0];
+    const acy = A[1] - C[1];
+    const bcy = B[1] - C[1];
+    const b = eDiff(two_product_twoProduct(acx, bcy), two_product_twoProduct(acy, bcx));
+    let det = eEstimate(b);
+    if (Math.abs(det) >= ccwerrboundB * detsum) {
+        // Anti-clockwise or clockwise
+        return det;
+    }
+    const acxtail = twoDiff(A[0], C[0])[0];
+    const bcxtail = twoDiff(B[0], C[0])[0];
+    const acytail = twoDiff(A[1], C[1])[0];
+    const bcytail = twoDiff(B[1], C[1])[0];
+    if (acxtail === 0 && acytail === 0 &&
+        bcxtail === 0 && bcytail === 0) {
+        // Straight
+        return det;
+    }
+    const errbound = ccwerrboundC * detsum + resulterrbound * Math.abs(det);
+    det += (acx * bcytail + bcy * acxtail) - (acy * bcxtail + bcx * acytail);
+    if (Math.abs(det) >= errbound) {
+        return det;
+    }
+    const a = eDiff(two_product_twoProduct(acxtail, bcy), two_product_twoProduct(acytail, bcx));
+    const c = fastExpansionSum(b, a);
+    const d = eDiff(two_product_twoProduct(acx, bcytail), two_product_twoProduct(acy, bcxtail));
+    const e = fastExpansionSum(c, d);
+    const f = eDiff(two_product_twoProduct(acxtail, bcytail), two_product_twoProduct(acytail, bcxtail));
+    let D = fastExpansionSum(e, f);
+    D = e_compress_eCompress(D);
+    return D[D.length - 1];
+}
+
+//# sourceMappingURL=orient2d.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-graham-scan/node/get-smallest-indx-y-then-x.js
+/**
+ * @internal
+ */
+function getSmallestIndxYThenX(ps) {
+    let smallest = [
+        Number.POSITIVE_INFINITY,
+        Number.POSITIVE_INFINITY
+    ];
+    let smallestI = undefined;
+    for (let i = 0; i < ps.length; i++) {
+        const y = ps[i][1];
+        if ((y < smallest[1]) ||
+            (y === smallest[1] && ps[i][0] < smallest[0])) {
+            smallestI = i;
+            smallest = ps[i];
+        }
+    }
+    return smallestI;
+}
+
+//# sourceMappingURL=get-smallest-indx-y-then-x.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-graham-scan/node/swap.js
+/**
+ * In-place swap two elements in the given array.
+ *
+ * @internal
+ */
+function swap(arr, a, b) {
+    if (a === b) {
+        return;
+    }
+    const temp = arr[a];
+    arr[a] = arr[b];
+    arr[b] = temp;
+}
+
+//# sourceMappingURL=swap.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-graham-scan/node/index.js
+
+
+
+/**
+ * Finds the convex hull of the given set of 2d points using the
+ * Graham Scan algorithm and returns the hull as an array of points.
+ * See https://en.wikipedia.org/wiki/Graham_scan
+ *
+ * Robust: This algorithm is robust via adaptive infinite precision floating
+ * point arithmetic.
+ *
+ * @param ps A set of points
+ * @param includeAllBoundaryPoints Set this to true to if all boundary points
+ * should be returned, even redundant ones - defaults to `false`
+ */
+function grahamScan(ps, includeAllBoundaryPoints = false) {
+    if (!ps.length) {
+        return undefined;
+    }
+    function fail(p1, p2, p3) {
+        const res = orient2d_orient2d(p1, p2, p3);
+        return includeAllBoundaryPoints
+            ? res < 0
+            : res <= 0;
+    }
+    const ps_ = ps.slice();
+    const n = ps_.length;
+    const idx = getSmallestIndxYThenX(ps_);
+    const [p] = ps_.splice(idx, 1);
+    ps_.sort((a, b) => {
+        let res = -orient2d_orient2d(p, a, b);
+        if (res !== 0) {
+            return res;
+        }
+        res = a[1] - b[1];
+        if (res !== 0) {
+            return res;
+        }
+        return a[0] - b[0];
+    });
+    ps_.unshift(p);
+    let m = 1;
+    for (let i = 2; i < n; i++) {
+        while (fail(ps_[m - 1], ps_[m], ps_[i])) {
+            if (m > 1) {
+                m -= 1;
+                continue;
+            }
+            else if (i === n - 1) {
+                m -= 1;
+                break;
+            }
+            else {
+                i += 1;
+            }
+        }
+        m += 1;
+        swap(ps_, m, i);
+    }
+    return ps_.slice(0, m + 1);
+}
+
+//# sourceMappingURL=index.js.map
+;// CONCATENATED MODULE: ./src/global-properties/bounds/get-bounding-hull.ts
+
+/**
+ * Finds the convex hull of the given set of 2d points using the
+ * Graham Scan algorithm and returns the hull as an array of points.
+ *
+ * * see https://en.wikipedia.org/wiki/Graham_scan
+ *
+ * **exact**: this algorithm is robust via adaptive infinite precision floating
+ * point arithmetic.
+ *
+ * @param ps a set of points, e.g. a bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]]
+ * @param includeAllBoundaryPoints set this to `true` to if all boundary points
+ * should be returned, even redundant ones; defaults to `false`
+ *
+ * @dox mdx
+ */
+const getBoundingHull = grahamScan;
+
+
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-sign.js
+/**
+ * Returns the sign of the given expansion.
+ *
+ * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ *
+ * From Shewchuk: "A nonoverlapping expansion is desirable because it is easy to
+ * determine its sign (take the sign of the largest component) ... "
+ *
+ * @param e A floating point expansion with zeroes eliminated.
+ */
+function e_sign_eSign(e) {
+    return e[e.length - 1];
+}
+
+//# sourceMappingURL=e-sign.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/double-to-octets.js
+// Modified from https://github.com/bartaz/ieee754-visualization/
+// under the MIT license
+// Copyright 2013 Bartek Szopka (original author)
+/**
+ * Returns the ieee-574 8 bytes composing the given double, starting from the
+ * sign bit and ending in the lsb of the significand.
+ * e.g. 123.456 -> [64, 94, 221, 47, 26, 159, 190, 119]
+ */
+function doubleToOctets(number) {
+    const buffer = new ArrayBuffer(8);
+    new DataView(buffer).setFloat64(0, number, false);
+    return Array.from(new Uint8Array(buffer));
+}
+
+//# sourceMappingURL=double-to-octets.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/double-to-binary-string.js
+// Modified from https://github.com/bartaz/ieee754-visualization/
+// under the MIT license
+// Copyright 2013 Bartek Szopka (original author)
+
+function doubleToBinaryString(number) {
+    return octetsToBinaryString(doubleToOctets(number));
+}
+/**
+ * @param octets The 8 bytes composing a double (msb first)
+ */
+function octetsToBinaryString(octets) {
+    return octets
+        .map(int8ToBinaryString)
+        .join('');
+}
+/**
+ * intToBinaryString(8) -> "00001000"
+ */
+function int8ToBinaryString(i) {
+    let iStr = i.toString(2);
+    for (; iStr.length < 8; iStr = "0" + iStr)
+        ;
+    return iStr;
+}
+
+//# sourceMappingURL=double-to-binary-string.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/parse-double.js
+// Modified from https://github.com/bartaz/ieee754-visualization/
+// under the MIT license
+// Copyright 2013 Bartek Szopka (original author)
+
+
+/**
+ * Returns the relevant parts of the given IEEE-754 double. The returned
+ * exponent has been normalized (i.e. 1023 ha been subtracted) and the
+ * significand has the hidden bit added if appropriate.
+ * See https://github.com/bartaz/ieee754-visualization
+ */
+function parseDouble(x) {
+    const parts = doubleToOctets(x);
+    const p0 = parts[0];
+    const p1 = parts[1];
+    const sign = p0 >> 7;
+    const exponent_ = ((p0 & 127) << 4) + ((p1 & 0b11110000) >> 4);
+    //---- Check for negative / positive zero / denormalized numbers.
+    const hiddenMsb = exponent_ === 0 ? 0 : 16;
+    // Note: exponent === 0 => 0 or denormalized number (a.k.a. subnormal number).
+    const exponent = exponent_ === 0
+        ? exponent_ - 1022 // Subnormals use a biased exponent of 1 (not 0!)
+        : exponent_ - 1023;
+    //---- Break up the significand into bytes
+    const significand = parts.slice(1);
+    significand[0] = (p1 & 15) + hiddenMsb;
+    return {
+        sign,
+        exponent,
+        significand
+    };
+}
+/**
+ * Returns the relevant parts of the given IEEE-754 double.
+ * See https://github.com/bartaz/ieee754-visualization.
+ * This is a slower version of parseDouble that gives binary string
+ * representations of the components.
+ */
+function parseDoubleDetailed(x) {
+    const str = doubleToBinaryString(x);
+    // sign{1} exponent{11} fraction{52} === 64 bits (+1 hidden!)
+    const [, sign, exponent, significand] = str.match(/^(.)(.{11})(.{52})$/);
+    const exponent_ = parseInt(exponent, 2);
+    const hidden = exponent_ === 0 ? "0" : "1";
+    return {
+        full: sign + exponent + hidden + significand,
+        sign,
+        exponent,
+        hidden,
+        significand
+    };
+}
+
+//# sourceMappingURL=parse-double.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/significand.js
+
+/**
+ * Return the significand of the given double with the hidden bit added (in case
+ * a is not subnormal or 0, etc.)
+ * @param a A double
+ */
+function significand(a) {
+    return parseDouble(a).significand;
+}
+
+//# sourceMappingURL=significand.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/get-max-set-bit.js
+
+/**
+ * Returns the lowest set bit of the given value in [1, (2**31)-1],
+ * i.e. from 1 up to 2147483647 else if no bit is set (input === 0) returns
+ * NaN, otherwise if the number is out of range returns a non-finite
+ * number.
+ * See https://stackoverflow.com/a/35190288/2010061
+ */
+function getLowestSetBit_(a) {
+    return Math.log2(a & -a);
+}
+/**
+ * Returns the lowest set bit of the given number's significand (where the lsb
+ * is bit 0 and the msb is bit 52). If no bit is set (input === 0 or +-inf or
+ * NaN) returns NaN.
+ * See https://stackoverflow.com/a/35190288/2010061
+ */
+function getLowestSetBit(a) {
+    if (a === 0 || !Number.isFinite(a)) {
+        // There is no lowest set bit
+        return NaN;
+    }
+    // Note: the significand includes the hidden bit!
+    const s = significand(a);
+    const len = s.length;
+    for (let i = len - 1; i >= 0; i--) {
+        if (s[i] === 0) {
+            continue;
+        }
+        const l = getLowestSetBit_(s[i]);
+        if (Number.isFinite(l)) {
+            return (8 * (len - i - 1)) + l;
+        }
+    }
+    return NaN;
+}
+/**
+ * Returns the highest set bit of the given value in [1, 255], i.e. from 1 up
+ * to 255. If the input number === 0 returns NaN.
+ * See https://stackoverflow.com/a/35190288/2010061
+ */
+function getHighestSetBit_(a) {
+    return a >= 128 ? 7
+        : a >= 64 ? 6
+            : a >= 32 ? 5
+                : a >= 16 ? 4
+                    : a >= 8 ? 3
+                        : a >= 4 ? 2
+                            : a >= 2 ? 1
+                                : a >= 1 ? 0
+                                    : NaN;
+}
+/**
+ * Returns the highest set bit of the given double. If no bit is set (input
+ * === 0 or +/-inf or NaN) returns NaN.
+ * See https://stackoverflow.com/a/35190288/2010061
+ */
+function getHighestSetBit(a) {
+    if (a === 0 || !Number.isFinite(a)) {
+        // There is no lowest set bit
+        return NaN;
+    }
+    // At this point there must be a highest set bit (always === 52 if the 
+    // number is not a subnormal.
+    const s = significand(a);
+    const len = s.length;
+    for (let i = 0; i < len; i++) {
+        const l = getHighestSetBit_(s[i]);
+        if (Number.isFinite(l)) {
+            return (8 * (len - i - 1)) + l;
+        }
+    }
+    return NaN;
+}
+
+//# sourceMappingURL=get-max-set-bit.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/exponent.js
+
+/**
+ * Returns the normalized exponent of the given number.
+ * @param a A double
+ */
+function exponent(a) {
+    return parseDouble(a).exponent;
+}
+
+//# sourceMappingURL=exponent.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/msb-exponent.js
+
+
+/**
+ * Returns the true exponent of the msb that is set of the given number or
+ * NaN if a === 0 or +-inf or NaN.
+ * @param a An array of numbers to check
+ */
+function msbExponent(a) {
+    if (a === 0 || !Number.isFinite(a)) {
+        return NaN;
+    }
+    const e = exponent(a);
+    // Will return e for all but subnormal numbers
+    return getHighestSetBit(a) - 52 + e;
+}
+
+//# sourceMappingURL=msb-exponent.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/basic/reduce-significand.js
+/**
+ * Truncates a floating point value's significand and returns the result.
+ * Similar to split, but with the ability to specify the number of bits to keep.
+ *
+ * Theorem 17 (Veltkamp-Dekker): Let a be a p-bit floating-point number, where
+ * p >= 3. Choose a splitting point s such that p/2 <= s <= p-1. Then the
+ * following algorithm will produce a (p-s)-bit value a_hi and a
+ * nonoverlapping (s-1)-bit value a_lo such that abs(a_hi) >= abs(a_lo) and
+ * a = a_hi + a_lo.
+ *
+ * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ *
+ * @param a a double
+ * @param bits the number of significand bits to leave intact
+ */
+function reduceSignificand(a, bits) {
+    const s = 53 - bits;
+    const f = 2 ** s + 1;
+    const c = f * a;
+    const r = c - (c - a);
+    return r;
+}
+
+//# sourceMappingURL=reduce-significand.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-to-bitlength.js
+
+
+
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
+const sign = e_sign_eSign;
+const e_to_bitlength_compress = e_compress_eCompress;
+/**
+ * Returns a floating point expansion accurate to the given number of bits.
+ * Extraneous bits are discarded.
+ * @param a a floating point expansion
+ * @param l the number of accurate bits to keep
+ */
+// TODO - make faster
+function eToBitlength(a, l) {
+    a = e_to_bitlength_compress(a);
+    if (sign(a) === 0) {
+        return [0];
+    }
+    const maxMsb = msbExponent(a[a.length - 1]);
+    let msb = maxMsb;
+    let i = a.length - 1; // start at most significant byte
+    while (i > 0) {
+        const msb_ = msbExponent(a[i - 1]);
+        if (maxMsb - msb_ > l) {
+            break;
+        }
+        msb = msb_;
+        i--;
+    }
+    const keepBits = Math.min(l - (maxMsb - msb), 53);
+    let b = a[i];
+    b = reduceSignificand(b, keepBits);
+    const result = a.slice(i);
+    result[0] = b;
+    return result;
+}
+
+//# sourceMappingURL=e-to-bitlength.js.map
 ;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/scale-expansion.js
 
 
 
 
-const f = 134217729; // 2**27 + 1;
+const scale_expansion_f = 134217729; // 2**27 + 1;
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
 const tp = (/* unused pure expression or super */ null && (twoProduct));
 const ts = (/* unused pure expression or super */ null && (twoSum));
@@ -740,10 +1032,10 @@ function scaleExpansion(e, b) {
     // inlined (above line)
     const a = e[0];
     let q = a * b;
-    const c = f * a;
+    const c = scale_expansion_f * a;
     const ah = c - (c - a);
     const al = a - ah;
-    const d = f * b;
+    const d = scale_expansion_f * b;
     const bh = d - (d - b);
     const bl = b - bh;
     const h = [];
@@ -752,16 +1044,15 @@ function scaleExpansion(e, b) {
     if (hh !== 0) {
         h.push(hh);
     }
-    ;
     for (let i = 1; i < m; i++) {
         //const [t, T] = tp(e[i], b);
         // inlined (above line)
         const a = e[i];
         const T = a * b;
-        const c = f * a;
+        const c = scale_expansion_f * a;
         const ah = c - (c - a);
         const al = a - ah;
-        const d = f * b;
+        const d = scale_expansion_f * b;
         const bh = d - (d - b);
         const bl = b - bh;
         const t = (al * bl) - ((T - (ah * bh)) - (al * bh) - (ah * bl));
@@ -820,10 +1111,10 @@ function scaleExpansion2(b, e) {
     // inlined (above line)
     const a = e[0];
     let q = a * b;
-    const c = f * a;
+    const c = scale_expansion_f * a;
     const ah = c - (c - a);
     const al = a - ah;
-    const d = f * b;
+    const d = scale_expansion_f * b;
     const bh = d - (d - b);
     const bl = b - bh;
     const h = [];
@@ -832,16 +1123,15 @@ function scaleExpansion2(b, e) {
     if (hh !== 0) {
         h.push(hh);
     }
-    ;
     for (let i = 1; i < m; i++) {
         //const [t, T] = tp(e[i], b);
         // inlined (above line)
         const a = e[i];
         const T = a * b;
-        const c = f * a;
+        const c = scale_expansion_f * a;
         const ah = c - (c - a);
         const al = a - ah;
-        const d = f * b;
+        const d = scale_expansion_f * b;
         const bh = d - (d - b);
         const bl = b - bh;
         const t = (al * bl) - ((T - (ah * bh)) - (al * bh) - (ah * bl));
@@ -883,7 +1173,7 @@ function scaleExpansion2(b, e) {
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
 const multByDouble = scaleExpansion;
-const add = fastExpansionSum;
+const expansion_product_add = fastExpansionSum;
 const expansion_product_compress = (/* unused pure expression or super */ null && (eCompress));
 /**
  * Returns the product of two double floating point expansions.
@@ -902,53 +1192,16 @@ const expansion_product_compress = (/* unused pure expression or super */ null &
  * @param e a double floating point expansion
  * @param f another double floating point expansion
  */
-function expansion_product_expansionProduct(e, f) {
+function expansionProduct(e, f) {
     let sum = [0];
     for (let i = 0; i < e.length; i++) {
-        sum = add(sum, multByDouble(f, e[i]));
+        sum = expansion_product_add(sum, multByDouble(f, e[i]));
     }
     //return compress(sum);
     return sum;
 }
 
 //# sourceMappingURL=expansion-product.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-negative-of.js
-/**
- * Returns the negative of the given floating point expansion.
- * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
- *
- * @param e a floating point expansion
- */
-function eNegativeOf(e) {
-    const m = e.length;
-    const h = new Array(m);
-    for (let i = 0; i < m; i++) {
-        h[i] = -e[i];
-    }
-    return h;
-}
-
-//# sourceMappingURL=e-negative-of.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-diff.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const negativeOf = eNegativeOf;
-const e_diff_add = fastExpansionSum;
-/**
- * Returns the difference between two floating point expansions, i.e. e - f.
- *
- * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
- *
- * @param e a floating point expansion
- * @param f another floating point expansion
- */
-function e_diff_eDiff(e, f) {
-    const g = negativeOf(f);
-    return e_diff_add(e, g);
-}
-
-//# sourceMappingURL=e-diff.js.map
 ;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/bit-length.js
 
 
@@ -972,12 +1225,12 @@ function bitLength(a) {
  * @param a A double precision floating point expansion
  */
 function expBitLength(a) {
-    let a_ = e_compress_eCompress(a);
+    const a_ = e_compress_eCompress(a);
     if (e_sign_eSign(a_) === 0) {
         return 0;
     }
-    let msbyte = a_[a_.length - 1];
-    let lsbyte = a_[0];
+    const msbyte = a_[a_.length - 1];
+    const lsbyte = a_[0];
     return exponent(msbyte) - exponent(lsbyte) + (53 - getLowestSetBit(lsbyte));
 }
 
@@ -989,11 +1242,11 @@ function expBitLength(a) {
 
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const mult = expansion_product_expansionProduct;
+const mult = expansionProduct;
 const toBitlength = eToBitlength;
 const e_div_bitLength = expBitLength;
-const diff = e_diff_eDiff;
-const estimate = e_estimate_eEstimate;
+const diff = eDiff;
+const estimate = eEstimate;
 /**
  * Returns the result of a/b using Goldschmidt division.
  *
@@ -1016,8 +1269,8 @@ function eDiv(N, D, expansionLength) {
     let exact = false;
     let resultBitlengthUpperBound = 0;
     if (!expansionLength) {
-        let bitlengthN = e_div_bitLength(N_);
-        let bitlengthD = e_div_bitLength(D_);
+        const bitlengthN = e_div_bitLength(N_);
+        const bitlengthD = e_div_bitLength(D_);
         // resultBitlengthUpperBound is only valid if the division is known
         // to be exact
         resultBitlengthUpperBound = bitlengthN - bitlengthD + 1;
@@ -1087,7 +1340,7 @@ function growExpansion(e, b) {
         const ee = e[i];
         const x = q + ee;
         const bv = x - q;
-        let hh = (q - (x - bv)) + (ee - bv);
+        const hh = (q - (x - bv)) + (ee - bv);
         if (hh !== 0) {
             h.push(hh);
         }
@@ -1186,14 +1439,14 @@ const e_long_divide_eCompress = e_compress_eCompress;
 const e_long_divide_growExpansion = growExpansion;
 const e_long_divide_eSum = eSum;
 const e_long_divide_scaleExpansion = scaleExpansion;
-const e_long_divide_eDiff = e_diff_eDiff;
+const e_long_divide_eDiff = eDiff;
 const e_long_divide_sign = Math.sign;
 function eLongDivide(N, D) {
     N = e_long_divide_eCompress(N);
     D = e_long_divide_eCompress(D);
     // get the most significant double
     // out by at most 1 ulp, exact if d < MAX_SAFE_INT
-    let d = D[D.length - 1];
+    const d = D[D.length - 1];
     // trivial cases
     if (D.length === 1) {
         if (d === 0) {
@@ -1210,11 +1463,11 @@ function eLongDivide(N, D) {
     if (signN === 0) {
         return { div: [0], rem: [0] };
     }
-    let signD = e_long_divide_sign(d);
-    let divs = [];
+    const signD = e_long_divide_sign(d);
+    const divs = [];
     let oldLen = 0;
     while (true) {
-        let rems = [];
+        const rems = [];
         // loop from big `n[i]` to small `n[i]`
         for (let i = N.length - 1; i >= 0; i--) {
             const n = N[i];
@@ -1223,7 +1476,7 @@ function eLongDivide(N, D) {
             // most 1/2 ulp
             // Due to roundoff (and the fact we'e using `d` and not `D`!), `_div` does 
             // not necessarily represent the exact quotient.
-            let div = Math.round((n - (n % d)) / d);
+            const div = Math.round((n - (n % d)) / d);
             // get the remainder by calculating `rem = n - d*div`
             rems.push(e_long_divide_scaleExpansion(D, div)); // exact
             if (div === 0) {
@@ -1331,8 +1584,8 @@ function eRem(a, b) {
  * @param a a floating point expansion
  * @param b another floating point expansion
  */
-function e_compare_eCompare(a, b) {
-    return e_sign_eSign(e_diff_eDiff(a, b));
+function eCompare(a, b) {
+    return e_sign_eSign(eDiff(a, b));
 }
 
 //# sourceMappingURL=e-compare.js.map
@@ -1349,7 +1602,7 @@ const e_abs_negativeOf = eNegativeOf;
  *
  * @param e a floating point expansion
  */
-function e_abs_eAbs(e) {
+function eAbs(e) {
     if (e[e.length - 1] < 0) {
         return e_abs_negativeOf(e);
     }
@@ -1474,57 +1727,6 @@ function split(a) {
 // const c = f * a; const a_h = c - (c - a); const a_l = a - a_h; return [a_h, a_l];
 
 //# sourceMappingURL=split.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/basic/two-diff.js
-/**
- * Returns the exact result of subtracting b from a (as a floating point
- * expansion).
- * @param a
- * @param b
- */
-function two_diff_twoDiff(a, b) {
-    const x = a - b;
-    const bvirt = a - x;
-    const y = (a - (x + bvirt)) + (bvirt - b);
-    return [y, x];
-}
-
-//# sourceMappingURL=two-diff.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/basic/two-product.js
-const two_product_f = 134217729; // 2**27 + 1;
-/**
- * Returns the exact result of multiplying two doubles.
- *
- * * the resulting array is the reverse of the standard twoSum in the literature.
- *
- * Theorem 18 (Shewchuk): Let a and b be p-bit floating-point numbers, where
- * p >= 6. Then the following algorithm will produce a nonoverlapping expansion
- * x + y such that ab = x + y, where x is an approximation to ab and y
- * represents the roundoff error in the calculation of x. Furthermore, if
- * round-to-even tiebreaking is used, x and y are non-adjacent.
- *
- * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
- * @param a A double
- * @param b Another double
- */
-function two_product_twoProduct(a, b) {
-    const x = a * b;
-    //const [ah, al] = split(a);
-    const c = two_product_f * a;
-    const ah = c - (c - a);
-    const al = a - ah;
-    //const [bh, bl] = split(b);
-    const d = two_product_f * b;
-    const bh = d - (d - b);
-    const bl = b - bh;
-    const y = (al * bl) - ((x - (ah * bh)) - (al * bh) - (ah * bl));
-    //const err1 = x - (ah * bh);
-    //const err2 = err1 - (al * bh);
-    //const err3 = err2 - (ah * bl);
-    //const y = (al * bl) - err3;
-    return [y, x];
-}
-
-//# sourceMappingURL=two-product.js.map
 ;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/is-bit-aligned.js
 
 
@@ -1559,11 +1761,11 @@ function isBitAligned(a, maxBitLength, gridSpacingExponent) {
     if (a === 0) {
         return true;
     }
-    let e = exponent(a);
-    let maxSetBit = getHighestSetBit(a) - 52 + e;
-    let minSetBit = getLowestSetBit(a) - 52 + e;
-    let minBitBigEnough = minSetBit >= gridSpacingExponent;
-    let maxBitSmallEnough = maxSetBit <= maxBitLength - 1 + gridSpacingExponent;
+    const e = exponent(a);
+    const maxSetBit = getHighestSetBit(a) - 52 + e;
+    const minSetBit = getLowestSetBit(a) - 52 + e;
+    const minBitBigEnough = minSetBit >= gridSpacingExponent;
+    const maxBitSmallEnough = maxSetBit <= maxBitLength - 1 + gridSpacingExponent;
     return minBitBigEnough && maxBitSmallEnough;
 }
 
@@ -1580,7 +1782,7 @@ function lsbExponent(a) {
     if (a === 0 || !Number.isFinite(a)) {
         return NaN;
     }
-    let e = exponent(a);
+    const e = exponent(a);
     return getLowestSetBit(a) - 52 + e;
 }
 
@@ -1594,7 +1796,7 @@ function lsbExponent(a) {
 
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const e_calculate_mult = expansion_product_expansionProduct;
+const e_calculate_mult = expansionProduct;
 const e_calculate_tp = two_product_twoProduct;
 const e_calculate_multByDouble = scaleExpansion;
 const e_calculate_ts = two_sum_twoSum;
@@ -1665,7 +1867,7 @@ function eCalculate(terms) {
 
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const e_product_mult = expansion_product_expansionProduct;
+const e_product_mult = expansionProduct;
 const e_product_tp = two_product_twoProduct;
 const e_product_multByDouble = scaleExpansion;
 const e_product_compress = e_compress_eCompress;
@@ -1708,7 +1910,7 @@ function eProduct(term) {
 
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const e_int_pow_mult = expansion_product_expansionProduct;
+const e_int_pow_mult = expansionProduct;
 const prod = eProduct;
 /**
  * Returns a**i, where i is a non-negative integer.
@@ -1756,105 +1958,6 @@ function eToDd(e) {
 }
 
 //# sourceMappingURL=e-to-double-double.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/geometric-primitives/orient2d.js
-
-
-
-
-
-
-let ccwerrboundA = 3.330669073875472e-16;
-let ccwerrboundB = 2.220446049250315e-16;
-let ccwerrboundC = 1.109335647967049e-31;
-let resulterrbound = 3.330669073875471e-16;
-/**
- * * Ported from [Shewchuk](http://docs.ros.org/kinetic/api/asr_approx_mvbb/html/Predicates_8cpp_source.html)
- * * see also https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
- *
- * * Adaptive exact 2d orientation test.
- *
- * * Robust.
- *
- * Return a positive value if the points pa, pb, and pc occur in
- * counterclockwise order; a negative value if they occur in clockwise order;
- * and zero if they are collinear.  The result is also a rough approximation of
- * twice the signed area of the triangle defined by the three points.
- *
- * The result returned is the determinant of a matrix. This determinant is
- * computed adaptively, in the sense that exact arithmetic is used only to the
- * degree it is needed to ensure that the returned value has the correct sign.
- * Hence, orient2d() is usually quite fast, but will run more slowly when the
- * input points are collinear or nearly so.
- */
-function orient2d_orient2d(A, B, C) {
-    let detleft = (A[0] - C[0]) * (B[1] - C[1]);
-    let detright = (A[1] - C[1]) * (B[0] - C[0]);
-    let det = detleft - detright;
-    let detsum;
-    if (detleft > 0) {
-        if (detright <= 0) {
-            // Anti-clockwise
-            return det;
-        }
-        else {
-            detsum = detleft + detright;
-        }
-    }
-    else if (detleft < 0) {
-        if (detright >= 0) {
-            // Clockwise
-            return det;
-        }
-        else {
-            detsum = -detleft - detright;
-        }
-    }
-    else {
-        // Anti-clockwise, clockwise or straight
-        return det;
-    }
-    if (Math.abs(det) >= ccwerrboundA * detsum) {
-        // Anti-clockwise or clockwise
-        return det;
-    }
-    return orient2dAdapt(A, B, C, detsum);
-}
-function orient2dAdapt(A, B, C, detsum) {
-    let acx = A[0] - C[0];
-    let bcx = B[0] - C[0];
-    let acy = A[1] - C[1];
-    let bcy = B[1] - C[1];
-    let b = e_diff_eDiff(two_product_twoProduct(acx, bcy), two_product_twoProduct(acy, bcx));
-    let det = e_estimate_eEstimate(b);
-    if (Math.abs(det) >= ccwerrboundB * detsum) {
-        // Anti-clockwise or clockwise
-        return det;
-    }
-    let acxtail = two_diff_twoDiff(A[0], C[0])[0];
-    let bcxtail = two_diff_twoDiff(B[0], C[0])[0];
-    let acytail = two_diff_twoDiff(A[1], C[1])[0];
-    let bcytail = two_diff_twoDiff(B[1], C[1])[0];
-    if (acxtail === 0 && acytail === 0 &&
-        bcxtail === 0 && bcytail === 0) {
-        // Straight
-        return det;
-    }
-    let errbound = ccwerrboundC * detsum + resulterrbound * Math.abs(det);
-    det += (acx * bcytail + bcy * acxtail) - (acy * bcxtail + bcx * acytail);
-    if (Math.abs(det) >= errbound) {
-        return det;
-    }
-    let a = e_diff_eDiff(two_product_twoProduct(acxtail, bcy), two_product_twoProduct(acytail, bcx));
-    let c = fastExpansionSum(b, a);
-    let d = e_diff_eDiff(two_product_twoProduct(acx, bcytail), two_product_twoProduct(acy, bcxtail));
-    let e = fastExpansionSum(c, d);
-    let f = e_diff_eDiff(two_product_twoProduct(acxtail, bcytail), two_product_twoProduct(acytail, bcxtail));
-    let D = fastExpansionSum(e, f);
-    D = e_compress_eCompress(D);
-    return D[D.length - 1];
-}
-
-//# sourceMappingURL=orient2d.js.map
 ;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/is-overlapping.js
 
 
@@ -1896,9 +1999,9 @@ function isNonOverlapping(a, b) {
         [a, b] = [b, a];
     }
     // At this point abs(a) > abs(b)
-    let l = getLowestSetBit(a);
-    let h = getHighestSetBit(b);
-    let shift = exponent(a) - exponent(b);
+    const l = getLowestSetBit(a);
+    const h = getHighestSetBit(b);
+    const shift = exponent(a) - exponent(b);
     return (l + shift) > h;
 }
 /**
@@ -2001,7 +2104,7 @@ function eIsInteger(a) {
 // used extensively in the literature with a particular recognizable name
 const eAdd = fastExpansionSum;
 const eAddDouble = growExpansion;
-const eMult = expansion_product_expansionProduct;
+const eMult = expansionProduct;
 const eMultDouble1 = scaleExpansion;
 const eMultDouble2 = scaleExpansion2;
 const operators = {
@@ -2009,14 +2112,14 @@ const operators = {
     fastTwoDiff: fastTwoDiff,
     fastTwoSum: fast_two_sum_fastTwoSum,
     split: split,
-    twoDiff: two_diff_twoDiff,
+    twoDiff: twoDiff,
     twoProduct: two_product_twoProduct,
     twoSum: two_sum_twoSum,
     reduceSignificand: reduceSignificand,
     //---- double floating point expansions ----//
     fastExpansionSum: fastExpansionSum, eAdd,
     growExpansion: growExpansion, eAddDouble,
-    expansionProduct: expansion_product_expansionProduct, eMult,
+    expansionProduct: expansionProduct, eMult,
     scaleExpansion: scaleExpansion, eMultDouble1,
     scaleExpansion2: scaleExpansion2, eMultDouble2,
     eDiv: eDiv,
@@ -2024,15 +2127,15 @@ const operators = {
     eIntDiv: eIntDiv,
     eRem: eRem,
     eCompress: e_compress_eCompress,
-    eEstimate: e_estimate_eEstimate,
-    eDiff: e_diff_eDiff,
+    eEstimate: eEstimate,
+    eDiff: eDiff,
     eNegativeOf: eNegativeOf,
     eMultBy2: eMultBy2,
     eMultByNeg2: eMultByNeg2,
     eDivBy2: eDivBy2,
     eSign: e_sign_eSign,
-    eCompare: e_compare_eCompare,
-    eAbs: e_abs_eAbs,
+    eCompare: eCompare,
+    eAbs: eAbs,
     eToBitlength: eToBitlength,
     eIntPow: eIntPow,
     eCalculate: eCalculate,
@@ -2063,128 +2166,6 @@ const operators = {
 
 
 //# sourceMappingURL=index.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-graham-scan/node/get-smallest-indx-y-then-x.js
-/**
- * @internal
- */
-function getSmallestIndxYThenX(ps) {
-    let smallest = [
-        Number.POSITIVE_INFINITY,
-        Number.POSITIVE_INFINITY
-    ];
-    let smallestI = undefined;
-    for (let i = 0; i < ps.length; i++) {
-        let y = ps[i][1];
-        if ((y < smallest[1]) ||
-            (y === smallest[1] && ps[i][0] < smallest[0])) {
-            smallestI = i;
-            smallest = ps[i];
-        }
-    }
-    return smallestI;
-}
-
-//# sourceMappingURL=get-smallest-indx-y-then-x.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-graham-scan/node/swap.js
-/**
- * In-place swap two elements in the given array.
- *
- * @internal
- */
-function swap(arr, a, b) {
-    if (a === b) {
-        return;
-    }
-    let temp = arr[a];
-    arr[a] = arr[b];
-    arr[b] = temp;
-}
-
-//# sourceMappingURL=swap.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-graham-scan/node/index.js
-
-
-
-/**
- * Finds the convex hull of the given set of 2d points using the
- * Graham Scan algorithm and returns the hull as an array of points.
- * See https://en.wikipedia.org/wiki/Graham_scan
- *
- * Robust: This algorithm is robust via adaptive infinite precision floating
- * point arithmetic.
- *
- * @param ps A set of points
- * @param includeAllBoundaryPoints Set this to true to if all boundary points
- * should be returned, even redundant ones - defaults to `false`
- */
-function grahamScan(ps, includeAllBoundaryPoints = false) {
-    if (!ps.length) {
-        return undefined;
-    }
-    function fail(p1, p2, p3) {
-        let res = orient2d_orient2d(p1, p2, p3);
-        return includeAllBoundaryPoints
-            ? res < 0
-            : res <= 0;
-    }
-    let ps_ = ps.slice();
-    let n = ps_.length;
-    let idx = getSmallestIndxYThenX(ps_);
-    let [p] = ps_.splice(idx, 1);
-    ps_.sort((a, b) => {
-        let res = -orient2d_orient2d(p, a, b);
-        if (res !== 0) {
-            return res;
-        }
-        res = a[1] - b[1];
-        if (res !== 0) {
-            return res;
-        }
-        return a[0] - b[0];
-    });
-    ps_.unshift(p);
-    let m = 1;
-    for (let i = 2; i < n; i++) {
-        while (fail(ps_[m - 1], ps_[m], ps_[i])) {
-            if (m > 1) {
-                m -= 1;
-                continue;
-            }
-            else if (i === n - 1) {
-                m -= 1;
-                break;
-            }
-            else {
-                i += 1;
-            }
-        }
-        m += 1;
-        swap(ps_, m, i);
-    }
-    return ps_.slice(0, m + 1);
-}
-
-//# sourceMappingURL=index.js.map
-;// CONCATENATED MODULE: ./src/global-properties/bounds/get-bounding-hull.ts
-
-/**
- * Finds the convex hull of the given set of 2d points using the
- * Graham Scan algorithm and returns the hull as an array of points.
- *
- * * see https://en.wikipedia.org/wiki/Graham_scan
- *
- * **exact**: this algorithm is robust via adaptive infinite precision floating
- * point arithmetic.
- *
- * @param ps a set of points, e.g. a bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]]
- * @param includeAllBoundaryPoints set this to `true` to if all boundary points
- * should be returned, even redundant ones; defaults to `false`
- *
- * @dox mdx
- */
-const getBoundingHull = grahamScan;
-
-
 ;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-diff-dd.js
 /**
  * Returns the result of subtracting the second given double-double-precision
@@ -2845,7 +2826,7 @@ function split_split(a) {
  * @param a minuend - a double-double precision floating point number
  * @param b subtrahend - a double-double precision floating point number
  */
-function basic_two_diff_twoDiff(a, b) {
+function two_diff_twoDiff(a, b) {
     const x = a - b;
     const bvirt = a - x;
     const y = (a - (x + bvirt)) + (bvirt - b);
@@ -2855,7 +2836,7 @@ function basic_two_diff_twoDiff(a, b) {
 //# sourceMappingURL=two-diff.js.map
 ;// CONCATENATED MODULE: ./node_modules/double-double/node/basic/two-product.js
 /** @internal */
-const basic_two_product_f = 134217729; // 2**27 + 1;
+const two_product_f = 134217729; // 2**27 + 1;
 /**
  * Returns the exact result of multiplying two doubles.
  *
@@ -2874,11 +2855,11 @@ const basic_two_product_f = 134217729; // 2**27 + 1;
 function basic_two_product_twoProduct(a, b) {
     const x = a * b;
     //const [ah, al] = split(a);
-    const c = basic_two_product_f * a;
+    const c = two_product_f * a;
     const ah = c - (c - a);
     const al = a - ah;
     //const [bh, bl] = split(b);
-    const d = basic_two_product_f * b;
+    const d = two_product_f * b;
     const bh = d - (d - b);
     const bl = b - bh;
     const y = (al * bl) - ((x - (ah * bh)) - (al * bh) - (ah * bl));
@@ -2985,7 +2966,7 @@ function reduce_significand_reduceSignificand(a, bits) {
  * @internal
  */
 function double_to_octets_doubleToOctets(number) {
-    var buffer = new ArrayBuffer(8);
+    const buffer = new ArrayBuffer(8);
     new DataView(buffer).setFloat64(0, number, false);
     return Array.from(new Uint8Array(buffer));
 }
@@ -3034,19 +3015,19 @@ function double_to_binary_string_int8ToBinaryString(i) {
  * See https://github.com/bartaz/ieee754-visualization
  */
 function parse_double_parseDouble(x) {
-    let parts = double_to_octets_doubleToOctets(x);
-    let p0 = parts[0];
-    let p1 = parts[1];
-    let sign = p0 >> 7;
-    let exponent_ = ((p0 & 127) << 4) + ((p1 & 0b11110000) >> 4);
+    const parts = double_to_octets_doubleToOctets(x);
+    const p0 = parts[0];
+    const p1 = parts[1];
+    const sign = p0 >> 7;
+    const exponent_ = ((p0 & 127) << 4) + ((p1 & 0b11110000) >> 4);
     //---- Check for negative / positive zero / denormalized numbers.
-    let hiddenMsb = exponent_ === 0 ? 0 : 16;
+    const hiddenMsb = exponent_ === 0 ? 0 : 16;
     // Note: exponent === 0 => 0 or denormalized number (a.k.a. subnormal number).
-    let exponent = exponent_ === 0
+    const exponent = exponent_ === 0
         ? exponent_ - 1022 // Subnormals use a biased exponent of 1 (not 0!)
         : exponent_ - 1023;
     //---- Break up the significand into bytes
-    let significand = parts.slice(1);
+    const significand = parts.slice(1);
     significand[0] = (p1 & 15) + hiddenMsb;
     return {
         sign,
@@ -3061,11 +3042,11 @@ function parse_double_parseDouble(x) {
  * representations of the components.
  */
 function parse_double_parseDoubleDetailed(x) {
-    let str = double_to_binary_string_doubleToBinaryString(x);
+    const str = double_to_binary_string_doubleToBinaryString(x);
     // sign{1} exponent{11} fraction{52} === 64 bits (+1 hidden!)
-    let [, sign, exponent, significand] = str.match(/^(.)(.{11})(.{52})$/);
-    let exponent_ = parseInt(exponent, 2);
-    let hidden = exponent_ === 0 ? "0" : "1";
+    const [, sign, exponent, significand] = str.match(/^(.)(.{11})(.{52})$/);
+    const exponent_ = parseInt(exponent, 2);
+    const hidden = exponent_ === 0 ? "0" : "1";
     return {
         full: sign + exponent + hidden + significand,
         sign,
@@ -3114,13 +3095,13 @@ function get_max_set_bit_getLowestSetBit(a) {
         return NaN;
     }
     // Note: the significand includes the hidden bit!
-    let s = significand_significand(a);
-    let len = s.length;
+    const s = significand_significand(a);
+    const len = s.length;
     for (let i = len - 1; i >= 0; i--) {
         if (s[i] === 0) {
             continue;
         }
-        let l = get_max_set_bit_getLowestSetBit_(s[i]);
+        const l = get_max_set_bit_getLowestSetBit_(s[i]);
         if (Number.isFinite(l)) {
             return (8 * (len - i - 1)) + l;
         }
@@ -3156,10 +3137,10 @@ function get_max_set_bit_getHighestSetBit(a) {
     }
     // At this point there must be a highest set bit (always === 52 if the 
     // number is not a subnormal.
-    let s = significand_significand(a);
-    let len = s.length;
+    const s = significand_significand(a);
+    const len = s.length;
     for (let i = 0; i < len; i++) {
-        let l = get_max_set_bit_getHighestSetBit_(s[i]);
+        const l = get_max_set_bit_getHighestSetBit_(s[i]);
         if (Number.isFinite(l)) {
             return (8 * (len - i - 1)) + l;
         }
@@ -3213,11 +3194,11 @@ function is_bit_aligned_isBitAligned(a, maxBitLength, gridSpacingExponent) {
     if (a === 0) {
         return true;
     }
-    let e = exponent_exponent(a);
-    let maxSetBit = get_max_set_bit_getHighestSetBit(a) - 52 + e;
-    let minSetBit = get_max_set_bit_getLowestSetBit(a) - 52 + e;
-    let minBitBigEnough = minSetBit >= gridSpacingExponent;
-    let maxBitSmallEnough = maxSetBit <= maxBitLength - 1 + gridSpacingExponent;
+    const e = exponent_exponent(a);
+    const maxSetBit = get_max_set_bit_getHighestSetBit(a) - 52 + e;
+    const minSetBit = get_max_set_bit_getLowestSetBit(a) - 52 + e;
+    const minBitBigEnough = minSetBit >= gridSpacingExponent;
+    const maxBitSmallEnough = maxSetBit <= maxBitLength - 1 + gridSpacingExponent;
     return minBitBigEnough && maxBitSmallEnough;
 }
 
@@ -3234,7 +3215,7 @@ function msb_exponent_msbExponent(a) {
     if (a === 0 || !Number.isFinite(a)) {
         return NaN;
     }
-    let e = exponent_exponent(a);
+    const e = exponent_exponent(a);
     // Will return e for all but subnormal numbers
     return get_max_set_bit_getHighestSetBit(a) - 52 + e;
 }
@@ -3252,7 +3233,7 @@ function lsb_exponent_lsbExponent(a) {
     if (a === 0 || !Number.isFinite(a)) {
         return NaN;
     }
-    let e = exponent_exponent(a);
+    const e = exponent_exponent(a);
     return get_max_set_bit_getLowestSetBit(a) - 52 + e;
 }
 
@@ -3419,7 +3400,7 @@ const node_ddSign = ddSign;
 const node_fastTwoDiff = fast_two_diff_fastTwoDiff;
 const node_fastTwoSum = basic_fast_two_sum_fastTwoSum;
 const node_split = split_split;
-const node_twoDiff = basic_two_diff_twoDiff;
+const node_twoDiff = two_diff_twoDiff;
 const node_twoProduct = basic_two_product_twoProduct;
 const node_doubleDivDouble = doubleDivDouble;
 const node_twoSum = basic_two_sum_twoSum;
@@ -3534,7 +3515,7 @@ function isReallyPoint(ps) {
 ;// CONCATENATED MODULE: ./src/global-properties/classification/is-quad-really-line.ts
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const ediff = e_diff_eDiff;
+const ediff = eDiff;
 const esign = e_sign_eSign;
 const is_quad_really_line_ts = two_sum_twoSum;
 const { abs } = Math;
@@ -3587,7 +3568,7 @@ function isQuadReallyLine(ps) {
 const is_cubic_really_quad_tp = two_product_twoProduct;
 const fes = fastExpansionSum;
 const is_cubic_really_quad_esign = e_sign_eSign;
-const is_cubic_really_quad_ediff = e_diff_eDiff;
+const is_cubic_really_quad_ediff = eDiff;
 const is_cubic_really_quad_u = Number.EPSILON / 2;
 const is_cubic_really_quad_abs = Math.abs;
 /**
@@ -3722,7 +3703,7 @@ function isVertical(ps) {
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const sce = scaleExpansion;
-const is_cubic_really_line_ediff = e_diff_eDiff;
+const is_cubic_really_line_ediff = eDiff;
 const is_cubic_really_line_ts = two_sum_twoSum;
 const is_cubic_really_line_esign = e_sign_eSign;
 /**
@@ -4012,7 +3993,7 @@ function getCoeffsBez3WithRunningError(ps) {
 ;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis/exact/to-power-basis-exact.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const td = two_diff_twoDiff;
+const td = twoDiff;
 const to_power_basis_exact_ts = two_sum_twoSum;
 const to_power_basis_exact_sce = scaleExpansion2;
 const ge = growExpansion;
@@ -4111,9 +4092,9 @@ function toPowerBasis0Exact(ps) {
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const epr = expansion_product_expansionProduct;
+const epr = expansionProduct;
 const get_coeffs_bez3_exact_fes = fastExpansionSum;
-const get_coeffs_bez3_exact_ediff = e_diff_eDiff;
+const get_coeffs_bez3_exact_ediff = eDiff;
 /**
  * Returns an error-free polynomial in 1 variable whose roots are the parameter
  * values of the self-intersection points of the given cubic bezier curve.
@@ -4167,8 +4148,8 @@ function getCoeffsBez3Exact(ps) {
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const { eSign: classify_eSign, eCompare: classify_eCompare } = operators;
-const edif = e_diff_eDiff;
-const classify_epr = expansion_product_expansionProduct;
+const edif = eDiff;
+const classify_epr = expansionProduct;
 const classify_sce = scaleExpansion2;
 const classify_td = node_twoDiff;
 const classify_ts = node_twoSum;
@@ -4373,7 +4354,7 @@ function classifyGeneralCubic(ps) {
         return cubicGeneralCrunode;
     }
     // we need to check exactly - (a !== 0) at this point - tested for earlier
-    let [A, B, C] = getCoeffsBez3Exact(ps);
+    const [A, B, C] = getCoeffsBez3Exact(ps);
     // exact - Discr = b^2 - 4ac
     const eDiscr = edif(classify_epr(B, B), classify_sce(4, classify_epr(A, C)));
     const sgnDiscr = classify_eSign(eDiscr);
@@ -4385,549 +4366,33 @@ function classifyGeneralCubic(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/to-cas-str.js
-
-/** @internal */
-function isNumber(x) {
-    return typeof x === 'number';
-}
-/** @internal */
-function isShewchuk(x) {
-    return Array.isArray(x);
-}
-/** @internal */
-function isBigint(x) {
-    return typeof x === 'bigint';
-}
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/calculus/double/integrate.js
 /**
- * Returns a string representing the given polynomial that is readable by a
- * human or a CAS (Computer Algebra System).
- *
- * * **note:** if the polynomial coefficients are given as Shewchuk expansions
- * then the coefficients are first down-converted to double precision
- *
- * @param p a polynomial (with coefficients given densely as an array of Shewchuk
- * floating point expansions **or** double precision floating point numbers **or**
- * bigints) from highest to lowest power, e.g. `[5,-3,0]` represents the
- * polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * toCasStr([5,4,3,2,1]); //=> "x^4*5 + x^3*4 + x^2*3 + x*2 + 1"
- * toCasStr([[5],[4],[3],[2],[1]]); //=> "x^4*5 + x^3*4 + x^2*3 + x*2 + 1"
- * toCasStr([5n,4n,3n,2n,1n]); //=> "x^4*5 + x^3*4 + x^2*3 + x*2 + 1"
- * ```
- *
- * @doc
- */
-function toCasStr(p) {
-    const d = p.length - 1;
-    let str = '';
-    for (let i = 0; i < d + 1; i++) {
-        const _v = p[i];
-        const v = isShewchuk(_v)
-            ? e_estimate_eEstimate(_v)
-            : _v; // bigint or number
-        const absV = isBigint(v)
-            ? (_v < 0n ? -v : v)
-            : Math.abs(v);
-        let cStr = nonNegativeNumberToString(absV);
-        cStr = (v >= 0 ? ' + ' : ' - ') + cStr;
-        if (i === d) {
-            str += cStr;
-        }
-        else if (i === d - 1) {
-            str += cStr + '*x';
-        }
-        else {
-            str += cStr + '*x^' + (d - i).toString();
-        }
-    }
-    return str;
-}
-/**
- * from https://stackoverflow.com/a/46545519/2010061
- *
- * @internal
- */
-function nonNegativeNumberToString(num) {
-    let numStr = num.toString();
-    if (isBigint(num)) {
-        return numStr;
-    }
-    if (Math.abs(num) < 1) {
-        const e = parseInt(numStr.split('e-')[1]);
-        if (e) {
-            num *= 10 ** (e - 1);
-            numStr = '0.' + (new Array(e)).join('0') + num.toString().substring(2);
-        }
-    }
-    else {
-        let e = parseInt(numStr.split('+')[1]);
-        if (e > 20) {
-            e -= 20;
-            num /= 10 ** e;
-            numStr = num.toString() + (new Array(e + 1)).join('0');
-        }
-    }
-    return numStr;
-}
-
-//# sourceMappingURL=to-cas-str.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/bigint/b-abs-coeff.js
-/**
- * Returns the polynomial with all coeffients the absolute value of the given
- * polynomial.
- *
- * @param p a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-function bAbsCoeff(p) {
-    const p_ = [];
-    for (let i = 0; i < p.length; i++) {
-        const v = p[i];
-        p_.push(v < 0n ? -v : v);
-    }
-    return p_;
-}
-
-//# sourceMappingURL=b-abs-coeff.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/bigint/b-remove-leading-zeros.js
-/**
- * If the highest power coefficient of the given polynomial is 0 then
- * removeLeadingZeros can be called to remove all such highest terms so that
- * the returned array is a valid presentation of a polynomial.
- * @param p a polynomial whose leading zeros should be removed
- *
- * @doc
- */
-function bRemoveLeadingZeros(p) {
-    // @ts-nocheck
-    let lzCount = 0;
-    for (let i = 0; i <= p.length - 1; i++) {
-        if (p[i] !== 0n) {
-            break;
-        }
-        lzCount++;
-    }
-    if (lzCount !== 0) {
-        p = p.slice(lzCount);
-    }
-    return p;
-}
-
-//# sourceMappingURL=b-remove-leading-zeros.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/bigint/b-add.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const b_add_bRemoveLeadingZeros = bRemoveLeadingZeros;
-/**
- * Returns the result of adding two polynomials with bigint coefficients.
- *
- * @param p1 a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]` represents the
- * polynomial `5x^2 - 3x`
- * @param p2 another polynomial
- *
- * @example
- * ```typescript
- * bAdd([1n,2n,3n],[3n,4n]); //=> [1n,5n,7n]
- * ```
- *
- * @doc
- */
-function bAdd(p1, p2) {
-    // Initialize result array  
-    const d1 = p1.length - 1;
-    const d2 = p2.length - 1;
-    const Δd = d1 - d2;
-    const Δd1 = Δd < 0 ? +Δd : 0;
-    const Δd2 = Δd > 0 ? -Δd : 0;
-    const d = Math.max(d1, d2);
-    // Add coefficients
-    const result = [];
-    for (let i = 0; i < d + 1; i++) {
-        const c1 = p1[i + Δd1] || 0n;
-        const c2 = p2[i + Δd2] || 0n;
-        result.push(c1 + c2);
-    }
-    // Ensure the result is a valid polynomial representation
-    return b_add_bRemoveLeadingZeros(result);
-}
-
-//# sourceMappingURL=b-add.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/bigint/b-degree.js
-/**
- * Returns the degree of the given polynomial - the zero polynomial degree is
- * returned as -1 (and not -∞ as is conventional).
- *
- * @param p a polynomial with coefficients given densely as an array of bigints
- * from highest to lowest power, e.g. `[5n,-3n,0n]` represents the
- * polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * bDegree([9n,8n,7n,6n,5n,4n,3n,2n,1n]); //=> 8
- * ```
- *
- * @doc
- */
-function bDegree(p) {
-    return p.length - 1;
-}
-
-//# sourceMappingURL=b-degree.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/bigint/b-divide-by-const.js
-/**
- * Divides (using **integer division**) a polynomial by a constant.
- *
- * @param p a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]` represents the
- * polynomial `5x^2 - 3x`
- * @param c a constant
- *
- * @doc
- */
-function bDivideByConst(p, c) {
-    const d = p.length;
-    const r = [];
-    for (let i = 0; i < d; i++) {
-        r.push(p[i] / c);
-    }
-    return r;
-}
-
-//# sourceMappingURL=b-divide-by-const.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/bigint/b-equal.js
-/**
- * Returns true if two polynomials are exactly equal by comparing coefficients,
- * false otherwise.
- *
- * @param a a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]` represents the
- * polynomial `5x^2 - 3x`
- * @param b another polynomial
- *
- * @example
- * ```typescript
- * bEqual([1n,2n,3n,4n], [1n,2n,3n,4n]);   //=> true
- * bEqual([1n,2n,3n,4n], [1n,2n,3n,4n,5n]); //=> false
- * ```
- *
- * @doc
- */
-function bEqual(a, b) {
-    if (a.length !== b.length) {
-        return false;
-    }
-    for (let i = 0; i < a.length; i++) {
-        if (a[i] !== b[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-//# sourceMappingURL=b-equal.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/bigint/b-invert.js
-/**
- * Inverts the given polynomial by reversing the order of the coefficients,
- * i.e. p(x) -> x^deg(p) * p(1/x)
- *
- * @param p a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]` represents the
- * polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * bInvert([3n,2n,-5n]);  // => [-5n,2n,3n]
- * ```
- *
- * @doc
- */
-function bInvert(p) {
-    return p.slice().reverse();
-}
-
-//# sourceMappingURL=b-invert.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/gcd/bigint/b-integer-gcd.js
-/**
- * Computes and returns the greatest common divisor of two integers a and b,
- * using the [Euclidean Algorithm](https://en.wikipedia.org/wiki/Euclidean_algorithm).
- *
- * @doc
- */
-function bGcdInt(a, b) {
-    a = a < 0n ? -a : a;
-    b = b < 0n ? -b : b;
-    // The below 2 commented lines represent Euclid's original algorithm.
-    //if (a === b) { return a; }
-    //return a > b ? gcdInt(a - b, b) : gcdInt(a, b - a);
-    if (a === 0n) {
-        return b;
-    }
-    if (b === 0n) {
-        return a;
-    }
-    while (b !== 0n) {
-        const t = b;
-        b = a % b;
-        a = t;
-    }
-    return a;
-}
-/**
- * Naively computes and returns the greatest common divisor of 2 or more
- * integers by taking each integer in turn and calculating the GCD of that
- * integer and the previously calculated GCD (where the first GCD is simply
- * taken as the first number).
- *
- * @param vals the integers for which the GCD is to be calculated
- *
- * @doc
- */
-function bGcdInts(vals) {
-    const vals_ = vals.slice();
-    const len = vals_.length;
-    // make array of numbers all positive
-    for (let i = 0; i < len; i++) {
-        vals_[i] = vals_[i] < 0n ? -vals_[i] : vals_[i];
-    }
-    let a = vals_[0];
-    for (let i = 1; i < len; i++) {
-        a = bGcdInt(a, vals_[i]);
-    }
-    return a;
-}
-/**
- * * ❗ don't use - too slow - use [[bGcdInts]] instead ❗
- *
- * Computes and returns the greatest common divisor of 2 or more integers by
- * calculating GCDs rescursively using a tree (Divide and Conquer).
- *
- * * It turns out this method is *slower* than the naive method
- */ /*
-function bGcdIntsTree(vals: bigint[]): bigint {
-   const vals_ = vals.slice();
-
-   // make array of numbers all positive
-   for (const i=0; i<vals_.length; i++) {
-       vals_[i] = vals_[i] < 0n ? -vals_[i] : vals_[i];
-   }
-   
-   // Divide and conquer
-   while (vals_.length > 1) {
-       const newVals = [];
-       const len = vals_.length;
-       for (const i=0; i<len-1; i += 2) {
-           newVals.push(bGcdInt(vals_[i], vals_[i+1]));
-       }
-       if (len % 2 !== 0) {
-           newVals.push(vals_[len-1]);
-       }
-
-       vals_ = newVals;
-   }
-   
-   return vals_[0];
-}
-*/
-
-//# sourceMappingURL=b-integer-gcd.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/bigint/b-is-rational-multiple-of.js
-
-/**
- * Returns true if either polynomial is an exact rational multiple of the other.
- *
- * @param a a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]` represents the
- * polynomial `5x^2 - 3x`
- * @param b another polynomial
- *
- * @doc
- */
-function bIsRationalMultipleOf(a, b) {
-    // If either polynomial is zero
-    if (a.length === 0 || b.length === 0) {
-        return true;
-    }
-    if (a.length !== b.length) {
-        return false;
-    }
-    // multiply by -1 if appropriate to make the leading coefficients positive
-    const a_ = a[0] < 0n ? a.map(c => -c) : a;
-    const b_ = b[0] < 0n ? b.map(c => -c) : b;
-    /** leading coefficient of a */
-    const lcA = a_[0];
-    /** leading coefficient of b */
-    const lcB = b_[0];
-    const gcd = bGcdInt(lcA, lcB);
-    const A = lcA / gcd; // this division is exact
-    const B = lcB / gcd; // this division is exact
-    for (let i = 0; i < a_.length; i++) {
-        const Ab = A * b_[i];
-        if (Ab % B !== 0n) {
-            return false;
-        }
-        if (Ab / B !== a_[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-//# sourceMappingURL=b-is-rational-multiple-of.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/bigint/b-multiply.js
-/**
- * Returns the result of multiplying 2 polynomials with bigint coefficients.
- *
- * * see [polynomial arithmetic](https://en.wikipedia.org/wiki/Polynomial_arithmetic)
- * * see [polynomial multiplication](https://en.wikipedia.org/wiki/Discrete_Fourier_transform#Polynomial_multiplication)
- * * see [polynomial multiplication](http://web.cs.iastate.edu/~cs577/handouts/polymultiply.pdf)
- *
- * @param a a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]`
- * represents the polynomial `5x^2 - 3x`
- * @param b another polynomial.
- *
- * @example
- * ```typescript
- * bMultiply([1n,2n,3n], [2n,5n,3n,5n]); //=> [2n, 9n, 19n, 26n, 19n, 15n]
- * ```
- *
- * @doc
- */
-function bMultiply(a, b) {
-    const da = a.length - 1;
-    const db = b.length - 1;
-    // if either or both is the zero polynomial
-    if (da < 0 || db < 0) {
-        return [];
-    }
-    const d = da + db;
-    const r = new Array(d + 1).fill(0n);
-    for (let i = 0; i < da + 1; i++) {
-        for (let j = 0; j < db + 1; j++) {
-            r[d - (i + j)] += (a[da - i] * b[db - j]);
-        }
-    }
-    return r;
-}
-
-//# sourceMappingURL=b-multiply.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/bigint/b-multiply-by-const.js
-/**
- * Returns the result of multiplies a polynomial (with bigint coefficients) by
- * a constant.
- *
- * @param c a constant
- * @param p a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-function bMultiplyByConst(c, p) {
-    if (c === 0n) {
-        return [];
-    }
-    const d = p.length;
-    const r = [];
-    for (let i = 0; i < d; i++) {
-        r.push(c * p[i]);
-    }
-    return r;
-}
-
-//# sourceMappingURL=b-multiply-by-const.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/bigint/b-negate.js
-/**
- * Returns the negative of the given polynomial (p -> -p).
- *
- * @param p a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]` represents the
- * polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * bNegate([1n, -2n]); //=> [-1n, 2n]
- * ```
- *
- * @doc
- */
-function bNegate(p) {
-    const p_ = [];
-    for (let i = 0; i < p.length; i++) {
-        p_.push(-p[i]);
-    }
-    return p_;
-}
-
-//# sourceMappingURL=b-negate.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/bigint/b-subtract.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const b_subtract_bRemoveLeadingZeros = bRemoveLeadingZeros;
-/**
- * Returns the result of subtracting the second polynomial from the first with
- * coefficients given as bigints; (p1 - p2).
- *
- * @param a minuend; the polynomial from which will be subtracted; a polynomial
- * with coefficients given densely as an array of bigints
- * from highest to lowest power, e.g. `[5,-3,0]` represents the
- * polynomial `5x^2 - 3x`
- * @param b subtrahend; the polynomial that will be subtracted
- *
- * @example
- * ```typescript
- * bSubtract([2n,3n],[4n,4n]); //=> [-2n, -1n]
- * ```
- *
- * @doc
- */
-function bSubtract(a, b) {
-    // Initialize result array  
-    const da = a.length - 1;
-    const db = b.length - 1;
-    const Δd = da - db;
-    const Δd2 = Δd > 0 ? -Δd : 0;
-    const Δd1 = Δd < 0 ? +Δd : 0;
-    const d = Math.max(da, db);
-    // Add coefficients
-    const result = [];
-    for (let i = 0; i < d + 1; i++) {
-        const c1 = a[i + Δd1] || 0n;
-        const c2 = b[i + Δd2] || 0n;
-        result.push(c1 - c2);
-    }
-    // Ensure the result is a valid polynomial representation
-    return b_subtract_bRemoveLeadingZeros(result);
-}
-
-//# sourceMappingURL=b-subtract.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/double/abs-coeff.js
-/**
- * Returns the polynomial with all coeffients the absolute value of the given
- * polynomial.
+ * Returns the result of integrating the given polynomial in double precision.
  *
  * @param p a polynomial with coefficients given densely as an array of double
  * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
  * represents the polynomial `5x^2 - 3x`
+ * @param c the constant of intergration
+ *
+ * @example
+ * ```typescript
+ * integrate([3, 2, 1]); //=> [1, 1, 1, c]
+ * ```
  *
  * @doc
  */
-function absCoeff(p) {
-    const p_ = [];
-    for (let i = 0; i < p.length; i++) {
-        p_.push(Math.abs(p[i]));
+function integrate(p, c) {
+    const result = [];
+    const d = p.length - 1;
+    for (let i = 0; i < d + 1; i++) {
+        result.push(p[i] / (d + 1 - i));
     }
-    return p_;
+    result.push(c);
+    return result;
 }
 
-//# sourceMappingURL=abs-coeff.js.map
+//# sourceMappingURL=integrate.js.map
 ;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/double/remove-leading-zeros.js
 /**
  * If the highest power coefficient of the given polynomial is 0 then
@@ -4959,445 +4424,6 @@ function removeLeadingZeros(p) {
 }
 
 //# sourceMappingURL=remove-leading-zeros.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/double/add.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const add_removeLeadingZeros = removeLeadingZeros;
-/**
- * Returns the result of adding two polynomials in double precision.
- *
- * @param p1 a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param p2 another polynomial
- *
- * @example
- * ```typescript
- * add([1,2,3],[3,4]); //=> [1,5,7]
- * ```
- *
- * @doc
- */
-function add_add(p1, p2) {
-    // Initialize result array  
-    const d1 = p1.length - 1;
-    const d2 = p2.length - 1;
-    const Δd = d1 - d2;
-    const Δd1 = Δd < 0 ? +Δd : 0;
-    const Δd2 = Δd > 0 ? -Δd : 0;
-    const d = Math.max(d1, d2);
-    // Add coefficients
-    const result = [];
-    for (let i = 0; i < d + 1; i++) {
-        const c1 = p1[i + Δd1] || 0;
-        const c2 = p2[i + Δd2] || 0;
-        result.push(c1 + c2);
-    }
-    // Ensure the result is a valid polynomial representation
-    return add_removeLeadingZeros(result);
-}
-
-//# sourceMappingURL=add.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/double/degree.js
-/**
- * Returns the degree of the given polynomial - the zero polynomial degree is
- * returned as -1 (and not -∞ as is conventional).
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * degree([9,8,7,6,5,4,3,2,1]); //=> 8
- * ```
- *
- * @doc
- */
-function degree(p) {
-    return p.length - 1;
-}
-
-//# sourceMappingURL=degree.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/double/divide-by-const.js
-/**
- * Divides a polynomial by a constant in double precision.
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param c a constant
- *
- * @doc
- */
-function divideByConst(p, c) {
-    const d = p.length;
-    const r = [];
-    for (let i = 0; i < d; i++) {
-        r.push(p[i] / c);
-    }
-    return r;
-}
-
-//# sourceMappingURL=divide-by-const.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/double/equal.js
-/**
- * Returns true if two polynomials are exactly equal by comparing coefficients,
- * false otherwise.
- *
- * @param p1 a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param p2 another polynomial
- * @example
- * ```typescript
- * equal([1,2,3,4], [1,2,3,4]);   //=> true
- * equal([1,2,3,4], [1,2,3,4,5]); //=> false
- * ```
- *
- * @doc
- */
-function equal(p1, p2) {
-    if (p1.length !== p2.length) {
-        return false;
-    }
-    for (let i = 0; i < p1.length; i++) {
-        if (p1[i] !== p2[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-//# sourceMappingURL=equal.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/double/invert.js
-/**
- * Inverts the given polynomial by reversing the order of the coefficients,
- * i.e. p(x) -> x^deg(p) * p(1/x)
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * invert([3,2,-5]);  // => [-5,2,3]
- * ```
- *
- * @doc
- */
-function invert(p) {
-    return p.slice().reverse();
-}
-
-//# sourceMappingURL=invert.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/scale-to-int/scale-floats-to-ints.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const scale_floats_to_ints_exponent = exponent;
-const scale_floats_to_ints_bitLength = bitLength;
-/**
- * Returns the result of scaling the given floats by the *same* power of two
- * such that all floats become integers (bar overflow).
- *
- * * the result is exact (no round-off can occur, but overflow can)
- * * can be used to scale polynomials or Shewchuk expansions
- *
- * @param as an array of double precision floating point numbers
- *
- * @doc
- */
-function scaleFloatsToInts(as) {
-    let e = -1024;
-    for (let i = 0; i < as.length; i++) {
-        const a = as[i];
-        if (a === 0) {
-            continue;
-        }
-        const scaleFactor = -scale_floats_to_ints_exponent(a) + scale_floats_to_ints_bitLength(a) - 1;
-        if (scaleFactor > e) {
-            e = scaleFactor;
-        }
-    }
-    return as.map(a => a * 2 ** e);
-}
-
-//# sourceMappingURL=scale-floats-to-ints.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/gcd/double/integer-gcd.js
-/**
- * Computes the greatest common divisor of two integers a and b, using the
- * Euclidean Algorithm.
- *
- * **precondition** a, b must be integers
- *
- * @doc
- */
-function gcdInt(a, b) {
-    a = Math.abs(a);
-    b = Math.abs(b);
-    // The below 2 commented lines represent Euclid's original algorithm.
-    //if (a === b) { return a; }
-    //return a > b ? gcdInt(a - b, b) : gcdInt(a, b - a);
-    if (a === 0) {
-        return b;
-    }
-    if (b === 0) {
-        return a;
-    }
-    while (b !== 0) {
-        const t = b;
-        b = a % b;
-        a = t;
-    }
-    return a;
-}
-/**
- * Computes the greatest common divisor of two integers a and b, using the
- * binary GCD algorithm - probably slower than just using gcdInt that uses
- * the Euclidean Algorithm.
- */
-function gcdIntBinary(a, b) {
-    a = Math.abs(a);
-    b = Math.abs(b);
-    if (a === 0) {
-        return b;
-    }
-    if (b === 0) {
-        return a;
-    }
-    // Reduce a and/or b to odd numbers and keep track of the greatest power of 
-    // 2 dividing both a and b.
-    let k = 1;
-    while (a % 2 === 0 && b % 2 === 0) {
-        a = a / 2; // right shift
-        b = b / 2; // right shift
-        k = k * 2; // left shift
-    }
-    // Reduce a to an odd number...
-    while (a % 2 === 0) {
-        a = a / 2; // right shift
-    }
-    // Henceforth, a is always odd...
-    while (b) {
-        // Remove all factors of 2 in b as they are not common
-        while (b % 2 === 0) {
-            b = b / 2; // right shift
-        }
-        // a and b are both odd. Swap values such that it is the larger of the 
-        // two values, and then set b to the difference (which is even)
-        if (a > b) {
-            [a, b] = [b, a];
-        }
-        b = b - a; // b=0 iff b=a
-    }
-    // Restore common factors of 2...
-    return k * a;
-}
-/**
- * Naively computes and returns the greatest common divisor of 2 or more
- * integers by taking each integer in turn and calculating the GCD of that
- * integer and the previously calculated GCD (where the first GCD is simply
- * taken as the first number).
- *
- * @param vals the integers for which the GCD is to be calculated
- *
- * @doc
- */
-function gcdInts(vals) {
-    const vals_ = vals.slice();
-    const len = vals_.length;
-    // make array of numbers all positive
-    for (let i = 0; i < len; i++) {
-        vals_[i] = Math.abs(vals_[i]);
-    }
-    let a = vals_[0];
-    for (let i = 1; i < len; i++) {
-        a = gcdInt(a, vals_[i]);
-    }
-    return a;
-}
-/**
- * :::tip Heads up!
- * don't use - too slow - use [[gcdInts]] instead
- * :::
- *
- * Computes and returns the greatest common divisor of 2 or more integers by
- * calculating GCDs rescursively using a tree (Divide and Conquer).
- *
- * * It turns out this method is *slower* than the naive method
- *
- * @param vals the integers for which the GCD is to be calculated
- *
- * @internal
- */
-function gcdIntsTree(vals) {
-    let vals_ = vals.slice();
-    // make array of numbers all positive
-    for (let i = 0; i < vals_.length; i++) {
-        vals_[i] = Math.abs(vals_[i]);
-    }
-    // Divide and conquer
-    while (vals_.length > 1) {
-        const newVals = [];
-        const len = vals_.length;
-        for (let i = 0; i < len - 1; i += 2) {
-            newVals.push(gcdInt(vals_[i], vals_[i + 1]));
-        }
-        if (len % 2 !== 0) {
-            newVals.push(vals_[len - 1]);
-        }
-        vals_ = newVals;
-    }
-    return vals_[0];
-}
-
-//export { gcdInt, gcdInts }
-//# sourceMappingURL=integer-gcd.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/double/is-rational-multiple-of.js
-
-
-
-/**
- * Returns true if either polynomial is an exact rational multiple of the other.
- *
- * @param a a polynomial with coefficients given densely as an array of
- * double precision floating point numbers from highest to lowest power,
- * e.g. `[5,-3,0]` represents the polynomial `5x^2 - 3x`
- * @param b another polynomial
- *
- * @doc
- */
-function isRationalMultipleOf(a, b) {
-    // If either polynomial is zero
-    if (a.length === 0 || b.length === 0) {
-        return true;
-    }
-    if (a.length !== b.length) {
-        return false;
-    }
-    // multiply by -1 if appropriate to make the leading coefficients positive
-    // then scale floating point coefficients to integers
-    const a_ = scaleFloatsToInts(a[0] < 0 ? a.map(c => -c) : a);
-    const b_ = scaleFloatsToInts(b[0] < 0 ? b.map(c => -c) : b);
-    /** leading coefficient of a */
-    const lcA = a_[0];
-    /** leading coefficient of b */
-    const lcB = b_[0];
-    const gcd = gcdInt(lcA, lcB);
-    const A = lcA / gcd; // this division is exact
-    const B = lcB / gcd; // this division is exact
-    for (let i = 0; i < a_.length; i++) {
-        const Ab = two_product_twoProduct(A, b_[i]);
-        const { div, rem } = eLongDivide(Ab, [B]);
-        if (e_sign_eSign(rem) !== 0) {
-            return false;
-        }
-        if (e_compare_eCompare(div, [a_[i]]) !== 0) {
-            return false;
-        }
-    }
-    return true;
-}
-
-//# sourceMappingURL=is-rational-multiple-of.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/double/multiply.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const multiply_removeLeadingZeros = removeLeadingZeros;
-/**
- * Returns the result of multiplying 2 polynomials in double precision.
- *
- * * see [polynomial arithmetic](https://en.wikipedia.org/wiki/Polynomial_arithmetic)
- * * see [polynomial multiplication](https://en.wikipedia.org/wiki/Discrete_Fourier_transform#Polynomial_multiplication)
- * * see [polynomial multiplication](http://web.cs.iastate.edu/~cs577/handouts/polymultiply.pdf)
- *
- * @param p1 a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param p2 another polynomial.
- * @example
- * ```typescript
- * multiply([1,2,3], [2,5,3,5]); //=> [2, 9, 19, 26, 19, 15]
- * ```
- *
- * @doc
- */
-function multiply(p1, p2) {
-    const d1 = p1.length - 1;
-    const d2 = p2.length - 1;
-    // if either or both is the zero polynomial
-    if (d1 < 0 || d2 < 0) {
-        return [];
-    }
-    const d = d1 + d2;
-    const r = new Array(d + 1).fill(0);
-    for (let i = 0; i < d1 + 1; i++) {
-        for (let j = 0; j < d2 + 1; j++) {
-            r[d - (i + j)] += (p1[d1 - i] * p2[d2 - j]);
-        }
-    }
-    return multiply_removeLeadingZeros(r);
-}
-
-//# sourceMappingURL=multiply.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/double/multiply-by-const.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const multiply_by_const_removeLeadingZeros = removeLeadingZeros;
-/**
- * Returns the result of multiplies a polynomial by a constant in double
- * precision.
- *
- * @param c a constant
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * multiplyByConst(0.25, [3,2,1]); //=> [0.75, 0.5, 0.25]
- * ```
- *
- * @doc
- */
-function multiplyByConst(c, p) {
-    if (c === 0) {
-        return [];
-    }
-    const d = p.length;
-    const p_ = [];
-    for (let i = 0; i < d; i++) {
-        p_.push(c * p[i]);
-    }
-    // We *have* to clip due to possible floating point underflow
-    return multiply_by_const_removeLeadingZeros(p_);
-}
-
-//# sourceMappingURL=multiply-by-const.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/double/negate.js
-/**
- * Returns the negative of the given polynomial (p -> -p).
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @example
- * ```typescript
- * negate([0.1, -0.2]); //=> [-0.1, 0.2]
- * ```
- *
- * @doc
- */
-function negate(p) {
-    const p_ = [];
-    for (let i = 0; i < p.length; i++) {
-        p_.push(-p[i]);
-    }
-    return p_;
-}
-
-//# sourceMappingURL=negate.js.map
 ;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/double/subtract.js
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
@@ -5439,6420 +4465,46 @@ function subtract(p1, p2) {
 }
 
 //# sourceMappingURL=subtract.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/expansion/e-abs-coeff.js
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/double/multiply.js
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_abs_coeff_eAbs = e_abs_eAbs;
+const multiply_removeLeadingZeros = removeLeadingZeros;
 /**
- * Returns the polynomial with all coeffients the absolute value of the given
- * polynomial.
- *
- * @param p a polynomial with coefficients given densely as an array of
- * Shewchuk expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-function eAbsCoeff(p) {
-    const p_ = [];
-    for (let i = 0; i < p.length; i++) {
-        p_.push(e_abs_coeff_eAbs(p[i]));
-    }
-    return p_;
-}
-
-//# sourceMappingURL=e-abs-coeff.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/expansion/e-remove-leading-zeros.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_remove_leading_zeros_eSign = e_sign_eSign;
-/**
- * If the highest power coefficient of the given polynomial is 0 then
- * removeLeadingZeros can be called to remove all such highest terms so that
- * the returned array is a valid presentation of a polynomial.
- *
- * @internal
- *
- * @param p a polynomial with coefficients given densely as an array of Shewchuk
- * floating point expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * eRemoveLeadingZeros([[1e-18], [1e-10], [1e-1]]); //=> [[1e-18], [1e-10], [1e-1]]
- * eRemoveLeadingZeros([[0], [1e-10], [1e-1]]); //=> [[1e-10], [1e-1]]
- * ```
- *
- * @doc
- */
-function eRemoveLeadingZeros(p) {
-    let lzCount = 0;
-    for (let i = 0; i <= p.length - 1; i++) {
-        if (e_remove_leading_zeros_eSign(p[i]) !== 0) {
-            break;
-        }
-        lzCount++;
-    }
-    if (lzCount !== 0) {
-        p = p.slice(lzCount);
-    }
-    return p;
-}
-
-//# sourceMappingURL=e-remove-leading-zeros.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/expansion/e-add.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_add_fastExpansionSum = fastExpansionSum;
-const e_add_eRemoveLeadingZeros = eRemoveLeadingZeros;
-/**
- * Returns the exact result (bar underflow / overflow) of adding two
- * polynomials with coefficients given as Shewchuk floating point expansions.
- *
- * @param p1 a polynomial with coefficients given densely as an array of Shewchuk
- * floating point expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- * @param p2 another polynomial
- *
- * @example
- * ```typescript
- * eAdd([[1],[2],[3]],[[3],[4]]); //=> [[1],[5],[7]]
- * ```
- *
- * @doc
- */
-function e_add_eAdd(p1, p2) {
-    // Initialize result array  
-    const d1 = p1.length - 1;
-    const d2 = p2.length - 1;
-    const Δd = d1 - d2;
-    const Δd1 = Δd < 0 ? +Δd : 0;
-    const Δd2 = Δd > 0 ? -Δd : 0;
-    const d = Math.max(d1, d2);
-    // Add coefficients
-    const result = [];
-    for (let i = 0; i < d + 1; i++) {
-        const c1 = p1[i + Δd1] || [0];
-        const c2 = p2[i + Δd2] || [0];
-        result.push(e_add_fastExpansionSum(c1, c2));
-    }
-    // Ensure the result is a valid polynomial representation
-    return e_add_eRemoveLeadingZeros(result);
-}
-
-//# sourceMappingURL=e-add.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/expansion/e-degree.js
-/**
- * Returns the degree of the given polynomial - the zero polynomial degree is
- * returned as -1 (and not -∞ as is conventional).
- *
- * @param p a polynomial with coefficients given densely as an array of Shewchuk
- * floating point expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * eDegree([[9],[8],[7],[6],[5],[4],[3],[2],[1]]); //=> 8
- * ```
- *
- * @doc
- */
-function eDegree(p) {
-    return p.length - 1;
-}
-
-//# sourceMappingURL=e-degree.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/expansion/e-equal.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_equal_eCompare = e_compare_eCompare;
-/**
- * Returns true if two polynomials (with coefficients given as Shewchuk floating
- * point expansions) are exactly equal by comparing coefficients, false otherwise.
- *
- * @param p1 a polynomial with coefficients given densely as an array of Shewchuk
- * floating point expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- * @param p2 another polynomial
- *
- * @example
- * ```typescript
- * eEqual([[1],[2],[3],[0,4]], [[1],[2],[3],[4]]);   //=> true
- * eEqual([[1],[2],[3],[4]], [[1],[2],[3],[4],[5]]); //=> false
- * ```
- *
- * @doc
- */
-function eEqual(p1, p2) {
-    if (p1.length !== p2.length) {
-        return false;
-    }
-    for (let i = 0; i < p1.length; i++) {
-        if (e_equal_eCompare(p1[i], p2[i]) !== 0) {
-            return false;
-        }
-    }
-    return true;
-}
-
-//# sourceMappingURL=e-equal.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/expansion/e-invert.js
-/**
- * Inverts the given polynomial (with coefficients given as Shewchuk floating
- * point expansions) by reversing the order of the coefficients,
- * i.e. p(x) -> x^deg(p) * p(1/x)
- *
- * @param p a polynomial with coefficients given densely as an array of Shewchuk
- * floating point expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * eInvert([[3],[2],[-5]]);  // => [[-5],[2],[3]]
- * ```
- *
- * @doc
- */
-function eInvert(p) {
-    return p.slice().reverse();
-}
-
-//# sourceMappingURL=e-invert.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/expansion/e-is-const-or-zero.js
-/**
- * Returns true if the given polynomial (with coefficients given as Shewchuk
- * floating point expansions) is a constant or the zero polynomial.
- *
- * @param p a polynomial with coefficients given densely as an array of Shewchuk
- * floating point expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-function eIsConstOrZero(p) {
-    return p.length <= 1;
-}
-
-//# sourceMappingURL=e-is-const-or-zero.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/scale-to-int/scale-floatss-to-intss.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const scale_floatss_to_intss_exponent = exponent;
-const scale_floatss_to_intss_bitLength = bitLength;
-/**
- * Returns the result of scaling the given array of array of floats by the
- * *same* power of two such that all floats become integers (bar overflow).
- *
- * * the result is exact (no round-off can occur, but overflow can)
- * * can be used to scale polynomials (with coefficients given as Shewchuk
- * expansions)
- *
- * @param ass an array of an array of double precision floating point numbers
- *
- * @doc
- */
-function scaleFloatssToIntss(ass) {
-    let e = -1024;
-    for (let i = 0; i < ass.length; i++) {
-        const c = ass[i];
-        for (let j = 0; j < c.length; j++) {
-            const a = c[j];
-            if (a === 0) {
-                continue;
-            }
-            const scaleFactor = -scale_floatss_to_intss_exponent(a) + scale_floatss_to_intss_bitLength(a) - 1;
-            if (scaleFactor > e) {
-                e = scaleFactor;
-            }
-        }
-    }
-    return ass.map(as => as.map(a => a * 2 ** e));
-}
-
-//# sourceMappingURL=scale-floatss-to-intss.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/gcd/expansion/e-integer-gcd.js
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_integer_gcd_eAbs = e_abs_eAbs;
-const e_integer_gcd_eSign = e_sign_eSign;
-const e_integer_gcd_eRem = eRem;
-/**
- * Computes the greatest common divisor of two integers a and b, using the
- * Euclidean Algorithm.
- *
- * **precondition** a, b must be integers given as Shewchuk expansions
- *
- * @doc
- */
-function eGcdInt(a, b) {
-    a = e_integer_gcd_eAbs(a);
-    b = e_integer_gcd_eAbs(b);
-    // The below 2 commented lines represent Euclid's original algorithm.
-    //if (a === b) { return a; }
-    //return a > b ? gcdInt(a - b, b) : gcdInt(a, b - a);
-    if (e_integer_gcd_eSign(a) === 0) {
-        return b;
-    }
-    if (e_integer_gcd_eSign(b) === 0) {
-        return a;
-    }
-    while (e_integer_gcd_eSign(b) !== 0) {
-        const t = b;
-        b = e_integer_gcd_eRem(a, b);
-        a = t;
-    }
-    return a;
-}
-/**
- * Naively computes and returns the greatest common divisor of 2 or more
- * integers by taking each integer in turn and calculating the GCD of that
- * integer and the previously calculated GCD (where the first GCD is simply
- * taken as the first number).
- *
- * @param vals the integers (given as Shewchuk expansions) for which the GCD is
- * to be calculated
- */
-function eGcdInts(vals) {
-    const vals_ = vals.slice();
-    const len = vals_.length;
-    // make array of numbers all positive
-    for (let i = 0; i < len; i++) {
-        vals_[i] = e_integer_gcd_eAbs(vals_[i]);
-    }
-    let a = vals_[0];
-    for (let i = 1; i < len; i++) {
-        a = eGcdInt(a, vals_[i]);
-    }
-    return a;
-}
-
-//# sourceMappingURL=e-integer-gcd.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/expansion/e-is-rational-multiple-of.js
-
-
-
-/**
- * Returns true if either polynomial is an exact rational multiple of the other.
- *
- * @param a a polynomial with coefficients given densely as an array of
- * Shewchuk expansions from highest to lowest power,
- * e.g. `[[5],[-3],[0]]` represents the polynomial `5x^2 - 3x`
- * @param b another polynomial
- *
- * @doc
- */
-function eIsRationalMultipleOf(a, b) {
-    // If either polynomial is zero
-    if (a.length === 0 || b.length === 0) {
-        return true;
-    }
-    if (a.length !== b.length) {
-        return false;
-    }
-    // multiply by -1 if appropriate to make the leading coefficients positive
-    // then scale floating point coefficients to integers
-    const a_ = scaleFloatssToIntss(e_sign_eSign(a[0]) < 0 ? a.map(c => eNegativeOf(c)) : a);
-    const b_ = scaleFloatssToIntss(e_sign_eSign(b[0]) < 0 ? b.map(c => eNegativeOf(c)) : b);
-    /** leading coefficient of a */
-    const lcA = a_[0];
-    /** leading coefficient of b */
-    const lcB = b_[0];
-    const gcd = eGcdInt(lcA, lcB);
-    const A = eIntDiv(lcA, gcd); // this division is exact
-    const B = eIntDiv(lcB, gcd); // this division is exact
-    for (let i = 0; i < a_.length; i++) {
-        const Ab = expansion_product_expansionProduct(A, b_[i]);
-        const { div, rem } = eLongDivide(Ab, B);
-        if (e_sign_eSign(rem) !== 0) {
-            return false;
-        }
-        if (e_compare_eCompare(div, a_[i]) !== 0) {
-            return false;
-        }
-    }
-    return true;
-}
-
-//# sourceMappingURL=e-is-rational-multiple-of.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/expansion/e-is-unit.js
-/**
- * Returns true if the given polynomial (with coefficients given as Shewchuk
- * floating point expansions) is the unit polynomial, i.e. === 1.
- *
- * @param p a polynomial with coefficients given densely as an array of Shewchuk
- * floating point expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-function eIsUnit(p) {
-    return p.length === 1 && p[0].length === 1 && p[0][0] === 1;
-}
-
-//# sourceMappingURL=e-is-unit.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/expansion/e-multiply.js
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_multiply_eRemoveLeadingZeros = eRemoveLeadingZeros;
-const e_multiply_expansionProduct = expansion_product_expansionProduct;
-const e_multiply_fastExpansionSum = fastExpansionSum;
-/**
- * Returns the exact result (bar underflow / overflow) of multiplying two
- * polynomials (with coefficients given as Shewchuk floating point expansions).
+ * Returns the result of multiplying 2 polynomials in double precision.
  *
  * * see [polynomial arithmetic](https://en.wikipedia.org/wiki/Polynomial_arithmetic)
  * * see [polynomial multiplication](https://en.wikipedia.org/wiki/Discrete_Fourier_transform#Polynomial_multiplication)
  * * see [polynomial multiplication](http://web.cs.iastate.edu/~cs577/handouts/polymultiply.pdf)
  *
- * @param a a polynomial with coefficients given densely as an array of Shewchuk
- * floating point expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
+ * @param p1 a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
  * represents the polynomial `5x^2 - 3x`
- * @param b another polynomial.
- *
+ * @param p2 another polynomial.
  * @example
  * ```typescript
- * eMultiply([[1],[2],[3]], [[2],[5],[3],[5]]); //=> [[2], [9], [19], [26], [19], [15]]
+ * multiply([1,2,3], [2,5,3,5]); //=> [2, 9, 19, 26, 19, 15]
  * ```
  *
  * @doc
  */
-function eMultiply(a, b) {
-    const da = a.length - 1;
-    const db = b.length - 1;
+function multiply(p1, p2) {
+    const d1 = p1.length - 1;
+    const d2 = p2.length - 1;
     // if either or both is the zero polynomial
-    if (da < 0 || db < 0) {
+    if (d1 < 0 || d2 < 0) {
         return [];
     }
-    const d = da + db;
-    const result = new Array(d + 1).fill([0]);
-    for (let i = 0; i < da + 1; i++) {
-        for (let j = 0; j < db + 1; j++) {
-            result[d - (i + j)] = e_multiply_fastExpansionSum(result[d - (i + j)], e_multiply_expansionProduct(a[da - i], b[db - j]));
+    const d = d1 + d2;
+    const r = new Array(d + 1).fill(0);
+    for (let i = 0; i < d1 + 1; i++) {
+        for (let j = 0; j < d2 + 1; j++) {
+            r[d - (i + j)] += (p1[d1 - i] * p2[d2 - j]);
         }
     }
-    return e_multiply_eRemoveLeadingZeros(result);
+    return multiply_removeLeadingZeros(r);
 }
 
-//# sourceMappingURL=e-multiply.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/expansion/e-multiply-by-const.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_multiply_by_const_eSign = e_sign_eSign;
-const e_multiply_by_const_expansionProduct = expansion_product_expansionProduct;
-/**
- * Returns the exact result (bar underflow / overflow) of multiplying a
- * polynomial (with coefficients given as Shewchuk floating point expansions)
- * by a constant (given as a Shewchuk floating point expansion)
- *
- * @param c a constant (given as a Shewchuk floating point expansion)
- * @param p a polynomial with coefficients given densely as an array of Shewchuk
- * floating point expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * eMultiplyByConst([0.25], [[3],[2],[1]]); //=> [[0.75], [0.5], [0.25]]
- * ```
- *
- * @doc
- */
-function eMultiplyByConst(c, p) {
-    if (e_multiply_by_const_eSign(c) === 0) {
-        return [];
-    }
-    const d = p.length - 1;
-    const result = [];
-    for (let i = 0; i < d + 1; i++) {
-        result.push(e_multiply_by_const_expansionProduct(c, p[i]));
-    }
-    return result;
-}
-
-//# sourceMappingURL=e-multiply-by-const.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/expansion/e-negate.js
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-
-const e_negate_eNegativeOf = eNegativeOf;
-/**
- * Returns the negative of the given polynomial (with coefficients given as
- * Shewchuk floating point expansions), i.e. (p -> -p).
- *
- * @param p a polynomial with coefficients given densely as an array of Shewchuk
- * floating point expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * eNegate([[0.1], [-0.2]]); //=> [[-0.1], [0.2]]
- * ```
- *
- * @doc
- */
-function eNegate(p) {
-    const result = [];
-    for (let i = 0; i < p.length; i++) {
-        result.push(e_negate_eNegativeOf(p[i]));
-    }
-    return result;
-}
-
-//# sourceMappingURL=e-negate.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/expansion/e-product.js
-
-/**
- * Returns the exact result (bar underflow / overflow) of the product of 0 or
- * more polynomials.
- *
- * * see [polynomial arithmetic](https://en.wikipedia.org/wiki/Polynomial_arithmetic)
- * * see [polynomial multiplication](https://en.wikipedia.org/wiki/Discrete_Fourier_transform#Polynomial_multiplication)
- * * see [polynomial multiplication](http://web.cs.iastate.edu/~cs577/handouts/polymultiply.pdf)
- *
- * @param ps an array of polynomials each with coefficients given densely as an
- * array of Shewchuk floating point expansions from highest to lowest power,
- * e.g. `[[5],[-3],[0]]` represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * eProduct([[[1],[2],[3]], [[2],[5],[3],[5]]]); //=> [[2], [9], [19], [26], [19], [15]]
- * ```
- *
- * @doc
- */
-function e_product_eProduct(ps) {
-    if (ps.length === 0) {
-        return [[1]];
-    }
-    let p = ps[0];
-    for (let i = 1; i < ps.length; i++) {
-        p = eMultiply(p, ps[i]);
-    }
-    return p;
-}
-
-//# sourceMappingURL=e-product.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/expansion/e-subtract.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_subtract_eDiff = e_diff_eDiff;
-const e_subtract_eRemoveLeadingZeros = eRemoveLeadingZeros;
-/**
- * Returns the exact result (bar underflow / overflow) of subtracting the
- * second polynomial from the first (both with coefficients given as Shewchuk
- * floating point expansions); (p1 - p2).
- *
- * @param p1 minuend; the polynomial from which will be subtracted; a polynomial
- * with coefficients given densely as Shewchuk floating point expansions
- * from highest to lowest power, e.g. `[[5],[-3],[0]]` represents the
- * polynomial `5x^2 - 3x`
- * @param p2 subtrahend; the polynomial that will be subtracted
- *
- * @example
- * ```typescript
- * eSubtract([[2],[3]],[[4],[4]]); //=> [[-2], [-1]]
- * ```
- *
- * @doc
- */
-function eSubtract(p1, p2) {
-    // Initialize result array  
-    const d1 = p1.length - 1;
-    const d2 = p2.length - 1;
-    const Δd = d1 - d2;
-    const Δd1 = Δd < 0 ? +Δd : 0;
-    const Δd2 = Δd > 0 ? -Δd : 0;
-    const d = Math.max(d1, d2);
-    // Add coefficients
-    const result = [];
-    for (let i = 0; i < d + 1; i++) {
-        const c1 = p1[i + Δd1] || [0];
-        const c2 = p2[i + Δd2] || [0];
-        result.push(e_subtract_eDiff(c1, c2));
-    }
-    // Ensure the result is a valid polynomial representation
-    return e_subtract_eRemoveLeadingZeros(result);
-}
-
-//# sourceMappingURL=e-subtract.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/calculus/bigint/b-differentiate.js
-/**
- * Returns the result of differentiating the given polynomial.
- *
- * @param p a polynomial with coefficients given densely as an array of bigints
- * from highest to lowest power, e.g. `[5n,-3n,0n]` represents the
- * polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * bDifferentiate([5n, 4n, 3n, 2n, 1n]); //=> [20n, 12n, 6n, 2n]
- * ```
- *
- * @doc
- */
-function bDifferentiate(p) {
-    const r = [];
-    const d = p.length - 1;
-    for (let i = 0; i < d; i++) {
-        r.push(BigInt((d - i)) * p[i]);
-    }
-    return r;
-}
-
-//# sourceMappingURL=b-differentiate.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/calculus/double/differentiate.js
-/**
- * Returns the result of differentiating the given polynomial in double
- * precision.
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * differentiate([5, 4, 3, 2, 1]); //=> [20, 12, 6, 2]
- * ```
- *
- * @doc
- */
-function differentiate(p) {
-    const result = [];
-    const d = p.length - 1;
-    for (let i = 0; i < d; i++) {
-        result.push((d - i) * p[i]);
-    }
-    return result;
-}
-
-//# sourceMappingURL=differentiate.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/calculus/double/integrate.js
-/**
- * Returns the result of integrating the given polynomial in double precision.
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param c the constant of intergration
- *
- * @example
- * ```typescript
- * integrate([3, 2, 1]); //=> [1, 1, 1, c]
- * ```
- *
- * @doc
- */
-function integrate(p, c) {
-    const result = [];
-    const d = p.length - 1;
-    for (let i = 0; i < d + 1; i++) {
-        result.push(p[i] / (d + 1 - i));
-    }
-    result.push(c);
-    return result;
-}
-
-//# sourceMappingURL=integrate.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/calculus/double-double/dd-differentiate.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const dd_differentiate_ddMultDouble2 = node_ddMultDouble2;
-/**
- * Returns the result of differentiating the given polynomial (with coefficients
- * given in double-double precision) in double-double precision.
- *
- * @param p a polynomial with coefficients given densely as an array of
- * double-double precision floating point numbers from highest to lowest power,
- * e.g. `[[5],[-3],[0]]` represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * ddDifferentiate([[0,5], [0,4], [0,3], [0,2], [0,1]]); //=> [[0,20], [0,12], [0,6], [0,2]]
- * ```
- *
- * @doc
- */
-function ddDifferentiate(p) {
-    const result = [];
-    const d = p.length - 1;
-    for (let i = 0; i < d; i++) {
-        result.push(dd_differentiate_ddMultDouble2((d - i), p[i]));
-    }
-    return result;
-}
-
-//# sourceMappingURL=dd-differentiate.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/error-analysis/gamma.js
-const gamma_u = Number.EPSILON / 2;
-const gamma_uu = gamma_u * gamma_u;
-/**
- * The canonical floating point error function, γ.
- *
- * * roughly `=== n * (Number.EPSILON / 2)`
- * * see e.g. [Algorithms for Accurate, Validated and Fast Polynomial Evaluation](https://hal.archives-ouvertes.fr/hal-00285603/document)
- * @param n the parameter - typically a small positive integer, e.g. for
- * polynomial evaluation this === 2*d + 1, where d is the degree of the
- * polynomial
- *
- * @doc
- */
-function gamma_(n) {
-    const nu = n * gamma_u;
-    return nu / (1 - nu);
-}
-/**
- * The canonical, once compensated (implying double-double precision),
- * floating point error function.
- *
- * * roughly `=== n * (Number.EPSILON / 2)**2`
- * * see e.g. [Algorithms for Accurate, Validated and Fast Polynomial Evaluation](https://hal.archives-ouvertes.fr/hal-00285603/document)
- * @param n the parameter - typically a small positive integer, e.g. for
- * polynomial evaluation this === 2*d + 1, where d is the degree of the
- * polynomial
- *
- * @doc
- */
-function error_analysis_gamma_(n) {
-    const nuu = n * gamma_uu;
-    return nuu / (1 - nuu);
-}
-
-//# sourceMappingURL=gamma.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/calculus/double-double/dd-differentiate-with-err.js
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const dd_differentiate_with_err_ddMultDouble2 = node_ddMultDouble2;
-const dd_differentiate_with_err_eEstimate = e_estimate_eEstimate;
-const γγ3 = error_analysis_gamma_(3);
-/**
- * Returns the result (and resulting coefficient-wise error bound) of
- * differentiating the given polynomial (with coefficients given in
- * double-double precision) in double-double precision.
- *
- * @param pWithErr an object with 2 properties: `p`: a polynomial with
- * coefficients given densely as an array of double-double precision floating
- * point numbers from highest to lowest power, e.g. `[[5],[-3],[0]]` represents
- * the polynomial `5x^2 - 3x` **and** `pE`: the coefficient-wise error bound of
- * the input polynomial
- *
- * @doc
- */
-function ddDifferentiateWithError(pWithErr) {
-    const { p, pE } = pWithErr;
-    const dp = [];
-    const dpE = [];
-    const d = p.length - 1;
-    for (let i = 0; i < d; i++) {
-        const deg = d - i;
-        const c = dd_differentiate_with_err_ddMultDouble2(deg, p[i]);
-        dp.push(c);
-        // if 1,2,4 or 8, etc. then no additional error occurs on multiply
-        // if 3,5,7 or 9, etc. then additional error occurs
-        // deg is a power of 2 <=> (deg & deg-1) === 0
-        const extraErr = (deg & deg - 1) === 0 ? 0 : γγ3;
-        const $c = dd_differentiate_with_err_eEstimate(c);
-        dpE.push(
-        //deg * (pE[i] + Math.abs($c)*extraErr)
-        deg * pE[i] + Math.abs($c) * extraErr);
-    }
-    return { p: dp, pE: dpE };
-}
-
-//# sourceMappingURL=dd-differentiate-with-err.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/calculus/double-double/dd-integrate.js
-
-/**
- * Returns the result of integrating the given polynomial in double-double
- * precision.
- *
- * @param p a polynomial with coefficients given densely as an array of
- * double-double precision floating point numbers from highest to lowest
- * power, e.g. `[[0,5],[0,-3],[0,0]]`
- * represents the polynomial `5x^2 - 3x`
- * @param c the constant of intergration
- *
- * @example
- * ```typescript
- * integrate([[0,3], [0,2], [0,1]]); //=> [[0,1], [0,1], [0,1], [0,c]]
- * ```
- *
- * @doc
- */
-function ddIntegrate(p, c) {
-    const result = [];
-    const d = p.length - 1;
-    for (let i = 0; i < d + 1; i++) {
-        result.push(node_ddDivDouble(p[i], (d + 1 - i)));
-    }
-    result.push(c);
-    return result;
-}
-
-//# sourceMappingURL=dd-integrate.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/calculus/expansion/e-differentiate.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_differentiate_scaleExpansion = scaleExpansion;
-/**
- * Returns the exact result (bar underflow / overflow) of differentiating the
- * given polynomial (with Shewchuk expansion coefficients).
- *
- * @param p a polynomial with coefficients given densely as an array of Shewchuk
- * floating point expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * eDifferentiate([[5], [4], [3], [2], [1]]); //=> [[20], [12], [6], [2]]
- * ```
- *
- * @doc
- */
-function eDifferentiate(p) {
-    const result = [];
-    const d = p.length - 1;
-    for (let i = 0; i < d; i++) {
-        result.push(e_differentiate_scaleExpansion(p[i], d - i));
-    }
-    return result;
-}
-
-//# sourceMappingURL=e-differentiate.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/change-variables/bigint/b-change-variables-linear.js
-/**
- * Returns the result of performing a change of variables of the
- * form: p(x) <- p(ax + b).
- *
- * * see [this stackoverflow question](http://stackoverflow.com/questions/141422/how-can-a-transform-a-polynomial-to-another-coordinate-system)
- *
- * @param p a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]` represents the
- * polynomial `5x^2 - 3x`
- * @param a the `a` in `ax + b`
- * @param b the `b` in `ax + b`
- *
- * @example
- * ```typescript
- * bChangeVariablesLinear([1n,2n,7n], 3n, 4n); //=> [9n, 30n, 31n]
- * ```
- *
- * @doc
- */
-function bChangeVariablesLinear(p, a, b) {
-    // We let the coefficients of p(ax + b) be denoted by d_i in the 
-    // code below. 
-    // d_i is calculated as d = T*c, where c are the original 
-    // coefficients.
-    const d = p.length - 1;
-    if (d < 0) {
-        return [];
-    }
-    // Initialize a zero matrix
-    const t = [];
-    for (let i = 0; i < d + 1; i++) {
-        t.push(new Array(d + 1).fill(0n));
-    }
-    // Calculate the triangular matrix T
-    t[0][0] = 1n;
-    for (let j = 1; j <= d; j++) {
-        t[0][j] = b * t[0][j - 1];
-        for (let i = 1; i <= j; i++) {
-            t[i][j] = b * t[i][j - 1] + a * t[i - 1][j - 1];
-        }
-    }
-    // Multiply
-    const res = new Array(d + 1).fill(0n);
-    for (let i = 0; i <= d; i++) {
-        res[d - i] = 0n;
-        for (let j = i; j <= d; j++) {
-            res[d - i] += t[i][j] * p[d - j];
-        }
-    }
-    return res;
-}
-
-//# sourceMappingURL=b-change-variables-linear.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/change-variables/bigint/b-change-variables-scale.js
-/**
- * Returns the result of performing a change of variables of the
- * form: p(x) <- p(ax).
- *
- * * see [this stackoverflow question](http://stackoverflow.com/questions/141422/how-can-a-transform-a-polynomial-to-another-coordinate-system)
- *
- * @param p a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]` represents the
- * polynomial `5x^2 - 3x`
- * @param a a scaling factor, i.e. the `a` in `p(x) <- p(ax)`
- *
- * @example
- * ```typescript
- * bChangeVariablesScale([1n,2n,7n], 3n); //=> [9n, 6n, 7n]
- * ```
- *
- * @doc
- */
-function bChangeVariablesScale(p, a) {
-    // We let the coefficients of `p(ax)` be denoted by `d_i` in the code below. 
-    // `d_i` is calculated as `d = T*c`, where `c` is the original coefficient
-    // vector.
-    const d = p.length - 1;
-    if (d < 0) {
-        return [];
-    }
-    // Initialize a zero matrix
-    const t = [];
-    for (let i = 0; i < d + 1; i++) {
-        t.push(new Array(d + 1).fill(0n));
-    }
-    // Calculate the triangular matrix T
-    t[0][0] = 1n;
-    for (let j = 1; j <= d; j++) {
-        t[0][j] = 0n;
-        for (let i = 1; i <= j; i++) {
-            t[i][j] = a * t[i - 1][j - 1];
-        }
-    }
-    // Multiply
-    const res = new Array(d + 1).fill(0n);
-    for (let i = 0; i <= d; i++) {
-        res[d - i] = 0n;
-        for (let j = i; j <= d; j++) {
-            res[d - i] += t[i][j] * p[d - j];
-        }
-    }
-    return res;
-}
-
-//# sourceMappingURL=b-change-variables-scale.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/change-variables/bigint/b-change-variables-translate-x.js
-/**
- * Returns the result of performing a change of variables of the
- * form: p(x) <- p(x + b).
- *
- * * see [this stackoverflow question](http://stackoverflow.com/questions/141422/how-can-a-transform-a-polynomial-to-another-coordinate-system)
- *
- * @param p a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]` represents the
- * polynomial `5x^2 - 3x`
- * @param b the `b` in `x + b`
- *
- * @example
- * ```typescript
- * bChangeVariablesTranslateX([1n,2n,7n], 3n); //=> [1n, 8n, 22n]
- * ```
- *
- * @doc
- */
-function bChangeVariablesTranslateX(p, b) {
-    // We let the coefficients of p(x + b) be denoted by d_i in the code below. 
-    // d_i is calculated as d = T*c, where c are the original coefficients.
-    const d = p.length - 1;
-    if (d < 0) {
-        return [];
-    }
-    // Initialize a zero matrix
-    const t = [];
-    for (let i = 0; i < d + 1; i++) {
-        t.push(new Array(d + 1).fill(0n));
-    }
-    // Calculate the triangular matrix T
-    t[0][0] = 1n;
-    for (let j = 1; j <= d; j++) {
-        t[0][j] = b * t[0][j - 1];
-        for (let i = 1; i <= j; i++) {
-            t[i][j] = b * t[i][j - 1] + t[i - 1][j - 1];
-        }
-    }
-    // Multiply
-    const res = new Array(d + 1).fill(0n);
-    for (let i = 0; i <= d; i++) {
-        res[d - i] = 0n;
-        for (let j = i; j <= d; j++) {
-            const acc = t[i][j] * p[d - j];
-            res[d - i] += acc;
-        }
-    }
-    return res;
-}
-
-//# sourceMappingURL=b-change-variables-translate-x.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/change-variables/bigint/b-reflect-about-y-axis.js
-/**
- * Returns the result of reflecting the given polynomial about the Y-axis, i.e.
- * perform the change of variables: p(x) <- p(-x).
- *
- * @param p a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]` represents the
- * polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * bReflectAboutYAxis([5n, 4n, 3n, 2n, 1n]); //=> [5n, -4n, 3n, -2n, 1n]
- * ```
- *
- * @doc
- */
-function bReflectAboutYAxis(p) {
-    const d = p.length - 1;
-    if (d < 0) {
-        return [];
-    }
-    const result = p.slice();
-    for (let i = 0; i < d + 1; i++) {
-        if (i % 2) {
-            result[i] = -result[i];
-        }
-    }
-    return result;
-}
-
-//# sourceMappingURL=b-reflect-about-y-axis.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/change-variables/double/change-variables-linear.js
-/**
- * Returns the result of performing a change of variables of the
- * form: p(x) <- p(ax + b) in double precision.
- *
- * * see [this stackoverflow question](http://stackoverflow.com/questions/141422/how-can-a-transform-a-polynomial-to-another-coordinate-system)
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param a the `a` in `ax + b`
- * @param b the `b` in `ax + b`
- *
- * @example
- * ```typescript
- * changeVariablesLinear([1,2,7], 3, 4); //=> [9, 30, 31]
- * ```
- *
- * @doc
- */
-function changeVariablesLinear(p, a, b) {
-    // We let the coefficients of p(ax + b) be denoted by d_i in the 
-    // code below. 
-    // d_i is calculated as d = T*c, where c are the original 
-    // coefficients.
-    const d = p.length - 1;
-    if (d < 0) {
-        return [];
-    }
-    // Initialize a zero matrix
-    const t = [];
-    for (let i = 0; i < d + 1; i++) {
-        t.push(new Array(d + 1).fill(0));
-    }
-    // Calculate the triangular matrix T
-    t[0][0] = 1;
-    for (let j = 1; j <= d; j++) {
-        t[0][j] = b * t[0][j - 1];
-        for (let i = 1; i <= j; i++) {
-            t[i][j] = b * t[i][j - 1] + a * t[i - 1][j - 1];
-        }
-    }
-    // Multiply
-    const res = new Array(d + 1).fill(0);
-    for (let i = 0; i <= d; i++) {
-        res[d - i] = 0;
-        for (let j = i; j <= d; j++) {
-            res[d - i] += t[i][j] * p[d - j];
-        }
-    }
-    return res;
-}
-
-//# sourceMappingURL=change-variables-linear.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/change-variables/double/change-variables-scale.js
-/**
- * Returns the result of performing a change of variables of the
- * form: p(x) <- p(ax) in double precision.
- *
- * * see [this stackoverflow question](http://stackoverflow.com/questions/141422/how-can-a-transform-a-polynomial-to-another-coordinate-system)
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param a a scaling factor, i.e. the `a` in `p(x) <- p(ax)`
- *
- * @example
- * ```typescript
- * changeVariablesScale([1,2,7], 3); //=> [9, 6, 7]
- * ```
- *
- * @doc
- */
-function changeVariablesScale(p, a) {
-    // We let the coefficients of `p(ax)` be denoted by `d_i` in the code below. 
-    // `d_i` is calculated as `d = T*c`, where `c` is the original coefficient
-    // vector.
-    const d = p.length - 1;
-    if (d < 0) {
-        return [];
-    }
-    // Initialize a zero matrix
-    const t = [];
-    for (let i = 0; i < d + 1; i++) {
-        t.push(new Array(d + 1).fill(0));
-    }
-    // Calculate the triangular matrix T
-    t[0][0] = 1;
-    for (let j = 1; j <= d; j++) {
-        t[0][j] = 0;
-        for (let i = 1; i <= j; i++) {
-            t[i][j] = a * t[i - 1][j - 1];
-        }
-    }
-    // Multiply
-    const res = new Array(d + 1).fill(0);
-    for (let i = 0; i <= d; i++) {
-        res[d - i] = 0;
-        for (let j = i; j <= d; j++) {
-            res[d - i] += t[i][j] * p[d - j];
-        }
-    }
-    return res;
-}
-
-//# sourceMappingURL=change-variables-scale.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/change-variables/double/change-variables-translate-x.js
-/**
- * Returns the result of performing a change of variables of the
- * form: p(x) <- p(x + b) in double precision.
- *
- * * see [this stackoverflow question](http://stackoverflow.com/questions/141422/how-can-a-transform-a-polynomial-to-another-coordinate-system)
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param b the `b` in `x + b`
- *
- * @example
- * ```typescript
- * changeVariablesTranslateX([1,2,7], 3); //=> [1, 8, 22]
- * ```
- *
- * @doc
- */
-function changeVariablesTranslateX(p, b) {
-    // We let the coefficients of p(x + b) be denoted by d_i in the code below. 
-    // d_i is calculated as d = T*c, where c are the original coefficients.
-    const d = p.length - 1;
-    if (d < 0) {
-        return [];
-    }
-    // Initialize a zero matrix
-    const t = [];
-    for (let i = 0; i < d + 1; i++) {
-        t.push(new Array(d + 1).fill(0));
-    }
-    // Calculate the triangular matrix T
-    t[0][0] = 1;
-    for (let j = 1; j <= d; j++) {
-        t[0][j] = b * t[0][j - 1];
-        for (let i = 1; i <= j; i++) {
-            t[i][j] = b * t[i][j - 1] + t[i - 1][j - 1];
-        }
-    }
-    // Multiply
-    const res = new Array(d + 1).fill(0);
-    for (let i = 0; i <= d; i++) {
-        res[d - i] = 0;
-        for (let j = i; j <= d; j++) {
-            res[d - i] += t[i][j] * p[d - j];
-        }
-    }
-    return res;
-}
-
-//# sourceMappingURL=change-variables-translate-x.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/change-variables/double/reflect-about-y-axis.js
-/**
- * Returns the result of reflecting the given polynomial about the Y-axis, i.e.
- * perform the change of variables: p(x) <- p(-x).
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * reflectAboutYAxis([5,4,3,2,1]); //=> [5, -4, 3, -2, 1]
- * ```
- *
- * @doc
- */
-function reflectAboutYAxis(p) {
-    const d = p.length - 1;
-    if (d < 0) {
-        return [];
-    }
-    const result = p.slice();
-    for (let i = 0; i < d + 1; i++) {
-        if (i % 2) {
-            result[i] = -result[i];
-        }
-    }
-    return result;
-}
-
-//# sourceMappingURL=reflect-about-y-axis.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/change-variables/expansion/e-change-variables-linear.js
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_change_variables_linear_expansionProduct = expansion_product_expansionProduct;
-const e_change_variables_linear_fastExpansionSum = fastExpansionSum;
-const e_change_variables_linear_scaleExpansion2 = scaleExpansion2;
-/**
- * Returns the exact result (bar underflow / overflow) of performing a change
- * of variables of the form: p(x) <- p(ax + b) on the given polynomial (with
- * coefficients given as Shewchuk expansions).
- *
- * * see [this stackoverflow question](http://stackoverflow.com/questions/141422/how-can-a-transform-a-polynomial-to-another-coordinate-system)
- *
- * @param p a polynomial with coefficients given densely as an array of Shewchuk
- * floating point expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- * @param a the `a` in `ax + b`
- * @param b the `b` in `ax + b`
- *
- * @example
- * ```typescript
- * eChangeVariablesLinear([[1],[2],[7]], 3, 4); //=> [[9], [30], [31]]
- * ```
- *
- * @doc
- */
-function eChangeVariablesLinear(p, a, b) {
-    // We let the coefficients of p(ax + b) be denoted by d_i in the code below. 
-    // d_i is calculated as d = T*c, where c are the original coefficients.
-    const d = p.length - 1;
-    if (d < 0) {
-        return [];
-    }
-    // Initialize a zero matrix
-    const t = [];
-    for (let i = 0; i < d + 1; i++) {
-        t.push(new Array(d + 1).fill([0]));
-    }
-    // Calculate the triangular matrix T
-    t[0][0] = [1];
-    for (let j = 1; j <= d; j++) {
-        t[0][j] = e_change_variables_linear_scaleExpansion2(b, t[0][j - 1]);
-        for (let i = 1; i <= j; i++) {
-            t[i][j] = e_change_variables_linear_fastExpansionSum(e_change_variables_linear_scaleExpansion2(b, t[i][j - 1]), e_change_variables_linear_scaleExpansion2(a, t[i - 1][j - 1]));
-        }
-    }
-    // Multiply
-    const res = new Array(d + 1).fill([0]);
-    for (let i = 0; i <= d; i++) {
-        res[d - i] = [0];
-        for (let j = i; j <= d; j++) {
-            const acc = e_change_variables_linear_expansionProduct(t[i][j], p[d - j]);
-            res[d - i] = e_change_variables_linear_fastExpansionSum(res[d - i], acc);
-        }
-    }
-    return res;
-}
-
-//# sourceMappingURL=e-change-variables-linear.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/change-variables/expansion/e-change-variables-scale.js
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_change_variables_scale_expansionProduct = expansion_product_expansionProduct;
-const e_change_variables_scale_fastExpansionSum = fastExpansionSum;
-const e_change_variables_scale_scaleExpansion2 = scaleExpansion2;
-/**
- * Returns the exact result (bar underflow / overflow) of performing a change
- * of variables of the form: p(x) <- p(ax).
- *
- * * see [this stackoverflow question](http://stackoverflow.com/questions/141422/how-can-a-transform-a-polynomial-to-another-coordinate-system)
- *
- * @param p a polynomial with coefficients given densely as an array of Shewchuk
- * floating point expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- * @param a a scaling factor, i.e. the `a` in `p(x) <- p(ax)`
- *
- * @example
- * ```typescript
- * eChangeVariablesScale([[1],[2],[7]], 3); //=> [[9], [6], [7]]
- * ```
- *
- * @doc
- */
-function eChangeVariablesScale(p, a) {
-    // We let the coefficients of `p(ax)` be denoted by `d_i` in the code below. 
-    // `d_i` is calculated as `d = T*c`, where `c` is the original coefficient
-    // vector.
-    const d = p.length - 1;
-    if (d < 0) {
-        return [];
-    }
-    // Initialize a zero matrix
-    const t = [];
-    for (let i = 0; i < d + 1; i++) {
-        t.push(new Array(d + 1).fill([0]));
-    }
-    // Calculate the triangular matrix T
-    t[0][0] = [1];
-    for (let j = 1; j <= d; j++) {
-        t[0][j] = [0];
-        for (let i = 1; i <= j; i++) {
-            t[i][j] = e_change_variables_scale_scaleExpansion2(a, t[i - 1][j - 1]);
-        }
-    }
-    // Multiply
-    const res = new Array(d + 1).fill([0]);
-    for (let i = 0; i <= d; i++) {
-        res[d - i] = [0];
-        for (let j = i; j <= d; j++) {
-            res[d - i] = e_change_variables_scale_fastExpansionSum(res[d - i], e_change_variables_scale_expansionProduct(t[i][j], p[d - j]));
-        }
-    }
-    return res;
-}
-
-//# sourceMappingURL=e-change-variables-scale.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/change-variables/expansion/e-change-variables-translate-x.js
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_change_variables_translate_x_expansionProduct = expansion_product_expansionProduct;
-const e_change_variables_translate_x_fastExpansionSum = fastExpansionSum;
-const e_change_variables_translate_x_scaleExpansion2 = scaleExpansion2;
-/**
- * Returns the exact result (bar undeflow / overflow) of performing a change of
- * variables of the form: p(x) <- p(x + b) on the given polynomial (with
- * coefficients given as Shewchuk expansions).
- *
- * * see [this stackoverflow question](http://stackoverflow.com/questions/141422/how-can-a-transform-a-polynomial-to-another-coordinate-system)
- *
- * @param p a polynomial with coefficients given densely as an array of Shewchuk
- * floating point expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- * @param b the `b` in `x + b`
- *
- * @doc
- */
-function eChangeVariablesTranslateX(p, b) {
-    // We let the coefficients of p(x + b) be denoted by d_i in the code below. 
-    // d_i is calculated as d = T*c, where c are the original coefficients.
-    const d = p.length - 1;
-    if (d < 0) {
-        return [];
-    }
-    // Initialize a zero matrix
-    const t = [];
-    for (let i = 0; i < d + 1; i++) {
-        t.push(new Array(d + 1).fill([0]));
-    }
-    // Calculate the triangular matrix T
-    t[0][0] = [1];
-    for (let j = 1; j <= d; j++) {
-        t[0][j] = e_change_variables_translate_x_scaleExpansion2(b, t[0][j - 1]);
-        for (let i = 1; i <= j; i++) {
-            t[i][j] = e_change_variables_translate_x_fastExpansionSum(e_change_variables_translate_x_scaleExpansion2(b, t[i][j - 1]), t[i - 1][j - 1]);
-        }
-    }
-    // Multiply
-    const res = new Array(d + 1).fill([0]);
-    for (let i = 0; i <= d; i++) {
-        res[d - i] = [0];
-        for (let j = i; j <= d; j++) {
-            const acc = e_change_variables_translate_x_expansionProduct(t[i][j], p[d - j]);
-            res[d - i] = e_change_variables_translate_x_fastExpansionSum(res[d - i], acc);
-        }
-    }
-    return res;
-}
-
-//# sourceMappingURL=e-change-variables-translate-x.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/change-variables/expansion/e-reflect-about-y-axis.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_reflect_about_y_axis_eNegativeOf = eNegativeOf;
-/**
- * Returns the result of reflecting the given polynomial about the Y-axis, i.e.
- * perform the change of variables: p(x) <- p(-x).
- * @param p a polynomial with coefficients given densely as an array of Shewchuk
- * floating point expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * eReflectAboutYAxis([[5],[4],[3],[2],[1]]); //=> [[5], [-4], [3], [-2], [1]]
- * ```
- *
- * @doc
- */
-function eReflectAboutYAxis(p) {
-    const d = p.length - 1;
-    if (d < 0) {
-        return [];
-    }
-    const result = p.slice();
-    for (let i = 0; i < d + 1; i++) {
-        if (i % 2) {
-            result[i] = e_reflect_about_y_axis_eNegativeOf(result[i]);
-        }
-    }
-    return result;
-}
-
-//# sourceMappingURL=e-reflect-about-y-axis.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/vec-sum.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const vec_sum_twoSum = two_sum_twoSum;
-/**
- * * helper function
- *
- * see http://www.ti3.tuhh.de/paper/rump/OgRuOi05.pdf
- *
- * @param x
- * @param K
- *
- * @internal
- */
-function vecSum(p_) {
-    const p = p_.slice();
-    for (let i = 1; i < p.length; i++) {
-        [p[i - 1], p[i]] = vec_sum_twoSum(p[i], p[i - 1]);
-    }
-    return p;
-}
-
-//# sourceMappingURL=vec-sum.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/sum-k.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const sum_k_vecSum = vecSum;
-/**
- * * helper function - K compensated vector sum
- *
- * see http://www.ti3.tuhh.de/paper/rump/OgRuOi05.pdf
- *
- * @param x
- * @param K
- *
- * @internal
- */
-function SumK(p, K) {
-    for (let i = 1; i < K; i++) {
-        p = sum_k_vecSum(p);
-    }
-    let res = p[0];
-    for (let i = 1; i < p.length; i++) {
-        res += p[i];
-    }
-    return res;
-}
-
-//# sourceMappingURL=sum-k.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/eft-horner.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const eft_horner_twoSum = two_sum_twoSum;
-const eft_horner_twoProduct = two_product_twoProduct;
-/**
- * Returns an EFT (error free transformation) for the Horner evaluation of a
- * polymial at a specified x. The result is returned as an object with
- * properties: r̂ -> the calculated evaluation, pπ and pσ -> two polynomials
- * with coefficients around 2^53 times smaller than the input polynomial.
- *
- * * r̂ + pπ(x) + pσ(x) = the *exact* evaluation (no error)
- *
- * * see [Algorithms for Accurate, Validated and Fast Polynomial Evaluation, *Stef Graillat, Philippe Langlois and Nicolas Louvet*](https://projecteuclid.org/download/pdf_1/euclid.jjiam/1265033778)
- * * see also [*Philippe Langlois, Nicolas Louvet.* Faithful Polynomial Evaluation with Compensated Horner Algorithm. ARITH18: 18th IEEE International Symposium on Computer Arithmetic, Jun 2007, Montpellier, France. pp.141–149. ffhal-00107222f](https://hal.archives-ouvertes.fr/hal-00107222/document)
- * * see also [Horner's Method](https://en.wikipedia.org/wiki/Horner%27s_method)
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param x the value at which to evaluate the polynomial
- *
- * @doc
- */
-function EFTHorner(p, x) {
-    const pπ = []; // A polynomial containing part of the error
-    const pσ = []; // Another polynomial containing part of the error
-    let σ;
-    let r̂ = p[0];
-    for (let i = 1; i < p.length; i++) {
-        const [π, pi] = eft_horner_twoProduct(r̂, x);
-        [σ, r̂] = eft_horner_twoSum(pi, p[i]);
-        // inlined
-        //r̂ = pi + p[i]; const bv = r̂ - pi; σ = (pi - (x-bv)) + (p[i]-bv);
-        pπ.push(π);
-        pσ.push(σ);
-    }
-    return { r̂, pπ, pσ };
-}
-// inlined
-//const pπ: number[] = []; const pσ: number[] = []; const σ: number; const r̂ = p[0];	for (const i=1; i<p.length; i++) { const [π,pi] = twoProduct(r̂,x); [σ,r̂] = twoSum(pi, p[i]); pπ.push(π); pσ.push(σ); } return { r̂, pπ, pσ }
-
-//# sourceMappingURL=eft-horner.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/eft-horner-k.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const eft_horner_k_EFTHorner = EFTHorner;
-/**
- * @param p
- * @param x
- * @param K
- *
- * @internal
- */
-function EFTHornerK(p, x, K) {
-    const ps = [p];
-    const hs = [];
-    const card = (2 ** K) - 1; // size of the tree, i.e. cardinality of the nodes
-    for (let i = 0; i < card; i++) {
-        const { r̂, pπ, pσ } = eft_horner_k_EFTHorner(ps[i], x);
-        hs.push(r̂);
-        ps.push(pπ);
-        ps.push(pσ);
-    }
-    return { hs, ps: ps.slice(2 ** (K - 1)) };
-}
-
-//# sourceMappingURL=eft-horner-k.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/horner.js
-/**
- * Returns the result of evaluating a univariate polynomial using
- * Horner's method in double precision floating point arithmetic.
- *
- * * see [Horner's Method](https://en.wikipedia.org/wiki/Horner%27s_method)
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param x the value at which to evaluate the polynomial
- *
- * @doc
- */
-function Horner(p, x) {
-    let q = 0;
-    for (let i = 0; i < p.length; i++) {
-        q = q * x + p[i];
-    }
-    return q;
-}
-// inlined (with q => E, p => p0)
-//let E = p0[0]; for (let i=1; i<p0.length; i++) {E = E*x + p0[i]; }
-
-//# sourceMappingURL=horner.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/comp-horner-k.js
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const comp_horner_k_SumK = SumK;
-const comp_horner_k_EFTHornerK = EFTHornerK;
-const comp_horner_k_Horner = Horner;
-/**
- * Returns a result of evaluating a univariate polynomial using K times compensated
- * Horner's method.
- *
- * * K times compensated means the error in the evaluation is reduced by roughly
- * `(1 / Number.EPSILON)**K` which is again roughly `2^(53*K)` - it is the same as using
- * double-double-.... (K times) precision in a normal Horner evaluation
- * * see [Algorithms for Accurate, Validated and Fast Polynomial Evaluation, `Stef Graillat, Philippe Langlois, Nicolas Louvet`](https://hal.archives-ouvertes.fr/hal-00285603/document)
- * * for K-times compensated with K <= 4 this is the fastest known method, but
- * the running time grows exponentially with K.
- *
- * * see [Algorithms for Accurate, Validated and Fast Polynomial Evaluation, *Stef Graillat, Philippe Langlois and Nicolas Louvet*](https://projecteuclid.org/download/pdf_1/euclid.jjiam/1265033778)
- * * see also [*Philippe Langlois, Nicolas Louvet.* Faithful Polynomial Evaluation with Compensated Horner Algorithm. ARITH18: 18th IEEE International Symposium on Computer Arithmetic, Jun 2007, Montpellier, France. pp.141–149. ffhal-00107222f](https://hal.archives-ouvertes.fr/hal-00107222/document)
- * * see also [Horner's Method](https://en.wikipedia.org/wiki/Horner%27s_method)
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param x the value at which to evaluate the polynomial
- * @param K (K - 1) === the number of compensations to do
- *
- * @doc
- */
-function CompHornerK(p, x, K) {
-    K = Math.min(p.length - 1, K);
-    const { hs, ps } = comp_horner_k_EFTHornerK(p, x, K);
-    const leafStart = 2 ** (K - 1); // cardinality and start of the leaves
-    for (let i = 0; i < leafStart; i++) {
-        hs.push(comp_horner_k_Horner(ps[leafStart + i], x));
-    }
-    const r̄ = comp_horner_k_SumK(hs, K);
-    return r̄;
-}
-
-//# sourceMappingURL=comp-horner-k.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/error-analysis/condition-number.js
-
-
-/**
- * Returns an accurate estimate (K === 4 => double-double-double-double
- * precision) of the condition number of the given polynomial when evaluated at
- * a given point.
- *
- * * **for testing purposes**
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-function conditionNumber(p, x) {
-    const pN = absCoeff(p);
-    const pD = p;
-    const N = CompHornerK(pN, x, 4);
-    const D = Math.abs(CompHornerK(pD, x, 4));
-    return Math.abs(N / D);
-}
-
-//# sourceMappingURL=condition-number.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/euclidean-division-related/bigint/b-elevate-degree.js
-/**
- * Returns the result of elevating the given polynomial by the given degree.
- *
- * @param p
- * @param deg
- *
- * @internal
- */
-function bElevateDegree(p, deg) {
-    const p_ = p.slice();
-    for (let i = 0; i < deg; i++) {
-        p_.push(0n);
-    }
-    return p_;
-}
-
-//# sourceMappingURL=b-elevate-degree.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/euclidean-division-related/bigint/b-pdiv-internal.js
-
-
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const b_pdiv_internal_bDegree = bDegree;
-const b_pdiv_internal_bElevateDegree = bElevateDegree;
-const b_pdiv_internal_bAdd = bAdd;
-const b_pdiv_internal_bMultiply = bMultiply;
-const b_pdiv_internal_bSubtract = bSubtract;
-/**
- * Returns the `quotient` and `remainder` of the pseudo division of `a/b` (a, b
- * both being polynomials) naively, i.e. in such a way that all intermediate
- * calculations and the final result are **not** guaranteed to be in ℤ, i.e.
- * performs Euclidean (i.e. long) division on the two given polynomials, a/b,
- * and returns `q` and `r` in the formula `a = bq + r`,
- * where `degree(r) < degree(b)`. `q` is called the quotient and `r` the
- * remainder.
- *
- * * **precondition:** the coefficients must be integers; if they are not they
- * can easily be scaled from floating point numbers to integers by calling
- * [[scaleFloatssToBigintss]] before calling this function (recall that all floating
- * point numbers are rational).
- *
- * * **precondition:** b !== [], i.e. unequal to the zero polynomial.
- *
- * * see [Polynomial long division](https://en.wikipedia.org/wiki/Polynomial_long_division)
- *
- * @param a the polynomial a in the formula a = bq + r; the polynomial is given
- * with coefficients as a dense array of bigints from highest to lowest
- * power, e.g. `[5n,-3n,0n]` represents the  polynomial `5x^2 - 3x`
- * @param b the polynomial b in the formula a = bq + r
- *
- * @internal
- */
-function bPdivInternal(a, b) {
-    let q = [];
-    const d = b_pdiv_internal_bDegree(b);
-    const c = b[0];
-    let r = a;
-    while (true) {
-        const deg = b_pdiv_internal_bDegree(r) - d;
-        if (deg < 0) {
-            return { q, r };
-        }
-        // The division below is guaranteed to be exact
-        const s = b_pdiv_internal_bElevateDegree([r[0] / c], deg);
-        q = b_pdiv_internal_bAdd(q, s);
-        r = b_pdiv_internal_bSubtract(r, b_pdiv_internal_bMultiply(s, b));
-    }
-}
-
-//# sourceMappingURL=b-pdiv-internal.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/euclidean-division-related/bigint/b-pdiv-trivial.js
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const b_pdiv_trivial_bDegree = bDegree;
-const b_pdiv_trivial_bMultiplyByConst = bMultiplyByConst;
-const b_pdiv_trivial_bPdivInternal = bPdivInternal;
-const b_pdiv_trivial_abs = (n) => n >= 0 ? n : -n;
-/**
- * Performs a **trivial pseudo-division** and returns the `quotient` and `remainder`
- * of the pseudo division of `a/b` (a, b both being polynomials) in such a way
- * that all intermediate calculations and the final result are done in ℤ, i.e.
- * performs Euclidean (i.e. long) division on the two given polynomials, a/b,
- * and returns a scaled `r` and `q` in the formula `a = bq + r`, where
- * `degree(r) < degree(b)`. `q` is called the quotient and `r` the remainder.
- *
- * * **precondition:** the coefficients must be bigints; if they are not they
- * can easily be scaled from floating point numbers to bigints by calling
- * [[scaleFloatsToBigints]] or similar before calling this function (recall that
- * all floating point numbers are rational).
- *
- * * **precondition:** b !== [0], i.e. unequal to the zero polynomial.
- *
- * * see [trivial pseudo-remainder sequence](https://en.wikipedia.org/wiki/Polynomial_greatest_common_divisor#Trivial_pseudo-remainder_sequence)
- * * see also [Polynomial long division](https://en.wikipedia.org/wiki/Polynomial_long_division)
- *
- * @param a the polynomial a in the formula a = bq + r; the polynomial is given
- * with coefficients as a dense array of bigints from highest to lowest
- * power, e.g. `[5n,-3n,0n]` represents the  polynomial `5x^2 - 3x`
- * @param b the polynomial b in the formula a = bq + r
- * @param positiveMultiplier defaults to false - if set to true then the
- * multiplier (of the coefficients of the dividend)
- * `leadingCoeff(b)^(deg(a)-deg(b)+1)` will be
- * modified to `abs(leadingCoeff(b)^(deg(a)-deg(b)+1))`
- *
- * @doc
- */
-function bPdivTrivial(a, b, positiveMultiplier = false) {
-    const d = b_pdiv_trivial_bDegree(a) - b_pdiv_trivial_bDegree(b) + 1;
-    if (d < 1) {
-        return { q: [], r: a };
-    }
-    let m = b[0] ** BigInt(d);
-    m = positiveMultiplier
-        ? b_pdiv_trivial_abs(m)
-        : m;
-    const a_ = b_pdiv_trivial_bMultiplyByConst(m, a);
-    return b_pdiv_trivial_bPdivInternal(a_, b);
-}
-
-//# sourceMappingURL=b-pdiv-trivial.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/factor/bigint/b-content.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const b_content_bGcdInts = bGcdInts;
-// for some reason the tests fails if not done like below likely because Node
-// and TypeScript and BigInt doesn't work perfectly together yet
-const b1 = 1n;
-/**
- * Returns cont(p), i.e. the content of the given polynomial defined as the
- * greatest common divisor of its coefficients.
- *
- * * the sign is chosen such that dividing the polynomial by cont(p) will
- * always result in a positive leading coefficient
- *
- * * see e.g. [Factorization of polynomials](https://en.wikipedia.org/wiki/Factorization_of_polynomials)
- *
- * * example: let `p = -10x² + 5x + 5 = (-5)(2x² - x - 1)` so that `-5` is the
- * content of `p` and `2x² - x - 1` is its primitive part.
- *
- * @param p a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]` represents the
- * polynomial `5x^2 - 3x`
- *
- * @doc
- */
-function bContent(p) {
-    if (p.length === 0) {
-        // the zero polynomial
-        return b1;
-    }
-    return p[0] < 0n ? -b_content_bGcdInts(p) : b_content_bGcdInts(p);
-}
-
-//# sourceMappingURL=b-content.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/factor/bigint/b-primitive-part.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const b_primitive_part_bContent = bContent;
-/**
- * Returns the primitive part of the given polynomial.
- *
- * * see e.g. [Factorization of polynomials](https://en.wikipedia.org/wiki/Factorization_of_polynomials)
- *
- * * the sign is chosen such that the leading term coefficient is positive
- *
- * * example: let `p = -10x² + 5x + 5 = (-5)(2x² - x - 1)` so that `-5` is the
- * content of `p` and `2x² - x - 1` is its primitive part.
- *
- * @param p a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]` represents the
- * polynomial `5x^2 - 3x`
- *
- * @doc
- */
-function bPrimitivePart(p) {
-    const c = b_primitive_part_bContent(p);
-    const p_ = [];
-    for (let i = 0; i < p.length; i++) {
-        p_.push(p[i] / c);
-    }
-    return p_;
-}
-
-//# sourceMappingURL=b-primitive-part.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/euclidean-division-related/bigint/b-prem-sequence-primitive.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const b_prem_sequence_primitive_bPdivTrivial = bPdivTrivial;
-const bGetPrimitivePart = bPrimitivePart;
-/**
- * Returns the primitive pseudo remainder sequence of a/b.
- *
- * * **precondition:** g !== [], i.e. unequal to the zero polynomial.
- *
-* * see [Primitive Pseudo-remainder sequences](https://en.wikipedia.org/wiki/Polynomial_greatest_common_divisor#Primitive_pseudo-remainder_sequence)
- *
- * @param f the polynomial a in the formula a = bq + r; the polynomial is given
- * with coefficients as a dense array of bigints from highest to lowest
- * power, e.g. `[5n,-3n,0n]` represents the  polynomial `5x^2 - 3x`
- * @param g the polynomial b in the formula a = bq + r;
- *
- * @doc
- */
-function bPremSequencePrimitive(f, g) {
-    const r = [f, g]; // Initialize the PRS
-    let i = 1;
-    while (true) {
-        let r_ = b_prem_sequence_primitive_bPdivTrivial(r[i - 1], r[i]).r;
-        r_ = bGetPrimitivePart(r_);
-        if (r_.length === 0) {
-            return r;
-        }
-        r.push(r_);
-        if (r_.length === 1) {
-            // the remainder is a constant so the next remainder 
-            // will be 0 anyway
-            return r;
-        }
-        i++;
-    }
-}
-
-//# sourceMappingURL=b-prem-sequence-primitive.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/euclidean-division-related/bigint/b-prem-sequence-subresultant.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const b_prem_sequence_subresultant_bDegree = bDegree;
-const b_prem_sequence_subresultant_bPdivTrivial = bPdivTrivial;
-/**
- * Returns the subresultant pseudo remainder sequence of a/b.
- *
- * * **precondition:** g !== [], i.e. unequal to the zero polynomial.
- *
- * * see [*The subresultant polynomial remainder sequence algorithm* by Ruiyuan (Ronnie) Chen, p.10](https://pdfs.semanticscholar.org/2e6b/95ba84e2160748ba8fc310cdc408fc9bbade.pdf)
- *
- * @param f the polynomial a in the formula a = bq + r; the polynomial is given
- * with coefficients as a dense array of bigints from highest to lowest
- * power, e.g. `[5n,-3n,0n]` represents the  polynomial `5x^2 - 3x`
- * @param g the polynomial b in the formula a = bq + r;
- * @param sturm if set to true then calculate a Sturm sequence instead
- *
- * @doc
- */
-function bPremSequenceSubresultant(f, g, sturm = false) {
-    const r = [f, g]; // Initialize the PRS
-    const d = [b_prem_sequence_subresultant_bDegree(f), b_prem_sequence_subresultant_bDegree(g)];
-    const a = [1n]; // a_1 === 1
-    const c = [1n]; // c_1 === 1
-    let i = 1;
-    while (true) {
-        a.push(r[i][0]); // leading coefficient of r[i-1]
-        const d_ = d[i - 1] - d[i];
-        const bD_ = BigInt(d_);
-        const sgn = sturm
-            ? -1
-            : (d_ + 1) % 2 === 0 ? +1 : -1;
-        const D = a[i - 1] * c[i - 1] ** bD_;
-        const exp = -bD_ + 1n;
-        const cTerm1 = a[i] ** bD_;
-        const cTerm2 = c[i - 1] ** (exp < 0n ? -exp : exp);
-        c.push(exp < 0
-            ? cTerm1 / cTerm2
-            : cTerm1 * cTerm2);
-        let r_ = b_prem_sequence_subresultant_bPdivTrivial(r[i - 1], r[i], sturm).r
-            .map(coeff => coeff / D);
-        r_ = sgn > 0 ? r_ : r_.map(c => -c);
-        d.push(b_prem_sequence_subresultant_bDegree(r_));
-        if (r_.length === 0) {
-            return r;
-        }
-        r.push(r_);
-        if (r_.length === 1) {
-            // the remainder is a constant so the next remainder 
-            // will be 0 anyway
-            return r;
-        }
-        i++;
-    }
-}
-
-//# sourceMappingURL=b-prem-sequence-subresultant.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/euclidean-division-related/bigint/b-prem-sequence-trivial.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const b_prem_sequence_trivial_bPdivTrivial = bPdivTrivial;
-/**
- * ❗ DON'T USE - coefficients grow way too big, making it slow - use
- * [[bPremSequenceSubresultant]] instead. ❗
- *
- * Returns the trivial pseudo remainder sequence of a/b.
- *
- * * **precondition:** g !== [], i.e. unequal to the zero polynomial.
- *
-* * see [Trivial Pseudo-remainder sequences](https://en.wikipedia.org/wiki/Polynomial_greatest_common_divisor#Trivial_pseudo-remainder_sequence)
- *
- * @param f the polynomial a in the formula a = bq + r; the polynomial is given
- * with coefficients as a dense array of bigints from highest to lowest
- * power, e.g. `[5n,-3n,0n]` represents the  polynomial `5x^2 - 3x`
- * @param g the polynomial b in the formula a = bq + r;
- *
- * @doc
- */
-function bPremSequenceTrivial(f, g) {
-    const r = [f, g]; // Initialize the PRS
-    let i = 1;
-    while (true) {
-        const r_ = b_prem_sequence_trivial_bPdivTrivial(r[i - 1], r[i]).r;
-        if (r_.length === 0) {
-            return r;
-        }
-        r.push(r_);
-        if (r_.length === 1) {
-            // the remainder is a constant so the next remainder 
-            // will be 0 anyway
-            return r;
-        }
-        i++;
-    }
-}
-
-//# sourceMappingURL=b-prem-sequence-trivial.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/euclidean-division-related/bigint/b-sturm-chain.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const b_sturm_chain_bDifferentiate = bDifferentiate;
-const b_sturm_chain_bPremSequenceSubresultant = bPremSequenceSubresultant;
-/**
- * Returns the Sturm Chain for the given polynomial using pseudo remainders.
- *
- * * see [Sturm's Theorem](https://en.wikipedia.org/wiki/Sturm%27s_theorem)
- * * see [Pseudo-remainder sequences](https://en.wikipedia.org/wiki/Polynomial_greatest_common_divisor#Pseudo-remainder_sequences)
- *
- * @param p a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]` represents the
- * polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * bSturmChain([-3n,4n,2n,-2n]); //=> [[-3n, 4n, 2n, -2n], [-9n, 8n, 2n], [-204n, 138n], [-1692n]]
- * ```
- *
- * @doc
- */
-function bSturmChain(p) {
-    const dp = b_sturm_chain_bDifferentiate(p);
-    return b_sturm_chain_bPremSequenceSubresultant(p, dp, true);
-}
-
-//# sourceMappingURL=b-sturm-chain.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/euclidean-division-related/expansion/e-elevate-degree.js
-/**
- * Returns the result of elevating the given polynomial by the given degree.
- *
- * @param p
- * @param deg
- *
- * @internal
- */
-function eElevateDegree(p, deg) {
-    const p_ = p.slice();
-    for (let i = 0; i < deg; i++) {
-        p_.push([0]);
-    }
-    return p_;
-}
-
-//# sourceMappingURL=e-elevate-degree.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/euclidean-division-related/expansion/e-pdiv-internal.js
-
-
-
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_pdiv_internal_eDiv = eDiv;
-const e_pdiv_internal_eDegree = eDegree;
-const e_pdiv_internal_eElevateDegree = eElevateDegree;
-const e_pdiv_internal_eAdd = e_add_eAdd;
-const e_pdiv_internal_eMultiply = eMultiply;
-const subtractExact = eSubtract;
-/**
- * Returns the `quotient` and `remainder` of the pseudo division of `a/b` (a, b
- * both being polynomials) naively, i.e. in such a way that all intermediate
- * calculations and the final result are **not** guaranteed to be in ℤ, i.e.
- * performs Euclidean (i.e. long) division on the two given polynomials, a/b,
- * and returns `q` and `r` in the formula `a = bq + r`,
- * where `degree(r) < degree(b)`. `q` is called the quotient and `r` the
- * remainder.
- *
- * * **precondition:** the coefficients must be integers; if they are not they
- * can easily be scaled from floating point numbers to integers by calling
- * [[scaleFloatsToBigints]] or similar before calling this function (recall that
- * all floating point numbers are rational).
- *
- * * **precondition:** b !== [], i.e. unequal to the zero polynomial.
- *
- * * see [Polynomial long division](https://en.wikipedia.org/wiki/Polynomial_long_division)
- *
- * @param a the polynomial a in the formula a = bq + r
- * @param b the polynomial b in the formula a = bq + r
- *
- * @internal
- */
-function ePdivInternal(a, b) {
-    let q = [];
-    const d = e_pdiv_internal_eDegree(b);
-    const c = b[0];
-    let r = a;
-    while (true) {
-        const deg = e_pdiv_internal_eDegree(r) - d;
-        if (deg < 0) {
-            return { q, r };
-        }
-        // The division below is guaranteed to be exact
-        let s = [e_pdiv_internal_eDiv(r[0], c, 0)];
-        s = e_pdiv_internal_eElevateDegree(s, deg);
-        q = e_pdiv_internal_eAdd(q, s);
-        r = subtractExact(r, e_pdiv_internal_eMultiply(s, b));
-    }
-}
-
-//# sourceMappingURL=e-pdiv-internal.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/euclidean-division-related/expansion/e-pdiv-trivial.js
-
-
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_pdiv_trivial_eDegree = eDegree;
-const e_pdiv_trivial_eAbs = e_abs_eAbs;
-const e_pdiv_trivial_eIntPow = eIntPow;
-/**
- * Performs a **trivial pseudo-division** and returns the `quotient` and `remainder`
- * of the pseudo division of `a/b` (a, b both being polynomials) in such a way
- * that all intermediate calculations and the final result are done in ℤ, i.e.
- * performs Euclidean (i.e. long) division on the two given polynomials, a/b,
- * and returns a scaled `r` and `q` in the formula `a = bq + r`, where
- * `degree(r) < degree(b)`. `q` is called the quotient and `r` the remainder.
- *
- * * **precondition:** the coefficients must integers (and also Shewchuk
- * floating point expansions); if they are not they can easily be scaled from
- * floating point numbers to Shewchuk expansions by calling [[scaleFloatsToInts]]
- * or similar before calling this function (recall that all floating point
- * numbers are rational).
- *
- * * Intermediate calculations (and the input coefficients) are done in
- * infinite precision up to overlow (meaning integers can be represented
- * *exactly* up to `2^1024 === 1797...(300 more digits)...37216`) and may
- * thus not be applicable to very high degree polynomials (in which case it is
- * better to use [[bPdivTrivial]])
- *
- * * **precondition:** b !== [], i.e. unequal to the zero polynomial.
- *
- * * see [trivial pseudo-remainder sequence](https://en.wikipedia.org/wiki/Polynomial_greatest_common_divisor#Trivial_pseudo-remainder_sequence)
- * * see also [Polynomial long division](https://en.wikipedia.org/wiki/Polynomial_long_division)
- * * see [*The subresultant polynomial remainder sequence algorithm* by Ruiyuan (Ronnie) Chen, p.10](https://pdfs.semanticscholar.org/2e6b/95ba84e2160748ba8fc310cdc408fc9bbade.pdf)
- * * see also [subresultant pseudo-remainder sequence](https://en.wikipedia.org/wiki/Polynomial_greatest_common_divisor#Subresultant_pseudo-remainder_sequence)
- *
- * @param a the polynomial a in the formula a = bq + r; the polynomial is given
- * with coefficients as a dense array of integer Shewchuk expansions from
- * highest to lowest power, e.g. `[[5],[-3],[0]]` represents the
- * polynomial `5x^2 - 3x`
- * @param b the polynomial b in the formula a = bq + r
- * @param positiveMultiplier defaults to false - if set to true then the
- * multiplier (of the coefficients of the dividend)
- * `leadingCoeff(b)^(deg(a)-deg(b)+1)` will be
- * modified to `abs(leadingCoeff(b)^(deg(a)-deg(b)+1))`
- *
- * @doc
- */
-function ePdivTrivial(a, b, positiveMultiplier = false) {
-    // change to pseudo-remainder, i.e. not simply r = a; this allows the 
-    // remainders to stay in 'Z', i.e. let m = leadingCoeff(b)^(deg(a)-deg(b)+1)
-    const d = e_pdiv_trivial_eDegree(a) - e_pdiv_trivial_eDegree(b) + 1;
-    if (d < 1) {
-        return { q: [], r: a };
-    }
-    let m = e_pdiv_trivial_eIntPow(b[0], d);
-    m = positiveMultiplier
-        ? e_pdiv_trivial_eAbs(m)
-        : m;
-    const a_ = eMultiplyByConst(m, a);
-    return ePdivInternal(a_, b);
-}
-
-//# sourceMappingURL=e-pdiv-trivial.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/euclidean-division-related/expansion/e-prem-sequence-subresultant.js
-
-
-
-
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_prem_sequence_subresultant_ePdivTrivial = ePdivTrivial;
-const e_prem_sequence_subresultant_eIsConstOrZero = eIsConstOrZero;
-const e_prem_sequence_subresultant_expansionProduct = expansion_product_expansionProduct;
-const e_prem_sequence_subresultant_eIntPow = eIntPow;
-const e_prem_sequence_subresultant_eDiv = eDiv;
-const e_prem_sequence_subresultant_eNegativeOf = eNegativeOf;
-const e_prem_sequence_subresultant_eDegree = eDegree;
-/**
- * Returns the subresultant pseudo remainder sequence of a/b.
- *
- * * **precondition:** g !== [], i.e. unequal to the zero polynomial.
- *
- * * **precondition:** the coefficients must be integer Shewchuk floating point
- * expansions; if they are not they can easily be scaled from
- * floating point numbers to Shewchuk expansions by calling [[scaleFloatsToInts]]
- * or similar before calling this function (recall that all floating point
- * numbers are rational).
- *
- * * Intermediate calculations (and the input coefficients) are done in
- * infinite precision up to overlow (meaning integers can be represented
- * *exactly* up to `2^1024 === 1797...(300 more digits)...37216`) and may
- * thus not be applicable to very high degree polynomials (in which case it is
- * better to use [[bPremSequenceSubresultant]])
- *
- * * see [*The subresultant polynomial remainder sequence algorithm* by Ruiyuan (Ronnie) Chen, p.10](https://pdfs.semanticscholar.org/2e6b/95ba84e2160748ba8fc310cdc408fc9bbade.pdf)
- *
- * @param f the polynomial a in the formula a = bq + r; the polynomial is given
- * with coefficients as a dense array of integer Shewchuk expansions from
- * highest to lowest power, e.g. `[[5],[-3],[0]]` represents the
- * polynomial `5x^2 - 3x`
- * @param g the polynomial b in the formula a = bq + r
- * @param sturm if set to true then calculate a Sturm sequence instead
- *
- * @doc
- */
-function ePremSequenceSubresultant(f, g, sturm = false) {
-    const r = [f, g]; // Initialize the PRS
-    const d = [e_prem_sequence_subresultant_eDegree(f), e_prem_sequence_subresultant_eDegree(g)];
-    const a = [[1]]; // a_1 === 1
-    const c = [[1]]; // c_1 === 1
-    let i = 2;
-    while (true) {
-        a.push(r[i - 1][0]); // leading coefficient of r[i-1]
-        const d_ = d[i - 2] - d[i - 1];
-        const sgn = sturm
-            ? -1
-            : (d_ + 1) % 2 === 0 ? +1 : -1;
-        const D = e_prem_sequence_subresultant_expansionProduct(a[i - 2], e_prem_sequence_subresultant_eIntPow(c[i - 2], d_));
-        const exp = -d_ + 1;
-        const cTerm1 = e_prem_sequence_subresultant_eIntPow(a[i - 1], d_);
-        const cTerm2 = e_prem_sequence_subresultant_eIntPow(c[i - 2], Math.abs(exp));
-        c.push(exp < 0
-            ? e_prem_sequence_subresultant_eDiv(cTerm1, cTerm2, 0)
-            : e_prem_sequence_subresultant_expansionProduct(cTerm1, cTerm2));
-        let r_ = e_prem_sequence_subresultant_ePdivTrivial(r[i - 2], r[i - 1], sturm).r
-            .map(coeff => e_prem_sequence_subresultant_eDiv(coeff, D, 0));
-        r_ = sgn > 0 ? r_ : r_.map(e_prem_sequence_subresultant_eNegativeOf);
-        d.push(e_prem_sequence_subresultant_eDegree(r_));
-        if (r_.length === 0) {
-            return r;
-        }
-        r.push(r_);
-        if (e_prem_sequence_subresultant_eIsConstOrZero(r_)) {
-            // the remainder is a constant so the next remainder 
-            // will be 0 anyway
-            return r;
-        }
-        i++;
-    }
-}
-
-//# sourceMappingURL=e-prem-sequence-subresultant.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/euclidean-division-related/double/prem-sequence-subresultant.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const prem_sequence_subresultant_ePremSequenceSubresultant = ePremSequenceSubresultant;
-/**
- * Returns the subresultant pseudo remainder sequence of a/b with the resulting
- * polynomials given with coefficients as Shewchuk expansions.
- *
- * * **precondition:** g !== [], i.e. unequal to the zero polynomial.
- *
- * * Intermediate calculations are done in infinite precision up to
- * overlow (meaning integers can be represented *exactly* up to
- * `2^1024 === 1797...(300 more digits)...37216`) and may
- * thus not be applicable to very high degree polynomials (in which case it is
- * better to use [[bPremSequenceSubresultant]])
- *
- * * see [*The subresultant polynomial remainder sequence algorithm* by Ruiyuan (Ronnie) Chen, p.10](https://pdfs.semanticscholar.org/2e6b/95ba84e2160748ba8fc310cdc408fc9bbade.pdf)
- *
- * @param f the polynomial a in the formula a = bq + r; the polynomial is given
- * with coefficients as a dense array of double precision floating point numbers
- * from highest to lowest power, e.g. `[5,-3,0]` represents the
- * polynomial `5x^2 - 3x`
- * @param g the polynomial b in the formula a = bq + r;
- * @param sturm if set to true then calculate a Sturm sequence instead
- *
- * @doc
- */
-function premSequenceSubresultant(f, g, sturm = false) {
-    return prem_sequence_subresultant_ePremSequenceSubresultant(f.map(c => [c]), g.map(c => [c]), sturm);
-}
-
-//# sourceMappingURL=prem-sequence-subresultant.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/euclidean-division-related/double/sturm-chain.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const sturm_chain_eDifferentiate = eDifferentiate;
-const sturm_chain_ePremSequenceSubresultant = ePremSequenceSubresultant;
-/**
- * Returns the Sturm chain for the given polynomial using pseudo remainders
- * with the resulting polynomials given with coefficients as Shewchuk
- * expansions.
- *
- * * intermediate calculations use Shewchuk expansions and the final result is
- * given as an array of polynomials with coefficients given densely as an array of
- * Shewchuk expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- *
- * * see [Sturm's Theorem](https://en.wikipedia.org/wiki/Sturm%27s_theorem)
- * * see [Pseudo-remainder sequences](https://en.wikipedia.org/wiki/Polynomial_greatest_common_divisor#Pseudo-remainder_sequences)
- *
- * @param p a polynomial with coefficients given densely as an array of
- * double precision floating point numbers from highest to lowest power,
- * e.g. `[5,-3,0]` represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * sturmChain([-3,4,2,-2]); //=> [[[-3],[4],[2],[-2]],[[-9],[8],[2]],[[-204],[138]],[[-1692]]]
- * ```
- *
- * @doc
- */
-function sturmChain(p) {
-    // convert from double precision to Shewchuk expansion
-    const p_ = p.map(c => [c]);
-    const dp = sturm_chain_eDifferentiate(p_);
-    return sturm_chain_ePremSequenceSubresultant(p_, dp, true);
-}
-
-//# sourceMappingURL=sturm-chain.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/factor/expansion/e-content.js
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_content_eGcdInts = eGcdInts;
-const e_content_eSign = e_sign_eSign;
-const e_content_eNegativeOf = eNegativeOf;
-/**
- * Returns cont(p), i.e. the content of the given polynomial defined as the
- * greatest common divisor of its coefficients.
- *
- * * the sign is chosen such that dividing the polynomial by cont(p) will
- * always result in a positive leading coefficient
- *
- * * see e.g. [Factorization of polynomials](https://en.wikipedia.org/wiki/Factorization_of_polynomials)
- *
- * * example: let `p = -10x² + 5x + 5 = (-5)(2x² - x - 1)` so that `-5` is the
- * content of `p` and `2x² - x - 1` is its primitive part.
- *
- * @param p a polynomial with coefficients given densely as an array of
- * Shewchuk expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-function eContent(p) {
-    if (p.length === 0) {
-        // the zero polynomial
-        return [1];
-    }
-    return e_content_eSign(p[0]) < 0 ? e_content_eNegativeOf(e_content_eGcdInts(p)) : e_content_eGcdInts(p);
-}
-
-//# sourceMappingURL=e-content.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/factor/expansion/e-primitive-part.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_primitive_part_eContent = eContent;
-const e_primitive_part_eDiv = eDiv;
-/**
- * Returns the primitive part of the given polynomial.
- *
- * * the sign is chosen such that the leading term coefficient is positive
- *
- * * see e.g. [Factorization of polynomials](https://en.wikipedia.org/wiki/Factorization_of_polynomials)
- *
- * * example: let `p = -10x² + 5x + 5 = (-5)(2x² - x - 1)` so that `-5` is the
- * content of `p` and `2x² - x - 1` is its primitive part.
- *
- * @param a polynomial with coefficients given densely as an array of
- * Shewchuk expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-function ePrimitivePart(p) {
-    let c = e_primitive_part_eContent(p);
-    let p_ = [];
-    for (let i = 0; i < p.length; i++) {
-        p_.push(e_primitive_part_eDiv(p[i], c, 0));
-    }
-    return p_;
-}
-
-//# sourceMappingURL=e-primitive-part.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/euclidean-division-related/expansion/e-prem-sequence-primitive.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_prem_sequence_primitive_ePdivTrivial = ePdivTrivial;
-const eGetPrimitivePart = ePrimitivePart;
-/**
- * Returns the primitive pseudo remainder sequence of a/b.
- *
- * * **precondition:** g !== [], i.e. unequal to the zero polynomial.
- *
-* * see [Primitive Pseudo-remainder sequences](https://en.wikipedia.org/wiki/Polynomial_greatest_common_divisor#Primitive_pseudo-remainder_sequence)
- *
- * @param f the polynomial a in the formula a = bq + r; the polynomial is given
- * with coefficients as a dense array of Shewchuk expansions from highest to
- * lowest power, e.g. `[[5],[-3],[0]]` represents the  polynomial `5x^2 - 3x`
- * @param g the polynomial b in the formula a = bq + r;
- *
- * @doc
- */
-function ePremSequencePrimitive(f, g) {
-    const r = [f, g]; // Initialize the PRS
-    let i = 1;
-    while (true) {
-        let r_ = e_prem_sequence_primitive_ePdivTrivial(r[i - 1], r[i]).r;
-        r_ = eGetPrimitivePart(r_);
-        if (r_.length === 0) {
-            return r;
-        }
-        r.push(r_);
-        if (r_.length === 1) {
-            // the remainder is a constant so the next remainder 
-            // will be 0 anyway
-            return r;
-        }
-        i++;
-    }
-}
-
-//# sourceMappingURL=e-prem-sequence-primitive.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/euclidean-division-related/expansion/e-sturm-chain.js
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_sturm_chain_eDifferentiate = eDifferentiate;
-const e_sturm_chain_ePremSequenceSubresultant = ePremSequenceSubresultant;
-const e_sturm_chain_scaleFloatssToIntss = scaleFloatssToIntss;
-/**
- * Returns the Sturm chain for the given polynomial using pseudo remainders.
- *
- * * see [Sturm's Theorem](https://en.wikipedia.org/wiki/Sturm%27s_theorem)
- * * see [Pseudo-remainder sequences](https://en.wikipedia.org/wiki/Polynomial_greatest_common_divisor#Pseudo-remainder_sequences)
- *
- * @param p a polynomial with coefficients given densely as an array of
- * Shewchuk expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * eSturmChain([[-3],[4],[2],[-2]]); //=> [[[-3],[4],[2],[-2]],[[-9],[8],[2]],[[-204],[138]],[[-1692]]]
- * ```
- *
- * @doc
- */
-function eSturmChain(p) {
-    p = e_sturm_chain_scaleFloatssToIntss(p);
-    const dp = e_sturm_chain_eDifferentiate(p);
-    return e_sturm_chain_ePremSequenceSubresultant(p, dp, true);
-}
-
-//# sourceMappingURL=e-sturm-chain.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/bigint/b-horner.js
-/**
- * Returns the result of evaluating (at an integer value) a univariate
- * polynomial with bigint coefficients using Horner's method.
- *
- * * see [Horner's Method](https://en.wikipedia.org/wiki/Horner%27s_method)
- *
- * @param p a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param x the value at which to evaluate the polynomial
- *
- * @doc
- */
-function bHorner(p, x) {
-    let q = 0n;
-    for (let i = 0; i < p.length; i++) {
-        q = q * x + p[i];
-    }
-    return q;
-}
-
-//# sourceMappingURL=b-horner.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/bigint/b-evaluate-at-0.js
-/**
- * Returns the constant term of the given polynomial.
- *
- * @param p a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * bEvaluateAt0([3n,2n,99n]); //=> 99n
- * ```
- *
- * @doc
- */
-function bEvaluateAt0(p) {
-    return p.length === 0 ? 0n : p[p.length - 1];
-}
-
-//# sourceMappingURL=b-evaluate-at-0.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/bigint/b-evaluate-at-1.js
-/**
- * Returns the exact result of evaluating the given polynomial at 1.
- *
- * * faster than at an arbitrary point.
- *
- * @param p a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-function bEvaluateAt1(p) {
-    let res = 0n;
-    for (let i = 0; i < p.length; i++) {
-        res += p[i];
-    }
-    return res;
-}
-
-//# sourceMappingURL=b-evaluate-at-1.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/abs-horner.js
-const abs_horner_abs = Math.abs;
-/**
- * Returns the result of evaluating a univariate polynomial using
- * Horner's method and where the absolute value of each coefficient is taken.
- *
- * * intermediate calculations are done in double precision
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param x the value at which `p` should be evaluated
- *
- * @doc
- */
-function AbsHorner(p, x) {
-    let q = 0;
-    for (let i = 0; i < p.length; i++) {
-        q = q * x + abs_horner_abs(p[i]);
-    }
-    return q;
-}
-// inlined (with q => e2, p => p0)
-//let e2 = abs(p0[0]); for (let i=1; i<p0.length; i++) { e2 = e2*x + abs(p0[i]); }
-
-//# sourceMappingURL=abs-horner.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/horner-sum.js
-/**
- * * helper function
- *
- * @param p1
- * @param p2
- *
- * @internal
- */
-function HornerSum(p1, p2, a) {
-    let result = 0;
-    for (let i = 0; i < p1.length; i++) {
-        result = p1[i] + p2[i] + result * a;
-    }
-    return result;
-}
-
-//# sourceMappingURL=horner-sum.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/comp-horner.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const comp_horner_EFTHorner = EFTHorner;
-const comp_horner_HornerSum = HornerSum;
-/**
- * Returns a result of evaluating a univariate polynomial using once compensated
- * Horner's method.
- *
- * * once compensated means the error in the evaluation is reduced by roughly
- * `1 / Number.EPSILON` which is again roughly `2^53` - it is equivalent as using
- * double-double precision in a normal Horner evaluation
- *
- * * see [Algorithms for Accurate, Validated and Fast Polynomial Evaluation, *Stef Graillat, Philippe Langlois and Nicolas Louvet*](https://projecteuclid.org/download/pdf_1/euclid.jjiam/1265033778)
- * * see [*Philippe Langlois, Nicolas Louvet.* Faithful Polynomial Evaluation with Compensated Horner Algorithm. ARITH18: 18th IEEE International Symposium on Computer Arithmetic, Jun 2007, Montpellier, France. pp.141–149. ffhal-00107222f](https://hal.archives-ouvertes.fr/hal-00107222/document)
- * * see [Horner's Method](https://en.wikipedia.org/wiki/Horner%27s_method)
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param x the value at which to evaluate the polynomial
- *
- * @doc
- */
-function compHorner(p, x) {
-    const { r̂, pπ, pσ } = comp_horner_EFTHorner(p, x);
-    const ĉ = comp_horner_HornerSum(pπ, pσ, x);
-    return r̂ + ĉ;
-}
-
-//# sourceMappingURL=comp-horner.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/horner-abs-sum.js
-/**
- * @param p1
- * @param p2
- *
- * @internal
- */
-function HornerAbsSum(p1, p2, x) {
-    let q = 0;
-    for (let i = 0; i < p1.length; i++) {
-        // TODO - Math.abs(p1[i] + p2[i]) <-- should this be Math.abs(p1[i]) + Math.abs(p2[i]) ??
-        q = Math.abs(p1[i] + p2[i]) + q * x;
-    }
-    return q;
-}
-
-//# sourceMappingURL=horner-abs-sum.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/gammas.js
-const gammas_u = Number.EPSILON / 2;
-// cache standard error bound units
-const _γs = [];
-/** @internal */
-function γs(n) {
-    return _γs[n] || ((1 + gammas_u) * (n * gammas_u / (1 - n * gammas_u)));
-}
-
-//# sourceMappingURL=gammas.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/comp-horner-is-faithful.js
-
-
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const comp_horner_is_faithful_twoSum = two_sum_twoSum;
-const comp_horner_is_faithful_HornerSum = HornerSum;
-const comp_horner_is_faithful_EFTHorner = EFTHorner;
-const comp_horner_is_faithful_HornerAbsSum = HornerAbsSum;
-const comp_horner_is_faithful_s = γs;
-const comp_horner_is_faithful_u = Number.EPSILON;
-/**
- * Returns the result of evaluating a univariate polynomial using once compensated
- * Horner's method, including a dynamic check for faithfull rounding and a
- * certified running error bound.
- *
- * * once compensated means the error in the evaluation is reduced by roughly
- * `1 / Number.EPSILON` which is again roughly `2^53` - it is the same as using
- * double-double precision in a normal Horner evaluation
- *
- * * see [Algorithms for Accurate, Validated and Fast Polynomial Evaluation, *Stef Graillat, Philippe Langlois and Nicolas Louvet*](https://projecteuclid.org/download/pdf_1/euclid.jjiam/1265033778)
- * * see also [*Philippe Langlois, Nicolas Louvet.* Faithful Polynomial Evaluation with Compensated Horner Algorithm. ARITH18: 18th IEEE International Symposium on Computer Arithmetic, Jun 2007, Montpellier, France. pp.141–149. ffhal-00107222f](https://hal.archives-ouvertes.fr/hal-00107222/document)
- * * see also [Horner's Method](https://en.wikipedia.org/wiki/Horner%27s_method)
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param x the value at which to evaluate the polynomial
- *
- * @doc
- */
-function compHornerIsFaithful(p, x) {
-    const n = p.length - 1;
-    const { r̂, pπ, pσ } = comp_horner_is_faithful_EFTHorner(p, x);
-    const ĉ = comp_horner_is_faithful_HornerSum(pπ, pσ, x);
-    const [e, r̄] = comp_horner_is_faithful_twoSum(r̂, ĉ);
-    const b̂ = comp_horner_is_faithful_HornerAbsSum(pπ, pσ, Math.abs(x));
-    const α̂ = (comp_horner_is_faithful_s(2 * n - 1) * b̂) / ((1 - 2 * (n + 1) * comp_horner_is_faithful_u));
-    const β̂ = (α̂ + Math.abs(e)) / (1 - 2 * comp_horner_is_faithful_u);
-    return {
-        isFaithful: α̂ < (comp_horner_is_faithful_u / 2) * Math.abs(r̄),
-        errBound: β̂,
-        r̄
-    };
-}
-
-//# sourceMappingURL=comp-horner-is-faithful.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/comp-horner-with-running-error.js
-
-
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const comp_horner_with_running_error_twoSum = two_sum_twoSum;
-const comp_horner_with_running_error_EFTHorner = EFTHorner;
-const comp_horner_with_running_error_HornerSum = HornerSum;
-const comp_horner_with_running_error_HornerAbsSum = HornerAbsSum;
-const comp_horner_with_running_error_s = γs;
-const comp_horner_with_running_error_u = Number.EPSILON / 2;
-/**
- * Returns the result of evaluating a univariate polynomial using once compensated
- * Horner's method, including a certified running error bound as an array in the
- * form: [result, absolute error].
- *
- * * Exactly the same as compHornerIsFaithful, except that it does not include
- * a faithfully rounded check.
- *
- * * once compensated means the error in the evaluation is reduced by roughly
- * `1 / Number.EPSILON` which is again roughly `2^53` - it is the same as using
- * double-double precision in a normal Horner evaluation
- *
- * * see [Algorithms for Accurate, Validated and Fast Polynomial Evaluation, *Stef Graillat, Philippe Langlois and Nicolas Louvet*](https://projecteuclid.org/download/pdf_1/euclid.jjiam/1265033778)
- * * see also [*Philippe Langlois, Nicolas Louvet.* Faithful Polynomial Evaluation with Compensated Horner Algorithm. ARITH18: 18th IEEE International Symposium on Computer Arithmetic, Jun 2007, Montpellier, France. pp.141–149. ffhal-00107222f](https://hal.archives-ouvertes.fr/hal-00107222/document)
- * * see also [Horner's Method](https://en.wikipedia.org/wiki/Horner%27s_method)
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param x the value at which to evaluate the polynomial
- *
- * @doc
- */
-function compHornerWithRunningError(p, x) {
-    const n = p.length - 1;
-    const { r̂, pπ, pσ } = comp_horner_with_running_error_EFTHorner(p, x);
-    // inlined
-    //const pπ: number[] = []; const pσ: number[] = []; const σ: number; const r̂ = p[0];	for (const i=1; i<p.length; i++) { const [π,pi] = twoProduct(r̂,x); [σ,r̂] = twoSum(pi, p[i]); pπ.push(π); pσ.push(σ); }
-    const ĉ = comp_horner_with_running_error_HornerSum(pπ, pσ, x);
-    const [e, r̄] = comp_horner_with_running_error_twoSum(r̂, ĉ);
-    const b̂ = comp_horner_with_running_error_HornerAbsSum(pπ, pσ, Math.abs(x));
-    const α̂ = (comp_horner_with_running_error_s(2 * n - 1) * b̂) / ((1 - 2 * (n + 1) * comp_horner_with_running_error_u));
-    const β̂ = (α̂ + Math.abs(e)) / (1 - 2 * comp_horner_with_running_error_u);
-    return [r̄, β̂];
-}
-
-//# sourceMappingURL=comp-horner-with-running-error.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/horner-with-running-error.js
-const horner_with_running_error_abs = Math.abs;
-const horner_with_running_error_u = Number.EPSILON / 2;
-/**
- * Returns the result of evaluating a polyniomial at a point x, including a
- * running error bound as an array in the form `[r,e]` where `r` is the result
- * of the evaluation and `e` is the error.
- *
- * * see e.g. page 95 (at bottom) of [Higham 2002](http://ftp.demec.ufpr.br/CFD/bibliografia/Higham_2002_Accuracy%20and%20Stability%20of%20Numerical%20Algorithms.pdf)
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param x the value at which to evaluate the polynomial
- *
- * @doc
- */
-function hornerWithRunningError(p, x) {
-    let r̂ = p[0];
-    let e = horner_with_running_error_abs(r̂) * 0.5;
-    for (let i = 1; i < p.length; i++) {
-        r̂ = r̂ * x + p[i];
-        e = e * horner_with_running_error_abs(x) + horner_with_running_error_abs(r̂);
-    }
-    e = horner_with_running_error_u * (2 * e - horner_with_running_error_abs(r̂));
-    return [r̂, e];
-}
-// inlined (where r̂ => r, e => e1, p => p0)
-//let r = p0[0]; let e1 = Math.abs(r) / 2; for (let i=1; i<p0.length; i++) { r = r*x + p0[i]; e1 = Math.abs(x)*e1 + Math.abs(r); } e1 = Number.EPSILON * (2*e1 - Math.abs(r));
-
-//# sourceMappingURL=horner-with-running-error.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/eval-certified.js
-
-
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const eval_certified_ = gamma_;
-const eval_certified_EFTHorner = EFTHorner;
-const eval_certified_hornerWithRunningError = hornerWithRunningError;
-const eval_certified_Horner = Horner;
-const eval_certified_AbsHorner = AbsHorner;
-const eval_certified_1 = eval_certified_(1);
-const γ2 = eval_certified_(2);
-/**
- * Returns the result of evaluating the given polynomial (with specified
- * coefficient-wise error bounds) at x such that the sign is correct when
- * positive or negative and undecided when 0 - an additional `multiplier`
- * parameter can enforce additional bits (beyond the sign) to be correct.
- *
- * * designed to be fast in 'easy' cases (say condition number < 2^53) and
- * harder cases (condition number < 2^106) since nearly all typical
- * calculations will have condition number < 2^106
- * * a staggered approach is used - first double precision, then simulated
- * double-double precision (i.e. once compensated Horner evluation) is tried
- * before giving up and returning 0 - see point below
- * * if zero is returned then the calculated result is too close to 0 to
- * determine the sign; the caller of this function can then resort to a more
- * accurate (possibly exact) evaluation
- *
- * @param p an array of 2 polynomials with coefficients given densely as an
- * array of double precision floating point numbers from highest to
- * lowest power, e.g. `[5,-3,0]` represents the polynomial `5x^2 - 3x`;
- * the first polynomial's coefficients represent the 'high part' (a double) of a
- * double-double precision value, while the second polynomial's coefficients
- * represent the 'low part', i.e. designating `hp` for high part and `lp` for
- * low part it must be that they are non-overlapping -> `twoSum(lp,hp)` will
- * equal `[lp,hp]`; put another way, if the given polynomial is given as e.g. a
- * linear polynomial with coefficients in double precision,
- * e.g. `[[1.7053025658242404e-13, 2354.33721613], [-7.105427357601002e-15,284.5673337]]`
- * then this parameter, `p`, should be `[[2354.33721613], 284.5673337], [1.7053025658242404e-13, -7.105427357601002e-15]]`
- * which is simply the result of transposing the original polynomial if it is
- * seen as a matrix
- * @param pE defaults to `undefined`; an error polynomial that provides a
- * coefficient-wise error bound on the input polynomial; all coefficients must
- * be positive; if `undefined` then the input polynomial will be assumed exact
- * @param x the value at which to evaluate the polynomial
- * @param multiplier defaults to 1; the final calculation error needs to be a
- * multiple of this number smaller than the evaluated value, otherwise zero is
- * returned - useful if not only the sign is important but also some bits, e.g.
- * if multiplier = 8 then 3 bits will have to be correct otherwise 0 is returned
- *
- * @doc
- */
-function evalCertified(p, x, pE = undefined, multiplier = 1) {
-    const absX = Math.abs(x);
-    const p0 = p[0];
-    // first do a fast evaluation
-    const [r, e1] = eval_certified_hornerWithRunningError(p0, x);
-    // inlined above line:
-    //const r = p0[0]; const e1 = Math.abs(r) / 2; for (const i=1; i<p0.length; i++) { r = r*x + p0[i]; e1 = Math.abs(x)*e1 + Math.abs(r); } e1 = Number.EPSILON * (2*e1 - Math.abs(r));
-    /** the error due to not considering p[1] */
-    // the line below was changed due to negative values of x now also allowed
-    const e2 = γ2 * eval_certified_AbsHorner(p0, absX);
-    // inlined above line:
-    //const e2 = abs(p0[0]); for (const i=1; i<p0.length; i++) { e2 = e2*x + abs(p0[i]); }
-    /** error due to imprecision in coefficients */
-    // the line below was changed due to negative values of x now also allowed
-    const E = pE !== undefined ? eval_certified_Horner(pE, absX) : 0;
-    //const E = p0[0]; for (const i=1; i<p0.length; i++) {E = E*x + p0[i]; }
-    const ee = e1 + e2 + E; // in difficult cases E can be larger than e1+e2
-    if (ee * multiplier < Math.abs(r)) {
-        // we are within bounds
-        return r;
-    }
-    // error is too large - do a more precise evaluation (i.e. once compensated
-    // with K === 2)
-    let { r̂, pπ, pσ } = eval_certified_EFTHorner(p0, x);
-    const [C1, c1] = eval_certified_hornerWithRunningError(pπ, x);
-    const [C2, c2] = eval_certified_hornerWithRunningError(pσ, x);
-    const [C3, c3] = eval_certified_hornerWithRunningError(p[1], x);
-    // typically: c1,c2 < c3 < E
-    let e = (c1 + c2 + c3) + E;
-    // typically: C1,C2 < C3 < r̂ and (C1 + C2 + C3 < r̂)
-    r̂ = (C1 + C2 + C3) + r̂;
-    e += eval_certified_1 * r̂;
-    if (e * multiplier < Math.abs(r̂)) {
-        return r̂;
-    }
-    // error is still too large to return the correct sign (if multiplier === 1)
-    return 0;
-}
-
-//# sourceMappingURL=eval-certified.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/eval-certified-incl-error.js
-
-
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const eval_certified_incl_error_ = gamma_;
-const eval_certified_incl_error_EFTHorner = EFTHorner;
-const eval_certified_incl_error_hornerWithRunningError = hornerWithRunningError;
-const eval_certified_incl_error_Horner = Horner;
-const eval_certified_incl_error_AbsHorner = AbsHorner;
-const eval_certified_incl_error_1 = eval_certified_incl_error_(1);
-const eval_certified_incl_error_2 = eval_certified_incl_error_(2);
-/**
- * Returns the result of evaluating the given polynomial (with specified
- * coefficient-wise error bounds) at `x` such that the sign is correct when
- * positive or negative and undecided when 0 - an additional `multiplier`
- * parameter can enforce additional bits (beyond the sign bit) to be correct.
- *
- * * designed to be fast in 'easy' cases (say condition number < 2^53) and
- * harder cases (condition number < 2^106) since nearly all typical
- * calculations will have condition number < 2^106
- * * a staggered approach is used - first double precision, then simulated
- * double-double precision (i.e. once compensated Horner evluation) is tried
- * before giving up and returning 0 - see point below
- * * if zero is returned then the calculated result is too close to 0 to
- * determine the sign; the caller of this function can then resort to a more
- * accurate (possibly exact) evaluation
- *
- * @param p an array of 2 polynomials with coefficients given densely as an
- * array of double precision floating point numbers from highest to
- * lowest power, e.g. `[5,-3,0]` represents the polynomial `5x^2 - 3x`;
- * the first polynomial's coefficients represent the 'high part' (a double) of a
- * double-double precision value, while the second polynomial's coefficients
- * represent the 'low part', i.e. designating `hp` for high part and `lp` for
- * low part it must be that they are non-overlapping -> `twoSum(lp,hp)` will
- * equal `[lp,hp]`; put another way, if the given polynomial is given as e.g. a
- * linear polynomial with coefficients in double precision,
- * e.g. `[[1.7053025658242404e-13, 2354.33721613], [-7.105427357601002e-15,284.5673337]]`
- * then this parameter, `p`, should be `[[2354.33721613], 284.5673337], [1.7053025658242404e-13, -7.105427357601002e-15]]`
- * which is simply the result of transposing the original polynomial if it is
- * seen as a matrix
- * @param pE defaults to `undefined`; an error polynomial that provides a
- * coefficient-wise error bound on the input polynomial; all coefficients must
- * be positive; if `undefined` then the input polynomial will be assumed exact
- * @param x the value at which to evaluate the polynomial
- * @param multiplier defaults to 1; the final calculation error needs to be a
- * multiple of this number smaller than the evaluated value, otherwise zero is
- * returned - useful if not only the sign is important but also some bits, e.g.
- * if multiplier = 8 then 3 bits will have to be correct otherwise 0 is returned
- *
- * @doc
- */
-function evalCertifiedInclError(p, x, pE = undefined, multiplier = 1) {
-    const absX = Math.abs(x);
-    // first do a fast evaluation
-    const [r, e1] = eval_certified_incl_error_hornerWithRunningError(p[0], x);
-    // the line below was changed due to negative values of x now also allowed
-    const e2 = eval_certified_incl_error_2 * eval_certified_incl_error_AbsHorner(p[0], absX); // the error due to not considering p[1]
-    // error due to imprecision in coefficients
-    // the line below was changed due to negative values of x now also allowed
-    //const E = pE ? Horner(pE, x) : 0; 
-    const E = pE !== undefined
-        ? eval_certified_incl_error_Horner(pE, absX)
-        : 0;
-    const ee = e1 + e2 + E; // in difficult cases E can be larger than e1+e2
-    if (ee * multiplier < Math.abs(r)) {
-        // we are within bounds
-        return { r̂: r, e: ee };
-    }
-    // error is too large - do a more precise evaluation
-    let { r̂, pπ, pσ } = eval_certified_incl_error_EFTHorner(p[0], x);
-    const [C1, c1] = eval_certified_incl_error_hornerWithRunningError(pπ, x);
-    const [C2, c2] = eval_certified_incl_error_hornerWithRunningError(pσ, x);
-    const [C3, c3] = eval_certified_incl_error_hornerWithRunningError(p[1], x);
-    let e = (c1 + c2 + c3) + E; // typically: c1,c2 < c3 < E
-    r̂ = (C1 + C2 + C3) + r̂; // typically: C1,C2 < C3 < r̂ and (C1 + C2 + C3 < r̂)
-    e += eval_certified_incl_error_1 * r̂;
-    if (e * multiplier < Math.abs(r̂)) {
-        return { r̂, e };
-    }
-    // error is still too large to return the correct sign (if multiplier === 1)
-    return { r̂: 0, e };
-}
-
-//# sourceMappingURL=eval-certified-incl-error.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/eval-k.js
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const eval_k_hornerWithRunningError = hornerWithRunningError;
-const eval_k_CompHornerK = CompHornerK;
-const eval_k_compHornerWithRunningError = compHornerWithRunningError;
-/**
- * Returns the result of evaluating the given polynomial at `x` such that at least
- * the sign bit is correct *up to 3-times compensated evaluation (K = 4)*, i.e.
- * as if evaluating in double-double-double-double precision.
- *
- * * uses a staggered algorithm, first trying in double precision, then in
- * double-double and finally in double-double-double-double
- *
- * * see [Algorithms for Accurate, Validated and Fast Polynomial Evaluation, *Stef Graillat, Philippe Langlois and Nicolas Louvet*](https://projecteuclid.org/download/pdf_1/euclid.jjiam/1265033778)
- * * see also [*Philippe Langlois, Nicolas Louvet.* Faithful Polynomial Evaluation with Compensated Horner Algorithm. ARITH18: 18th IEEE International Symposium on Computer Arithmetic, Jun 2007, Montpellier, France. pp.141–149. ffhal-00107222f](https://hal.archives-ouvertes.fr/hal-00107222/document)
- * * see also [Horner's Method](https://en.wikipedia.org/wiki/Horner%27s_method)
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param x the value at which to evaluate the polynomial
- *
- * @doc
- */
-function evalK(p, x) {
-    const [r̂, e] = eval_k_hornerWithRunningError(p, x);
-    // inlined 
-    //const r̂ = p[0]; const e = Math.abs(r̂) / 2; for (const i=1; i<p.length; i++) { r̂ = r̂*x + p[i]; e = Math.abs(x)*e + Math.abs(r̂); } e = Number.EPSILON * (2*e - Math.abs(r̂));
-    if (Math.abs(r̂) - e < 0) {
-        return evalK2(p, x);
-        // inlined
-        //[r̂, e] = compHornerWithRunningError(p, x); if (Math.abs(r̂) - e < 0) { return evalK4(p, x); } return { r̂, level: 2 }
-    }
-    return r̂;
-}
-function evalK2(p, x) {
-    const [r̂, e] = eval_k_compHornerWithRunningError(p, x);
-    if (Math.abs(r̂) - e < 0) {
-        return evalK4(p, x);
-    }
-    return r̂;
-}
-// inlined
-//[r̂, e] = compHornerWithRunningError(p, x); if (Math.abs(r̂) - e < 0) { return evalK4(p, x); } return { r̂, level: 2 }
-function evalK4(p, x) {
-    const r̂ = eval_k_CompHornerK(p, x, 4);
-    return r̂;
-}
-
-//# sourceMappingURL=eval-k.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/evaluate-at-0.js
-/**
- * Returns the constant term of the given polynomial.
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * evaluateAt0([3,2,99]); //=> 99
- * ```
- *
- * @doc
- */
-function evaluateAt0(p) {
-    return p.length === 0 ? 0 : p[p.length - 1];
-}
-
-//# sourceMappingURL=evaluate-at-0.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/evaluate-at-1.js
-/**
- * Returns the result of evaluating the given polynomial at 1 using double
- * precision for intermediate calculations.
- *
- * * faster than at an arbitrary point.
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-function evaluateAt1(p) {
-    let res = 0;
-    for (let i = 0; i < p.length; i++) {
-        res += p[i];
-    }
-    return res;
-}
-
-//# sourceMappingURL=evaluate-at-1.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/expansion/e-e-horner.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_e_horner_fastExpansionSum = fastExpansionSum;
-const e_e_horner_expansionProduct = expansion_product_expansionProduct;
-/**
- * Returns the exact result (bar underflow / overflow) of evaluating a
- * univariate polynomial at a point given as a Shewchuk expansion using
- * Horner's method - the result is returned as a Shewchuk expansion.
- *
- * @param p a polynomial with coefficients given densely as an array of
- * Shewchuk expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- * @param x the value at which to evaluate the polynomial
- *
- * @doc
- */
-function eeHorner(p, x) {
-    let result = [0];
-    for (let i = 0; i < p.length; i++) {
-        result = e_e_horner_fastExpansionSum(p[i], e_e_horner_expansionProduct(result, x));
-    }
-    return result;
-}
-
-//# sourceMappingURL=e-e-horner.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/expansion/e-evaluate-at-0.js
-/**
- * Returns the constant term of the given polynomial.
- *
- * @param p a polynomial with coefficients given densely as an array of
- * Shewchuk expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * evaluateAt0([[3],[2],[99]]); //=> [99]
- * ```
- *
- * @doc
- */
-function eEvaluateAt0(p) {
-    return p.length === 0 ? [0] : p[p.length - 1];
-}
-
-//# sourceMappingURL=e-evaluate-at-0.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/expansion/e-evaluate-at-1.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_evaluate_at_1_fastExpansionSum = fastExpansionSum;
-/**
- * Returns the exact result (bar underflow / overflow) of evaluating the given
- * polynomial at 1.
- *
- * * faster than at an arbitrary point.
- *
- * @param p a polynomial with coefficients given densely as an array of
- * Shewchuk expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-function eEvaluateAt1(p) {
-    let res = [0];
-    for (let i = 0; i < p.length; i++) {
-        res = e_evaluate_at_1_fastExpansionSum(res, p[i]);
-    }
-    return res;
-}
-
-//# sourceMappingURL=e-evaluate-at-1.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/expansion/e-horner.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_horner_fes = fastExpansionSum;
-const e_horner_sce = scaleExpansion;
-/**
- * Returns the exact result (bar underflow / overflow) of evaluating a
- * univariate polynomial using Horner's method - the result is returned as a
- * Shewchuk expansion.
- *
- * @param p a polynomial with coefficients given densely as an array of
- * Shewchuk expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- * @param x the value at which to evaluate the polynomial
- *
- * @doc
- */
-function eHorner(p, x) {
-    let q = [0];
-    for (let i = 0; i < p.length; i++) {
-        q = e_horner_fes(p[i], e_horner_sce(q, x));
-    }
-    return q;
-}
-
-//# sourceMappingURL=e-horner.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/factor/double/content.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const content_gcdInts = gcdInts;
-/**
- * Returns cont(p), i.e. the content of the given polynomial defined as the
- * greatest common divisor of its coefficients.
- *
- * * the sign is chosen such that dividing the polynomial by cont(p) will
- * always result in a positive leading coefficient
- *
- * * see e.g. [Factorization of polynomials](https://en.wikipedia.org/wiki/Factorization_of_polynomials)
- *
- * * example: let `p = -10x² + 5x + 5 = (-5)(2x² - x - 1)` so that `-5` is the
- * content of `p` and `2x² - x - 1` is its primitive part.
- *
- * * **precondition** p must have integer coefficients, else use e.g. [[scaleFloatsToInts]]
- *
- * @param p a polynomial with coefficients given densely as an array of
- * double precision floating point numbers from highest to lowest power, e.g.
- * `[5,-3,0]` represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-function content(p) {
-    if (p.length === 0) {
-        // the zero polynomial
-        return 1;
-    }
-    return Math.sign(p[0]) * content_gcdInts(p);
-}
-
-//# sourceMappingURL=content.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/factor/double/primitive-part.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const getContent = content;
-/**
- * Returns the primitive part of the given polynomial.
- *
- * * the sign is chosen such that the leading term coefficient is positive
- *
- * * see e.g. [Factorization of polynomials](https://en.wikipedia.org/wiki/Factorization_of_polynomials)
- *
- * * example: let `p = -10x² + 5x + 5 = (-5)(2x² - x - 1)` so that `-5` is the
- * content of `p` and `2x² - x - 1` is its primitive part.
- *
- * * **precondition** p must have integer coefficients, else use e.g. [[scaleFloatsToInts]]
- *
- * @param p a polynomial with coefficients given densely as an array of
- * double precision floating point numbers from highest to lowest power, e.g.
- * `[5,-3,0]` represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-function primitivePart(p) {
-    const c = getContent(p);
-    const p_ = [];
-    for (let i = 0; i < p.length; i++) {
-        p_.push(p[i] / c);
-    }
-    return p_;
-}
-
-//# sourceMappingURL=primitive-part.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/gcd/bigint/b-gcd-prs.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const b_gcd_prs_bPremSequenceSubresultant = bPremSequenceSubresultant;
-/**
- * :::tip Heads up!
- * Use the modular gcd algorithm, [[gcdModular]] (still to be implemented 😢), instead - it is faster.
- * :::
- *
- * Returns the GCD (Greatest Common Divisor) of the two given polynomials using
- * Pseudo Remainder Sequences (PRSs) (bar overflow). The returned GCD is a
- * polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`.
- *
- * @param a a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]` represents the
- * polynomial `5x^2 - 3x`
- * @param b another polynomial
- *
- * @doc
- */
-function bGcdPrs(a, b) {
-    if (a.length === 0) {
-        return b;
-    }
-    else if (b.length === 0) {
-        return a;
-    }
-    const seq = b_gcd_prs_bPremSequenceSubresultant(a, b, false);
-    return seq[seq.length - 1];
-}
-
-//# sourceMappingURL=b-gcd-prs.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/norm/bigint/b-p-1-norm.js
-/**
- * Returns the `p-1 norm`, a.k.a. `Taxicab norm`, i.e. the sum of the absolute
- * values of the given array of bigints.
- *
- * * if the array of bigints represent polynomial coefficients then the p-1
- * norm is known as the `length` of the polynomial
- *
- * @param p an array of bigints
- *
- * @doc
- */
-function bP1Norm(p) {
-    let s = 0n;
-    for (let i = 0; i < p.length; i++) {
-        const n = p[i];
-        s += n < 0n ? -n : n;
-    }
-    return s;
-}
-
-//# sourceMappingURL=b-p-1-norm.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/norm/bigint/b-p-2-norm-squared.js
-/**
- * Returns the `p-2 norm` squared, i.e. the square of the `Euclidean norm` of
- * the given array of bigints.
- *
- * @param p an array of bigints; can represent an array of polynomial
- * coefficients
- *
- * @doc
- */
-function bP2NormSquared(p) {
-    let s = 0n;
-    for (let i = 0; i < p.length; i++) {
-        s += p[i] ** 2n;
-    }
-    return s;
-}
-
-//# sourceMappingURL=b-p-2-norm-squared.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/norm/bigint/b-p-inf-norm.js
-/**
- * Returns the `p-infinity norm`, i.e. the maximum magnitude absolute value
- * within the given array of bigints / coefficients.
- *
- * @param p an array of bigints; can represent an array of polynomial
- * coefficients
- *
- * @doc
- */
-function bPInfNorm(p) {
-    let max = 0n;
-    for (let i = 0; i < p.length; i++) {
-        let v = p[i];
-        v = v < 0n ? -v : v;
-        if (v > max) {
-            max = v;
-        }
-    }
-    return max;
-}
-
-//# sourceMappingURL=b-p-inf-norm.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/norm/double/p-1-norm.js
-/**
- * Returns the `p-1 norm`, a.k.a. `Taxicab norm`, i.e. the sum of the absolute
- * values of the given array of numbers (with intermediate calculations done
- * in double precision).
- *
- * * if the array of numbers represent polynomial coefficients then the p-1
- * norm is known as the `length` of the polynomial
- *
- * @param p an array of numbers
- *
- * @doc
- */
-function p1Norm(p) {
-    let s = 0;
-    for (let i = 0; i < p.length; i++) {
-        s += Math.abs(p[i]);
-    }
-    return s;
-}
-
-//# sourceMappingURL=p-1-norm.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/norm/double/p-2-norm.js
-/**
- * Returns the `p-2 norm`, i.e. `Euclidean norm` of the given array of numbers
- * (with intermediate calculations done in double precision).
- *
- * @param p an array of numbers; can represent an array of polynomial
- * coefficients
- *
- * @doc
- */
-function p2Norm(p) {
-    let s = 0;
-    for (let i = 0; i < p.length; i++) {
-        s += p[i] ** 2;
-    }
-    return Math.sqrt(s);
-}
-
-//# sourceMappingURL=p-2-norm.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/norm/double/p-inf-norm.js
-/**
- * Returns the `p-infinity norm`, i.e. the maximum magnitude absolute value
- * within the given array of numbers / coefficients (with intermediate
- * calculations done in double precision).
- *
- * @param p an array of numbers; can represent an array of polynomial
- * coefficients
- *
- * @doc
- */
-function pInfNorm(p) {
-    let max = 0;
-    for (let i = 0; i < p.length; i++) {
-        const v = Math.abs(p[i]);
-        if (v > max) {
-            max = v;
-        }
-    }
-    return max;
-}
-
-//# sourceMappingURL=p-inf-norm.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/norm/expansion/e-p-1-norm.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_p_1_norm_eEstimate = e_estimate_eEstimate;
-/**
- * Returns the `p-1 norm`, a.k.a. `Taxicab norm`, i.e. the sum of the absolute
- * values of the given array of Shewchuk expansions (with intermediate
- * calculations (and the final result) done in double precision).
- *
- * * if the array of expansions represent polynomial coefficients then the p-1
- * norm is known as the `length` of the polynomial
- *
- * @param p an array of Shewchuk expansions
- *
- * @doc
- */
-function eP1Norm(p) {
-    let s = 0;
-    for (let i = 0; i < p.length; i++) {
-        s += Math.abs(e_p_1_norm_eEstimate(p[i]));
-    }
-    return s;
-}
-
-//# sourceMappingURL=e-p-1-norm.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/norm/expansion/e-p-2-norm.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_p_2_norm_eEstimate = e_estimate_eEstimate;
-/**
- * Returns the `p-2 norm`, i.e. `Euclidean norm` of the given array of Shewchuk
- * expansions (with intermediate calculations (and the final result) done in
- * double precision).
- *
- * @param p an array of Shewchuk expansions; can represent an array of polynomial
- * coefficients
- *
- * @doc
- */
-function eP2Norm(p) {
-    let s = 0;
-    for (let i = 0; i < p.length; i++) {
-        s += e_p_2_norm_eEstimate(p[i]) ** 2;
-    }
-    return Math.sqrt(s);
-}
-
-//# sourceMappingURL=e-p-2-norm.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/norm/expansion/e-p-inf-norm.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_p_inf_norm_eEstimate = e_estimate_eEstimate;
-/**
- * Returns the `p-infinity norm`, i.e. the maximum magnitude absolute value
- * within the given array of numbers / coefficients (with intermediate
- * calculations (and the final result) done in double precision).
- *
- * @param p an array of numbers; can represent an array of polynomial
- * coefficients
- *
- * @doc
- */
-function ePInfNorm(p) {
-    let max = 0;
-    for (let i = 0; i < p.length; i++) {
-        const v = Math.abs(e_p_inf_norm_eEstimate(p[i]));
-        if (v > max) {
-            max = v;
-        }
-    }
-    return max;
-}
-
-//# sourceMappingURL=e-p-inf-norm.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/from-roots/double/from-roots.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const from_roots_multiply = multiply;
-/**
- * Constructs a polynomial from the given roots by multiplying out the
- * factors (x - root1)(x - root2) in double precision
- *
- * * the resulting polynomial may have complex roots close to zero due to
- * round-off caused by working in double precision.
- *
- * * mostly for testing purposes.
- *
- * * the real roots of the constructed polynomial is unlikely to be exactly
- * the same as the roots that the polynomial has been constructed from due to
- * floating-point round-off.
- *
- * @param roots an array of roots
- *
- * @example
- * ```typescript
- * fromRoots([1,2,3,3]); //=> [1, -9, 29, -39, 18]
- * allRoots([1, -9, 29, -39, 18]); //=> [1.0000000000000007, 2.000000000000004]
- *
- * // In the above note the rounding error. Also note the multiple root of 3 that has been missed.
- * allRoots([1, -9, 29, -39, 17.99999999999999]); //=> [0.9999999999999973, 2.00000000000002, 2.9999999999999982]
- * allRoots([1, -9, 29, -39, 17.9999999999999]); //=> [0.999999999999975, 2.0000000000000986, 2.9999997898930832, 3.0000002095475775]
- * ```
- *
- * @doc
- */
-function fromRoots(roots) {
-    let p = [1];
-    for (let i = 0; i < roots.length; i++) {
-        p = from_roots_multiply(p, [1, -roots[i]]);
-    }
-    return p;
-}
-
-//# sourceMappingURL=from-roots.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/predictive-random/double/random.js
-
-/**
- * Arbitrary seed value for the simple random number generator.
- *
- * @internal
- */
-const SEED = 123456789;
-/**
- * The range for the simple random number generator, i.e. the generated
- * numbers will be in [0,RANGE].
- *
- * @internal
- */
-const RANGE = 4294967296;
-/**
- * Creates a function from the given function with parameters similar
- * to flatRoots but with an extra parameter in the beginning indicating
- * the length of the array generated by the original function.
- *
- * @param f
- *
- * @internal
- */
-function createArrFunction(f) {
-    return function (n, d, a, b, seed = SEED, odds = 0) {
-        const res = [];
-        for (let i = 0; i < n; i++) {
-            const v = f(d, a, b, seed, odds);
-            const p = v.p;
-            seed = v.seed;
-            res.push(p);
-        }
-        return res;
-    };
-}
-/**
- * Generates and returns an array of polynomials with random **roots** (with coefficients
- * given densely as an array of double floating point numbers from highest to
- * lowest power, e.g. `[5,-3,0]` represents the polynomial `5x^2 - 3x`).
- *
- * * all roots will approximate real values so is not at all representative of
- * a natural random root distribution
- *
- * * the exact same polynomials will be created on each call to this function
- * if the same seed is used; this is by design to improve testing.
- *
- * @param n the number of polynomials to generate.
- * @param d the degree of the polynomials
- * @param a defaults to 0; the lower bound of the coefficients
- * @param b defaults to 1; the upper bound of the coefficients
- * @param seed defaults to 123456789; a seed value in [0,4294967296]
- * @param odds defaults to 0; the odds that a root will be doubled (applied
- * recursively so that some roots could be tripled, etc.
- *
- * @example
- * ```typescript
- * flatRootsArr(2,3,0,10); //=> [[1, -17.27247918024659, 97.33487287168995, -179.34094494147305], [1, -14.934967160224915, 57.624514485645406, -14.513933300587215]]
- * flatRootsArr(2,3,0,10); //=> [[1, -17.27247918024659, 97.33487287168995, -179.34094494147305], [1, -14.934967160224915, 57.624514485645406, -14.513933300587215]]
- * ```
- *
- * @doc
- */
-const flatRootsArr = createArrFunction(flatRoots);
-/**
- * Generates and returns an array of polynomials with random **coefficients** (with coefficients
- * given densely as an array of double floating point numbers from highest to
- * lowest power, e.g. `[5,-3,0]` represents the polynomial `5x^2 - 3x`).
- *
- * * the exact same polynomials will be created on each call to this function
- * if the same seed is used; this is by design to improve testing.
- *
- * @param n the number of polynomials to generate.
- * @param d the length of the polynomial coefficients array
- * @param a defaults to 0; the lower bound of the coefficients
- * @param b defaults to 1; the upper bound of the coefficients
- * @param seed defaults to 123456789; a seed value in [0,4294967296]
- * @param odds defaults to 0; the odds that a root will be doubled (applied
- * recursively so that some roots could be tripled, etc.
- *
- * @example
- * ```typescript
- * flatCoefficientsArr(2,3,-2,2); //=> [[0.1749166026711464, -0.20349335670471191, 0.9375684261322021], [1.0617692470550537, -1.8918039798736572, 0.8040215969085693]]
- * flatCoefficientsArr(2,3,-2,2); //=> [[0.1749166026711464, -0.20349335670471191, 0.9375684261322021], [1.0617692470550537, -1.8918039798736572, 0.8040215969085693]]
- * ```
- *
- * @doc
- */
-const flatCoefficientsArr = createArrFunction(flatCoefficients);
-/**
- * Returns a quasi-random number to be used as the next input to this function.
- *
- * * see [stackoverflow](https://stackoverflow.com/questions/3062746/special-simple-random-number-generator)
- *
- * @param seed
- *
- * @internal
- */
-function predictiveRandom(seed) {
-    const a = 134775813;
-    return (a * seed + 1) % RANGE;
-}
-/**
- * Generates a random array of numbers picked from a bounded flat
- * distribution (i.e. a rectangular distribution) with specified odds of
- * duplication of consecutive values.
- *
- * @param n the number of values to generate
- * @param a defaults to 0; the lower bound of the distribution
- * @param b defaults to 1; the upper bound of the distribution
- * @param seed defaults to 123456789; a seed
- * @param odds defaults to 0; the odds that a number will be doubled (applied
- * recursively so that some numbers will be tripled, etc.
- *
- * @internal
- */
-function randomArray(n, a, b, seed, odds = 0) {
-    let vs = [];
-    for (let i = 0; i < n; i++) {
-        seed = predictiveRandom(seed);
-        const v = ((seed / RANGE) * (b - a)) + a;
-        seed = push(seed, vs, v, odds);
-    }
-    vs = vs.slice(0, n);
-    return { vs, seed };
-}
-/**
- * Helper function that will add more numbers to the passed array - modifies the
- * values parameter.
- *
- * @param seed
- * @param values an existing array of values - will be modified!
- * @param x the number that will be added (possibly multiple times)
- * @param odds the odds that the number will be added again (recursively).
- *
- * @internal
- */
-function push(seed, values, x, odds) {
-    seed = predictiveRandom(seed);
-    values.push(x);
-    if ((seed / RANGE) < odds) {
-        seed = push(seed, values, x, odds);
-    }
-    return seed;
-}
-/**
- * Generates and returns an array of polynomials with random **roots** (with coefficients
- * given densely as an array of double floating point numbers from highest to
- * lowest power, e.g. `[5,-3,0]` represents the polynomial `5x^2 - 3x`).
- *
- * * also returns a new seed value that can be used as the input to the next
- * call to a predictive random function
- *
- * * all roots will approximate real values so is not at all representative of
- * a natural random root distribution
- *
- * * the exact same polynomial will be created on each call to this function
- * if the same seed is used; this is by design to improve testing.
- *
- * @param d the degree of the polynomials
- * @param a defaults to 0; the lower bound of the coefficients
- * @param b defaults to 1; the upper bound of the coefficients
- * @param seed defaults to 123456789; a seed value in [0,4294967296]
- * @param odds defaults to 0; the odds that a root will be doubled (applied
- * recursively so that some roots could be tripled, etc.
- *
- * @example
- * ```typescript
- * flatRoots(3,0,10); //=> { p: [1, -17.27247918024659, 97.33487287168995, -179.34094494147305], seed: 939629312 }
- * ```
- *
- * @doc
- */
-function flatRoots(d, a = 0, b = 1, seed = SEED, odds = 0) {
-    const randArr = randomArray(d, a, b, seed, odds);
-    seed = randArr.seed;
-    const p = fromRoots(randArr.vs);
-    return { p, seed };
-}
-/**
- * Generates and returns an array of polynomials with random **coefficients** (with coefficients
- * given densely as an array of double floating point numbers from highest to
- * lowest power, e.g. `[5,-3,0]` represents the polynomial `5x^2 - 3x`).
- *
- * * also returns a new seed value that can be used as the input to the next
- * call to a predictive random function
- *
- * * the exact same polynomial will be created on each call to this function
- * if the same seed is used; this is by design to improve testing.
- *
- * @param d the length of the polynomial coefficients array
- * @param a defaults to 0; the lower bound of the coefficients
- * @param b defaults to 1; the upper bound of the coefficients
- * @param seed defaults to 123456789; a seed value in [0,4294967296]
- * @param odds defaults to 0; the odds that a root will be doubled (applied
- * recursively so that some roots could be tripled, etc.
- *
- * @example
- * ```typescript
- * flatCoefficients(3,-5,5); //=> { p: [0.437291506677866, -0.5087333917617798, 2.3439210653305054], seed: 939629312 }
- * ```
- *
- * @doc
- */
-function flatCoefficients(d, a = -1, b = +1, seed = SEED) {
-    const randArr = randomArray(d, a, b, seed);
-    seed = randArr.seed;
-    const p = randArr.vs;
-    return { p, seed };
-}
-
-//# sourceMappingURL=random.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/scale-to-int/scale-floats-to-bigints.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const scale_floats_to_bigints_exponent = exponent;
-const scale_floats_to_bigints_bitLength = bitLength;
-const b0 = 0n; // so tests are not tripped up - awaiting better support
-/**
- * Returns the result of scaling the given array of floats by the *same* power
- * of two such that all floats become bigints.
- *
- * * can be used to scale polynomials
- *
- * @param as an array of double precision floating point numbers
- *
- * @doc
- */
-function scaleFloatsToBigints(as) {
-    let e = -1024;
-    for (let i = 0; i < as.length; i++) {
-        const a = as[i];
-        if (a === 0) {
-            continue;
-        }
-        const scalePower = -scale_floats_to_bigints_exponent(a) + scale_floats_to_bigints_bitLength(a) - 1;
-        if (scalePower > e) {
-            e = scalePower;
-        }
-    }
-    // check for the trivial case
-    if (e === 0) {
-        return as.map(a => BigInt(a));
-    }
-    if (e > 0) {
-        return as.map(a => {
-            if (a === 0) {
-                return b0;
-            }
-            const scalePower = -scale_floats_to_bigints_exponent(a) + scale_floats_to_bigints_bitLength(a) - 1;
-            // we first scale `a` to an integer without overflow and then
-            // convert it to a bigint before multiplying
-            return BigInt(a * 2 ** scalePower) * 2n ** BigInt(e - scalePower);
-        });
-    }
-    // overflow / underflow cannot occur
-    return as.map(a => BigInt(a * 2 ** e));
-}
-
-//# sourceMappingURL=scale-floats-to-bigints.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/predictive-random/bigint/b-random.js
-
-
-/**
- * Some seed value for the simple random number generator.
- *
- * @internal
- */
-const b_random_SEED = 123456789;
-/**
- * Generates and returns a polynomial with random **roots** (with coefficients
- * given densely as an array of bigints from highest to
- * lowest power, e.g. `[5n,-3n,0n]` represents the polynomial `5x^2 - 3x`).
- *
- * * all roots will approximate real values so is not at all representative of
- * a natural random root distribution
- *
- * * the exact same polynomial will be created on each call to this function
- * if the same seed is used; this is by design to improve testing.
- *
- * @param d the degree of the polynomials
- * @param a defaults to 0; the lower bound of the coefficients
- * @param b defaults to 1; the upper bound of the coefficients
- * @param seed defaults to 123456789; a seed value in [0,4294967296]
- * @param odds defaults to 0; the odds that a root will be doubled (applied
- * recursively so that some roots could be tripled, etc.
- *
- * @doc
- */
-function bFlatRoots(d, a = 0, b = 1, seed = b_random_SEED, odds = 0) {
-    const res = flatRoots(d, a, b, seed, odds);
-    return { p: scaleFloatsToBigints(res.p), seed: res.seed };
-}
-/**
- * Generates and returns an array of polynomials with random **roots** (with
- * coefficients given densely as an array of bigints from highest to
- * lowest power, e.g. `[5n,-3n,0n]` represents the polynomial `5x^2 - 3x`).
- *
- * * all roots will approximate real values so is not at all representative of
- * a natural random root distribution
- *
- * * the exact same polynomials will be created on each call to this function
- * if the same seed is used; this is by design to improve testing.
- *
- * @param n the number of polynomials to generate.
- * @param d the degree of the polynomials
- * @param a defaults to 0; the lower bound of the coefficients
- * @param b defaults to 1; the upper bound of the coefficients
- * @param seed defaults to 123456789; a seed value in [0,4294967296]
- * @param odds defaults to 0; the odds that a root will be doubled (applied
- * recursively so that some roots could be tripled, etc.
- *
- * @doc
- */
-function bFlatRootsArr(n, d, a = 0, b = 1, seed = b_random_SEED, odds = 0) {
-    return flatRootsArr(n, d, a, b, seed, odds).map(scaleFloatsToBigints);
-}
-/**
- * Generates and returns a polynomial with random **coefficients**
- * (with coefficients given densely as an array of bigints from highest to
- * lowest power, e.g. `[5n,-3n,0n]` represents the polynomial `5x^2 - 3x`).
- *
- * * the exact same polynomials will be created on each call to this function
- * if the same seed is used; this is by design to improve testing.
- *
- * @param d the length of the polynomial coefficients array
- * @param a defaults to 0; the lower bound of the coefficients
- * @param b defaults to 1; the upper bound of the coefficients
- * @param seed defaults to 123456789; a seed value in [0,4294967296]
- * @param odds defaults to 0; the odds that a root will be doubled (applied
- * recursively so that some roots could be tripled, etc.
- *
- * @doc
- */
-function bFlatCoefficients(d, a = 0, b = 1, seed = b_random_SEED) {
-    const res = flatCoefficients(d, a, b, seed);
-    return { p: scaleFloatsToBigints(res.p), seed: res.seed };
-}
-/**
- * Generates and returns an array of polynomials with random **coefficients**
- * (with coefficients given densely as an array of bigints from highest to
- * lowest power, e.g. `[5n,-3n,0n]` represents the polynomial `5x^2 - 3x`).
- *
- * * the exact same polynomials will be created on each call to this function
- * if the same seed is used; this is by design to improve testing.
- *
- * @param n the number of polynomials to generate.
- * @param d the length of the polynomial coefficients array
- * @param a defaults to 0; the lower bound of the coefficients
- * @param b defaults to 1; the upper bound of the coefficients
- * @param seed defaults to 123456789; a seed value in [0,4294967296]
- * @param odds defaults to 0; the odds that a root will be doubled (applied
- * recursively so that some roots could be tripled, etc.
- *
- * @doc
- */
-function bFlatCoefficientsArr(n, d, a = 0, b = 1, seed = b_random_SEED, odds = 0) {
-    return flatCoefficientsArr(n, d, a, b, seed, odds).map(scaleFloatsToBigints);
-}
-
-//# sourceMappingURL=b-random.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/certified/transpose-poly.js
-/**
- * Transposes the given polynomial (given with multi-precision coefficients)
- * into multiple polynomials with each consecutive polynomial 'adjusting'
- * the prior one to higher precision.
- *
- * @param p
- *
- * @internal
- */
-function transposePoly(p) {
-    // transpose the polynomial coefficients into multiple polynomials
-    const len = p[0].length;
-    const p_ = [];
-    for (let i = 0; i < len; i++) {
-        const _p = [];
-        for (let j = 0; j < p.length; j++) {
-            _p.push(p[j][len - (i + 1)]); // from highest to lowest
-        }
-        p_.push(_p);
-    }
-    return p_;
-}
-
-//# sourceMappingURL=transpose-poly.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/certified/eval-adaptive.js
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const eval_adaptive_evalCertified = evalCertified;
-const eval_adaptive_eHorner = eHorner;
-const eval_adaptive_eEstimate = e_estimate_eEstimate;
-/**
- * Returns the result of evaluating the given polynomial (with double-double
- * precision coefficients) at the given value, where the coefficient-wise error
- * is also given.
- *
- * * **the sign of the returned result is guaranteed to be correct**
- * * the evaluation is done adaptively, i.e. if the evaluation cannot be done
- * accurately enough then an exact precision polynomial is requested
- *
- * @param p a polynomial given as an array with each consecutive element of
- * the array having more accurate coefficients than the previous (by adding
- * consecutive double precision coefficients to prior coefficients)
- * @param pE a coefficientwise error bound
- * @param x the point of evaluation
- * @param psExact an object holding the exact polynomial and all its exact
- * derivatives - this object may be modified!
- * @param getPsExact a function to retrieve the exact polynomial and all its
- * exact derivatives
- * @param diffCount the number of differentiations done up to this point
- *
- * @internal
- */
-function evalAdaptive(p, pE, x, getPolyExact) {
-    const r = eval_adaptive_evalCertified(p, x, pE, 4);
-    if (r !== 0) {
-        return r;
-    }
-    // condition number is too high - request higher precision
-    return eval_adaptive_eEstimate(eval_adaptive_eHorner(getPolyExact(), x));
-}
-
-//# sourceMappingURL=eval-adaptive.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/certified/refine-certified.js
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const refine_certified_evalCertified = evalCertified;
-const refine_certified_eHorner = eHorner;
-const refine_certified_eEstimate = e_estimate_eEstimate;
-const refine_certified_eps = Number.EPSILON;
-const refine_certified_abs = Math.abs;
-const max = Math.max;
-/**
- * Returns a refined root given a root bracketed in the interval (a,b) of the
- * given polynomial using Brent's Method - modified slightly to allow for
- * error certified bounds.
- *
- * * near exact implementation of the original Brent Dekker Method (also known
- * as Brent's Method), except that it is specialzed to polynomial evaluation
- *
- * * Brent's Method is an excellent root-refinement choice since:
- *  * guaranteed converge (unlike the Newton and other so-called single-point
- * methods),
- *  * converges in a reasonable number of iterations even for highly contrived
- * functions (unlike Dekker's Method) and
- *  * nearly always converges fast, i.e. super-linearly (unlike the Secant and
- * Regula-Falsi methods).
- * * unfortunately the algorithm given on [Wikipedia](https://en.wikipedia.org/wiki/Brent%27s_method)
- * works but is not precisely Brent's method and runs about 2x or more slower
- * due to it not implementing the critically important 'micro-step' (Aug 2020).
- *
- * * see [Brent (page 47)](https://maths-people.anu.edu.au/~brent/pd/rpb011i.pdf)
- * * [c++ implementation of Brent's Method](https://people.sc.fsu.edu/~jburkardt/cpp_src/brent/brent.cpp)
- *
- * @param p A polynomial with coefficients given densely as an array of double-double
- * floating point numbers from highest to lowest power, e.g. `[[0,5],[0,-3],[0,0]]`
- * represents the polynomial `5x^2 - 3x`. If `exact` is `true` then this is allowed
- * to be `undefined`.
- * @param pE An error polynomial that provides a coefficientwise error bound on
- * the input polynomial; all coefficients must be positive. If `exact` is `true`
- * then this is allowed to be `undefined`.
- * @param lb the lower limit of the search interval.
- * @param ub the upper limit of the search interval.
- * @param fa the result of evaluating the input polynomial at `a`
- * @param fb the result of evaluating the input polynomial at `b`
- * @param psExact
- * @param getPsExact
- * @param diffCount
- * @param exact set to true if you need to do exact evaluations from the start
- *
- * @internal
- */
-function refineCertified(p, pE, lb, ub, fa, fb, getPolyExact, exact) {
-    //---- Make local copies of a and b.
-    let a = lb;
-    let b = ub;
-    let c = a;
-    let fc = fa;
-    let e = b - a;
-    let d = e;
-    while (true) {
-        // update delta
-        if (refine_certified_abs(fc) < refine_certified_abs(fb)) {
-            a = b;
-            b = c;
-            c = a;
-            fa = fb;
-            fb = fc;
-            fc = fa;
-        }
-        // Original c++ code had the line below but with us t === 0 and b is 
-        // taken as 1 and 2.0 * macheps is taken as 2*u === Number.EPSILON (eps)
-        // or can also be taken as 4*u === 2*Number.EPSILON (2*eps)
-        // adaptive tolerance
-        //let δ = 2 * eps * max(1,abs(b));
-        //let δ = 2 * u * max(1,abs(b));
-        let δ;
-        const mm = max(refine_certified_abs(a), refine_certified_abs(b));
-        if (mm <= 1) {
-            δ = refine_certified_eps;
-        }
-        else {
-            // keep δ = eps * a power of 2
-            //δ = eps * 2**Math.ceil(Math.log2(Math.ceil(mm)));  // may be faster to get log2 of an integer
-            δ = refine_certified_eps * 2 ** Math.ceil(Math.log2(mm));
-        }
-        //tol = 2.0 * macheps * abs ( b ) + t;
-        const m = 0.5 * (c - b);
-        //if (abs(m) <= δ || fb === 0) {
-        // modified from the original since we dont need the fb === 0 check here
-        if (refine_certified_abs(m) <= δ) {
-            // TODO - could potentially make b - c a power of 2 here δ
-            return b < c ? [b, c] : [c, b];
-        }
-        if (refine_certified_abs(e) < δ || refine_certified_abs(fa) <= refine_certified_abs(fb)) {
-            e = m;
-            d = e;
-        }
-        else {
-            let s = fb / fa;
-            let p;
-            let q;
-            if (a === c) {
-                p = 2 * m * s;
-                q = 1 - s;
-            }
-            else {
-                q = fa / fc;
-                const r = fb / fc;
-                p = s * (2 * m * q * (q - r) - (b - a) * (r - 1));
-                q = (q - 1) * (r - 1) * (s - 1);
-            }
-            if (0 < p) {
-                q = -q;
-            }
-            else {
-                p = -p;
-            }
-            s = e;
-            e = d;
-            if (2 * p < 3 * m * q - refine_certified_abs(δ * q) && p < refine_certified_abs(0.5 * s * q)) {
-                d = p / q;
-            }
-            else {
-                e = m;
-                d = e;
-            }
-        }
-        a = b;
-        fa = fb;
-        if (δ < refine_certified_abs(d)) {
-            b = b + d;
-        }
-        else if (0 < m) {
-            b = b + δ;
-        }
-        else {
-            //b = b - eps;
-            b = b - δ;
-        }
-        fb = exact
-            ? refine_certified_eEstimate(refine_certified_eHorner(getPolyExact(), b))
-            // keep TypeScript happy; neither `p` nor `pE` can be `undefined` 
-            // here by a precondition
-            : refine_certified_evalCertified(p, b, pE);
-        if (fb === 0) {
-            // Since `evalCertified` returns zero if undecided the zero result
-            // cannot be fully trusted at this point.
-            // if we are already doing exact evaluations this is an exact root
-            if (exact) {
-                return [b, b];
-            }
-            // We need to calculate δ/2 to the left and right of b to get 
-            // results that should usually be !== 0. 
-            // It is a pre-filter. If the result === 0 we need to sharpen the
-            // ability of the evaluation by somehow reducing the error bound
-            const sL = Math.max(lb, b - δ); // dont overstep bounds
-            const sR = Math.min(ub, b + δ); // dont overstep bounds
-            // Note: sR - sL <= 2*δ provided lb, ub are in [-1..1] - usually 
-            // (when sL === s - δ and sR === s + δ) sR - sL === 2*δ. Also δ > 0
-            // keep TypeScript happy; neither `p` nor `pE` can be `undefined` 
-            // here by a precondition
-            const fsL = refine_certified_evalCertified(p, sL, pE);
-            const fsR = refine_certified_evalCertified(p, sR, pE);
-            // if the evaluation method is strong enough return the result
-            if (fsL * fsR !== 0) {
-                return [sL, sR];
-            }
-            // At this point either fsL or fsR === 0 so we need to sharpen the
-            // evaluation method
-            exact = true;
-            // get and cache the exact polynomial (we cache this since getting
-            // an exact polynomial takes about 15 times more time than getting
-            // a double-double polynomial and we very rarely expect to get to 
-            // this point)
-            fb = refine_certified_eEstimate(refine_certified_eHorner(getPolyExact(), b));
-            // if the exact evaluation returns 0 we have an exact root
-            if (fb === 0) {
-                return [b, b];
-            }
-            // else we've got a new value for fb and from here on we use exact
-            // evaluations
-        }
-        if ((0 < fb && 0 < fc) || (fb <= 0 && fc <= 0)) {
-            c = a;
-            fc = fa;
-            e = b - a;
-            d = e;
-        }
-    }
-}
-
-//# sourceMappingURL=refine-certified.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/root-bounds/upper-to-lower-bound.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const upper_to_lower_bound_invert = invert;
-/**
- * Returns a function that returns a positive lower root bound given a function
- * that returns a positive upper root bound.
- *
- * @param positiveUpperBoundFunction
- *
- * @internal
- */
-function upperToLowerBound(positiveUpperBoundFunction) {
-    return (p) => {
-        return 1 / positiveUpperBoundFunction(upper_to_lower_bound_invert(p));
-    };
-}
-
-//# sourceMappingURL=upper-to-lower-bound.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/root-bounds/positive-to-negative-bound.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const positive_to_negative_bound_reflectAboutYAxis = reflectAboutYAxis;
-/**
- * Returns a function that returns a negative root bound given a function that
- * returns a positive root bound.
- *
- * @param positiveBoundFunction
- *
- * @internal
- */
-function positiveToNegativeBound(positiveBoundFunction) {
-    return (p) => {
-        return -positiveBoundFunction(positive_to_negative_bound_reflectAboutYAxis(p));
-    };
-}
-
-//# sourceMappingURL=positive-to-negative-bound.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/root-bounds/root-bounds-lmq.js
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const root_bounds_lmq_negate = negate;
-const root_bounds_lmq_upperToLowerBound = upperToLowerBound;
-const root_bounds_lmq_positiveToNegativeBound = positiveToNegativeBound;
-/**
- * Returns an upper bound for the positive real roots of the given polynomial.
- *
- * See algoritm 6 of the paper by Vigklas, Akritas and Strzeboński,
- * specifically the LocalMaxQuadratic algorithm hence LMQ.
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * positiveRootUpperBound_LMQ([2,-3,6,5,-130]); //=> 4.015534272870436
- * positiveRootUpperBound_LMQ([2,3]);           //=> 0
- * positiveRootUpperBound_LMQ([-2,-3,-4]);      //=> 0
- * ```
- *
- * @doc
- */
-function positiveRootUpperBound_LMQ(p) {
-    const deg = p.length - 1;
-    if (deg < 1) {
-        return 0;
-    }
-    if (p[0] < 0) {
-        p = root_bounds_lmq_negate(p);
-    }
-    const timesUsed = [];
-    for (let i = 0; i < deg; i++) {
-        timesUsed.push(1);
-    }
-    let ub = 0;
-    for (let m = 0; m <= deg; m++) {
-        if (p[m] >= 0) {
-            continue;
-        }
-        let tempub = Number.POSITIVE_INFINITY;
-        let any = false;
-        for (let k = 0; k < m; k++) {
-            if (p[k] <= 0) {
-                continue;
-            }
-            const temp = (-p[m] / (p[k] / 2 ** timesUsed[k])) ** (1 / (m - k));
-            timesUsed[k]++;
-            if (tempub > temp) {
-                tempub = temp;
-            }
-            any = true;
-        }
-        if (any && ub < tempub)
-            ub = tempub;
-    }
-    return ub;
-}
-/**
- * Returns a positive lower bound of the real roots of the given polynomial
- *
- * See algoritm 6 of the paper by Vigklas, Akritas and Strzeboński,
- * specifically the LocalMaxQuadratic algorithm hence LMQ.
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-const positiveRootLowerBound_LMQ = root_bounds_lmq_upperToLowerBound(positiveRootUpperBound_LMQ);
-/**
- * Returns a negative lower (further from zero) bound of the real roots of the
- * given polynomial.
- *
- * See algoritm 6 of the paper by Vigklas, Akritas and Strzeboński,
- * specifically the LocalMaxQuadratic algorithm hence LMQ.
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-const negativeRootLowerBound_LMQ = root_bounds_lmq_positiveToNegativeBound(positiveRootUpperBound_LMQ);
-/**
- * Returns a negative upper (closer to zero) bound of the real roots of the
- * given polynomial.
- *
- * See algoritm 6 of the paper by Vigklas, Akritas and Strzeboński,
- * specifically the LocalMaxQuadratic algorithm hence LMQ.
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-const negativeRootUpperBound_LMQ = root_bounds_lmq_upperToLowerBound(negativeRootLowerBound_LMQ);
-
-//# sourceMappingURL=root-bounds-lmq.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/certified/all-roots-certified.js
-
-
-
-
-
-
-
-
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const all_roots_certified_ddDifferentiateWithError = ddDifferentiateWithError;
-const all_roots_certified_evalCertified = evalCertified;
-const all_roots_certified_eHorner = eHorner;
-const all_roots_certified_transposePoly = transposePoly;
-const all_roots_certified_evalAdaptive = evalAdaptive;
-const all_roots_certified_refineCertified = refineCertified;
-const all_roots_certified_negativeRootUpperBound_LMQ = negativeRootLowerBound_LMQ;
-const all_roots_certified_positiveRootUpperBound_LMQ = positiveRootUpperBound_LMQ;
-const all_roots_certified_eDifferentiate = eDifferentiate;
-const all_roots_certified_eEstimate = e_estimate_eEstimate;
-const all_roots_certified_hornerWithRunningError = hornerWithRunningError;
-const all_roots_certified_eSign = e_sign_eSign;
-const all_roots_certified_max = Math.max;
-const min = Math.min;
-const all_roots_certified_abs = Math.abs;
-const all_roots_certified_eps = Number.EPSILON;
-const onePlusEps = 1 + all_roots_certified_eps;
-function allRootsCertified(p, lb = 0, ub = 1, pE, getPExact, returnUndefinedForZeroPoly) {
-    // if `getPExact` is not specified then assume the given double-double 
-    // precision coefficient polynomial is exact
-    if (!getPExact) {
-        getPExact = () => p;
-    }
-    //const δ = 2*Number.EPSILON * max(1, max(abs(lb), abs(ub)));
-    // if `pE` is not specified then assume there is no error
-    pE = pE || new Array(p.length).fill(0); // no error
-    // set `diffCount` to 0 so `getPolyExact` can be accurate
-    let diffCount = 0;
-    // lazy loaded array of the given polynomial and its derivatives
-    let psExact = undefined;
-    //----------------------------------------------------------------------
-    // Remove leading zero coefficients 
-    // (the case of leading zero coefficients can now be handled)
-    // `p` and `getPExact()` *must* be of same length
-    //----------------------------------------------------------------------
-    let polyExact = undefined; // lazy loaded
-    // while the leading coefficient is smaller then the error bound 
-    // i.e. possibly zero	
-    while (p.length > 0 && all_roots_certified_abs(p[0][1]) <= pE[0]) {
-        polyExact = polyExact || getPExact();
-        // if leading coefficient really is zero
-        if (all_roots_certified_eSign(polyExact[0]) === 0) {
-            // shift the leading coefficient and error out without altering the 
-            // given polynomial and error bound (shift is destructive, slice is not)
-            p = p.slice();
-            p.shift();
-            pE = pE.slice();
-            pE.shift();
-            // also shift out the exact polynomial's leading coefficient
-            polyExact.shift();
-            continue;
-        }
-        break;
-    }
-    if (p.length === 0) {
-        // return `undefined` for the zero polynomial?
-        return returnUndefinedForZeroPoly ? undefined : [];
-    }
-    else if (p.length === 1) {
-        // return `[]` for a degree 1 polynomial (a non-zero constant)
-        return [];
-    }
-    if (lb === Number.NEGATIVE_INFINITY || ub === Number.POSITIVE_INFINITY) {
-        const pDoubleCoeffs = p.map(c => c[1]);
-        if (lb === Number.NEGATIVE_INFINITY) {
-            lb = all_roots_certified_negativeRootUpperBound_LMQ(pDoubleCoeffs);
-        }
-        if (ub === Number.POSITIVE_INFINITY) {
-            ub = all_roots_certified_positiveRootUpperBound_LMQ(pDoubleCoeffs);
-        }
-    }
-    const p_ = all_roots_certified_transposePoly(p);
-    let bCount;
-    let exact;
-    const deg = p.length - 1;
-    bCount = 0;
-    exact = false;
-    let LB; // evaluation at lb
-    do {
-        LB = exact
-            ? all_roots_certified_eEstimate(all_roots_certified_eHorner(getPolyExact(), lb))
-            : all_roots_certified_evalCertified(p_, lb, pE);
-        if (LB === 0) {
-            bCount++;
-            // the max bCount is empirically selected for max performance
-            if (bCount >= 3 && !exact) {
-                exact = true;
-                continue;
-            }
-            lb -= 2 * Number.EPSILON * all_roots_certified_max(1, all_roots_certified_abs(lb));
-        }
-    } while (LB === 0);
-    bCount = 0;
-    exact = false;
-    let UB; // evaluation at ub
-    do {
-        UB = exact
-            ? all_roots_certified_eEstimate(all_roots_certified_eHorner(getPolyExact(), ub))
-            : all_roots_certified_evalCertified(p_, ub, pE);
-        if (UB === 0) {
-            bCount++;
-            if (bCount >= 3 && !exact) { // the max bCount is empirically selected for max performance
-                exact = true;
-                continue;
-            }
-            ub += 2 * Number.EPSILON * all_roots_certified_max(1, all_roots_certified_abs(ub));
-        }
-    } while (UB === 0);
-    // Get all derivatives with their coefficient-wise error bounds, i.e. 
-    // ps === [p, dp, ddp, ..., constant]
-    //        [0,  1,   2, ..., deg     ]
-    const ps = [{ p, pE }];
-    const ps_ = [all_roots_certified_transposePoly(p)]; // the transposed versions
-    for (let i = 1; i <= deg; i++) {
-        const dP = all_roots_certified_ddDifferentiateWithError(ps[i - 1]);
-        ps.push(dP);
-        ps_.push(all_roots_certified_transposePoly(dP.p)); // the transposed versions
-    }
-    let is = [];
-    let curPE;
-    let curP_;
-    diffCount = deg - 1; // update diffcount
-    for (; diffCount >= 0; diffCount--) {
-        curPE = ps[diffCount].pE;
-        // on first iteration curP_ is linear, 
-        // on second it is quadratic, etc. ...
-        curP_ = ps_[diffCount];
-        is = getRootsWithin();
-    }
-    // depends externally on `diffCount` and `psExact`
-    function getPolyExact() {
-        // cache
-        if (psExact !== undefined) {
-            return psExact[diffCount];
-        }
-        // keep TypeScript happy; `getPExact` cannot be `undefined` here
-        let poly = polyExact || getPExact();
-        psExact = [poly];
-        while (poly.length > 1) {
-            poly = all_roots_certified_eDifferentiate(poly);
-            psExact.push(poly);
-        }
-        return psExact[diffCount];
-    }
-    return is;
-    // All cases:
-    // ----------
-    // Note: [_a,a_] denotes a micro-interval, whereas [b_,_a], [a_,_b] denotes a
-    // normal interval.
-    // Note: In all iterations we check [_a,a_] and [a_,_b]. In the final
-    // iteration we check [_b,b_], then we've checked all intervals.
-    // 
-    // ⇑ represents +pos (above x-axis) and ⇓ represents -neg
-    // (the symmetric cases also applies where + and - are interchanged)
-    // ? means does not matter
-    // -----------------------------------------------------------------
-    // CASE 1A:
-    // _A⇑ | A_⇑ | _B⇑
-    //  - [_a,a_] → 
-    //    - _a === a_
-    //        ? no root 
-    //        : A_/_A close enough to zero
-    //            ? close even root 
-    //            : no roots
-    //  - [a_,_b] → no root (curve is monotone increasing or decreasing)
-    // CASE 1B:
-    // _A⇑ | A_⇑ | _B⇓  
-    //  - [_a,a_] → 
-    //    - _a === a_
-    //        ? no root 
-    //        : A_/_A close enough to zero ? close even root : no roots
-    //  - [a_,_b] → single root (curve is monotone increasing or decreasing)
-    // CASE 2A:
-    // _A⇑ | A_⇓ | _B⇑
-    //  - [_a,a_] → odd root(s)
-    //  - [a_,_b] → single root (curve is monotone increasing or decreasing)
-    // CASE 2B:
-    // _A⇑ | A_⇓ | _B⇓
-    //  - [_a,a_] → odd root(s)
-    //  - [a_,_b] → no root (curve is monotone increasing or decreasing)
-    // CASE 3A: 
-    // A_0 | A_? | _B? | B_?  
-    // CASE 3B: 
-    // A_? | A_0 | _B? | B_?  
-    /**
-     * Finds and returns all roots of the given polynomial within the given
-     * intervals, starting from the lower bound (lb) and ending at the upper
-     * bound (ub) as fetched from the closure.
-     *
-     * * **precondition** intervals should be disjoint, i.e endpoints are not allowed
-     * to be equal - it must be that a_ !== _b
-     * * **precondition** the curve must be monotone increasing or decreasing between
-     * b_ and _a AND a_ and _b
-     * * **precondition** the value at the lower bound (LB) and upper bound (UB)
-     * must !== 0
-     *
-     * @internal
-     *
-     * @param curP_ a polynomial given as an array with each consecutive element of
-     * the array having more accurate coefficients than the previous (by adding
-     * consecutive double precision coefficients to prior coefficients)
-     * @param is the micro-intervals
-     */
-    function getRootsWithin() {
-        const roots = [];
-        // If there are no micro-intervals then check the interval between lb and ub.
-        const LB = all_roots_certified_evalAdaptive(curP_, curPE, lb, getPolyExact);
-        if (!is.length) {
-            // close even root not possible
-            const UB = all_roots_certified_evalAdaptive(curP_, curPE, ub, getPolyExact);
-            if (LB * UB >= 0) {
-                return [];
-            }
-            const [tS, tE] = all_roots_certified_refineCertified(curP_, curPE, lb, ub, LB, UB, getPolyExact /*, δ*/);
-            return [{ tS, tE, multiplicity: 1 }];
-        }
-        //---- First check from lb to the left side of the first micro-interval.
-        let _a = is[0].tS;
-        let _A = all_roots_certified_evalAdaptive(curP_, curPE, _a, getPolyExact);
-        if (LB * _A > 0) {
-            // no roots possible (curve is monotone increasing or decreasing)
-        }
-        else if (LB * _A < 0) {
-            // recall LB must !== 0 as a precondition
-            const [tS, tE] = all_roots_certified_refineCertified(curP_, curPE, lb, _a, LB, _A, getPolyExact /*, δ*/);
-            roots.push({ tS, tE, multiplicity: 1 });
-        } //else {
-        // _A === 0
-        // no roots possible in [lb,_a]
-        //}
-        let a_ = lb;
-        let A_ = LB;
-        let _b = _a;
-        let _B = _A;
-        let a;
-        for (let i = 0; i < is.length; i++) {
-            const i_ = is[i + 1]; // right micro-interval
-            a = is[i];
-            _a = _b;
-            a_ = is[i].tE;
-            _b = i_ ? i_.tS : ub;
-            const B_ = A_;
-            _A = _B;
-            A_ = all_roots_certified_evalAdaptive(curP_, curPE, a_, getPolyExact);
-            _B = all_roots_certified_evalAdaptive(curP_, curPE, _b, getPolyExact);
-            if (_A * A_ > 0) {
-                //---- CASE 1: _A⇑ | A_⇑   OR   _A⇓ | A_⇓
-                if (A_ * _B > 0) {
-                    //---- CASE 1A: _A⇑ | A_⇑ | _B⇑   OR   _A⇓ | A_⇓ | _B⇓
-                    //console.log('CASE 1A');
-                    if (a_ !== _a && a.multiplicity % 2 === 1) {
-                        checkEvenAA();
-                    }
-                    // [a_,_b] → no root
-                }
-                else if (A_ * _B < 0) {
-                    //---- CASE 1B: _A⇑ | A_⇑ | _B⇓   OR   _A⇓ | A_⇓ | _B⇑
-                    //console.log('CASE 1B');
-                    // we cannot exclude this case as their may be even 
-                    // multiplicity >= 4 roots; we would've been able if we
-                    // knew that a.multiplicity === 1 exactly and thus the code
-                    // could still be improved slightly
-                    if (a_ !== _a && a.multiplicity % 2 === 1) {
-                        checkEvenAA();
-                    }
-                    // [a_,_b] → single root (curve is monotone increasing or decreasing)
-                    const [tS, tE] = all_roots_certified_refineCertified(curP_, curPE, a_, _b, A_, _B, getPolyExact /*, δ*/);
-                    roots.push({ tS, tE, multiplicity: 1 });
-                }
-                else { // _B === 0
-                    //---- CASE 1C: _A⇑ | A_⇑ | _B0   OR   _A⇓ | A_⇓ | _B0
-                    //console.log('CASE 1C');
-                    // we cannot exclude this case as their may be even 
-                    // multiplicity >= 4 roots; we would've been able if we
-                    // knew that a.multiplicity === 1 exactly and thus the code
-                    // could still be improved slightly
-                    if (a_ !== _a && a.multiplicity % 2 === 1) {
-                        checkEvenAA();
-                    }
-                    // [a_,_b] → no root
-                }
-            }
-            else if (_A * A_ < 0) {
-                //---- CASE 2 _A⇑ | A_⇓   OR   _A⇓ | A_⇑
-                //console.log('CASE 2');
-                // - [_a,a_] → odd root(s)
-                roots.push({ tS: a.tS, tE: a.tE, multiplicity: 3 });
-                if (A_ * _B < 0) {
-                    //---- CASE 2A: _A⇑ | A_⇓ | _B⇑   OR   _A⇓ | A_⇑ | _B⇓
-                    //console.log('CASE 2A');
-                    // [a_,_b] → single root
-                    const [tS, tE] = all_roots_certified_refineCertified(curP_, curPE, a_, _b, A_, _B, getPolyExact /*, δ*/);
-                    roots.push({ tS, tE, multiplicity: 1 });
-                }
-                else if (A_ * _B > 0) {
-                    //---- CASE 2B: _A⇑ | A_⇓ | _B⇓   OR   _A⇓ | A_⇑ | _B⇑
-                    //console.log('CASE 2B');
-                    // [a_,_b] → no roots
-                }
-                else { // _B === 0
-                    //console.log('CASE 2C');
-                    // [a_,_b] → no roots
-                }
-            }
-            else if (A_ === 0) {
-                //---- CASE 3A A_0
-                //console.log('CASE 3A');
-                // [_a,a_] → rational root at a_
-                // There cannot be a root between a_ and _b since _B !== 0
-                if ( /*_a === a_ ||*/_A === 0) {
-                    // multiple rational root at a_ OR both _A and A_ is 0
-                    // so update multiplicity parity
-                    roots.push({ tS: a.tS, tE: a.tE, multiplicity: a.multiplicity + 1 });
-                }
-                else {
-                    // now _A and _B are both !== 0
-                    if (_A * _B > 0) {
-                        roots.push({ tS: a.tS, tE: a.tE, multiplicity: 2 });
-                    }
-                    else {
-                        roots.push({ tS: a.tS, tE: a.tE, multiplicity: 3 });
-                    }
-                }
-            }
-            else { // _A === 0
-                //---- CASE 3B _A0
-                //console.log('CASE 3B');
-                // A_ !== 0 here and _a !== a_
-                // [_a,a_] → rational root at _a
-                if (A_ * _B < 0) {
-                    // [a_,_b] → single root
-                    const [tS, tE] = all_roots_certified_refineCertified(curP_, curPE, a_, _b, A_, _B, getPolyExact /*, δ*/);
-                    roots.push({ tS, tE, multiplicity: 1 });
-                }
-                else if (A_ * _B > 0) {
-                    // [a_,_b] → no roots
-                }
-                // - [_a,a_] → 
-                // B_ and A_ are both !== 0
-                if (B_ * A_ > 0) {
-                    roots.push({ tS: a.tS, tE: a.tE, multiplicity: 2 });
-                }
-                else {
-                    roots.push({ tS: a.tS, tE: a.tE, multiplicity: 3 });
-                }
-            }
-        }
-        // Combine the root intervals if they are adjacent (they are not 
-        // allowed to overlap)
-        for (let i = 0; i < roots.length - 1; i++) {
-            const r = roots[i];
-            const r_ = roots[i + 1];
-            if (r.tE >= r_.tS) {
-                return joinRoots(roots);
-            }
-        }
-        return roots;
-        /**
-         * Calculates and returns max 2nd derivative - calculated using something
-         * akin to a Taylor expansion - could be improved by not taking absolute
-         * values, but rather minimum mins. and maximum max values of f(s)?.
-         * maxDdP = |f(s)| + δ|f'(s)| + δ^2|f''(s)| + ..., where δ = (a_ - _a),
-         * s = _a and f is the second derivative of the current polynomial. We can
-         * also potentially short circuit the maxDdP calculation after some terms,
-         * the point being there are very likely many optimizations that can still
-         * be done.
-         *
-         * @internal
-         */
-        function checkEvenAA() {
-            //This was the old method when the function only supported lb = 0, ub = 1
-            //-----------------------------------------------------------------------
-            //const ddP0 = diffCount+2 > deg ? undefined : ps_[diffCount+2][0];
-            //const maxDdP2 = 0;
-            //for (const j=0; j<ddP0.length; j++) {
-            //	// evaluate at 1
-            //	maxDdP2 += abs(ddP0[j]);  // this is valid only if |lb| and |ub| <= 1
-            //}
-            const d = (a_ - _a) * onePlusEps;
-            let mult = 1;
-            let maxDdP = 0;
-            for (let ddDiffCount = diffCount + 2; ddDiffCount <= deg; ddDiffCount++) {
-                const p = ps_[ddDiffCount][0];
-                const h = all_roots_certified_hornerWithRunningError(p, _a);
-                const fs = all_roots_certified_abs(h[0]) + h[1];
-                maxDdP += fs * mult;
-                mult *= d * onePlusEps;
-            }
-            // maxDdP is now calculated
-            const AMinMax = A_ > 0 ? min(_A, A_) : all_roots_certified_max(_A, A_);
-            const δ = 2 * Number.EPSILON * all_roots_certified_max(1, all_roots_certified_abs(a_));
-            const dMax = maxDdP * (2 * δ); // since the first derivative === 0 somewhere in [_a,a_]
-            const yShift = A_ > 0 ? -dMax * 2 * δ : dMax * 2 * δ;
-            const y = AMinMax + yShift;
-            if (y * A_ < 0) {
-                // possible even multiplicity root
-                //console.log('A_, yShift', A_, yShift);
-                //console.log(toCasStr(ps_[0][0]));
-                //console.log('possible even multiplicty root: ', _a, a_);
-                // The below multiplicity can really be any non-negative 
-                // multiple of 2
-                roots.push({ tS: a.tS, tE: a.tE, multiplicity: 2 });
-            }
-        }
-    }
-}
-function joinRoots(rs) {
-    const newRs = [];
-    const r = rs[0];
-    // make a clone of the first interval
-    let curR = { tS: r.tS, tE: r.tE, multiplicity: r.multiplicity };
-    for (let i = 0; i < rs.length - 1; i++) {
-        const r = rs[i];
-        const r_ = rs[i + 1];
-        if (r.tE < r_.tS) {
-            // they don't stick together
-            newRs.push(curR);
-            // make a clone of the next interval
-            curR = { tS: r_.tS, tE: r_.tE, multiplicity: r_.multiplicity };
-        }
-        else {
-            // they stick together - expand
-            curR.tE = r_.tE;
-            curR.multiplicity = r.multiplicity + r_.multiplicity;
-        }
-    }
-    newRs.push(curR);
-    return newRs;
-}
-
-//# sourceMappingURL=all-roots-certified.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/certified/all-roots-certified-simplified.js
-
-function allRootsCertifiedSimplified(p, lb = Number.NEGATIVE_INFINITY, ub = Number.POSITIVE_INFINITY, returnUndefinedForZeroPoly) {
-    return allRootsCertified(p.map(c => [0, c]), lb, ub, undefined, undefined, returnUndefinedForZeroPoly);
-}
-
-//# sourceMappingURL=all-roots-certified-simplified.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/certified/refine-k1.js
-
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const refine_k1_eChangeVariablesLinear = eChangeVariablesLinear;
-const refine_k1_allRootsCertified = allRootsCertified;
-const refine_k1_eToDd = eToDd;
-const refine_k1_twoSum = two_sum_twoSum;
-const refine_k1_eps = Number.EPSILON;
-/**
- * Returns once compensated root(s) (bar underflow / overflow) given a root
- * interval previously calculated using [[allRootsCertified]].
- *
- * * 'once-compensated' here means that the typical root interval, `W`,
- * (`= Number.EPSILON` at `1`) is reduced to `W**2`; if multiple roots were
- * present in the original interval they may be resolved to individual
- * intervals
- *
- * @param ri a root interval previously calculated
- * @param p the exact polynomial with coefficients given densely as an array of
- * Shewchuk floating point expansions from highest to lowest power,
- * e.g. `[[5],[-3],[0]]` represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-function refineK1(ri, p) {
-    const tS = ri.tS;
-    // scale is exact by the precondition put on `RootInterval`
-    const δ = ri.tE - tS;
-    if (δ === 0) {
-        return [{
-                tS: [0, tS],
-                tE: [0, tS],
-                multiplicity: ri.multiplicity
-            }];
-    }
-    // Translate the polynomial such that the root is within δ from 0, then
-    // scale it such that the roots stay <= 1, i.e. is in [0,1]
-    const pExactK1 = refine_k1_eChangeVariablesLinear(p, δ, tS);
-    // reduce the polynomial to double-double precision for faster root finding
-    const pDdK1 = pExactK1.map(refine_k1_eToDd);
-    // update the double-double precision error bound - it is simply the error 
-    // in rounding the exact coefficients to double-double precision
-    const errBoundK1 = pDdK1.map(c => refine_k1_eps * refine_k1_eps * c[1]);
-    const getPExactK1 = () => pExactK1;
-    // keep TypeScript happy; `allRootsCertified` can safely be assumed not to
-    // return `undefined`
-    const risLo = refine_k1_allRootsCertified(pDdK1, 0, 1, errBoundK1, getPExactK1);
-    const ris = [];
-    for (let riLo of risLo) {
-        ris.push({
-            tS: refine_k1_twoSum(tS, riLo.tS * δ),
-            tE: refine_k1_twoSum(tS, riLo.tE * δ),
-            multiplicity: riLo.multiplicity
-        });
-    }
-    return ris;
-}
-
-//# sourceMappingURL=refine-k1.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/certified/root-interval.js
-/**
- * Simple function that creates and returns an exact root (with a bracketing
- * interval width of 0 and multiplicity 1)
- *
- * @param t
- *
- * @doc
- */
-function createRootExact(t) {
-    return { tS: t, tE: t, multiplicity: 1 };
-}
-/**
- * Simple function that returns the middle of the root bracketing interval - can
- * be used to estimate the root
- *
- * @param ri a root interval
- *
- * @doc
- */
-function mid(ri) {
-    return (ri.tS + ri.tE) / 2;
-}
-
-//# sourceMappingURL=root-interval.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/certified/root-interval-to-exp.js
-/**
- * Returns the result of converting a double precision root interval to a
- * double-double precision one
- *
- * @param ri a root interval
- *
- * @doc
- */
-function rootIntervalToExp(ri) {
-    return {
-        tS: [0, ri.tS],
-        tE: [0, ri.tE],
-        multiplicity: ri.multiplicity
-    };
-}
-
-//# sourceMappingURL=root-interval-to-exp.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/descartes/bigint/b-sign-changes.js
-/**
- * Returns the number of sign changes in the polynomial coefficents when
- * ordered in descending order; zeros are ignored.
- *
- * * Descartes' rule of signs states (quoted from Wikipedia):
- * "if the terms of a polynomial are ordered by descending variable
- * exponent, then the number of positive roots of the polynomial is
- * either equal to the number of sign differences between consecutive
- * nonzero coefficients, or is less than it by an even number. Multiple
- * roots of the same value are counted separately."
- *
- * * see [Descartes' rule of signs](https://en.wikipedia.org/wiki/Descartes%27_rule_of_signs)
- *
- * @param p a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * bSignChanges([1n,2n,-3n,0n,0n,3n,-1n]); //=> 3
- * ```
- *
- * @doc
- */
-function bSignChanges(p) {
-    const d = p.length - 1;
-    let result = 0;
-    let prevSign = p[0] === 0n ? 0 : p[0] < 0n ? -1 : +1;
-    for (let i = 1; i < d + 1; i++) {
-        const sign = p[i] === 0n ? 0 : p[i] < 0n ? -1 : +1;
-        if (sign !== prevSign && sign !== 0) {
-            result++;
-            prevSign = sign;
-        }
-    }
-    return result;
-}
-
-//# sourceMappingURL=b-sign-changes.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/descartes/bigint/b-num-roots.js
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const b_num_roots_bSturmChain = bSturmChain;
-const b_num_roots_bDegree = bDegree;
-const b_num_roots_bSignChanges = bSignChanges;
-/**
- * Returns the *exact* number of *distinct* real roots in the interval (-∞,+∞)
- * of the given polynomial.
- *
- * * From Wikipedia: "In the case of a non-square-free polynomial,
- * if neither a nor b is a multiple root of p, then V(a) − V(b) is the number
- * of distinct real roots of P".
- *
- * @param p a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * const p = [n1, 1n, -64n, 236n, -240n];
- * bNumRoots(p); //=> 4
- * ```
- *
- * @doc
- */
-function bNumRoots(p) {
-    const ps = b_num_roots_bSturmChain(p);
-    const as = ps.map(p => b_num_roots_bDegree(p) % 2 === 0 ? p[0] : -p[0]);
-    const bs = ps.map(p => p[0]);
-    return b_num_roots_bSignChanges(as) - b_num_roots_bSignChanges(bs);
-}
-
-//# sourceMappingURL=b-num-roots.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/descartes/bigint/b-num-roots-0-1.js
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const b_num_roots_0_1_bSturmChain = bSturmChain;
-const b_num_roots_0_1_bSignChanges = bSignChanges;
-const b_num_roots_0_1_bEvaluateAt1 = bEvaluateAt1;
-/**
- * Returns the *exact* number of *distinct* real roots in the open
- * interval (0,1) of the given polynomial.
- *
- * @param p a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]` represents the
- * polynomial `5x^2 - 3x`
- *
- * @doc
- */
-function bNumRootsIn01(p) {
-    const ps = b_num_roots_0_1_bSturmChain(p);
-    const as = ps.map(p => p[p.length - 1]); // evaluate at 0
-    const bs = ps.map(p => b_num_roots_0_1_bEvaluateAt1(p)); // evaluate at 1
-    return b_num_roots_0_1_bSignChanges(as) - b_num_roots_0_1_bSignChanges(bs);
-}
-
-//# sourceMappingURL=b-num-roots-0-1.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/descartes/bigint/b-num-roots-in-range.js
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const b_num_roots_in_range_bSturmChain = bSturmChain;
-const b_num_roots_in_range_bHorner = bHorner;
-const b_num_roots_in_range_bSignChanges = bSignChanges;
-/**
- * Returns the *exact* number of *distinct* real roots in the open
- * interval (a,b) of the given polynomial.
- *
- * @param p a polynomial with coefficients given densely as an array of
- * bigints from highest to lowest power, e.g. `[5n,-3n,0n]`
- * represents the polynomial `5x^2 - 3x`
- * @param a a lower bound
- * @param b an upper bound
- *
- * @example
- * ```typescript
- * const p = [1n, 1n, -64n, 236n, -240n];
- * bNumRootsInRange(p,-20,-11);  //=> 0
- * bNumRootsInRange(p,-11,-9);   //=> 1
- * bNumRootsInRange(p,-11,3.5);  //=> 3
- * bNumRootsInRange(p,-11,5);    //=> 4
- * ```
- *
- * @doc
- */
-function bNumRootsInRange(p, a, b) {
-    const ps = b_num_roots_in_range_bSturmChain(p);
-    const as = ps.map(p => b_num_roots_in_range_bHorner(p, a));
-    const bs = ps.map(p => b_num_roots_in_range_bHorner(p, b));
-    return b_num_roots_in_range_bSignChanges(as) - b_num_roots_in_range_bSignChanges(bs);
-}
-
-//# sourceMappingURL=b-num-roots-in-range.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/descartes/double/sign-changes.js
-/**
- * Returns the number of sign changes in the polynomial coefficents when
- * ordered in descending order; zeros are ignored.
- *
- * * Descartes' rule of signs states (quoted from Wikipedia):
- * "if the terms of a polynomial are ordered by descending variable
- * exponent, then the number of positive roots of the polynomial is
- * either equal to the number of sign differences between consecutive
- * nonzero coefficients, or is less than it by an even number. Multiple
- * roots of the same value are counted separately."
- *
- * * see [Descartes' rule of signs](https://en.wikipedia.org/wiki/Descartes%27_rule_of_signs)
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * signChanges([1,2,-3,0,0,3,-1]); //=> 3
- * ```
- *
- * @doc
- */
-function signChanges(p) {
-    const d = p.length - 1;
-    let result = 0;
-    let prevSign = Math.sign(p[0]);
-    for (let i = 1; i < d + 1; i++) {
-        const sign = Math.sign(p[i]);
-        if (sign !== prevSign && sign !== 0) {
-            result++;
-            prevSign = sign;
-        }
-    }
-    return result;
-}
-
-//# sourceMappingURL=sign-changes.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/descartes/double/num-roots.js
-
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const num_roots_signChanges = signChanges;
-const num_roots_eSign = e_sign_eSign;
-const num_roots_eDegree = eDegree;
-const num_roots_eSturmChain = eSturmChain;
-/**
- * Returns the *exact* number of *distinct* real roots in the interval (-∞,+∞)
- * of the given polynomial - subject to floating point underflow / overflow of
- * intermediate calculations.
- *
- * * From Wikipedia: "In the case of a non-square-free polynomial,
- * if neither a nor b is a multiple root of p, then V(a) − V(b) is the number
- * of distinct real roots of P".
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * const p = [1, 1, -64, 236, -240];
- * numRoots(p); //=> 4
- * ```
- *
- * @doc
- */
-function numRoots(p) {
-    const p_ = p.map(c => [c]);
-    const ps = num_roots_eSturmChain(p_);
-    const as = ps.map(p_ => num_roots_eDegree(p_) % 2 === 0 ? num_roots_eSign(p_[0]) : -num_roots_eSign(p_[0]));
-    const bs = ps.map(p_ => num_roots_eSign(p_[0]));
-    return num_roots_signChanges(as) - num_roots_signChanges(bs);
-}
-
-//# sourceMappingURL=num-roots.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/descartes/double/num-roots-in-0-1.js
-
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const num_roots_in_0_1_eEvaluateAt1 = eEvaluateAt1;
-const num_roots_in_0_1_eSturmChain = eSturmChain;
-const num_roots_in_0_1_signChanges = signChanges;
-const num_roots_in_0_1_eSign = e_sign_eSign;
-/**
- * Returns the *exact* number of *distinct* real roots in the open
- * interval (0,1) of the given polynomial - subject to floating point
- * underflow / overflow of intermediate calculations.
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * precision floating point numbers from highest to lowest power,
- * e.g. `[5,-3,0]` represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-function numRootsIn01(p) {
-    const p_ = p.map(c => [c]);
-    const ps = num_roots_in_0_1_eSturmChain(p_);
-    const as = ps.map(p_ => num_roots_in_0_1_eSign(p_[p_.length - 1])); // evaluate at 0
-    const bs = ps.map(p_ => num_roots_in_0_1_eSign(num_roots_in_0_1_eEvaluateAt1(p_))); // evaluate at 1
-    return num_roots_in_0_1_signChanges(as) - num_roots_in_0_1_signChanges(bs);
-}
-
-//# sourceMappingURL=num-roots-in-0-1.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/descartes/expansion/e-sign-changes.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_sign_changes_eSign = e_sign_eSign;
-/**
- * Returns the number of sign changes in the polynomial coefficents when
- * ordered in descending order; zeros are ignored.
- *
- * * this function is often called `Descartes` in the literature
- *
- * * returns an upper bound of the number of *positive* real roots of the given
- * polynomial
- *
- * * the upper bound returned is always a non-negative multiple of two
- * (i.e. 0, 2, etc) higher than the actual number of real roots
- *
- * * the polynomial need not be square free
- *
- * * Descartes' rule of signs states (quoted from Wikipedia):
- * "if the terms of a polynomial are ordered by descending variable
- * exponent, then the number of positive roots of the polynomial is
- * either equal to the number of sign differences between consecutive
- * nonzero coefficients, or is less than it by an even number. Multiple
- * roots of the same value are counted separately."
- *
- * * see [Descartes' rule of signs](https://en.wikipedia.org/wiki/Descartes%27_rule_of_signs)
- *
- * @param p a polynomial with coefficients given densely as an array of Shewchuk
- * floating point expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * eSignChanges([[1],[2],[-3],[0],[0],[3],[-1]]); //=> 3
- * ```
- *
- * @doc
- */
-function eSignChanges(p) {
-    const d = p.length - 1;
-    if (d < 1) {
-        return 0;
-    }
-    let result = 0;
-    let prevSign = Math.sign(e_sign_changes_eSign(p[0]));
-    for (let i = 1; i < d + 1; i++) {
-        const sign_ = Math.sign(e_sign_changes_eSign(p[i]));
-        if (sign_ !== prevSign && sign_ !== 0) {
-            result++;
-            prevSign = sign_;
-        }
-    }
-    return result;
-}
-
-//# sourceMappingURL=e-sign-changes.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/descartes/double/num-roots-in-range.js
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const num_roots_in_range_sturmChain = sturmChain;
-const num_roots_in_range_eHorner = eHorner;
-const num_roots_in_range_eSignChanges = eSignChanges;
-/**
- * Returns the *exact* number of *distinct* real roots in the open
- * interval (a,b) of the given polynomial - subject to floating point
- * underflow / overflow of intermediate calculations.
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param a a lower bound
- * @param b an upper bound
- *
- * @example
- * ```typescript
- * const p = [1, 1, -64, 236, -240];
- * numRootsInRange(p,-20,-11);  //=> 0
- * numRootsInRange(p,-11,-9);   //=> 1
- * numRootsInRange(p,-11,3.5);  //=> 3
- * numRootsInRange(p,-11,5);    //=> 4
- * ```
- *
- * @doc
- */
-function numRootsInRange(p, a, b) {
-    const ps = num_roots_in_range_sturmChain(p);
-    const as = ps.map(p => num_roots_in_range_eHorner(p, a));
-    const bs = ps.map(p => num_roots_in_range_eHorner(p, b));
-    return num_roots_in_range_eSignChanges(as) - num_roots_in_range_eSignChanges(bs);
-}
-
-//# sourceMappingURL=num-roots-in-range.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/descartes/expansion/e-num-roots.js
-
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_num_roots_signChanges = signChanges;
-const e_num_roots_eSign = e_sign_eSign;
-const e_num_roots_eDegree = eDegree;
-const e_num_roots_eSturmChain = eSturmChain;
-/**
- * Returns the *exact* number of *distinct* real roots in the interval (-∞,+∞)
- * of the given polynomial - subject to floating point underflow / overflow of
- * intermediate calculations.
- *
- * * From Wikipedia: "In the case of a non-square-free polynomial,
- * if neither a nor b is a multiple root of p, then V(a) − V(b) is the number
- * of distinct real roots of P".
- *
- * @param p a polynomial with coefficients given densely as an array of
- * Shewchuk expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * const p = [[1], [1], [-64], [236], [-240]];
- * eNumRoots(p); //=> 4
- * ```
- *
- * @doc
- */
-function eNumRoots(p) {
-    const ps = e_num_roots_eSturmChain(p);
-    const as = ps.map(p => e_num_roots_eDegree(p) % 2 === 0 ? e_num_roots_eSign(p[0]) : -e_num_roots_eSign(p[0]));
-    const bs = ps.map(p => e_num_roots_eSign(p[0]));
-    return e_num_roots_signChanges(as) - e_num_roots_signChanges(bs);
-}
-
-//# sourceMappingURL=e-num-roots.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/descartes/expansion/e-num-roots-0-1.js
-
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_num_roots_0_1_eEvaluateAt1 = eEvaluateAt1;
-const e_num_roots_0_1_eSturmChain = eSturmChain;
-const e_num_roots_0_1_signChanges = signChanges;
-const e_num_roots_0_1_eSign = e_sign_eSign;
-/**
- * Returns the *exact* number of *distinct* real roots in the open
- * interval (0,1) of the given polynomial - subject to floating point
- * underflow / overflow of intermediate calculations.
- *
- * @param p a polynomial with coefficients given densely as an array of
- * Shewchuk expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-function eNumRootsIn01(p) {
-    const ps = e_num_roots_0_1_eSturmChain(p);
-    const as = ps.map(p => e_num_roots_0_1_eSign(p[p.length - 1])); // evaluate at 0
-    const bs = ps.map(p => e_num_roots_0_1_eSign(e_num_roots_0_1_eEvaluateAt1(p))); // evaluate at 1
-    return e_num_roots_0_1_signChanges(as) - e_num_roots_0_1_signChanges(bs);
-}
-
-//# sourceMappingURL=e-num-roots-0-1.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/descartes/expansion/e-num-roots-in-range.js
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_num_roots_in_range_eeHorner = eeHorner;
-const e_num_roots_in_range_eSturmChain = eSturmChain;
-const e_num_roots_in_range_eSignChanges = eSignChanges;
-/**
- * Returns the *exact* number of *distinct* real roots in the open
- * interval (a,b) of the given polynomial - subject to floating point
- * underflow / overflow of intermediate calculations.
- *
- * * From Wikipedia: "In the case of a non-square-free polynomial, if
- * neither a nor b is a multiple root of p, then V(a) − V(b) is the number of
- * distinct real roots of P".
- *
- * @param p a polynomial with coefficients given densely as an array of
- * Shewchuk expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- * @param a a lower bound given as a Shewchuk expansion
- * @param b an upper bound
- *
- * @example
- * ```typescript
- * const p = [[1], [1], [-64], [236], [-240]];
- * eNumRootsInRange(p,-20,-11); //=> 0
- * eNumRootsInRange(p,-11,-9);  //=> 1
- * eNumRootsInRange(p,-11,3.5); //=> 3
- * eNumRootsInRange(p,-11,5);   //=> 4
- * ```
- *
- * @doc
- */
-function eNumRootsInRange(p, a, b) {
-    const ps = e_num_roots_in_range_eSturmChain(p);
-    const as = ps.map(p => e_num_roots_in_range_eeHorner(p, a));
-    const bs = ps.map(p => e_num_roots_in_range_eeHorner(p, b));
-    return e_num_roots_in_range_eSignChanges(as) - e_num_roots_in_range_eSignChanges(bs);
-}
-
-//# sourceMappingURL=e-num-roots-in-range.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/from-roots/bigint/b-from-roots.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const b_from_roots_bMultiply = bMultiply;
-/**
- * Constructs a polynomial from the given roots by multiplying out the
- * factors (x - root1)(x - root2)
- *
- * * currently, only integer roots are allowed
- *
- * @param roots an array of roots
- *
- * @example
- * ```typescript
- * fromRoots([1n,2n,3n,3n]); //=> [1n, -9n, 29n, -39n, 18n]
- * ```
- *
- * @doc
- */
-function bFromRoots(roots) {
-    let p = [1n];
-    for (let i = 0; i < roots.length; i++) {
-        p = b_from_roots_bMultiply(p, [1n, -roots[i]]);
-    }
-    return p;
-}
-
-//# sourceMappingURL=b-from-roots.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/from-roots/expansion/e-from-roots.js
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const e_from_roots_eMultiply = eMultiply;
-const e_from_roots_eNegativeOf = eNegativeOf;
-const e_from_roots_eToDd = eToDd;
-/**
- * Constructs a double-double precision polynomial from the given roots by
- * multiplying out the factors (x - root1)(x - root2) in infinite precision
- * (bar overflow) and rounding back to double-double precision; also returns
- * a coefficient-wise error polynomial and a function that returns the exact
- * polynomial.
- *
- * * mostly for testing purposes.
- *
- * @param roots an array of roots
- *
- * @doc
- */
-function eFromRoots(roots) {
-    let p = [[1]];
-    for (let i = 0; i < roots.length; i++) {
-        p = e_from_roots_eMultiply(p, [[1], e_from_roots_eNegativeOf(roots[i])]);
-    }
-    const pE = p.map(c => Math.abs(c[c.length - 1] * Number.EPSILON));
-    const getPExact = () => p;
-    return {
-        pDd: p.map(e_from_roots_eToDd),
-        pE,
-        getPExact
-    };
-}
-
-//# sourceMappingURL=e-from-roots.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/naive/brent-poly.js
-
-const brent_poly_Horner = Horner;
-const brent_poly_eps = Number.EPSILON;
-const brent_poly_u = brent_poly_eps / 2;
-const brent_poly_abs = Math.abs;
-const brent_poly_max = Math.max;
-/**
- * Returns a refined root given a root bracketed in the interval (a,b) of the
- * given polynomial using Brent's Method.
- *
- * * near exact implementation of the original Brent Dekker Method (also known
- * as Brent's Method), except that it is specialzed to polynomial evaluation
- *
- * * the algorithm stops once the interval width becomes equal or less than
- * `2 * Number.EPSILON/2 * max(1,abs(a),abs(b))` where `a` and `b` are the current
- * lower and upper interval limits
- *
- * * Brent's Method is an excellent root-refinement choice since:
- *  * guaranteed converge (unlike the Newton and other so-called single-point
- * methods),
- *  * converges in a reasonable number of iterations even for highly contrived
- * functions (unlike Dekker's Method) and
- *  * nearly always converges fast, i.e. super-linearly (unlike the Secant and
- * Regula-Falsi methods).
- * * unfortunately the algorithm given on [Wikipedia](https://en.wikipedia.org/wiki/Brent%27s_method)
- * works but is not precisely Brent's method and runs about 2x or more slower
- * due to it not implementing the critically important 'micro-step' (Aug 2020).
- *
- * * see [Brent (page 47)](https://maths-people.anu.edu.au/~brent/pd/rpb011i.pdf)
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param lb the lower limit of the search interval.
- * @param ub the upper limit of the search interval.
- * @param fa (may be left out - will be calculated automatically) the result of
- * evaluating the input polynomial at `a`
- * @param fb (may be left out - will be calculated automatically) the result of
- * evaluating the input polynomial at `b`
- *
- * @example
- * ```typescript
- * const p = fromRoots([-10,2,3,4]);  //=> [1, 1, -64, 236, -240]
- * const a = 2.2;
- * const b = 3.8;
- * brent(p,a,b); //=> 3.000000000000003
- * b = 3.1;
- * brent(p,a,b); //=> 3.000000000000001
- * ```
- *
- * @doc
- */
-function brentPoly(p, lb, ub, fa = brent_poly_Horner(p, lb), fb = brent_poly_Horner(p, ub)) {
-    // Precondition: fa, fb !== 0
-    //---- Make local copies of a and b.
-    let a = lb;
-    let b = ub;
-    let c = a;
-    let fc = fa;
-    let e = b - a;
-    let d = e;
-    while (true) {
-        if (brent_poly_abs(fc) < brent_poly_abs(fb)) {
-            a = b;
-            b = c;
-            c = a;
-            fa = fb;
-            fb = fc;
-            fc = fa;
-        }
-        const δ = 2 * brent_poly_u * brent_poly_max(1, brent_poly_abs(a), brent_poly_abs(b));
-        const m = 0.5 * (c - b);
-        //if (abs(m) <= δ || fb === 0) {
-        if (brent_poly_abs(m) <= δ) {
-            // uncomment below if range to be returned
-            //return b < c ? [b,c] : [c,b];
-            // uncomment below if leftmost guess to be returned
-            //return b < c ? b : c;
-            // uncomment below if rightmost guess to be returned
-            //return b < c ? b : c;
-            // uncomment below if any guess to be returned
-            return b;
-        }
-        if (brent_poly_abs(e) < δ || brent_poly_abs(fa) <= brent_poly_abs(fb)) {
-            e = m;
-            d = e;
-        }
-        else {
-            let s = fb / fa;
-            let p;
-            let q;
-            if (a === c) {
-                p = 2 * m * s;
-                q = 1 - s;
-            }
-            else {
-                q = fa / fc;
-                const r = fb / fc;
-                p = s * (2 * m * q * (q - r) - (b - a) * (r - 1));
-                q = (q - 1) * (r - 1) * (s - 1);
-            }
-            if (0 < p) {
-                q = -q;
-            }
-            else {
-                p = -p;
-            }
-            s = e;
-            e = d;
-            if (2 * p < 3 * m * q - brent_poly_abs(δ * q) && p < brent_poly_abs(0.5 * s * q)) {
-                d = p / q;
-            }
-            else {
-                e = m;
-                d = e;
-            }
-        }
-        a = b;
-        fa = fb;
-        if (δ < brent_poly_abs(d)) {
-            b = b + d;
-        }
-        else if (0 < m) {
-            b = b + δ;
-        }
-        else {
-            //b = b - eps;
-            b = b - δ;
-        }
-        fb = brent_poly_Horner(p, b);
-        // inlined above line:
-        //fb = p[0]; for (let i=1; i<p.length; i++) { fb = fb*b + p[i]; }
-        if (fb === 0) {
-            return b;
-        }
-        if (fb * fc > 0) {
-            c = a;
-            fc = fa;
-            e = b - a;
-            d = e;
-        }
-    }
-}
-
-//# sourceMappingURL=brent-poly.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/naive/all-roots.js
-
-
-
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const all_roots_differentiate = differentiate;
-const all_roots_Horner = Horner;
-const all_roots_brentPoly = brentPoly;
-const all_roots_negativeRootUpperBound_LMQ = negativeRootLowerBound_LMQ;
-const all_roots_positiveRootUpperBound_LMQ = positiveRootUpperBound_LMQ;
-const all_roots_removeLeadingZeros = removeLeadingZeros;
-/**
- * Find and return all roots of the given polynomial in the given interval.
- *
- * * an empty array is returned for a constant or the zero polynomial
- *
- * * **non-exact:** roots are found 'naively' using double-precision arithmetic
- * and accuracy will thus depend on the condition number around the root - use
- * [[allRootsCertifiedSimplified]] or [[allRootsCertified]] instead if certified
- * root bounds are required (it is about 3x slower, but still very fast!)
- *
- * * close (where the definition of closeness depends on the condition
- * number) or multiple *even* roots can be returned as 0, 1 or more close
- * roots, whereas close or multiple *odd* roots are guaranteed to return *at
- * least 1 root*
- *
- * * optimized for polynomials of degree 1 to about 30
- *
- * * roots are refined using the celebrated Brent's Method (and evaluated using
- * Horner's Method) until a root interval is found with
- * width `<= eps * max(1, 2^⌈log₂r⌉)`, where `eps = Number.EPSILON` and
- * `r` is a root
- *
- * * **ordered:** the returned roots are ordered from lowest to highest
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param lb defaults to `Number.NEGATIVE_INFINITY`; lower bound of roots to be
- * returned
- * @param ub defaults to `Number.POSITIVE_INFINITY`; upper bound of roots to be
- * returned
- *
- * @doc
- */
-function allRoots(p, lb = Number.NEGATIVE_INFINITY, ub = Number.POSITIVE_INFINITY) {
-    p = all_roots_removeLeadingZeros(p);
-    //---- count and remove roots at zero
-    let numZerosAtZero = 0;
-    while (p[p.length - 1] === 0) {
-        p = p.slice(0, -1);
-        numZerosAtZero++;
-    }
-    //------------------------
-    // return an empty array for a constant or the zero polynomial
-    if (p.length <= 1) {
-        const roots = [];
-        for (let j = 0; j < numZerosAtZero; j++) {
-            roots.push(0);
-        }
-        return roots;
-    }
-    if (lb === Number.NEGATIVE_INFINITY) {
-        lb = all_roots_negativeRootUpperBound_LMQ(p);
-    }
-    if (ub === Number.POSITIVE_INFINITY) {
-        ub = all_roots_positiveRootUpperBound_LMQ(p);
-    }
-    // Get all derivatives, i.e. 
-    // ps === [p, dp, ddp, ..., constant]
-    //        [0,  1,   2, ..., deg     ]
-    const ps = [p];
-    for (let i = 1; i <= p.length - 1; i++) {
-        ps.push(all_roots_differentiate(ps[i - 1]));
-    }
-    //const δ = Math.max(2*eps, 2*eps * Math.max(Math.abs(lb), Math.abs(ub)));
-    /** root intervals */
-    let is = [];
-    // loop: ps[diffCount] === [linear, quadratic, ..., deg]
-    for (let diffCount = p.length - 2; diffCount >= 0; diffCount--) {
-        // Get roots within intervals:
-        // ---------------------------
-        // Finds and returns all roots of the given polynomial within the given 
-        // intervals, starting from the lower bound (lb) and ending at the upper
-        // bound (ub)
-        const p = ps[diffCount];
-        const roots = [];
-        let _a_ = lb;
-        let _A_ = all_roots_Horner(p, _a_);
-        // if lower bound value is zero and this is the last iteration with 
-        // p === the original polynomial then push the root at the lower bound
-        if (_A_ === 0 && diffCount === 0) {
-            roots.push(lb);
-        }
-        for (let i = 0; i < is.length; i++) {
-            const _b_ = is[i];
-            const _B_ = all_roots_Horner(p, _b_);
-            // if there is a root at the right interval then add it
-            if (_B_ === 0) {
-                roots.push(_b_);
-            }
-            else if (_A_ * _B_ < 0) {
-                roots.push(all_roots_brentPoly(p, _a_, _b_, _A_, _B_));
-            }
-            _a_ = _b_;
-            _A_ = _B_;
-        }
-        const _B_ = all_roots_Horner(p, ub);
-        if (_A_ * _B_ < 0) {
-            roots.push(all_roots_brentPoly(p, _a_, ub, _A_, _B_));
-        }
-        // if upper bound value is zero and this is the last iteration with 
-        // p === the original polynomial then push the root at the upper bound
-        if (_B_ === 0 && diffCount === 0) {
-            roots.push(ub);
-        }
-        is = roots;
-    }
-    if (numZerosAtZero > 0 && lb <= 0 && ub >= 0) {
-        // at this point the existing intervals, `is`, are sorted
-        // find the insertion spot and insert the zero roots to keep the roots
-        // sorted
-        let isWithZeroRoots = [];
-        let zerosInserted = false;
-        for (let i = 0; i < is.length; i++) {
-            if (!zerosInserted && is[i] >= 0) {
-                // push the zero roots
-                for (let j = 0; j < numZerosAtZero; j++) {
-                    isWithZeroRoots.push(0);
-                }
-                zerosInserted = true;
-            }
-            isWithZeroRoots.push(is[i]);
-        }
-        return isWithZeroRoots;
-    }
-    return is;
-}
-
-//# sourceMappingURL=all-roots.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/naive/bisection.js
-const bisection_abs = Math.abs;
-const bisection_max = Math.max;
-/**
- * Returns a refined root given a root bracketed in the interval (a,b) of the
- * given function using the
- * [Bisection Method](https://en.wikipedia.org/wiki/Bisection_method) algorithm.
- *
- * * any function can be supplied (it does not even have to be continuous) as
- * long as the root is bracketed.
- *
- * * this function has no advantages above Brent's method except for its
- * simpler implementation and can be slower. Use [[brentPoly]] or [[brent]]
- * instead.
- *
- * * the algorithm stops once the interval width becomes equal or less than
- * `2 * Number.EPSILON * max(1,abs(a),abs(b))` where `a` and `b` are the current
- * lower and upper interval limits
- *
- * @param f the function for which the root is sought
- * @param a the lower limit of the search interval
- * @param b the upper limit of the search interval
- *
- * @example
- * ```typescript
- * const p = fromRoots([-10,2,3,4]);  //=> [1, 1, -64, 236, -240]
- * const f = t => Horner(p,t);
- * bisection(f,2.2,3.8); //=> 3
- * bisection(f,2.2,3.1); //=> 3.0000000000000044
- * ```
- *
- * @doc
- */
-function bisection(f, a, b) {
-    if (b < a) {
-        [a, b] = [b, a]; // Swap a and b 
-    }
-    const fa = f(a);
-    const fb = f(b);
-    if (a === b) {
-        if (fa !== 0) {
-            // Root is not bracketed - this is a precondition.
-            throw new Error('Root not bracketed');
-        }
-        // the root is already found.
-        return a;
-    }
-    if (fa === 0) {
-        return a;
-    }
-    if (fb === 0) {
-        return b;
-    }
-    if (fa * fb > 0) {
-        // Root is not bracketed - this is a precondition.
-        throw new Error('Root not bracketed');
-    }
-    while (true) {
-        const c = a + (b - a) / 2; // Take midpoint
-        const fc = f(c);
-        if (fc === 0) {
-            return c;
-        }
-        if (fa * fc < 0) {
-            b = c;
-        }
-        else {
-            a = c;
-        }
-        const δ = 2 * Number.EPSILON * bisection_max(1, bisection_abs(a), bisection_abs(b));
-        if (Math.abs(a - b) <= δ) {
-            return b;
-        }
-    }
-}
-
-//# sourceMappingURL=bisection.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/naive/brent.js
-const brent_eps = Number.EPSILON;
-const brent_abs = Math.abs;
-const brent_max = Math.max;
-/**
- * Returns a refined root given a root bracketed in the interval (a,b) of the
- * given function using Brent's Method. Any function can be supplied (it
- * does not even have to be continuous) as long as the root is bracketed.
- *
- * * near exact implementation of the original Brent Dekker Method (also known
- * as Brent's Method)
- *
- * * Brent's Method is an excellent root-refinement choice since:
- *   * guaranteed converge (unlike the Newton and other so-called single-point
- * methods),
- *   * converges in a reasonable number of iterations even for highly contrived
- * functions (unlike Dekker's Method) and
- *   * nearly always converges fast, i.e. super-linearly (unlike the Secant and
- * Regula-Falsi methods).
- * * unfortunately the algorithm given on [Wikipedia](https://en.wikipedia.org/wiki/Brent%27s_method)
- * works but is not precisely Brent's method and runs about 2x or more slower
- * due to it not implementing the critically important 'micro-step' (Aug 2020).
- *
- * * the algorithm stops once the interval width becomes equal or less than
- * `2 * Number.EPSILON * max(1,abs(a),abs(b))` where `a` and `b` are the current
- * lower and upper interval limits
- *
- * * see [Brent (page 47)](https://maths-people.anu.edu.au/~brent/pd/rpb011i.pdf)
- *
- * @param f the function for which the root is sought.
- * @param lb the lower limit of the search interval.
- * @param ub the upper limit of the search interval.
- *
- * @example
- * ```typescript
- * let p = fromRoots([-10,2,3,4]);  //=> [1, 1, -64, 236, -240]
- * let f = t => Horner(p,t);
- * brent(f,2.2,3.8); //=> 3.000000000000003
- * brent(f,2.2,3.1); //=> 3.000000000000001
- * ```
- *
- * @doc
- */
-function brent(f, lb, ub) {
-    // Precondition: fa, fb !== 0
-    //---- Make local copies of a and b.
-    let a = lb;
-    let b = ub;
-    let fa = f(a);
-    let fb = f(b);
-    let c = a;
-    let fc = fa;
-    let e = b - a;
-    let d = e;
-    while (true) {
-        if (brent_abs(fc) < brent_abs(fb)) {
-            a = b;
-            b = c;
-            c = a;
-            fa = fb;
-            fb = fc;
-            fc = fa;
-        }
-        const δ = 2 * brent_eps * brent_max(1, brent_abs(a), brent_abs(b));
-        const m = 0.5 * (c - b);
-        //if (abs(m) <= δ || fb === 0) {
-        if (brent_abs(m) <= δ) {
-            // uncomment below if range to be returned
-            //return b < c ? [b,c] : [c,b];
-            // uncomment below if leftmost guess to be returned
-            //return b < c ? b : c;
-            // uncomment below if rightmost guess to be returned
-            //return b < c ? b : c;
-            // uncomment below if any guess to be returned
-            return b;
-        }
-        if (brent_abs(e) < δ || brent_abs(fa) <= brent_abs(fb)) {
-            e = m;
-            d = e;
-        }
-        else {
-            let s = fb / fa;
-            let p;
-            let q;
-            if (a === c) {
-                p = 2 * m * s;
-                q = 1 - s;
-            }
-            else {
-                q = fa / fc;
-                const r = fb / fc;
-                p = s * (2 * m * q * (q - r) - (b - a) * (r - 1));
-                q = (q - 1) * (r - 1) * (s - 1);
-            }
-            if (0 < p) {
-                q = -q;
-            }
-            else {
-                p = -p;
-            }
-            s = e;
-            e = d;
-            if (2 * p < 3 * m * q - brent_abs(δ * q) && p < brent_abs(0.5 * s * q)) {
-                d = p / q;
-            }
-            else {
-                e = m;
-                d = e;
-            }
-        }
-        a = b;
-        fa = fb;
-        if (δ < brent_abs(d)) {
-            b = b + d;
-        }
-        else if (0 < m) {
-            b = b + δ;
-        }
-        else {
-            //b = b - eps;
-            b = b - δ;
-        }
-        fb = f(b);
-        // inlined above line:
-        //fb = p[0]; for (let i=1; i<p.length; i++) { fb = fb*b + p[i]; }
-        if (fb === 0) {
-            return b;
-        }
-        if (fb * fc > 0) {
-            c = a;
-            fc = fa;
-            e = b - a;
-            d = e;
-        }
-    }
-}
-
-//# sourceMappingURL=brent.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/naive/dd-deflate.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const qmd = node_ddMultDouble2;
-const qaq = node_ddAddDd;
-/**
- * Deflates the given polynomial *approximately* by removing a factor (x - r),
- * where r is a root of the polynomial.
- *
- * * **non-exact:** the deflation is done in double-double precision - it is not
- * possible to deflate a root exactly in most cases and round-off will thus
- * occur - use only if approximate deflation is acceptable
- *
- * @param p a polynomial with coefficients given densely as an array of
- * double-double precision floating point numbers from highest to lowest power,
- * e.g. `[[0,5],[0,-3],[0,0]]` represents the polynomial `5x^2 - 3x`
- * @param root a root of the polynomial.
- *
- * @example
- * ```typescript
- * // The polynomial x^3 - 5x^2 + 8x - 4 has a root at 1 and a double root at 2
- * ddDeflate([[0,1], [0,-5], [0,8], [0,-4]], [0,2]); //=> [[0,1], [0,-3], [0,2]]
- * ddDeflate([[0,1], [0,-3], [0,2], [0,2]);          //=> [[0,1], [0,-1]]
- * ddDeflate([[0,1], [0,-1]], [0,1]);                //=> [[0,1]]
- * ```
- *
- * @doc
- */
-function ddDeflate(p, root) {
-    const d = p.length - 1;
-    const bs = [p[0]];
-    for (let i = 1; i < d; i++) {
-        bs.push(qaq(p[i], qmd(root, bs[i - 1])));
-    }
-    return bs;
-}
-
-//# sourceMappingURL=dd-deflate.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/naive/deflate.js
-/**
- * Deflates the given polynomial *approximately* by removing a factor (x - r),
- * where r is a root of the polynomial.
- *
- * * **non-exact:** the deflation is done in double precision - it is not
- * possible to deflate a root exactly in most cases and round-off will thus
- * occur - use only if approximate deflation is acceptable
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param root a root of the polynomial.
- *
- * @example
- * ```typescript
- * // The polynomial x^3 - 5x^2 + 8x - 4 has a root at 1 and a double root at 2
- * deflate([1, -5, 8, -4], 2);  //=> [1, -3, 2]
- * deflate([1, -3, 2], 2);      //=> [1,-1]
- * deflate([1, -1], 1);         //=> [1]
- * ```
- *
- * @doc
- */
-function deflate(p, root) {
-    const d = p.length - 1;
-    const bs = [p[0]];
-    for (let i = 1; i < d; i++) {
-        bs.push(p[i] + root * bs[i - 1]);
-    }
-    return bs;
-}
-
-//# sourceMappingURL=deflate.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/naive/quadratic-roots.js
-/**
- * Floating-point-stably calculates and returns the ordered quadratic roots of
- * the given quadratic polynomial.
- *
- * * **precondition:** the input polynomial must be quadratic (given as an array
- * of exactly 3 values with the first value *unequal* to zero)
- * * **non-exact:** it is important to note that even though the roots are
- * calculated in a stable way they are still subject to round-off
- * * might be slightly faster than calling [[allRoots]].
- *
- * @param p a quadratic polynomial with coefficients given as an array
- * of double floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the quadratic `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * quadraticRoots([1, -3, 2]); //=> [1,2]
- * ```
- *
- * @doc
- */
-function quadraticRoots(p) {
-    const [a, b, c] = p;
-    const _D = b * b - 4 * a * c;
-    if (_D < 0) {
-        // No real roots;
-        return [];
-    }
-    if (_D === 0) {
-        return [-b / (2 * a)];
-    }
-    const D = Math.sqrt(_D);
-    if (b >= 0) {
-        const root1 = (-b - D) / (2 * a);
-        const root2 = (2 * c) / (-b - D);
-        return root1 < root2
-            ? [root1, root2]
-            : [root2, root1];
-    }
-    const root1 = (2 * c) / (-b + D);
-    const root2 = (-b + D) / (2 * a);
-    return root1 < root2
-        ? [root1, root2]
-        : [root2, root1];
-}
-
-//# sourceMappingURL=quadratic-roots.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/root-bounds/root-magnitude-upper-bound-fujiwara.js
-/**
- * Returns an upper bound on the magnitude (absolute value) of the complex
- * roots of the given polynomial using the near-optimal Fujiwara bound.
- *
- * * the bound includes complex roots.
- * * the bound is quite tight
- *
- * * see [Wikipedia](https://en.wikipedia.org/wiki/Properties_of_polynomial_roots#Other_bounds)
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * rootMagnitudeUpperBound_fujiwara([2,-3,6,5,-130]); //=> 6.753296750770361
- * allRoots([2,-3,6,5,-130]); //=> [-2.397918624065303, 2.8793785310848383]
- * ```
- *
- * @doc
- */
-function rootMagnitudeUpperBound_fujiwara(p) {
-    if (p.length <= 1) {
-        return 0;
-    }
-    const d = p.length - 1;
-    const an = p[0];
-    const bs = [];
-    for (let i = 1; i < d; i++) {
-        bs.push((Math.abs(p[i] / an)) ** (1 / i));
-    }
-    bs.push((Math.abs(p[d] / 2 * an)) ** (1 / d));
-    return 2 * Math.max(...bs);
-}
-
-//# sourceMappingURL=root-magnitude-upper-bound-fujiwara.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/root-bounds/root-magnitude-upper-bound-rouche.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const root_magnitude_upper_bound_rouche_pInfNorm = pInfNorm;
-/**
- * Finds an upper bound on the magnitude (absolute value) of the roots
- * (including complex roots) of the given polynomial using Rouche's Theorem
- * with k = n.
- *
- * * fast but the bound is not very tight
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-function rootMagnitudeUpperBound_rouche(p) {
-    if (p.length <= 1) {
-        return 0;
-    }
-    return 1 + (root_magnitude_upper_bound_rouche_pInfNorm(p.slice(1)) / p[0]);
-}
-
-//# sourceMappingURL=root-magnitude-upper-bound-rouche.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/scale-to-int/scale-float-to-int.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const scale_float_to_int_exponent = exponent;
-const scale_float_to_int_bitLength = bitLength;
-/**
- * Returns the result of scaling the given float by a power of two such that
- * it becomes an integer (overflow not possible) - the smallest such integer is
- * returned.
- *
- * * the result is exact (no round-off can occur)
- *
- * @param a a double precision floating point number
- *
- * @doc
- */
-function scaleFloatToInt(a) {
-    if (a === 0) {
-        return 0;
-    }
-    return a * 2 ** (-scale_float_to_int_exponent(a) + scale_float_to_int_bitLength(a) - 1);
-}
-
-//# sourceMappingURL=scale-float-to-int.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/scale-to-int/scale-float-to-bigint.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const scale_float_to_bigint_exponent = exponent;
-const scale_float_to_bigint_bitLength = bitLength;
-const scale_float_to_bigint_b0 = 0n; // temp until support is better otherwise test fails
-/**
- * Returns the result of scaling the given float by a power of two such that
- * it becomes a bigint - the smallest such integer is returned.
- *
- * @param a a double precision floating point number
- *
- * @doc
- */
-function scaleFloatToBigint(a) {
-    if (a === 0) {
-        return scale_float_to_bigint_b0;
-    }
-    return BigInt(a * 2 ** (-scale_float_to_bigint_exponent(a) + scale_float_to_bigint_bitLength(a) - 1));
-}
-
-//# sourceMappingURL=scale-float-to-bigint.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/scale-to-int/scale-floatss-to-bigintss.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const scale_floatss_to_bigintss_exponent = exponent;
-const scale_floatss_to_bigintss_bitLength = bitLength;
-const scale_floatss_to_bigintss_b0 = 0n; // so tests are not tripped up - awaiting better support
-/**
- * Returns the result of scaling the given array of array of floats by the
- * *same* power of two such that all floats become bigints.
- *
- * * can be used to scale polynomials (with coefficients given as Shewchuk
- * expansions)
- *
- * @param ass an array of an array of double precision floating point numbers
- *
- * @doc
- */
-function scaleFloatssToBigintss(ass) {
-    let e = -1024;
-    for (let i = 0; i < ass.length; i++) {
-        const c = ass[i];
-        for (let j = 0; j < c.length; j++) {
-            const a = c[j];
-            if (a === 0) {
-                continue;
-            }
-            const scaleFactor = -scale_floatss_to_bigintss_exponent(a) + scale_floatss_to_bigintss_bitLength(a) - 1;
-            if (scaleFactor > e) {
-                e = scaleFactor;
-            }
-        }
-    }
-    // check for the trivial case
-    if (e === 0) {
-        return ass.map(as => as.map(a => BigInt(a)));
-    }
-    if (e > 0) {
-        return ass.map(as => as.map(a => {
-            if (a === 0) {
-                return scale_floatss_to_bigintss_b0;
-            }
-            const scalePower = -scale_floatss_to_bigintss_exponent(a) + scale_floatss_to_bigintss_bitLength(a) - 1;
-            // we first scale `a` to an integer without overflow and then
-            // convert it to a bigint before multiplying
-            return BigInt(a * 2 ** scalePower) * 2n ** BigInt(e - scalePower);
-        }));
-    }
-    // overflow / underflow cannot occur
-    return ass.map(as => as.map(a => BigInt(a * 2 ** e)));
-}
-
-//# sourceMappingURL=scale-floatss-to-bigintss.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/index.js
-// basic
-
-// basic bigint
-
-
-
-
-
-
-
-
-
-
-
-
-// basic double
-
-
-
-
-
-
-
-
-
-
-
-
-// basic expansion
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// calculus bigint
-
-// calculus double
-
-
-// calculus double-double
-
-
-
-// calculus expansion
-
-// change variables bigint
-
-
-
-
-// change variables double
-
-
-
-
-// change variables expansion
-
-
-
-
-// error analysis
-
-
-
-// euclidean division related bigint
-
-
-
-
-
-// euclidean division related double
-
-
-// euclidean division related expansion
-
-
-
-
-// evaluate bigint
-
-
-
-// evaluate double
-
-
-
-
-
-
-
-
-
-
-
-
-
-// evaluate expansion
-
-
-
-
-// factor bigint
-
-
-// factor double
-
-
-// factor expansion
-
-
-// gcd bigint
-
-
-
-// gcd double
-//import { gcdPrs } from './gcd/double/gcd-prs.js';
-
-
-// gcd expansion
-//import { eGcdPrs } from './gcd/expansion/e-gcd-prs.js';
-
-
-// norm bigint
-
-
-
-// norm double
-
-
-
-// norm expansion
-
-
-
-// predictive random double
-
-
-
-
-
-// predictive random bigint
-
-
-
-
-// roots certified
-
-
-
-
-
-
-// roots descartes bigint
-
-
-
-
-// roots descartes double
-
-
-
-
-// roots descartes expansion
-
-
-
-
-// roots from roots
-
-
-
-// roots naive
-
-
-
-
-
-
-
-// roots root bounds
-
-
-
-
-
-
-// scale to int
-
-
-
-
-
-
-const flo_poly_node_operators = {
-    // basic
-    toCasStr: toCasStr,
-    // basic bigint
-    bAbsCoeff: bAbsCoeff,
-    bAdd: bAdd,
-    bDegree: bDegree,
-    bDivideByConst: bDivideByConst,
-    bEqual: bEqual,
-    bInvert: bInvert,
-    bIsRationalMultipleOf: bIsRationalMultipleOf,
-    bMultiply: bMultiply,
-    bMultiplyByConst: bMultiplyByConst,
-    bNegate: bNegate,
-    bRemoveLeadingZeros: bRemoveLeadingZeros,
-    bSubtract: bSubtract,
-    // basic double
-    absCoeff: absCoeff,
-    add: add_add,
-    degree: degree,
-    divideByConst: divideByConst,
-    equal: equal,
-    invert: invert,
-    isRationalMultipleOf: isRationalMultipleOf,
-    multiply: multiply,
-    multiplyByConst: multiplyByConst,
-    negate: negate,
-    removeLeadingZeros: removeLeadingZeros,
-    subtract: subtract,
-    // basic expansion
-    eAbsCoeff: eAbsCoeff,
-    eAdd: e_add_eAdd,
-    eDegree: eDegree,
-    eEqual: eEqual,
-    eInvert: eInvert,
-    eIsConstOrZero: eIsConstOrZero,
-    eIsRationalMultipleOf: eIsRationalMultipleOf,
-    eIsUnit: eIsUnit,
-    eMultiply: eMultiply,
-    eMultiplyByConst: eMultiplyByConst,
-    eNegate: eNegate,
-    eProduct: e_product_eProduct,
-    eRemoveLeadingZeros: eRemoveLeadingZeros,
-    eSubtract: eSubtract,
-    // calculus bigint
-    bDifferentiate: bDifferentiate,
-    // calculus double
-    differentiate: differentiate,
-    integrate: integrate,
-    // calculus double-double
-    ddDifferentiate: ddDifferentiate,
-    ddDifferentiateWithError: ddDifferentiateWithError,
-    ddIntegrate: ddIntegrate,
-    // calculus expansion
-    eDifferentiate: eDifferentiate,
-    // change variables bigint
-    bChangeVariablesLinear: bChangeVariablesLinear,
-    bChangeVariablesScale: bChangeVariablesScale,
-    bChangeVariablesTranslateX: bChangeVariablesTranslateX,
-    bReflectAboutYAxis: bReflectAboutYAxis,
-    // change variables double
-    changeVariablesLinear: changeVariablesLinear,
-    changeVariablesScale: changeVariablesScale,
-    changeVariablesTranslateX: changeVariablesTranslateX,
-    reflectAboutYAxis: reflectAboutYAxis,
-    // change variables expansion
-    eChangeVariablesLinear: eChangeVariablesLinear,
-    eChangeVariablesScale: eChangeVariablesScale,
-    eChangeVariablesTranslateX: eChangeVariablesTranslateX,
-    eReflectAboutYAxis: eReflectAboutYAxis,
-    // error analysis
-    conditionNumber: conditionNumber,
-    γ: gamma_,
-    γγ: error_analysis_gamma_,
-    // euclidean division related bigint
-    bPdivTrivial: bPdivTrivial,
-    bPremSequencePrimitive: bPremSequencePrimitive,
-    bPremSequenceSubresultant: bPremSequenceSubresultant,
-    bPremSequenceTrivial: bPremSequenceTrivial,
-    bSturmChain: bSturmChain,
-    // euclidean division related double
-    premSequenceSubresultant: premSequenceSubresultant,
-    sturmChain: sturmChain,
-    // euclidean division related expansion
-    ePdivTrivial: ePdivTrivial,
-    ePremSequencePrimitive: ePremSequencePrimitive,
-    ePremSequenceSubresultant: ePremSequenceSubresultant,
-    eSturmChain: eSturmChain,
-    // evaluate bigint
-    bHorner: bHorner,
-    bEvaluateAt0: bEvaluateAt0,
-    bEvaluateAt1: bEvaluateAt1,
-    // evaluate double
-    AbsHorner: AbsHorner,
-    compHorner: compHorner,
-    compHornerIsFaithful: compHornerIsFaithful,
-    CompHornerK: CompHornerK,
-    compHornerWithRunningError: compHornerWithRunningError,
-    EFTHorner: EFTHorner,
-    evalCertified: evalCertified,
-    evalCertifiedInclError: evalCertifiedInclError,
-    evalK: evalK,
-    evaluateAt0: evaluateAt0,
-    evaluateAt1: evaluateAt1,
-    Horner: Horner,
-    hornerWithRunningError: hornerWithRunningError,
-    // evaluate expansion
-    eeHorner: eeHorner,
-    eEvaluateAt0: eEvaluateAt0,
-    eEvaluateAt1: eEvaluateAt1,
-    eHorner: eHorner,
-    // factor bigint
-    bContent: bContent,
-    bPrimitivePart: bPrimitivePart,
-    // factor double
-    content: content,
-    primitivePart: primitivePart,
-    // factor expansion
-    eContent: eContent,
-    ePrimitivePart: ePrimitivePart,
-    // norm bigint
-    bP1Norm: bP1Norm,
-    bP2NormSquared: bP2NormSquared,
-    bPInfNorm: bPInfNorm,
-    // norm double
-    p1Norm: p1Norm,
-    p2Norm: p2Norm,
-    pInfNorm: pInfNorm,
-    // norm expansion
-    eP1Norm: eP1Norm,
-    eP2Norm: eP2Norm,
-    ePInfNorm: ePInfNorm,
-    // predictive random double
-    flatRoots: flatRoots,
-    flatRootsArr: flatRootsArr,
-    flatCoefficients: flatCoefficients,
-    flatCoefficientsArr: flatCoefficientsArr,
-    predictiveRandom: predictiveRandom,
-    // predictive random bigint
-    bFlatRoots: bFlatRoots,
-    bFlatRootsArr: bFlatRootsArr,
-    bFlatCoefficients: bFlatCoefficients,
-    bFlatCoefficientsArr: bFlatCoefficientsArr,
-    // roots certified
-    allRootsCertified: allRootsCertified,
-    allRootsCertifiedSimplified: allRootsCertifiedSimplified,
-    refineK1: refineK1,
-    mid: mid,
-    createRootExact: createRootExact,
-    rootIntervalToExp: rootIntervalToExp,
-    // roots descartes bigint
-    bNumRoots: bNumRoots,
-    bNumRootsIn01: bNumRootsIn01,
-    bNumRootsInRange: bNumRootsInRange,
-    bSignChanges: bSignChanges,
-    // roots descartes double
-    numRoots: numRoots,
-    numRootsIn01: numRootsIn01,
-    numRootsInRange: numRootsInRange,
-    signChanges: signChanges,
-    // roots descartes expansion
-    eNumRoots: eNumRoots,
-    eNumRootsIn01: eNumRootsIn01,
-    eNumRootsInRange: eNumRootsInRange,
-    eSignChanges: eSignChanges,
-    // roots from roots
-    bFromRoots: bFromRoots,
-    fromRoots: fromRoots,
-    eFromRoots: eFromRoots,
-    // roots naive
-    allRoots: allRoots,
-    bisection: bisection,
-    brent: brent,
-    brentPoly: brentPoly,
-    ddDeflate: ddDeflate,
-    deflate: deflate,
-    quadraticRoots: quadraticRoots,
-    // roots root bounds
-    positiveRootUpperBound_LMQ: positiveRootUpperBound_LMQ,
-    positiveRootLowerBound_LMQ: positiveRootLowerBound_LMQ,
-    negativeRootLowerBound_LMQ: negativeRootLowerBound_LMQ,
-    negativeRootUpperBound_LMQ: negativeRootUpperBound_LMQ,
-    rootMagnitudeUpperBound_fujiwara: rootMagnitudeUpperBound_fujiwara,
-    rootMagnitudeUpperBound_rouche: rootMagnitudeUpperBound_rouche,
-    // scale to int
-    scaleFloatToInt: scaleFloatToInt,
-    scaleFloatsToInts: scaleFloatsToInts,
-    scaleFloatssToIntss: scaleFloatssToIntss,
-    scaleFloatToBigint: scaleFloatToBigint,
-    scaleFloatsToBigints: scaleFloatsToBigints,
-    scaleFloatssToBigintss: scaleFloatssToBigintss,
-    // gcd bigint
-    bGcdPrs: bGcdPrs,
-    bGcdInt: bGcdInt,
-    bGcdInts: bGcdInts,
-    // gcd double
-    //gcdPrs,
-    gcdInt: gcdInt,
-    gcdInts: gcdInts,
-    // gcd expansion
-    //eGcdPrs,
-    eGcdInt: eGcdInt,
-    eGcdInts: eGcdInts
-};
-
-
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=multiply.js.map
 ;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis/double/to-power-basis.ts
 /**
  * Returns the power basis representation of a bezier curve of order cubic or
@@ -12008,8 +4660,8 @@ function toPowerBasis1_1stDerivative(ps) {
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  */
 function area_area(ps) {
-    let [x, y] = toPowerBasis(ps);
-    let [dx, dy] = toPowerBasis_1stDerivative(ps);
+    const [x, y] = toPowerBasis(ps);
+    const [dx, dy] = toPowerBasis_1stDerivative(ps);
     const poly = integrate(subtract(multiply(x, dy), multiply(y, dx)), 0);
     // the below is exactly te same as: Horner(poly,1) - Horner(poly,0)
     let total = 0;
@@ -12020,148 +4672,6 @@ function area_area(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/dot.js
-/**
- * Returns the dot (inner) product between two 2-vectors.
- * @param a the first vector
- * @param b the second vector
- */
-function dot(a, b) {
-    return a[0] * b[0] + a[1] * b[1];
-}
-
-//# sourceMappingURL=dot.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/lines-and-segments/seg-seg-intersection.js
-
-
-const seg_seg_intersection_epr = (/* unused pure expression or super */ null && (expansionProduct));
-const seg_seg_intersection_td = (/* unused pure expression or super */ null && (twoDiff));
-/**
-* Returns the point where two line segments intersect or undefined if they
-* don't intersect or if they intersect at infinitely many points.
-* * see Geometric primitves http://algs4.cs.princeton.edu/91primitives
-* * **certified**
-* @param ab The first line
-* @param cd The second line
-*/
-function segSegIntersection(ab, cd) {
-    let [a, b] = ab;
-    let [c, d] = cd;
-    let [a0, a1] = a;
-    let [b0, b1] = b;
-    let [c0, c1] = c;
-    let [d0, d1] = d;
-    //let denom  = (b[0] - a[0])*(d[1] - c[1]) - (b[1] - a[1])*(d[0] - c[0]);
-    let denom = eDiff(seg_seg_intersection_epr(seg_seg_intersection_td(b0, a0), seg_seg_intersection_td(d1, c1)), seg_seg_intersection_epr(seg_seg_intersection_td(b1, a1), seg_seg_intersection_td(d0, c0)));
-    //let rNumer = (a[1] - c[1])*(d[0] - c[0]) - (a[0] - c[0])*(d[1] - c[1]);
-    let rNumer = eDiff(seg_seg_intersection_epr(seg_seg_intersection_td(a1, c1), seg_seg_intersection_td(d0, c0)), seg_seg_intersection_epr(seg_seg_intersection_td(a0, c0), seg_seg_intersection_td(d1, c1)));
-    //let sNumer = (a[1] - c[1]) * (b[0] - a[0]) - (a[0] - c[0]) * (b[1] - a[1]); 
-    let sNumer = eDiff(seg_seg_intersection_epr(seg_seg_intersection_td(a1, c1), seg_seg_intersection_td(b0, a0)), seg_seg_intersection_epr(seg_seg_intersection_td(a0, c0), seg_seg_intersection_td(b1, a1)));
-    if (denom[denom.length - 1] === 0) {
-        // parallel
-        if (rNumer[rNumer.length - 1] === 0) {
-            // collinear
-            // TODO Check if x-projections and y-projections intersect
-            // and return the line of intersection if they do.
-            return undefined;
-        }
-        return undefined;
-    }
-    //let r = rNumer / denom;
-    //let s = sNumer / denom;
-    // if (0 <= r && r <= 1 && 0 <= s && s <= 1)
-    if (eSign(rNumer) * eSign(denom) >= 0 && eCompare(eAbs(denom), eAbs(rNumer)) >= 0 &&
-        eSign(sNumer) * eSign(denom) >= 0 && eCompare(eAbs(denom), eAbs(sNumer)) >= 0) {
-        let r = eEstimate(rNumer) / eEstimate(denom);
-        //return [a0 + r*(b0 - a0), a1 + r*(b1 - a1)];
-        return [
-            eEstimate(twoSum(eEstimate(seg_seg_intersection_epr(seg_seg_intersection_td(b0, a0), rNumer)) / eEstimate(denom), a0)),
-            eEstimate(twoSum(eEstimate(seg_seg_intersection_epr(seg_seg_intersection_td(b1, a1), rNumer)) / eEstimate(denom), a1))
-        ];
-    }
-    return undefined;
-}
-
-//# sourceMappingURL=seg-seg-intersection.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/lines-and-segments/does-seg-seg-intersect.js
-
-/**
- * Returns true if the two given 2d line segments intersect, false otherwise.
- * * **robust** uses exact adaptive floating point arithmetic.
- * @param a a line segment
- * @param b another line segment
- */
-function doesSegSegIntersect(a, b) {
-    if ((orient2d(a[0], a[1], b[0]) * orient2d(a[0], a[1], b[1])) > 0) {
-        return false;
-    }
-    if ((orient2d(b[0], b[1], a[0]) * orient2d(b[0], b[1], a[1])) > 0) {
-        return false;
-    }
-    return true;
-}
-
-//# sourceMappingURL=does-seg-seg-intersect.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/affine-transformations/translate/translate.js
-// From: https://en.wikipedia.org/wiki/Affine_transformation
-// "If X is the point set of an affine space, then every affine transformation 
-// on X can be represented as the composition of a linear transformation on X 
-// and a translation of X"
-function translate(a, b) {
-    function f(b) {
-        return [a[0] + b[0], a[1] + b[1]];
-    }
-    // Curry the function
-    return b === undefined ? f : f(b);
-}
-
-//# sourceMappingURL=translate.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/affine-transformations/linear/rotate.js
-function rotate(sinθ, cosθ, p) {
-    function rotateByθ(p) {
-        return [
-            p[0] * cosθ - p[1] * sinθ,
-            p[0] * sinθ + p[1] * cosθ
-        ];
-    }
-    // Curry the function
-    return p === undefined ? rotateByθ : rotateByθ(p);
-}
-
-//# sourceMappingURL=rotate.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/affine-transformations/linear/scale.js
-/**
- * Returns a scaled version of the given 2-vector.
- * @param p a vector
- * @param c a scale factor
- */
-function scale(p, c) {
-    return [c * p[0], c * p[1]];
-}
-
-//# sourceMappingURL=scale.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/affine-transformations/linear/reverse.js
-/**
- * Returns the given 2-vector reversed (i.e. scaled by -1).
- * @param p a vector
- */
-function reverse(p) {
-    return [-p[0], -p[1]];
-}
-
-//# sourceMappingURL=reverse.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/distance-and-length/to-length.js
-/**
- * Returns the given 2-vector scaled to the given length.
- * @param p a vector
- * @param length the length to scale to
- */
-function toLength(p, length) {
-    let c = length / Math.sqrt(p[0] * p[0] + p[1] * p[1]);
-    return [c * p[0], c * p[1]];
-}
-
-//# sourceMappingURL=to-length.js.map
 ;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/distance-and-length/distance-between.js
 /**
  * Returns the distance between two 2d points.
@@ -12169,158 +4679,12 @@ function toLength(p, length) {
  * @param q another point
  */
 function distanceBetween(p, q) {
-    let x = q[0] - p[0];
-    let y = q[1] - p[1];
+    const x = q[0] - p[0];
+    const y = q[1] - p[1];
     return Math.sqrt(x * x + y * y);
 }
 
 //# sourceMappingURL=distance-between.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/distance-and-length/len.js
-/**
- * Returns the length of the given 2-vector.
- * @param p a 2d vector
- */
-function len(p) {
-    return Math.sqrt(p[0] * p[0] + p[1] * p[1]);
-}
-
-//# sourceMappingURL=len.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/distance-and-length/squared-distance-between.js
-/**
- * Returns the squared distance between two 2d points.
- * @param p a point
- * @param q another point
- */
-function squared_distance_between_squaredDistanceBetween(p, q) {
-    let x = q[0] - p[0];
-    let y = q[1] - p[1];
-    return x * x + y * y;
-}
-
-//# sourceMappingURL=squared-distance-between.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/index.js
-//==================================
-// 2d vector pure functions library
-//==================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * Three 2d points are a counter-clockwise turn if ccw > 0, clockwise if
- * ccw < 0, and colinear if ccw === 0 because ccw is a determinant that gives
- * twice the signed area of the triangle formed by the points a, b and c.
- * * **certified**
- * @param A The first point
- * @param B The second point
- * @param C The third point
- */
-const ccw = (/* unused pure expression or super */ null && (orient2d));
-/**
- * Returns the second 2-vector minus the first.
- * @param p the first vector
- * @param q the second vector
-  */
-function fromTo(p, q) {
-    return [q[0] - p[0], q[1] - p[1]];
-}
-/**
- * Performs linear interpolation between two 2d points and returns the
- * resulting point.
- * @param p the first point.
- * @param q the second point.
- * @param t the interpolation fraction (often in [0,1]).
- */
-function interpolate(p, q, t) {
-    return [
-        p[0] + (q[0] - p[0]) * t,
-        p[1] + (q[1] - p[1]) * t
-    ];
-}
-/**
- * Returns the mean of two 2d points.
- * @param ps the two points
- */
-function mean(ps) {
-    let p = ps[0];
-    let q = ps[1];
-    return [(p[0] + q[0]) / 2, (p[1] + q[1]) / 2];
-}
-/**
-* Returns true if two 2-vectors are identical (by value), false otherwise.
-* @param a a 2d vector
-* @param b another 2d vector
-*/
-function node_equal(a, b) {
-    return (a[0] === b[0] && a[1] === b[1]);
-}
-/**
- * Returns the closest point to the array of 2d points or if the array is empty
- * returns undefined.
- * @param p
- * @param ps
- */
-function getClosestTo(p, ps) {
-    let closestPoint = undefined;
-    let closestDistance = Number.POSITIVE_INFINITY;
-    for (let i = 0; i < ps.length; i++) {
-        let q = ps[i];
-        let d = squaredDistanceBetween(p, q);
-        if (d < closestDistance) {
-            closestPoint = q;
-            closestDistance = d;
-        }
-    }
-    return closestPoint;
-}
-/**
- * Returns the closest point to the array of 2d points by providing a distance
- * function. If the given array is empty, returns undefined.
- * @param p
- * @param ps
- * @param f a function that takes the object and returns a point in order to
- * apply the Euclidian distance.
- */
-function getObjClosestTo(p, ps, f) {
-    let closestObj = undefined; // Closest Point
-    let closestDistance = Number.POSITIVE_INFINITY;
-    for (let i = 0; i < ps.length; i++) {
-        let o = ps[i];
-        let d = squaredDistanceBetween(p, f(o));
-        if (d < closestDistance) {
-            closestObj = o;
-            closestDistance = d;
-        }
-    }
-    return closestObj;
-}
-
-//# sourceMappingURL=index.js.map
 ;// CONCATENATED MODULE: ./src/global-properties/length/length-bez1.ts
 
 /**
@@ -12335,10 +4699,10 @@ function getObjClosestTo(p, ps, f) {
  * @internal
  */
 function lengthBez1(interval, ps) {
-    let [t1, t2] = interval;
-    let [[x0, y0], [x1, y1]] = ps;
-    let p1 = [x0 + t1 * (x1 - x0), y0 + t1 * (y1 - y0)];
-    let p2 = [x0 + t2 * (x1 - x0), y0 + t2 * (y1 - y0)];
+    const [t1, t2] = interval;
+    const [[x0, y0], [x1, y1]] = ps;
+    const p1 = [x0 + t1 * (x1 - x0), y0 + t1 * (y1 - y0)];
+    const p2 = [x0 + t2 * (x1 - x0), y0 + t2 * (y1 - y0)];
     return distanceBetween(p1, p2);
 }
 
@@ -12367,11 +4731,11 @@ function gaussQuadrature(f, interval, order = 16) {
     if (interval[0] === interval[1]) {
         return 0;
     }
-    let { weights, abscissas } = GAUSS_CONSTANTS[order];
-    let [a, b] = interval;
+    const { weights, abscissas } = GAUSS_CONSTANTS[order];
+    const [a, b] = interval;
     let result = 0;
-    let m1 = (b - a) / 2;
-    let m2 = (b + a) / 2;
+    const m1 = (b - a) / 2;
+    const m2 = (b + a) / 2;
     for (let i = 0; i <= order - 1; i++) {
         result += weights[i] * f(m1 * abscissas[i] + m2);
     }
@@ -12583,6 +4947,31 @@ const GAUSS_CONSTANTS = {
 };
 
 //# sourceMappingURL=index.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/horner.js
+/**
+ * Returns the result of evaluating a univariate polynomial using
+ * Horner's method in double precision floating point arithmetic.
+ *
+ * * see [Horner's Method](https://en.wikipedia.org/wiki/Horner%27s_method)
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ * @param x the value at which to evaluate the polynomial
+ *
+ * @doc
+ */
+function Horner(p, x) {
+    let q = 0;
+    for (let i = 0; i < p.length; i++) {
+        q = q * x + p[i];
+    }
+    return q;
+}
+// inlined (with q => E, p => p0)
+//let E = p0[0]; for (let i=1; i<p0.length; i++) {E = E*x + p0[i]; }
+
+//# sourceMappingURL=horner.js.map
 ;// CONCATENATED MODULE: ./src/local-properties-at-t/ds.ts
 
 
@@ -12901,8 +5290,8 @@ function getInterfaceRotation(a, b) {
     const v2 = a[1];
     const w1 = b[0];
     const w2 = b[1];
-    let A = get_interface_rotation_ddDiffDd(get_interface_rotation_tp(w2, v1), get_interface_rotation_tp(w1, v2))[1];
-    let B = get_interface_rotation_ddAddDd(get_interface_rotation_tp(w1, v1), get_interface_rotation_tp(w2, v2))[1];
+    const A = get_interface_rotation_ddDiffDd(get_interface_rotation_tp(w2, v1), get_interface_rotation_tp(w1, v2))[1];
+    const B = get_interface_rotation_ddAddDd(get_interface_rotation_tp(w1, v1), get_interface_rotation_tp(w2, v2))[1];
     return atan2(A, B);
 }
 
@@ -13371,7 +5760,7 @@ const from_to_fromTo1 = fromTo1;
  *
  * @doc mdx
  */
-function from_to_fromTo(ps, tS, tE) {
+function fromTo(ps, tS, tE) {
     if (ps.length === 4) {
         return from_to_fromTo3(ps, tS, tE);
     }
@@ -13409,11 +5798,11 @@ function from_to_fromTo(ps, tS, tE) {
  * @doc mdx
  */
 function splitByCurvature(ps, maxCurviness = 0.4, minTSpan = 2 ** -16) {
-    let head = { r: [0, 1] };
+    const head = { r: [0, 1] };
     let n = head;
     while (n !== undefined) {
         const ts_ = n.r;
-        const ps_ = from_to_fromTo(ps, ts_[0], ts_[1]);
+        const ps_ = fromTo(ps, ts_[0], ts_[1]);
         const curviness_ = curviness(ps_);
         if (curviness_ <= maxCurviness || ts_[1] - ts_[0] <= minTSpan) {
             n = n.next;
@@ -13961,6 +6350,144 @@ function clone(ps) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/naive/brent.js
+const brent_eps = Number.EPSILON;
+const brent_abs = Math.abs;
+const max = Math.max;
+/**
+ * Returns a refined root given a root bracketed in the interval (a,b) of the
+ * given function using Brent's Method. Any function can be supplied (it
+ * does not even have to be continuous) as long as the root is bracketed.
+ *
+ * * near exact implementation of the original Brent Dekker Method (also known
+ * as Brent's Method)
+ *
+ * * Brent's Method is an excellent root-refinement choice since:
+ *   * guaranteed converge (unlike the Newton and other so-called single-point
+ * methods),
+ *   * converges in a reasonable number of iterations even for highly contrived
+ * functions (unlike Dekker's Method) and
+ *   * nearly always converges fast, i.e. super-linearly (unlike the Secant and
+ * Regula-Falsi methods).
+ * * unfortunately the algorithm given on [Wikipedia](https://en.wikipedia.org/wiki/Brent%27s_method)
+ * works but is not precisely Brent's method and runs about 2x or more slower
+ * due to it not implementing the critically important 'micro-step' (Aug 2020).
+ *
+ * * the algorithm stops once the interval width becomes equal or less than
+ * `2 * Number.EPSILON * max(1,abs(a),abs(b))` where `a` and `b` are the current
+ * lower and upper interval limits
+ *
+ * * see [Brent (page 47)](https://maths-people.anu.edu.au/~brent/pd/rpb011i.pdf)
+ *
+ * @param f the function for which the root is sought.
+ * @param lb the lower limit of the search interval.
+ * @param ub the upper limit of the search interval.
+ *
+ * @example
+ * ```typescript
+ * let p = fromRoots([-10,2,3,4]);  //=> [1, 1, -64, 236, -240]
+ * let f = t => Horner(p,t);
+ * brent(f,2.2,3.8); //=> 3.000000000000003
+ * brent(f,2.2,3.1); //=> 3.000000000000001
+ * ```
+ *
+ * @doc
+ */
+function brent(f, lb, ub) {
+    // Precondition: fa, fb !== 0
+    //---- Make local copies of a and b.
+    let a = lb;
+    let b = ub;
+    let fa = f(a);
+    let fb = f(b);
+    let c = a;
+    let fc = fa;
+    let e = b - a;
+    let d = e;
+    while (true) {
+        if (brent_abs(fc) < brent_abs(fb)) {
+            a = b;
+            b = c;
+            c = a;
+            fa = fb;
+            fb = fc;
+            fc = fa;
+        }
+        const δ = 2 * brent_eps * max(1, brent_abs(a), brent_abs(b));
+        const m = 0.5 * (c - b);
+        //if (abs(m) <= δ || fb === 0) {
+        if (brent_abs(m) <= δ) {
+            // uncomment below if range to be returned
+            //return b < c ? [b,c] : [c,b];
+            // uncomment below if leftmost guess to be returned
+            //return b < c ? b : c;
+            // uncomment below if rightmost guess to be returned
+            //return b < c ? b : c;
+            // uncomment below if any guess to be returned
+            return b;
+        }
+        if (brent_abs(e) < δ || brent_abs(fa) <= brent_abs(fb)) {
+            e = m;
+            d = e;
+        }
+        else {
+            let s = fb / fa;
+            let p;
+            let q;
+            if (a === c) {
+                p = 2 * m * s;
+                q = 1 - s;
+            }
+            else {
+                q = fa / fc;
+                const r = fb / fc;
+                p = s * (2 * m * q * (q - r) - (b - a) * (r - 1));
+                q = (q - 1) * (r - 1) * (s - 1);
+            }
+            if (0 < p) {
+                q = -q;
+            }
+            else {
+                p = -p;
+            }
+            s = e;
+            e = d;
+            if (2 * p < 3 * m * q - brent_abs(δ * q) && p < brent_abs(0.5 * s * q)) {
+                d = p / q;
+            }
+            else {
+                e = m;
+                d = e;
+            }
+        }
+        a = b;
+        fa = fb;
+        if (δ < brent_abs(d)) {
+            b = b + d;
+        }
+        else if (0 < m) {
+            b = b + δ;
+        }
+        else {
+            //b = b - eps;
+            b = b - δ;
+        }
+        fb = f(b);
+        // inlined above line:
+        //fb = p[0]; for (let i=1; i<p.length; i++) { fb = fb*b + p[i]; }
+        if (fb === 0) {
+            return b;
+        }
+        if (fb * fc > 0) {
+            c = a;
+            fc = fa;
+            e = b - a;
+            d = e;
+        }
+    }
+}
+
+//# sourceMappingURL=brent.js.map
 ;// CONCATENATED MODULE: ./src/local-properties-to-t/get-t-at-length.ts
 
 
@@ -13994,7 +6521,7 @@ function getTAtLength(ps, s) {
  *
  * @doc
  */
-function equal_equal(ps1, ps2) {
+function equal(ps1, ps2) {
     if (ps1 === ps2) {
         return true;
     }
@@ -14257,11 +6784,11 @@ function fromToInclErrorBound(ps, tS, tE) {
 ;// CONCATENATED MODULE: ./src/transformation/degree-or-type/cubic-to-quadratic.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const cubic_to_quadratic_epr = expansion_product_expansionProduct;
-const cubic_to_quadratic_td = two_diff_twoDiff;
-const cubic_to_quadratic_ediff = e_diff_eDiff;
+const cubic_to_quadratic_epr = expansionProduct;
+const cubic_to_quadratic_td = twoDiff;
+const cubic_to_quadratic_ediff = eDiff;
 const cubic_to_quadratic_esign = e_sign_eSign;
-const cubic_to_quadratic_estimate = e_estimate_eEstimate;
+const cubic_to_quadratic_estimate = eEstimate;
 const cubic_to_quadratic_sce = scaleExpansion;
 const cubic_to_quadratic_ts = two_sum_twoSum;
 /**
@@ -14351,6 +6878,31 @@ function llIntersection(l1, l2) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/certified/root-interval.js
+/**
+ * Simple function that creates and returns an exact root (with a bracketing
+ * interval width of 0 and multiplicity 1)
+ *
+ * @param t
+ *
+ * @doc
+ */
+function createRootExact(t) {
+    return { tS: t, tE: t, multiplicity: 1 };
+}
+/**
+ * Simple function that returns the middle of the root bracketing interval - can
+ * be used to estimate the root
+ *
+ * @param ri a root interval
+ *
+ * @doc
+ */
+function mid(ri) {
+    return (ri.tS + ri.tE) / 2;
+}
+
+//# sourceMappingURL=root-interval.js.map
 ;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/x.ts
 /** @internal */
 function getPFromBox(box) {
@@ -14363,12 +6915,1262 @@ function getPFromBox(box) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/error-analysis/gamma.js
+const gamma_u = Number.EPSILON / 2;
+const gamma_uu = gamma_u * gamma_u;
+/**
+ * The canonical floating point error function, γ.
+ *
+ * * roughly `=== n * (Number.EPSILON / 2)`
+ * * see e.g. [Algorithms for Accurate, Validated and Fast Polynomial Evaluation](https://hal.archives-ouvertes.fr/hal-00285603/document)
+ * @param n the parameter - typically a small positive integer, e.g. for
+ * polynomial evaluation this === 2*d + 1, where d is the degree of the
+ * polynomial
+ *
+ * @doc
+ */
+function gamma_(n) {
+    const nu = n * gamma_u;
+    return nu / (1 - nu);
+}
+/**
+ * The canonical, once compensated (implying double-double precision),
+ * floating point error function.
+ *
+ * * roughly `=== n * (Number.EPSILON / 2)**2`
+ * * see e.g. [Algorithms for Accurate, Validated and Fast Polynomial Evaluation](https://hal.archives-ouvertes.fr/hal-00285603/document)
+ * @param n the parameter - typically a small positive integer, e.g. for
+ * polynomial evaluation this === 2*d + 1, where d is the degree of the
+ * polynomial
+ *
+ * @doc
+ */
+function error_analysis_gamma_(n) {
+    const nuu = n * gamma_uu;
+    return nuu / (1 - nuu);
+}
+
+//# sourceMappingURL=gamma.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/calculus/double-double/dd-differentiate-with-err.js
+
+
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const dd_differentiate_with_err_ddMultDouble2 = node_ddMultDouble2;
+const dd_differentiate_with_err_eEstimate = eEstimate;
+const γγ3 = error_analysis_gamma_(3);
+/**
+ * Returns the result (and resulting coefficient-wise error bound) of
+ * differentiating the given polynomial (with coefficients given in
+ * double-double precision) in double-double precision.
+ *
+ * @param pWithErr an object with 2 properties: `p`: a polynomial with
+ * coefficients given densely as an array of double-double precision floating
+ * point numbers from highest to lowest power, e.g. `[[5],[-3],[0]]` represents
+ * the polynomial `5x^2 - 3x` **and** `pE`: the coefficient-wise error bound of
+ * the input polynomial
+ *
+ * @doc
+ */
+function ddDifferentiateWithError(pWithErr) {
+    const { p, pE } = pWithErr;
+    const dp = [];
+    const dpE = [];
+    const d = p.length - 1;
+    for (let i = 0; i < d; i++) {
+        const deg = d - i;
+        const c = dd_differentiate_with_err_ddMultDouble2(deg, p[i]);
+        dp.push(c);
+        // if 1,2,4 or 8, etc. then no additional error occurs on multiply
+        // if 3,5,7 or 9, etc. then additional error occurs
+        // deg is a power of 2 <=> (deg & deg-1) === 0
+        const extraErr = (deg & deg - 1) === 0 ? 0 : γγ3;
+        const $c = dd_differentiate_with_err_eEstimate(c);
+        dpE.push(
+        //deg * (pE[i] + Math.abs($c)*extraErr)
+        deg * pE[i] + Math.abs($c) * extraErr);
+    }
+    return { p: dp, pE: dpE };
+}
+
+//# sourceMappingURL=dd-differentiate-with-err.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/calculus/expansion/e-differentiate.js
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const e_differentiate_scaleExpansion = scaleExpansion;
+/**
+ * Returns the exact result (bar underflow / overflow) of differentiating the
+ * given polynomial (with Shewchuk expansion coefficients).
+ *
+ * @param p a polynomial with coefficients given densely as an array of Shewchuk
+ * floating point expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
+ * represents the polynomial `5x^2 - 3x`
+ *
+ * @example
+ * ```typescript
+ * eDifferentiate([[5], [4], [3], [2], [1]]); //=> [[20], [12], [6], [2]]
+ * ```
+ *
+ * @doc
+ */
+function eDifferentiate(p) {
+    const result = [];
+    const d = p.length - 1;
+    for (let i = 0; i < d; i++) {
+        result.push(e_differentiate_scaleExpansion(p[i], d - i));
+    }
+    return result;
+}
+
+//# sourceMappingURL=e-differentiate.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/eft-horner.js
+
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const eft_horner_twoSum = two_sum_twoSum;
+const eft_horner_twoProduct = two_product_twoProduct;
+/**
+ * Returns an EFT (error free transformation) for the Horner evaluation of a
+ * polymial at a specified x. The result is returned as an object with
+ * properties: r̂ -> the calculated evaluation, pπ and pσ -> two polynomials
+ * with coefficients around 2^53 times smaller than the input polynomial.
+ *
+ * * r̂ + pπ(x) + pσ(x) = the *exact* evaluation (no error)
+ *
+ * * see [Algorithms for Accurate, Validated and Fast Polynomial Evaluation, *Stef Graillat, Philippe Langlois and Nicolas Louvet*](https://projecteuclid.org/download/pdf_1/euclid.jjiam/1265033778)
+ * * see also [*Philippe Langlois, Nicolas Louvet.* Faithful Polynomial Evaluation with Compensated Horner Algorithm. ARITH18: 18th IEEE International Symposium on Computer Arithmetic, Jun 2007, Montpellier, France. pp.141–149. ffhal-00107222f](https://hal.archives-ouvertes.fr/hal-00107222/document)
+ * * see also [Horner's Method](https://en.wikipedia.org/wiki/Horner%27s_method)
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ * @param x the value at which to evaluate the polynomial
+ *
+ * @doc
+ */
+function EFTHorner(p, x) {
+    const pπ = []; // A polynomial containing part of the error
+    const pσ = []; // Another polynomial containing part of the error
+    let σ;
+    let r̂ = p[0];
+    for (let i = 1; i < p.length; i++) {
+        const [π, pi] = eft_horner_twoProduct(r̂, x);
+        [σ, r̂] = eft_horner_twoSum(pi, p[i]);
+        // inlined
+        //r̂ = pi + p[i]; const bv = r̂ - pi; σ = (pi - (x-bv)) + (p[i]-bv);
+        pπ.push(π);
+        pσ.push(σ);
+    }
+    return { r̂, pπ, pσ };
+}
+// inlined
+//const pπ: number[] = []; const pσ: number[] = []; const σ: number; const r̂ = p[0];	for (const i=1; i<p.length; i++) { const [π,pi] = twoProduct(r̂,x); [σ,r̂] = twoSum(pi, p[i]); pπ.push(π); pσ.push(σ); } return { r̂, pπ, pσ }
+
+//# sourceMappingURL=eft-horner.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/horner-with-running-error.js
+const horner_with_running_error_abs = Math.abs;
+const horner_with_running_error_u = Number.EPSILON / 2;
+/**
+ * Returns the result of evaluating a polyniomial at a point x, including a
+ * running error bound as an array in the form `[r,e]` where `r` is the result
+ * of the evaluation and `e` is the error.
+ *
+ * * see e.g. page 95 (at bottom) of [Higham 2002](http://ftp.demec.ufpr.br/CFD/bibliografia/Higham_2002_Accuracy%20and%20Stability%20of%20Numerical%20Algorithms.pdf)
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ * @param x the value at which to evaluate the polynomial
+ *
+ * @doc
+ */
+function hornerWithRunningError(p, x) {
+    let r̂ = p[0];
+    let e = horner_with_running_error_abs(r̂) * 0.5;
+    for (let i = 1; i < p.length; i++) {
+        r̂ = r̂ * x + p[i];
+        e = e * horner_with_running_error_abs(x) + horner_with_running_error_abs(r̂);
+    }
+    e = horner_with_running_error_u * (2 * e - horner_with_running_error_abs(r̂));
+    return [r̂, e];
+}
+// inlined (where r̂ => r, e => e1, p => p0)
+//let r = p0[0]; let e1 = Math.abs(r) / 2; for (let i=1; i<p0.length; i++) { r = r*x + p0[i]; e1 = Math.abs(x)*e1 + Math.abs(r); } e1 = Number.EPSILON * (2*e1 - Math.abs(r));
+
+//# sourceMappingURL=horner-with-running-error.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/abs-horner.js
+const abs_horner_abs = Math.abs;
+/**
+ * Returns the result of evaluating a univariate polynomial using
+ * Horner's method and where the absolute value of each coefficient is taken.
+ *
+ * * intermediate calculations are done in double precision
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ * @param x the value at which `p` should be evaluated
+ *
+ * @doc
+ */
+function AbsHorner(p, x) {
+    let q = 0;
+    for (let i = 0; i < p.length; i++) {
+        q = q * x + abs_horner_abs(p[i]);
+    }
+    return q;
+}
+// inlined (with q => e2, p => p0)
+//let e2 = abs(p0[0]); for (let i=1; i<p0.length; i++) { e2 = e2*x + abs(p0[i]); }
+
+//# sourceMappingURL=abs-horner.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/eval-certified.js
+
+
+
+
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const eval_certified_ = gamma_;
+const eval_certified_EFTHorner = EFTHorner;
+const eval_certified_hornerWithRunningError = hornerWithRunningError;
+const eval_certified_Horner = Horner;
+const eval_certified_AbsHorner = AbsHorner;
+const eval_certified_1 = eval_certified_(1);
+const γ2 = eval_certified_(2);
+/**
+ * Returns the result of evaluating the given polynomial (with specified
+ * coefficient-wise error bounds) at x such that the sign is correct when
+ * positive or negative and undecided when 0 - an additional `multiplier`
+ * parameter can enforce additional bits (beyond the sign) to be correct.
+ *
+ * * designed to be fast in 'easy' cases (say condition number < 2^53) and
+ * harder cases (condition number < 2^106) since nearly all typical
+ * calculations will have condition number < 2^106
+ * * a staggered approach is used - first double precision, then simulated
+ * double-double precision (i.e. once compensated Horner evluation) is tried
+ * before giving up and returning 0 - see point below
+ * * if zero is returned then the calculated result is too close to 0 to
+ * determine the sign; the caller of this function can then resort to a more
+ * accurate (possibly exact) evaluation
+ *
+ * @param p an array of 2 polynomials with coefficients given densely as an
+ * array of double precision floating point numbers from highest to
+ * lowest power, e.g. `[5,-3,0]` represents the polynomial `5x^2 - 3x`;
+ * the first polynomial's coefficients represent the 'high part' (a double) of a
+ * double-double precision value, while the second polynomial's coefficients
+ * represent the 'low part', i.e. designating `hp` for high part and `lp` for
+ * low part it must be that they are non-overlapping -> `twoSum(lp,hp)` will
+ * equal `[lp,hp]`; put another way, if the given polynomial is given as e.g. a
+ * linear polynomial with coefficients in double precision,
+ * e.g. `[[1.7053025658242404e-13, 2354.33721613], [-7.105427357601002e-15,284.5673337]]`
+ * then this parameter, `p`, should be `[[2354.33721613], 284.5673337], [1.7053025658242404e-13, -7.105427357601002e-15]]`
+ * which is simply the result of transposing the original polynomial if it is
+ * seen as a matrix
+ * @param pE defaults to `undefined`; an error polynomial that provides a
+ * coefficient-wise error bound on the input polynomial; all coefficients must
+ * be positive; if `undefined` then the input polynomial will be assumed exact
+ * @param x the value at which to evaluate the polynomial
+ * @param multiplier defaults to 1; the final calculation error needs to be a
+ * multiple of this number smaller than the evaluated value, otherwise zero is
+ * returned - useful if not only the sign is important but also some bits, e.g.
+ * if multiplier = 8 then 3 bits will have to be correct otherwise 0 is returned
+ *
+ * @doc
+ */
+function evalCertified(p, x, pE = undefined, multiplier = 1) {
+    const absX = Math.abs(x);
+    const p0 = p[0];
+    // first do a fast evaluation
+    const [r, e1] = eval_certified_hornerWithRunningError(p0, x);
+    // inlined above line:
+    //const r = p0[0]; const e1 = Math.abs(r) / 2; for (const i=1; i<p0.length; i++) { r = r*x + p0[i]; e1 = Math.abs(x)*e1 + Math.abs(r); } e1 = Number.EPSILON * (2*e1 - Math.abs(r));
+    /** the error due to not considering p[1] */
+    // the line below was changed due to negative values of x now also allowed
+    const e2 = γ2 * eval_certified_AbsHorner(p0, absX);
+    // inlined above line:
+    //const e2 = abs(p0[0]); for (const i=1; i<p0.length; i++) { e2 = e2*x + abs(p0[i]); }
+    /** error due to imprecision in coefficients */
+    // the line below was changed due to negative values of x now also allowed
+    const E = pE !== undefined ? eval_certified_Horner(pE, absX) : 0;
+    //const E = p0[0]; for (const i=1; i<p0.length; i++) {E = E*x + p0[i]; }
+    const ee = e1 + e2 + E; // in difficult cases E can be larger than e1+e2
+    if (ee * multiplier < Math.abs(r)) {
+        // we are within bounds
+        return r;
+    }
+    // error is too large - do a more precise evaluation (i.e. once compensated
+    // with K === 2)
+    const EFTHorner_ = eval_certified_EFTHorner(p0, x);
+    const { pπ, pσ } = EFTHorner_;
+    let { r̂ } = EFTHorner_;
+    const [C1, c1] = eval_certified_hornerWithRunningError(pπ, x);
+    const [C2, c2] = eval_certified_hornerWithRunningError(pσ, x);
+    const [C3, c3] = eval_certified_hornerWithRunningError(p[1], x);
+    // typically: c1,c2 < c3 < E
+    let e = (c1 + c2 + c3) + E;
+    // typically: C1,C2 < C3 < r̂ and (C1 + C2 + C3 < r̂)
+    r̂ = (C1 + C2 + C3) + r̂;
+    e += eval_certified_1 * r̂;
+    if (e * multiplier < Math.abs(r̂)) {
+        return r̂;
+    }
+    // error is still too large to return the correct sign (if multiplier === 1)
+    return 0;
+}
+
+//# sourceMappingURL=eval-certified.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/expansion/e-horner.js
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const e_horner_fes = fastExpansionSum;
+const e_horner_sce = scaleExpansion;
+/**
+ * Returns the exact result (bar underflow / overflow) of evaluating a
+ * univariate polynomial using Horner's method - the result is returned as a
+ * Shewchuk expansion.
+ *
+ * @param p a polynomial with coefficients given densely as an array of
+ * Shewchuk expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
+ * represents the polynomial `5x^2 - 3x`
+ * @param x the value at which to evaluate the polynomial
+ *
+ * @doc
+ */
+function eHorner(p, x) {
+    let q = [0];
+    for (let i = 0; i < p.length; i++) {
+        q = e_horner_fes(p[i], e_horner_sce(q, x));
+    }
+    return q;
+}
+
+//# sourceMappingURL=e-horner.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/certified/transpose-poly.js
+/**
+ * Transposes the given polynomial (given with multi-precision coefficients)
+ * into multiple polynomials with each consecutive polynomial 'adjusting'
+ * the prior one to higher precision.
+ *
+ * @param p
+ *
+ * @internal
+ */
+function transposePoly(p) {
+    // transpose the polynomial coefficients into multiple polynomials
+    const len = p[0].length;
+    const p_ = [];
+    for (let i = 0; i < len; i++) {
+        const _p = [];
+        for (let j = 0; j < p.length; j++) {
+            _p.push(p[j][len - (i + 1)]); // from highest to lowest
+        }
+        p_.push(_p);
+    }
+    return p_;
+}
+
+//# sourceMappingURL=transpose-poly.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/certified/eval-adaptive.js
+
+
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const eval_adaptive_evalCertified = evalCertified;
+const eval_adaptive_eHorner = eHorner;
+const eval_adaptive_eEstimate = eEstimate;
+/**
+ * Returns the result of evaluating the given polynomial (with double-double
+ * precision coefficients) at the given value, where the coefficient-wise error
+ * is also given.
+ *
+ * * **the sign of the returned result is guaranteed to be correct**
+ * * the evaluation is done adaptively, i.e. if the evaluation cannot be done
+ * accurately enough then an exact precision polynomial is requested
+ *
+ * @param p a polynomial given as an array with each consecutive element of
+ * the array having more accurate coefficients than the previous (by adding
+ * consecutive double precision coefficients to prior coefficients)
+ * @param pE a coefficientwise error bound
+ * @param x the point of evaluation
+ * @param psExact an object holding the exact polynomial and all its exact
+ * derivatives - this object may be modified!
+ * @param getPsExact a function to retrieve the exact polynomial and all its
+ * exact derivatives
+ * @param diffCount the number of differentiations done up to this point
+ *
+ * @internal
+ */
+function evalAdaptive(p, pE, x, getPolyExact) {
+    const r = eval_adaptive_evalCertified(p, x, pE, 4);
+    if (r !== 0) {
+        return r;
+    }
+    // condition number is too high - request higher precision
+    return eval_adaptive_eEstimate(eval_adaptive_eHorner(getPolyExact(), x));
+}
+
+//# sourceMappingURL=eval-adaptive.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/certified/refine-certified.js
+
+
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const refine_certified_evalCertified = evalCertified;
+const refine_certified_eHorner = eHorner;
+const refine_certified_eEstimate = eEstimate;
+const refine_certified_eps = Number.EPSILON;
+const refine_certified_abs = Math.abs;
+const refine_certified_max = Math.max;
+/**
+ * Returns a refined root given a root bracketed in the interval (a,b) of the
+ * given polynomial using Brent's Method - modified slightly to allow for
+ * error certified bounds.
+ *
+ * * near exact implementation of the original Brent Dekker Method (also known
+ * as Brent's Method), except that it is specialzed to polynomial evaluation
+ *
+ * * Brent's Method is an excellent root-refinement choice since:
+ *  * guaranteed converge (unlike the Newton and other so-called single-point
+ * methods),
+ *  * converges in a reasonable number of iterations even for highly contrived
+ * functions (unlike Dekker's Method) and
+ *  * nearly always converges fast, i.e. super-linearly (unlike the Secant and
+ * Regula-Falsi methods).
+ * * unfortunately the algorithm given on [Wikipedia](https://en.wikipedia.org/wiki/Brent%27s_method)
+ * works but is not precisely Brent's method and runs about 2x or more slower
+ * due to it not implementing the critically important 'micro-step' (Aug 2020).
+ *
+ * * see [Brent (page 47)](https://maths-people.anu.edu.au/~brent/pd/rpb011i.pdf)
+ * * [c++ implementation of Brent's Method](https://people.sc.fsu.edu/~jburkardt/cpp_src/brent/brent.cpp)
+ *
+ * @param p A polynomial with coefficients given densely as an array of double-double
+ * floating point numbers from highest to lowest power, e.g. `[[0,5],[0,-3],[0,0]]`
+ * represents the polynomial `5x^2 - 3x`. If `exact` is `true` then this is allowed
+ * to be `undefined`.
+ * @param pE An error polynomial that provides a coefficientwise error bound on
+ * the input polynomial; all coefficients must be positive. If `exact` is `true`
+ * then this is allowed to be `undefined`.
+ * @param lb the lower limit of the search interval.
+ * @param ub the upper limit of the search interval.
+ * @param fa the result of evaluating the input polynomial at `a`
+ * @param fb the result of evaluating the input polynomial at `b`
+ * @param psExact
+ * @param getPsExact
+ * @param diffCount
+ * @param exact set to true if you need to do exact evaluations from the start
+ *
+ * @internal
+ */
+function refineCertified(p, pE, lb, ub, fa, fb, getPolyExact, exact) {
+    //---- Make local copies of a and b.
+    let a = lb;
+    let b = ub;
+    let c = a;
+    let fc = fa;
+    let e = b - a;
+    let d = e;
+    while (true) {
+        // update delta
+        if (refine_certified_abs(fc) < refine_certified_abs(fb)) {
+            a = b;
+            b = c;
+            c = a;
+            fa = fb;
+            fb = fc;
+            fc = fa;
+        }
+        // Original c++ code had the line below but with us t === 0 and b is 
+        // taken as 1 and 2.0 * macheps is taken as 2*u === Number.EPSILON (eps)
+        // or can also be taken as 4*u === 2*Number.EPSILON (2*eps)
+        // adaptive tolerance
+        //let δ = 2 * eps * max(1,abs(b));
+        //let δ = 2 * u * max(1,abs(b));
+        let δ;
+        const mm = refine_certified_max(refine_certified_abs(a), refine_certified_abs(b));
+        if (mm <= 1) {
+            δ = refine_certified_eps;
+        }
+        else {
+            // keep δ = eps * a power of 2
+            //δ = eps * 2**Math.ceil(Math.log2(Math.ceil(mm)));  // may be faster to get log2 of an integer
+            δ = refine_certified_eps * 2 ** Math.ceil(Math.log2(mm));
+        }
+        //tol = 2.0 * macheps * abs ( b ) + t;
+        const m = 0.5 * (c - b);
+        //if (abs(m) <= δ || fb === 0) {
+        // modified from the original since we dont need the fb === 0 check here
+        if (refine_certified_abs(m) <= δ) {
+            // TODO - could potentially make b - c a power of 2 here δ
+            return b < c ? [b, c] : [c, b];
+        }
+        if (refine_certified_abs(e) < δ || refine_certified_abs(fa) <= refine_certified_abs(fb)) {
+            e = m;
+            d = e;
+        }
+        else {
+            let s = fb / fa;
+            let p;
+            let q;
+            if (a === c) {
+                p = 2 * m * s;
+                q = 1 - s;
+            }
+            else {
+                q = fa / fc;
+                const r = fb / fc;
+                p = s * (2 * m * q * (q - r) - (b - a) * (r - 1));
+                q = (q - 1) * (r - 1) * (s - 1);
+            }
+            if (0 < p) {
+                q = -q;
+            }
+            else {
+                p = -p;
+            }
+            s = e;
+            e = d;
+            if (2 * p < 3 * m * q - refine_certified_abs(δ * q) && p < refine_certified_abs(0.5 * s * q)) {
+                d = p / q;
+            }
+            else {
+                e = m;
+                d = e;
+            }
+        }
+        a = b;
+        fa = fb;
+        if (δ < refine_certified_abs(d)) {
+            b = b + d;
+        }
+        else if (0 < m) {
+            b = b + δ;
+        }
+        else {
+            //b = b - eps;
+            b = b - δ;
+        }
+        fb = exact
+            ? refine_certified_eEstimate(refine_certified_eHorner(getPolyExact(), b))
+            // keep TypeScript happy; neither `p` nor `pE` can be `undefined` 
+            // here by a precondition
+            : refine_certified_evalCertified(p, b, pE);
+        if (fb === 0) {
+            // Since `evalCertified` returns zero if undecided the zero result
+            // cannot be fully trusted at this point.
+            // if we are already doing exact evaluations this is an exact root
+            if (exact) {
+                return [b, b];
+            }
+            // We need to calculate δ/2 to the left and right of b to get 
+            // results that should usually be !== 0. 
+            // It is a pre-filter. If the result === 0 we need to sharpen the
+            // ability of the evaluation by somehow reducing the error bound
+            const sL = Math.max(lb, b - δ); // dont overstep bounds
+            const sR = Math.min(ub, b + δ); // dont overstep bounds
+            // Note: sR - sL <= 2*δ provided lb, ub are in [-1..1] - usually 
+            // (when sL === s - δ and sR === s + δ) sR - sL === 2*δ. Also δ > 0
+            // keep TypeScript happy; neither `p` nor `pE` can be `undefined` 
+            // here by a precondition
+            const fsL = refine_certified_evalCertified(p, sL, pE);
+            const fsR = refine_certified_evalCertified(p, sR, pE);
+            // if the evaluation method is strong enough return the result
+            if (fsL * fsR !== 0) {
+                return [sL, sR];
+            }
+            // At this point either fsL or fsR === 0 so we need to sharpen the
+            // evaluation method
+            exact = true;
+            // get and cache the exact polynomial (we cache this since getting
+            // an exact polynomial takes about 15 times more time than getting
+            // a double-double polynomial and we very rarely expect to get to 
+            // this point)
+            fb = refine_certified_eEstimate(refine_certified_eHorner(getPolyExact(), b));
+            // if the exact evaluation returns 0 we have an exact root
+            if (fb === 0) {
+                return [b, b];
+            }
+            // else we've got a new value for fb and from here on we use exact
+            // evaluations
+        }
+        if ((0 < fb && 0 < fc) || (fb <= 0 && fc <= 0)) {
+            c = a;
+            fc = fa;
+            e = b - a;
+            d = e;
+        }
+    }
+}
+
+//# sourceMappingURL=refine-certified.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/double/negate.js
+/**
+ * Returns the negative of the given polynomial (p -> -p).
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ * @example
+ * ```typescript
+ * negate([0.1, -0.2]); //=> [-0.1, 0.2]
+ * ```
+ *
+ * @doc
+ */
+function negate(p) {
+    const p_ = [];
+    for (let i = 0; i < p.length; i++) {
+        p_.push(-p[i]);
+    }
+    return p_;
+}
+
+//# sourceMappingURL=negate.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/double/invert.js
+/**
+ * Inverts the given polynomial by reversing the order of the coefficients,
+ * i.e. p(x) -> x^deg(p) * p(1/x)
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ *
+ * @example
+ * ```typescript
+ * invert([3,2,-5]);  // => [-5,2,3]
+ * ```
+ *
+ * @doc
+ */
+function invert(p) {
+    return p.slice().reverse();
+}
+
+//# sourceMappingURL=invert.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/root-bounds/upper-to-lower-bound.js
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const upper_to_lower_bound_invert = invert;
+/**
+ * Returns a function that returns a positive lower root bound given a function
+ * that returns a positive upper root bound.
+ *
+ * @param positiveUpperBoundFunction
+ *
+ * @internal
+ */
+function upperToLowerBound(positiveUpperBoundFunction) {
+    return (p) => {
+        return 1 / positiveUpperBoundFunction(upper_to_lower_bound_invert(p));
+    };
+}
+
+//# sourceMappingURL=upper-to-lower-bound.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/change-variables/double/reflect-about-y-axis.js
+/**
+ * Returns the result of reflecting the given polynomial about the Y-axis, i.e.
+ * perform the change of variables: p(x) <- p(-x).
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ *
+ * @example
+ * ```typescript
+ * reflectAboutYAxis([5,4,3,2,1]); //=> [5, -4, 3, -2, 1]
+ * ```
+ *
+ * @doc
+ */
+function reflectAboutYAxis(p) {
+    const d = p.length - 1;
+    if (d < 0) {
+        return [];
+    }
+    const result = p.slice();
+    for (let i = 0; i < d + 1; i++) {
+        if (i % 2) {
+            result[i] = -result[i];
+        }
+    }
+    return result;
+}
+
+//# sourceMappingURL=reflect-about-y-axis.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/root-bounds/positive-to-negative-bound.js
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const positive_to_negative_bound_reflectAboutYAxis = reflectAboutYAxis;
+/**
+ * Returns a function that returns a negative root bound given a function that
+ * returns a positive root bound.
+ *
+ * @param positiveBoundFunction
+ *
+ * @internal
+ */
+function positiveToNegativeBound(positiveBoundFunction) {
+    return (p) => {
+        return -positiveBoundFunction(positive_to_negative_bound_reflectAboutYAxis(p));
+    };
+}
+
+//# sourceMappingURL=positive-to-negative-bound.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/root-bounds/root-bounds-lmq.js
+
+
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const root_bounds_lmq_negate = negate;
+const root_bounds_lmq_upperToLowerBound = upperToLowerBound;
+const root_bounds_lmq_positiveToNegativeBound = positiveToNegativeBound;
+/**
+ * Returns an upper bound for the positive real roots of the given polynomial.
+ *
+ * See algoritm 6 of the paper by Vigklas, Akritas and Strzeboński,
+ * specifically the LocalMaxQuadratic algorithm hence LMQ.
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ *
+ * @example
+ * ```typescript
+ * positiveRootUpperBound_LMQ([2,-3,6,5,-130]); //=> 4.015534272870436
+ * positiveRootUpperBound_LMQ([2,3]);           //=> 0
+ * positiveRootUpperBound_LMQ([-2,-3,-4]);      //=> 0
+ * ```
+ *
+ * @doc
+ */
+function positiveRootUpperBound_LMQ(p) {
+    const deg = p.length - 1;
+    if (deg < 1) {
+        return 0;
+    }
+    if (p[0] < 0) {
+        p = root_bounds_lmq_negate(p);
+    }
+    const timesUsed = [];
+    for (let i = 0; i < deg; i++) {
+        timesUsed.push(1);
+    }
+    let ub = 0;
+    for (let m = 0; m <= deg; m++) {
+        if (p[m] >= 0) {
+            continue;
+        }
+        let tempub = Number.POSITIVE_INFINITY;
+        let any = false;
+        for (let k = 0; k < m; k++) {
+            if (p[k] <= 0) {
+                continue;
+            }
+            const temp = (-p[m] / (p[k] / 2 ** timesUsed[k])) ** (1 / (m - k));
+            timesUsed[k]++;
+            if (tempub > temp) {
+                tempub = temp;
+            }
+            any = true;
+        }
+        if (any && ub < tempub)
+            ub = tempub;
+    }
+    return ub;
+}
+/**
+ * Returns a positive lower bound of the real roots of the given polynomial
+ *
+ * See algoritm 6 of the paper by Vigklas, Akritas and Strzeboński,
+ * specifically the LocalMaxQuadratic algorithm hence LMQ.
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ *
+ * @doc
+ */
+const positiveRootLowerBound_LMQ = root_bounds_lmq_upperToLowerBound(positiveRootUpperBound_LMQ);
+/**
+ * Returns a negative lower (further from zero) bound of the real roots of the
+ * given polynomial.
+ *
+ * See algoritm 6 of the paper by Vigklas, Akritas and Strzeboński,
+ * specifically the LocalMaxQuadratic algorithm hence LMQ.
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ *
+ * @doc
+ */
+const negativeRootLowerBound_LMQ = root_bounds_lmq_positiveToNegativeBound(positiveRootUpperBound_LMQ);
+/**
+ * Returns a negative upper (closer to zero) bound of the real roots of the
+ * given polynomial.
+ *
+ * See algoritm 6 of the paper by Vigklas, Akritas and Strzeboński,
+ * specifically the LocalMaxQuadratic algorithm hence LMQ.
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ *
+ * @doc
+ */
+const negativeRootUpperBound_LMQ = root_bounds_lmq_upperToLowerBound(negativeRootLowerBound_LMQ);
+
+//# sourceMappingURL=root-bounds-lmq.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/certified/all-roots-certified.js
+
+
+
+
+
+
+
+
+
+
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const all_roots_certified_ddDifferentiateWithError = ddDifferentiateWithError;
+const all_roots_certified_evalCertified = evalCertified;
+const all_roots_certified_eHorner = eHorner;
+const all_roots_certified_transposePoly = transposePoly;
+const all_roots_certified_evalAdaptive = evalAdaptive;
+const all_roots_certified_refineCertified = refineCertified;
+const all_roots_certified_negativeRootUpperBound_LMQ = negativeRootLowerBound_LMQ;
+const all_roots_certified_positiveRootUpperBound_LMQ = positiveRootUpperBound_LMQ;
+const all_roots_certified_eDifferentiate = eDifferentiate;
+const all_roots_certified_eEstimate = eEstimate;
+const all_roots_certified_hornerWithRunningError = hornerWithRunningError;
+const all_roots_certified_eSign = e_sign_eSign;
+const all_roots_certified_max = Math.max;
+const min = Math.min;
+const all_roots_certified_abs = Math.abs;
+const all_roots_certified_eps = Number.EPSILON;
+const onePlusEps = 1 + all_roots_certified_eps;
+function allRootsCertified(p, lb = 0, ub = 1, pE, getPExact, returnUndefinedForZeroPoly) {
+    // if `getPExact` is not specified then assume the given double-double 
+    // precision coefficient polynomial is exact
+    if (!getPExact) {
+        getPExact = () => p;
+    }
+    //const δ = 2*Number.EPSILON * max(1, max(abs(lb), abs(ub)));
+    // if `pE` is not specified then assume there is no error
+    pE = pE || new Array(p.length).fill(0); // no error
+    // set `diffCount` to 0 so `getPolyExact` can be accurate
+    let diffCount = 0;
+    // lazy loaded array of the given polynomial and its derivatives
+    let psExact = undefined;
+    //----------------------------------------------------------------------
+    // Remove leading zero coefficients 
+    // (the case of leading zero coefficients can now be handled)
+    // `p` and `getPExact()` *must* be of same length
+    //----------------------------------------------------------------------
+    let polyExact = undefined; // lazy loaded
+    // while the leading coefficient is smaller then the error bound 
+    // i.e. possibly zero	
+    while (p.length > 0 && all_roots_certified_abs(p[0][1]) <= pE[0]) {
+        polyExact = polyExact || getPExact();
+        // if leading coefficient really is zero
+        if (all_roots_certified_eSign(polyExact[0]) === 0) {
+            // shift the leading coefficient and error out without altering the 
+            // given polynomial and error bound (shift is destructive, slice is not)
+            p = p.slice();
+            p.shift();
+            pE = pE.slice();
+            pE.shift();
+            // also shift out the exact polynomial's leading coefficient
+            polyExact.shift();
+            continue;
+        }
+        break;
+    }
+    if (p.length === 0) {
+        // return `undefined` for the zero polynomial?
+        return returnUndefinedForZeroPoly ? undefined : [];
+    }
+    else if (p.length === 1) {
+        // return `[]` for a degree 1 polynomial (a non-zero constant)
+        return [];
+    }
+    if (lb === Number.NEGATIVE_INFINITY || ub === Number.POSITIVE_INFINITY) {
+        const pDoubleCoeffs = p.map(c => c[1]);
+        if (lb === Number.NEGATIVE_INFINITY) {
+            lb = all_roots_certified_negativeRootUpperBound_LMQ(pDoubleCoeffs);
+        }
+        if (ub === Number.POSITIVE_INFINITY) {
+            ub = all_roots_certified_positiveRootUpperBound_LMQ(pDoubleCoeffs);
+        }
+    }
+    const p_ = all_roots_certified_transposePoly(p);
+    let bCount;
+    let exact;
+    const deg = p.length - 1;
+    bCount = 0;
+    exact = false;
+    let LB; // evaluation at lb
+    do {
+        LB = exact
+            ? all_roots_certified_eEstimate(all_roots_certified_eHorner(getPolyExact(), lb))
+            : all_roots_certified_evalCertified(p_, lb, pE);
+        if (LB === 0) {
+            bCount++;
+            // the max bCount is empirically selected for max performance
+            if (bCount >= 3 && !exact) {
+                exact = true;
+                continue;
+            }
+            lb -= 2 * Number.EPSILON * all_roots_certified_max(1, all_roots_certified_abs(lb));
+        }
+    } while (LB === 0);
+    bCount = 0;
+    exact = false;
+    let UB; // evaluation at ub
+    do {
+        UB = exact
+            ? all_roots_certified_eEstimate(all_roots_certified_eHorner(getPolyExact(), ub))
+            : all_roots_certified_evalCertified(p_, ub, pE);
+        if (UB === 0) {
+            bCount++;
+            if (bCount >= 3 && !exact) { // the max bCount is empirically selected for max performance
+                exact = true;
+                continue;
+            }
+            ub += 2 * Number.EPSILON * all_roots_certified_max(1, all_roots_certified_abs(ub));
+        }
+    } while (UB === 0);
+    // Get all derivatives with their coefficient-wise error bounds, i.e. 
+    // ps === [p, dp, ddp, ..., constant]
+    //        [0,  1,   2, ..., deg     ]
+    const ps = [{ p, pE }];
+    const ps_ = [all_roots_certified_transposePoly(p)]; // the transposed versions
+    for (let i = 1; i <= deg; i++) {
+        const dP = all_roots_certified_ddDifferentiateWithError(ps[i - 1]);
+        ps.push(dP);
+        ps_.push(all_roots_certified_transposePoly(dP.p)); // the transposed versions
+    }
+    let is = [];
+    let curPE;
+    let curP_;
+    diffCount = deg - 1; // update diffcount
+    for (; diffCount >= 0; diffCount--) {
+        curPE = ps[diffCount].pE;
+        // on first iteration curP_ is linear, 
+        // on second it is quadratic, etc. ...
+        curP_ = ps_[diffCount];
+        is = getRootsWithin();
+    }
+    // depends externally on `diffCount` and `psExact`
+    function getPolyExact() {
+        // cache
+        if (psExact !== undefined) {
+            return psExact[diffCount];
+        }
+        // keep TypeScript happy; `getPExact` cannot be `undefined` here
+        let poly = polyExact || getPExact();
+        psExact = [poly];
+        while (poly.length > 1) {
+            poly = all_roots_certified_eDifferentiate(poly);
+            psExact.push(poly);
+        }
+        return psExact[diffCount];
+    }
+    return is;
+    // All cases:
+    // ----------
+    // Note: [_a,a_] denotes a micro-interval, whereas [b_,_a], [a_,_b] denotes a
+    // normal interval.
+    // Note: In all iterations we check [_a,a_] and [a_,_b]. In the final
+    // iteration we check [_b,b_], then we've checked all intervals.
+    // 
+    // ⇑ represents +pos (above x-axis) and ⇓ represents -neg
+    // (the symmetric cases also applies where + and - are interchanged)
+    // ? means does not matter
+    // -----------------------------------------------------------------
+    // CASE 1A:
+    // _A⇑ | A_⇑ | _B⇑
+    //  - [_a,a_] → 
+    //    - _a === a_
+    //        ? no root 
+    //        : A_/_A close enough to zero
+    //            ? close even root 
+    //            : no roots
+    //  - [a_,_b] → no root (curve is monotone increasing or decreasing)
+    // CASE 1B:
+    // _A⇑ | A_⇑ | _B⇓  
+    //  - [_a,a_] → 
+    //    - _a === a_
+    //        ? no root 
+    //        : A_/_A close enough to zero ? close even root : no roots
+    //  - [a_,_b] → single root (curve is monotone increasing or decreasing)
+    // CASE 2A:
+    // _A⇑ | A_⇓ | _B⇑
+    //  - [_a,a_] → odd root(s)
+    //  - [a_,_b] → single root (curve is monotone increasing or decreasing)
+    // CASE 2B:
+    // _A⇑ | A_⇓ | _B⇓
+    //  - [_a,a_] → odd root(s)
+    //  - [a_,_b] → no root (curve is monotone increasing or decreasing)
+    // CASE 3A: 
+    // A_0 | A_? | _B? | B_?  
+    // CASE 3B: 
+    // A_? | A_0 | _B? | B_?  
+    /**
+     * Finds and returns all roots of the given polynomial within the given
+     * intervals, starting from the lower bound (lb) and ending at the upper
+     * bound (ub) as fetched from the closure.
+     *
+     * * **precondition** intervals should be disjoint, i.e endpoints are not allowed
+     * to be equal - it must be that a_ !== _b
+     * * **precondition** the curve must be monotone increasing or decreasing between
+     * b_ and _a AND a_ and _b
+     * * **precondition** the value at the lower bound (LB) and upper bound (UB)
+     * must !== 0
+     *
+     * @internal
+     *
+     * @param curP_ a polynomial given as an array with each consecutive element of
+     * the array having more accurate coefficients than the previous (by adding
+     * consecutive double precision coefficients to prior coefficients)
+     * @param is the micro-intervals
+     */
+    function getRootsWithin() {
+        const roots = [];
+        // If there are no micro-intervals then check the interval between lb and ub.
+        const LB = all_roots_certified_evalAdaptive(curP_, curPE, lb, getPolyExact);
+        if (!is.length) {
+            // close even root not possible
+            const UB = all_roots_certified_evalAdaptive(curP_, curPE, ub, getPolyExact);
+            if (LB * UB >= 0) {
+                return [];
+            }
+            const [tS, tE] = all_roots_certified_refineCertified(curP_, curPE, lb, ub, LB, UB, getPolyExact /*, δ*/);
+            return [{ tS, tE, multiplicity: 1 }];
+        }
+        //---- First check from lb to the left side of the first micro-interval.
+        let _a = is[0].tS;
+        let _A = all_roots_certified_evalAdaptive(curP_, curPE, _a, getPolyExact);
+        if (LB * _A > 0) {
+            // no roots possible (curve is monotone increasing or decreasing)
+        }
+        else if (LB * _A < 0) {
+            // recall LB must !== 0 as a precondition
+            const [tS, tE] = all_roots_certified_refineCertified(curP_, curPE, lb, _a, LB, _A, getPolyExact /*, δ*/);
+            roots.push({ tS, tE, multiplicity: 1 });
+        } //else {
+        // _A === 0
+        // no roots possible in [lb,_a]
+        //}
+        let a_ = lb;
+        let A_ = LB;
+        let _b = _a;
+        let _B = _A;
+        let a;
+        for (let i = 0; i < is.length; i++) {
+            const i_ = is[i + 1]; // right micro-interval
+            a = is[i];
+            _a = _b;
+            a_ = is[i].tE;
+            _b = i_ ? i_.tS : ub;
+            const B_ = A_;
+            _A = _B;
+            A_ = all_roots_certified_evalAdaptive(curP_, curPE, a_, getPolyExact);
+            _B = all_roots_certified_evalAdaptive(curP_, curPE, _b, getPolyExact);
+            if (_A * A_ > 0) {
+                //---- CASE 1: _A⇑ | A_⇑   OR   _A⇓ | A_⇓
+                if (A_ * _B > 0) {
+                    //---- CASE 1A: _A⇑ | A_⇑ | _B⇑   OR   _A⇓ | A_⇓ | _B⇓
+                    //console.log('CASE 1A');
+                    if (a_ !== _a && a.multiplicity % 2 === 1) {
+                        checkEvenAA();
+                    }
+                    // [a_,_b] → no root
+                }
+                else if (A_ * _B < 0) {
+                    //---- CASE 1B: _A⇑ | A_⇑ | _B⇓   OR   _A⇓ | A_⇓ | _B⇑
+                    //console.log('CASE 1B');
+                    // we cannot exclude this case as their may be even 
+                    // multiplicity >= 4 roots; we would've been able if we
+                    // knew that a.multiplicity === 1 exactly and thus the code
+                    // could still be improved slightly
+                    if (a_ !== _a && a.multiplicity % 2 === 1) {
+                        checkEvenAA();
+                    }
+                    // [a_,_b] → single root (curve is monotone increasing or decreasing)
+                    const [tS, tE] = all_roots_certified_refineCertified(curP_, curPE, a_, _b, A_, _B, getPolyExact /*, δ*/);
+                    roots.push({ tS, tE, multiplicity: 1 });
+                }
+                else { // _B === 0
+                    //---- CASE 1C: _A⇑ | A_⇑ | _B0   OR   _A⇓ | A_⇓ | _B0
+                    //console.log('CASE 1C');
+                    // we cannot exclude this case as their may be even 
+                    // multiplicity >= 4 roots; we would've been able if we
+                    // knew that a.multiplicity === 1 exactly and thus the code
+                    // could still be improved slightly
+                    if (a_ !== _a && a.multiplicity % 2 === 1) {
+                        checkEvenAA();
+                    }
+                    // [a_,_b] → no root
+                }
+            }
+            else if (_A * A_ < 0) {
+                //---- CASE 2 _A⇑ | A_⇓   OR   _A⇓ | A_⇑
+                //console.log('CASE 2');
+                // - [_a,a_] → odd root(s)
+                roots.push({ tS: a.tS, tE: a.tE, multiplicity: 3 });
+                if (A_ * _B < 0) {
+                    //---- CASE 2A: _A⇑ | A_⇓ | _B⇑   OR   _A⇓ | A_⇑ | _B⇓
+                    //console.log('CASE 2A');
+                    // [a_,_b] → single root
+                    const [tS, tE] = all_roots_certified_refineCertified(curP_, curPE, a_, _b, A_, _B, getPolyExact /*, δ*/);
+                    roots.push({ tS, tE, multiplicity: 1 });
+                }
+                else if (A_ * _B > 0) {
+                    //---- CASE 2B: _A⇑ | A_⇓ | _B⇓   OR   _A⇓ | A_⇑ | _B⇑
+                    //console.log('CASE 2B');
+                    // [a_,_b] → no roots
+                }
+                else { // _B === 0
+                    //console.log('CASE 2C');
+                    // [a_,_b] → no roots
+                }
+            }
+            else if (A_ === 0) {
+                //---- CASE 3A A_0
+                //console.log('CASE 3A');
+                // [_a,a_] → rational root at a_
+                // There cannot be a root between a_ and _b since _B !== 0
+                if ( /*_a === a_ ||*/_A === 0) {
+                    // multiple rational root at a_ OR both _A and A_ is 0
+                    // so update multiplicity parity
+                    roots.push({ tS: a.tS, tE: a.tE, multiplicity: a.multiplicity + 1 });
+                }
+                else {
+                    // now _A and _B are both !== 0
+                    if (_A * _B > 0) {
+                        roots.push({ tS: a.tS, tE: a.tE, multiplicity: 2 });
+                    }
+                    else {
+                        roots.push({ tS: a.tS, tE: a.tE, multiplicity: 3 });
+                    }
+                }
+            }
+            else { // _A === 0
+                //---- CASE 3B _A0
+                //console.log('CASE 3B');
+                // A_ !== 0 here and _a !== a_
+                // [_a,a_] → rational root at _a
+                if (A_ * _B < 0) {
+                    // [a_,_b] → single root
+                    const [tS, tE] = all_roots_certified_refineCertified(curP_, curPE, a_, _b, A_, _B, getPolyExact /*, δ*/);
+                    roots.push({ tS, tE, multiplicity: 1 });
+                }
+                else if (A_ * _B > 0) {
+                    // [a_,_b] → no roots
+                }
+                // - [_a,a_] → 
+                // B_ and A_ are both !== 0
+                if (B_ * A_ > 0) {
+                    roots.push({ tS: a.tS, tE: a.tE, multiplicity: 2 });
+                }
+                else {
+                    roots.push({ tS: a.tS, tE: a.tE, multiplicity: 3 });
+                }
+            }
+        }
+        // Combine the root intervals if they are adjacent (they are not 
+        // allowed to overlap)
+        for (let i = 0; i < roots.length - 1; i++) {
+            const r = roots[i];
+            const r_ = roots[i + 1];
+            if (r.tE >= r_.tS) {
+                return joinRoots(roots);
+            }
+        }
+        return roots;
+        /**
+         * Calculates and returns max 2nd derivative - calculated using something
+         * akin to a Taylor expansion - could be improved by not taking absolute
+         * values, but rather minimum mins. and maximum max values of f(s)?.
+         * maxDdP = |f(s)| + δ|f'(s)| + δ^2|f''(s)| + ..., where δ = (a_ - _a),
+         * s = _a and f is the second derivative of the current polynomial. We can
+         * also potentially short circuit the maxDdP calculation after some terms,
+         * the point being there are very likely many optimizations that can still
+         * be done.
+         *
+         * @internal
+         */
+        function checkEvenAA() {
+            //This was the old method when the function only supported lb = 0, ub = 1
+            //-----------------------------------------------------------------------
+            //const ddP0 = diffCount+2 > deg ? undefined : ps_[diffCount+2][0];
+            //const maxDdP2 = 0;
+            //for (const j=0; j<ddP0.length; j++) {
+            //	// evaluate at 1
+            //	maxDdP2 += abs(ddP0[j]);  // this is valid only if |lb| and |ub| <= 1
+            //}
+            const d = (a_ - _a) * onePlusEps;
+            let mult = 1;
+            let maxDdP = 0;
+            for (let ddDiffCount = diffCount + 2; ddDiffCount <= deg; ddDiffCount++) {
+                const p = ps_[ddDiffCount][0];
+                const h = all_roots_certified_hornerWithRunningError(p, _a);
+                const fs = all_roots_certified_abs(h[0]) + h[1];
+                maxDdP += fs * mult;
+                mult *= d * onePlusEps;
+            }
+            // maxDdP is now calculated
+            const AMinMax = A_ > 0 ? min(_A, A_) : all_roots_certified_max(_A, A_);
+            const δ = 2 * Number.EPSILON * all_roots_certified_max(1, all_roots_certified_abs(a_));
+            const dMax = maxDdP * (2 * δ); // since the first derivative === 0 somewhere in [_a,a_]
+            const yShift = A_ > 0 ? -dMax * 2 * δ : dMax * 2 * δ;
+            const y = AMinMax + yShift;
+            if (y * A_ < 0) {
+                // possible even multiplicity root
+                //console.log('A_, yShift', A_, yShift);
+                //console.log(toCasStr(ps_[0][0]));
+                //console.log('possible even multiplicty root: ', _a, a_);
+                // The below multiplicity can really be any non-negative 
+                // multiple of 2
+                roots.push({ tS: a.tS, tE: a.tE, multiplicity: 2 });
+            }
+        }
+    }
+}
+function joinRoots(rs) {
+    const newRs = [];
+    const r = rs[0];
+    // make a clone of the first interval
+    let curR = { tS: r.tS, tE: r.tE, multiplicity: r.multiplicity };
+    for (let i = 0; i < rs.length - 1; i++) {
+        const r = rs[i];
+        const r_ = rs[i + 1];
+        if (r.tE < r_.tS) {
+            // they don't stick together
+            newRs.push(curR);
+            // make a clone of the next interval
+            curR = { tS: r_.tS, tE: r_.tE, multiplicity: r_.multiplicity };
+        }
+        else {
+            // they stick together - expand
+            curR.tE = r_.tE;
+            curR.multiplicity = r.multiplicity + r_.multiplicity;
+        }
+    }
+    newRs.push(curR);
+    return newRs;
+}
+
+//# sourceMappingURL=all-roots-certified.js.map
 ;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const to_power_basis_dd_with_running_error_td = node_twoDiff; // error -> 0
-const to_power_basis_dd_with_running_error_qmd = node_ddMultDouble2; // error -> 3*u²
-const to_power_basis_dd_with_running_error_qaq = node_ddAddDd;
+const qmd = node_ddMultDouble2; // error -> 3*u²
+const qaq = node_ddAddDd;
 const qad = node_ddAddDouble; // error -> 2*u²
 const to_power_basis_dd_with_running_error_abs = Math.abs;
 /**
@@ -14419,9 +8221,9 @@ function toPowerBasis3DdWithRunningError(ps) {
     const xa = to_power_basis_dd_with_running_error_td(x3, x0); // error free
     const xb = to_power_basis_dd_with_running_error_td(x1, x2); // error free
     const $xc = 3 * (x1 - x2);
-    const xc = to_power_basis_dd_with_running_error_qmd(3, xb);
+    const xc = qmd(3, xb);
     const _xc_ = to_power_basis_dd_with_running_error_abs($xc);
-    const xx3 = to_power_basis_dd_with_running_error_qaq(xa, xc);
+    const xx3 = qaq(xa, xc);
     const xx3_ = _xc_ + to_power_basis_dd_with_running_error_abs(x3 - x0 + $xc);
     // ----------------------------
     // xx2 = 3*(x2 - 2*x1 + x0)
@@ -14429,14 +8231,14 @@ function toPowerBasis3DdWithRunningError(ps) {
     const xd = to_power_basis_dd_with_running_error_td(x2, 2 * x1); // error free
     const xe = qad(xd, x0);
     const _xe_ = to_power_basis_dd_with_running_error_abs(x2 - 2 * x1 + x0);
-    const xx2 = to_power_basis_dd_with_running_error_qmd(3, xe);
+    const xx2 = qmd(3, xe);
     //const xx2_ = 3*_xe_ + 3*_xe_;
     const xx2_ = 6 * _xe_;
     // ----------------------------
     // xx1 = 3*(x1 - x0)
     // ----------------------------
     const xg = to_power_basis_dd_with_running_error_td(x1, x0); // error free
-    const xx1 = to_power_basis_dd_with_running_error_qmd(3, xg);
+    const xx1 = qmd(3, xg);
     const xx1_ = to_power_basis_dd_with_running_error_abs(3 * (x1 - x0));
     // ----------------------------
     // yy3 = y3 + 3*(y1 - y2) - y0
@@ -14444,9 +8246,9 @@ function toPowerBasis3DdWithRunningError(ps) {
     const ya = to_power_basis_dd_with_running_error_td(y3, y0); // error free
     const yb = to_power_basis_dd_with_running_error_td(y1, y2); // error free
     const $yc = 3 * (y1 - y2);
-    const yc = to_power_basis_dd_with_running_error_qmd(3, yb);
+    const yc = qmd(3, yb);
     const _yc_ = to_power_basis_dd_with_running_error_abs($yc);
-    const yy3 = to_power_basis_dd_with_running_error_qaq(ya, yc);
+    const yy3 = qaq(ya, yc);
     const yy3_ = _yc_ + to_power_basis_dd_with_running_error_abs(y3 - y0 + $yc);
     // ----------------------------
     // yy2 = 3*(y2 - 2*y1 + y0)
@@ -14454,14 +8256,14 @@ function toPowerBasis3DdWithRunningError(ps) {
     const yd = to_power_basis_dd_with_running_error_td(y2, 2 * y1); // error free
     const ye = qad(yd, y0);
     const _ye_ = to_power_basis_dd_with_running_error_abs(y2 - 2 * y1 + y0);
-    const yy2 = to_power_basis_dd_with_running_error_qmd(3, ye);
+    const yy2 = qmd(3, ye);
     //const yy2_ = 3*_ye_ + 3*_ye_;
     const yy2_ = 6 * _ye_;
     // ----------------------------
     // yy1 = 3*(y1 - y0)
     // ----------------------------
     const yg = to_power_basis_dd_with_running_error_td(y1, y0); // error free
-    const yy1 = to_power_basis_dd_with_running_error_qmd(3, yg);
+    const yy1 = qmd(3, yg);
     const yy1_ = to_power_basis_dd_with_running_error_abs(3 * (y1 - y0));
     return {
         coeffs: [[xx3, xx2, xx1, [0, x0]], [yy3, yy2, yy1, [0, y0]]],
@@ -18583,7 +12385,7 @@ function getCoeffsBez3Bez3Dd(ps1, ps2) {
 
 
 const get_implicit_form1_exact_sce = scaleExpansion2;
-const get_implicit_form1_exact_edif = e_diff_eDiff;
+const get_implicit_form1_exact_edif = eDiff;
 const get_implicit_form1_exact_eno = eNegativeOf;
 const get_implicit_form1_exact_eSign = e_sign_eSign;
 /**
@@ -18632,7 +12434,7 @@ function getImplicitForm1ExactPb(pspb) {
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 
 const get_coeffs_bez1_bez1_exact_sce = scaleExpansion2;
-const get_coeffs_bez1_bez1_exact_epr = expansion_product_expansionProduct;
+const get_coeffs_bez1_bez1_exact_epr = expansionProduct;
 const get_coeffs_bez1_bez1_exact_fes = fastExpansionSum;
 const get_coeffs_bez1_bez1_exact_eSign = (/* unused pure expression or super */ null && (_eSign));
 /**
@@ -18692,8 +12494,8 @@ function getCoeffsBez1Bez1Exact(ps1, ps2) {
 
 const get_implicit_form2_exact_sce = scaleExpansion2;
 const em2 = eMultBy2;
-const get_implicit_form2_exact_edif = e_diff_eDiff;
-const get_implicit_form2_exact_epr = expansion_product_expansionProduct;
+const get_implicit_form2_exact_edif = eDiff;
+const get_implicit_form2_exact_epr = expansionProduct;
 const get_implicit_form2_exact_eno = eNegativeOf;
 /**
  * Returns the exact implicit form of the given quadratic bezier curve
@@ -18777,7 +12579,7 @@ function getImplicitForm2ExactPb(pspb) {
 
 const get_coeffs_bez2_bez1_exact_tp = two_product_twoProduct; // error -> 0
 const get_coeffs_bez2_bez1_exact_sce = scaleExpansion2;
-const get_coeffs_bez2_bez1_exact_epr = expansion_product_expansionProduct;
+const get_coeffs_bez2_bez1_exact_epr = expansionProduct;
 const get_coeffs_bez2_bez1_exact_fes = fastExpansionSum;
 const get_coeffs_bez2_bez1_exact_em2 = eMultBy2;
 const get_coeffs_bez2_bez1_exact_eSign = e_sign_eSign;
@@ -18869,9 +12671,9 @@ function getCoeffsBez2Bez1Exact(ps1, ps2) {
 
 
 const get_implicit_form3_exact_sce = scaleExpansion2;
-const get_implicit_form3_exact_epr = expansion_product_expansionProduct;
+const get_implicit_form3_exact_epr = expansionProduct;
 const get_implicit_form3_exact_fes = fastExpansionSum;
-const get_implicit_form3_exact_edif = e_diff_eDiff;
+const get_implicit_form3_exact_edif = eDiff;
 const get_implicit_form3_exact_eno = eNegativeOf;
 const get_implicit_form3_exact_em2 = eMultBy2;
 const ed2 = eDivBy2;
@@ -19017,7 +12819,7 @@ function getImplicitForm3ExactPb(pspb) {
 
 const get_coeffs_bez3_bez1_exact_tp = two_product_twoProduct; // error -> 0
 const get_coeffs_bez3_bez1_exact_sce = scaleExpansion2;
-const get_coeffs_bez3_bez1_exact_epr = expansion_product_expansionProduct;
+const get_coeffs_bez3_bez1_exact_epr = expansionProduct;
 const get_coeffs_bez3_bez1_exact_fes = fastExpansionSum;
 const get_coeffs_bez3_bez1_exact_em2 = eMultBy2;
 const get_coeffs_bez3_bez1_exact_eSign = e_sign_eSign;
@@ -19176,7 +12978,7 @@ function getCoeffsBez3Bez1Exact(ps1, ps2) {
 
 
 const get_coeffs_bez1_bez2_exact_sce = scaleExpansion2;
-const get_coeffs_bez1_bez2_exact_epr = expansion_product_expansionProduct;
+const get_coeffs_bez1_bez2_exact_epr = expansionProduct;
 const get_coeffs_bez1_bez2_exact_fes = fastExpansionSum;
 const get_coeffs_bez1_bez2_exact_eSign = e_sign_eSign;
 /**
@@ -19246,7 +13048,7 @@ function getCoeffsBez1Bez2Exact(ps1, ps2) {
 
 const get_coeffs_bez2_bez2_exact_tp = two_product_twoProduct; // error -> 0
 const get_coeffs_bez2_bez2_exact_sce = scaleExpansion2;
-const get_coeffs_bez2_bez2_exact_epr = expansion_product_expansionProduct;
+const get_coeffs_bez2_bez2_exact_epr = expansionProduct;
 const get_coeffs_bez2_bez2_exact_fes = fastExpansionSum;
 const get_coeffs_bez2_bez2_exact_em2 = eMultBy2;
 const get_coeffs_bez2_bez2_exact_eSign = e_sign_eSign;
@@ -19401,7 +13203,7 @@ function getCoeffsBez2Bez2Exact(ps1, ps2) {
 
 const get_coeffs_bez3_bez2_exact_tp = two_product_twoProduct; // error -> 0
 const get_coeffs_bez3_bez2_exact_sce = scaleExpansion2;
-const get_coeffs_bez3_bez2_exact_epr = expansion_product_expansionProduct;
+const get_coeffs_bez3_bez2_exact_epr = expansionProduct;
 const get_coeffs_bez3_bez2_exact_fes = fastExpansionSum;
 const get_coeffs_bez3_bez2_exact_em2 = eMultBy2;
 const get_coeffs_bez3_bez2_exact_eSign = e_sign_eSign;
@@ -19723,7 +13525,7 @@ function getCoeffsBez3Bez2Exact(ps1, ps2) {
 
 
 const get_coeffs_bez1_bez3_exact_sce = scaleExpansion2;
-const get_coeffs_bez1_bez3_exact_epr = expansion_product_expansionProduct;
+const get_coeffs_bez1_bez3_exact_epr = expansionProduct;
 const get_coeffs_bez1_bez3_exact_fes = fastExpansionSum;
 const get_coeffs_bez1_bez3_exact_eSign = e_sign_eSign;
 /**
@@ -19798,7 +13600,7 @@ function getCoeffsBez1Bez3Exact(ps1, ps2) {
 
 const get_coeffs_bez2_bez3_exact_tp = two_product_twoProduct; // error -> 0
 const get_coeffs_bez2_bez3_exact_sce = scaleExpansion2;
-const get_coeffs_bez2_bez3_exact_epr = expansion_product_expansionProduct;
+const get_coeffs_bez2_bez3_exact_epr = expansionProduct;
 const get_coeffs_bez2_bez3_exact_fes = fastExpansionSum;
 const get_coeffs_bez2_bez3_exact_em2 = eMultBy2;
 const get_coeffs_bez2_bez3_exact_eSign = e_sign_eSign;
@@ -20003,7 +13805,7 @@ function getCoeffsBez2Bez3Exact(ps1, ps2) {
 
 const get_coeffs_bez3_bez3_exact_tp = two_product_twoProduct; // error -> 0
 const get_coeffs_bez3_bez3_exact_sce = scaleExpansion2;
-const get_coeffs_bez3_bez3_exact_epr = expansion_product_expansionProduct;
+const get_coeffs_bez3_bez3_exact_epr = expansionProduct;
 const get_coeffs_bez3_bez3_exact_fes = fastExpansionSum;
 const get_coeffs_bez3_bez3_exact_em2 = eMultBy2;
 const get_coeffs_bez3_bez3_exact_eSign = e_sign_eSign;
@@ -20532,10 +14334,10 @@ function bezierBezierIntersectionBoundless(ps1, ps2) {
 
 
 const is_point_on_bezier_extension_1_qaq = node_ddAddDd;
-const is_point_on_bezier_extension_1_epr = expansion_product_expansionProduct;
+const is_point_on_bezier_extension_1_epr = expansionProduct;
 const is_point_on_bezier_extension_1_fes = fastExpansionSum;
 const is_point_on_bezier_extension_1_sign = e_sign_eSign;
-const is_point_on_bezier_extension_1_estimate = e_estimate_eEstimate;
+const is_point_on_bezier_extension_1_estimate = eEstimate;
 const is_point_on_bezier_extension_1_qmq = node_ddMultDd;
 const etodd = eToDd;
 const is_point_on_bezier_extension_1_abs = Math.abs;
@@ -20903,10 +14705,10 @@ function getImplicitForm2ErrorCounters(ps) {
 
 const is_point_on_bezier_extension_2_qmq = node_ddMultDd;
 const is_point_on_bezier_extension_2_qaq = node_ddAddDd;
-const is_point_on_bezier_extension_2_epr = expansion_product_expansionProduct;
+const is_point_on_bezier_extension_2_epr = expansionProduct;
 const is_point_on_bezier_extension_2_fes = fastExpansionSum;
 const is_point_on_bezier_extension_2_sign = e_sign_eSign;
-const is_point_on_bezier_extension_2_estimate = e_estimate_eEstimate;
+const is_point_on_bezier_extension_2_estimate = eEstimate;
 const is_point_on_bezier_extension_2_etodd = eToDd;
 const is_point_on_bezier_extension_2_abs = Math.abs;
 const is_point_on_bezier_extension_2_1 = γ(1);
@@ -21036,7 +14838,7 @@ function isPointOnBezierExtension2(ps, p) {
     }
     // error still too high - let's go exact
     {
-        let implictForm = getImplicitForm2Exact(ps);
+        const implictForm = getImplicitForm2Exact(ps);
         if (implictForm === undefined) {
             // all ps are the same point
             return isDouble && x === ps[0][0] && y === ps[0][1];
@@ -21262,10 +15064,10 @@ function getImplicitForm3ErrorCounters(ps) {
 
 const is_point_on_bezier_extension_3_qmq = node_ddMultDd;
 const is_point_on_bezier_extension_3_qaq = node_ddAddDd;
-const is_point_on_bezier_extension_3_epr = expansion_product_expansionProduct;
+const is_point_on_bezier_extension_3_epr = expansionProduct;
 const is_point_on_bezier_extension_3_fes = fastExpansionSum;
 const is_point_on_bezier_extension_3_sign = e_sign_eSign;
-const is_point_on_bezier_extension_3_estimate = e_estimate_eEstimate;
+const is_point_on_bezier_extension_3_estimate = eEstimate;
 const is_point_on_bezier_extension_3_etodd = eToDd;
 const is_point_on_bezier_extension_3_abs = Math.abs;
 const is_point_on_bezier_extension_3_1 = γ(1);
@@ -21475,7 +15277,7 @@ function isPointOnBezierExtension3(ps, p) {
             implictForm.vₓᵧ = [0];
             implictForm.vᵧᵧ = [0];
         }
-        let { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = implictForm;
+        const { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = implictForm;
         // `h` (say height) is the the result of evaluating the implicit 
         // equation; if it is 0 we are on the curve, else we're not.
         // const h =
@@ -21674,7 +15476,7 @@ function toPowerBasis0Dd(ps) {
 
 
 
-const t_from_xy_twoDiff = two_diff_twoDiff;
+const t_from_xy_twoDiff = twoDiff;
 const { min: t_from_xy_min, max: t_from_xy_max } = Math;
 const t_from_xy_3 = γγ(3);
 /**
@@ -21777,12 +15579,12 @@ function tFromXY3(ps, p) {
     // self-intersection), 3 overlaps (for self-overlapping curve (that looks 
     // like a line))
     // at this point `xrs !== undefined` and `yrs !== undefined`
-    let ris = [];
+    const ris = [];
     for (let i = 0; i < xrs.length; i++) {
-        let xr = xrs[i];
+        const xr = xrs[i];
         for (let j = 0; j < yrs.length; j++) {
-            let yr = yrs[j];
-            let r = combineRoots(xr, yr);
+            const yr = yrs[j];
+            const r = combineRoots(xr, yr);
             if (r !== undefined) {
                 ris.push(r);
             }
@@ -21849,12 +15651,12 @@ function tFromXY2(ps, p) {
     // - there can be 0 or 1 overlap (the usual case), 2 overlaps (for 
     // self-overlapping curve (that looks like a line))
     // at this point `xrs !== undefined` and `yrs !== undefined`
-    let ris = [];
+    const ris = [];
     for (let i = 0; i < xrs.length; i++) {
-        let xr = xrs[i];
+        const xr = xrs[i];
         for (let j = 0; j < yrs.length; j++) {
-            let yr = yrs[j];
-            let r = combineRoots(xr, yr);
+            const yr = yrs[j];
+            const r = combineRoots(xr, yr);
             if (r !== undefined) {
                 ris.push(r);
             }
@@ -22332,19 +16134,15 @@ function intersectBoxes(a, b) {
     if (ax0 > ax1) {
         [ax0, ax1] = [ax1, ax0];
     }
-    ;
     if (bx0 > bx1) {
         [bx0, bx1] = [bx1, bx0];
     }
-    ;
     if (ay0 > ay1) {
         [ay0, ay1] = [ay1, ay0];
     }
-    ;
     if (by0 > by1) {
         [by0, by1] = [by1, by0];
     }
-    ;
     if (!(ax0 <= bx1 && ax1 >= bx0 &&
         by0 <= ay1 && by1 >= ay0)) {
         // they don't intersect
@@ -22363,8 +16161,8 @@ function intersectBoxes(a, b) {
 
 
 
-const bezier_self_intersection_edif = e_diff_eDiff;
-const bezier_self_intersection_epr = expansion_product_expansionProduct;
+const bezier_self_intersection_edif = eDiff;
+const bezier_self_intersection_epr = expansionProduct;
 const bezier_self_intersection_sce = scaleExpansion2;
 const bezier_self_intersection_td = node_twoDiff;
 const bezier_self_intersection_ts = node_twoSum;
@@ -22420,7 +16218,7 @@ function bezierSelfIntersection(ps, inRange = true) {
         const b2 = bezier_self_intersection_ge(bezier_self_intersection_ts(y2, y0), -2 * y1);
         const a2b3 = bezier_self_intersection_epr(a2, b3);
         const a3b2 = bezier_self_intersection_epr(a3, b2);
-        if (e_compare_eCompare(a2b3, a3b2) === 0) {
+        if (eCompare(a2b3, a3b2) === 0) {
             // a === 0 => no roots possible! (also b === 0 always if a === 0)
             // This type of curve is usually shaped like an S where both 
             // extreme curvatures are identical...
@@ -22503,8 +16301,8 @@ function bezierSelfIntersection(ps, inRange = true) {
             //t1 = (2*C) / (-B + D);
             //t2 = (-B + D) / (2*A);
         }
-        let t1 = e_estimate_eEstimate(qdivq(nBD, bezier_self_intersection_qm2(A))); // max 1 ulps out
-        let t2 = e_estimate_eEstimate(qdivq(bezier_self_intersection_qm2(C), nBD)); // max 1 ulps out
+        let t1 = eEstimate(qdivq(nBD, bezier_self_intersection_qm2(A))); // max 1 ulps out
+        let t2 = eEstimate(qdivq(bezier_self_intersection_qm2(C), nBD)); // max 1 ulps out
         if (inRange) {
             // if any root is outside the range => no double point for t in [0,1]
             if (t1 < -eps2 || t1 > 1 + eps2 ||
@@ -22546,7 +16344,7 @@ function bezierSelfIntersection(ps, inRange = true) {
         return [];
     }
     // if result is > 1 the cusp is outside the bezier endpoints
-    if (e_compare_eCompare(e_abs_eAbs(B), e_abs_eAbs(d)) > 0) {
+    if (eCompare(eAbs(B), eAbs(d)) > 0) {
         return [];
     }
     const qB = eToDd(B);
@@ -22619,7 +16417,7 @@ function ensureRange(t, min1Sign) {
  * @internal
  */
 function erEstimate(a) {
-    return e_estimate_eEstimate(eDiv(a[0], a[1], 2));
+    return eEstimate(eDiv(a[0], a[1], 2));
 }
 
 
@@ -22706,7 +16504,7 @@ function getTransformedTs1(A, B) {
     // (1)   d = (r0 - p0)/p1
     // the *exact* `d` is given as the rational number `N/D`
     // where `N` and `D` are [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) expansions
-    return [e_diff_eDiff(r0, p0), p1];
+    return [eDiff(r0, p0), p1];
 }
 
 
@@ -22725,12 +16523,149 @@ const getAB1 = getAB(getTransform1);
  * @internal
  */
 function erCompare(a, b) {
-    return (e_compare_eCompare(eMult(a[0], b[1]), eMult(a[1], b[0])) *
+    return (eCompare(eMult(a[0], b[1]), eMult(a[1], b[0])) *
         e_sign_eSign(a[1]) *
         e_sign_eSign(b[1]));
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/scale-to-int/scale-floatss-to-bigintss.js
+
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const scale_floatss_to_bigintss_exponent = exponent;
+const scale_floatss_to_bigintss_bitLength = bitLength;
+const b0 = 0n; // so tests are not tripped up - awaiting better support
+/**
+ * Returns the result of scaling the given array of array of floats by the
+ * *same* power of two such that all floats become bigints.
+ *
+ * * can be used to scale polynomials (with coefficients given as Shewchuk
+ * expansions)
+ *
+ * @param ass an array of an array of double precision floating point numbers
+ *
+ * @doc
+ */
+function scaleFloatssToBigintss(ass) {
+    let e = -1024;
+    for (let i = 0; i < ass.length; i++) {
+        const c = ass[i];
+        for (let j = 0; j < c.length; j++) {
+            const a = c[j];
+            if (a === 0) {
+                continue;
+            }
+            const scaleFactor = -scale_floatss_to_bigintss_exponent(a) + scale_floatss_to_bigintss_bitLength(a) - 1;
+            if (scaleFactor > e) {
+                e = scaleFactor;
+            }
+        }
+    }
+    // check for the trivial case
+    if (e === 0) {
+        return ass.map(as => as.map(a => BigInt(a)));
+    }
+    if (e > 0) {
+        return ass.map(as => as.map(a => {
+            if (a === 0) {
+                return b0;
+            }
+            const scalePower = -scale_floatss_to_bigintss_exponent(a) + scale_floatss_to_bigintss_bitLength(a) - 1;
+            // we first scale `a` to an integer without overflow and then
+            // convert it to a bigint before multiplying
+            return BigInt(a * 2 ** scalePower) * 2n ** BigInt(e - scalePower);
+        }));
+    }
+    // overflow / underflow cannot occur
+    return ass.map(as => as.map(a => BigInt(a * 2 ** e)));
+}
+
+//# sourceMappingURL=scale-floatss-to-bigintss.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/gcd/bigint/b-integer-gcd.js
+/**
+ * Computes and returns the greatest common divisor of two integers a and b,
+ * using the [Euclidean Algorithm](https://en.wikipedia.org/wiki/Euclidean_algorithm).
+ *
+ * @doc
+ */
+function bGcdInt(a, b) {
+    a = a < 0n ? -a : a;
+    b = b < 0n ? -b : b;
+    // The below 2 commented lines represent Euclid's original algorithm.
+    //if (a === b) { return a; }
+    //return a > b ? gcdInt(a - b, b) : gcdInt(a, b - a);
+    if (a === 0n) {
+        return b;
+    }
+    if (b === 0n) {
+        return a;
+    }
+    while (b !== 0n) {
+        const t = b;
+        b = a % b;
+        a = t;
+    }
+    return a;
+}
+/**
+ * Naively computes and returns the greatest common divisor of 2 or more
+ * integers by taking each integer in turn and calculating the GCD of that
+ * integer and the previously calculated GCD (where the first GCD is simply
+ * taken as the first number).
+ *
+ * @param vals the integers for which the GCD is to be calculated
+ *
+ * @doc
+ */
+function bGcdInts(vals) {
+    const vals_ = vals.slice();
+    const len = vals_.length;
+    // make array of numbers all positive
+    for (let i = 0; i < len; i++) {
+        vals_[i] = vals_[i] < 0n ? -vals_[i] : vals_[i];
+    }
+    let a = vals_[0];
+    for (let i = 1; i < len; i++) {
+        a = bGcdInt(a, vals_[i]);
+    }
+    return a;
+}
+/**
+ * * ❗ don't use - too slow - use [[bGcdInts]] instead ❗
+ *
+ * Computes and returns the greatest common divisor of 2 or more integers by
+ * calculating GCDs rescursively using a tree (Divide and Conquer).
+ *
+ * * It turns out this method is *slower* than the naive method
+ */ /*
+function bGcdIntsTree(vals: bigint[]): bigint {
+   const vals_ = vals.slice();
+
+   // make array of numbers all positive
+   for (const i=0; i<vals_.length; i++) {
+       vals_[i] = vals_[i] < 0n ? -vals_[i] : vals_[i];
+   }
+   
+   // Divide and conquer
+   while (vals_.length > 1) {
+       const newVals = [];
+       const len = vals_.length;
+       for (const i=0; i<len-1; i += 2) {
+           newVals.push(bGcdInt(vals_[i], vals_[i+1]));
+       }
+       if (len % 2 !== 0) {
+           newVals.push(vals_[len-1]);
+       }
+
+       vals_ = newVals;
+   }
+   
+   return vals_[0];
+}
+*/
+
+//# sourceMappingURL=b-integer-gcd.js.map
 ;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/bigint-to-expansion.ts
 
 const maxSafe = BigInt(2 ** 53);
@@ -22826,8 +16761,8 @@ function calcExactSquareRoot(a) {
     const gcd = bGcdInt(NN, DD);
     // the *exact* positive root `c` is given as the rational number `N/D` 
     // where `N` and `D` are [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) expansions
-    let N = bigintToExpansion(bSqrt(bAbs(NN / gcd)));
-    let D = bigintToExpansion(bSqrt(bAbs(DD / gcd)));
+    const N = bigintToExpansion(bSqrt(bAbs(NN / gcd)));
+    const D = bigintToExpansion(bSqrt(bAbs(DD / gcd)));
     return [N, D];
 }
 
@@ -22887,8 +16822,8 @@ function getTransformedTs2(A, B) {
     //    = (-r1 - N*p1/D)/(N*2*p2/D)
     //    = (-r1*D - N*p1)/(N*2*p2)
     return [
-        [e_diff_eDiff(eMult(r1, D), eMult(p1, N)), eMult(N, eMultBy2(p2))],
-        [e_diff_eDiff(eMult(r1, eNegativeOf(D)), eMult(p1, N)), eMult(N, eMultBy2(p2))]
+        [eDiff(eMult(r1, D), eMult(p1, N)), eMult(N, eMultBy2(p2))],
+        [eDiff(eMult(r1, eNegativeOf(D)), eMult(p1, N)), eMult(N, eMultBy2(p2))]
     ].sort(erCompare);
 }
 
@@ -22973,8 +16908,8 @@ function calcExactCubeRoot(a) {
     const gcd = bGcdInt(NN, DD);
     // the *exact* positive root `c` is given as the rational number `N/D` 
     // where `N` and `D` are [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) expansions
-    let N = bigintToExpansion(bCbrt(NN / gcd));
-    let D = bigintToExpansion(bCbrt(DD / gcd));
+    const N = bigintToExpansion(bCbrt(NN / gcd));
+    const D = bigintToExpansion(bCbrt(DD / gcd));
     return [N, D];
 }
 
@@ -23028,7 +16963,7 @@ function getTransformedTs3(A, B) {
     //  =>   d = (r2/cc - p2)/(3*p3)
     const NN = eSquare(C[0]);
     return [
-        e_diff_eDiff(eMult(r2, eSquare(C[1])), eMult(p2, NN)),
+        eDiff(eMult(r2, eSquare(C[1])), eMult(p2, NN)),
         eMult(scaleExpansion2(3, p3), NN)
     ];
 }
@@ -23256,18 +17191,18 @@ function bezierBezierIntersection(ps1, ps2) {
     if (ris1.length === 0) {
         return [];
     }
-    let is1 = ris1.map(ri => getIntervalBox(ps1, [ri.tS, ri.tE]));
-    let is2 = ris2.map(ri => getIntervalBox(ps2, [ri.tS, ri.tE]));
-    let xs = [];
+    const is1 = ris1.map(ri => getIntervalBox(ps1, [ri.tS, ri.tE]));
+    const is2 = ris2.map(ri => getIntervalBox(ps2, [ri.tS, ri.tE]));
+    const xs = [];
     for (let i = 0; i < ris1.length; i++) {
-        let box1 = is1[i];
+        const box1 = is1[i];
         for (let j = 0; j < ris2.length; j++) {
-            let box2 = is2[j];
-            let box = intersectBoxes(box1, box2);
+            const box2 = is2[j];
+            const box = intersectBoxes(box1, box2);
             if (box !== undefined) {
                 const ri1 = ris1[i];
                 const ri2 = ris2[j];
-                let x = {
+                const x = {
                     p: getPFromBox(box), kind: 1, box,
                     t1: mid(ri1), ri1: ri1,
                     t2: mid(ri2), ri2: ri2
@@ -23336,8 +17271,8 @@ function getCoincidingSelfIntersections(ps1, ps2) {
     }
     const xs = [];
     // this is a *very* rare case
-    for (let t1 of ts1) {
-        for (let t2 of ts2) {
+    for (const t1 of ts1) {
+        for (const t2 of ts2) {
             const ri1 = { tS: t1 - bezier_bezier_intersection_eps2, tE: t1 + bezier_bezier_intersection_eps2, multiplicity: 1 };
             const ri2 = { tS: t2 - bezier_bezier_intersection_eps2, tE: t2 + bezier_bezier_intersection_eps2, multiplicity: 1 };
             const box = getIntervalBox(ps1, [t1 - bezier_bezier_intersection_eps2, t1 + bezier_bezier_intersection_eps2]);
@@ -23511,8 +17446,8 @@ function getAbsAreaBetween(ps1, ps2) {
         const x = xs[i];
         const tE1 = x === undefined ? 1 : mid(x.ri1);
         const tE2 = x === undefined ? 1 : mid(x.ri2);
-        const piece1 = from_to_fromTo(ps1, tS1, tE1);
-        const piece2 = from_to_fromTo(ps2, tS2, tE2);
+        const piece1 = fromTo(ps1, tS1, tE1);
+        const piece2 = fromTo(ps2, tS2, tE2);
         tS1 = tE1;
         tS2 = tE2;
         total += Math.abs(area_area(piece1) - area_area(piece2));
@@ -23775,6 +17710,334 @@ function getFootpointPoly1(ps, p) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/distance-and-length/squared-distance-between.js
+/**
+ * Returns the squared distance between two 2d points.
+ * @param p a point
+ * @param q another point
+ */
+function squared_distance_between_squaredDistanceBetween(p, q) {
+    const x = q[0] - p[0];
+    const y = q[1] - p[1];
+    return x * x + y * y;
+}
+
+//# sourceMappingURL=squared-distance-between.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/calculus/double/differentiate.js
+/**
+ * Returns the result of differentiating the given polynomial in double
+ * precision.
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ *
+ * @example
+ * ```typescript
+ * differentiate([5, 4, 3, 2, 1]); //=> [20, 12, 6, 2]
+ * ```
+ *
+ * @doc
+ */
+function differentiate(p) {
+    const result = [];
+    const d = p.length - 1;
+    for (let i = 0; i < d; i++) {
+        result.push((d - i) * p[i]);
+    }
+    return result;
+}
+
+//# sourceMappingURL=differentiate.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/naive/brent-poly.js
+
+const brent_poly_Horner = Horner;
+const brent_poly_eps = Number.EPSILON;
+const brent_poly_u = brent_poly_eps / 2;
+const brent_poly_abs = Math.abs;
+const brent_poly_max = Math.max;
+/**
+ * Returns a refined root given a root bracketed in the interval (a,b) of the
+ * given polynomial using Brent's Method.
+ *
+ * * near exact implementation of the original Brent Dekker Method (also known
+ * as Brent's Method), except that it is specialzed to polynomial evaluation
+ *
+ * * the algorithm stops once the interval width becomes equal or less than
+ * `2 * Number.EPSILON/2 * max(1,abs(a),abs(b))` where `a` and `b` are the current
+ * lower and upper interval limits
+ *
+ * * Brent's Method is an excellent root-refinement choice since:
+ *  * guaranteed converge (unlike the Newton and other so-called single-point
+ * methods),
+ *  * converges in a reasonable number of iterations even for highly contrived
+ * functions (unlike Dekker's Method) and
+ *  * nearly always converges fast, i.e. super-linearly (unlike the Secant and
+ * Regula-Falsi methods).
+ * * unfortunately the algorithm given on [Wikipedia](https://en.wikipedia.org/wiki/Brent%27s_method)
+ * works but is not precisely Brent's method and runs about 2x or more slower
+ * due to it not implementing the critically important 'micro-step' (Aug 2020).
+ *
+ * * see [Brent (page 47)](https://maths-people.anu.edu.au/~brent/pd/rpb011i.pdf)
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ * @param lb the lower limit of the search interval.
+ * @param ub the upper limit of the search interval.
+ * @param fa (may be left out - will be calculated automatically) the result of
+ * evaluating the input polynomial at `a`
+ * @param fb (may be left out - will be calculated automatically) the result of
+ * evaluating the input polynomial at `b`
+ *
+ * @example
+ * ```typescript
+ * const p = fromRoots([-10,2,3,4]);  //=> [1, 1, -64, 236, -240]
+ * const a = 2.2;
+ * const b = 3.8;
+ * brent(p,a,b); //=> 3.000000000000003
+ * b = 3.1;
+ * brent(p,a,b); //=> 3.000000000000001
+ * ```
+ *
+ * @doc
+ */
+function brentPoly(p, lb, ub, fa = brent_poly_Horner(p, lb), fb = brent_poly_Horner(p, ub)) {
+    // Precondition: fa, fb !== 0
+    //---- Make local copies of a and b.
+    let a = lb;
+    let b = ub;
+    let c = a;
+    let fc = fa;
+    let e = b - a;
+    let d = e;
+    while (true) {
+        if (brent_poly_abs(fc) < brent_poly_abs(fb)) {
+            a = b;
+            b = c;
+            c = a;
+            fa = fb;
+            fb = fc;
+            fc = fa;
+        }
+        const δ = 2 * brent_poly_u * brent_poly_max(1, brent_poly_abs(a), brent_poly_abs(b));
+        const m = 0.5 * (c - b);
+        //if (abs(m) <= δ || fb === 0) {
+        if (brent_poly_abs(m) <= δ) {
+            // uncomment below if range to be returned
+            //return b < c ? [b,c] : [c,b];
+            // uncomment below if leftmost guess to be returned
+            //return b < c ? b : c;
+            // uncomment below if rightmost guess to be returned
+            //return b < c ? b : c;
+            // uncomment below if any guess to be returned
+            return b;
+        }
+        if (brent_poly_abs(e) < δ || brent_poly_abs(fa) <= brent_poly_abs(fb)) {
+            e = m;
+            d = e;
+        }
+        else {
+            let s = fb / fa;
+            let p;
+            let q;
+            if (a === c) {
+                p = 2 * m * s;
+                q = 1 - s;
+            }
+            else {
+                q = fa / fc;
+                const r = fb / fc;
+                p = s * (2 * m * q * (q - r) - (b - a) * (r - 1));
+                q = (q - 1) * (r - 1) * (s - 1);
+            }
+            if (0 < p) {
+                q = -q;
+            }
+            else {
+                p = -p;
+            }
+            s = e;
+            e = d;
+            if (2 * p < 3 * m * q - brent_poly_abs(δ * q) && p < brent_poly_abs(0.5 * s * q)) {
+                d = p / q;
+            }
+            else {
+                e = m;
+                d = e;
+            }
+        }
+        a = b;
+        fa = fb;
+        if (δ < brent_poly_abs(d)) {
+            b = b + d;
+        }
+        else if (0 < m) {
+            b = b + δ;
+        }
+        else {
+            //b = b - eps;
+            b = b - δ;
+        }
+        fb = brent_poly_Horner(p, b);
+        // inlined above line:
+        //fb = p[0]; for (let i=1; i<p.length; i++) { fb = fb*b + p[i]; }
+        if (fb === 0) {
+            return b;
+        }
+        if (fb * fc > 0) {
+            c = a;
+            fc = fa;
+            e = b - a;
+            d = e;
+        }
+    }
+}
+
+//# sourceMappingURL=brent-poly.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/naive/all-roots.js
+
+
+
+
+
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const all_roots_differentiate = differentiate;
+const all_roots_Horner = Horner;
+const all_roots_brentPoly = brentPoly;
+const all_roots_negativeRootUpperBound_LMQ = negativeRootLowerBound_LMQ;
+const all_roots_positiveRootUpperBound_LMQ = positiveRootUpperBound_LMQ;
+const all_roots_removeLeadingZeros = removeLeadingZeros;
+/**
+ * Find and return all roots of the given polynomial in the given interval.
+ *
+ * * an empty array is returned for a constant or the zero polynomial
+ *
+ * * **non-exact:** roots are found 'naively' using double-precision arithmetic
+ * and accuracy will thus depend on the condition number around the root - use
+ * [[allRootsCertifiedSimplified]] or [[allRootsCertified]] instead if certified
+ * root bounds are required (it is about 3x slower, but still very fast!)
+ *
+ * * close (where the definition of closeness depends on the condition
+ * number) or multiple *even* roots can be returned as 0, 1 or more close
+ * roots, whereas close or multiple *odd* roots are guaranteed to return *at
+ * least 1 root*
+ *
+ * * optimized for polynomials of degree 1 to about 30
+ *
+ * * roots are refined using the celebrated Brent's Method (and evaluated using
+ * Horner's Method) until a root interval is found with
+ * width `<= eps * max(1, 2^⌈log₂r⌉)`, where `eps = Number.EPSILON` and
+ * `r` is a root
+ *
+ * * **ordered:** the returned roots are ordered from lowest to highest
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ * @param lb defaults to `Number.NEGATIVE_INFINITY`; lower bound of roots to be
+ * returned
+ * @param ub defaults to `Number.POSITIVE_INFINITY`; upper bound of roots to be
+ * returned
+ *
+ * @doc
+ */
+function allRoots(p, lb = Number.NEGATIVE_INFINITY, ub = Number.POSITIVE_INFINITY) {
+    p = all_roots_removeLeadingZeros(p);
+    //---- count and remove roots at zero
+    let numZerosAtZero = 0;
+    while (p[p.length - 1] === 0) {
+        p = p.slice(0, -1);
+        numZerosAtZero++;
+    }
+    //------------------------
+    // return an empty array for a constant or the zero polynomial
+    if (p.length <= 1) {
+        const roots = [];
+        for (let j = 0; j < numZerosAtZero; j++) {
+            roots.push(0);
+        }
+        return roots;
+    }
+    if (lb === Number.NEGATIVE_INFINITY) {
+        lb = all_roots_negativeRootUpperBound_LMQ(p);
+    }
+    if (ub === Number.POSITIVE_INFINITY) {
+        ub = all_roots_positiveRootUpperBound_LMQ(p);
+    }
+    // Get all derivatives, i.e. 
+    // ps === [p, dp, ddp, ..., constant]
+    //        [0,  1,   2, ..., deg     ]
+    const ps = [p];
+    for (let i = 1; i <= p.length - 1; i++) {
+        ps.push(all_roots_differentiate(ps[i - 1]));
+    }
+    //const δ = Math.max(2*eps, 2*eps * Math.max(Math.abs(lb), Math.abs(ub)));
+    /** root intervals */
+    let is = [];
+    // loop: ps[diffCount] === [linear, quadratic, ..., deg]
+    for (let diffCount = p.length - 2; diffCount >= 0; diffCount--) {
+        // Get roots within intervals:
+        // ---------------------------
+        // Finds and returns all roots of the given polynomial within the given 
+        // intervals, starting from the lower bound (lb) and ending at the upper
+        // bound (ub)
+        const p = ps[diffCount];
+        const roots = [];
+        let _a_ = lb;
+        let _A_ = all_roots_Horner(p, _a_);
+        // if lower bound value is zero and this is the last iteration with 
+        // p === the original polynomial then push the root at the lower bound
+        if (_A_ === 0 && diffCount === 0) {
+            roots.push(lb);
+        }
+        for (let i = 0; i < is.length; i++) {
+            const _b_ = is[i];
+            const _B_ = all_roots_Horner(p, _b_);
+            // if there is a root at the right interval then add it
+            if (_B_ === 0) {
+                roots.push(_b_);
+            }
+            else if (_A_ * _B_ < 0) {
+                roots.push(all_roots_brentPoly(p, _a_, _b_, _A_, _B_));
+            }
+            _a_ = _b_;
+            _A_ = _B_;
+        }
+        const _B_ = all_roots_Horner(p, ub);
+        if (_A_ * _B_ < 0) {
+            roots.push(all_roots_brentPoly(p, _a_, ub, _A_, _B_));
+        }
+        // if upper bound value is zero and this is the last iteration with 
+        // p === the original polynomial then push the root at the upper bound
+        if (_B_ === 0 && diffCount === 0) {
+            roots.push(ub);
+        }
+        is = roots;
+    }
+    if (numZerosAtZero > 0 && lb <= 0 && ub >= 0) {
+        // at this point the existing intervals, `is`, are sorted
+        // find the insertion spot and insert the zero roots to keep the roots
+        // sorted
+        const isWithZeroRoots = [];
+        let zerosInserted = false;
+        for (let i = 0; i < is.length; i++) {
+            if (!zerosInserted && is[i] >= 0) {
+                // push the zero roots
+                for (let j = 0; j < numZerosAtZero; j++) {
+                    isWithZeroRoots.push(0);
+                }
+                zerosInserted = true;
+            }
+            isWithZeroRoots.push(is[i]);
+        }
+        return isWithZeroRoots;
+    }
+    return is;
+}
+
+//# sourceMappingURL=all-roots.js.map
 ;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/closest-point-on-bezier.ts
 
 
@@ -23899,6 +18162,20 @@ function furthestPointOnBezier(ps, p) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/affine-transformations/translate/translate.js
+// From: https://en.wikipedia.org/wiki/Affine_transformation
+// "If X is the point set of an affine space, then every affine transformation 
+// on X can be represented as the composition of a linear transformation on X 
+// and a translation of X"
+function translate(a, b) {
+    function f(b) {
+        return [a[0] + b[0], a[1] + b[1]];
+    }
+    // Curry the function
+    return b === undefined ? f : f(b);
+}
+
+//# sourceMappingURL=translate.js.map
 ;// CONCATENATED MODULE: ./src/create/generate-quarter-circle.ts
 
 /**
@@ -24090,13 +18367,13 @@ function geoClip(G, dF, dMin, dMax) {
     let tMin = Number.POSITIVE_INFINITY;
     let tMax = Number.NEGATIVE_INFINITY;
     /** *lower* Bernstein *lower* fatline roots */
-    const rootsMinBMinF = geo_clip_quadraticRoots(a, b, c1);
+    const rootsMinBMinF = quadraticRoots(a, b, c1);
     /** *lower* Bernstein *upper* fatline roots */
-    const rootsMinBMaxF = geo_clip_quadraticRoots(a, b, c2);
+    const rootsMinBMaxF = quadraticRoots(a, b, c2);
     /** *upper* Bernstein *lower* fatline roots */
-    const rootsMaxBMinF = geo_clip_quadraticRoots(d, e, f1);
+    const rootsMaxBMinF = quadraticRoots(d, e, f1);
     /** *upper* Bernstein *upper* fatline roots */
-    const rootsMaxBMaxF = geo_clip_quadraticRoots(d, e, f2);
+    const rootsMaxBMaxF = quadraticRoots(d, e, f2);
     // if there are an infinite number of roots, i.e. if the quadratic is
     // really the zero polynomial
     if (rootsMinBMinF === undefined || rootsMinBMaxF === undefined ||
@@ -24176,7 +18453,7 @@ function geoClip(G, dF, dMin, dMax) {
  *
  * @internal
  */
-function geo_clip_quadraticRoots(a, b, c) {
+function quadraticRoots(a, b, c) {
     if (a === 0) {
         if (b === 0) {
             // degenerate constant (degree 0 polynomial)
@@ -24321,6 +18598,141 @@ function geo_clip_quadraticRoots(a, b, c) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/index.js
+//==================================
+// 2d vector pure functions library
+//==================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Three 2d points are a counter-clockwise turn if ccw > 0, clockwise if
+ * ccw < 0, and colinear if ccw === 0 because ccw is a determinant that gives
+ * twice the signed area of the triangle formed by the points a, b and c.
+ * * **certified**
+ * @param A The first point
+ * @param B The second point
+ * @param C The third point
+ */
+const ccw = (/* unused pure expression or super */ null && (orient2d));
+/**
+ * Returns the second 2-vector minus the first.
+ * @param p the first vector
+ * @param q the second vector
+  */
+function node_fromTo(p, q) {
+    return [q[0] - p[0], q[1] - p[1]];
+}
+/**
+ * Performs linear interpolation between two 2d points and returns the
+ * resulting point.
+ * @param p the first point.
+ * @param q the second point.
+ * @param t the interpolation fraction (often in [0,1]).
+ */
+function interpolate(p, q, t) {
+    return [
+        p[0] + (q[0] - p[0]) * t,
+        p[1] + (q[1] - p[1]) * t
+    ];
+}
+/**
+ * Returns the mean of two 2d points.
+ * @param ps the two points
+ */
+function mean(ps) {
+    const p = ps[0];
+    const q = ps[1];
+    return [(p[0] + q[0]) / 2, (p[1] + q[1]) / 2];
+}
+/**
+* Returns true if two 2-vectors are identical (by value), false otherwise.
+* @param a a 2d vector
+* @param b another 2d vector
+*/
+function node_equal(a, b) {
+    return (a[0] === b[0] && a[1] === b[1]);
+}
+/**
+ * Returns the closest point to the array of 2d points or if the array is empty
+ * returns undefined.
+ * @param p
+ * @param ps
+ */
+function getClosestTo(p, ps) {
+    let closestPoint = undefined;
+    let closestDistance = Number.POSITIVE_INFINITY;
+    for (let i = 0; i < ps.length; i++) {
+        const q = ps[i];
+        const d = squaredDistanceBetween(p, q);
+        if (d < closestDistance) {
+            closestPoint = q;
+            closestDistance = d;
+        }
+    }
+    return closestPoint;
+}
+/**
+ * Returns the closest point to the array of 2d points by providing a distance
+ * function. If the given array is empty, returns undefined.
+ * @param p
+ * @param ps
+ * @param f a function that takes the object and returns a point in order to
+ * apply the Euclidian distance.
+ */
+function getObjClosestTo(p, ps, f) {
+    let closestObj = undefined; // Closest Point
+    let closestDistance = Number.POSITIVE_INFINITY;
+    for (let i = 0; i < ps.length; i++) {
+        const o = ps[i];
+        const d = squaredDistanceBetween(p, f(o));
+        if (d < closestDistance) {
+            closestObj = o;
+            closestDistance = d;
+        }
+    }
+    return closestObj;
+}
+
+//# sourceMappingURL=index.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/distance-and-length/to-length.js
+/**
+ * Returns the given 2-vector scaled to the given length.
+ * @param p a vector
+ * @param length the length to scale to
+ */
+function toLength(p, length) {
+    const c = length / Math.sqrt(p[0] * p[0] + p[1] * p[1]);
+    return [c * p[0], c * p[1]];
+}
+
+//# sourceMappingURL=to-length.js.map
 ;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection-fast/get-distance-to-line-function.ts
 
 const get_distance_to_line_function_tp = node_twoProduct;
@@ -24393,7 +18805,7 @@ function getDistanceToLineFunction(pS, pE) {
 const check_intersection_in_ranges_getDistanceToLineFunction = getDistanceToLineFunction;
 const check_intersection_in_ranges_geoClip = geoClip;
 const check_intersection_in_ranges_fromToInclErrorBound = fromToInclErrorBound;
-const fromToVect = fromTo;
+const fromToVect = node_fromTo;
 const check_intersection_in_ranges_translate = translate;
 const check_intersection_in_ranges_toLength = toLength;
 const check_intersection_in_ranges_noIntersection = undefined;
@@ -24458,29 +18870,29 @@ function checkIntersectionInRanges(iter) {
     }
     const lenF = Fps.length;
     // Q will be fat line bounded. Get start and endpoint of curve
-    let FS = Fps[0];
-    let FE = Fps[lenF - 1];
+    const FS = Fps[0];
+    const FE = Fps[lenF - 1];
     // Note: The case where `FS` and `FE` are the same point will result in
     // `geoClip` not clipping and returning 'no intersection' so we don't
     // explicitly test for it here.
     // Get the implict line equation for the line defined by the first and 
     // last control point of Q. This equation gives the distance between any 
     // point and the line (but scaled for efficiency *and* robustness).
-    let dF = check_intersection_in_ranges_getDistanceToLineFunction(FS, FE);
+    const dF = check_intersection_in_ranges_getDistanceToLineFunction(FS, FE);
     // Signed distances to cubic mid control points *plus* the first and last
     // control points since there is an error bound involved that need to
     // be included to ensure robustness
-    let dF0 = dF(Fps[0], F_ps[0]);
-    let dF1 = dF(Fps[1], F_ps[1]);
-    let dF2 = dF(Fps[2], F_ps[2]);
-    let dF3 = lenF === 4 ? dF(Fps[3], F_ps[3]) : { dMin: 0, dMax: 0 };
+    const dF0 = dF(Fps[0], F_ps[0]);
+    const dF1 = dF(Fps[1], F_ps[1]);
+    const dF2 = dF(Fps[2], F_ps[2]);
+    const dF3 = lenF === 4 ? dF(Fps[3], F_ps[3]) : { dMin: 0, dMax: 0 };
     // Calculate the fat line of F.
     // Calculate the distance from the control points of F to the line.
     //let C = len === 4 ? (dF1*dF2 > 0) ? 3/4 : 4/9 : 1/2;
     // The above calculation of C has been replaced by the one below so we can
     // ensure robustness (`dF1` and `dF2` are not simply numbers but also have
     // an error bound associated with them)
-    let C = lenF === 4 ? 3 / 4 : 1 / 2;
+    const C = lenF === 4 ? 3 / 4 : 1 / 2;
     const dMin = C * Math.min(0, dF0.dMin, dF1.dMin, dF2.dMin, dF3.dMin);
     const dMax = C * Math.max(0, dF0.dMax, dF1.dMax, dF2.dMax, dF3.dMax);
     // Add fatline debug info
@@ -24500,7 +18912,6 @@ function checkIntersectionInRanges(iter) {
         if (!clipPerp()) {
             return [];
         }
-        ;
     }
     if (!last && tMax - tMin > maxClipTSpan) {
         return split();
@@ -24533,14 +18944,14 @@ function checkIntersectionInRanges(iter) {
         const FEy = FE[1];
         // rotate [FS,FE] 90 degrees about FS
         const V = [FSx + FSy - FEy, FSy + FEx - FSx];
-        let dQ_ = check_intersection_in_ranges_getDistanceToLineFunction(FS, V);
+        const dQ_ = check_intersection_in_ranges_getDistanceToLineFunction(FS, V);
         // Signed distances to other 3 control points *plus* the first
         // control point since there is an error bound involved that need to
         // be included to ensure robustness
-        let dF0_ = dQ_(Fps[0], F_ps[0]);
-        let dF1_ = dQ_(Fps[1], F_ps[1]);
-        let dF2_ = dQ_(Fps[2], F_ps[2]);
-        let dF3_ = lenF === 4 ? dQ_(Fps[3], F_ps[3]) : { dMin: 0, dMax: 0 };
+        const dF0_ = dQ_(Fps[0], F_ps[0]);
+        const dF1_ = dQ_(Fps[1], F_ps[1]);
+        const dF2_ = dQ_(Fps[2], F_ps[2]);
+        const dF3_ = lenF === 4 ? dQ_(Fps[3], F_ps[3]) : { dMin: 0, dMax: 0 };
         const dMin_ = Math.min(0, dF0_.dMin, dF1_.dMin, dF2_.dMin, dF3_.dMin);
         const dMax_ = Math.max(0, dF0_.dMax, dF1_.dMax, dF2_.dMax, dF3_.dMax);
         // Add fatline debug info
@@ -24592,22 +19003,22 @@ function checkIntersectionInRanges(iter) {
     }
 }
 function getFatlineDebugInfo(FS, FE, dMin, dMax) {
-    let vF = fromToVect(FS, FE); // Move [FS, FE] to the origin
-    let vFr = [-vF[1], vF[0]]; // Rotate vector by -90 degrees
+    const vF = fromToVect(FS, FE); // Move [FS, FE] to the origin
+    const vFr = [-vF[1], vF[0]]; // Rotate vector by -90 degrees
     // get scale factor `d` to scale back to actual distances 
     // (not perfectly accurate due to rounding)
     const xS = FS[0];
     const yS = FS[1];
     const xE = FE[0];
     const yE = FE[1];
-    let s = yS - yE;
-    let t = xE - xS;
-    let u = xS * yE - xE * yS;
-    let d = Math.sqrt(s ** 2 + t ** 2);
-    let offsetMin = check_intersection_in_ranges_toLength(vFr, dMin / d);
-    let offsetMax = check_intersection_in_ranges_toLength(vFr, dMax / d);
-    let psMin = [check_intersection_in_ranges_translate(FS, offsetMin), check_intersection_in_ranges_translate(FE, offsetMin)];
-    let psMax = [check_intersection_in_ranges_translate(FS, offsetMax), check_intersection_in_ranges_translate(FE, offsetMax)];
+    const s = yS - yE;
+    const t = xE - xS;
+    const u = xS * yE - xE * yS;
+    const d = Math.sqrt(s ** 2 + t ** 2);
+    const offsetMin = check_intersection_in_ranges_toLength(vFr, dMin / d);
+    const offsetMax = check_intersection_in_ranges_toLength(vFr, dMax / d);
+    const psMin = [check_intersection_in_ranges_translate(FS, offsetMin), check_intersection_in_ranges_translate(FE, offsetMin)];
+    const psMax = [check_intersection_in_ranges_translate(FS, offsetMax), check_intersection_in_ranges_translate(FE, offsetMax)];
     return {
         psBase: [FS, FE],
         psMin, psMax
@@ -24664,16 +19075,16 @@ function bezierBezierIntersectionFast(ps1, ps2) {
         return implicit(ps1, ps2);
     }
     /** Intersection `t` values for both beziers */
-    let ts = [];
+    const ts = [];
     /** an iteration still left to check for intersections */
-    let iteration = {
+    const iteration = {
         F: ps1,
         G: ps2,
         fRange: [0, 1],
         gRange: [0, 1],
         last: undefined
     };
-    let stack = [iteration];
+    const stack = [iteration];
     if (globalThis.__debug__ !== undefined && !globalThis.__debug__.already) {
         globalThis.__debug__.tree = iteration;
     }
@@ -24691,7 +19102,7 @@ function bezierBezierIntersectionFast(ps1, ps2) {
             globalThis.__debug__.currentIter = iter;
             iter.uid = globalThis.__debug__.uid++;
         }
-        let newIterations = bezier_bezier_intersection_fast_checkIntersectionInRanges(iter);
+        const newIterations = bezier_bezier_intersection_fast_checkIntersectionInRanges(iter);
         if (newIterations.length === 1) {
             const newIter = newIterations[0];
             const fRange = newIter.fRange;
@@ -24821,19 +19232,15 @@ function areBoxesIntersecting(closed, a, b) {
     if (ay0 > ay1) {
         [ay0, ay1] = [ay1, ay0];
     }
-    ;
     if (by0 > by1) {
         [by0, by1] = [by1, by0];
     }
-    ;
     if (ax0 > ax1) {
         [ax0, ax1] = [ax1, ax0];
     }
-    ;
     if (bx0 > bx1) {
         [bx0, bx1] = [bx1, bx0];
     }
-    ;
     return closed
         ? ax0 <= bx1 && ax1 >= bx0 &&
             by0 <= ay1 && by1 >= ay0
@@ -25144,7 +19551,7 @@ function totalCurvature(ps, interval = [0, 1]) {
  *
  * @doc
  */
-function reverse_reverse(ps) {
+function reverse(ps) {
     return ps.slice().reverse();
 }
 
@@ -26026,7 +20433,7 @@ function toPowerBasis_3rdDerivativeDd(ps) {
 
 ;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis-1st-derivative/exact/to-power-basis-1st-derivative-exact.ts
 
-const to_power_basis_1st_derivative_exact_td = two_diff_twoDiff;
+const to_power_basis_1st_derivative_exact_td = twoDiff;
 const to_power_basis_1st_derivative_exact_ts = two_sum_twoSum;
 const to_power_basis_1st_derivative_exact_sce = scaleExpansion2;
 const eadd = eAdd;
@@ -26098,7 +20505,7 @@ function toPowerBasis1_1stDerivativeExact(ps) {
 
 ;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis-2nd-derivative/exact/to-power-basis-2nd-derivative-exact.ts
 
-const to_power_basis_2nd_derivative_exact_td = two_diff_twoDiff;
+const to_power_basis_2nd_derivative_exact_td = twoDiff;
 const to_power_basis_2nd_derivative_exact_sce = scaleExpansion2;
 const to_power_basis_2nd_derivative_exact_eadd = eAdd;
 const to_power_basis_2nd_derivative_exact_ge = growExpansion;
@@ -26145,7 +20552,7 @@ function toPowerBasis_2ndDerivativeExact(ps) {
 
 ;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis-3rd-derivative/exact/to-power-basis-3rd-derivative-exact.ts
 
-const to_power_basis_3rd_derivative_exact_td = two_diff_twoDiff;
+const to_power_basis_3rd_derivative_exact_td = twoDiff;
 const to_power_basis_3rd_derivative_exact_sce = scaleExpansion2;
 const to_power_basis_3rd_derivative_exact_eadd = eAdd;
 /**
@@ -26484,6 +20891,17 @@ function curvature(ps, t) {
 const κ = curvature;
 
 
+;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/dot.js
+/**
+ * Returns the dot (inner) product between two 2-vectors.
+ * @param a the first vector
+ * @param b the second vector
+ */
+function dot(a, b) {
+    return a[0] * b[0] + a[1] * b[1];
+}
+
+//# sourceMappingURL=dot.js.map
 ;// CONCATENATED MODULE: ./src/global-properties/classification/is-quad-obtuse.ts
 
 /**
@@ -26498,9 +20916,9 @@ const κ = curvature;
  * @doc mdx
  */
 function isQuadObtuse(ps) {
-    const v0 = fromTo(ps[0], ps[1]);
-    const v1 = fromTo(ps[1], ps[2]);
-    const v2 = fromTo(ps[2], ps[0]);
+    const v0 = node_fromTo(ps[0], ps[1]);
+    const v1 = node_fromTo(ps[1], ps[2]);
+    const v2 = node_fromTo(ps[2], ps[0]);
     const angleP0Obtuse = dot(v2, v0) > 0;
     const angleP2Obtuse = dot(v1, v2) > 0;
     return angleP0Obtuse || angleP2Obtuse;
@@ -26625,8 +21043,8 @@ function quadraticToPolyline(ps, tolerance) {
             continue;
         }
         const quads = [
-            from_to_fromTo(ps, 0, 0.5),
-            from_to_fromTo(ps, 0.5, 1)
+            fromTo(ps, 0, 0.5),
+            fromTo(ps, 0.5, 1)
         ];
         const prev = node.prev;
         const next = node.next;
@@ -27247,13 +21665,13 @@ function getFootpointPoly1Dd(ps, p) {
 ;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/exact/get-footpoint-poly-3-exact.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_footpoint_poly_3_exact_td = two_diff_twoDiff;
+const get_footpoint_poly_3_exact_td = twoDiff;
 const emult = eMult;
 const get_footpoint_poly_3_exact_sce = scaleExpansion2;
 const get_footpoint_poly_3_exact_em2 = eMultBy2;
 const emn2 = eMultByNeg2;
 const get_footpoint_poly_3_exact_eadd = eAdd;
-const get_footpoint_poly_3_exact_ediff = e_diff_eDiff;
+const get_footpoint_poly_3_exact_ediff = eDiff;
 /**
  * Returns the *exact* polynomial whose roots are all the `t` values on the
  * given bezier curve such that the line from the given point to the point on
@@ -27354,12 +21772,12 @@ function getFootpointPoly3Exact(ps, p) {
 ;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/exact/get-footpoint-poly-2-exact.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_footpoint_poly_2_exact_td = two_diff_twoDiff;
+const get_footpoint_poly_2_exact_td = twoDiff;
 const get_footpoint_poly_2_exact_emult = eMult;
 const get_footpoint_poly_2_exact_sce = scaleExpansion2;
 const get_footpoint_poly_2_exact_em2 = eMultBy2;
 const get_footpoint_poly_2_exact_eadd = eAdd;
-const get_footpoint_poly_2_exact_ediff = e_diff_eDiff;
+const get_footpoint_poly_2_exact_ediff = eDiff;
 /**
  * Returns the result of multiplying a floating point expansion by 4.
  *
@@ -27444,11 +21862,11 @@ function getFootpointPoly2Exact(ps, p) {
 ;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/exact/get-footpoint-poly-1-exact.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_footpoint_poly_1_exact_td = two_diff_twoDiff;
+const get_footpoint_poly_1_exact_td = twoDiff;
 const get_footpoint_poly_1_exact_emult = eMult;
 const get_footpoint_poly_1_exact_emn2 = eMultByNeg2;
 const get_footpoint_poly_1_exact_eadd = eAdd;
-const get_footpoint_poly_1_exact_ediff = e_diff_eDiff;
+const get_footpoint_poly_1_exact_ediff = eDiff;
 /**
  * Returns the *exact* polynomial whose roots are all the `t` values on the
  * given bezier curve such that the line from the given point to the point on
@@ -27787,8 +22205,8 @@ function getClosestOnBezier1FromPointErrorCounters(ps, p) {
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const closest_point_on_bezier_certified_estimate = e_estimate_eEstimate;
-const closest_point_on_bezier_certified_td = two_diff_twoDiff;
+const closest_point_on_bezier_certified_estimate = eEstimate;
+const closest_point_on_bezier_certified_td = twoDiff;
 const closest_point_on_bezier_certified_emult = eMult;
 const closest_point_on_bezier_certified_eadd = eAdd;
 const closest_point_on_bezier_certified_eps = Number.EPSILON;
@@ -28031,7 +22449,7 @@ function getMaxHausdorff(i) {
  * @internal
  */
 function hausdorffCompare(a, b) {
-    let diff = (getMaxHausdorff(a) - getMaxHausdorff(b));
+    const diff = (getMaxHausdorff(a) - getMaxHausdorff(b));
     if (diff !== 0) {
         return diff;
     }
@@ -28239,8 +22657,8 @@ function calcHErrorBound(A, tS, tE) {
     // absolute tangent values on curve segments or use the control point 
     // lengths as an upper bound.
     const tM = (tE + tS) / 2; // since the formula says `δS/2` so divide by 2
-    const psL = from_to_fromTo(A, tS, tM);
-    const psR = from_to_fromTo(A, tM, tE);
+    const psL = fromTo(A, tS, tM);
+    const psR = fromTo(A, tM, tE);
     const eL = controlPointLinesLength(psL);
     const eR = controlPointLinesLength(psR);
     return [eL, eR];
@@ -28294,11 +22712,11 @@ function hausdorffDistance(A, B, tolerance, maxIterations) {
  * @doc mdx
  */
 function splitByLength(ps, maxLength) {
-    let head = { r: [0, 1] };
+    const head = { r: [0, 1] };
     let n = head;
     while (n !== undefined) {
         const ts_ = n.r;
-        const ps_ = from_to_fromTo(ps, ts_[0], ts_[1]);
+        const ps_ = fromTo(ps, ts_[0], ts_[1]);
         if (controlPointLinesLength(ps_) <= maxLength) {
             n = n.next;
             continue;
@@ -28563,11 +22981,11 @@ function getCurvatureExtremaQuadraticPoly(ps) {
  * @doc mdx
  */
 function splitByCurvatureAndLength(ps, maxCurviness = 0.4, maxLength = 10, minTSpan = 2 ** -16) {
-    let head = { r: [0, 1] };
+    const head = { r: [0, 1] };
     let n = head;
     while (n !== undefined) {
         const ts_ = n.r;
-        const ps_ = from_to_fromTo(ps, ts_[0], ts_[1]);
+        const ps_ = fromTo(ps, ts_[0], ts_[1]);
         if ((controlPointLinesLength(ps_) <= maxLength &&
             curviness(ps_) <= maxCurviness) || ts_[1] - ts_[0] <= minTSpan) {
             n = n.next;
@@ -28716,6 +23134,26 @@ function getBounds(ps) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/affine-transformations/linear/rotate.js
+function rotate(sinθ, cosθ, p) {
+    function rotateByθ(p) {
+        return [
+            p[0] * cosθ - p[1] * sinθ,
+            p[0] * sinθ + p[1] * cosθ
+        ];
+    }
+    // Curry the function
+    return p === undefined ? rotateByθ : rotateByθ(p);
+}
+
+//# sourceMappingURL=rotate.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/certified/all-roots-certified-simplified.js
+
+function allRootsCertifiedSimplified(p, lb = Number.NEGATIVE_INFINITY, ub = Number.POSITIVE_INFINITY, returnUndefinedForZeroPoly) {
+    return allRootsCertified(p.map(c => [0, c]), lb, ub, undefined, undefined, returnUndefinedForZeroPoly);
+}
+
+//# sourceMappingURL=all-roots-certified-simplified.js.map
 ;// CONCATENATED MODULE: ./src/global-properties/bounds/get-x-bounds-tight.ts
 
 
@@ -29546,7 +23984,7 @@ function evaluate2ndDerivativeExact(ps, t) {
 
 ;// CONCATENATED MODULE: ./src/local-properties-at-t/tangent/exact/tangent-at-0-exact.ts
 
-const tangent_at_0_exact_td = two_diff_twoDiff;
+const tangent_at_0_exact_td = twoDiff;
 const tangent_at_0_exact_sce = scaleExpansion2;
 /**
  * Returns the *exact* tangent vector (not necessarily of unit length) of an
@@ -29624,7 +24062,7 @@ function evaluate2ndDerivativeAt0Exact(ps) {
 
 ;// CONCATENATED MODULE: ./src/local-properties-at-t/tangent/exact/tangent-at-1-exact.ts
 
-const tangent_at_1_exact_td = two_diff_twoDiff;
+const tangent_at_1_exact_td = twoDiff;
 const tangent_at_1_exact_sce = scaleExpansion2;
 /**
  * Returns the *exact* tangent vector (not necessarily of unit length) of an
@@ -30033,7 +24471,7 @@ function getBendingEnergyByGauss(κi, ps, maxCurviness, gaussOrder) {
     for (let i = 0; i < ts.length - 1; i++) {
         const tS = ts[i];
         const tE = ts[i + 1];
-        const ps_ = from_to_fromTo(ps, tS, tE);
+        const ps_ = fromTo(ps, tS, tE);
         total += gaussQuadrature(κi(ps_), [0, 1], gaussOrder);
     }
     return total;
@@ -30158,6 +24596,37 @@ function cubicFromAnglesAndSpeeds(anglesAndSpeeds) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/affine-transformations/linear/reverse.js
+/**
+ * Returns the given 2-vector reversed (i.e. scaled by -1).
+ * @param p a vector
+ */
+function reverse_reverse(p) {
+    return [-p[0], -p[1]];
+}
+
+//# sourceMappingURL=reverse.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/affine-transformations/linear/scale.js
+/**
+ * Returns a scaled version of the given 2-vector.
+ * @param p a vector
+ * @param c a scale factor
+ */
+function scale(p, c) {
+    return [c * p[0], c * p[1]];
+}
+
+//# sourceMappingURL=scale.js.map
+;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/distance-and-length/len.js
+/**
+ * Returns the length of the given 2-vector.
+ * @param p a 2d vector
+ */
+function len(p) {
+    return Math.sqrt(p[0] * p[0] + p[1] * p[1]);
+}
+
+//# sourceMappingURL=len.js.map
 ;// CONCATENATED MODULE: ./src/angles-and-speeds/bezier-by-angles-and-speeds/cubic-to-angles-and-speeds.ts
 
 const { cos: cubic_to_angles_and_speeds_cos, sin: cubic_to_angles_and_speeds_sin, atan2: cubic_to_angles_and_speeds_atan2 } = Math;
@@ -30179,7 +24648,7 @@ function cubicToAnglesAndSpeeds(ps) {
     // [_x1,_y1],[_x2,_y2],[_x3,_y3]
     const p = ps[0];
     // move ps to origin
-    ps = ps.map(translate(reverse(p)));
+    ps = ps.map(translate(reverse_reverse(p)));
     const [x, y] = [ps[3][0], ps[3][1]];
     const rot = cubic_to_angles_and_speeds_atan2(y, x);
     ps = ps.map(rotate(cubic_to_angles_and_speeds_sin(-rot), cubic_to_angles_and_speeds_cos(-rot)));
@@ -30214,10 +24683,8 @@ function getCubicSpeeds(ps) {
     const p3 = ps[3];
     const v = [p3[0] - p0[0], p3[1] - p0[1]]; // vector from 1st to last point
     const L = len(v);
-    const v01 = fromTo(p0, p1);
-    ;
-    const v32 = fromTo(p3, p2);
-    ;
+    const v01 = node_fromTo(p0, p1);
+    const v32 = node_fromTo(p3, p2);
     const s0 = 3 * len(v01) / L;
     const s1 = 3 * len(v32) / L;
     return [s0, s1];
@@ -30244,8 +24711,8 @@ function setCubicSpeeds(ps, s0, s1) {
     const p3 = ps[3];
     const v = [p3[0] - p0[0], p3[1] - p0[1]]; // vector from 1st to last point
     const L = len(v);
-    const v01 = fromTo(p0, p1);
-    const v32 = fromTo(p3, p2);
+    const v01 = node_fromTo(p0, p1);
+    const v32 = node_fromTo(p3, p2);
     const v01_ = toLength(v01, s0 / 3 * L);
     const p1_ = translate(p0, v01_);
     const v32_ = toLength(v32, s1 / 3 * L);
@@ -30275,7 +24742,7 @@ function getMinDistance(i) {
  * @internal
  */
 function distanceCompareMaxAsc(a, b) {
-    let diff = (getMaxDistance(a) - getMaxDistance(b));
+    const diff = (getMaxDistance(a) - getMaxDistance(b));
     if (diff !== 0) {
         return diff;
     }
@@ -30283,7 +24750,7 @@ function distanceCompareMaxAsc(a, b) {
 }
 /** @internal */
 function distanceCompareMinDesc(a, b) {
-    let diff = (getMinDistance(b) - getMinDistance(a));
+    const diff = (getMinDistance(b) - getMinDistance(a));
     if (diff !== 0) {
         return diff;
     }
@@ -30443,8 +24910,8 @@ function closest_distance_between_beziers_calcHErrorBound(A, tS, tE) {
     // absolute tangent values on curve segments or use the control point 
     // lengths as an upper bound.
     const tM = (tE + tS) / 2; // since the formula says `δS/2` so divide by 2
-    const psL = from_to_fromTo(A, tS, tM);
-    const psR = from_to_fromTo(A, tM, tE);
+    const psL = fromTo(A, tS, tM);
+    const psR = fromTo(A, tM, tE);
     const eL = controlPointLinesLength(psL);
     const eR = controlPointLinesLength(psR);
     return [eL, eR];
@@ -30588,6 +25055,145 @@ function closest_distance_between_beziers_calcHErrorBound(A, tS, tE) {
 
 
 
-FloBezier = __webpack_exports__;
-/******/ })()
-;
+var __webpack_exports__areBoxesIntersecting = __webpack_exports__.y2;
+var __webpack_exports__area = __webpack_exports__.SO;
+var __webpack_exports__bezierBezierIntersection = __webpack_exports__.Cn;
+var __webpack_exports__bezierBezierIntersectionBoundless = __webpack_exports__.ii;
+var __webpack_exports__bezierBezierIntersectionFast = __webpack_exports__.uw;
+var __webpack_exports__bezierSelfIntersection = __webpack_exports__.Vr;
+var __webpack_exports__circleBezierIntersection = __webpack_exports__.bG;
+var __webpack_exports__classification = __webpack_exports__.Gm;
+var __webpack_exports__classifications = __webpack_exports__.xt;
+var __webpack_exports__classify = __webpack_exports__.xk;
+var __webpack_exports__clone = __webpack_exports__.d9;
+var __webpack_exports__closestPointOnBezier = __webpack_exports__.jd;
+var __webpack_exports__closestPointOnBezierCertified = __webpack_exports__.Ay;
+var __webpack_exports__closestPointsBetweenBeziers = __webpack_exports__.Ek;
+var __webpack_exports__controlPointLinesLength = __webpack_exports__.Sx;
+var __webpack_exports__cubicFromAnglesAndSpeeds = __webpack_exports__.vC;
+var __webpack_exports__cubicThroughPointGiven013 = __webpack_exports__.hI;
+var __webpack_exports__cubicToAnglesAndSpeeds = __webpack_exports__.GY;
+var __webpack_exports__cubicToHybridQuadratic = __webpack_exports__.Wb;
+var __webpack_exports__cubicToQuadratic = __webpack_exports__.kP;
+var __webpack_exports__curvature = __webpack_exports__.Ne;
+var __webpack_exports__curviness = __webpack_exports__.oj;
+var __webpack_exports__equal = __webpack_exports__.Dg;
+var __webpack_exports__evalDeCasteljau = __webpack_exports__.su;
+var __webpack_exports__evalDeCasteljauDd = __webpack_exports__.ue;
+var __webpack_exports__evalDeCasteljauError = __webpack_exports__.WQ;
+var __webpack_exports__evalDeCasteljauWithErr = __webpack_exports__.T_;
+var __webpack_exports__evalDeCasteljauWithErrDd = __webpack_exports__.K5;
+var __webpack_exports__evaluate = __webpack_exports__.ku;
+var __webpack_exports__evaluate2ndDerivative = __webpack_exports__.Rf;
+var __webpack_exports__evaluate2ndDerivativeAt0 = __webpack_exports__.ok;
+var __webpack_exports__evaluate2ndDerivativeAt0Exact = __webpack_exports__.Bv;
+var __webpack_exports__evaluate2ndDerivativeAt1 = __webpack_exports__.CH;
+var __webpack_exports__evaluate2ndDerivativeAt1Exact = __webpack_exports__.Q$;
+var __webpack_exports__evaluate2ndDerivativeExact = __webpack_exports__.mz;
+var __webpack_exports__evaluateExact = __webpack_exports__.Lb;
+var __webpack_exports__evaluateImplicit1 = __webpack_exports__.fV;
+var __webpack_exports__evaluateImplicit2 = __webpack_exports__.fK;
+var __webpack_exports__evaluateImplicit3 = __webpack_exports__.CS;
+var __webpack_exports__fitQuadsToCubic = __webpack_exports__.Go;
+var __webpack_exports__fromPowerBasis = __webpack_exports__.jX;
+var __webpack_exports__fromTo = __webpack_exports__.JQ;
+var __webpack_exports__fromToInclErrorBound = __webpack_exports__.RU;
+var __webpack_exports__furthestPointOnBezier = __webpack_exports__.ZL;
+var __webpack_exports__generateCuspAtHalf3 = __webpack_exports__.Gc;
+var __webpack_exports__generateQuarterCircle = __webpack_exports__.MM;
+var __webpack_exports__generateSelfIntersecting = __webpack_exports__.W9;
+var __webpack_exports__getAbsAreaBetween = __webpack_exports__.OP;
+var __webpack_exports__getBendingEnergy = __webpack_exports__.so;
+var __webpack_exports__getBoundingBox = __webpack_exports__.A5;
+var __webpack_exports__getBoundingBoxTight = __webpack_exports__.FZ;
+var __webpack_exports__getBoundingHull = __webpack_exports__.vT;
+var __webpack_exports__getBounds = __webpack_exports__.zX;
+var __webpack_exports__getCoeffsBezBez = __webpack_exports__.Gb;
+var __webpack_exports__getControlPointBox = __webpack_exports__.zs;
+var __webpack_exports__getCubicSpeeds = __webpack_exports__.D;
+var __webpack_exports__getCurvatureExtrema = __webpack_exports__.cQ;
+var __webpack_exports__getEndpointIntersections = __webpack_exports__.Fx;
+var __webpack_exports__getFootpointPoly = __webpack_exports__.w9;
+var __webpack_exports__getFootpointPolyDd = __webpack_exports__.c1;
+var __webpack_exports__getFootpointPolyExact = __webpack_exports__.Fi;
+var __webpack_exports__getHodograph = __webpack_exports__.v2;
+var __webpack_exports__getImplicitForm1 = __webpack_exports__._z;
+var __webpack_exports__getImplicitForm1Dd = __webpack_exports__.xV;
+var __webpack_exports__getImplicitForm1DdWithRunningError = __webpack_exports__.Kd;
+var __webpack_exports__getImplicitForm1ErrorCounters = __webpack_exports__.sp;
+var __webpack_exports__getImplicitForm1Exact = __webpack_exports__.MA;
+var __webpack_exports__getImplicitForm2 = __webpack_exports__.pr;
+var __webpack_exports__getImplicitForm2Dd = __webpack_exports__.i2;
+var __webpack_exports__getImplicitForm2DdWithRunningError = __webpack_exports__.HL;
+var __webpack_exports__getImplicitForm2ErrorCounters = __webpack_exports__.AI;
+var __webpack_exports__getImplicitForm2Exact = __webpack_exports__.LX;
+var __webpack_exports__getImplicitForm3 = __webpack_exports__.q3;
+var __webpack_exports__getImplicitForm3Dd = __webpack_exports__.wj;
+var __webpack_exports__getImplicitForm3DdWithRunningError = __webpack_exports__.pt;
+var __webpack_exports__getImplicitForm3ErrorCounters = __webpack_exports__.Vh;
+var __webpack_exports__getImplicitForm3Exact = __webpack_exports__.gt;
+var __webpack_exports__getInflections = __webpack_exports__.Qi;
+var __webpack_exports__getInterfaceRotation = __webpack_exports__.Nl;
+var __webpack_exports__getIntervalBox = __webpack_exports__.mk;
+var __webpack_exports__getIntervalBoxDd = __webpack_exports__.I3;
+var __webpack_exports__getTAtLength = __webpack_exports__.n;
+var __webpack_exports__getXBoundsTight = __webpack_exports__.vx;
+var __webpack_exports__getYBoundsTight = __webpack_exports__.pJ;
+var __webpack_exports__hausdorffDistance = __webpack_exports__.OT;
+var __webpack_exports__hausdorffDistanceOneSided = __webpack_exports__.sn;
+var __webpack_exports__intersectBoxes = __webpack_exports__.wN;
+var __webpack_exports__isCollinear = __webpack_exports__.cp;
+var __webpack_exports__isCubicReallyLine = __webpack_exports__.Hz;
+var __webpack_exports__isCubicReallyQuad = __webpack_exports__.gd;
+var __webpack_exports__isHorizontal = __webpack_exports__.wE;
+var __webpack_exports__isPointOnBezierExtension = __webpack_exports__.Xn;
+var __webpack_exports__isQuadObtuse = __webpack_exports__.p0;
+var __webpack_exports__isQuadReallyLine = __webpack_exports__.NI;
+var __webpack_exports__isReallyPoint = __webpack_exports__.GV;
+var __webpack_exports__isSelfOverlapping = __webpack_exports__._2;
+var __webpack_exports__isVertical = __webpack_exports__.Ll;
+var __webpack_exports__length = __webpack_exports__.kE;
+var __webpack_exports__lineToCubic = __webpack_exports__.w2;
+var __webpack_exports__lineToQuadratic = __webpack_exports__.L8;
+var __webpack_exports__maxAbsCoordinate = __webpack_exports__.he;
+var __webpack_exports__normal = __webpack_exports__.mJ;
+var __webpack_exports__quadraticToCubic = __webpack_exports__.d3;
+var __webpack_exports__quadraticToPolyline = __webpack_exports__.q8;
+var __webpack_exports__reduceOrderIfPossible = __webpack_exports__.Ut;
+var __webpack_exports__reverse = __webpack_exports__.S3;
+var __webpack_exports__setCubicSpeeds = __webpack_exports__.Bm;
+var __webpack_exports__splitByCurvature = __webpack_exports__.ZP;
+var __webpack_exports__splitByCurvatureAndLength = __webpack_exports__.xO;
+var __webpack_exports__splitByLength = __webpack_exports__.GQ;
+var __webpack_exports__tFromXY = __webpack_exports__.Uo;
+var __webpack_exports__tangent = __webpack_exports__.s6;
+var __webpack_exports__tangentAt0 = __webpack_exports__.Cz;
+var __webpack_exports__tangentAt0Exact = __webpack_exports__.Vo;
+var __webpack_exports__tangentAt1 = __webpack_exports__.LC;
+var __webpack_exports__tangentAt1Exact = __webpack_exports__.Tb;
+var __webpack_exports__tangentExact = __webpack_exports__.x_;
+var __webpack_exports__toCubic = __webpack_exports__.rA;
+var __webpack_exports__toPowerBasis = __webpack_exports__.iq;
+var __webpack_exports__toPowerBasisDd = __webpack_exports__.rQ;
+var __webpack_exports__toPowerBasisDdWithRunningError = __webpack_exports__.l7;
+var __webpack_exports__toPowerBasisErrorCounters = __webpack_exports__.XK;
+var __webpack_exports__toPowerBasisExact = __webpack_exports__.K_;
+var __webpack_exports__toPowerBasisWithRunningError = __webpack_exports__.jU;
+var __webpack_exports__toPowerBasis_1stDerivative = __webpack_exports__.iN;
+var __webpack_exports__toPowerBasis_1stDerivativeDd = __webpack_exports__.iv;
+var __webpack_exports__toPowerBasis_1stDerivativeErrorCounters = __webpack_exports__.bn;
+var __webpack_exports__toPowerBasis_1stDerivativeExact = __webpack_exports__.oh;
+var __webpack_exports__toPowerBasis_2ndDerivative = __webpack_exports__.O6;
+var __webpack_exports__toPowerBasis_2ndDerivativeDd = __webpack_exports__.Kr;
+var __webpack_exports__toPowerBasis_2ndDerivativeExact = __webpack_exports__.hJ;
+var __webpack_exports__toPowerBasis_3rdDerivative = __webpack_exports__.ai;
+var __webpack_exports__toPowerBasis_3rdDerivativeDd = __webpack_exports__.J8;
+var __webpack_exports__toPowerBasis_3rdDerivativeExact = __webpack_exports__._A;
+var __webpack_exports__toString = __webpack_exports__.BB;
+var __webpack_exports__totalAbsoluteCurvature = __webpack_exports__._G;
+var __webpack_exports__totalCurvature = __webpack_exports__.Ce;
+var __webpack_exports__totalLength = __webpack_exports__.Cv;
+var __webpack_exports___ = __webpack_exports__.H8;
+var __webpack_exports___ = __webpack_exports__.Uv;
+var __webpack_exports___ = __webpack_exports__.Ef;
+export { __webpack_exports__areBoxesIntersecting as areBoxesIntersecting, __webpack_exports__area as area, __webpack_exports__bezierBezierIntersection as bezierBezierIntersection, __webpack_exports__bezierBezierIntersectionBoundless as bezierBezierIntersectionBoundless, __webpack_exports__bezierBezierIntersectionFast as bezierBezierIntersectionFast, __webpack_exports__bezierSelfIntersection as bezierSelfIntersection, __webpack_exports__circleBezierIntersection as circleBezierIntersection, __webpack_exports__classification as classification, __webpack_exports__classifications as classifications, __webpack_exports__classify as classify, __webpack_exports__clone as clone, __webpack_exports__closestPointOnBezier as closestPointOnBezier, __webpack_exports__closestPointOnBezierCertified as closestPointOnBezierCertified, __webpack_exports__closestPointsBetweenBeziers as closestPointsBetweenBeziers, __webpack_exports__controlPointLinesLength as controlPointLinesLength, __webpack_exports__cubicFromAnglesAndSpeeds as cubicFromAnglesAndSpeeds, __webpack_exports__cubicThroughPointGiven013 as cubicThroughPointGiven013, __webpack_exports__cubicToAnglesAndSpeeds as cubicToAnglesAndSpeeds, __webpack_exports__cubicToHybridQuadratic as cubicToHybridQuadratic, __webpack_exports__cubicToQuadratic as cubicToQuadratic, __webpack_exports__curvature as curvature, __webpack_exports__curviness as curviness, __webpack_exports__equal as equal, __webpack_exports__evalDeCasteljau as evalDeCasteljau, __webpack_exports__evalDeCasteljauDd as evalDeCasteljauDd, __webpack_exports__evalDeCasteljauError as evalDeCasteljauError, __webpack_exports__evalDeCasteljauWithErr as evalDeCasteljauWithErr, __webpack_exports__evalDeCasteljauWithErrDd as evalDeCasteljauWithErrDd, __webpack_exports__evaluate as evaluate, __webpack_exports__evaluate2ndDerivative as evaluate2ndDerivative, __webpack_exports__evaluate2ndDerivativeAt0 as evaluate2ndDerivativeAt0, __webpack_exports__evaluate2ndDerivativeAt0Exact as evaluate2ndDerivativeAt0Exact, __webpack_exports__evaluate2ndDerivativeAt1 as evaluate2ndDerivativeAt1, __webpack_exports__evaluate2ndDerivativeAt1Exact as evaluate2ndDerivativeAt1Exact, __webpack_exports__evaluate2ndDerivativeExact as evaluate2ndDerivativeExact, __webpack_exports__evaluateExact as evaluateExact, __webpack_exports__evaluateImplicit1 as evaluateImplicit1, __webpack_exports__evaluateImplicit2 as evaluateImplicit2, __webpack_exports__evaluateImplicit3 as evaluateImplicit3, __webpack_exports__fitQuadsToCubic as fitQuadsToCubic, __webpack_exports__fromPowerBasis as fromPowerBasis, __webpack_exports__fromTo as fromTo, __webpack_exports__fromToInclErrorBound as fromToInclErrorBound, __webpack_exports__furthestPointOnBezier as furthestPointOnBezier, __webpack_exports__generateCuspAtHalf3 as generateCuspAtHalf3, __webpack_exports__generateQuarterCircle as generateQuarterCircle, __webpack_exports__generateSelfIntersecting as generateSelfIntersecting, __webpack_exports__getAbsAreaBetween as getAbsAreaBetween, __webpack_exports__getBendingEnergy as getBendingEnergy, __webpack_exports__getBoundingBox as getBoundingBox, __webpack_exports__getBoundingBoxTight as getBoundingBoxTight, __webpack_exports__getBoundingHull as getBoundingHull, __webpack_exports__getBounds as getBounds, __webpack_exports__getCoeffsBezBez as getCoeffsBezBez, __webpack_exports__getControlPointBox as getControlPointBox, __webpack_exports__getCubicSpeeds as getCubicSpeeds, __webpack_exports__getCurvatureExtrema as getCurvatureExtrema, __webpack_exports__getEndpointIntersections as getEndpointIntersections, __webpack_exports__getFootpointPoly as getFootpointPoly, __webpack_exports__getFootpointPolyDd as getFootpointPolyDd, __webpack_exports__getFootpointPolyExact as getFootpointPolyExact, __webpack_exports__getHodograph as getHodograph, __webpack_exports__getImplicitForm1 as getImplicitForm1, __webpack_exports__getImplicitForm1Dd as getImplicitForm1Dd, __webpack_exports__getImplicitForm1DdWithRunningError as getImplicitForm1DdWithRunningError, __webpack_exports__getImplicitForm1ErrorCounters as getImplicitForm1ErrorCounters, __webpack_exports__getImplicitForm1Exact as getImplicitForm1Exact, __webpack_exports__getImplicitForm2 as getImplicitForm2, __webpack_exports__getImplicitForm2Dd as getImplicitForm2Dd, __webpack_exports__getImplicitForm2DdWithRunningError as getImplicitForm2DdWithRunningError, __webpack_exports__getImplicitForm2ErrorCounters as getImplicitForm2ErrorCounters, __webpack_exports__getImplicitForm2Exact as getImplicitForm2Exact, __webpack_exports__getImplicitForm3 as getImplicitForm3, __webpack_exports__getImplicitForm3Dd as getImplicitForm3Dd, __webpack_exports__getImplicitForm3DdWithRunningError as getImplicitForm3DdWithRunningError, __webpack_exports__getImplicitForm3ErrorCounters as getImplicitForm3ErrorCounters, __webpack_exports__getImplicitForm3Exact as getImplicitForm3Exact, __webpack_exports__getInflections as getInflections, __webpack_exports__getInterfaceRotation as getInterfaceRotation, __webpack_exports__getIntervalBox as getIntervalBox, __webpack_exports__getIntervalBoxDd as getIntervalBoxDd, __webpack_exports__getTAtLength as getTAtLength, __webpack_exports__getXBoundsTight as getXBoundsTight, __webpack_exports__getYBoundsTight as getYBoundsTight, __webpack_exports__hausdorffDistance as hausdorffDistance, __webpack_exports__hausdorffDistanceOneSided as hausdorffDistanceOneSided, __webpack_exports__intersectBoxes as intersectBoxes, __webpack_exports__isCollinear as isCollinear, __webpack_exports__isCubicReallyLine as isCubicReallyLine, __webpack_exports__isCubicReallyQuad as isCubicReallyQuad, __webpack_exports__isHorizontal as isHorizontal, __webpack_exports__isPointOnBezierExtension as isPointOnBezierExtension, __webpack_exports__isQuadObtuse as isQuadObtuse, __webpack_exports__isQuadReallyLine as isQuadReallyLine, __webpack_exports__isReallyPoint as isReallyPoint, __webpack_exports__isSelfOverlapping as isSelfOverlapping, __webpack_exports__isVertical as isVertical, __webpack_exports__length as length, __webpack_exports__lineToCubic as lineToCubic, __webpack_exports__lineToQuadratic as lineToQuadratic, __webpack_exports__maxAbsCoordinate as maxAbsCoordinate, __webpack_exports__normal as normal, __webpack_exports__quadraticToCubic as quadraticToCubic, __webpack_exports__quadraticToPolyline as quadraticToPolyline, __webpack_exports__reduceOrderIfPossible as reduceOrderIfPossible, __webpack_exports__reverse as reverse, __webpack_exports__setCubicSpeeds as setCubicSpeeds, __webpack_exports__splitByCurvature as splitByCurvature, __webpack_exports__splitByCurvatureAndLength as splitByCurvatureAndLength, __webpack_exports__splitByLength as splitByLength, __webpack_exports__tFromXY as tFromXY, __webpack_exports__tangent as tangent, __webpack_exports__tangentAt0 as tangentAt0, __webpack_exports__tangentAt0Exact as tangentAt0Exact, __webpack_exports__tangentAt1 as tangentAt1, __webpack_exports__tangentAt1Exact as tangentAt1Exact, __webpack_exports__tangentExact as tangentExact, __webpack_exports__toCubic as toCubic, __webpack_exports__toPowerBasis as toPowerBasis, __webpack_exports__toPowerBasisDd as toPowerBasisDd, __webpack_exports__toPowerBasisDdWithRunningError as toPowerBasisDdWithRunningError, __webpack_exports__toPowerBasisErrorCounters as toPowerBasisErrorCounters, __webpack_exports__toPowerBasisExact as toPowerBasisExact, __webpack_exports__toPowerBasisWithRunningError as toPowerBasisWithRunningError, __webpack_exports__toPowerBasis_1stDerivative as toPowerBasis_1stDerivative, __webpack_exports__toPowerBasis_1stDerivativeDd as toPowerBasis_1stDerivativeDd, __webpack_exports__toPowerBasis_1stDerivativeErrorCounters as toPowerBasis_1stDerivativeErrorCounters, __webpack_exports__toPowerBasis_1stDerivativeExact as toPowerBasis_1stDerivativeExact, __webpack_exports__toPowerBasis_2ndDerivative as toPowerBasis_2ndDerivative, __webpack_exports__toPowerBasis_2ndDerivativeDd as toPowerBasis_2ndDerivativeDd, __webpack_exports__toPowerBasis_2ndDerivativeExact as toPowerBasis_2ndDerivativeExact, __webpack_exports__toPowerBasis_3rdDerivative as toPowerBasis_3rdDerivative, __webpack_exports__toPowerBasis_3rdDerivativeDd as toPowerBasis_3rdDerivativeDd, __webpack_exports__toPowerBasis_3rdDerivativeExact as toPowerBasis_3rdDerivativeExact, __webpack_exports__toString as toString, __webpack_exports__totalAbsoluteCurvature as totalAbsoluteCurvature, __webpack_exports__totalCurvature as totalCurvature, __webpack_exports__totalLength as totalLength, __webpack_exports___ as γ, __webpack_exports___ as γγ, __webpack_exports___ as κ };

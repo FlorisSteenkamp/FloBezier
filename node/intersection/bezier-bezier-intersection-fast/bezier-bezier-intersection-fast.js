@@ -46,16 +46,16 @@ function bezierBezierIntersectionFast(ps1, ps2) {
         return implicit(ps1, ps2);
     }
     /** Intersection `t` values for both beziers */
-    let ts = [];
+    const ts = [];
     /** an iteration still left to check for intersections */
-    let iteration = {
+    const iteration = {
         F: ps1,
         G: ps2,
         fRange: [0, 1],
         gRange: [0, 1],
         last: undefined
     };
-    let stack = [iteration];
+    const stack = [iteration];
     if (globalThis.__debug__ !== undefined && !globalThis.__debug__.already) {
         globalThis.__debug__.tree = iteration;
     }
@@ -73,7 +73,7 @@ function bezierBezierIntersectionFast(ps1, ps2) {
             globalThis.__debug__.currentIter = iter;
             iter.uid = globalThis.__debug__.uid++;
         }
-        let newIterations = checkIntersectionInRanges(iter);
+        const newIterations = checkIntersectionInRanges(iter);
         if (newIterations.length === 1) {
             const newIter = newIterations[0];
             const fRange = newIter.fRange;

@@ -17,8 +17,8 @@ function calcExactSquareRoot(a) {
     const gcd = bGcdInt(NN, DD);
     // the *exact* positive root `c` is given as the rational number `N/D` 
     // where `N` and `D` are [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) expansions
-    let N = bigintToExpansion(bSqrt(bAbs(NN / gcd)));
-    let D = bigintToExpansion(bSqrt(bAbs(DD / gcd)));
+    const N = bigintToExpansion(bSqrt(bAbs(NN / gcd)));
+    const D = bigintToExpansion(bSqrt(bAbs(DD / gcd)));
     return [N, D];
 }
 export { calcExactSquareRoot };

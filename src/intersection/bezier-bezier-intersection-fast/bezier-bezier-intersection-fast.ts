@@ -3,7 +3,7 @@ import type { Iteration } from './iteration.js';
 import { checkIntersectionInRanges as _checkIntersectionInRanges } from './check-intersection-in-ranges.js';
 import { bezierBezierIntersection as _bezierBezierIntersection } from '../bezier-bezier-intersection/bezier-bezier-intersection.js';
 
-declare var globalThis: typeof global & { __debug__: __Debug__ };
+declare const globalThis: typeof global & { __debug__: __Debug__ };
 
 
 const checkIntersectionInRanges = _checkIntersectionInRanges;
@@ -61,10 +61,10 @@ function bezierBezierIntersectionFast(
     }
 
     /** Intersection `t` values for both beziers */
-    let ts: number[][][] = [];
+    const ts: number[][][] = [];
 
     /** an iteration still left to check for intersections */
-    let iteration: Iteration = { 
+    const iteration: Iteration = { 
         F: ps1, 
         G: ps2,
         fRange: [0,1],
@@ -72,7 +72,7 @@ function bezierBezierIntersectionFast(
         last: undefined
     };
 
-    let stack = [iteration];
+    const stack = [iteration];
 
     if (globalThis.__debug__ !== undefined && !globalThis.__debug__.already) {
         globalThis.__debug__.tree = iteration;
@@ -95,7 +95,7 @@ function bezierBezierIntersectionFast(
             (iter as Iteration & IterationExtras).uid = globalThis.__debug__.uid++;
         }
 
-        let newIterations = checkIntersectionInRanges(iter);
+        const newIterations = checkIntersectionInRanges(iter);
 
         if (newIterations.length === 1) {
             const newIter = newIterations[0];

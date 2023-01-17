@@ -276,7 +276,7 @@ const γγ3 = γγ(3);
             (implictForm as ImplicitFormExact2).vᵧᵧ = [0];
         }
 
-        let { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = implictForm as ImplicitFormExact3;
+        const { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = implictForm as ImplicitFormExact3;
         
         // `h` (say height) is the the result of evaluating the implicit 
         // equation; if it is 0 we are on the curve, else we're not.

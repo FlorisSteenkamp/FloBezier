@@ -16,7 +16,7 @@ interface Bound {
 interface XBounds {
 	minX: Bound;
 	maxX: Bound; 
-};
+}
 
 
 /**
@@ -25,7 +25,7 @@ interface XBounds {
 interface YBounds {
 	minY: Bound;
 	maxY: Bound; 
-};
+}
 
 
 export type { Bound, XBounds, YBounds }

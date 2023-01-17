@@ -24,11 +24,11 @@ import { LlNode } from "./linked-list/linked-list-node.js";
  */
 function splitByCurvatureAndLength(
         ps: number[][], 
-        maxCurviness: number = 0.4,
-        maxLength: number = 10,
+        maxCurviness = 0.4,
+        maxLength = 10,
         minTSpan = 2**-16) {
 
-    let head: LlNode<number[]> = { r: [0,1] };
+    const head: LlNode<number[]> = { r: [0,1] };
     let n = head;
     while (n !== undefined) {
         const ts_ = n.r;

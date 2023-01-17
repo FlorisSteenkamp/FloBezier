@@ -6,7 +6,7 @@ import { getMaxDistance, getMinDistance } from "./get-min-max-distance.js";
  * @internal
  */
 function distanceCompareMaxAsc(a, b) {
-    let diff = (getMaxDistance(a) - getMaxDistance(b));
+    const diff = (getMaxDistance(a) - getMaxDistance(b));
     if (diff !== 0) {
         return diff;
     }
@@ -14,7 +14,7 @@ function distanceCompareMaxAsc(a, b) {
 }
 /** @internal */
 function distanceCompareMinDesc(a, b) {
-    let diff = (getMinDistance(b) - getMinDistance(a));
+    const diff = (getMinDistance(b) - getMinDistance(a));
     if (diff !== 0) {
         return diff;
     }
