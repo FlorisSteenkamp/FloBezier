@@ -13,5 +13,5 @@
  *
  * @doc
  */
-declare function toPowerBasis_3rdDerivativeDd(ps: number[][]): number[][];
+declare function toPowerBasis_3rdDerivativeDd(ps: number[][]): number[][][];
 export { toPowerBasis_3rdDerivativeDd };

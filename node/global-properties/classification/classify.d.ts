@@ -3,7 +3,7 @@
  *
  * These are the four types from the paper [Shape Analysis of Cubic Bézier Curves – Correspondence to Four Primitive Cubics](https://www.cad-journal.net/files/vol_11/CAD_11(5)_2014_568-578.pdf)
  */
-declare type NodeType = 'crunode' | 'acnode' | 'cusp' | 'explicit';
+type NodeType = 'crunode' | 'acnode' | 'cusp' | 'explicit';
 interface ClassificationType {
     /** the order based on the number of control points */
     order: 0 | 1 | 2 | 3;
@@ -114,7 +114,7 @@ declare const cubicDegenPoint: {
  * *All* possible planar polynomial bezier curves (of order <= 3) are
  * represented and all options are mutually exclusive.
  */
-declare type Classification = typeof point | typeof lineGeneral | typeof lineDegenPoint | typeof quadGeneral | typeof quadDegenCollinear | typeof quadDegenLine | typeof quadDegenPoint | typeof cubicGeneralCrunode | typeof cubicGeneralAcnode | typeof cubicGeneralCusp | typeof cubicGeneralExplicit | typeof cubicDegenCollinearCubic | typeof cubicDegenQuad | typeof cubicDegenCollinearQuad | typeof cubicDegenLine | typeof cubicDegenPoint;
+type Classification = typeof point | typeof lineGeneral | typeof lineDegenPoint | typeof quadGeneral | typeof quadDegenCollinear | typeof quadDegenLine | typeof quadDegenPoint | typeof cubicGeneralCrunode | typeof cubicGeneralAcnode | typeof cubicGeneralCusp | typeof cubicGeneralExplicit | typeof cubicDegenCollinearCubic | typeof cubicDegenQuad | typeof cubicDegenCollinearQuad | typeof cubicDegenLine | typeof cubicDegenPoint;
 /**
  * The classifications form an equivalence class, in other words *all*
  * possible planar polynomial bezier curves (of order <= 3) are represented and

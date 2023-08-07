@@ -24,147 +24,153 @@ var __webpack_exports__ = {};
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "y2": () => (/* reexport */ areBoxesIntersecting),
-  "SO": () => (/* reexport */ area_area),
-  "Cn": () => (/* reexport */ bezierBezierIntersection),
-  "ii": () => (/* reexport */ bezierBezierIntersectionBoundless),
-  "uw": () => (/* reexport */ bezierBezierIntersectionFast),
-  "Vr": () => (/* reexport */ bezierSelfIntersection),
-  "bG": () => (/* reexport */ circleBezierIntersection),
-  "Gm": () => (/* reexport */ classification),
-  "xt": () => (/* reexport */ classifications),
-  "xk": () => (/* reexport */ classify),
-  "d9": () => (/* reexport */ clone),
-  "jd": () => (/* reexport */ closestPointOnBezier),
-  "Ay": () => (/* reexport */ closestPointOnBezierCertified),
-  "Ek": () => (/* reexport */ closestPointsBetweenBeziers),
-  "Sx": () => (/* reexport */ controlPointLinesLength),
-  "vC": () => (/* reexport */ cubicFromAnglesAndSpeeds),
-  "hI": () => (/* reexport */ cubicThroughPointGiven013),
-  "GY": () => (/* reexport */ cubicToAnglesAndSpeeds),
-  "Wb": () => (/* reexport */ cubicToHybridQuadratic),
-  "kP": () => (/* reexport */ cubicToQuadratic),
-  "Ne": () => (/* reexport */ curvature),
-  "oj": () => (/* reexport */ curviness),
-  "Dg": () => (/* reexport */ equal),
-  "su": () => (/* reexport */ evalDeCasteljau),
-  "ue": () => (/* reexport */ evalDeCasteljauDd),
-  "WQ": () => (/* reexport */ evalDeCasteljauError),
-  "T_": () => (/* reexport */ evalDeCasteljauWithErr),
-  "K5": () => (/* reexport */ evalDeCasteljauWithErrDd),
-  "ku": () => (/* reexport */ evaluate),
-  "Rf": () => (/* reexport */ evaluate2ndDerivative),
-  "ok": () => (/* reexport */ evaluate2ndDerivativeAt0),
-  "Bv": () => (/* reexport */ evaluate2ndDerivativeAt0Exact),
-  "CH": () => (/* reexport */ evaluate2ndDerivativeAt1),
-  "Q$": () => (/* reexport */ evaluate2ndDerivativeAt1Exact),
-  "mz": () => (/* reexport */ evaluate2ndDerivativeExact),
-  "Lb": () => (/* reexport */ evaluateExact),
-  "fV": () => (/* reexport */ evaluateImplicit1),
-  "fK": () => (/* reexport */ evaluateImplicit2),
-  "CS": () => (/* reexport */ evaluateImplicit3),
-  "Go": () => (/* reexport */ fitQuadsToCubic),
-  "jX": () => (/* reexport */ fromPowerBasis),
-  "JQ": () => (/* reexport */ fromTo),
-  "RU": () => (/* reexport */ fromToInclErrorBound),
-  "ZL": () => (/* reexport */ furthestPointOnBezier),
-  "Gc": () => (/* reexport */ generateCuspAtHalf3),
-  "MM": () => (/* reexport */ generateQuarterCircle),
-  "W9": () => (/* reexport */ generateSelfIntersecting),
-  "OP": () => (/* reexport */ getAbsAreaBetween),
-  "so": () => (/* reexport */ getBendingEnergy),
-  "A5": () => (/* reexport */ getBoundingBox),
-  "FZ": () => (/* reexport */ getBoundingBoxTight),
-  "vT": () => (/* reexport */ getBoundingHull),
-  "zX": () => (/* reexport */ getBounds),
-  "Gb": () => (/* reexport */ getCoeffsBezBez),
-  "zs": () => (/* reexport */ getControlPointBox),
-  "D": () => (/* reexport */ getCubicSpeeds),
-  "cQ": () => (/* reexport */ getCurvatureExtrema),
-  "Fx": () => (/* reexport */ getEndpointIntersections),
-  "w9": () => (/* reexport */ getFootpointPoly),
-  "c1": () => (/* reexport */ getFootpointPolyDd),
-  "Fi": () => (/* reexport */ getFootpointPolyExact),
-  "v2": () => (/* reexport */ getHodograph),
-  "_z": () => (/* reexport */ getImplicitForm1),
-  "xV": () => (/* reexport */ getImplicitForm1Dd),
-  "Kd": () => (/* reexport */ getImplicitForm1DdWithRunningError),
-  "sp": () => (/* reexport */ getImplicitForm1ErrorCounters),
-  "MA": () => (/* reexport */ getImplicitForm1Exact),
-  "pr": () => (/* reexport */ getImplicitForm2),
-  "i2": () => (/* reexport */ getImplicitForm2Dd),
-  "HL": () => (/* reexport */ getImplicitForm2DdWithRunningError),
-  "AI": () => (/* reexport */ getImplicitForm2ErrorCounters),
-  "LX": () => (/* reexport */ getImplicitForm2Exact),
-  "q3": () => (/* reexport */ getImplicitForm3),
-  "wj": () => (/* reexport */ getImplicitForm3Dd),
-  "pt": () => (/* reexport */ getImplicitForm3DdWithRunningError),
-  "Vh": () => (/* reexport */ getImplicitForm3ErrorCounters),
-  "gt": () => (/* reexport */ getImplicitForm3Exact),
-  "Qi": () => (/* reexport */ getInflections),
-  "Nl": () => (/* reexport */ getInterfaceRotation),
-  "mk": () => (/* reexport */ getIntervalBox),
-  "I3": () => (/* reexport */ getIntervalBoxDd),
-  "n": () => (/* reexport */ getTAtLength),
-  "vx": () => (/* reexport */ getXBoundsTight),
-  "pJ": () => (/* reexport */ getYBoundsTight),
-  "OT": () => (/* reexport */ hausdorffDistance),
-  "sn": () => (/* reexport */ hausdorffDistanceOneSided),
-  "wN": () => (/* reexport */ intersectBoxes),
-  "cp": () => (/* reexport */ isCollinear),
-  "Hz": () => (/* reexport */ isCubicReallyLine),
-  "gd": () => (/* reexport */ isCubicReallyQuad),
-  "wE": () => (/* reexport */ isHorizontal),
-  "Xn": () => (/* reexport */ isPointOnBezierExtension),
-  "p0": () => (/* reexport */ isQuadObtuse),
-  "NI": () => (/* reexport */ isQuadReallyLine),
-  "GV": () => (/* reexport */ isReallyPoint),
-  "_2": () => (/* reexport */ isSelfOverlapping),
-  "Ll": () => (/* reexport */ isVertical),
-  "kE": () => (/* reexport */ length_length),
-  "w2": () => (/* reexport */ lineToCubic),
-  "L8": () => (/* reexport */ lineToQuadratic),
-  "he": () => (/* reexport */ maxAbsCoordinate),
-  "mJ": () => (/* reexport */ normal),
-  "d3": () => (/* reexport */ quadraticToCubic),
-  "q8": () => (/* reexport */ quadraticToPolyline),
-  "Ut": () => (/* reexport */ reduceOrderIfPossible),
-  "S3": () => (/* reexport */ reverse),
-  "Bm": () => (/* reexport */ setCubicSpeeds),
-  "ZP": () => (/* reexport */ splitByCurvature),
-  "xO": () => (/* reexport */ splitByCurvatureAndLength),
-  "GQ": () => (/* reexport */ splitByLength),
-  "Uo": () => (/* reexport */ tFromXY),
-  "s6": () => (/* reexport */ tangent),
-  "Cz": () => (/* reexport */ tangentAt0),
-  "Vo": () => (/* reexport */ tangentAt0Exact),
-  "LC": () => (/* reexport */ tangentAt1),
-  "Tb": () => (/* reexport */ tangentAt1Exact),
-  "x_": () => (/* reexport */ tangentExact),
-  "rA": () => (/* reexport */ toCubic),
-  "iq": () => (/* reexport */ toPowerBasis),
-  "rQ": () => (/* reexport */ toPowerBasisDd),
-  "l7": () => (/* reexport */ toPowerBasisDdWithRunningError),
-  "XK": () => (/* reexport */ toPowerBasisErrorCounters),
-  "K_": () => (/* reexport */ toPowerBasisExact),
-  "jU": () => (/* reexport */ toPowerBasisWithRunningError),
-  "iN": () => (/* reexport */ toPowerBasis_1stDerivative),
-  "iv": () => (/* reexport */ toPowerBasis_1stDerivativeDd),
-  "bn": () => (/* reexport */ toPowerBasis_1stDerivativeErrorCounters),
-  "oh": () => (/* reexport */ toPowerBasis_1stDerivativeExact),
-  "O6": () => (/* reexport */ toPowerBasis_2ndDerivative),
-  "Kr": () => (/* reexport */ toPowerBasis_2ndDerivativeDd),
-  "hJ": () => (/* reexport */ toPowerBasis_2ndDerivativeExact),
-  "ai": () => (/* reexport */ toPowerBasis_3rdDerivative),
-  "J8": () => (/* reexport */ toPowerBasis_3rdDerivativeDd),
-  "_A": () => (/* reexport */ toPowerBasis_3rdDerivativeExact),
-  "BB": () => (/* reexport */ to_string_toString),
-  "_G": () => (/* reexport */ totalAbsoluteCurvature),
-  "Ce": () => (/* reexport */ totalCurvature),
-  "Cv": () => (/* reexport */ totalLength),
-  "H8": () => (/* reexport */ γ),
-  "Uv": () => (/* reexport */ γγ),
-  "Ef": () => (/* reexport */ κ)
+  y2: () => (/* reexport */ areBoxesIntersecting),
+  SO: () => (/* reexport */ area_area),
+  Cn: () => (/* reexport */ bezierBezierIntersection),
+  ii: () => (/* reexport */ bezierBezierIntersectionBoundless),
+  uw: () => (/* reexport */ bezierBezierIntersectionFast),
+  Vr: () => (/* reexport */ bezierSelfIntersection),
+  bG: () => (/* reexport */ circleBezierIntersection),
+  Gm: () => (/* reexport */ classification),
+  xt: () => (/* reexport */ classifications),
+  xk: () => (/* reexport */ classify),
+  d9: () => (/* reexport */ clone),
+  jd: () => (/* reexport */ closestPointOnBezier),
+  Ay: () => (/* reexport */ closestPointOnBezierCertified),
+  Ek: () => (/* reexport */ closestPointsBetweenBeziers),
+  Sx: () => (/* reexport */ controlPointLinesLength),
+  vC: () => (/* reexport */ cubicFromAnglesAndSpeeds),
+  hI: () => (/* reexport */ cubicThroughPointGiven013),
+  GY: () => (/* reexport */ cubicToAnglesAndSpeeds),
+  Wb: () => (/* reexport */ cubicToHybridQuadratic),
+  kP: () => (/* reexport */ cubicToQuadratic),
+  Ne: () => (/* reexport */ curvature),
+  oj: () => (/* reexport */ curviness),
+  fz: () => (/* reexport */ ddCurvature),
+  pZ: () => (/* reexport */ eCurvature),
+  Dg: () => (/* reexport */ equal),
+  su: () => (/* reexport */ evalDeCasteljau),
+  ue: () => (/* reexport */ evalDeCasteljauDd),
+  WQ: () => (/* reexport */ evalDeCasteljauError),
+  T_: () => (/* reexport */ evalDeCasteljauWithErr),
+  K5: () => (/* reexport */ evalDeCasteljauWithErrDd),
+  ku: () => (/* reexport */ evaluate),
+  Rf: () => (/* reexport */ evaluate2ndDerivative),
+  ok: () => (/* reexport */ evaluate2ndDerivativeAt0),
+  Bv: () => (/* reexport */ evaluate2ndDerivativeAt0Exact),
+  CH: () => (/* reexport */ evaluate2ndDerivativeAt1),
+  Q$: () => (/* reexport */ evaluate2ndDerivativeAt1Exact),
+  mz: () => (/* reexport */ evaluate2ndDerivativeExact),
+  Lb: () => (/* reexport */ evaluateExact),
+  fV: () => (/* reexport */ evaluateImplicit1),
+  fK: () => (/* reexport */ evaluateImplicit2),
+  CS: () => (/* reexport */ evaluateImplicit3),
+  Go: () => (/* reexport */ fitQuadsToCubic),
+  jX: () => (/* reexport */ fromPowerBasis),
+  JQ: () => (/* reexport */ fromTo),
+  RU: () => (/* reexport */ fromToInclErrorBound),
+  ZL: () => (/* reexport */ furthestPointOnBezier),
+  Gc: () => (/* reexport */ generateCuspAtHalf3),
+  MM: () => (/* reexport */ generateQuarterCircle),
+  W9: () => (/* reexport */ generateSelfIntersecting),
+  OP: () => (/* reexport */ getAbsAreaBetween),
+  so: () => (/* reexport */ getBendingEnergy),
+  A5: () => (/* reexport */ getBoundingBox),
+  FZ: () => (/* reexport */ getBoundingBoxTight),
+  vT: () => (/* reexport */ getBoundingHull),
+  zX: () => (/* reexport */ getBounds),
+  Gb: () => (/* reexport */ getCoeffsBezBez),
+  zs: () => (/* reexport */ getControlPointBox),
+  D: () => (/* reexport */ getCubicSpeeds),
+  cQ: () => (/* reexport */ getCurvatureExtrema),
+  PO: () => (/* reexport */ getCurvatureExtremaDd),
+  c: () => (/* reexport */ getCurvatureExtremaE),
+  Fx: () => (/* reexport */ getEndpointIntersections),
+  PZ: () => (/* reexport */ getFootPointsOnBezierCertified),
+  b0: () => (/* reexport */ getFootPointsOnBezierPolysCertified),
+  w9: () => (/* reexport */ getFootpointPoly),
+  c1: () => (/* reexport */ getFootpointPolyDd),
+  Fi: () => (/* reexport */ getFootpointPolyExact),
+  v2: () => (/* reexport */ getHodograph),
+  _z: () => (/* reexport */ getImplicitForm1),
+  xV: () => (/* reexport */ getImplicitForm1Dd),
+  Kd: () => (/* reexport */ getImplicitForm1DdWithRunningError),
+  sp: () => (/* reexport */ getImplicitForm1ErrorCounters),
+  MA: () => (/* reexport */ getImplicitForm1Exact),
+  pr: () => (/* reexport */ getImplicitForm2),
+  i2: () => (/* reexport */ getImplicitForm2Dd),
+  HL: () => (/* reexport */ getImplicitForm2DdWithRunningError),
+  AI: () => (/* reexport */ getImplicitForm2ErrorCounters),
+  LX: () => (/* reexport */ getImplicitForm2Exact),
+  q3: () => (/* reexport */ getImplicitForm3),
+  wj: () => (/* reexport */ getImplicitForm3Dd),
+  pt: () => (/* reexport */ getImplicitForm3DdWithRunningError),
+  Vh: () => (/* reexport */ getImplicitForm3ErrorCounters),
+  gt: () => (/* reexport */ getImplicitForm3Exact),
+  Qi: () => (/* reexport */ getInflections),
+  Nl: () => (/* reexport */ getInterfaceRotation),
+  mk: () => (/* reexport */ getIntervalBox),
+  I3: () => (/* reexport */ getIntervalBoxDd),
+  n: () => (/* reexport */ getTAtLength),
+  vx: () => (/* reexport */ getXBoundsTight),
+  pJ: () => (/* reexport */ getYBoundsTight),
+  OT: () => (/* reexport */ hausdorffDistance),
+  sn: () => (/* reexport */ hausdorffDistanceOneSided),
+  wN: () => (/* reexport */ intersectBoxes),
+  cp: () => (/* reexport */ isCollinear),
+  Hz: () => (/* reexport */ isCubicReallyLine),
+  gd: () => (/* reexport */ isCubicReallyQuad),
+  wE: () => (/* reexport */ isHorizontal),
+  Xn: () => (/* reexport */ isPointOnBezierExtension),
+  p0: () => (/* reexport */ isQuadObtuse),
+  NI: () => (/* reexport */ isQuadReallyLine),
+  GV: () => (/* reexport */ isReallyPoint),
+  _2: () => (/* reexport */ isSelfOverlapping),
+  Ll: () => (/* reexport */ isVertical),
+  kE: () => (/* reexport */ length_length),
+  w2: () => (/* reexport */ lineToCubic),
+  L8: () => (/* reexport */ lineToQuadratic),
+  he: () => (/* reexport */ maxAbsCoordinate),
+  mJ: () => (/* reexport */ normal),
+  d3: () => (/* reexport */ quadraticToCubic),
+  q8: () => (/* reexport */ quadraticToPolyline),
+  Ut: () => (/* reexport */ reduceOrderIfPossible),
+  S3: () => (/* reexport */ reverse),
+  Bm: () => (/* reexport */ setCubicSpeeds),
+  ZP: () => (/* reexport */ splitByCurvature),
+  xO: () => (/* reexport */ splitByCurvatureAndLength),
+  GQ: () => (/* reexport */ splitByLength),
+  Uo: () => (/* reexport */ tFromXY),
+  s6: () => (/* reexport */ tangent),
+  Cz: () => (/* reexport */ tangentAt0),
+  Vo: () => (/* reexport */ tangentAt0Exact),
+  LC: () => (/* reexport */ tangentAt1),
+  Tb: () => (/* reexport */ tangentAt1Exact),
+  x_: () => (/* reexport */ tangentExact),
+  rA: () => (/* reexport */ toCubic),
+  iq: () => (/* reexport */ toPowerBasis),
+  rQ: () => (/* reexport */ toPowerBasisDd),
+  l7: () => (/* reexport */ toPowerBasisDdWithRunningError),
+  XK: () => (/* reexport */ toPowerBasisErrorCounters),
+  K_: () => (/* reexport */ toPowerBasisExact),
+  jU: () => (/* reexport */ toPowerBasisWithRunningError),
+  iN: () => (/* reexport */ toPowerBasis_1stDerivative),
+  iv: () => (/* reexport */ toPowerBasis_1stDerivativeDd),
+  bn: () => (/* reexport */ toPowerBasis_1stDerivativeErrorCounters),
+  oh: () => (/* reexport */ toPowerBasis_1stDerivativeExact),
+  O6: () => (/* reexport */ toPowerBasis_2ndDerivative),
+  Kr: () => (/* reexport */ toPowerBasis_2ndDerivativeDd),
+  hJ: () => (/* reexport */ toPowerBasis_2ndDerivativeExact),
+  ai: () => (/* reexport */ toPowerBasis_3rdDerivative),
+  J8: () => (/* reexport */ toPowerBasis_3rdDerivativeDd),
+  _A: () => (/* reexport */ toPowerBasis_3rdDerivativeExact),
+  BB: () => (/* reexport */ to_string_toString),
+  _G: () => (/* reexport */ totalAbsoluteCurvature),
+  Ce: () => (/* reexport */ totalCurvature),
+  Cv: () => (/* reexport */ totalLength),
+  H8: () => (/* reexport */ γ),
+  Uv: () => (/* reexport */ γγ),
+  Ef: () => (/* reexport */ κ)
 });
 
 ;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/basic/two-product.js
@@ -7240,6 +7246,7 @@ const e_horner_sce = scaleExpansion;
 function eHorner(p, x) {
     let q = [0];
     for (let i = 0; i < p.length; i++) {
+        // q = p[i] + x*q;
         q = e_horner_fes(p[i], e_horner_sce(q, x));
     }
     return q;
@@ -18268,7 +18275,6 @@ const geo_clip_eps = Number.EPSILON;
 const geo_clip_u = geo_clip_eps / 2;
 const onemin = 1 - geo_clip_eps;
 const onemax = 1 + geo_clip_eps;
-const noIntersection = undefined;
 const noClip = [0, 1];
 /**
  * Performs geometric clipping of the given bezier curve and returns the new
@@ -18431,7 +18437,7 @@ function geoClip(G, dF, dMin, dMax) {
     }
     if (tMin === Number.POSITIVE_INFINITY) {
         // will have here also: `tMax === Number.NEGATIVE_INFINITY`
-        return noIntersection;
+        return undefined;
     }
     return [tMin, tMax];
 }
@@ -18808,7 +18814,6 @@ const check_intersection_in_ranges_fromToInclErrorBound = fromToInclErrorBound;
 const fromToVect = node_fromTo;
 const check_intersection_in_ranges_translate = translate;
 const check_intersection_in_ranges_toLength = toLength;
-const check_intersection_in_ranges_noIntersection = undefined;
 /**
  * the heuristic value indicating the maximum `t` parameter span allowed after
  * clipping before perpendicular fatline clipping or curve splitting is
@@ -18901,7 +18906,7 @@ function checkIntersectionInRanges(iter) {
     }
     const tRange = check_intersection_in_ranges_geoClip(G_, dF, dMin, dMax);
     const last = iter.last;
-    if (tRange === check_intersection_in_ranges_noIntersection) {
+    if (tRange === undefined) {
         return [];
     }
     let tMin = tRange[0];
@@ -18959,7 +18964,7 @@ function checkIntersectionInRanges(iter) {
             globalThis.__debug__.currentIter.fatlinePerp = getFatlineDebugInfo(FS, V, dMin_, dMax_);
         }
         const tRange = check_intersection_in_ranges_geoClip(G_, dQ_, dMin_, dMax_);
-        if (tRange === check_intersection_in_ranges_noIntersection) {
+        if (tRange === undefined) {
             return false;
         }
         const tMin_ = tRange[0];
@@ -19319,10 +19324,10 @@ const eval_de_casteljau_dd_qad = node_ddAddDouble;
  **/
 function evalDeCasteljauDd(ps, t) {
     if (t[0] === 0 && t[1] === 0) {
-        return ps[0].map(c => [c]);
+        return ps[0].map(c => [0, c]);
     }
     else if (t[0] === 0 && t[1] === 1) {
-        return ps[ps.length - 1].map(c => [c]);
+        return ps[ps.length - 1].map(c => [0, c]);
     }
     if (ps.length === 4) {
         const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
@@ -20260,13 +20265,14 @@ function toPowerBasis_2ndDerivative(ps) {
 function toPowerBasis_3rdDerivative(ps) {
     if (ps.length === 4) {
         const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
-        return [
-            6 * ((x3 - x0) + 3 * (x1 - x2)),
-            6 * ((y3 - y0) + 3 * (y1 - y2))
-        ];
+        return [[
+                6 * ((x3 - x0) + 3 * (x1 - x2))
+            ], [
+                6 * ((y3 - y0) + 3 * (y1 - y2))
+            ]];
     }
     if (ps.length <= 3) {
-        return [0, 0];
+        return [[0], [0]];
     }
     throw new Error('The given bezier curve must be of order <= 3.');
     // Side note: if x0,x1,x2,x3 <= X (for some X) and t is an element of [0,1], 
@@ -20316,12 +20322,18 @@ function toPowerBasis_1stDerivativeDd(ps) {
 function toPowerBasis3_1stDerivativeDd(ps) {
     const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
     return [[
+            // 3*((x3 - x0) + 3*(x1 - x2)),
             to_power_basis_1st_derivative_dd_qmd(3, to_power_basis_1st_derivative_dd_qaq(to_power_basis_1st_derivative_dd_td(x3, x0), to_power_basis_1st_derivative_dd_qmd(3, to_power_basis_1st_derivative_dd_td(x1, x2)))),
+            // 6*((x2 + x0) - 2*x1),
             to_power_basis_1st_derivative_dd_qmd(6, to_power_basis_1st_derivative_dd_qad(to_power_basis_1st_derivative_dd_ts(x2, x0), -2 * x1)),
+            // 3*(x1 - x0)
             to_power_basis_1st_derivative_dd_qmd(3, to_power_basis_1st_derivative_dd_td(x1, x0))
         ], [
+            // 3*((y3 - y0) + 3*(y1 - y2)),
             to_power_basis_1st_derivative_dd_qmd(3, to_power_basis_1st_derivative_dd_qaq(to_power_basis_1st_derivative_dd_td(y3, y0), to_power_basis_1st_derivative_dd_qmd(3, to_power_basis_1st_derivative_dd_td(y1, y2)))),
+            // 6*((y2 + y0) - 2*y1),
             to_power_basis_1st_derivative_dd_qmd(6, to_power_basis_1st_derivative_dd_qad(to_power_basis_1st_derivative_dd_ts(y2, y0), -2 * y1)),
+            // 3*(y1 - y0)
             to_power_basis_1st_derivative_dd_qmd(3, to_power_basis_1st_derivative_dd_td(y1, y0))
         ]];
 }
@@ -20329,10 +20341,14 @@ function toPowerBasis3_1stDerivativeDd(ps) {
 function toPowerBasis2_1stDerivativeDd(ps) {
     const [[x0, y0], [x1, y1], [x2, y2]] = ps;
     return [[
+            // 2*((x2 + x0) - 2*x1),
             to_power_basis_1st_derivative_dd_qad(to_power_basis_1st_derivative_dd_ts(2 * x2, 2 * x0), -4 * x1),
+            // 2*(x1 - x0)
             to_power_basis_1st_derivative_dd_td(2 * x1, 2 * x0),
         ], [
+            // 2*((y2 + y0) - 2*y1),
             to_power_basis_1st_derivative_dd_qad(to_power_basis_1st_derivative_dd_ts(2 * y2, 2 * y0), -4 * y1),
+            // 2*(y1 - y0)
             to_power_basis_1st_derivative_dd_td(2 * y1, 2 * y0),
         ]];
 }
@@ -20388,7 +20404,7 @@ function toPowerBasis_2ndDerivativeDd(ps) {
             ]];
     }
     if (ps.length <= 2) {
-        return [[[0]], [[0]]];
+        return [[[0, 0]], [[0, 0]]];
     }
     throw new Error('The given bezier curve must be of order <= 3.');
 }
@@ -20417,13 +20433,14 @@ const to_power_basis_3rd_derivative_dd_qmd = node_ddMultDouble2;
 function toPowerBasis_3rdDerivativeDd(ps) {
     if (ps.length === 4) {
         const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
-        return [
-            to_power_basis_3rd_derivative_dd_qmd(6, to_power_basis_3rd_derivative_dd_qaq(to_power_basis_3rd_derivative_dd_td(x3, x0), to_power_basis_3rd_derivative_dd_qmd(3, to_power_basis_3rd_derivative_dd_td(x1, x2)))),
-            to_power_basis_3rd_derivative_dd_qmd(6, to_power_basis_3rd_derivative_dd_qaq(to_power_basis_3rd_derivative_dd_td(y3, y0), to_power_basis_3rd_derivative_dd_qmd(3, to_power_basis_3rd_derivative_dd_td(y1, y2))))
-        ];
+        return [[
+                to_power_basis_3rd_derivative_dd_qmd(6, to_power_basis_3rd_derivative_dd_qaq(to_power_basis_3rd_derivative_dd_td(x3, x0), to_power_basis_3rd_derivative_dd_qmd(3, to_power_basis_3rd_derivative_dd_td(x1, x2))))
+            ], [
+                to_power_basis_3rd_derivative_dd_qmd(6, to_power_basis_3rd_derivative_dd_qaq(to_power_basis_3rd_derivative_dd_td(y3, y0), to_power_basis_3rd_derivative_dd_qmd(3, to_power_basis_3rd_derivative_dd_td(y1, y2))))
+            ]];
     }
     if (ps.length <= 3) {
-        return [[0, 0], [0, 0]];
+        return [[[0, 0]], [[0, 0]]];
     }
     throw new Error('The given bezier curve must be of order <= 3.');
     // Side note: if x0,x1,x2,x3 <= X (for some X) and t is an element of [0,1], 
@@ -20889,6 +20906,97 @@ function curvature(ps, t) {
  * @doc
  */
 const κ = curvature;
+
+
+;// CONCATENATED MODULE: ./src/local-properties-at-t/e-curvature.ts
+
+
+
+
+/**
+ * Returns the curvature `κ` of the given linear, quadratic or cubic bezier
+ * curve at a specific given parameter value `t`.
+ *
+ * * returns `Number.NaN` at a cusp - this can be tested for with `Number.isNaN`
+ *
+ * @param ps an order 1,2 or 3 bezier curve, e.g. `[[[0],[0]],[[1],[1]],[[2],[1]],[[2],[0]]]`
+ * @param t the parameter value where the curvature should be evaluated
+ */
+function eCurvature(ps, t) {
+    const [dX, dY] = toPowerBasis_1stDerivativeExact(ps);
+    const [ddX, ddY] = toPowerBasis_2ndDerivativeExact(ps);
+    const dx = eHorner(dX, t);
+    const dy = eHorner(dY, t);
+    const ddx = eHorner(ddX, t);
+    const ddy = eHorner(ddY, t);
+    const a = e_compress_eCompress(eDiff(eMult(dx, ddy), eMult(dy, ddx)));
+    const _b = e_compress_eCompress(eAdd(eMult(dx, dx), eMult(dy, dy)));
+    const __b = eMult(_b, eMult(_b, _b));
+    const b = Math.sqrt(__b[__b.length - 1]);
+    const a_ = a[a.length - 1];
+    return a_ / b;
+}
+
+
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double-double/dd-horner.js
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const dd_horner_qaq = node_ddAddDd;
+const dd_horner_qmd = node_ddMultDouble2;
+/**
+ * Returns the exact result (bar underflow / overflow) of evaluating a
+ * univariate polynomial using Horner's method - the result is returned as a
+ * Shewchuk expansion.
+ *
+ * @param p a polynomial with coefficients given densely as an array of
+ * Shewchuk expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
+ * represents the polynomial `5x^2 - 3x`
+ * @param x the value at which to evaluate the polynomial
+ *
+ * @doc
+ */
+function ddHorner(p, x) {
+    let q = [0, 0];
+    for (let i = 0; i < p.length; i++) {
+        // q = p[i] + x*q;
+        q = dd_horner_qaq(p[i], dd_horner_qmd(x, q));
+    }
+    return q;
+}
+ddHorner([[0, 1], [0, 1], [0, -2], [0, 3]], 0.25); //?
+
+//# sourceMappingURL=dd-horner.js.map
+;// CONCATENATED MODULE: ./src/local-properties-at-t/dd-curvature.ts
+
+
+
+
+const dd_curvature_qmq = node_ddMultDd;
+const dd_curvature_qaq = node_ddAddDd;
+const dd_curvature_qdq = node_ddDiffDd;
+/**
+ * Returns the curvature `κ` of the given linear, quadratic or cubic bezier
+ * curve at a specific given parameter value `t`.
+ *
+ * * returns `Number.NaN` at a cusp - this can be tested for with `Number.isNaN`
+ *
+ * @param ps an order 1,2 or 3 bezier curve, e.g. `[[[0],[0]],[[1],[1]],[[2],[1]],[[2],[0]]]`
+ * @param t the parameter value where the curvature should be evaluated
+ */
+function ddCurvature(ps, t) {
+    const [dX, dY] = toPowerBasis_1stDerivativeDd(ps);
+    const [ddX, ddY] = toPowerBasis_2ndDerivativeDd(ps);
+    const dx = ddHorner(dX, t);
+    const dy = ddHorner(dY, t);
+    const ddx = ddHorner(ddX, t);
+    const ddy = ddHorner(ddY, t);
+    const a = dd_curvature_qdq(dd_curvature_qmq(dx, ddy), dd_curvature_qmq(dy, ddx));
+    const _b = dd_curvature_qaq(dd_curvature_qmq(dx, dx), dd_curvature_qmq(dy, dy));
+    const __b = dd_curvature_qmq(_b, dd_curvature_qmq(_b, _b));
+    const b = Math.sqrt(__b[1]);
+    const a_ = a[1];
+    return a_ / b;
+}
 
 
 ;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/dot.js
@@ -21460,6 +21568,63 @@ function getIntervalBoxAtTDd(ps, t) {
 }
 
 
+;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/root-interval-to-distance-squared-interval.ts
+
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
+const root_interval_to_distance_squared_interval_estimate = eEstimate;
+const root_interval_to_distance_squared_interval_td = twoDiff;
+const emult = eMult;
+const root_interval_to_distance_squared_interval_eadd = eAdd;
+const root_interval_to_distance_squared_interval_eps = Number.EPSILON;
+/**
+ * Returns the distance interval squared given the root interval (currently
+ * ignoring multiplicity)
+ *
+ * @param box
+ * @param p
+ *
+ * @internal
+ */
+function rootIntervalToDistanceSquaredInterval(box, p) {
+    const bl = box[0];
+    const tr = box[1];
+    const minX = bl[0];
+    const minY = bl[1];
+    const maxX = tr[0];
+    const maxY = tr[1];
+    const x = p[0]; // <0>
+    const y = p[1]; // <0>
+    let minDSquared = Number.POSITIVE_INFINITY;
+    let maxDSquared = Number.NEGATIVE_INFINITY;
+    // for each corner of the interval box
+    for (const [a, b] of [[minX, minY], [minX, maxY], [maxX, minY], [maxX, maxY]]) {
+        /*
+        // distance to 1st corner of interval box - `distance² = x² + y²`
+        const dc1 = (a - x)**2 + (b - y)**2;
+        // max absolute roundoff error of `dc1`
+        // <4>dc1 <-- <4>(<3>(<1>(a - x)**2) + <3>(<1>((b - y)**2))
+        const dc1E = 4*γ1*((a + x)**2 + (b + y)**2);
+        const dc1Min = dc1 - dc1E;  // distance minus max error
+        const dc1Max = dc1 + dc1E;  // distance plus max error
+        */
+        /** distance to 1st corner of interval box - `distance² = x² + y²` */
+        const ax = root_interval_to_distance_squared_interval_td(a, x); // a - x
+        const by = root_interval_to_distance_squared_interval_td(b, y); // b - y
+        const dc1Exact = root_interval_to_distance_squared_interval_eadd(emult(ax, ax), emult(by, by)); // ax**2 + bx**2
+        const dc1 = root_interval_to_distance_squared_interval_estimate(dc1Exact);
+        const dc1Min = dc1 * (1 - root_interval_to_distance_squared_interval_eps); // distance minus max error
+        const dc1Max = dc1 * (1 + root_interval_to_distance_squared_interval_eps); // distance plus max error
+        if (dc1Min <= minDSquared) {
+            minDSquared = dc1Min;
+        }
+        if (dc1Max >= maxDSquared) {
+            maxDSquared = dc1Max;
+        }
+    }
+    return [minDSquared, maxDSquared];
+}
+
+
 ;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double-double/get-footpoint-poly-3-dd.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
@@ -21666,7 +21831,7 @@ function getFootpointPoly1Dd(ps, p) {
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const get_footpoint_poly_3_exact_td = twoDiff;
-const emult = eMult;
+const get_footpoint_poly_3_exact_emult = eMult;
 const get_footpoint_poly_3_exact_sce = scaleExpansion2;
 const get_footpoint_poly_3_exact_em2 = eMultBy2;
 const emn2 = eMultByNeg2;
@@ -21709,26 +21874,26 @@ function getFootpointPoly3Exact(ps, p) {
     const yy1 = get_footpoint_poly_3_exact_td(y1, y);
     const yy2 = get_footpoint_poly_3_exact_td(y2, y);
     const yy3 = get_footpoint_poly_3_exact_td(y3, y);
-    const x00 = emult(xx0, xx0);
-    const x01 = get_footpoint_poly_3_exact_sce(6, emult(xx0, xx1));
-    const x02 = get_footpoint_poly_3_exact_sce(6, emult(xx0, xx2));
-    const x03 = get_footpoint_poly_3_exact_em2(emult(xx0, xx3));
-    const x11 = get_footpoint_poly_3_exact_sce(9, emult(xx1, xx1));
-    const x12 = get_footpoint_poly_3_exact_sce(18, emult(xx1, xx2));
-    const x13 = get_footpoint_poly_3_exact_sce(6, emult(xx1, xx3));
-    const x22 = get_footpoint_poly_3_exact_sce(9, emult(xx2, xx2));
-    const x23 = get_footpoint_poly_3_exact_sce(6, emult(xx2, xx3));
-    const x33 = emult(xx3, xx3);
-    const y00 = emult(yy0, yy0);
-    const y01 = get_footpoint_poly_3_exact_sce(6, emult(yy0, yy1));
-    const y02 = get_footpoint_poly_3_exact_sce(6, emult(yy0, yy2));
-    const y03 = get_footpoint_poly_3_exact_em2(emult(yy0, yy3));
-    const y11 = get_footpoint_poly_3_exact_sce(9, emult(yy1, yy1));
-    const y12 = get_footpoint_poly_3_exact_sce(18, emult(yy1, yy2));
-    const y13 = get_footpoint_poly_3_exact_sce(6, emult(yy1, yy3));
-    const y22 = get_footpoint_poly_3_exact_sce(9, emult(yy2, yy2));
-    const y23 = get_footpoint_poly_3_exact_sce(6, emult(yy2, yy3));
-    const y33 = emult(yy3, yy3);
+    const x00 = get_footpoint_poly_3_exact_emult(xx0, xx0);
+    const x01 = get_footpoint_poly_3_exact_sce(6, get_footpoint_poly_3_exact_emult(xx0, xx1));
+    const x02 = get_footpoint_poly_3_exact_sce(6, get_footpoint_poly_3_exact_emult(xx0, xx2));
+    const x03 = get_footpoint_poly_3_exact_em2(get_footpoint_poly_3_exact_emult(xx0, xx3));
+    const x11 = get_footpoint_poly_3_exact_sce(9, get_footpoint_poly_3_exact_emult(xx1, xx1));
+    const x12 = get_footpoint_poly_3_exact_sce(18, get_footpoint_poly_3_exact_emult(xx1, xx2));
+    const x13 = get_footpoint_poly_3_exact_sce(6, get_footpoint_poly_3_exact_emult(xx1, xx3));
+    const x22 = get_footpoint_poly_3_exact_sce(9, get_footpoint_poly_3_exact_emult(xx2, xx2));
+    const x23 = get_footpoint_poly_3_exact_sce(6, get_footpoint_poly_3_exact_emult(xx2, xx3));
+    const x33 = get_footpoint_poly_3_exact_emult(xx3, xx3);
+    const y00 = get_footpoint_poly_3_exact_emult(yy0, yy0);
+    const y01 = get_footpoint_poly_3_exact_sce(6, get_footpoint_poly_3_exact_emult(yy0, yy1));
+    const y02 = get_footpoint_poly_3_exact_sce(6, get_footpoint_poly_3_exact_emult(yy0, yy2));
+    const y03 = get_footpoint_poly_3_exact_em2(get_footpoint_poly_3_exact_emult(yy0, yy3));
+    const y11 = get_footpoint_poly_3_exact_sce(9, get_footpoint_poly_3_exact_emult(yy1, yy1));
+    const y12 = get_footpoint_poly_3_exact_sce(18, get_footpoint_poly_3_exact_emult(yy1, yy2));
+    const y13 = get_footpoint_poly_3_exact_sce(6, get_footpoint_poly_3_exact_emult(yy1, yy3));
+    const y22 = get_footpoint_poly_3_exact_sce(9, get_footpoint_poly_3_exact_emult(yy2, yy2));
+    const y23 = get_footpoint_poly_3_exact_sce(6, get_footpoint_poly_3_exact_emult(yy2, yy3));
+    const y33 = get_footpoint_poly_3_exact_emult(yy3, yy3);
     const q1 = get_footpoint_poly_3_exact_eadd(x13, x22);
     const q2 = get_footpoint_poly_3_exact_eadd(x03, x12);
     const q3 = get_footpoint_poly_3_exact_eadd(x02, x11);
@@ -22189,29 +22354,82 @@ function getClosestOnBezier1FromPointErrorCounters(ps, p) {
 }
 
 
+;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-foot-points-polys-on-bezier-certified.ts
+
+
+
+
+
+
+
+
+
+
+const γγ6 = γγ(6);
+/**
+ * Returns the footpoint(s) (and parameter `t` value(s)) on the
+ * given bezier curve to the given point (with `t ∈ [0,1]`).
+ *
+ * * guaranteed accurate to within `4*Number.EPSILON` in the returned `t`
+ * value(s)
+ * * the returned point(s) are objects with the following properties:
+ *     * `p`: the best estimate point on the bezier curve (calculated from the root interval `ri`)
+ *     * `t`: the best estimate `t` parameter value (calculated from the root interval `ri`)
+ *     * `d`: the best estimate closest distance from the point to the bezier curve (calculated from the root interval `ri`)
+ *     * `ri`: a root interval guaranteed to contain the actual `t` value
+ *     * `box`: a small box guaranteed to contain the relevant point on the bezier curve
+ *     * `dSquaredI`: a small squared distance interval guaranteed to contain the actual distance squared
+ *        between the point and the bezier curve
+ *
+ * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param p a point, e.g. `[1,2]`
+ *
+ * @doc
+ */
+function getFootPointsOnBezierPolysCertified(ps, p) {
+    const order = ps.length - 1;
+    if (order === 3) {
+        return {
+            polyDd: getFootpointPoly3Dd(ps, p),
+            polyE: getClosestOnBezier3FromPointErrorCounters(ps, p).map(e => 10 * γγ6 * e),
+            getPolyExact: () => getFootpointPoly3Exact(ps, p)
+        };
+    }
+    else if (order === 2) {
+        return {
+            polyDd: getFootpointPoly2Dd(ps, p),
+            polyE: getClosestOnBezier2FromPointErrorCounters(ps, p).map(e => 8 * γγ6 * e),
+            getPolyExact: () => getFootpointPoly2Exact(ps, p)
+        };
+    }
+    else if (order === 1) {
+        return {
+            polyDd: getFootpointPoly1Dd(ps, p),
+            polyE: getClosestOnBezier1FromPointErrorCounters(ps, p).map(e => 6 * γγ6 * e),
+            getPolyExact: () => getFootpointPoly1Exact(ps, p)
+        };
+    }
+    else if (order === 0) {
+        return {
+            polyDd: [[0, 1]],
+            polyE: [0],
+            getPolyExact: () => [[1]]
+        };
+    }
+    else {
+        throw new Error('The given bezier curve must be of order <= 3');
+    }
+}
+
+
 ;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/closest-point-on-bezier-certified.ts
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const closest_point_on_bezier_certified_estimate = eEstimate;
-const closest_point_on_bezier_certified_td = twoDiff;
-const closest_point_on_bezier_certified_emult = eMult;
-const closest_point_on_bezier_certified_eadd = eAdd;
-const closest_point_on_bezier_certified_eps = Number.EPSILON;
 const { sqrt: closest_point_on_bezier_certified_sqrt } = Math;
-const γγ6 = γγ(6);
 /**
  * Returns the closest point(s) (and parameter `t` value(s)) on the given
  * bezier curve to the given point (with `t ∈ [0,1]`).
@@ -22235,30 +22453,13 @@ const γγ6 = γγ(6);
  *
  * @doc
  */
-function closestPointOnBezierCertified(ps, p) {
-    const order = ps.length - 1;
-    let ris;
-    if (order === 3) {
-        // keep TypeScript happy; `ris` cannot be `undefined` here
-        ris = allRootsCertified(getFootpointPoly3Dd(ps, p), 0, 1, getClosestOnBezier3FromPointErrorCounters(ps, p).map(e => 10 * γγ6 * e), () => getFootpointPoly3Exact(ps, p));
-    }
-    else if (order === 2) {
-        // keep TypeScript happy; `ris` cannot be `undefined` here
-        ris = allRootsCertified(getFootpointPoly2Dd(ps, p), 0, 1, getClosestOnBezier2FromPointErrorCounters(ps, p).map(e => 8 * γγ6 * e), () => getFootpointPoly2Exact(ps, p));
-    }
-    else if (order === 1) {
-        // keep TypeScript happy; `ris` cannot be `undefined` here
-        ris = allRootsCertified(getFootpointPoly1Dd(ps, p), 0, 1, getClosestOnBezier1FromPointErrorCounters(ps, p).map(e => 6 * γγ6 * e), () => getFootpointPoly1Exact(ps, p));
-    }
-    else if (order === 0) {
-        return [];
-    }
-    else {
-        throw new Error('The given bezier curve must be of order <= 3');
-    }
-    ris.push({ tS: 0, tE: 0, multiplicity: 1 });
-    ris.push({ tS: 1, tE: 1, multiplicity: 1 });
-    const infos = ris.map(ri => {
+function closestPointOnBezierCertified(ps, p, lb = 0, ub = 1) {
+    // const ris = getFootPointsOnBezierCertified(ps,p);
+    const { polyDd, polyE, getPolyExact } = getFootPointsOnBezierPolysCertified(ps, p);
+    const ris = allRootsCertified(polyDd, lb, ub, polyE, getPolyExact);
+    ris.push({ tS: lb, tE: lb, multiplicity: 1 });
+    ris.push({ tS: ub, tE: ub, multiplicity: 1 });
+    const infos = ris.map((ri) => {
         const box = getIntervalBox(ps, [ri.tS, ri.tE]);
         const dSquaredI = rootIntervalToDistanceSquaredInterval(box, p);
         return {
@@ -22287,103 +22488,63 @@ function closestPointOnBezierCertified(ps, p) {
     }
     return closestPointInfos;
 }
-/**
- * Returns the distance interval squared given the root interval (currently
- * ignoring multiplicity)
- *
- * @param box
- * @param p
- *
- * @internal
- */
-function rootIntervalToDistanceSquaredInterval(box, p) {
-    const bl = box[0];
-    const tr = box[1];
-    const minX = bl[0];
-    const minY = bl[1];
-    const maxX = tr[0];
-    const maxY = tr[1];
-    const x = p[0]; // <0>
-    const y = p[1]; // <0>
-    let minDSquared = Number.POSITIVE_INFINITY;
-    let maxDSquared = Number.NEGATIVE_INFINITY;
-    // for each corner of the interval box
-    for (const [a, b] of [[minX, minY], [minX, maxY], [maxX, minY], [maxX, maxY]]) {
-        /*
-        // distance to 1st corner of interval box - `distance² = x² + y²`
-        const dc1 = (a - x)**2 + (b - y)**2;
-        // max absolute roundoff error of `dc1`
-        // <4>dc1 <-- <4>(<3>(<1>(a - x)**2) + <3>(<1>((b - y)**2))
-        const dc1E = 4*γ1*((a + x)**2 + (b + y)**2);
-        const dc1Min = dc1 - dc1E;  // distance minus max error
-        const dc1Max = dc1 + dc1E;  // distance plus max error
-        */
-        /** distance to 1st corner of interval box - `distance² = x² + y²` */
-        const ax = closest_point_on_bezier_certified_td(a, x);
-        const by = closest_point_on_bezier_certified_td(b, y);
-        const dc1Exact = closest_point_on_bezier_certified_eadd(closest_point_on_bezier_certified_emult(ax, ax), closest_point_on_bezier_certified_emult(by, by));
-        const dc1 = closest_point_on_bezier_certified_estimate(dc1Exact);
-        const dc1Min = dc1 * (1 - closest_point_on_bezier_certified_eps); // distance minus max error
-        const dc1Max = dc1 * (1 + closest_point_on_bezier_certified_eps); // distance plus max error
-        if (dc1Min <= minDSquared) {
-            minDSquared = dc1Min;
-        }
-        if (dc1Max >= maxDSquared) {
-            maxDSquared = dc1Max;
-        }
-    }
-    return [minDSquared, maxDSquared];
-}
 
+
+;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-foot-points-on-bezier-certified.ts
+
+
+
+
+
+
+
+
+
+
+
+const get_foot_points_on_bezier_certified_6 = γγ(6);
 /**
- * Returns the closest point on the bezier to the given point - returns the point
- * and the t value.
+ * Returns the footpoint(s) (and parameter `t` value(s)) on the
+ * given bezier curve to the given point (with `t ∈ [0,1]`).
  *
- * * this function also acts as an excellent inversion formula.
+ * * guaranteed accurate to within `4*Number.EPSILON` in the returned `t`
+ * value(s)
+ * * the returned point(s) are objects with the following properties:
+ *     * `p`: the best estimate point on the bezier curve (calculated from the root interval `ri`)
+ *     * `t`: the best estimate `t` parameter value (calculated from the root interval `ri`)
+ *     * `d`: the best estimate closest distance from the point to the bezier curve (calculated from the root interval `ri`)
+ *     * `ri`: a root interval guaranteed to contain the actual `t` value
+ *     * `box`: a small box guaranteed to contain the relevant point on the bezier curve
+ *     * `dSquaredI`: a small squared distance interval guaranteed to contain the actual distance squared
+ *        between the point and the bezier curve
  *
- * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
+ * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param p a point, e.g. `[1,2]`
+ *
+ * @doc
  */
-/*
- function closestPointOnBezierPrecise(
-        ps: number[][],
-        p: number[]): {
-            p: number[];
-            t: number;
-        } {
-
-    const polyE = getFootpointPolyExact(ps, p);
-    const polyDd = polyE.map(eToDd);
-    const polyErr = polyE.map((c,i) => Math.abs(eEstimate(eDiff(c,polyDd[i]))));
-    function getPExact() { return polyE; }
-
-    let ts = allRootsCertified(
-        polyDd,
-        0, 1,
-        polyErr,
-        getPExact
-    ).map(mid);
-
-    ts.push(0);
-    ts.push(1);
-
-    let ps_ = ts.map(t => ({ p: evaluateExact(ps, t).map(eEstimate), t }));
-
-    // Get point with minimum distance
-    let minD = Number.POSITIVE_INFINITY;
-    let minT: { p: number[], t: number } | undefined = undefined;
-    ps_.forEach(p_ => {
-        let d = squaredDistanceBetween(p_.p, p);
-        if (d < minD) {
-            minD = d;
-            minT = p_;
-        }
-    });
-
-    return minT!;
+function getFootPointsOnBezierCertified(ps, p, lb = 0, ub = 1) {
+    const order = ps.length - 1;
+    let ris;
+    if (order === 3) {
+        ris = allRootsCertified(getFootpointPoly3Dd(ps, p), lb, ub, getClosestOnBezier3FromPointErrorCounters(ps, p).map(e => 10 * get_foot_points_on_bezier_certified_6 * e), () => getFootpointPoly3Exact(ps, p));
+    }
+    else if (order === 2) {
+        ris = allRootsCertified(getFootpointPoly2Dd(ps, p), lb, ub, getClosestOnBezier2FromPointErrorCounters(ps, p).map(e => 8 * get_foot_points_on_bezier_certified_6 * e), () => getFootpointPoly2Exact(ps, p));
+    }
+    else if (order === 1) {
+        ris = allRootsCertified(getFootpointPoly1Dd(ps, p), lb, ub, getClosestOnBezier1FromPointErrorCounters(ps, p).map(e => 6 * get_foot_points_on_bezier_certified_6 * e), () => getFootpointPoly1Exact(ps, p));
+    }
+    else if (order === 0) {
+        return [];
+    }
+    else {
+        throw new Error('The given bezier curve must be of order <= 3');
+    }
+    return ris;
 }
-*/ 
+
 
 ;// CONCATENATED MODULE: ./src/global-properties/length/control-point-lines-length.ts
 
@@ -22769,7 +22930,7 @@ function getAbsCurvatureExtremaPolys(ps) {
     // Max abs curvature at: ((x′′′y′ − x′y′′′)(x′2 + y′2) − 3(x′x′′ + y′y′′)(x′′y′ − x′y′′)) === 0
     const [[dx2, dx1, dx0], [dy2, dy1, dy0]] = toPowerBasis_1stDerivative(ps); // max bitlength increase === 5
     const [[ddx1, ddx0], [ddy1, ddy0]] = toPowerBasis_2ndDerivative(ps); // max bitlength increase === 6
-    const [dddx, dddy] = toPowerBasis_3rdDerivative(ps); // max bitlength increase === 6
+    const [[dddx], [dddy]] = toPowerBasis_3rdDerivative(ps); // max bitlength increase === 6
     // ((x′′′y′ − x′y′′′)(x′2 + y′2) − 3(x′x′′ + y′y′′)(x′′y′ − x′y′′))
     // or 
     // x′′′x′x′y′ + x′′′y′y′y′ - y′′′x′x′x′ - y′′′x′y′y′ + 
@@ -22955,6 +23116,596 @@ function getCurvatureExtremaQuadraticPoly(ps) {
         y0 * (wy - y1) - y1 * (y21 - y1);
     const d = wx * wx + wy * wy;
     return [d, -n];
+}
+
+
+;// CONCATENATED MODULE: ./node_modules/flo-poly/node/calculus/double-double/dd-differentiate.js
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
+const dd_differentiate_ddMultDouble2 = node_ddMultDouble2;
+/**
+ * Returns the result of differentiating the given polynomial (with coefficients
+ * given in double-double precision) in double-double precision.
+ *
+ * @param p a polynomial with coefficients given densely as an array of
+ * double-double precision floating point numbers from highest to lowest power,
+ * e.g. `[[5],[-3],[0]]` represents the polynomial `5x^2 - 3x`
+ *
+ * @example
+ * ```typescript
+ * ddDifferentiate([[0,5], [0,4], [0,3], [0,2], [0,1]]); //=> [[0,20], [0,12], [0,6], [0,2]]
+ * ```
+ *
+ * @doc
+ */
+function ddDifferentiate(p) {
+    const result = [];
+    const d = p.length - 1;
+    for (let i = 0; i < d; i++) {
+        result.push(dd_differentiate_ddMultDouble2((d - i), p[i]));
+    }
+    return result;
+}
+
+//# sourceMappingURL=dd-differentiate.js.map
+;// CONCATENATED MODULE: ./src/get-curvature-extrema-dd/get-abs-curvature-extrema-polys-dd.ts
+
+
+
+
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
+const get_abs_curvature_extrema_polys_dd_tp = (/* unused pure expression or super */ null && (twoProduct));
+const get_abs_curvature_extrema_polys_dd_qm2 = node_ddMultBy2;
+const get_abs_curvature_extrema_polys_dd_qm4 = node_ddMultBy4;
+const get_abs_curvature_extrema_polys_dd_qmd = node_ddMultDouble2;
+const get_abs_curvature_extrema_polys_dd_qmq = node_ddMultDd;
+const get_abs_curvature_extrema_polys_dd_qaq = node_ddAddDd;
+const get_abs_curvature_extrema_polys_dd_qdq = node_ddDiffDd;
+/**
+ * Returns the polynomials whose zeros are the `t` values of the local
+ * minima / maxima of the absolute curvature for the given bezier curve.
+ *
+ * The polynomials are in the form `p1*p2` where the zeros
+ * of `p1` are the inflection points and the zeros of `p2` are the other minima /
+ * maxima.
+ *
+ * * **precondition:** must be a `true` cubic bezier (not degenerate to line or
+ * quadratic)
+ * * see [MvG](https://math.stackexchange.com/a/1956264/130809)
+ * * **non-exact:** due to floating point roundof during calculation
+ *
+ * @param ps an order 1,2 or 3 bezier curve given as an array of its control
+ * points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ *
+ * @internal
+ */
+function getAbsCurvatureExtremaPolysDd(ps) {
+    // It is a real cubic - use the excellent answer from the description:
+    // dd(kappa^2)/dt === (x′′y′ − x′y′′)*((x′′′y′ − x′y′′′)(x′2 + y′2) − 3(x′x′′ + y′y′′)(x′′y′ − x′y′′))
+    // Inflection points at: (x′′y′ − x′y′′) === 0
+    // Max abs curvature at: ((x′′′y′ − x′y′′′)(x′2 + y′2) − 3(x′x′′ + y′y′′)(x′′y′ − x′y′′)) === 0
+    const [[dx2, dx1, dx0], [dy2, dy1, dy0]] = toPowerBasis_1stDerivativeDd(ps); // max bitlength increase === 5
+    const [[ddx1, ddx0], [ddy1, ddy0]] = toPowerBasis_2ndDerivativeDd(ps); // max bitlength increase === 6
+    const [[dddx], [dddy]] = toPowerBasis_3rdDerivativeDd(ps); // max bitlength increase === 6
+    // ((x′′′y′ − x′y′′′)(x′2 + y′2) − 3(x′x′′ + y′y′′)(x′′y′ − x′y′′))
+    // or 
+    // x′′′x′x′y′ + x′′′y′y′y′ - y′′′x′x′x′ - y′′′x′y′y′ + 
+    // 3(x′′y′′x′x′ - x′′x′′x′y′ - x′′y′′y′y′ + y′′y′′x′y′)
+    // The above line becomes
+    // ((dddx*dy(t) − dx(t)*dddy)(dx(t)dx(t) + dy(t)dy(t)) − 3(dx(t)ddx(t) + dy(t)ddy(t))(ddx(t)dy(t) − dx(t)ddy(t)))
+    // or 
+    // dddx*dxt**2*dyt + dddx*dyt**3 - dddy*dxt**3 - dddy*dxt*dyt**2 - 
+    // 3*ddxt**2*dxt*dyt + 3*ddxt*ddyt*dxt**2 - 3*ddxt*ddyt*dyt**2 + 3*ddyt**2*dxt*dyt
+    // which becomes: (after substituting e.g. dy(t) = dy2*t^2 + dy1*t + dy0, etc. using Python and
+    // then expanding and collecting terms)
+    const dddx_dy1 = get_abs_curvature_extrema_polys_dd_qmq(dddx, dy1);
+    const dddy_dx1 = get_abs_curvature_extrema_polys_dd_qmq(dddy, dx1);
+    const ddx0_dy0 = get_abs_curvature_extrema_polys_dd_qmq(ddx0, dy0);
+    const ddx0_dy1 = get_abs_curvature_extrema_polys_dd_qmq(ddx0, dy1);
+    const ddy1_ddy1 = get_abs_curvature_extrema_polys_dd_qmq(ddy1, ddy1);
+    const ddx1_dy0 = get_abs_curvature_extrema_polys_dd_qmq(ddx1, dy0);
+    const ddy0_dx0 = get_abs_curvature_extrema_polys_dd_qmq(ddy0, dx0);
+    const ddy0_dx1 = get_abs_curvature_extrema_polys_dd_qmq(ddy0, dx1);
+    const ddy1_dx0 = get_abs_curvature_extrema_polys_dd_qmq(ddy1, dx0);
+    const dx0_dx1 = get_abs_curvature_extrema_polys_dd_qmq(dx0, dx1);
+    const dx0_dx2 = get_abs_curvature_extrema_polys_dd_qmq(dx0, dx2);
+    const dx0_dy2 = get_abs_curvature_extrema_polys_dd_qmq(dx0, dy2);
+    const dx1_dx1 = get_abs_curvature_extrema_polys_dd_qmq(dx1, dx1);
+    const dx1_dx2 = get_abs_curvature_extrema_polys_dd_qmq(dx1, dx2);
+    const dx1_dy1 = get_abs_curvature_extrema_polys_dd_qmq(dx1, dy1);
+    const dx2_dy0 = get_abs_curvature_extrema_polys_dd_qmq(dx2, dy0);
+    const dx2_dy2 = get_abs_curvature_extrema_polys_dd_qmq(dx2, dy2);
+    const dx2_dx2 = get_abs_curvature_extrema_polys_dd_qmq(dx2, dx2);
+    const dy0_dy1 = get_abs_curvature_extrema_polys_dd_qmq(dy0, dy1);
+    const dy0_dy2 = get_abs_curvature_extrema_polys_dd_qmq(dy0, dy2);
+    const dy1_dy1 = get_abs_curvature_extrema_polys_dd_qmq(dy1, dy1);
+    const dy1_dy2 = get_abs_curvature_extrema_polys_dd_qmq(dy1, dy2);
+    const dy2_dy2 = get_abs_curvature_extrema_polys_dd_qmq(dy2, dy2);
+    const ss = get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qmq(dddx, dy0), get_abs_curvature_extrema_polys_dd_qmq(dddy, dx0));
+    const uu = get_abs_curvature_extrema_polys_dd_qdq(dddx_dy1, dddy_dx1);
+    const vv = get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(ddx0, dx0), get_abs_curvature_extrema_polys_dd_qmq(ddy0, dy0));
+    const ww = get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(ddx0, dx1), get_abs_curvature_extrema_polys_dd_qmq(ddx1, dx0)), get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(ddy0, dy1), get_abs_curvature_extrema_polys_dd_qmq(ddy1, dy0)));
+    const xx = get_abs_curvature_extrema_polys_dd_qdq(ddx0_dy0, ddy0_dx0);
+    const yy = get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qaq(ddx0_dy1, ddx1_dy0), get_abs_curvature_extrema_polys_dd_qaq(ddy0_dx1, ddy1_dx0));
+    const qq = get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(dx0, dx0), get_abs_curvature_extrema_polys_dd_qmq(dy0, dy0));
+    const rr = get_abs_curvature_extrema_polys_dd_qaq(dx0_dx1, dy0_dy1);
+    // t6 cancels! see https://math.stackexchange.com/a/1956264/130809
+    const z1 = get_abs_curvature_extrema_polys_dd_qaq(dx1_dy1, dx2_dy0);
+    const z2 = get_abs_curvature_extrema_polys_dd_qaq(dy0_dy2, dy1_dy1);
+    const z3 = get_abs_curvature_extrema_polys_dd_qaq(dx0_dx2, dx1_dx1);
+    const z4 = get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(dx1, dy2), get_abs_curvature_extrema_polys_dd_qmq(dx2, dy1));
+    const z5 = get_abs_curvature_extrema_polys_dd_qdq(dx2_dx2, dy2_dy2);
+    const z6 = get_abs_curvature_extrema_polys_dd_qdq(dx1_dx2, dy1_dy2);
+    const z7 = get_abs_curvature_extrema_polys_dd_qaq(dx0_dy2, dx1_dy1);
+    const z8 = get_abs_curvature_extrema_polys_dd_qdq(dx0_dx1, dy0_dy1);
+    const z9 = get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(dx0, dy1), get_abs_curvature_extrema_polys_dd_qmq(dx1, dy0));
+    const x1 = get_abs_curvature_extrema_polys_dd_qaq(dy0_dy2, z2);
+    const x2 = get_abs_curvature_extrema_polys_dd_qaq(dx0_dx2, z3);
+    const x3 = get_abs_curvature_extrema_polys_dd_qaq(dx0_dy2, z1);
+    const x4 = get_abs_curvature_extrema_polys_dd_qaq(dx1_dy1, z1);
+    const x5 = get_abs_curvature_extrema_polys_dd_qdq(x2, x1);
+    const x6 = get_abs_curvature_extrema_polys_dd_qaq(z1, dx2_dy0);
+    const x7 = get_abs_curvature_extrema_polys_dd_qaq(z7, dx2_dy0);
+    const x8 = get_abs_curvature_extrema_polys_dd_qaq(node_ddMultBy2(ddy0_dx1), ddy1_dx0);
+    // const t5 = 
+    //     dx2_dx2*(dddx_dy1 - 3*dddy_dx1) + 
+    //     dy2_dy2*(3*dddx_dy1 - dddy_dx1) + 
+    //     2*((dx2_dy2)*((dddx*dx1 - dddy*dy1) + 3*(ddy0*ddy1 - ddx0*ddx1)) + 3*ddx1*ddy1*z6) + 
+    //     3*(z4*(ddy1_ddy1 - ddx1*ddx1) + z5*(ddx0*ddy1 + ddy0*ddx1));
+    const a1 = get_abs_curvature_extrema_polys_dd_qmq(dx2_dx2, (get_abs_curvature_extrema_polys_dd_qdq(dddx_dy1, get_abs_curvature_extrema_polys_dd_qmd(3, dddy_dx1))));
+    const a2 = get_abs_curvature_extrema_polys_dd_qmq(dy2_dy2, (get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qmd(3, dddx_dy1), dddy_dx1)));
+    const a3 = node_ddMultBy2(get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(dx2_dy2, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qmq(dddx, dx1), get_abs_curvature_extrema_polys_dd_qmq(dddy, dy1)), get_abs_curvature_extrema_polys_dd_qmd(3, get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qmq(ddy0, ddy1), get_abs_curvature_extrema_polys_dd_qmq(ddx0, ddx1)))))), get_abs_curvature_extrema_polys_dd_qmd(3, get_abs_curvature_extrema_polys_dd_qmq(get_abs_curvature_extrema_polys_dd_qmq(ddx1, ddy1), z6))));
+    const a4 = get_abs_curvature_extrema_polys_dd_qmd(3, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(z4, (get_abs_curvature_extrema_polys_dd_qdq(ddy1_ddy1, get_abs_curvature_extrema_polys_dd_qmq(ddx1, ddx1)))), get_abs_curvature_extrema_polys_dd_qmq(z5, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(ddx0, ddy1), get_abs_curvature_extrema_polys_dd_qmq(ddy0, ddx1)))))));
+    const t5 = get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qaq(a1, a2), get_abs_curvature_extrema_polys_dd_qaq(a3, a4));
+    // const t4 = 
+    //     dddx*(dy2*(x2 + 3*z2) + dx2*x4) -
+    //     dddy*(dx0*(3*dx2_dx2 + dy2_dy2) + dx1*(3*dx1_dx2 + 2*dy1_dy2) + dx2*x1) + 
+    //     3*(
+    //         ddx0*((ddy0*z5 - ddx0*dx2_dy2) + 2*(ddy1*z6 - ddx1*z4)) + 
+    //         ddx1*(2*ddy0*z6 + ddy1*(2*(dx0_dx2 - dy0_dy2) + (dx1_dx1 - dy1_dy1)) - ddx1*x7) + 
+    //         ddy0*(ddy0*dx2_dy2 + 2*ddy1*z4) + 
+    //         ddy1_ddy1*x3
+    //     );
+    const b1 = get_abs_curvature_extrema_polys_dd_qmq(dddx, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(dy2, (get_abs_curvature_extrema_polys_dd_qaq(x2, get_abs_curvature_extrema_polys_dd_qmd(3, z2)))), get_abs_curvature_extrema_polys_dd_qmq(dx2, x4))));
+    const b2 = get_abs_curvature_extrema_polys_dd_qmq(dddy, get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(dx0, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmd(3, dx2_dx2), dy2_dy2))), get_abs_curvature_extrema_polys_dd_qmq(dx1, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmd(3, dx1_dx2), get_abs_curvature_extrema_polys_dd_qm2(dy1_dy2))))), get_abs_curvature_extrema_polys_dd_qmq(dx2, x1)));
+    const b3 = get_abs_curvature_extrema_polys_dd_qmd(3, get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(ddx0, (get_abs_curvature_extrema_polys_dd_qaq((get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qmq(ddy0, z5), get_abs_curvature_extrema_polys_dd_qmq(ddx0, dx2_dy2))), get_abs_curvature_extrema_polys_dd_qm2((get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qmq(ddy1, z6), get_abs_curvature_extrema_polys_dd_qmq(ddx1, z4))))))), get_abs_curvature_extrema_polys_dd_qmq(ddx1, (get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qm2(get_abs_curvature_extrema_polys_dd_qmq(ddy0, z6)), get_abs_curvature_extrema_polys_dd_qmq(ddy1, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qm2(get_abs_curvature_extrema_polys_dd_qdq(dx0_dx2, dy0_dy2)), (get_abs_curvature_extrema_polys_dd_qdq(dx1_dx1, dy1_dy1)))))), get_abs_curvature_extrema_polys_dd_qmq(ddx1, x7))))), get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(ddy0, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(ddy0, dx2_dy2), get_abs_curvature_extrema_polys_dd_qm2(get_abs_curvature_extrema_polys_dd_qmq(ddy1, z4))))), get_abs_curvature_extrema_polys_dd_qmq(ddy1_ddy1, x3))));
+    const t4 = get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qdq(b1, b2), b3);
+    // const t3 =
+    //     dddx*(2*dx0*z4 + dx1*x6 + dy1*(4*dy0_dy2 + x1)) - 
+    //     dddy*(2*dx0*(3*dx1_dx2 + dy1_dy2) + dx1*(dx1_dx1 + 2*dy0_dy2) + dy1*x6) + 
+    //     3*(
+    //         ddx0*(2*(ddy0*z6 - ddx1*x7) + ddy1*x5 - ddx0*z4) + 
+    //         ddx1*(2*ddy1*z8 - ddx1*z9) +
+    //         ddy0*(ddy0*z4 + 2*ddy1*x3 + ddx1*x5) + 
+    //         ddy1_ddy1*z9
+    //     );
+    const c1 = get_abs_curvature_extrema_polys_dd_qmq(dddx, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qm2(get_abs_curvature_extrema_polys_dd_qmq(dx0, z4)), get_abs_curvature_extrema_polys_dd_qmq(dx1, x6)), get_abs_curvature_extrema_polys_dd_qmq(dy1, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qm4(dy0_dy2), x1))))));
+    const c2 = get_abs_curvature_extrema_polys_dd_qmq(dddy, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qm2(get_abs_curvature_extrema_polys_dd_qmq(dx0, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmd(3, dx1_dx2), dy1_dy2)))), get_abs_curvature_extrema_polys_dd_qmq(dx1, (get_abs_curvature_extrema_polys_dd_qaq(dx1_dx1, get_abs_curvature_extrema_polys_dd_qm2(dy0_dy2))))), get_abs_curvature_extrema_polys_dd_qmq(dy1, x6))));
+    const c3 = get_abs_curvature_extrema_polys_dd_qmd(3, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(ddx0, (get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qm2(get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qmq(ddy0, z6), get_abs_curvature_extrema_polys_dd_qmq(ddx1, x7))), get_abs_curvature_extrema_polys_dd_qmq(ddy1, x5)), get_abs_curvature_extrema_polys_dd_qmq(ddx0, z4)))), get_abs_curvature_extrema_polys_dd_qmq(ddx1, (get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qm2(get_abs_curvature_extrema_polys_dd_qmq(ddy1, z8)), get_abs_curvature_extrema_polys_dd_qmq(ddx1, z9))))), get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(ddy0, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(ddy0, z4), get_abs_curvature_extrema_polys_dd_qm2(get_abs_curvature_extrema_polys_dd_qmq(ddy1, x3))), get_abs_curvature_extrema_polys_dd_qmq(ddx1, x5)))), get_abs_curvature_extrema_polys_dd_qmq(ddy1_ddy1, z9)))));
+    const t3 = get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qdq(c1, c2), c3);
+    // const t2 = 
+    //     dddx*(dx0*(dx0_dy2 + 2*z1) + dy0*(dx1_dx1 + 3*z2)) -
+    //     dddy*(dx0*(3*z3 + x1) + dy0*x4) + 
+    //     3*(
+    //         ddx0*(ddy0*x5 - ddx0*x3 + 2*(ddy1*z8 - ddx1*z9)) + 
+    //         ddx1*(dx0*(x8 - ddx1*dy0) - dy0*(2*ddy0*dy1 + ddy1*dy0)) + 
+    //         ddy0*(ddy0*z1 + dx0*(2*ddy1*dy1 + ddy0*dy2)) + 
+    //         ddy1*dy0*x8
+    //     );
+    const d1 = get_abs_curvature_extrema_polys_dd_qmq(dddx, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(dx0, (get_abs_curvature_extrema_polys_dd_qaq(dx0_dy2, get_abs_curvature_extrema_polys_dd_qm2(z1)))), get_abs_curvature_extrema_polys_dd_qmq(dy0, (get_abs_curvature_extrema_polys_dd_qaq(dx1_dx1, get_abs_curvature_extrema_polys_dd_qmd(3, z2)))))));
+    const d2 = get_abs_curvature_extrema_polys_dd_qmq(dddy, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(dx0, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmd(3, z3), x1))), get_abs_curvature_extrema_polys_dd_qmq(dy0, x4))));
+    const d3 = get_abs_curvature_extrema_polys_dd_qmd(3, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(ddx0, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qmq(ddy0, x5), get_abs_curvature_extrema_polys_dd_qmq(ddx0, x3)), get_abs_curvature_extrema_polys_dd_qm2(get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qmq(ddy1, z8), get_abs_curvature_extrema_polys_dd_qmq(ddx1, z9)))))), get_abs_curvature_extrema_polys_dd_qmq(ddx1, (get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qmq(dx0, (get_abs_curvature_extrema_polys_dd_qdq(x8, get_abs_curvature_extrema_polys_dd_qmq(ddx1, dy0)))), get_abs_curvature_extrema_polys_dd_qmq(dy0, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qm2(get_abs_curvature_extrema_polys_dd_qmq(ddy0, dy1)), get_abs_curvature_extrema_polys_dd_qmq(ddy1, dy0)))))))), get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(ddy0, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(ddy0, z1), get_abs_curvature_extrema_polys_dd_qmq(dx0, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qm2(get_abs_curvature_extrema_polys_dd_qmq(ddy1, dy1)), get_abs_curvature_extrema_polys_dd_qmq(ddy0, dy2))))))), get_abs_curvature_extrema_polys_dd_qmq(ddy1, get_abs_curvature_extrema_polys_dd_qmq(dy0, x8))))));
+    const t2 = get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qdq(d1, d2), d3);
+    // const t1 = (qq*uu + 2*rr*ss) - 3*(vv*yy + ww*xx)
+    const t1 = get_abs_curvature_extrema_polys_dd_qdq((get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(qq, uu), get_abs_curvature_extrema_polys_dd_qm2(get_abs_curvature_extrema_polys_dd_qmq(rr, ss)))), get_abs_curvature_extrema_polys_dd_qmd(3, get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(vv, yy), get_abs_curvature_extrema_polys_dd_qmq(ww, xx))));
+    // const t0 = ss*qq - 3*vv*xx;
+    const t0 = get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qmq(ss, qq), get_abs_curvature_extrema_polys_dd_qmd(3, get_abs_curvature_extrema_polys_dd_qmq(vv, xx)));
+    const r3 = get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qmq(ddx1, dy2), get_abs_curvature_extrema_polys_dd_qmq(ddy1, dx2));
+    const r2 = get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(ddx0, dy2), get_abs_curvature_extrema_polys_dd_qmq(ddx1, dy1)), get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(ddy0, dx2), get_abs_curvature_extrema_polys_dd_qmq(ddy1, dx1)));
+    const r1 = get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qaq(ddx0_dy1, ddx1_dy0), get_abs_curvature_extrema_polys_dd_qaq(ddy0_dx1, ddy1_dx0));
+    const r0 = get_abs_curvature_extrema_polys_dd_qdq(ddx0_dy0, ddy0_dx0);
+    return {
+        inflectionPoly: [r3, r2, r1, r0],
+        otherExtremaPoly: [t5, t4, t3, t2, t1, t0]
+    };
+}
+
+
+;// CONCATENATED MODULE: ./src/get-curvature-extrema-dd/get-curvature-extrema-quadratic-poly-dd.ts
+
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
+const get_curvature_extrema_quadratic_poly_dd_td = node_twoDiff;
+const get_curvature_extrema_quadratic_poly_dd_qmd = node_ddMultDouble2;
+const get_curvature_extrema_quadratic_poly_dd_qmq = node_ddMultDd;
+const get_curvature_extrema_quadratic_poly_dd_qaq = node_ddAddDd;
+const get_curvature_extrema_quadratic_poly_dd_qdq = node_ddDiffDd;
+/**
+ * Returns the polynomial whose zero is the t value of maximum absolute
+ * curvature for the given *quadratic* bezier curve.
+ *
+ * * **precondition:** the given parabola is not degenerate to a line
+ * * **non-exact:** there is floating point roundof during calculation
+ * * see e.g. [math.stackexchange](https://math.stackexchange.com/a/2971112)'s
+ * answer by [KeithWM](https://math.stackexchange.com/a/2971112/130809)
+ *
+ * @param ps an order 2 bezier curve given as an array of control points,
+ * e.g. `[[0,0],[1,1],[2,1]]`
+ *
+ * @internal
+ */
+function getCurvatureExtremaQuadraticPolyDd(ps) {
+    // Find the point of max curvature (of the parabola)
+    // calculate t*
+    const [[x0, y0], [x1, y1], [x2, y2]] = ps;
+    const x10 = get_curvature_extrema_quadratic_poly_dd_td(x1, x0);
+    const x21 = get_curvature_extrema_quadratic_poly_dd_td(x2, x1);
+    const wx = get_curvature_extrema_quadratic_poly_dd_qdq(x21, x10);
+    const y10 = get_curvature_extrema_quadratic_poly_dd_td(y1, y0);
+    const y21 = get_curvature_extrema_quadratic_poly_dd_td(y2, y1);
+    const wy = get_curvature_extrema_quadratic_poly_dd_qdq(y21, y10);
+    const n = get_curvature_extrema_quadratic_poly_dd_qaq(get_curvature_extrema_quadratic_poly_dd_qdq(get_curvature_extrema_quadratic_poly_dd_qmd(x0, (get_curvature_extrema_quadratic_poly_dd_qdq(wx, [0, -x1]))), get_curvature_extrema_quadratic_poly_dd_qmd(x1, (get_curvature_extrema_quadratic_poly_dd_qdq(x21, [0, -x1])))), get_curvature_extrema_quadratic_poly_dd_qdq(get_curvature_extrema_quadratic_poly_dd_qmd(y0, (get_curvature_extrema_quadratic_poly_dd_qdq(wy, [0, -y1]))), get_curvature_extrema_quadratic_poly_dd_qmd(y1, (get_curvature_extrema_quadratic_poly_dd_qdq(y21, [0, -y1])))));
+    const d = get_curvature_extrema_quadratic_poly_dd_qaq(get_curvature_extrema_quadratic_poly_dd_qmq(wx, wx), get_curvature_extrema_quadratic_poly_dd_qmq(wy, wy));
+    return [d, node_ddNegativeOf(n)];
+}
+
+
+;// CONCATENATED MODULE: ./src/get-curvature-extrema-dd/get-curvature-extrema-dd.ts
+
+
+
+
+
+
+
+/**
+ * Returns the parameter `t` values (in `[0,1]`) of local minimum / maximum
+ * absolute curvature for the given bezier curve.
+ *
+ * If there are an infinite number of such `t` values (such as is the case for a
+ * line), an empty array is returned.
+ *
+ * * see [MvG](https://math.stackexchange.com/a/1956264/130809)'s excellent
+ * answer on math.stackexchange
+ *
+ * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ *
+ * @doc mdx
+ */
+function getCurvatureExtremaDd(ps) {
+    if (isCollinear(ps)) {
+        return { minima: [], maxima: [], inflections: [] };
+    }
+    if (ps.length === 4 && isCubicReallyQuad(ps)) {
+        ps = cubicToQuadratic(ps);
+    }
+    if (ps.length === 3) {
+        const poly = getCurvatureExtremaQuadraticPolyDd(ps);
+        const maxima = allRootsCertified(poly, 0, 1);
+        return {
+            minima: [],
+            maxima: maxima.map(r => (r.tS + r.tE) / 2),
+            inflections: []
+        };
+    }
+    const polys = getAbsCurvatureExtremaPolysDd(ps);
+    const p1 = polys.inflectionPoly;
+    const p2 = polys.otherExtremaPoly;
+    const ts = allRootsCertified(p2, 0, 1);
+    // get second derivative (using product rule) to see if it is a local 
+    // minimum or maximum, i.e. diff(p1*p2) = p1'*p2 + p1*p2' = dp1*p2 + p1*dp2
+    // = p1*dp2 (since dp1*p2 === 0)
+    const dp2 = ddDifferentiate(p2);
+    const minima = [];
+    const maxima = [];
+    for (let i = 0; i < ts.length; i++) {
+        const t = (ts[i].tS + ts[i].tE) / 2;
+        const dp2_ = eHorner(dp2, t);
+        const p1_ = eHorner(p1, t);
+        const secondDerivative = eMult(p1_, dp2_);
+        if (e_sign_eSign(secondDerivative) >= 0) {
+            minima.push(t);
+        }
+        else {
+            maxima.push(t);
+        }
+    }
+    const inflections = allRootsCertified(p1, 0, 1)
+        .map(r => (r.tS + r.tE) / 2);
+    return { minima, maxima, inflections };
+}
+
+
+;// CONCATENATED MODULE: ./src/get-curvature-extrema-e/get-abs-curvature-extrema-polys-e.ts
+
+
+
+
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
+const get_abs_curvature_extrema_polys_e_em2 = eMultBy2;
+const get_abs_curvature_extrema_polys_e_em4 = (v) => eMultBy2(eMultBy2(v));
+const emd = eMultDouble1;
+const eme = eMult;
+const eae = eAdd;
+const ede = eDiff;
+/**
+ * Returns the polynomials whose zeros are the `t` values of the local
+ * minima / maxima of the absolute curvature for the given bezier curve.
+ *
+ * The polynomials are in the form `p1*p2` where the zeros
+ * of `p1` are the inflection points and the zeros of `p2` are the other minima /
+ * maxima.
+ *
+ * * **precondition:** must be a `true` cubic bezier (not degenerate to line or
+ * quadratic)
+ * * see [MvG](https://math.stackexchange.com/a/1956264/130809)
+ * * **non-exact:** due to floating point roundof during calculation
+ *
+ * @param ps an order 1,2 or 3 bezier curve given as an array of its control
+ * points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ *
+ * @internal
+ */
+function getAbsCurvatureExtremaPolysE(ps) {
+    // It is a real cubic - use the excellent answer from the description:
+    // dd(kappa^2)/dt === (x′′y′ − x′y′′)*((x′′′y′ − x′y′′′)(x′2 + y′2) − 3(x′x′′ + y′y′′)(x′′y′ − x′y′′))
+    // Inflection points at: (x′′y′ − x′y′′) === 0
+    // Max abs curvature at: ((x′′′y′ − x′y′′′)(x′2 + y′2) − 3(x′x′′ + y′y′′)(x′′y′ − x′y′′)) === 0
+    const [[dx2, dx1, dx0], [dy2, dy1, dy0]] = toPowerBasis_1stDerivativeExact(ps); // max bitlength increase === 5
+    const [[ddx1, ddx0], [ddy1, ddy0]] = toPowerBasis_2ndDerivativeExact(ps); // max bitlength increase === 6
+    const [dddx, dddy] = toPowerBasis_3rdDerivativeExact(ps); // max bitlength increase === 6
+    // ((x′′′y′ − x′y′′′)(x′2 + y′2) − 3(x′x′′ + y′y′′)(x′′y′ − x′y′′))
+    // or 
+    // x′′′x′x′y′ + x′′′y′y′y′ - y′′′x′x′x′ - y′′′x′y′y′ + 
+    // 3(x′′y′′x′x′ - x′′x′′x′y′ - x′′y′′y′y′ + y′′y′′x′y′)
+    // The above line becomes
+    // ((dddx*dy(t) − dx(t)*dddy)(dx(t)dx(t) + dy(t)dy(t)) − 3(dx(t)ddx(t) + dy(t)ddy(t))(ddx(t)dy(t) − dx(t)ddy(t)))
+    // or 
+    // dddx*dxt**2*dyt + dddx*dyt**3 - dddy*dxt**3 - dddy*dxt*dyt**2 - 
+    // 3*ddxt**2*dxt*dyt + 3*ddxt*ddyt*dxt**2 - 3*ddxt*ddyt*dyt**2 + 3*ddyt**2*dxt*dyt
+    // which becomes: (after substituting e.g. dy(t) = dy2*t^2 + dy1*t + dy0, etc. using Python and
+    // then expanding and collecting terms)
+    const dddx_dy1 = eme(dddx, dy1);
+    const dddy_dx1 = eme(dddy, dx1);
+    const ddx0_dy0 = eme(ddx0, dy0);
+    const ddx0_dy1 = eme(ddx0, dy1);
+    const ddy1_ddy1 = eme(ddy1, ddy1);
+    const ddx1_dy0 = eme(ddx1, dy0);
+    const ddy0_dx0 = eme(ddy0, dx0);
+    const ddy0_dx1 = eme(ddy0, dx1);
+    const ddy1_dx0 = eme(ddy1, dx0);
+    const dx0_dx1 = eme(dx0, dx1);
+    const dx0_dx2 = eme(dx0, dx2);
+    const dx0_dy2 = eme(dx0, dy2);
+    const dx1_dx1 = eme(dx1, dx1);
+    const dx1_dx2 = eme(dx1, dx2);
+    const dx1_dy1 = eme(dx1, dy1);
+    const dx2_dy0 = eme(dx2, dy0);
+    const dx2_dy2 = eme(dx2, dy2);
+    const dx2_dx2 = eme(dx2, dx2);
+    const dy0_dy1 = eme(dy0, dy1);
+    const dy0_dy2 = eme(dy0, dy2);
+    const dy1_dy1 = eme(dy1, dy1);
+    const dy1_dy2 = eme(dy1, dy2);
+    const dy2_dy2 = eme(dy2, dy2);
+    const ss = ede(eme(dddx, dy0), eme(dddy, dx0));
+    const uu = ede(dddx_dy1, dddy_dx1);
+    const vv = eae(eme(ddx0, dx0), eme(ddy0, dy0));
+    const ww = eae(eae(eme(ddx0, dx1), eme(ddx1, dx0)), eae(eme(ddy0, dy1), eme(ddy1, dy0)));
+    const xx = ede(ddx0_dy0, ddy0_dx0);
+    const yy = ede(eae(ddx0_dy1, ddx1_dy0), eae(ddy0_dx1, ddy1_dx0));
+    const qq = eae(eme(dx0, dx0), eme(dy0, dy0));
+    const rr = eae(dx0_dx1, dy0_dy1);
+    // t6 cancels! see https://math.stackexchange.com/a/1956264/130809
+    const z1 = eae(dx1_dy1, dx2_dy0);
+    const z2 = eae(dy0_dy2, dy1_dy1);
+    const z3 = eae(dx0_dx2, dx1_dx1);
+    const z4 = eae(eme(dx1, dy2), eme(dx2, dy1));
+    const z5 = ede(dx2_dx2, dy2_dy2);
+    const z6 = ede(dx1_dx2, dy1_dy2);
+    const z7 = eae(dx0_dy2, dx1_dy1);
+    const z8 = ede(dx0_dx1, dy0_dy1);
+    const z9 = eae(eme(dx0, dy1), eme(dx1, dy0));
+    const x1 = eae(dy0_dy2, z2);
+    const x2 = eae(dx0_dx2, z3);
+    const x3 = eae(dx0_dy2, z1);
+    const x4 = eae(dx1_dy1, z1);
+    const x5 = ede(x2, x1);
+    const x6 = eae(z1, dx2_dy0);
+    const x7 = eae(z7, dx2_dy0);
+    const x8 = eae(get_abs_curvature_extrema_polys_e_em2(ddy0_dx1), ddy1_dx0);
+    // const t5 = 
+    //     dx2_dx2*(dddx_dy1 - 3*dddy_dx1) + 
+    //     dy2_dy2*(3*dddx_dy1 - dddy_dx1) + 
+    //     2*((dx2_dy2)*((dddx*dx1 - dddy*dy1) + 3*(ddy0*ddy1 - ddx0*ddx1)) + 3*ddx1*ddy1*z6) + 
+    //     3*(z4*(ddy1_ddy1 - ddx1*ddx1) + z5*(ddx0*ddy1 + ddy0*ddx1));
+    const a1 = eme(dx2_dx2, (ede(dddx_dy1, emd(dddy_dx1, 3))));
+    const a2 = eme(dy2_dy2, (ede(emd(dddx_dy1, 3), dddy_dx1)));
+    const a3 = get_abs_curvature_extrema_polys_e_em2(eae(eme(dx2_dy2, (eae(ede(eme(dddx, dx1), eme(dddy, dy1)), emd(ede(eme(ddy0, ddy1), eme(ddx0, ddx1)), 3)))), emd(eme(eme(ddx1, ddy1), z6), 3)));
+    const a4 = emd((eae(eme(z4, (ede(ddy1_ddy1, eme(ddx1, ddx1)))), eme(z5, (eae(eme(ddx0, ddy1), eme(ddy0, ddx1)))))), 3);
+    const t5 = eae(eae(a1, a2), eae(a3, a4));
+    // const t4 = 
+    //     dddx*(dy2*(x2 + 3*z2) + dx2*x4) -
+    //     dddy*(dx0*(3*dx2_dx2 + dy2_dy2) + dx1*(3*dx1_dx2 + 2*dy1_dy2) + dx2*x1) + 
+    //     3*(
+    //         ddx0*((ddy0*z5 - ddx0*dx2_dy2) + 2*(ddy1*z6 - ddx1*z4)) + 
+    //         ddx1*(2*ddy0*z6 + ddy1*(2*(dx0_dx2 - dy0_dy2) + (dx1_dx1 - dy1_dy1)) - ddx1*x7) + 
+    //         ddy0*(ddy0*dx2_dy2 + 2*ddy1*z4) + 
+    //         ddy1_ddy1*x3
+    //     );
+    const b1 = eme(dddx, (eae(eme(dy2, (eae(x2, emd(z2, 3)))), eme(dx2, x4))));
+    const b2 = eme(dddy, eae(eae(eme(dx0, (eae(emd(dx2_dx2, 3), dy2_dy2))), eme(dx1, (eae(emd(dx1_dx2, 3), get_abs_curvature_extrema_polys_e_em2(dy1_dy2))))), eme(dx2, x1)));
+    const b3 = emd(eae(eae(eme(ddx0, (eae((ede(eme(ddy0, z5), eme(ddx0, dx2_dy2))), get_abs_curvature_extrema_polys_e_em2((ede(eme(ddy1, z6), eme(ddx1, z4))))))), eme(ddx1, (ede(eae(get_abs_curvature_extrema_polys_e_em2(eme(ddy0, z6)), eme(ddy1, (eae(get_abs_curvature_extrema_polys_e_em2(ede(dx0_dx2, dy0_dy2)), (ede(dx1_dx1, dy1_dy1)))))), eme(ddx1, x7))))), eae(eme(ddy0, (eae(eme(ddy0, dx2_dy2), get_abs_curvature_extrema_polys_e_em2(eme(ddy1, z4))))), eme(ddy1_ddy1, x3))), 3);
+    const t4 = eae(ede(b1, b2), b3);
+    // const t3 =
+    //     dddx*(2*dx0*z4 + dx1*x6 + dy1*(4*dy0_dy2 + x1)) - 
+    //     dddy*(2*dx0*(3*dx1_dx2 + dy1_dy2) + dx1*(dx1_dx1 + 2*dy0_dy2) + dy1*x6) + 
+    //     3*(
+    //         ddx0*(2*(ddy0*z6 - ddx1*x7) + ddy1*x5 - ddx0*z4) + 
+    //         ddx1*(2*ddy1*z8 - ddx1*z9) +
+    //         ddy0*(ddy0*z4 + 2*ddy1*x3 + ddx1*x5) + 
+    //         ddy1_ddy1*z9
+    //     );
+    const c1 = eme(dddx, (eae(eae(get_abs_curvature_extrema_polys_e_em2(eme(dx0, z4)), eme(dx1, x6)), eme(dy1, (eae(get_abs_curvature_extrema_polys_e_em4(dy0_dy2), x1))))));
+    const c2 = eme(dddy, (eae(eae(get_abs_curvature_extrema_polys_e_em2(eme(dx0, (eae(emd(dx1_dx2, 3), dy1_dy2)))), eme(dx1, (eae(dx1_dx1, get_abs_curvature_extrema_polys_e_em2(dy0_dy2))))), eme(dy1, x6))));
+    const c3 = emd((eae(eae(eme(ddx0, (ede(eae(get_abs_curvature_extrema_polys_e_em2(ede(eme(ddy0, z6), eme(ddx1, x7))), eme(ddy1, x5)), eme(ddx0, z4)))), eme(ddx1, (ede(get_abs_curvature_extrema_polys_e_em2(eme(ddy1, z8)), eme(ddx1, z9))))), eae(eme(ddy0, (eae(eae(eme(ddy0, z4), get_abs_curvature_extrema_polys_e_em2(eme(ddy1, x3))), eme(ddx1, x5)))), eme(ddy1_ddy1, z9)))), 3);
+    const t3 = eae(ede(c1, c2), c3);
+    // const t2 = 
+    //     dddx*(dx0*(dx0_dy2 + 2*z1) + dy0*(dx1_dx1 + 3*z2)) -
+    //     dddy*(dx0*(3*z3 + x1) + dy0*x4) + 
+    //     3*(
+    //         ddx0*(ddy0*x5 - ddx0*x3 + 2*(ddy1*z8 - ddx1*z9)) + 
+    //         ddx1*(dx0*(x8 - ddx1*dy0) - dy0*(2*ddy0*dy1 + ddy1*dy0)) + 
+    //         ddy0*(ddy0*z1 + dx0*(2*ddy1*dy1 + ddy0*dy2)) + 
+    //         ddy1*dy0*x8
+    //     );
+    const d1 = eme(dddx, (eae(eme(dx0, (eae(dx0_dy2, get_abs_curvature_extrema_polys_e_em2(z1)))), eme(dy0, (eae(dx1_dx1, emd(z2, 3)))))));
+    const d2 = eme(dddy, (eae(eme(dx0, (eae(emd(z3, 3), x1))), eme(dy0, x4))));
+    const d3 = emd((eae(eae(eme(ddx0, (eae(ede(eme(ddy0, x5), eme(ddx0, x3)), get_abs_curvature_extrema_polys_e_em2(ede(eme(ddy1, z8), eme(ddx1, z9)))))), eme(ddx1, (ede(eme(dx0, (ede(x8, eme(ddx1, dy0)))), eme(dy0, (eae(get_abs_curvature_extrema_polys_e_em2(eme(ddy0, dy1)), eme(ddy1, dy0)))))))), eae(eme(ddy0, (eae(eme(ddy0, z1), eme(dx0, (eae(get_abs_curvature_extrema_polys_e_em2(eme(ddy1, dy1)), eme(ddy0, dy2))))))), eme(ddy1, eme(dy0, x8))))), 3);
+    const t2 = eae(ede(d1, d2), d3);
+    // const t1 = (qq*uu + 2*rr*ss) - 3*(vv*yy + ww*xx)
+    const t1 = ede((eae(eme(qq, uu), get_abs_curvature_extrema_polys_e_em2(eme(rr, ss)))), emd(eae(eme(vv, yy), eme(ww, xx)), 3));
+    // const t0 = ss*qq - 3*vv*xx;
+    const t0 = ede(eme(ss, qq), emd(eme(vv, xx), 3));
+    const r3 = ede(eme(ddx1, dy2), eme(ddy1, dx2));
+    const r2 = ede(eae(eme(ddx0, dy2), eme(ddx1, dy1)), eae(eme(ddy0, dx2), eme(ddy1, dx1)));
+    const r1 = ede(eae(ddx0_dy1, ddx1_dy0), eae(ddy0_dx1, ddy1_dx0));
+    const r0 = ede(ddx0_dy0, ddy0_dx0);
+    return {
+        inflectionPoly: [r3, r2, r1, r0],
+        otherExtremaPoly: [t5, t4, t3, t2, t1, t0]
+    };
+}
+
+
+;// CONCATENATED MODULE: ./src/get-curvature-extrema-e/get-curvature-extrema-quadratic-poly-e.ts
+
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
+const get_curvature_extrema_quadratic_poly_e_emd = eMultDouble2;
+const get_curvature_extrema_quadratic_poly_e_eme = eMult;
+const get_curvature_extrema_quadratic_poly_e_eae = eAdd;
+const get_curvature_extrema_quadratic_poly_e_ede = eDiff;
+// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
+const get_curvature_extrema_quadratic_poly_e_td = twoDiff;
+/**
+ * Returns the polynomial whose zero is the t value of maximum absolute
+ * curvature for the given *quadratic* bezier curve.
+ *
+ * * **precondition:** the given parabola is not degenerate to a line
+ * * **non-exact:** there is floating point roundof during calculation
+ * * see e.g. [math.stackexchange](https://math.stackexchange.com/a/2971112)'s
+ * answer by [KeithWM](https://math.stackexchange.com/a/2971112/130809)
+ *
+ * @param ps an order 2 bezier curve given as an array of control points,
+ * e.g. `[[0,0],[1,1],[2,1]]`
+ *
+ * @internal
+ */
+function getCurvatureExtremaQuadraticPolyE(ps) {
+    // Find the point of max curvature (of the parabola)
+    // calculate t*
+    const [[x0, y0], [x1, y1], [x2, y2]] = ps;
+    const x10 = get_curvature_extrema_quadratic_poly_e_td(x1, x0);
+    const x21 = get_curvature_extrema_quadratic_poly_e_td(x2, x1);
+    const wx = get_curvature_extrema_quadratic_poly_e_ede(x21, x10);
+    const y10 = get_curvature_extrema_quadratic_poly_e_td(y1, y0);
+    const y21 = get_curvature_extrema_quadratic_poly_e_td(y2, y1);
+    const wy = get_curvature_extrema_quadratic_poly_e_ede(y21, y10);
+    const n = get_curvature_extrema_quadratic_poly_e_eae(get_curvature_extrema_quadratic_poly_e_ede(get_curvature_extrema_quadratic_poly_e_emd(x0, (get_curvature_extrema_quadratic_poly_e_ede(wx, [0, -x1]))), get_curvature_extrema_quadratic_poly_e_emd(x1, (get_curvature_extrema_quadratic_poly_e_ede(x21, [0, -x1])))), get_curvature_extrema_quadratic_poly_e_ede(get_curvature_extrema_quadratic_poly_e_emd(y0, (get_curvature_extrema_quadratic_poly_e_ede(wy, [0, -y1]))), get_curvature_extrema_quadratic_poly_e_emd(y1, (get_curvature_extrema_quadratic_poly_e_ede(y21, [0, -y1])))));
+    const d = get_curvature_extrema_quadratic_poly_e_eae(get_curvature_extrema_quadratic_poly_e_eme(wx, wx), get_curvature_extrema_quadratic_poly_e_eme(wy, wy));
+    return [d, eNegativeOf(n)];
+}
+
+
+;// CONCATENATED MODULE: ./src/get-curvature-extrema-e/get-curvature-extrema-e.ts
+
+
+
+
+
+
+
+
+
+const { abs: get_curvature_extrema_e_abs } = Math;
+/**
+ * Returns the parameter `t` values (in `[0,1]`) of local minimum / maximum
+ * absolute curvature for the given bezier curve.
+ *
+ * If there are an infinite number of such `t` values (such as is the case for a
+ * line), an empty array is returned.
+ *
+ * * see [MvG](https://math.stackexchange.com/a/1956264/130809)'s excellent
+ * answer on math.stackexchange
+ *
+ * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ *
+ * @doc mdx
+ */
+// TODO - slow - currently just for testing!
+function getCurvatureExtremaE(ps) {
+    if (isCollinear(ps)) {
+        return { minima: [], maxima: [], inflections: [] };
+    }
+    if (ps.length === 4 && isCubicReallyQuad(ps)) {
+        ps = cubicToQuadratic(ps);
+    }
+    if (ps.length === 3) {
+        const polyDd = getCurvatureExtremaQuadraticPolyDd(ps);
+        const polyE = getCurvatureExtremaQuadraticPolyE(ps);
+        const polyErr = polyE.map((c, i) => {
+            const cDd = polyDd[i];
+            const d = eDiff(c, cDd);
+            return get_curvature_extrema_e_abs(d[d.length - 1]);
+        });
+        // const maxima = allRoots(poly, 0, 1);
+        const maxima = allRootsCertified(polyDd, 0, 1, polyErr, () => polyE);
+        return {
+            minima: [],
+            maxima: maxima.map(r => (r.tS + r.tE) / 2),
+            inflections: []
+        };
+    }
+    const polys = getAbsCurvatureExtremaPolysE(ps);
+    const p1 = polys.inflectionPoly;
+    const p2 = polys.otherExtremaPoly;
+    const polysDd = getAbsCurvatureExtremaPolysDd(ps);
+    const p1Dd = polysDd.inflectionPoly;
+    const p2Dd = polysDd.otherExtremaPoly;
+    const polyErr1 = p1.map((c, i) => {
+        const cDd = p1Dd[i];
+        const d = eDiff(c, cDd);
+        return get_curvature_extrema_e_abs(d[d.length - 1]);
+    });
+    const polyErr2 = p2.map((c, i) => {
+        const cDd = p2Dd[i];
+        const d = eDiff(c, cDd);
+        return get_curvature_extrema_e_abs(d[d.length - 1]);
+    });
+    // if (p2Dd.length || polyErr1)
+    const ts = allRootsCertified(p2Dd, 0, 1, polyErr2, () => p2);
+    // get second derivative (using product rule) to see if it is a local 
+    // minimum or maximum, i.e. diff(p1*p2) = p1'*p2 + p1*p2' = dp1*p2 + p1*dp2
+    // = p1*dp2 (since dp1*p2 === 0)
+    const dp2 = eDifferentiate(p2);
+    const minima = [];
+    const maxima = [];
+    for (let i = 0; i < ts.length; i++) {
+        const t = (ts[i].tS + ts[i].tE) / 2;
+        const dp2_ = eHorner(dp2, t);
+        const p1_ = eHorner(p1, t);
+        const secondDerivative = eMult(p1_, dp2_);
+        if (e_sign_eSign(secondDerivative) >= 0) {
+            minima.push(t);
+        }
+        else {
+            maxima.push(t);
+        }
+    }
+    const inflections = allRootsCertified(p1Dd, 0, 1, polyErr1, () => p1)
+        .map(r => (r.tS + r.tE) / 2);
+    return { minima, maxima, inflections };
 }
 
 
@@ -25055,6 +25806,12 @@ function closest_distance_between_beziers_calcHErrorBound(A, tS, tE) {
 
 
 
+
+
+
+
+
+
 var __webpack_exports__areBoxesIntersecting = __webpack_exports__.y2;
 var __webpack_exports__area = __webpack_exports__.SO;
 var __webpack_exports__bezierBezierIntersection = __webpack_exports__.Cn;
@@ -25077,6 +25834,8 @@ var __webpack_exports__cubicToHybridQuadratic = __webpack_exports__.Wb;
 var __webpack_exports__cubicToQuadratic = __webpack_exports__.kP;
 var __webpack_exports__curvature = __webpack_exports__.Ne;
 var __webpack_exports__curviness = __webpack_exports__.oj;
+var __webpack_exports__ddCurvature = __webpack_exports__.fz;
+var __webpack_exports__eCurvature = __webpack_exports__.pZ;
 var __webpack_exports__equal = __webpack_exports__.Dg;
 var __webpack_exports__evalDeCasteljau = __webpack_exports__.su;
 var __webpack_exports__evalDeCasteljauDd = __webpack_exports__.ue;
@@ -25112,7 +25871,11 @@ var __webpack_exports__getCoeffsBezBez = __webpack_exports__.Gb;
 var __webpack_exports__getControlPointBox = __webpack_exports__.zs;
 var __webpack_exports__getCubicSpeeds = __webpack_exports__.D;
 var __webpack_exports__getCurvatureExtrema = __webpack_exports__.cQ;
+var __webpack_exports__getCurvatureExtremaDd = __webpack_exports__.PO;
+var __webpack_exports__getCurvatureExtremaE = __webpack_exports__.c;
 var __webpack_exports__getEndpointIntersections = __webpack_exports__.Fx;
+var __webpack_exports__getFootPointsOnBezierCertified = __webpack_exports__.PZ;
+var __webpack_exports__getFootPointsOnBezierPolysCertified = __webpack_exports__.b0;
 var __webpack_exports__getFootpointPoly = __webpack_exports__.w9;
 var __webpack_exports__getFootpointPolyDd = __webpack_exports__.c1;
 var __webpack_exports__getFootpointPolyExact = __webpack_exports__.Fi;
@@ -25196,4 +25959,4 @@ var __webpack_exports__totalLength = __webpack_exports__.Cv;
 var __webpack_exports___ = __webpack_exports__.H8;
 var __webpack_exports___ = __webpack_exports__.Uv;
 var __webpack_exports___ = __webpack_exports__.Ef;
-export { __webpack_exports__areBoxesIntersecting as areBoxesIntersecting, __webpack_exports__area as area, __webpack_exports__bezierBezierIntersection as bezierBezierIntersection, __webpack_exports__bezierBezierIntersectionBoundless as bezierBezierIntersectionBoundless, __webpack_exports__bezierBezierIntersectionFast as bezierBezierIntersectionFast, __webpack_exports__bezierSelfIntersection as bezierSelfIntersection, __webpack_exports__circleBezierIntersection as circleBezierIntersection, __webpack_exports__classification as classification, __webpack_exports__classifications as classifications, __webpack_exports__classify as classify, __webpack_exports__clone as clone, __webpack_exports__closestPointOnBezier as closestPointOnBezier, __webpack_exports__closestPointOnBezierCertified as closestPointOnBezierCertified, __webpack_exports__closestPointsBetweenBeziers as closestPointsBetweenBeziers, __webpack_exports__controlPointLinesLength as controlPointLinesLength, __webpack_exports__cubicFromAnglesAndSpeeds as cubicFromAnglesAndSpeeds, __webpack_exports__cubicThroughPointGiven013 as cubicThroughPointGiven013, __webpack_exports__cubicToAnglesAndSpeeds as cubicToAnglesAndSpeeds, __webpack_exports__cubicToHybridQuadratic as cubicToHybridQuadratic, __webpack_exports__cubicToQuadratic as cubicToQuadratic, __webpack_exports__curvature as curvature, __webpack_exports__curviness as curviness, __webpack_exports__equal as equal, __webpack_exports__evalDeCasteljau as evalDeCasteljau, __webpack_exports__evalDeCasteljauDd as evalDeCasteljauDd, __webpack_exports__evalDeCasteljauError as evalDeCasteljauError, __webpack_exports__evalDeCasteljauWithErr as evalDeCasteljauWithErr, __webpack_exports__evalDeCasteljauWithErrDd as evalDeCasteljauWithErrDd, __webpack_exports__evaluate as evaluate, __webpack_exports__evaluate2ndDerivative as evaluate2ndDerivative, __webpack_exports__evaluate2ndDerivativeAt0 as evaluate2ndDerivativeAt0, __webpack_exports__evaluate2ndDerivativeAt0Exact as evaluate2ndDerivativeAt0Exact, __webpack_exports__evaluate2ndDerivativeAt1 as evaluate2ndDerivativeAt1, __webpack_exports__evaluate2ndDerivativeAt1Exact as evaluate2ndDerivativeAt1Exact, __webpack_exports__evaluate2ndDerivativeExact as evaluate2ndDerivativeExact, __webpack_exports__evaluateExact as evaluateExact, __webpack_exports__evaluateImplicit1 as evaluateImplicit1, __webpack_exports__evaluateImplicit2 as evaluateImplicit2, __webpack_exports__evaluateImplicit3 as evaluateImplicit3, __webpack_exports__fitQuadsToCubic as fitQuadsToCubic, __webpack_exports__fromPowerBasis as fromPowerBasis, __webpack_exports__fromTo as fromTo, __webpack_exports__fromToInclErrorBound as fromToInclErrorBound, __webpack_exports__furthestPointOnBezier as furthestPointOnBezier, __webpack_exports__generateCuspAtHalf3 as generateCuspAtHalf3, __webpack_exports__generateQuarterCircle as generateQuarterCircle, __webpack_exports__generateSelfIntersecting as generateSelfIntersecting, __webpack_exports__getAbsAreaBetween as getAbsAreaBetween, __webpack_exports__getBendingEnergy as getBendingEnergy, __webpack_exports__getBoundingBox as getBoundingBox, __webpack_exports__getBoundingBoxTight as getBoundingBoxTight, __webpack_exports__getBoundingHull as getBoundingHull, __webpack_exports__getBounds as getBounds, __webpack_exports__getCoeffsBezBez as getCoeffsBezBez, __webpack_exports__getControlPointBox as getControlPointBox, __webpack_exports__getCubicSpeeds as getCubicSpeeds, __webpack_exports__getCurvatureExtrema as getCurvatureExtrema, __webpack_exports__getEndpointIntersections as getEndpointIntersections, __webpack_exports__getFootpointPoly as getFootpointPoly, __webpack_exports__getFootpointPolyDd as getFootpointPolyDd, __webpack_exports__getFootpointPolyExact as getFootpointPolyExact, __webpack_exports__getHodograph as getHodograph, __webpack_exports__getImplicitForm1 as getImplicitForm1, __webpack_exports__getImplicitForm1Dd as getImplicitForm1Dd, __webpack_exports__getImplicitForm1DdWithRunningError as getImplicitForm1DdWithRunningError, __webpack_exports__getImplicitForm1ErrorCounters as getImplicitForm1ErrorCounters, __webpack_exports__getImplicitForm1Exact as getImplicitForm1Exact, __webpack_exports__getImplicitForm2 as getImplicitForm2, __webpack_exports__getImplicitForm2Dd as getImplicitForm2Dd, __webpack_exports__getImplicitForm2DdWithRunningError as getImplicitForm2DdWithRunningError, __webpack_exports__getImplicitForm2ErrorCounters as getImplicitForm2ErrorCounters, __webpack_exports__getImplicitForm2Exact as getImplicitForm2Exact, __webpack_exports__getImplicitForm3 as getImplicitForm3, __webpack_exports__getImplicitForm3Dd as getImplicitForm3Dd, __webpack_exports__getImplicitForm3DdWithRunningError as getImplicitForm3DdWithRunningError, __webpack_exports__getImplicitForm3ErrorCounters as getImplicitForm3ErrorCounters, __webpack_exports__getImplicitForm3Exact as getImplicitForm3Exact, __webpack_exports__getInflections as getInflections, __webpack_exports__getInterfaceRotation as getInterfaceRotation, __webpack_exports__getIntervalBox as getIntervalBox, __webpack_exports__getIntervalBoxDd as getIntervalBoxDd, __webpack_exports__getTAtLength as getTAtLength, __webpack_exports__getXBoundsTight as getXBoundsTight, __webpack_exports__getYBoundsTight as getYBoundsTight, __webpack_exports__hausdorffDistance as hausdorffDistance, __webpack_exports__hausdorffDistanceOneSided as hausdorffDistanceOneSided, __webpack_exports__intersectBoxes as intersectBoxes, __webpack_exports__isCollinear as isCollinear, __webpack_exports__isCubicReallyLine as isCubicReallyLine, __webpack_exports__isCubicReallyQuad as isCubicReallyQuad, __webpack_exports__isHorizontal as isHorizontal, __webpack_exports__isPointOnBezierExtension as isPointOnBezierExtension, __webpack_exports__isQuadObtuse as isQuadObtuse, __webpack_exports__isQuadReallyLine as isQuadReallyLine, __webpack_exports__isReallyPoint as isReallyPoint, __webpack_exports__isSelfOverlapping as isSelfOverlapping, __webpack_exports__isVertical as isVertical, __webpack_exports__length as length, __webpack_exports__lineToCubic as lineToCubic, __webpack_exports__lineToQuadratic as lineToQuadratic, __webpack_exports__maxAbsCoordinate as maxAbsCoordinate, __webpack_exports__normal as normal, __webpack_exports__quadraticToCubic as quadraticToCubic, __webpack_exports__quadraticToPolyline as quadraticToPolyline, __webpack_exports__reduceOrderIfPossible as reduceOrderIfPossible, __webpack_exports__reverse as reverse, __webpack_exports__setCubicSpeeds as setCubicSpeeds, __webpack_exports__splitByCurvature as splitByCurvature, __webpack_exports__splitByCurvatureAndLength as splitByCurvatureAndLength, __webpack_exports__splitByLength as splitByLength, __webpack_exports__tFromXY as tFromXY, __webpack_exports__tangent as tangent, __webpack_exports__tangentAt0 as tangentAt0, __webpack_exports__tangentAt0Exact as tangentAt0Exact, __webpack_exports__tangentAt1 as tangentAt1, __webpack_exports__tangentAt1Exact as tangentAt1Exact, __webpack_exports__tangentExact as tangentExact, __webpack_exports__toCubic as toCubic, __webpack_exports__toPowerBasis as toPowerBasis, __webpack_exports__toPowerBasisDd as toPowerBasisDd, __webpack_exports__toPowerBasisDdWithRunningError as toPowerBasisDdWithRunningError, __webpack_exports__toPowerBasisErrorCounters as toPowerBasisErrorCounters, __webpack_exports__toPowerBasisExact as toPowerBasisExact, __webpack_exports__toPowerBasisWithRunningError as toPowerBasisWithRunningError, __webpack_exports__toPowerBasis_1stDerivative as toPowerBasis_1stDerivative, __webpack_exports__toPowerBasis_1stDerivativeDd as toPowerBasis_1stDerivativeDd, __webpack_exports__toPowerBasis_1stDerivativeErrorCounters as toPowerBasis_1stDerivativeErrorCounters, __webpack_exports__toPowerBasis_1stDerivativeExact as toPowerBasis_1stDerivativeExact, __webpack_exports__toPowerBasis_2ndDerivative as toPowerBasis_2ndDerivative, __webpack_exports__toPowerBasis_2ndDerivativeDd as toPowerBasis_2ndDerivativeDd, __webpack_exports__toPowerBasis_2ndDerivativeExact as toPowerBasis_2ndDerivativeExact, __webpack_exports__toPowerBasis_3rdDerivative as toPowerBasis_3rdDerivative, __webpack_exports__toPowerBasis_3rdDerivativeDd as toPowerBasis_3rdDerivativeDd, __webpack_exports__toPowerBasis_3rdDerivativeExact as toPowerBasis_3rdDerivativeExact, __webpack_exports__toString as toString, __webpack_exports__totalAbsoluteCurvature as totalAbsoluteCurvature, __webpack_exports__totalCurvature as totalCurvature, __webpack_exports__totalLength as totalLength, __webpack_exports___ as γ, __webpack_exports___ as γγ, __webpack_exports___ as κ };
+export { __webpack_exports__areBoxesIntersecting as areBoxesIntersecting, __webpack_exports__area as area, __webpack_exports__bezierBezierIntersection as bezierBezierIntersection, __webpack_exports__bezierBezierIntersectionBoundless as bezierBezierIntersectionBoundless, __webpack_exports__bezierBezierIntersectionFast as bezierBezierIntersectionFast, __webpack_exports__bezierSelfIntersection as bezierSelfIntersection, __webpack_exports__circleBezierIntersection as circleBezierIntersection, __webpack_exports__classification as classification, __webpack_exports__classifications as classifications, __webpack_exports__classify as classify, __webpack_exports__clone as clone, __webpack_exports__closestPointOnBezier as closestPointOnBezier, __webpack_exports__closestPointOnBezierCertified as closestPointOnBezierCertified, __webpack_exports__closestPointsBetweenBeziers as closestPointsBetweenBeziers, __webpack_exports__controlPointLinesLength as controlPointLinesLength, __webpack_exports__cubicFromAnglesAndSpeeds as cubicFromAnglesAndSpeeds, __webpack_exports__cubicThroughPointGiven013 as cubicThroughPointGiven013, __webpack_exports__cubicToAnglesAndSpeeds as cubicToAnglesAndSpeeds, __webpack_exports__cubicToHybridQuadratic as cubicToHybridQuadratic, __webpack_exports__cubicToQuadratic as cubicToQuadratic, __webpack_exports__curvature as curvature, __webpack_exports__curviness as curviness, __webpack_exports__ddCurvature as ddCurvature, __webpack_exports__eCurvature as eCurvature, __webpack_exports__equal as equal, __webpack_exports__evalDeCasteljau as evalDeCasteljau, __webpack_exports__evalDeCasteljauDd as evalDeCasteljauDd, __webpack_exports__evalDeCasteljauError as evalDeCasteljauError, __webpack_exports__evalDeCasteljauWithErr as evalDeCasteljauWithErr, __webpack_exports__evalDeCasteljauWithErrDd as evalDeCasteljauWithErrDd, __webpack_exports__evaluate as evaluate, __webpack_exports__evaluate2ndDerivative as evaluate2ndDerivative, __webpack_exports__evaluate2ndDerivativeAt0 as evaluate2ndDerivativeAt0, __webpack_exports__evaluate2ndDerivativeAt0Exact as evaluate2ndDerivativeAt0Exact, __webpack_exports__evaluate2ndDerivativeAt1 as evaluate2ndDerivativeAt1, __webpack_exports__evaluate2ndDerivativeAt1Exact as evaluate2ndDerivativeAt1Exact, __webpack_exports__evaluate2ndDerivativeExact as evaluate2ndDerivativeExact, __webpack_exports__evaluateExact as evaluateExact, __webpack_exports__evaluateImplicit1 as evaluateImplicit1, __webpack_exports__evaluateImplicit2 as evaluateImplicit2, __webpack_exports__evaluateImplicit3 as evaluateImplicit3, __webpack_exports__fitQuadsToCubic as fitQuadsToCubic, __webpack_exports__fromPowerBasis as fromPowerBasis, __webpack_exports__fromTo as fromTo, __webpack_exports__fromToInclErrorBound as fromToInclErrorBound, __webpack_exports__furthestPointOnBezier as furthestPointOnBezier, __webpack_exports__generateCuspAtHalf3 as generateCuspAtHalf3, __webpack_exports__generateQuarterCircle as generateQuarterCircle, __webpack_exports__generateSelfIntersecting as generateSelfIntersecting, __webpack_exports__getAbsAreaBetween as getAbsAreaBetween, __webpack_exports__getBendingEnergy as getBendingEnergy, __webpack_exports__getBoundingBox as getBoundingBox, __webpack_exports__getBoundingBoxTight as getBoundingBoxTight, __webpack_exports__getBoundingHull as getBoundingHull, __webpack_exports__getBounds as getBounds, __webpack_exports__getCoeffsBezBez as getCoeffsBezBez, __webpack_exports__getControlPointBox as getControlPointBox, __webpack_exports__getCubicSpeeds as getCubicSpeeds, __webpack_exports__getCurvatureExtrema as getCurvatureExtrema, __webpack_exports__getCurvatureExtremaDd as getCurvatureExtremaDd, __webpack_exports__getCurvatureExtremaE as getCurvatureExtremaE, __webpack_exports__getEndpointIntersections as getEndpointIntersections, __webpack_exports__getFootPointsOnBezierCertified as getFootPointsOnBezierCertified, __webpack_exports__getFootPointsOnBezierPolysCertified as getFootPointsOnBezierPolysCertified, __webpack_exports__getFootpointPoly as getFootpointPoly, __webpack_exports__getFootpointPolyDd as getFootpointPolyDd, __webpack_exports__getFootpointPolyExact as getFootpointPolyExact, __webpack_exports__getHodograph as getHodograph, __webpack_exports__getImplicitForm1 as getImplicitForm1, __webpack_exports__getImplicitForm1Dd as getImplicitForm1Dd, __webpack_exports__getImplicitForm1DdWithRunningError as getImplicitForm1DdWithRunningError, __webpack_exports__getImplicitForm1ErrorCounters as getImplicitForm1ErrorCounters, __webpack_exports__getImplicitForm1Exact as getImplicitForm1Exact, __webpack_exports__getImplicitForm2 as getImplicitForm2, __webpack_exports__getImplicitForm2Dd as getImplicitForm2Dd, __webpack_exports__getImplicitForm2DdWithRunningError as getImplicitForm2DdWithRunningError, __webpack_exports__getImplicitForm2ErrorCounters as getImplicitForm2ErrorCounters, __webpack_exports__getImplicitForm2Exact as getImplicitForm2Exact, __webpack_exports__getImplicitForm3 as getImplicitForm3, __webpack_exports__getImplicitForm3Dd as getImplicitForm3Dd, __webpack_exports__getImplicitForm3DdWithRunningError as getImplicitForm3DdWithRunningError, __webpack_exports__getImplicitForm3ErrorCounters as getImplicitForm3ErrorCounters, __webpack_exports__getImplicitForm3Exact as getImplicitForm3Exact, __webpack_exports__getInflections as getInflections, __webpack_exports__getInterfaceRotation as getInterfaceRotation, __webpack_exports__getIntervalBox as getIntervalBox, __webpack_exports__getIntervalBoxDd as getIntervalBoxDd, __webpack_exports__getTAtLength as getTAtLength, __webpack_exports__getXBoundsTight as getXBoundsTight, __webpack_exports__getYBoundsTight as getYBoundsTight, __webpack_exports__hausdorffDistance as hausdorffDistance, __webpack_exports__hausdorffDistanceOneSided as hausdorffDistanceOneSided, __webpack_exports__intersectBoxes as intersectBoxes, __webpack_exports__isCollinear as isCollinear, __webpack_exports__isCubicReallyLine as isCubicReallyLine, __webpack_exports__isCubicReallyQuad as isCubicReallyQuad, __webpack_exports__isHorizontal as isHorizontal, __webpack_exports__isPointOnBezierExtension as isPointOnBezierExtension, __webpack_exports__isQuadObtuse as isQuadObtuse, __webpack_exports__isQuadReallyLine as isQuadReallyLine, __webpack_exports__isReallyPoint as isReallyPoint, __webpack_exports__isSelfOverlapping as isSelfOverlapping, __webpack_exports__isVertical as isVertical, __webpack_exports__length as length, __webpack_exports__lineToCubic as lineToCubic, __webpack_exports__lineToQuadratic as lineToQuadratic, __webpack_exports__maxAbsCoordinate as maxAbsCoordinate, __webpack_exports__normal as normal, __webpack_exports__quadraticToCubic as quadraticToCubic, __webpack_exports__quadraticToPolyline as quadraticToPolyline, __webpack_exports__reduceOrderIfPossible as reduceOrderIfPossible, __webpack_exports__reverse as reverse, __webpack_exports__setCubicSpeeds as setCubicSpeeds, __webpack_exports__splitByCurvature as splitByCurvature, __webpack_exports__splitByCurvatureAndLength as splitByCurvatureAndLength, __webpack_exports__splitByLength as splitByLength, __webpack_exports__tFromXY as tFromXY, __webpack_exports__tangent as tangent, __webpack_exports__tangentAt0 as tangentAt0, __webpack_exports__tangentAt0Exact as tangentAt0Exact, __webpack_exports__tangentAt1 as tangentAt1, __webpack_exports__tangentAt1Exact as tangentAt1Exact, __webpack_exports__tangentExact as tangentExact, __webpack_exports__toCubic as toCubic, __webpack_exports__toPowerBasis as toPowerBasis, __webpack_exports__toPowerBasisDd as toPowerBasisDd, __webpack_exports__toPowerBasisDdWithRunningError as toPowerBasisDdWithRunningError, __webpack_exports__toPowerBasisErrorCounters as toPowerBasisErrorCounters, __webpack_exports__toPowerBasisExact as toPowerBasisExact, __webpack_exports__toPowerBasisWithRunningError as toPowerBasisWithRunningError, __webpack_exports__toPowerBasis_1stDerivative as toPowerBasis_1stDerivative, __webpack_exports__toPowerBasis_1stDerivativeDd as toPowerBasis_1stDerivativeDd, __webpack_exports__toPowerBasis_1stDerivativeErrorCounters as toPowerBasis_1stDerivativeErrorCounters, __webpack_exports__toPowerBasis_1stDerivativeExact as toPowerBasis_1stDerivativeExact, __webpack_exports__toPowerBasis_2ndDerivative as toPowerBasis_2ndDerivative, __webpack_exports__toPowerBasis_2ndDerivativeDd as toPowerBasis_2ndDerivativeDd, __webpack_exports__toPowerBasis_2ndDerivativeExact as toPowerBasis_2ndDerivativeExact, __webpack_exports__toPowerBasis_3rdDerivative as toPowerBasis_3rdDerivative, __webpack_exports__toPowerBasis_3rdDerivativeDd as toPowerBasis_3rdDerivativeDd, __webpack_exports__toPowerBasis_3rdDerivativeExact as toPowerBasis_3rdDerivativeExact, __webpack_exports__toString as toString, __webpack_exports__totalAbsoluteCurvature as totalAbsoluteCurvature, __webpack_exports__totalCurvature as totalCurvature, __webpack_exports__totalLength as totalLength, __webpack_exports___ as γ, __webpack_exports___ as γγ, __webpack_exports___ as κ };

@@ -1,5 +1,5 @@
 import { RootInterval } from "flo-poly";
-declare type FootAndEndpointInfo = {
+type FootAndEndpointInfo = {
     p: number[];
     t: number;
     d: number;
