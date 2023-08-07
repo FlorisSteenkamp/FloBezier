@@ -49,12 +49,18 @@ function toPowerBasis3_1stDerivativeDd(ps: number[][]): number[][][] {
     const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
 
     return [[
+        // 3*((x3 - x0) + 3*(x1 - x2)),
         qmd(3,qaq(td(x3,x0),qmd(3,td(x1,x2)))),
+        // 6*((x2 + x0) - 2*x1),
         qmd(6,qad(ts(x2,x0),-2*x1)),
+        // 3*(x1 - x0)
         qmd(3,td(x1,x0))
     ], [
+        // 3*((y3 - y0) + 3*(y1 - y2)),
         qmd(3,qaq(td(y3,y0),qmd(3,td(y1,y2)))),
+        // 6*((y2 + y0) - 2*y1),
         qmd(6,qad(ts(y2,y0),-2*y1)),
+        // 3*(y1 - y0)
         qmd(3,td(y1,y0))
     ]];
 }
@@ -64,10 +70,14 @@ function toPowerBasis3_1stDerivativeDd(ps: number[][]): number[][][] {
 function toPowerBasis2_1stDerivativeDd(ps: number[][]): number[][][] {
     const [[x0,y0], [x1,y1], [x2,y2]] = ps;
     return [[
+        // 2*((x2 + x0) - 2*x1),
         qad(ts(2*x2,2*x0),-4*x1),
+        // 2*(x1 - x0)
         td(2*x1,2*x0),
     ], [
+        // 2*((y2 + y0) - 2*y1),
         qad(ts(2*y2,2*y0),-4*y1),
+        // 2*(y1 - y0)
         td(2*y1,2*y0),
     ]];
 } 

@@ -7,7 +7,6 @@ const eps = Number.EPSILON;
 const u = eps / 2;
 const onemin = 1 - eps;
 const onemax = 1 + eps;
-const noIntersection = undefined;
 const noClip = [0, 1];
 /**
  * Performs geometric clipping of the given bezier curve and returns the new
@@ -170,7 +169,7 @@ function geoClip(G, dF, dMin, dMax) {
     }
     if (tMin === Number.POSITIVE_INFINITY) {
         // will have here also: `tMax === Number.NEGATIVE_INFINITY`
-        return noIntersection;
+        return undefined;
     }
     return [tMin, tMax];
 }

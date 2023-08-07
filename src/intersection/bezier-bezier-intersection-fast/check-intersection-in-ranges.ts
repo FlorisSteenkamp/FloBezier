@@ -17,7 +17,6 @@ const fromToVect = _fromToVect;
 const translate = _translate;
 const toLength = _toLength;
 
-const noIntersection = undefined;
 
 /** 
  * the heuristic value indicating the maximum `t` parameter span allowed after
@@ -130,7 +129,7 @@ function checkIntersectionInRanges(
 
     const last = iter.last;
 
-    if (tRange === noIntersection) { return []; }
+    if (tRange === undefined) { return []; }
     let tMin = tRange[0];
     let tMax = tRange[1];
 
@@ -198,7 +197,7 @@ function checkIntersectionInRanges(
         }
     
         const tRange = geoClip(G_, dQ_, dMin_, dMax_);
-        if (tRange === noIntersection) { 
+        if (tRange === undefined) { 
             return false; 
         }
     

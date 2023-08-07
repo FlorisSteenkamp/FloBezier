@@ -10,7 +10,6 @@ const fromToInclErrorBound = _fromToInclErrorBound;
 const fromToVect = _fromToVect;
 const translate = _translate;
 const toLength = _toLength;
-const noIntersection = undefined;
 /**
  * the heuristic value indicating the maximum `t` parameter span allowed after
  * clipping before perpendicular fatline clipping or curve splitting is
@@ -103,7 +102,7 @@ function checkIntersectionInRanges(iter) {
     }
     const tRange = geoClip(G_, dF, dMin, dMax);
     const last = iter.last;
-    if (tRange === noIntersection) {
+    if (tRange === undefined) {
         return [];
     }
     let tMin = tRange[0];
@@ -161,7 +160,7 @@ function checkIntersectionInRanges(iter) {
             globalThis.__debug__.currentIter.fatlinePerp = getFatlineDebugInfo(FS, V, dMin_, dMax_);
         }
         const tRange = geoClip(G_, dQ_, dMin_, dMax_);
-        if (tRange === noIntersection) {
+        if (tRange === undefined) {
             return false;
         }
         const tMin_ = tRange[0];

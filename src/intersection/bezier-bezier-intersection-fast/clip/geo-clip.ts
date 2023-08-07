@@ -15,7 +15,6 @@ const onemin = 1 - eps;
 const onemax = 1 + eps;
 
 
-const noIntersection = undefined;
 const noClip: number[] = [0,1];
 
 
@@ -41,7 +40,7 @@ function geoClip(
         G: { ps: number[][], _ps: number[][] }, 
         dF: (p: number[], _p: number[]) => { dMin: number; dMax: number; },
         dMin: number, 
-        dMax: number): number[] | typeof noIntersection {
+        dMax: number): number[] | typeof undefined {
 
     // estimated bezier control points
     const Gps = G.ps;
@@ -192,7 +191,7 @@ function geoClip(
 
     if (tMin === Number.POSITIVE_INFINITY) {
         // will have here also: `tMax === Number.NEGATIVE_INFINITY`
-        return noIntersection;
+        return undefined;
     }
 
     return [tMin, tMax];

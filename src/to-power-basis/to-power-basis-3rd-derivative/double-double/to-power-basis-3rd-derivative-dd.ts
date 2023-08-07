@@ -20,17 +20,18 @@ const qmd = ddMultDouble2;
  * 
  * @doc
  */
-function toPowerBasis_3rdDerivativeDd(ps: number[][]): number[][] {
+function toPowerBasis_3rdDerivativeDd(ps: number[][]): number[][][] {
 	if (ps.length === 4) {
 		const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
-		return [
-			qmd(6,qaq(td(x3,x0), qmd(3,td(x1,x2)))),
+		return [[
+			qmd(6,qaq(td(x3,x0), qmd(3,td(x1,x2))))
+		], [
 			qmd(6,qaq(td(y3,y0), qmd(3,td(y1,y2))))
-		];
+		]];
 	} 
 	
 	if (ps.length <= 3) {
-		return [[0,0], [0,0]];
+		return [[[0,0]],[[0,0]]];
 	}
 
 	throw new Error('The given bezier curve must be of order <= 3.');

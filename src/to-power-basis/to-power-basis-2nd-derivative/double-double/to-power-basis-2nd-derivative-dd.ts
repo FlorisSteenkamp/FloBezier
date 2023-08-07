@@ -24,6 +24,7 @@ const qad = ddAddDouble;
 function toPowerBasis_2ndDerivativeDd(ps: number[][]): number[][][] {
 	if (ps.length === 4) {
 		const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
+
 		return [[
 			qmd(6,(qaq(td(x3,x0), qmd(3,(td(x1,x2)))))),
 			qmd(6,(qad(td(x2,2*x1),x0)))
@@ -35,6 +36,7 @@ function toPowerBasis_2ndDerivativeDd(ps: number[][]): number[][][] {
 	
 	if (ps.length === 3) {
 		const [[x0,y0], [x1,y1], [x2,y2]] = ps;
+
 		return [[
 			qad(td(2*x2,4*x1),2*x0)
 		], [
@@ -43,7 +45,7 @@ function toPowerBasis_2ndDerivativeDd(ps: number[][]): number[][][] {
 	} 
 	
 	if (ps.length <= 2) {
-		return [[[0]],[[0]]];
+		return [[[0,0]],[[0,0]]];
 	}
 
 	throw new Error('The given bezier curve must be of order <= 3.');	

@@ -79,17 +79,23 @@ import { normal } from './local-properties-at-t/normal/normal.js';
 import { bezierBezierIntersection } from './intersection/bezier-bezier-intersection/bezier-bezier-intersection.js';
 import { toCubic } from './transformation/degree-or-type/to-cubic.js';
 import { κ, curvature } from './local-properties-at-t/curvature.js';
+import { eCurvature } from './local-properties-at-t/e-curvature.js';
+import { ddCurvature } from './local-properties-at-t/dd-curvature.js';
 import { quadraticToPolyline } from './fit/quadratic-to-polyline.js';
 import { isQuadObtuse } from './global-properties/classification/is-quad-obtuse.js';
 import { getIntervalBox } from './global-properties/bounds/get-interval-box/get-interval-box.js';
 import { getIntervalBoxDd } from './global-properties/bounds/get-interval-box/get-interval-box-dd.js';
 import { getInterfaceRotation } from './simultaneous-properties/get-interface-rotation.js';
 import { closestPointOnBezierCertified } from './simultaneous-properties/closest-and-furthest-point-on-bezier/closest-point-on-bezier-certified.js';
+import { getFootPointsOnBezierCertified } from './simultaneous-properties/closest-and-furthest-point-on-bezier/get-foot-points-on-bezier-certified.js';
+import { getFootPointsOnBezierPolysCertified } from './simultaneous-properties/closest-and-furthest-point-on-bezier/get-foot-points-polys-on-bezier-certified.js';
 import { hausdorffDistanceOneSided } from './simultaneous-properties/hausdorff-distance/hausdorff-distance-one-sided.js';
 import { hausdorffDistance } from './simultaneous-properties/hausdorff-distance/hausdorff-distance.js';
 import { controlPointLinesLength } from './global-properties/length/control-point-lines-length.js';
 import { splitByLength } from './transformation/split/split-by-length.js';
 import { getCurvatureExtrema } from './get-curvature-extrema/get-curvature-extrema.js';
+import { getCurvatureExtremaDd } from './get-curvature-extrema-dd/get-curvature-extrema-dd.js';
+import { getCurvatureExtremaE } from './get-curvature-extrema-e/get-curvature-extrema-e.js';
 import { curviness } from './global-properties/curviness.js';
 import { splitByCurvature } from './transformation/split/split-by-curvature.js';
 import { splitByCurvatureAndLength } from './transformation/split/split-by-curvature-and-length.js';
@@ -172,6 +178,8 @@ export {
 	toPowerBasis_1stDerivativeErrorCounters,
 
 	κ, curvature,
+	eCurvature,
+	ddCurvature,
 	tangent,
 	normal,
 
@@ -223,6 +231,8 @@ export {
 	getIntervalBox,
 
 	getCurvatureExtrema,
+	getCurvatureExtremaDd,
+	getCurvatureExtremaE,
 	totalCurvature,
 	totalAbsoluteCurvature,
 
@@ -246,6 +256,8 @@ export {
 	equal,
 	γ,γγ,
 	closestPointOnBezierCertified,
+	getFootPointsOnBezierCertified,
+	getFootPointsOnBezierPolysCertified,
 	getInterfaceRotation,
 	closestPointOnBezier,
 	furthestPointOnBezier,

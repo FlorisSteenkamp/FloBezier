@@ -1,4 +1,3 @@
-declare const noIntersection: undefined;
 /**
  * Performs geometric clipping of the given bezier curve and returns the new
  * minimum and maximum `t` parameter values.
@@ -23,5 +22,5 @@ declare function geoClip(G: {
 }, dF: (p: number[], _p: number[]) => {
     dMin: number;
     dMax: number;
-}, dMin: number, dMax: number): number[] | typeof noIntersection;
+}, dMin: number, dMax: number): number[] | typeof undefined;
 export { geoClip };

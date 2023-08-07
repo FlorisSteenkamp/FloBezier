@@ -13,17 +13,18 @@
  * 
  * @doc
  */
-function toPowerBasis_3rdDerivative(ps: number[][]): number[] {
+function toPowerBasis_3rdDerivative(ps: number[][]): number[][] {
 	if (ps.length === 4) {
 		const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
-		return [
-			6*((x3 - x0) + 3*(x1 - x2)),
+		return [[
+			6*((x3 - x0) + 3*(x1 - x2))
+		], [
 			6*((y3 - y0) + 3*(y1 - y2))
-		];
+		]];
 	} 
 	
 	if (ps.length <= 3) {
-		return [0, 0];
+		return [[0],[0]];
 	}
 
 	throw new Error('The given bezier curve must be of order <= 3.');

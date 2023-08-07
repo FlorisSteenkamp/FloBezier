@@ -30,9 +30,9 @@ function evalDeCasteljauDd(
 		t: number[]): number[][] {
 
 	if (t[0] === 0 && t[1] === 0) {
-		return ps[0].map(c => [c]);
+		return ps[0].map(c => [0,c]);
 	} else if (t[0] === 0 && t[1] === 1) {
-		return ps[ps.length-1].map(c => [c]);
+		return ps[ps.length-1].map(c => [0,c]);
 	}
 
 	if (ps.length === 4) {
