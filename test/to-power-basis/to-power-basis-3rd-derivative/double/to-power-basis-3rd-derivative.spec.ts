@@ -13,26 +13,26 @@ describe('toPowerBasis_3rdDerivative', function() {
 		{
 			const ps = getRandomCubic(0);
 			const r = toPowerBasis_3rdDerivative(ps);
-			const expected = [1518.5815863227895,-1662.8818047630489];
+			const expected = [[1518.5815863227895],[-1662.8818047630489]];
 			// @ts-ignore - otherwise TypeScript gives an error on nearly
 			expect(r).to.be.nearly(2**8, expected);
 		}
 		{
 			const ps = getRandomQuad(0);
 			const r = toPowerBasis_3rdDerivative(ps);
-			const expected = [0,0];
+			const expected = [[0],[0]];
 			expect(r).to.eql(expected);
 		}
 		{
 			const ps = getRandomLine(0);
 			const r = toPowerBasis_3rdDerivative(ps);
-			const expected = [0,0];
+			const expected = [[0],[0]];
 			expect(r).to.eql(expected);
 		}
 		{
 			const ps = getRandomPoint(0);
 			const r = toPowerBasis_3rdDerivative(ps);
-			const expected = [0,0];
+			const expected = [[0],[0]];
 			expect(r).to.eql(expected);
 		}
 

@@ -20590,13 +20590,14 @@ const to_power_basis_3rd_derivative_exact_eadd = eAdd;
 function toPowerBasis_3rdDerivativeExact(ps) {
     if (ps.length === 4) {
         const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
-        return [
-            to_power_basis_3rd_derivative_exact_sce(6, to_power_basis_3rd_derivative_exact_eadd(to_power_basis_3rd_derivative_exact_td(x3, x0), to_power_basis_3rd_derivative_exact_sce(3, to_power_basis_3rd_derivative_exact_td(x1, x2)))),
-            to_power_basis_3rd_derivative_exact_sce(6, to_power_basis_3rd_derivative_exact_eadd(to_power_basis_3rd_derivative_exact_td(y3, y0), to_power_basis_3rd_derivative_exact_sce(3, to_power_basis_3rd_derivative_exact_td(y1, y2))))
-        ];
+        return [[
+                to_power_basis_3rd_derivative_exact_sce(6, to_power_basis_3rd_derivative_exact_eadd(to_power_basis_3rd_derivative_exact_td(x3, x0), to_power_basis_3rd_derivative_exact_sce(3, to_power_basis_3rd_derivative_exact_td(x1, x2))))
+            ], [
+                to_power_basis_3rd_derivative_exact_sce(6, to_power_basis_3rd_derivative_exact_eadd(to_power_basis_3rd_derivative_exact_td(y3, y0), to_power_basis_3rd_derivative_exact_sce(3, to_power_basis_3rd_derivative_exact_td(y1, y2))))
+            ]];
     }
     else if (ps.length <= 3) {
-        return [[0], [0]];
+        return [[[0]], [[0]]];
     }
     // Note: if x0,x1,x2,x3 <= X (for some X) and t is an element of [0,1], then
     // max(dddx)(t) <= 48*X for all t.
@@ -23453,7 +23454,7 @@ function getAbsCurvatureExtremaPolysE(ps) {
     // Max abs curvature at: ((x′′′y′ − x′y′′′)(x′2 + y′2) − 3(x′x′′ + y′y′′)(x′′y′ − x′y′′)) === 0
     const [[dx2, dx1, dx0], [dy2, dy1, dy0]] = toPowerBasis_1stDerivativeExact(ps); // max bitlength increase === 5
     const [[ddx1, ddx0], [ddy1, ddy0]] = toPowerBasis_2ndDerivativeExact(ps); // max bitlength increase === 6
-    const [dddx, dddy] = toPowerBasis_3rdDerivativeExact(ps); // max bitlength increase === 6
+    const [[dddx], [dddy]] = toPowerBasis_3rdDerivativeExact(ps); // max bitlength increase === 6
     // ((x′′′y′ − x′y′′′)(x′2 + y′2) − 3(x′x′′ + y′y′′)(x′′y′ − x′y′′))
     // or 
     // x′′′x′x′y′ + x′′′y′y′y′ - y′′′x′x′x′ - y′′′x′y′y′ + 

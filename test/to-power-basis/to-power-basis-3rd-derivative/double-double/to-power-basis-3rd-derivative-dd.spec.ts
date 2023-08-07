@@ -14,10 +14,11 @@ describe('toPowerBasis_3rdDerivativeDd', function() {
 		{
 			const ps = getRandomCubic(0);
 			const r = toPowerBasis_3rdDerivativeDd(ps);
-			const expected = [
+			const expected = [[
 				[0, 1518.5815863227895],
+			], [
 				[-1.1368683772161603e-13, -1662.8818047630489]
-			];
+			]];
 			expect(r).to.eql(expected);
 
 			for (let i=0; i<10; i++) {
@@ -26,25 +27,25 @@ describe('toPowerBasis_3rdDerivativeDd', function() {
 				const rd = toPowerBasis_3rdDerivative(ps);
 
 				// @ts-ignore - otherwise TypeScript gives an error on nearly
-				expect(r.map(eEstimate)).to.be.nearly(2**0, rd);
+				expect(r.map(r => r.map(eEstimate))).to.be.nearly(2**0, rd);
 			}
 		}
 		{
 			const ps = getRandomQuad(0);
 			const r = toPowerBasis_3rdDerivativeDd(ps);
-			const expected = [[0,0],[0,0]];
+			const expected = [[[0,0]],[[0,0]]];
 			expect(r).to.eql(expected);
 		}
 		{
 			const ps = getRandomLine(0);
 			const r = toPowerBasis_3rdDerivativeDd(ps);
-			const expected = [[0,0],[0,0]];
+			const expected = [[[0,0]],[[0,0]]];
 			expect(r).to.eql(expected);
 		}
 		{
 			const ps = getRandomPoint(0);
 			const r = toPowerBasis_3rdDerivativeDd(ps);
-			const expected = [[0,0],[0,0]];
+			const expected = [[[0,0]],[[0,0]]];
 			expect(r).to.eql(expected);
 		}
 

@@ -38,7 +38,6 @@ function closestPointOnBezierCertified(
         lb = 0,
         ub = 1): FootAndEndpointInfo[] {
 
-    // const ris = getFootPointsOnBezierCertified(ps,p);
     const { polyDd, polyE, getPolyExact } = getFootPointsOnBezierPolysCertified(ps, p);
     const ris = allRootsCertified(polyDd, lb, ub, polyE, getPolyExact);
 

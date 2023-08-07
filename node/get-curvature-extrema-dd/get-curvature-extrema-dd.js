@@ -29,7 +29,6 @@ function getCurvatureExtremaDd(ps) {
     }
     if (ps.length === 3) {
         const poly = getCurvatureExtremaQuadraticPolyDd(ps);
-        // const maxima = allRoots(poly, 0, 1);
         const maxima = allRootsCertified(poly, 0, 1);
         return {
             minima: [],

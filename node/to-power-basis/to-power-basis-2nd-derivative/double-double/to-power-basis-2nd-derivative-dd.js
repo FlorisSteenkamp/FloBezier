@@ -38,7 +38,7 @@ function toPowerBasis_2ndDerivativeDd(ps) {
             ]];
     }
     if (ps.length <= 2) {
-        return [[[0]], [[0]]];
+        return [[[0, 0]], [[0, 0]]];
     }
     throw new Error('The given bezier curve must be of order <= 3.');
 }

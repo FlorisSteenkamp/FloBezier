@@ -48,13 +48,13 @@ describe('toPowerBasis_2ndDerivativeDd', function() {
 		{
 			const ps = getRandomLine(0);
 			const r = toPowerBasis_2ndDerivativeDd(ps);
-			const expected = [[[0]],[[0]]];
+			const expected = [[[0,0]],[[0,0]]];
 			expect(r).to.eql(expected);
 		}
 		{
 			const ps = getRandomPoint(0);
 			const r = toPowerBasis_2ndDerivativeDd(ps);
-			const expected = [[[0]],[[0]]];
+			const expected = [[[0,0]],[[0,0]]];
 			expect(r).to.eql(expected);
 		}
 
