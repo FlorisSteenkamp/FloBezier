@@ -22455,7 +22455,6 @@ const { sqrt: closest_point_on_bezier_certified_sqrt } = Math;
  * @doc
  */
 function closestPointOnBezierCertified(ps, p, lb = 0, ub = 1) {
-    // const ris = getFootPointsOnBezierCertified(ps,p);
     const { polyDd, polyE, getPolyExact } = getFootPointsOnBezierPolysCertified(ps, p);
     const ris = allRootsCertified(polyDd, lb, ub, polyE, getPolyExact);
     ris.push({ tS: lb, tE: lb, multiplicity: 1 });
@@ -23027,7 +23026,40 @@ function getAbsCurvatureExtremaPolys(ps) {
 }
 
 
+;// CONCATENATED MODULE: ./src/get-curvature-extrema/get-curvature-extrema-quadratic-poly.ts
+/**
+ * Returns the polynomial whose zero is the t value of maximum absolute
+ * curvature for the given *quadratic* bezier curve.
+ *
+ * * **precondition:** the given parabola is not degenerate to a line
+ * * **non-exact:** there is floating point roundof during calculation
+ * * see e.g. [math.stackexchange](https://math.stackexchange.com/a/2971112)'s
+ * answer by [KeithWM](https://math.stackexchange.com/a/2971112/130809)
+ *
+ * @param ps an order 2 bezier curve given as an array of control points,
+ * e.g. `[[0,0],[1,1],[2,1]]`
+ *
+ * @internal
+ */
+function getCurvatureExtremaQuadraticPoly(ps) {
+    // Find the point of max curvature (of the parabola)
+    // calculate t*
+    const [[x0, y0], [x1, y1], [x2, y2]] = ps;
+    const x10 = x1 - x0;
+    const x21 = x2 - x1;
+    const wx = x21 - x10;
+    const y10 = y1 - y0;
+    const y21 = y2 - y1;
+    const wy = y21 - y10;
+    const n = x0 * (wx - x1) - x1 * (x21 - x1) +
+        y0 * (wy - y1) - y1 * (y21 - y1);
+    const d = wx * wx + wy * wy;
+    return [d, -n];
+}
+
+
 ;// CONCATENATED MODULE: ./src/get-curvature-extrema/get-curvature-extrema.ts
+
 
 
 
@@ -23088,35 +23120,6 @@ function getCurvatureExtrema(ps) {
     }
     const inflections = allRoots(p1, 0, 1);
     return { minima, maxima, inflections };
-}
-/**
- * Returns the polynomial whose zero is the t value of maximum absolute
- * curvature for the given *quadratic* bezier curve.
- *
- * * **precondition:** the given parabola is not degenerate to a line
- * * **non-exact:** there is floating point roundof during calculation
- * * see e.g. [math.stackexchange](https://math.stackexchange.com/a/2971112)'s
- * answer by [KeithWM](https://math.stackexchange.com/a/2971112/130809)
- *
- * @param ps an order 2 bezier curve given as an array of control points,
- * e.g. `[[0,0],[1,1],[2,1]]`
- *
- * @internal
- */
-function getCurvatureExtremaQuadraticPoly(ps) {
-    // Find the point of max curvature (of the parabola)
-    // calculate t*
-    const [[x0, y0], [x1, y1], [x2, y2]] = ps;
-    const x10 = x1 - x0;
-    const x21 = x2 - x1;
-    const wx = x21 - x10;
-    const y10 = y1 - y0;
-    const y21 = y2 - y1;
-    const wy = y21 - y10;
-    const n = x0 * (wx - x1) - x1 * (x21 - x1) +
-        y0 * (wy - y1) - y1 * (y21 - y1);
-    const d = wx * wx + wy * wy;
-    return [d, -n];
 }
 
 
@@ -23344,7 +23347,7 @@ function getCurvatureExtremaQuadraticPolyDd(ps) {
     const y10 = get_curvature_extrema_quadratic_poly_dd_td(y1, y0);
     const y21 = get_curvature_extrema_quadratic_poly_dd_td(y2, y1);
     const wy = get_curvature_extrema_quadratic_poly_dd_qdq(y21, y10);
-    const n = get_curvature_extrema_quadratic_poly_dd_qaq(get_curvature_extrema_quadratic_poly_dd_qdq(get_curvature_extrema_quadratic_poly_dd_qmd(x0, (get_curvature_extrema_quadratic_poly_dd_qdq(wx, [0, -x1]))), get_curvature_extrema_quadratic_poly_dd_qmd(x1, (get_curvature_extrema_quadratic_poly_dd_qdq(x21, [0, -x1])))), get_curvature_extrema_quadratic_poly_dd_qdq(get_curvature_extrema_quadratic_poly_dd_qmd(y0, (get_curvature_extrema_quadratic_poly_dd_qdq(wy, [0, -y1]))), get_curvature_extrema_quadratic_poly_dd_qmd(y1, (get_curvature_extrema_quadratic_poly_dd_qdq(y21, [0, -y1])))));
+    const n = get_curvature_extrema_quadratic_poly_dd_qaq(get_curvature_extrema_quadratic_poly_dd_qdq(get_curvature_extrema_quadratic_poly_dd_qmd(x0, (get_curvature_extrema_quadratic_poly_dd_qdq(wx, [0, x1]))), get_curvature_extrema_quadratic_poly_dd_qmd(x1, (get_curvature_extrema_quadratic_poly_dd_qdq(x21, [0, x1])))), get_curvature_extrema_quadratic_poly_dd_qdq(get_curvature_extrema_quadratic_poly_dd_qmd(y0, (get_curvature_extrema_quadratic_poly_dd_qdq(wy, [0, y1]))), get_curvature_extrema_quadratic_poly_dd_qmd(y1, (get_curvature_extrema_quadratic_poly_dd_qdq(y21, [0, y1])))));
     const d = get_curvature_extrema_quadratic_poly_dd_qaq(get_curvature_extrema_quadratic_poly_dd_qmq(wx, wx), get_curvature_extrema_quadratic_poly_dd_qmq(wy, wy));
     return [d, node_ddNegativeOf(n)];
 }

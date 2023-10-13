@@ -28,7 +28,6 @@ const { sqrt } = Math;
  * @doc
  */
 function closestPointOnBezierCertified(ps, p, lb = 0, ub = 1) {
-    // const ris = getFootPointsOnBezierCertified(ps,p);
     const { polyDd, polyE, getPolyExact } = getFootPointsOnBezierPolysCertified(ps, p);
     const ris = allRootsCertified(polyDd, lb, ub, polyE, getPolyExact);
     ris.push({ tS: lb, tE: lb, multiplicity: 1 });

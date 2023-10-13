@@ -43,12 +43,12 @@ function getCurvatureExtremaQuadraticPolyDd(
 
     const n = qaq(
         qdq(
-            qmd(x0,(qdq(wx,[0,-x1]))),
-            qmd(x1,(qdq(x21,[0,-x1])))
+            qmd(x0,(qdq(wx,[0,x1]))),
+            qmd(x1,(qdq(x21,[0,x1])))
         ),
         qdq(
-            qmd(y0,(qdq(wy,[0,-y1]))),
-            qmd(y1,(qdq(y21,[0,-y1])))
+            qmd(y0,(qdq(wy,[0,y1]))),
+            qmd(y1,(qdq(y21,[0,y1])))
         )
     );
 

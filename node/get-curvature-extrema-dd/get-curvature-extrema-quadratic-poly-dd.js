@@ -29,7 +29,7 @@ function getCurvatureExtremaQuadraticPolyDd(ps) {
     const y10 = td(y1, y0);
     const y21 = td(y2, y1);
     const wy = qdq(y21, y10);
-    const n = qaq(qdq(qmd(x0, (qdq(wx, [0, -x1]))), qmd(x1, (qdq(x21, [0, -x1])))), qdq(qmd(y0, (qdq(wy, [0, -y1]))), qmd(y1, (qdq(y21, [0, -y1])))));
+    const n = qaq(qdq(qmd(x0, (qdq(wx, [0, x1]))), qmd(x1, (qdq(x21, [0, x1])))), qdq(qmd(y0, (qdq(wy, [0, y1]))), qmd(y1, (qdq(y21, [0, y1])))));
     const d = qaq(qmq(wx, wx), qmq(wy, wy));
     return [d, ddNegativeOf(n)];
 }
