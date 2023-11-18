@@ -583,11 +583,11 @@ function orient2dAdapt(A, B, C, detsum) {
 }
 
 //# sourceMappingURL=orient2d.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-graham-scan/node/get-smallest-indx-y-then-x.js
+;// CONCATENATED MODULE: ./node_modules/flo-graham-scan/node/get-smallest-idx-y-then-x.js
 /**
  * @internal
  */
-function getSmallestIndxYThenX(ps) {
+function getSmallestIdxYThenX(ps) {
     let smallest = [
         Number.POSITIVE_INFINITY,
         Number.POSITIVE_INFINITY
@@ -604,25 +604,8 @@ function getSmallestIndxYThenX(ps) {
     return smallestI;
 }
 
-//# sourceMappingURL=get-smallest-indx-y-then-x.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-graham-scan/node/swap.js
-/**
- * In-place swap two elements in the given array.
- *
- * @internal
- */
-function swap(arr, a, b) {
-    if (a === b) {
-        return;
-    }
-    const temp = arr[a];
-    arr[a] = arr[b];
-    arr[b] = temp;
-}
-
-//# sourceMappingURL=swap.js.map
+//# sourceMappingURL=get-smallest-idx-y-then-x.js.map
 ;// CONCATENATED MODULE: ./node_modules/flo-graham-scan/node/index.js
-
 
 
 /**
@@ -637,19 +620,13 @@ function swap(arr, a, b) {
  * @param includeAllBoundaryPoints Set this to true to if all boundary points
  * should be returned, even redundant ones - defaults to `false`
  */
-function grahamScan(ps, includeAllBoundaryPoints = false) {
-    if (!ps.length) {
+function grahamScan(ps) {
+    const n = ps.length;
+    if (n === 0) {
         return undefined;
     }
-    function fail(p1, p2, p3) {
-        const res = orient2d_orient2d(p1, p2, p3);
-        return includeAllBoundaryPoints
-            ? res < 0
-            : res <= 0;
-    }
     const ps_ = ps.slice();
-    const n = ps_.length;
-    const idx = getSmallestIndxYThenX(ps_);
+    const idx = getSmallestIdxYThenX(ps_);
     const [p] = ps_.splice(idx, 1);
     ps_.sort((a, b) => {
         let res = -orient2d_orient2d(p, a, b);
@@ -663,25 +640,38 @@ function grahamScan(ps, includeAllBoundaryPoints = false) {
         return a[0] - b[0];
     });
     ps_.unshift(p);
-    let m = 1;
-    for (let i = 2; i < n; i++) {
-        while (fail(ps_[m - 1], ps_[m], ps_[i])) {
-            if (m > 1) {
-                m -= 1;
-                continue;
-            }
-            else if (i === n - 1) {
-                m -= 1;
+    let stack = [];
+    for (const p of ps_) {
+        while (stack.length > 1) {
+            const r = orient2d_orient2d(stack[stack.length - 2], stack[stack.length - 1], p) <= 0;
+            if (!r) {
                 break;
             }
-            else {
-                i += 1;
-            }
+            stack.pop();
         }
-        m += 1;
-        swap(ps_, m, i);
+        stack.push(p);
     }
-    return ps_.slice(0, m + 1);
+    const len = stack.length;
+    const stack_ = [stack[0]];
+    for (let i = 1; i < len; i++) {
+        const pS = stack[(i - 1) % len];
+        const pM = stack[(i) % len];
+        const pE = stack[(i + 1) % len];
+        if (orient2d_orient2d(pS, pM, pE) !== 0 || dot(pS, pM, pE) < 0) {
+            stack_.push(pM);
+        }
+    }
+    return stack_;
+}
+/**
+ * No need to be accurate
+ */
+function dot(p1, p2, p3) {
+    const v1x = p2[0] - p1[0];
+    const v1y = p2[1] - p1[1];
+    const v2x = p3[0] - p2[0];
+    const v2y = p3[1] - p2[1];
+    return v1x * v2x + v1y * v2y;
 }
 
 //# sourceMappingURL=index.js.map
@@ -12443,7 +12433,6 @@ function getImplicitForm1ExactPb(pspb) {
 const get_coeffs_bez1_bez1_exact_sce = scaleExpansion2;
 const get_coeffs_bez1_bez1_exact_epr = expansionProduct;
 const get_coeffs_bez1_bez1_exact_fes = fastExpansionSum;
-const get_coeffs_bez1_bez1_exact_eSign = (/* unused pure expression or super */ null && (_eSign));
 /**
  * Returns an error-free polynomial in 1 variable whose roots are the parameter
  * values of the intersection points of two order 1 bezier curves (i.e. 2 lines).
@@ -21006,7 +20995,7 @@ function ddCurvature(ps, t) {
  * @param a the first vector
  * @param b the second vector
  */
-function dot(a, b) {
+function dot_dot(a, b) {
     return a[0] * b[0] + a[1] * b[1];
 }
 
@@ -21028,8 +21017,8 @@ function isQuadObtuse(ps) {
     const v0 = node_fromTo(ps[0], ps[1]);
     const v1 = node_fromTo(ps[1], ps[2]);
     const v2 = node_fromTo(ps[2], ps[0]);
-    const angleP0Obtuse = dot(v2, v0) > 0;
-    const angleP2Obtuse = dot(v1, v2) > 0;
+    const angleP0Obtuse = dot_dot(v2, v0) > 0;
+    const angleP2Obtuse = dot_dot(v1, v2) > 0;
     return angleP0Obtuse || angleP2Obtuse;
 }
 

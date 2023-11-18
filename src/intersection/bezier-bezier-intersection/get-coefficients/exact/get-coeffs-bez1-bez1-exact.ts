@@ -8,7 +8,6 @@ import { expansionProduct, fastExpansionSum, scaleExpansion2, eSign as _eSign } 
 const sce = scaleExpansion2;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
-const eSign = _eSign;
 
 
 /**

@@ -1,11 +1,10 @@
 import { getImplicitForm1ExactPb } from "../../../../implicit-form/exact/get-implicit-form1-exact.js";
 import { toPowerBasis1Exact } from "../../../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-import { expansionProduct, fastExpansionSum, scaleExpansion2, eSign as _eSign } from "big-float-ts";
+import { expansionProduct, fastExpansionSum, scaleExpansion2 } from "big-float-ts";
 const sce = scaleExpansion2;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
-const eSign = _eSign;
 /**
  * Returns an error-free polynomial in 1 variable whose roots are the parameter
  * values of the intersection points of two order 1 bezier curves (i.e. 2 lines).
