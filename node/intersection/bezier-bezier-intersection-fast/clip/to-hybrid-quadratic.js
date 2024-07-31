@@ -51,8 +51,8 @@ function toHybridQuadratic(G) {
     // <12> <= <12>(<11>(<0>3*<10>x2) + <11>x3)
     const _hq2 = [(3 * _x2 + _x3) / 2, (3 * _y2 + _y3) / 2];
     return {
-        hq: [[(3 * x1 - x0) / 2, (3 * y1 - y0) / 2],
-            [(3 * x2 - x3) / 2, (3 * y2 - y3) / 2]],
+        hq: [[(3 * x1 - x0) / 2, (3 * y1 - y0) / 2], // evaluated at (1-t)
+            [(3 * x2 - x3) / 2, (3 * y2 - y3) / 2]], // evaluated at t
         // error bounds (still need to be multiplied by 4*u and 6*u)
         _hq: [_hq1, _hq2]
     };

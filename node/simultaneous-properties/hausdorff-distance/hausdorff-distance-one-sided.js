@@ -61,7 +61,7 @@ function hausdorffDistanceOneSided(A, B, tolerance, maxIterations = 50) {
         return EA0 > EA1 ? EA0 : EA1;
     }
     const l = max(maxAbsCoordinate(A), maxAbsCoordinate(B));
-    tolerance = tolerance || l / 1000000;
+    tolerance = tolerance || l / 1000_000;
     // an array of intervals
     const [eL, eR] = calcHErrorBound(A, 0, 1);
     const d0 = closestPointOnBezier(B, A[0]).d;

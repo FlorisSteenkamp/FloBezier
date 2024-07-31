@@ -97,9 +97,9 @@ function splitRight3(ps, t) {
         ps: [[x03, y03], [x12, y12], [x21, y21], [x30, y30]],
         _ps: [
             // the coordinate-wise error bounds
-            [_x03, _y03],
-            [_x12, _y12],
-            [_x21, _y21],
+            [_x03, _y03], // [9*u*_x03, 9*u*_y03]      
+            [_x12, _y12], // [6*u*_x02, 6*u*_y02]
+            [_x21, _y21], // [3*u*_x01, 3*u*_y01]
             [0, 0] // [0, 0],
         ]
     };
@@ -176,9 +176,9 @@ function splitLeft3(ps, t) {
         ps: [[x00, y00], [x01, y01], [x02, y02], [x03, y03]],
         _ps: [
             // the coordinate-wise error bounds
-            [0, 0],
-            [_x01, _y01],
-            [_x02, _y02],
+            [0, 0], // [0, 0],
+            [_x01, _y01], // [3*u*_x01, 3*u*_y01],
+            [_x02, _y02], // [6*u*_x02, 6*u*_y02],
             [_x03, _y03] // [9*u*_x03, 9*u*_y03]
         ]
     };
@@ -284,9 +284,9 @@ function splitAtBoth3(ps, tS, tE) {
     return {
         ps: [[xx0, yy0], [xx1, yy1], [xx2, yy2], [xx3, yy3]],
         _ps: [
-            [_xx0, _yy0],
-            [_xx1, _yy1],
-            [_xx2, _yy2],
+            [_xx0, _yy0], // [8*u*_xx0, 8*u*_yy0]
+            [_xx1, _yy1], // [7*u*_xx1, 7*u*_yy1]
+            [_xx2, _yy2], // [7*u*_xx2, 7*u*_yy2]
             [_xx3, _yy3] // [8*u*_xx3, 8*u*_yy3]
         ]
     };

@@ -52,9 +52,9 @@ function splitRight1(ps, t) {
     //   2. <k>a<l>b = <k + l + 1>ab
     //   3. fl(a) === <1>a
     const psR = [
-        [t * (x1 - x0) + x0,
-            t * (y1 - y0) + y0],
-        [x1,
+        [t * (x1 - x0) + x0, // xx0
+            t * (y1 - y0) + y0], // yy0
+        [x1, // xx1
             y1] // yy1
     ];
     // -----------------------
@@ -109,9 +109,9 @@ function splitLeft1(ps, t) {
     //   2. <k>a<l>b = <k + l + 1>ab
     //   3. fl(a) === <1>a
     const psL = [
-        [x0,
-            y0],
-        [t * (x1 - x0) + x0,
+        [x0, // xx0
+            y0], // yy0
+        [t * (x1 - x0) + x0, // xx1
             t * (y1 - y0) + y0] // yy1
     ];
     // -----------------------
@@ -167,9 +167,9 @@ function splitAtBoth1(ps, tS, tE) {
     //   2. <k>a<l>b = <k + l + 1>ab
     //   3. fl(a) === <1>a
     const psB = [
-        [tS * (x1 - x0) + x0,
-            tS * (y1 - y0) + y0],
-        [tE * (x1 - x0) + x0,
+        [tS * (x1 - x0) + x0, // xx0
+            tS * (y1 - y0) + y0], // yy0
+        [tE * (x1 - x0) + x0, // xx1
             tE * (y1 - y0) + y0] // yy1
     ];
     // -----------------------

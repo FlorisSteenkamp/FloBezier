@@ -62,7 +62,7 @@ function quadraticToPolyline(ps, tolerance) {
     // Polyline linked list
     let head = {
         ps,
-        prev: undefined,
+        prev: undefined, // keep TypeScript happy - it's ok, we'll set it later
         next: undefined // keep TypeScript happy - it's ok, we'll set it later
     };
     stack.push(head);
@@ -86,7 +86,7 @@ function quadraticToPolyline(ps, tolerance) {
         };
         const node2 = {
             ps: quads[1],
-            prev: undefined,
+            prev: undefined, // keep TypeScript happy - it's ok, we'll set it later
             next
         };
         node1.next = node2;

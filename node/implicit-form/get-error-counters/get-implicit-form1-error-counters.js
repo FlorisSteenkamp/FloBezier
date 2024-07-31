@@ -50,8 +50,8 @@ function getImplicitForm1ErrorCounters(ps) {
     // <3>v <-- <3>(<2>(<0>a0*<1>b1) - <2>(<1>a1*<0>b0))
     const v_ = abs(a0) * b1_ + abs(b0) * a1_; // <3>
     return {
-        vₓ_: b1_,
-        vᵧ_: a1_,
+        vₓ_: b1_, // <1>
+        vᵧ_: a1_, // <1>
         v_ // <3>
     };
 }

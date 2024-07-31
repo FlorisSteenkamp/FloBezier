@@ -117,7 +117,7 @@ function toPowerBasis2_1stDerivativeErrorCounters(ps) {
     // `<D> === <1>` else if double-double precision then `<D> === <0>`.
     return [
         [
-            2 * ((_x2 + _x0) + 2 * _x1),
+            2 * ((_x2 + _x0) + 2 * _x1), // <D+1> <-- <D+1>(<D>(x2 + x0) - 2*x1)
             2 * (_x1 + _x0) // <D> <-- 2*<D>(x1 - x0)
         ], [
             2 * ((_y2 + _y0) + 2 * _y1),

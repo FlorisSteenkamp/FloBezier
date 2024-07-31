@@ -49,11 +49,11 @@ function splitRight2(ps, t) {
     const yA = y0 - y1;
     const yB = y2 - y1;
     return [
-        [tt * (xA + xB) - (2 * t * xA - x0),
-            tt * (yA + yB) - (2 * t * yA - y0)],
-        [t * xB + x1,
-            t * yB + y1],
-        [x2,
+        [tt * (xA + xB) - (2 * t * xA - x0), // xx0, split point x
+            tt * (yA + yB) - (2 * t * yA - y0)], // yy0, split point y
+        [t * xB + x1, // xx1
+            t * yB + y1], // yy1
+        [x2, // xx2
             y2] // yy2
     ];
 }
@@ -84,11 +84,11 @@ function splitLeft2(ps, t) {
     const xA = x0 - x1;
     const yA = y0 - y1;
     return [
-        [x0,
-            y0],
-        [-t * xA + x0,
-            -t * yA + y0],
-        [tt * (xA + (x2 - x1)) - (2 * t * xA - x0),
+        [x0, // xx0
+            y0], // yy0
+        [-t * xA + x0, // xx1
+            -t * yA + y0], // yy1
+        [tt * (xA + (x2 - x1)) - (2 * t * xA - x0), // xx2 - split point x
             tt * (yA + (y2 - y1)) - (2 * t * yA - y0)] // yy2 - split point y
     ];
 }

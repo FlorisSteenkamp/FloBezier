@@ -54,18 +54,23 @@ function fitQuadsToCubic(
         stack.push([0, 0.5], [0.5,1]);
     } else if (nodeType === 'cusp') {
         const t = bezierSelfIntersection(ps)[0];
-        stack.push([0,t], [t,1]);  // split at cusp
+        if (t !== undefined) {
+            // split at cusp IF the cusp is within [0,1]
+            stack.push([0,t], [t,1]);
+        } else {
+            stack.push([0,1]);
+        }
     } else if (nodeType === 'crunode') {
         const ts = bezierSelfIntersection(ps);
         if (ts.length > 1) {
             stack.push(
-                [0, ts[0]], 
-                [ts[0], ts[1]], 
+                [0, ts[0]],
+                [ts[0], ts[1]],
                 [ts[1], 1]
             );  // split at intersections
         } else {
             // the intersection is outside the range [0,1]
-            stack.push([0,1]);  
+            stack.push([0,1]);
         }
     } else {
         stack.push([0,1]);

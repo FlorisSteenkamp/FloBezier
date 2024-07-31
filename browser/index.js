@@ -24,153 +24,153 @@ var __webpack_exports__ = {};
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  y2: () => (/* reexport */ areBoxesIntersecting),
-  SO: () => (/* reexport */ area_area),
-  Cn: () => (/* reexport */ bezierBezierIntersection),
-  ii: () => (/* reexport */ bezierBezierIntersectionBoundless),
-  uw: () => (/* reexport */ bezierBezierIntersectionFast),
-  Vr: () => (/* reexport */ bezierSelfIntersection),
-  bG: () => (/* reexport */ circleBezierIntersection),
-  Gm: () => (/* reexport */ classification),
-  xt: () => (/* reexport */ classifications),
-  xk: () => (/* reexport */ classify),
-  d9: () => (/* reexport */ clone),
-  jd: () => (/* reexport */ closestPointOnBezier),
-  Ay: () => (/* reexport */ closestPointOnBezierCertified),
-  Ek: () => (/* reexport */ closestPointsBetweenBeziers),
-  Sx: () => (/* reexport */ controlPointLinesLength),
-  vC: () => (/* reexport */ cubicFromAnglesAndSpeeds),
-  hI: () => (/* reexport */ cubicThroughPointGiven013),
-  GY: () => (/* reexport */ cubicToAnglesAndSpeeds),
-  Wb: () => (/* reexport */ cubicToHybridQuadratic),
-  kP: () => (/* reexport */ cubicToQuadratic),
-  Ne: () => (/* reexport */ curvature),
-  oj: () => (/* reexport */ curviness),
-  fz: () => (/* reexport */ ddCurvature),
-  pZ: () => (/* reexport */ eCurvature),
-  Dg: () => (/* reexport */ equal),
-  su: () => (/* reexport */ evalDeCasteljau),
-  ue: () => (/* reexport */ evalDeCasteljauDd),
-  WQ: () => (/* reexport */ evalDeCasteljauError),
-  T_: () => (/* reexport */ evalDeCasteljauWithErr),
-  K5: () => (/* reexport */ evalDeCasteljauWithErrDd),
-  ku: () => (/* reexport */ evaluate),
-  Rf: () => (/* reexport */ evaluate2ndDerivative),
-  ok: () => (/* reexport */ evaluate2ndDerivativeAt0),
-  Bv: () => (/* reexport */ evaluate2ndDerivativeAt0Exact),
-  CH: () => (/* reexport */ evaluate2ndDerivativeAt1),
-  Q$: () => (/* reexport */ evaluate2ndDerivativeAt1Exact),
-  mz: () => (/* reexport */ evaluate2ndDerivativeExact),
-  Lb: () => (/* reexport */ evaluateExact),
-  fV: () => (/* reexport */ evaluateImplicit1),
-  fK: () => (/* reexport */ evaluateImplicit2),
-  CS: () => (/* reexport */ evaluateImplicit3),
-  Go: () => (/* reexport */ fitQuadsToCubic),
-  jX: () => (/* reexport */ fromPowerBasis),
-  JQ: () => (/* reexport */ fromTo),
-  RU: () => (/* reexport */ fromToInclErrorBound),
-  ZL: () => (/* reexport */ furthestPointOnBezier),
-  Gc: () => (/* reexport */ generateCuspAtHalf3),
-  MM: () => (/* reexport */ generateQuarterCircle),
-  W9: () => (/* reexport */ generateSelfIntersecting),
-  OP: () => (/* reexport */ getAbsAreaBetween),
-  so: () => (/* reexport */ getBendingEnergy),
-  A5: () => (/* reexport */ getBoundingBox),
-  FZ: () => (/* reexport */ getBoundingBoxTight),
-  vT: () => (/* reexport */ getBoundingHull),
-  zX: () => (/* reexport */ getBounds),
-  Gb: () => (/* reexport */ getCoeffsBezBez),
-  zs: () => (/* reexport */ getControlPointBox),
-  D: () => (/* reexport */ getCubicSpeeds),
-  cQ: () => (/* reexport */ getCurvatureExtrema),
-  PO: () => (/* reexport */ getCurvatureExtremaDd),
-  c: () => (/* reexport */ getCurvatureExtremaE),
-  Fx: () => (/* reexport */ getEndpointIntersections),
-  PZ: () => (/* reexport */ getFootPointsOnBezierCertified),
-  b0: () => (/* reexport */ getFootPointsOnBezierPolysCertified),
-  w9: () => (/* reexport */ getFootpointPoly),
-  c1: () => (/* reexport */ getFootpointPolyDd),
-  Fi: () => (/* reexport */ getFootpointPolyExact),
-  v2: () => (/* reexport */ getHodograph),
-  _z: () => (/* reexport */ getImplicitForm1),
-  xV: () => (/* reexport */ getImplicitForm1Dd),
-  Kd: () => (/* reexport */ getImplicitForm1DdWithRunningError),
-  sp: () => (/* reexport */ getImplicitForm1ErrorCounters),
-  MA: () => (/* reexport */ getImplicitForm1Exact),
-  pr: () => (/* reexport */ getImplicitForm2),
-  i2: () => (/* reexport */ getImplicitForm2Dd),
-  HL: () => (/* reexport */ getImplicitForm2DdWithRunningError),
-  AI: () => (/* reexport */ getImplicitForm2ErrorCounters),
-  LX: () => (/* reexport */ getImplicitForm2Exact),
-  q3: () => (/* reexport */ getImplicitForm3),
-  wj: () => (/* reexport */ getImplicitForm3Dd),
-  pt: () => (/* reexport */ getImplicitForm3DdWithRunningError),
-  Vh: () => (/* reexport */ getImplicitForm3ErrorCounters),
-  gt: () => (/* reexport */ getImplicitForm3Exact),
-  Qi: () => (/* reexport */ getInflections),
-  Nl: () => (/* reexport */ getInterfaceRotation),
-  mk: () => (/* reexport */ getIntervalBox),
-  I3: () => (/* reexport */ getIntervalBoxDd),
-  n: () => (/* reexport */ getTAtLength),
-  vx: () => (/* reexport */ getXBoundsTight),
-  pJ: () => (/* reexport */ getYBoundsTight),
-  OT: () => (/* reexport */ hausdorffDistance),
-  sn: () => (/* reexport */ hausdorffDistanceOneSided),
-  wN: () => (/* reexport */ intersectBoxes),
-  cp: () => (/* reexport */ isCollinear),
-  Hz: () => (/* reexport */ isCubicReallyLine),
-  gd: () => (/* reexport */ isCubicReallyQuad),
-  wE: () => (/* reexport */ isHorizontal),
-  Xn: () => (/* reexport */ isPointOnBezierExtension),
-  p0: () => (/* reexport */ isQuadObtuse),
-  NI: () => (/* reexport */ isQuadReallyLine),
-  GV: () => (/* reexport */ isReallyPoint),
-  _2: () => (/* reexport */ isSelfOverlapping),
-  Ll: () => (/* reexport */ isVertical),
-  kE: () => (/* reexport */ length_length),
-  w2: () => (/* reexport */ lineToCubic),
-  L8: () => (/* reexport */ lineToQuadratic),
-  he: () => (/* reexport */ maxAbsCoordinate),
-  mJ: () => (/* reexport */ normal),
-  d3: () => (/* reexport */ quadraticToCubic),
-  q8: () => (/* reexport */ quadraticToPolyline),
-  Ut: () => (/* reexport */ reduceOrderIfPossible),
-  S3: () => (/* reexport */ reverse),
-  Bm: () => (/* reexport */ setCubicSpeeds),
-  ZP: () => (/* reexport */ splitByCurvature),
-  xO: () => (/* reexport */ splitByCurvatureAndLength),
-  GQ: () => (/* reexport */ splitByLength),
-  Uo: () => (/* reexport */ tFromXY),
-  s6: () => (/* reexport */ tangent),
-  Cz: () => (/* reexport */ tangentAt0),
-  Vo: () => (/* reexport */ tangentAt0Exact),
-  LC: () => (/* reexport */ tangentAt1),
-  Tb: () => (/* reexport */ tangentAt1Exact),
-  x_: () => (/* reexport */ tangentExact),
-  rA: () => (/* reexport */ toCubic),
-  iq: () => (/* reexport */ toPowerBasis),
-  rQ: () => (/* reexport */ toPowerBasisDd),
-  l7: () => (/* reexport */ toPowerBasisDdWithRunningError),
-  XK: () => (/* reexport */ toPowerBasisErrorCounters),
-  K_: () => (/* reexport */ toPowerBasisExact),
-  jU: () => (/* reexport */ toPowerBasisWithRunningError),
-  iN: () => (/* reexport */ toPowerBasis_1stDerivative),
-  iv: () => (/* reexport */ toPowerBasis_1stDerivativeDd),
-  bn: () => (/* reexport */ toPowerBasis_1stDerivativeErrorCounters),
-  oh: () => (/* reexport */ toPowerBasis_1stDerivativeExact),
-  O6: () => (/* reexport */ toPowerBasis_2ndDerivative),
-  Kr: () => (/* reexport */ toPowerBasis_2ndDerivativeDd),
-  hJ: () => (/* reexport */ toPowerBasis_2ndDerivativeExact),
-  ai: () => (/* reexport */ toPowerBasis_3rdDerivative),
-  J8: () => (/* reexport */ toPowerBasis_3rdDerivativeDd),
-  _A: () => (/* reexport */ toPowerBasis_3rdDerivativeExact),
-  BB: () => (/* reexport */ to_string_toString),
-  _G: () => (/* reexport */ totalAbsoluteCurvature),
-  Ce: () => (/* reexport */ totalCurvature),
-  Cv: () => (/* reexport */ totalLength),
-  H8: () => (/* reexport */ γ),
-  Uv: () => (/* reexport */ γγ),
-  Ef: () => (/* reexport */ κ)
+  r9: () => (/* reexport */ areBoxesIntersecting),
+  Wc: () => (/* reexport */ area_area),
+  G6: () => (/* reexport */ bezierBezierIntersection),
+  $Z: () => (/* reexport */ bezierBezierIntersectionBoundless),
+  EK: () => (/* reexport */ bezierBezierIntersectionFast),
+  nd: () => (/* reexport */ bezierSelfIntersection),
+  pH: () => (/* reexport */ circleBezierIntersection),
+  xs: () => (/* reexport */ classification),
+  Ug: () => (/* reexport */ classifications),
+  L8: () => (/* reexport */ classify),
+  o8: () => (/* reexport */ clone),
+  GC: () => (/* reexport */ closestPointOnBezier),
+  d2: () => (/* reexport */ closestPointOnBezierCertified),
+  HE: () => (/* reexport */ closestPointsBetweenBeziers),
+  hB: () => (/* reexport */ controlPointLinesLength),
+  ex: () => (/* reexport */ cubicFromAnglesAndSpeeds),
+  rM: () => (/* reexport */ cubicThroughPointGiven013),
+  ZS: () => (/* reexport */ cubicToAnglesAndSpeeds),
+  o1: () => (/* reexport */ cubicToHybridQuadratic),
+  ks: () => (/* reexport */ cubicToQuadratic),
+  E0: () => (/* reexport */ curvature),
+  $c: () => (/* reexport */ curviness),
+  EC: () => (/* reexport */ ddCurvature),
+  Lh: () => (/* reexport */ eCurvature),
+  LC: () => (/* reexport */ equal),
+  u7: () => (/* reexport */ evalDeCasteljau),
+  w4: () => (/* reexport */ evalDeCasteljauDd),
+  g5: () => (/* reexport */ evalDeCasteljauError),
+  RK: () => (/* reexport */ evalDeCasteljauWithErr),
+  rR: () => (/* reexport */ evalDeCasteljauWithErrDd),
+  _3: () => (/* reexport */ evaluate),
+  L: () => (/* reexport */ evaluate2ndDerivative),
+  i$: () => (/* reexport */ evaluate2ndDerivativeAt0),
+  XZ: () => (/* reexport */ evaluate2ndDerivativeAt0Exact),
+  r$: () => (/* reexport */ evaluate2ndDerivativeAt1),
+  EZ: () => (/* reexport */ evaluate2ndDerivativeAt1Exact),
+  Sb: () => (/* reexport */ evaluate2ndDerivativeExact),
+  xW: () => (/* reexport */ evaluateExact),
+  WA: () => (/* reexport */ evaluateImplicit1),
+  PD: () => (/* reexport */ evaluateImplicit2),
+  Ik: () => (/* reexport */ evaluateImplicit3),
+  fb: () => (/* reexport */ fitQuadsToCubic),
+  Ci: () => (/* reexport */ fromPowerBasis),
+  e8: () => (/* reexport */ fromTo),
+  CR: () => (/* reexport */ fromToInclErrorBound),
+  "in": () => (/* reexport */ furthestPointOnBezier),
+  IY: () => (/* reexport */ generateCuspAtHalf3),
+  Cl: () => (/* reexport */ generateQuarterCircle),
+  bs: () => (/* reexport */ generateSelfIntersecting),
+  Sw: () => (/* reexport */ getAbsAreaBetween),
+  Qj: () => (/* reexport */ getBendingEnergy),
+  UX: () => (/* reexport */ getBoundingBox),
+  I5: () => (/* reexport */ getBoundingBoxTight),
+  _y: () => (/* reexport */ getBoundingHull),
+  gW: () => (/* reexport */ getBounds),
+  v0: () => (/* reexport */ getCoeffsBezBez),
+  lX: () => (/* reexport */ getControlPointBox),
+  jK: () => (/* reexport */ getCubicSpeeds),
+  YV: () => (/* reexport */ getCurvatureExtrema),
+  IB: () => (/* reexport */ getCurvatureExtremaDd),
+  Tc: () => (/* reexport */ getCurvatureExtremaE),
+  cR: () => (/* reexport */ getEndpointIntersections),
+  RH: () => (/* reexport */ getFootPointsOnBezierCertified),
+  GF: () => (/* reexport */ getFootPointsOnBezierPolysCertified),
+  vd: () => (/* reexport */ getFootpointPoly),
+  jT: () => (/* reexport */ getFootpointPolyDd),
+  mK: () => (/* reexport */ getFootpointPolyExact),
+  rh: () => (/* reexport */ getHodograph),
+  TX: () => (/* reexport */ getImplicitForm1),
+  bJ: () => (/* reexport */ getImplicitForm1Dd),
+  O5: () => (/* reexport */ getImplicitForm1DdWithRunningError),
+  oB: () => (/* reexport */ getImplicitForm1ErrorCounters),
+  Ep: () => (/* reexport */ getImplicitForm1Exact),
+  Md: () => (/* reexport */ getImplicitForm2),
+  w3: () => (/* reexport */ getImplicitForm2Dd),
+  x1: () => (/* reexport */ getImplicitForm2DdWithRunningError),
+  RN: () => (/* reexport */ getImplicitForm2ErrorCounters),
+  Dk: () => (/* reexport */ getImplicitForm2Exact),
+  FB: () => (/* reexport */ getImplicitForm3),
+  LQ: () => (/* reexport */ getImplicitForm3Dd),
+  DR: () => (/* reexport */ getImplicitForm3DdWithRunningError),
+  bK: () => (/* reexport */ getImplicitForm3ErrorCounters),
+  s_: () => (/* reexport */ getImplicitForm3Exact),
+  vH: () => (/* reexport */ getInflections),
+  e4: () => (/* reexport */ getInterfaceRotation),
+  TY: () => (/* reexport */ getIntervalBox),
+  z4: () => (/* reexport */ getIntervalBoxDd),
+  Qf: () => (/* reexport */ getTAtLength),
+  is: () => (/* reexport */ getXBoundsTight),
+  Rk: () => (/* reexport */ getYBoundsTight),
+  gV: () => (/* reexport */ hausdorffDistance),
+  L1: () => (/* reexport */ hausdorffDistanceOneSided),
+  NZ: () => (/* reexport */ intersectBoxes),
+  SG: () => (/* reexport */ isCollinear),
+  Mz: () => (/* reexport */ isCubicReallyLine),
+  RA: () => (/* reexport */ isCubicReallyQuad),
+  $b: () => (/* reexport */ isHorizontal),
+  IF: () => (/* reexport */ isPointOnBezierExtension),
+  Un: () => (/* reexport */ isQuadObtuse),
+  pf: () => (/* reexport */ isQuadReallyLine),
+  Qr: () => (/* reexport */ isReallyPoint),
+  Ag: () => (/* reexport */ isSelfOverlapping),
+  fk: () => (/* reexport */ isVertical),
+  Bw: () => (/* reexport */ length_length),
+  uw: () => (/* reexport */ lineToCubic),
+  cZ: () => (/* reexport */ lineToQuadratic),
+  LX: () => (/* reexport */ maxAbsCoordinate),
+  qb: () => (/* reexport */ normal),
+  _f: () => (/* reexport */ quadraticToCubic),
+  i2: () => (/* reexport */ quadraticToPolyline),
+  DD: () => (/* reexport */ reduceOrderIfPossible),
+  BE: () => (/* reexport */ reverse),
+  ve: () => (/* reexport */ setCubicSpeeds),
+  FH: () => (/* reexport */ splitByCurvature),
+  ey: () => (/* reexport */ splitByCurvatureAndLength),
+  OX: () => (/* reexport */ splitByLength),
+  jX: () => (/* reexport */ tFromXY),
+  KR: () => (/* reexport */ tangent),
+  Hf: () => (/* reexport */ tangentAt0),
+  um: () => (/* reexport */ tangentAt0Exact),
+  AY: () => (/* reexport */ tangentAt1),
+  zr: () => (/* reexport */ tangentAt1Exact),
+  Bg: () => (/* reexport */ tangentExact),
+  Oj: () => (/* reexport */ toCubic),
+  V4: () => (/* reexport */ toPowerBasis),
+  bL: () => (/* reexport */ toPowerBasisDd),
+  CP: () => (/* reexport */ toPowerBasisDdWithRunningError),
+  wr: () => (/* reexport */ toPowerBasisErrorCounters),
+  _K: () => (/* reexport */ toPowerBasisExact),
+  SP: () => (/* reexport */ toPowerBasisWithRunningError),
+  pn: () => (/* reexport */ toPowerBasis_1stDerivative),
+  $0: () => (/* reexport */ toPowerBasis_1stDerivativeDd),
+  eT: () => (/* reexport */ toPowerBasis_1stDerivativeErrorCounters),
+  gw: () => (/* reexport */ toPowerBasis_1stDerivativeExact),
+  rC: () => (/* reexport */ toPowerBasis_2ndDerivative),
+  Hm: () => (/* reexport */ toPowerBasis_2ndDerivativeDd),
+  yb: () => (/* reexport */ toPowerBasis_2ndDerivativeExact),
+  qg: () => (/* reexport */ toPowerBasis_3rdDerivative),
+  kd: () => (/* reexport */ toPowerBasis_3rdDerivativeDd),
+  RJ: () => (/* reexport */ toPowerBasis_3rdDerivativeExact),
+  dI: () => (/* reexport */ to_string_toString),
+  hM: () => (/* reexport */ totalAbsoluteCurvature),
+  wu: () => (/* reexport */ totalCurvature),
+  "do": () => (/* reexport */ totalLength),
+  e7: () => (/* reexport */ γ),
+  ZH: () => (/* reexport */ γγ),
+  LZ: () => (/* reexport */ κ)
 });
 
 ;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/basic/two-product.js
@@ -616,20 +616,23 @@ function getSmallestIdxYThenX(ps) {
  * Robust: This algorithm is robust via adaptive infinite precision floating
  * point arithmetic.
  *
- * @param ps A set of points
- * @param includeAllBoundaryPoints Set this to true to if all boundary points
- * should be returned, even redundant ones - defaults to `false`
+ * @param ps a set of points
+ * @param includeRedundantPoints set to `true` if all boundary points
+ * should be returned, even redundant ones (except coincident points)
  */
-function grahamScan(ps) {
+function grahamScan(ps, includeRedundantPoints) {
     const n = ps.length;
     if (n === 0) {
         return undefined;
     }
-    const ps_ = ps.slice();
-    const idx = getSmallestIdxYThenX(ps_);
-    const [p] = ps_.splice(idx, 1);
-    ps_.sort((a, b) => {
-        let res = -orient2d_orient2d(p, a, b);
+    const _ps = ps.slice();
+    const idx = getSmallestIdxYThenX(_ps);
+    const [p] = _ps.splice(idx, 1);
+    //-------------------------------------------------------------------------
+    // Sort by orientation of `p` with the x-axis, then by Manhattan distance.
+    //-------------------------------------------------------------------------
+    _ps.sort((a, b) => {
+        let res = -orient2d_orient2d(p, a, b); // res: +tive if ⟳ => a > b
         if (res !== 0) {
             return res;
         }
@@ -637,41 +640,75 @@ function grahamScan(ps) {
         if (res !== 0) {
             return res;
         }
-        return a[0] - b[0];
+        return a[0] - b[0]; // points are coincident
     });
-    ps_.unshift(p);
-    let stack = [];
+    _ps.unshift(p);
+    const ps_ = filterEqualPoints(_ps);
+    //---------------------------------------
+    // The core of the Graham scan algorithm
+    //---------------------------------------
+    const stack = [];
     for (const p of ps_) {
-        while (stack.length > 1) {
-            const r = orient2d_orient2d(stack[stack.length - 2], stack[stack.length - 1], p) <= 0;
-            if (!r) {
+        while (stack.length >= 2) {
+            const orientation = orient2d_orient2d(stack[stack.length - 2], stack[stack.length - 1], p);
+            const clockwise = orientation < 0;
+            if (clockwise) {
+                stack.pop();
+            }
+            else {
                 break;
             }
-            stack.pop();
         }
         stack.push(p);
     }
-    const len = stack.length;
-    const stack_ = [stack[0]];
-    for (let i = 1; i < len; i++) {
-        const pS = stack[(i - 1) % len];
-        const pM = stack[(i) % len];
-        const pE = stack[(i + 1) % len];
-        if (orient2d_orient2d(pS, pM, pE) !== 0 || dot(pS, pM, pE) < 0) {
-            stack_.push(pM);
+    if (includeRedundantPoints || stack.length < 3) {
+        return stack;
+    }
+    const stack_ = [];
+    {
+        const len = stack.length;
+        for (let i = 0; i < len; i++) {
+            const _i = (i + len - 1) % len;
+            const i_ = (i + 1) % len;
+            const pS = stack[_i];
+            const pM = stack[i];
+            const pE = stack[i_];
+            // The `dot` is to take care of lines back-overlapping themselves
+            if (orient2d_orient2d(pS, pM, pE) !== 0 || dot(pS, pM, pE) < 0) {
+                stack_.push(pM);
+            }
         }
     }
     return stack_;
 }
 /**
- * No need to be accurate
- */
+* No need to be accurate
+*/
 function dot(p1, p2, p3) {
     const v1x = p2[0] - p1[0];
     const v1y = p2[1] - p1[1];
     const v2x = p3[0] - p2[0];
     const v2y = p3[1] - p2[1];
     return v1x * v2x + v1y * v2y;
+}
+/**
+ * * ps must be sorted
+ *
+ * @param ps
+ */
+function filterEqualPoints(ps) {
+    const _ps = [ps[0]];
+    const len = ps.length;
+    for (let i = 1; i < ps.length; i++) {
+        const _i = (i + len - 1) % len;
+        const _p = ps[_i];
+        const p = ps[i];
+        if (_p[0] === p[0] && _p[1] === p[1]) {
+            continue;
+        }
+        _ps.push(p);
+    }
+    return _ps;
 }
 
 //# sourceMappingURL=index.js.map
@@ -2423,9 +2460,7 @@ const dd_mult_dd_f = 2 ** 27 + 1;
  * @param y another double-double precision floating point number
  */
 function ddMultDd(x, y) {
-    //const xl = x[0];
     const xh = x[1];
-    //const yl = y[0];
     const yh = y[1];
     //const [cl1,ch] = twoProduct(xh,yh);
     const ch = xh * yh;
@@ -3323,7 +3358,830 @@ function divWithErr(n, d, nE, dE) {
 }
 
 //# sourceMappingURL=div-with-err.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/get-zeros-str.js
+/**
+ * Returns a string having the given number of zeros.
+ *
+ * @internal
+ */
+function getZerosStr(n) {
+    return new Array(n + 1).join('0');
+}
+
+//# sourceMappingURL=get-zeros-str.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/mult-str-by-pow-of-10.js
+
+/**
+ * * string must not contain an `'e'`, e.g. `'1e-10'` is not allowed
+ *
+ * @internal
+ */
+function multStrByPowOf10(s, pow) {
+    if (pow === 0 || Number(s) === 0) {
+        return s;
+    }
+    const negative = s.indexOf('-') !== -1;
+    const negativeStr = negative ? '-' : '';
+    if (negative) {
+        s = s.slice(1);
+    }
+    if (s.startsWith('+')) {
+        s = s.slice(1);
+    }
+    const idx = s.indexOf('.');
+    if (pow > 0) {
+        // shift dot right
+        if (idx === -1) {
+            const zeros = getZerosStr(pow);
+            return negativeStr + s + zeros;
+        }
+        const [bef, aft] = s.split('.'); //?
+        if (aft.length < pow) {
+            return negativeStr + bef + aft + getZerosStr(pow - aft.length);
+        }
+        else {
+            const aftP1 = aft.substring(0, pow); //?
+            const aftP2 = aft.substring(pow);
+            return negativeStr + bef + aftP1 + (aftP2 ? '.' + aftP2 : '');
+        }
+    }
+    // shift dot left
+    pow = -pow;
+    let bef = '';
+    let aft = '';
+    if (idx === -1) {
+        bef = s;
+    }
+    else {
+        [bef, aft] = s.split('.');
+    }
+    if (bef.length === pow) {
+        return negativeStr + '0.' + bef + aft;
+    }
+    else if (bef.length > pow) {
+        const l = bef.length - pow; //?
+        const befP1 = bef.substring(0, l); //?
+        const befP2 = bef.substring(l); //?
+        return negativeStr + befP1 + '.' + befP2 + aft;
+    }
+    else {
+        const l = pow - bef.length; //?
+        const zeros = getZerosStr(l) || '0';
+        return negativeStr + '0.' + zeros + bef + aft;
+    }
+}
+
+//# sourceMappingURL=mult-str-by-pow-of-10.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/dd-to-str/dd-to-str.js
+
+const { floor, max, round, log2, log10, ceil } = Math;
+const LOG2_10 = log2(1024) / log10(1024);
+/**
+ * Converts the given double-double precision value to a string and returns the
+ * result.
+ *
+ * * there will always be enough decimal digits returned but some could be
+ * extraneous.
+ *
+ * @param dd
+ */
+function ddToStr(dd) {
+    let [l, h] = dd;
+    let negative = false;
+    if (h < 0) {
+        h = -h;
+        l = -l;
+        negative = true;
+    }
+    if (h === 0) {
+        return '0';
+    }
+    const scale2 = max(0, -floor(log2(h)) + 3 * 53);
+    if (scale2 === 0) {
+        const llb = BigInt(round(l));
+        const hhb = BigInt(round(h));
+        const str = (llb + hhb).toString();
+        return negative ? '-' + str : str;
+    }
+    const scale2b = BigInt(scale2);
+    const scale10 = ceil(scale2 / LOG2_10);
+    const scale10b = BigInt(scale10);
+    const ll = l * (2 ** scale2);
+    const hh = h * (2 ** scale2);
+    const llb = BigInt(round(ll));
+    const hhb = BigInt(round(hh));
+    const b = (llb + hhb) * (10n ** scale10b);
+    const bb = b / (2n ** (scale2b));
+    let bStr = bb.toString();
+    let str = multStrByPowOf10(bStr, -scale10);
+    str = removeExtraneousZeros(str);
+    return negative ? '-' + str : str;
+}
+function removeExtraneousZeros(str) {
+    const idx = str.indexOf('.');
+    if (idx === -1) {
+        return str;
+    }
+    let i = 0;
+    let c = 0;
+    while (i < str.length) {
+        if (str[str.length - 1 - i] === '0') {
+            c++;
+        }
+        else {
+            break;
+        }
+        i++;
+    }
+    if (c > 0) {
+        str = str.slice(0, str.length - c);
+    }
+    if (str.endsWith('.')) {
+        str = str.slice(0, str.length - 1);
+    }
+    return str;
+}
+
+//# sourceMappingURL=dd-to-str.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/get-num-leading-zeros-after-point.js
+/**
+ * Returns the number of leading zeros (plus 1) after the decimal point or `0`
+ * if the number is >= 1 or equal to zero.
+ *
+ * * the number string must be positive
+ * * the number string must not start with a `+` sign
+ * * the number string must must be a simple decimal expansion, e.g. no `e-8`
+ * at the end
+ *
+ * Examples:
+ * `getNumLeadingZeros(0.1)    // => 0`
+ * `getNumLeadingZeros(0.001)  // => 2`
+ * `getNumLeadingZeros(3.001)  // => 0`
+ * `getNumLeadingZeros(13)     // => 0`
+ * `getNumLeadingZeros(0)      // => 0
+ *
+ * @param str
+ *
+ * @internal
+ */
+function getNumLeadingZerosAfterPoint(str) {
+    if (!str.startsWith('0.')) {
+        return 0;
+    }
+    if (Number(str) === 0) {
+        return 0;
+    }
+    let numLeadingZeros = 1;
+    for (let i = 0; i < str.length; i++) {
+        if (str[i + 2] === '0') {
+            numLeadingZeros++;
+        }
+        else {
+            break;
+        }
+    }
+    return numLeadingZeros;
+}
+
+//# sourceMappingURL=get-num-leading-zeros-after-point.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/set-0-from-to.js
+/**
+ *
+ * @param str
+ * @param from
+ * @param to
+ *
+ * @internal
+ */
+function set0FromTo(str, from, to) {
+    // TODO - this function is currently slow since it replaces one zero at a time.
+    const pointAt = str.indexOf('.');
+    let i = from + (pointAt !== -1 && pointAt < from ? 1 : 0);
+    let j = i;
+    to = to || str.length;
+    while (i < to) {
+        if (str[j] === '.') {
+            j++;
+            continue;
+        }
+        str = set0At(str, j);
+        i++;
+        j++;
+    }
+    return str;
+}
+/**
+ * @internal
+ */
+function set0At(str, idx) {
+    if (idx > str.length - 1) {
+        return str;
+    }
+    ;
+    return str.substring(0, idx) + '0' + str.substring(idx + 1);
+}
+
+//# sourceMappingURL=set-0-from-to.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/num-significant-digits.js
+/**
+ * The number of significant digits per nibble.
+ *
+ * Since we use 3 nibbles there are 3*15 significant decimal figures looked at
+ * to convert a string to a double-double.
+ */
+const d = 15;
+
+//# sourceMappingURL=num-significant-digits.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/get-parts.js
+
+
+
+/**
+ * Returns the following parts of the number string as an object:
+ * * `Z`
+ * * `seH` -> the exact high part string if interpreted as a real number
+ * * `seL` -> the exact low part string if interpreted as a real number
+ * * `seC` -> the exact correction part string if interpreted as a real number;
+ * this is used for correctly rounding the lsb; interestingly ECMASCRIPT only
+ * checks up to 20 significant figures for rounding purposes (we check 45)
+ *
+ * @param str
+ *
+ * @internal
+ */
+function getParts(str) {
+    if (str.startsWith('+')) {
+        str = str.slice(1);
+    }
+    let pointAt = str.indexOf('.');
+    if (pointAt === -1) {
+        str += '.0';
+    }
+    pointAt = str.indexOf('.');
+    const Z = getNumLeadingZerosAfterPoint(str);
+    // Lengthen string to `3*d` significant figures
+    if (str.length < 3 * d + 1) {
+        const zeros = new Array(3 * d + 2 - str.length).join('0');
+        str += zeros;
+    }
+    // Shorten string to `3*d` significant figures
+    str = str.slice(0, 3 * d + (pointAt >= 3 * d ? 0 : 1) + Z);
+    if (pointAt >= 3 * d) {
+        // Take care of numbers > 10**(3*d)
+        const zeros = new Array(pointAt - 3 * d + 1).join('0');
+        str += zeros;
+    }
+    let seH = set0FromTo(str, d + Z);
+    let seL = set0FromTo(str, 0, d + Z);
+    seL = set0FromTo(seL, 2 * d + Z);
+    let seC = set0FromTo(str, 0, 2 * d + Z);
+    return { Z, seH, seL, seC };
+}
+
+//# sourceMappingURL=get-parts.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/add-1-ulp.js
+const { EPSILON: add_1_ulp_eps } = Number;
+const add_1_ulp_u = add_1_ulp_eps / 2;
+const es = (add_1_ulp_eps ** 2) / 2;
+const ups = add_1_ulp_u + es;
+/**
+ * Add one unit in the last place (ulp) to the given number.
+ *
+ * * subnormal numbers (and 0) are returned unaltered
+ *
+ * @internal
+ */
+function add1Ulp(n) {
+    return n > 0 ? n + n * ups : n - n * ups;
+}
+
+//# sourceMappingURL=add-1-ulp.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/get-num-leading-zeros.js
+/**
+ * Returns the number of leading extraneous zeros before the decimal point.
+ *
+ * @param str
+ *
+ * @internal
+ */
+function getNumLeadingZeros(str) {
+    if (Number(str) === 0) {
+        return 0;
+    }
+    if (str.startsWith('0.')) {
+        return 0;
+    }
+    let numLeadingZeros = 0;
+    let i = 0;
+    for (; i < str.length; i++) {
+        if (str[i] === '0') {
+            numLeadingZeros++;
+        }
+        else {
+            break;
+        }
+    }
+    if (str[i] === '.') {
+        return 0;
+    }
+    return numLeadingZeros;
+}
+
+//# sourceMappingURL=get-num-leading-zeros.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/get-num-leading-zeros-before-point.js
+/**
+ * Returns the number of leading zeros before the decimal point.
+ *
+ * @param str
+ *
+ * @internal
+ */
+function getNumLeadingZerosBeforePoint(str) {
+    if (str.startsWith('0.')) {
+        return 0;
+    }
+    if (Number(str) === 0) {
+        return 0;
+    }
+    const idx = str.indexOf('.');
+    return idx === -1 ? str.length : idx;
+}
+
+//# sourceMappingURL=get-num-leading-zeros-before-point.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/extract-exp.js
+function extractExp(s) {
+    const idx = s.indexOf('e');
+    let exp = 0;
+    if (idx !== -1) {
+        exp = Number(s.slice(idx + 1));
+        s = s.slice(0, idx);
+    }
+    return { s, exp };
+}
+
+//# sourceMappingURL=extract-exp.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/normalize-str.js
+
+
+
+
+/**
+ *
+ * @param s
+ *
+ * @internal
+ */
+function normalizeStr(s) {
+    if (Number(s) === 0) {
+        return { str: '0', exp: 0, negative: false };
+    }
+    const negative = s.startsWith('-');
+    if (negative) {
+        s = s.slice(1);
+    }
+    let exp = 0;
+    ({ s, exp } = extractExp(s));
+    let str;
+    const z = getNumLeadingZerosAfterPoint(s);
+    if (z > 0) {
+        s = s.slice(z + 1);
+        str = s[0] + '.' + s.slice(1);
+        exp = exp - z;
+    }
+    else {
+        const Z = getNumLeadingZerosBeforePoint(s);
+        s = s.split('').filter(s => s !== '.').join('');
+        str = s[0] + '.' + s.slice(1);
+        exp = exp + Z - 1;
+    }
+    str = str.slice(0, 3 * d + 1);
+    if (str.length < 3 * d + 1) {
+        const zeros = new Array(3 * d + 1 - str.length).join('0');
+        str += zeros;
+    }
+    return { str, exp, negative };
+}
+
+//# sourceMappingURL=normalize-str.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/get-power-of-10.js
+
+
+
+/**
+ *
+ * @param a
+ * @param b
+ *
+ * @internal
+ */
+function ddMultD(a, b) {
+    return ddMultDouble1(b, a);
+}
+/**
+ *
+ * @param pow
+ *
+ * @internal
+ */
+function getPowerOf10(pow) {
+    // `10**21` (possibly `10**22`) is the max power of 10 that is exact in double
+    // precision
+    // we multiply in pairs to minimize error, e.g.
+    const m = pow % 21;
+    const d = (pow - m) / 21;
+    const x = 10 ** m;
+    if (d === 0) {
+        return [0, x]; // exact
+    }
+    const a = 10 ** 21;
+    const ax = basic_two_product_twoProduct(a, x);
+    const aa = basic_two_product_twoProduct(a, a);
+    const aax = ddMultD(aa, x);
+    const a4 = ddMultDd(aa, aa);
+    const aaax = ddMultDd(aa, ax);
+    const a8 = ddMultDd(a4, a4);
+    const a4x = ddMultD(a4, x);
+    const a4ax = ddMultDd(a4, ax);
+    const a4aax = ddMultDd(a4, aax);
+    const a4aaax = ddMultDd(a4, aaax);
+    if (d === 1) {
+        return ax;
+    }
+    if (d === 2) {
+        return aax;
+    }
+    if (d === 3) {
+        return aaax;
+    }
+    if (d === 4) {
+        return a4x;
+    }
+    if (d === 5) {
+        return a4ax;
+    }
+    if (d === 6) {
+        return a4aax;
+    }
+    if (d === 7) {
+        return a4aaax;
+    }
+    if (d === 8) {
+        return ddMultD(a8, x);
+    }
+    if (d === 9) {
+        return ddMultDd(a8, ax);
+    }
+    if (d === 10) {
+        return ddMultDd(a8, aax);
+    }
+    if (d === 11) {
+        return ddMultDd(a8, aaax);
+    }
+    if (d === 12) {
+        return ddMultDd(a8, a4x);
+    }
+    if (d === 13) {
+        return ddMultDd(a8, a4ax);
+    }
+    if (d === 14) {
+        return ddMultDd(a8, a4aax);
+    }
+    if (d === 15) {
+        return ddMultDd(a8, a4aaax);
+    }
+    throw new Error('`exp` must be between 0 and 308; This is a bug');
+}
+
+//# sourceMappingURL=get-power-of-10.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/str-to-dd.js
+
+
+
+
+
+
+
+
+
+
+
+
+const { abs } = Math;
+// How to print floating-point numbers accurately (behind a paywall)
+// https://dl.acm.org/doi/10.1145/989393.989431
+// Chromium implementation at https://chromium.googlesource.com/v8/v8/+/refs/heads/main/src/base/numbers/strtod.cc
+// that converts a string to a double.
+/**
+ * Converts the given decimal string to a double-double and returns the result.
+ *
+ * * accurate to within `1` ulp^2
+ *
+ * @param str a string to convert to double-double precision
+ *
+ * Examples:
+ * ```
+ * strToDd('3.14159265358979323846264338327950')  //=> [1.2246467991473535e-16, 3.141592653589793]
+ * strToDd('6.0221408e+23')  //=> [-2097152, 6.0221408e+23]
+ * ```
+ */
+function strToDd(str) {
+    const { str: s, exp, negative } = normalizeStr(str);
+    if (negative) {
+        str = str.slice(1);
+    }
+    // get exact low, high and correction string parts
+    let { Z, seH: eH, seL: eL, seC: eC } = getParts(s);
+    // adding 1 ulp ensures the string significant digits are correct up to a point
+    const H = add1Ulp(Number(eH));
+    const _sHC = H.toFixed(3 * d);
+    const sHC = set0FromTo(_sHC, 0, d + Z);
+    // get exact high correction low and high string parts
+    let { Z: Z2, seH: seHCH, seL: seHCL } = getParts(sHC);
+    const HCH = add1Ulp(Number(seHCH));
+    const sHCH = HCH.toFixed(3 * d);
+    const sHCL = set0FromTo(sHCH, Z2, d + Z2 + 1);
+    // get exact low correction string part
+    let L = add1Ulp(Number(eL));
+    const lZ1 = getNumLeadingZeros(eL);
+    let sLC = L.toFixed(3 * d);
+    sLC = set0FromTo(sLC, d + Z - lZ1, 2 * d + Z + 1 - lZ1);
+    const HCL = Number(sHCL);
+    const LC = Number(sLC);
+    const C = Number(eC);
+    const HCHL = Number(seHCL);
+    // (correction         ) - (low    ) + (high)
+    // (HCL - LC + C - HCHL) - (HCH + L) + (H   )
+    const rL = ddAddDd(basic_two_sum_twoSum(HCL, -LC), basic_two_sum_twoSum(C, -HCHL)); // correction term
+    const rHL = ddAddDouble(basic_two_sum_twoSum(L, -HCH), H);
+    let r = ddAddDd(rHL, rL);
+    // get accurate power of 10
+    const exp10 = getPowerOf10(abs(exp));
+    r = exp === 0
+        ? r
+        : exp < 0
+            ? ddDivDd(r, exp10)
+            : ddMultDd(r, exp10);
+    const q = (add1Ulp(r[1]) - r[1]);
+    // remove extraneous bits (not strictly necessary)
+    r[0] = r[0] + q / 2 - q / 2;
+    r = negative ? r.map(r => -r) : [r[0], r[1]];
+    return r;
+}
+
+//# sourceMappingURL=str-to-dd.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/constants.js
+// import { strToDd } from "./str-to-dd/str-to-dd.js";
+const PIDd = [1.2246467991473535e-16, 3.141592653589793];
+const eDd = (/* unused pure expression or super */ null && ([1.4456468917292502e-16, 2.718281828459045]));
+const ln2Dd = (/* unused pure expression or super */ null && ([2.3190468138463e-17, 0.6931471805599453]));
+const eulerDd = (/* unused pure expression or super */ null && ([-4.942915152430649e-18, 0.5772156649015329]));
+// strToDd('0.5772156649015328606065120900824024310421593359399235988057672348');//?
+
+//# sourceMappingURL=constants.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-gt.js
+/**
+ * Returns `true` if `x1 > x2`, `false` otherwise.
+ *
+ * @param x1 a double-double precision floating point number
+ * @param x2 a double-double precision floating point number
+ */
+function ddGt(x1, x2) {
+    if (x1[1] > x2[1]) {
+        return true;
+    }
+    if (x1[1] < x2[1]) {
+        return false;
+    }
+    if (x1[0] > x2[0]) {
+        return true;
+    }
+    return false;
+}
+
+//# sourceMappingURL=dd-gt.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-sin.js
+
+
+
+
+
+
+
+
+
+const { trunc } = Math;
+// See https://gist.github.com/publik-void/067f7f2fef32dbe5c27d6e215f824c91#sin-abs-error-minimized-degree-33
+// Maximum relative error: 1.64002557798425265331386526431095701e-39
+// Maximum absolute error: 7.80601195686311420504782780641951757e-41
+const a0 = [0, 1];
+const a1 = strToDd('-0.166666666666666666666666666666666667');
+const a2 = strToDd('0.00833333333333333333333333333333333069');
+const a3 = strToDd('-0.000198412698412698412698412698412671319');
+const a4 = strToDd('2.75573192239858906525573192223995808e-6');
+const a5 = strToDd('-2.50521083854417187750521077962123682e-8');
+const a6 = strToDd('1.60590438368216145993922289621550506e-10');
+const a7 = strToDd('-7.64716373181981647587481187300831335e-13');
+const a8 = strToDd('2.81145725434552075980975905006999319e-15');
+const a9 = strToDd('-8.22063524662432650297086257962703293e-18');
+const aa = strToDd('1.95729410633890026175367390152305383e-20');
+const ab = strToDd('-3.86817017051340241224838720319634797e-23');
+const ac = strToDd('6.44695023999222092772271073593727141e-26');
+const ad = strToDd('-9.1836779606017064087088551595474321e-29');
+const ae = strToDd('1.13078207057779775850779192271873238e-31');
+const af = strToDd('1.19290046424220296937971101373203567e-34');
+const PIDd_2 = ddDivDouble(PIDd, 2);
+const PIDd2 = ddMultDouble1(2, PIDd);
+/**
+ * Returns the sine of x.
+ *
+ * @param θ a double-double precision floating point number
+ *
+ * @example
+ * ```
+ * import { PIDd } from 'double-double';
+ * import { ddDivDouble } from 'double-double';
+ *
+ * ddSin(ddDivDouble(PIDd,6));  //=> [0,0.5]
+ * ```
+ */
+function ddSin(θ) {
+    let negate = θ[1] < 0;
+    if (negate) {
+        θ = [-θ[0], -θ[1]];
+    }
+    if (ddGt(θ, PIDd)) {
+        const _c = ddDivDd(θ, PIDd2);
+        const c = trunc(_c[1] + _c[0]);
+        θ = ddDiffDd(θ, ddMultDouble1(c, PIDd2));
+    }
+    if (ddGt(θ, PIDd)) {
+        // between 𝜋 and 2𝜋
+        θ = ddDiffDd(θ, PIDd);
+        negate = !negate;
+    }
+    if (ddGt(θ, PIDd_2)) {
+        // between 𝜋/2 and 𝜋
+        θ = ddDiffDd(PIDd, θ);
+    }
+    const x1 = θ;
+    const x2 = ddMultDd(θ, θ);
+    const r = ddMultDd(x1, (ddAddDd(a0, ddMultDd(x2, (ddAddDd(a1, ddMultDd(x2, (ddAddDd(a2, ddMultDd(x2, (ddAddDd(a3, ddMultDd(x2, (ddAddDd(a4, ddMultDd(x2, (ddAddDd(a5, ddMultDd(x2, (ddAddDd(a6, ddMultDd(x2, (ddAddDd(a7, ddMultDd(x2, (ddAddDd(a8, ddMultDd(x2, (ddAddDd(a9, ddMultDd(x2, (ddAddDd(aa, ddMultDd(x2, (ddAddDd(ab, ddMultDd(x2, (ddAddDd(ac, ddMultDd(x2, (ddAddDd(ad, ddMultDd(x2, (ddDiffDd(ae, ddMultDd(x2, af))))))))))))))))))))))))))))))))))))))))))))));
+    return negate ? [-r[0], -r[1]] : r;
+}
+
+//# sourceMappingURL=dd-sin.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-cos.js
+
+
+
+
+// See https://gist.github.com/publik-void/067f7f2fef32dbe5c27d6e215f824c91#sin-abs-error-minimized-degree-33
+// Maximum relative error: 1.64002557798425265331386526431095701e-39
+// Maximum absolute error: 7.80601195686311420504782780641951757e-41
+const dd_cos_PIDd_2 = ddDivDouble(PIDd, 2);
+/**
+ * Returns the cosine of x.
+ *
+ * @param θ a double-double precision floating point number
+ *
+ * @example
+ * ```
+ * import { PIDd } from 'double-double';
+ * import { ddDivDouble } from 'double-double';
+ *
+ * ddCos(ddDivDouble(PIDd,6));  //=> [5.017542110902477e-17, 0.8660254037844386]
+ * ```
+ */
+function ddCos(θ) {
+    const x_ = ddAddDd(θ, dd_cos_PIDd_2);
+    return ddSin(x_);
+}
+
+//# sourceMappingURL=dd-cos.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-eq.js
+/**
+ * Returns `true` if `x1 === x2`, `false` otherwise.
+ *
+ * @param x1 a double-double precision floating point number
+ * @param x2 a double-double precision floating point number
+ */
+function ddEq(x1, x2) {
+    return x1[0] === x2[0] && x1[1] === x2[1];
+}
+
+//# sourceMappingURL=dd-eq.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-gte.js
+/**
+ * Returns `true` if `x1 >= x2`, `false` otherwise.
+ *
+ * @param x1 a double-double precision floating point number
+ * @param x2 a double-double precision floating point number
+ */
+function ddGte(x1, x2) {
+    if (x1[1] > x2[1]) {
+        return true;
+    }
+    if (x1[1] < x2[1]) {
+        return false;
+    }
+    if (x1[0] >= x2[0]) {
+        return true;
+    }
+    return false;
+}
+
+//# sourceMappingURL=dd-gte.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-lt.js
+/**
+ * Returns `true` if `x1 < x2`, `false` otherwise.
+ *
+ * @param x1 a double-double precision floating point number
+ * @param x2 a double-double precision floating point number
+ */
+function ddLt(x1, x2) {
+    if (x1[1] < x2[1]) {
+        return true;
+    }
+    if (x1[1] > x2[1]) {
+        return false;
+    }
+    if (x1[0] < x2[0]) {
+        return true;
+    }
+    return false;
+}
+
+//# sourceMappingURL=dd-lt.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-lte.js
+/**
+ * Returns `true` if `x1 <= x2`, `false` otherwise.
+ *
+ * @param x1 a double-double precision floating point number
+ * @param x2 a double-double precision floating point number
+ */
+function ddLte(x1, x2) {
+    if (x1[1] < x2[1]) {
+        return true;
+    }
+    if (x1[1] > x2[1]) {
+        return false;
+    }
+    if (x1[0] <= x2[0]) {
+        return true;
+    }
+    return false;
+}
+
+//# sourceMappingURL=dd-lte.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-mixed-double-double/dd-diff-double.js
+/**
+ * Returns the result of subtracting the second given double-precision
+ * floating point number from the first double-double precision float.
+ *
+ * * relative error bound: 3u^2 + 13u^3, i.e. fl(a-b) = (a-b)(1+ϵ),
+ * where ϵ <= 3u^2 + 13u^3, u = 0.5 * Number.EPSILON
+ * * the error bound is not sharp - the worst case that could be found by the
+ * authors were 2.25u^2
+ *
+ * ALGORITHM 6 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
+ * @param x a double-double precision floating point number
+ * @param y a double precision floating point number
+ */
+function ddDiffDouble(x, y) {
+    const xl = x[0];
+    const xh = x[1];
+    //const [sl,sh] = twoSum(xh,yh);
+    const sh = xh - y;
+    const _1 = sh - xh;
+    const sl = (xh - (sh - _1)) + (-y - _1);
+    //const [tl,th] = twoSum(xl,yl);
+    const th = xl;
+    const _2 = th - xl;
+    const tl = (xl - (th - _2)) - _2;
+    const c = sl + th;
+    //const [vl,vh] = fastTwoSum(sh,c)
+    const vh = sh + c;
+    const vl = c - (vh - sh);
+    const w = tl + vl;
+    //const [zl,zh] = fastTwoSum(vh,w)
+    const zh = vh + w;
+    const zl = w - (zh - vh);
+    return [zl, zh];
+}
+
+//# sourceMappingURL=dd-diff-double.js.map
 ;// CONCATENATED MODULE: ./node_modules/double-double/node/index.js
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3413,6 +4271,16 @@ const node_doubleToOctets = double_to_octets_doubleToOctets;
 const node_getHighestSetBit = get_max_set_bit_getHighestSetBit;
 const node_ddDivDdWithError = ddDivDdWithError;
 const node_divWithErr = divWithErr;
+const node_ddToStr = ddToStr;
+const node_strToDd = strToDd;
+const node_ddSin = ddSin;
+const node_ddCos = ddCos;
+const node_ddEq = ddEq;
+const node_ddGt = ddGt;
+const node_ddGte = ddGte;
+const node_ddLt = ddLt;
+const node_ddLte = ddLte;
+const node_ddDiffDouble = ddDiffDouble;
 const node_operators = {
     //---- basic ----//
     fastTwoDiff: node_fastTwoDiff,
@@ -3447,6 +4315,14 @@ const node_operators = {
     ddMultByNeg4: node_ddMultByNeg4,
     ddMin: node_ddMin,
     ddMax: node_ddMax,
+    ddSin: node_ddSin,
+    ddCos: node_ddCos,
+    ddEq: node_ddEq,
+    ddGt: node_ddGt,
+    ddGte: node_ddGte,
+    ddLt: node_ddLt,
+    ddLte: node_ddLte,
+    ddDiffDouble: node_ddDiffDouble,
     //---- double-double precision error propagation - with error bound on input parameters
     ddDivDdWithError: node_ddDivDdWithError,
     //---- double precision error propagation - with error bound on input parameters
@@ -3464,10 +4340,18 @@ const node_operators = {
     getHighestSetBit: node_getHighestSetBit,
     getLowestSetBit: node_getLowestSetBit,
     exponent: node_exponent,
-    significand: node_significand
+    significand: node_significand,
+    ddToStr: node_ddToStr,
+    strToDd: node_strToDd
 };
 
 
+node_ddEq;
+node_ddGt;
+node_ddGte;
+node_ddLt;
+node_ddLte;
+node_ddDiffDouble;
 //# sourceMappingURL=index.js.map
 ;// CONCATENATED MODULE: ./src/error-analysis/error-analysis.ts
 const error_analysis_u = Number.EPSILON / 2;
@@ -3514,7 +4398,7 @@ function isReallyPoint(ps) {
 const ediff = eDiff;
 const esign = e_sign_eSign;
 const is_quad_really_line_ts = two_sum_twoSum;
-const { abs } = Math;
+const { abs: is_quad_really_line_abs } = Math;
 /**
  * Returns `true` if the given quadratic bezier curve is really a linear curve
  * (or a point), i.e. if all control points collinear *and* it can be converted
@@ -3535,20 +4419,20 @@ function isQuadReallyLine(ps) {
     // Calculate an approximation of the above with error bounds and use it as
     // a fast filter.
     const q = x0 + x2;
-    const _q_ = abs(q); // the absolute error bound in q (after multipliciation by `u`)
+    const _q_ = is_quad_really_line_abs(q); // the absolute error bound in q (after multipliciation by `u`)
     const w = q - 2 * x1;
-    const w_ = _q_ + abs(w); // the absolute error bound in w
+    const w_ = _q_ + is_quad_really_line_abs(w); // the absolute error bound in w
     // if w cannot possibly be zero, i.e. if the error is smaller than the value
-    if (abs(w) - w_ > 0) {
+    if (is_quad_really_line_abs(w) - w_ > 0) {
         // fast filter passed
         return false;
     }
     const r = y0 + y2;
-    const _r_ = abs(r); // the absolute error bound in r (after multipliciation by `u`)
+    const _r_ = is_quad_really_line_abs(r); // the absolute error bound in r (after multipliciation by `u`)
     const z = r - 2 * y1;
-    const z_ = _r_ + abs(z); // the absolute error bound in w
+    const z_ = _r_ + is_quad_really_line_abs(z); // the absolute error bound in w
     // if the error is smaller than the value
-    if (abs(z) - z_ > 0) {
+    if (is_quad_really_line_abs(z) - z_ > 0) {
         // fast filter passed
         return false;
     }
@@ -5055,11 +5939,11 @@ function splitRight2(ps, t) {
     const yA = y0 - y1;
     const yB = y2 - y1;
     const psR = [
-        [tt * (xA + xB) - (2 * t * xA - x0),
-            tt * (yA + yB) - (2 * t * yA - y0)],
-        [t * xB + x1,
-            t * yB + y1],
-        [x2,
+        [tt * (xA + xB) - (2 * t * xA - x0), // xx0, split point x
+            tt * (yA + yB) - (2 * t * yA - y0)], // yy0, split point y
+        [t * xB + x1, // xx1
+            t * yB + y1], // yy1
+        [x2, // xx2
             y2] // yy2
     ];
     // -----------------------
@@ -5131,11 +6015,11 @@ function splitLeft2(ps, t) {
     const xA = x0 - x1; // <1>xA
     const yA = y0 - y1;
     const psL = [
-        [x0,
-            y0],
-        [-t * xA + x0,
-            -t * yA + y0],
-        [tt * (xA + (x2 - x1)) - (2 * t * xA - x0),
+        [x0, // xx0
+            y0], // yy0
+        [-t * xA + x0, // xx1
+            -t * yA + y0], // yy1
+        [tt * (xA + (x2 - x1)) - (2 * t * xA - x0), // xx2 - split point x
             tt * (yA + (y2 - y1)) - (2 * t * yA - y0)] // yy2 - split point y
     ];
     // -----------------------
@@ -5548,11 +6432,11 @@ function from_to_2_splitRight2(ps, t) {
     const yA = y0 - y1;
     const yB = y2 - y1;
     return [
-        [tt * (xA + xB) - (2 * t * xA - x0),
-            tt * (yA + yB) - (2 * t * yA - y0)],
-        [t * xB + x1,
-            t * yB + y1],
-        [x2,
+        [tt * (xA + xB) - (2 * t * xA - x0), // xx0, split point x
+            tt * (yA + yB) - (2 * t * yA - y0)], // yy0, split point y
+        [t * xB + x1, // xx1
+            t * yB + y1], // yy1
+        [x2, // xx2
             y2] // yy2
     ];
 }
@@ -5583,11 +6467,11 @@ function from_to_2_splitLeft2(ps, t) {
     const xA = x0 - x1;
     const yA = y0 - y1;
     return [
-        [x0,
-            y0],
-        [-t * xA + x0,
-            -t * yA + y0],
-        [tt * (xA + (x2 - x1)) - (2 * t * xA - x0),
+        [x0, // xx0
+            y0], // yy0
+        [-t * xA + x0, // xx1
+            -t * yA + y0], // yy1
+        [tt * (xA + (x2 - x1)) - (2 * t * xA - x0), // xx2 - split point x
             tt * (yA + (y2 - y1)) - (2 * t * yA - y0)] // yy2 - split point y
     ];
 }
@@ -5677,9 +6561,9 @@ function splitRight1(ps, t) {
     const y1 = p1[1];
     // --------------------------------------------------------
     return [
-        [t * (x1 - x0) + x0,
-            t * (y1 - y0) + y0],
-        [x1,
+        [t * (x1 - x0) + x0, // xx0
+            t * (y1 - y0) + y0], // yy0
+        [x1, // xx1
             y1] // yy1
     ];
 }
@@ -5704,9 +6588,9 @@ function splitLeft1(ps, t) {
     const y1 = p1[1];
     // --------------------------------------------------------
     return [
-        [x0,
-            y0],
-        [t * (x1 - x0) + x0,
+        [x0, // xx0
+            y0], // yy0
+        [t * (x1 - x0) + x0, // xx1
             t * (y1 - y0) + y0] // yy1
     ];
 }
@@ -5731,9 +6615,9 @@ function splitAtBoth1(ps, tS, tE) {
     const y1 = p1[1];
     // --------------------------------------------------------
     return [
-        [tS * (x1 - x0) + x0,
-            tS * (y1 - y0) + y0],
-        [tE * (x1 - x0) + x0,
+        [tS * (x1 - x0) + x0, // xx0
+            tS * (y1 - y0) + y0], // yy0
+        [tE * (x1 - x0) + x0, // xx1
             tE * (y1 - y0) + y0] // yy1
     ];
 }
@@ -6012,9 +6896,9 @@ function from_to_3_incl_error_bound_splitRight3(ps, t) {
         ps: [[x03, y03], [x12, y12], [x21, y21], [x30, y30]],
         _ps: [
             // the coordinate-wise error bounds
-            [_x03, _y03],
-            [_x12, _y12],
-            [_x21, _y21],
+            [_x03, _y03], // [9*u*_x03, 9*u*_y03]      
+            [_x12, _y12], // [6*u*_x02, 6*u*_y02]
+            [_x21, _y21], // [3*u*_x01, 3*u*_y01]
             [0, 0] // [0, 0],
         ]
     };
@@ -6091,9 +6975,9 @@ function from_to_3_incl_error_bound_splitLeft3(ps, t) {
         ps: [[x00, y00], [x01, y01], [x02, y02], [x03, y03]],
         _ps: [
             // the coordinate-wise error bounds
-            [0, 0],
-            [_x01, _y01],
-            [_x02, _y02],
+            [0, 0], // [0, 0],
+            [_x01, _y01], // [3*u*_x01, 3*u*_y01],
+            [_x02, _y02], // [6*u*_x02, 6*u*_y02],
             [_x03, _y03] // [9*u*_x03, 9*u*_y03]
         ]
     };
@@ -6199,9 +7083,9 @@ function from_to_3_incl_error_bound_splitAtBoth3(ps, tS, tE) {
     return {
         ps: [[xx0, yy0], [xx1, yy1], [xx2, yy2], [xx3, yy3]],
         _ps: [
-            [_xx0, _yy0],
-            [_xx1, _yy1],
-            [_xx2, _yy2],
+            [_xx0, _yy0], // [8*u*_xx0, 8*u*_yy0]
+            [_xx1, _yy1], // [7*u*_xx1, 7*u*_yy1]
+            [_xx2, _yy2], // [7*u*_xx2, 7*u*_yy2]
             [_xx3, _yy3] // [8*u*_xx3, 8*u*_yy3]
         ]
     };
@@ -6349,7 +7233,7 @@ function clone(ps) {
 ;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/naive/brent.js
 const brent_eps = Number.EPSILON;
 const brent_abs = Math.abs;
-const max = Math.max;
+const brent_max = Math.max;
 /**
  * Returns a refined root given a root bracketed in the interval (a,b) of the
  * given function using Brent's Method. Any function can be supplied (it
@@ -6409,7 +7293,7 @@ function brent(f, lb, ub) {
             fb = fc;
             fc = fa;
         }
-        const δ = 2 * brent_eps * max(1, brent_abs(a), brent_abs(b));
+        const δ = 2 * brent_eps * brent_max(1, brent_abs(a), brent_abs(b));
         const m = 0.5 * (c - b);
         //if (abs(m) <= δ || fb === 0) {
         if (brent_abs(m) <= δ) {
@@ -6588,9 +7472,9 @@ function from_to_1_incl_error_bound_splitRight1(ps, t) {
     //   2. <k>a<l>b = <k + l + 1>ab
     //   3. fl(a) === <1>a
     const psR = [
-        [t * (x1 - x0) + x0,
-            t * (y1 - y0) + y0],
-        [x1,
+        [t * (x1 - x0) + x0, // xx0
+            t * (y1 - y0) + y0], // yy0
+        [x1, // xx1
             y1] // yy1
     ];
     // -----------------------
@@ -6645,9 +7529,9 @@ function from_to_1_incl_error_bound_splitLeft1(ps, t) {
     //   2. <k>a<l>b = <k + l + 1>ab
     //   3. fl(a) === <1>a
     const psL = [
-        [x0,
-            y0],
-        [t * (x1 - x0) + x0,
+        [x0, // xx0
+            y0], // yy0
+        [t * (x1 - x0) + x0, // xx1
             t * (y1 - y0) + y0] // yy1
     ];
     // -----------------------
@@ -6703,9 +7587,9 @@ function from_to_1_incl_error_bound_splitAtBoth1(ps, tS, tE) {
     //   2. <k>a<l>b = <k + l + 1>ab
     //   3. fl(a) === <1>a
     const psB = [
-        [tS * (x1 - x0) + x0,
-            tS * (y1 - y0) + y0],
-        [tE * (x1 - x0) + x0,
+        [tS * (x1 - x0) + x0, // xx0
+            tS * (y1 - y0) + y0], // yy0
+        [tE * (x1 - x0) + x0, // xx1
             tE * (y1 - y0) + y0] // yy1
     ];
     // -----------------------
@@ -7586,7 +8470,7 @@ function reflectAboutYAxis(p) {
     }
     const result = p.slice();
     for (let i = 0; i < d + 1; i++) {
-        if (i % 2) {
+        if (i % 2 === (d - 1) % 2) {
             result[i] = -result[i];
         }
     }
@@ -14549,10 +15433,10 @@ function toPowerBasis1ErrorCounters(ps) {
     const _y1 = to_power_basis_error_counters_abs(y1);
     return [
         [
-            _x1 + _x0,
+            _x1 + _x0, // <1> <= <1>(<0>x1 - <0>x0)
             0,
         ], [
-            _y1 + _y0,
+            _y1 + _y0, // <1>
             0,
         ]
     ];
@@ -14568,12 +15452,12 @@ function toPowerBasis2ErrorCounters(ps) {
     const _y2 = to_power_basis_error_counters_abs(y2);
     return [
         [
-            _x2 + _x0 + 2 * _x1,
-            2 * (_x1 + _x0),
+            _x2 + _x0 + 2 * _x1, // <2> <= <2>(<1>(x2 + x0) - 2*x1)
+            2 * (_x1 + _x0), // <1> <= 2*<1>(x1 - x0)
             0,
         ], [
-            _y2 + _y0 + 2 * _y1,
-            2 * (_y1 + _y0),
+            _y2 + _y0 + 2 * _y1, // <2>
+            2 * (_y1 + _y0), // <1>
             0,
         ]
     ];
@@ -14591,14 +15475,14 @@ function toPowerBasis3ErrorCounters(ps) {
     const _y3 = to_power_basis_error_counters_abs(y3);
     return [
         [
-            _x3 + _x0 + 3 * (_x1 + _x2),
-            3 * (_x2 + _x0 + 2 * _x1),
-            3 * (_x1 + _x0),
+            _x3 + _x0 + 3 * (_x1 + _x2), // <3> <-- <3>(<1>(x3 - x0) + <2>(3*(<1>(x1 - x2))))
+            3 * (_x2 + _x0 + 2 * _x1), // <3> <-- <3>(3*(<2>(<1>(x2 + x0) - 2*x1)))
+            3 * (_x1 + _x0), // <2> <-- <2>(3*(<1>(x1 - x0)))
             0,
         ], [
-            _y3 + _y0 + 3 * (_y1 + _y2),
-            3 * (_y2 + _y0 + 2 * _y1),
-            3 * (_y1 + _y0),
+            _y3 + _y0 + 3 * (_y1 + _y2), // <3>
+            3 * (_y2 + _y0 + 2 * _y1), // <3>
+            3 * (_y1 + _y0), // <2>
             0,
         ]
     ];
@@ -14680,11 +15564,11 @@ function getImplicitForm2ErrorCounters(ps) {
     // <10>v <-- <10>(<9>(<5>q1*<3>(<2>(a1*b0) - <2>(a0*b1))) - <9>(<4>q2*<4>q2))
     const v_ = q1_ * (a1_ * b0_ + a0_ * b1_) + q2_ * q2_;
     return {
-        vₓₓ_,
-        vₓᵧ_,
-        vᵧᵧ_,
-        vₓ_,
-        vᵧ_,
+        vₓₓ_, // <5>
+        vₓᵧ_, // <5>
+        vᵧᵧ_, // <5>
+        vₓ_, // <8>
+        vᵧ_, // <8>
         v_ // <10>
     };
 }
@@ -15035,15 +15919,15 @@ function getImplicitForm3ErrorCounters(ps) {
     // <24>v <-- <24>(<21>(<5>q1*<15>(<14>(<13>tq2q4 - <11>q1q1) - <13>q1q5)) + <23>(<22>(<17>s3*<4>q6) - <20>(<14>q3q4*<5>q4)))
     const v_ = (q1_ * ((tq2q4_ + q1q1_) + q1q5_)) + (s3_ * q6_ + q3q4_ * q4_);
     return {
-        vₓₓₓ_,
-        vₓₓᵧ_,
-        vₓᵧᵧ_,
-        vᵧᵧᵧ_,
-        vₓₓ_,
-        vₓᵧ_,
-        vᵧᵧ_,
-        vₓ_,
-        vᵧ_,
+        vₓₓₓ_, // <11>
+        vₓₓᵧ_, // <12>
+        vₓᵧᵧ_, // <12>
+        vᵧᵧᵧ_, // <11>
+        vₓₓ_, // <19>
+        vₓᵧ_, // <18>
+        vᵧᵧ_, // <19>
+        vₓ_, // <22>
+        vᵧ_, // <22>
         v_ // <24>
     };
 }
@@ -16691,7 +17575,7 @@ function bigintToExpansion(b) {
 
 
 ;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/b-sqrt.ts
-const { round, sqrt } = Math;
+const { round: b_sqrt_round, sqrt } = Math;
 /**
  * Returns the square root of a bigint.
  *
@@ -16708,7 +17592,7 @@ function bSqrt(v) {
         }
         return v;
     }
-    let x0 = BigInt(round(sqrt(Number(v))));
+    let x0 = BigInt(b_sqrt_round(sqrt(Number(v))));
     while (true) {
         const x1 = (x0 + v / x0) >> 1n;
         if (x1 === x0) {
@@ -16979,8 +17863,8 @@ const getAB3 = getAB(getTransform3);
 ;// CONCATENATED MODULE: ./src/sub-1-ulp.ts
 const { EPSILON: sub_1_ulp_eps } = Number;
 const sub_1_ulp_u = sub_1_ulp_eps / 2;
-const es = (sub_1_ulp_eps ** 2) / 2;
-const ups = sub_1_ulp_u + es;
+const sub_1_ulp_es = (sub_1_ulp_eps ** 2) / 2;
+const sub_1_ulp_ups = sub_1_ulp_u + sub_1_ulp_es;
 /**
  * Subtract one unit in the last place (ulp) from the given number
  *
@@ -16988,22 +17872,22 @@ const ups = sub_1_ulp_u + es;
  * @internal
  */
 function sub1Ulp(n) {
-    return n > 0 ? n - n * ups : n + n * ups;
+    return n > 0 ? n - n * sub_1_ulp_ups : n + n * sub_1_ulp_ups;
 }
 
 
 ;// CONCATENATED MODULE: ./src/add-1-ulp.ts
-const { EPSILON: add_1_ulp_eps } = Number;
-const add_1_ulp_u = add_1_ulp_eps / 2;
-const add_1_ulp_es = (add_1_ulp_eps ** 2) / 2;
-const add_1_ulp_ups = add_1_ulp_u + add_1_ulp_es;
+const { EPSILON: src_add_1_ulp_eps } = Number;
+const src_add_1_ulp_u = src_add_1_ulp_eps / 2;
+const add_1_ulp_es = (src_add_1_ulp_eps ** 2) / 2;
+const add_1_ulp_ups = src_add_1_ulp_u + add_1_ulp_es;
 /**
  * Add one unit in the last place (ulp) to the given number
  *
  * * subnormal numbers (and 0) are returned unaltered
  * @internal
  */
-function add1Ulp(n) {
+function add_1_ulp_add1Ulp(n) {
     return n > 0 ? n + n * add_1_ulp_ups : n - n * add_1_ulp_ups;
 }
 
@@ -17100,7 +17984,7 @@ function sub2Ulp(v) {
 }
 /** @internal */
 function add2Ulp(v) {
-    return add1Ulp(add1Ulp(v));
+    return add_1_ulp_add1Ulp(add_1_ulp_add1Ulp(v));
 }
 /** @internal */
 function getMinMaxT(t) {
@@ -17499,7 +18383,13 @@ function fitQuadsToCubic(ps, tolerance) {
     }
     else if (nodeType === 'cusp') {
         const t = bezierSelfIntersection(ps)[0];
-        stack.push([0, t], [t, 1]); // split at cusp
+        if (t !== undefined) {
+            // split at cusp IF the cusp is within [0,1]
+            stack.push([0, t], [t, 1]);
+        }
+        else {
+            stack.push([0, 1]);
+        }
     }
     else if (nodeType === 'crunode') {
         const ts = bezierSelfIntersection(ps);
@@ -18028,6 +18918,12 @@ function allRoots(p, lb = Number.NEGATIVE_INFINITY, ub = Number.POSITIVE_INFINIT
             }
             isWithZeroRoots.push(is[i]);
         }
+        if (!zerosInserted) {
+            // push the zero roots
+            for (let j = 0; j < numZerosAtZero; j++) {
+                isWithZeroRoots.push(0);
+            }
+        }
         return isWithZeroRoots;
     }
     return is;
@@ -18246,8 +19142,8 @@ function toHybridQuadratic(G) {
     // <12> <= <12>(<11>(<0>3*<10>x2) + <11>x3)
     const _hq2 = [(3 * _x2 + _x3) / 2, (3 * _y2 + _y3) / 2];
     return {
-        hq: [[(3 * x1 - x0) / 2, (3 * y1 - y0) / 2],
-            [(3 * x2 - x3) / 2, (3 * y2 - y3) / 2]],
+        hq: [[(3 * x1 - x0) / 2, (3 * y1 - y0) / 2], // evaluated at (1-t)
+            [(3 * x2 - x3) / 2, (3 * y2 - y3) / 2]], // evaluated at t
         // error bounds (still need to be multiplied by 4*u and 6*u)
         _hq: [_hq1, _hq2]
     };
@@ -19904,8 +20800,8 @@ function getImplicitForm1ErrorCounters(ps) {
     // <3>v <-- <3>(<2>(<0>a0*<1>b1) - <2>(<1>a1*<0>b0))
     const v_ = get_implicit_form1_error_counters_abs(a0) * b1_ + get_implicit_form1_error_counters_abs(b0) * a1_; // <3>
     return {
-        vₓ_: b1_,
-        vᵧ_: a1_,
+        vₓ_: b1_, // <1>
+        vᵧ_: a1_, // <1>
         v_ // <3>
     };
 }
@@ -20714,7 +21610,7 @@ function toPowerBasis2_1stDerivativeErrorCounters(ps) {
     // `<D> === <1>` else if double-double precision then `<D> === <0>`.
     return [
         [
-            2 * ((_x2 + _x0) + 2 * _x1),
+            2 * ((_x2 + _x0) + 2 * _x1), // <D+1> <-- <D+1>(<D>(x2 + x0) - 2*x1)
             2 * (_x1 + _x0) // <D> <-- 2*<D>(x1 - x0)
         ], [
             2 * ((_y2 + _y0) + 2 * _y1),
@@ -21129,7 +22025,7 @@ function quadraticToPolyline(ps, tolerance) {
     // Polyline linked list
     let head = {
         ps,
-        prev: undefined,
+        prev: undefined, // keep TypeScript happy - it's ok, we'll set it later
         next: undefined // keep TypeScript happy - it's ok, we'll set it later
     };
     stack.push(head);
@@ -21153,7 +22049,7 @@ function quadraticToPolyline(ps, tolerance) {
         };
         const node2 = {
             ps: quads[1],
-            prev: undefined,
+            prev: undefined, // keep TypeScript happy - it's ok, we'll set it later
             next
         };
         node1.next = node2;
@@ -22183,11 +23079,11 @@ function getClosestOnBezier3FromPointErrorCounters(ps, p) {
     const t0_ = ((x01_ + 6 * x00_) +
         (y01_ + 6 * y00_));
     return [
-        t5_,
-        t4_,
-        t3_,
-        t2_,
-        t1_,
+        t5_, // <9>
+        t4_, // <10>
+        t3_, // <10>
+        t2_, // <10>
+        t1_, // <9>
         t0_ // <7>
     ];
 }
@@ -22276,9 +23172,9 @@ function getClosestOnBezier2FromPointErrorCounters(ps, p) {
     const t0_ = (y01_ + y00_) +
         (x01_ + x00_);
     return [
-        t3_,
-        t2_,
-        t1_,
+        t3_, // <7>
+        t2_, // <8>
+        t1_, // <7>
         t0_ // <5>
     ];
 }
@@ -22338,7 +23234,7 @@ function getClosestOnBezier1FromPointErrorCounters(ps, p) {
     // <5>t0 = <5>(s1 - s2);
     const t0 = s1_ + s2_;
     return [
-        t1,
+        t1, // <6>
         t0 // <5>
     ];
 }
@@ -22750,7 +23646,7 @@ function hausdorffDistanceOneSided(A, B, tolerance, maxIterations = 50) {
         return EA0 > EA1 ? EA0 : EA1;
     }
     const l = hausdorff_distance_one_sided_max(maxAbsCoordinate(A), maxAbsCoordinate(B));
-    tolerance = tolerance || l / 1000000;
+    tolerance = tolerance || l / 1000_000;
     // an array of intervals
     const [eL, eR] = calcHErrorBound(A, 0, 1);
     const d0 = closestPointOnBezier(B, A[0]).d;
@@ -24411,12 +25307,12 @@ function getCoeffsCubicErrorCounters(circle, ps) {
     // <5> <--  <5>(<2>(-2*(<1>(a0*cx) + <1>(b0*cy))) + <4>(<3>(<2>(<1>(a0**2) + <1>(b0**2)) + <2>(<1>(cx**2) + <1>(cy**2))) - <1>(r**2)));
     const t0_ = 2 * (a0_ * cx_ + b0_ * cy_) + (((a0_ * a0_ + b0_ * b0_) + (cx_ * cx_ + cy_ * cy_)) + r * r);
     return [
-        t6_,
-        t5_,
-        t4_,
-        t3_,
-        t2_,
-        t1_,
+        t6_, // <8>
+        t5_, // <8>
+        t4_, // <9>
+        t3_, // <9>
+        t2_, // <8>
+        t1_, // <5>
         t0_ // <5>
     ];
 }
@@ -25041,7 +25937,7 @@ function evaluate2ndDerivativeAt1(ps) {
     if (ps.length === 3) {
         const [[x0, y0], [x1, y1], [x2, y2]] = ps;
         return [
-            2 * ((x2 + x0) - 2 * x1),
+            2 * ((x2 + x0) - 2 * x1), // t^0
             2 * ((y2 + y0) - 2 * y1), // t^0
         ]; // max bitlength increase 3
     }
@@ -25584,7 +26480,7 @@ function closestPointsBetweenBeziers(A, B, tolerance, maxIterations = 50) {
         return pwds;
     }
     const l = closest_distance_between_beziers_max(maxAbsCoordinate(A), maxAbsCoordinate(B));
-    tolerance = tolerance || l / 1000000;
+    tolerance = tolerance || l / 1000_000;
     // an array of intervals
     const [eL, eR] = closest_distance_between_beziers_calcHErrorBound(A, 0, 1);
     const dL = closestPointOnBezier(B, A[0]).d;
@@ -25805,151 +26701,151 @@ function closest_distance_between_beziers_calcHErrorBound(A, tS, tE) {
 
 
 
-var __webpack_exports__areBoxesIntersecting = __webpack_exports__.y2;
-var __webpack_exports__area = __webpack_exports__.SO;
-var __webpack_exports__bezierBezierIntersection = __webpack_exports__.Cn;
-var __webpack_exports__bezierBezierIntersectionBoundless = __webpack_exports__.ii;
-var __webpack_exports__bezierBezierIntersectionFast = __webpack_exports__.uw;
-var __webpack_exports__bezierSelfIntersection = __webpack_exports__.Vr;
-var __webpack_exports__circleBezierIntersection = __webpack_exports__.bG;
-var __webpack_exports__classification = __webpack_exports__.Gm;
-var __webpack_exports__classifications = __webpack_exports__.xt;
-var __webpack_exports__classify = __webpack_exports__.xk;
-var __webpack_exports__clone = __webpack_exports__.d9;
-var __webpack_exports__closestPointOnBezier = __webpack_exports__.jd;
-var __webpack_exports__closestPointOnBezierCertified = __webpack_exports__.Ay;
-var __webpack_exports__closestPointsBetweenBeziers = __webpack_exports__.Ek;
-var __webpack_exports__controlPointLinesLength = __webpack_exports__.Sx;
-var __webpack_exports__cubicFromAnglesAndSpeeds = __webpack_exports__.vC;
-var __webpack_exports__cubicThroughPointGiven013 = __webpack_exports__.hI;
-var __webpack_exports__cubicToAnglesAndSpeeds = __webpack_exports__.GY;
-var __webpack_exports__cubicToHybridQuadratic = __webpack_exports__.Wb;
-var __webpack_exports__cubicToQuadratic = __webpack_exports__.kP;
-var __webpack_exports__curvature = __webpack_exports__.Ne;
-var __webpack_exports__curviness = __webpack_exports__.oj;
-var __webpack_exports__ddCurvature = __webpack_exports__.fz;
-var __webpack_exports__eCurvature = __webpack_exports__.pZ;
-var __webpack_exports__equal = __webpack_exports__.Dg;
-var __webpack_exports__evalDeCasteljau = __webpack_exports__.su;
-var __webpack_exports__evalDeCasteljauDd = __webpack_exports__.ue;
-var __webpack_exports__evalDeCasteljauError = __webpack_exports__.WQ;
-var __webpack_exports__evalDeCasteljauWithErr = __webpack_exports__.T_;
-var __webpack_exports__evalDeCasteljauWithErrDd = __webpack_exports__.K5;
-var __webpack_exports__evaluate = __webpack_exports__.ku;
-var __webpack_exports__evaluate2ndDerivative = __webpack_exports__.Rf;
-var __webpack_exports__evaluate2ndDerivativeAt0 = __webpack_exports__.ok;
-var __webpack_exports__evaluate2ndDerivativeAt0Exact = __webpack_exports__.Bv;
-var __webpack_exports__evaluate2ndDerivativeAt1 = __webpack_exports__.CH;
-var __webpack_exports__evaluate2ndDerivativeAt1Exact = __webpack_exports__.Q$;
-var __webpack_exports__evaluate2ndDerivativeExact = __webpack_exports__.mz;
-var __webpack_exports__evaluateExact = __webpack_exports__.Lb;
-var __webpack_exports__evaluateImplicit1 = __webpack_exports__.fV;
-var __webpack_exports__evaluateImplicit2 = __webpack_exports__.fK;
-var __webpack_exports__evaluateImplicit3 = __webpack_exports__.CS;
-var __webpack_exports__fitQuadsToCubic = __webpack_exports__.Go;
-var __webpack_exports__fromPowerBasis = __webpack_exports__.jX;
-var __webpack_exports__fromTo = __webpack_exports__.JQ;
-var __webpack_exports__fromToInclErrorBound = __webpack_exports__.RU;
-var __webpack_exports__furthestPointOnBezier = __webpack_exports__.ZL;
-var __webpack_exports__generateCuspAtHalf3 = __webpack_exports__.Gc;
-var __webpack_exports__generateQuarterCircle = __webpack_exports__.MM;
-var __webpack_exports__generateSelfIntersecting = __webpack_exports__.W9;
-var __webpack_exports__getAbsAreaBetween = __webpack_exports__.OP;
-var __webpack_exports__getBendingEnergy = __webpack_exports__.so;
-var __webpack_exports__getBoundingBox = __webpack_exports__.A5;
-var __webpack_exports__getBoundingBoxTight = __webpack_exports__.FZ;
-var __webpack_exports__getBoundingHull = __webpack_exports__.vT;
-var __webpack_exports__getBounds = __webpack_exports__.zX;
-var __webpack_exports__getCoeffsBezBez = __webpack_exports__.Gb;
-var __webpack_exports__getControlPointBox = __webpack_exports__.zs;
-var __webpack_exports__getCubicSpeeds = __webpack_exports__.D;
-var __webpack_exports__getCurvatureExtrema = __webpack_exports__.cQ;
-var __webpack_exports__getCurvatureExtremaDd = __webpack_exports__.PO;
-var __webpack_exports__getCurvatureExtremaE = __webpack_exports__.c;
-var __webpack_exports__getEndpointIntersections = __webpack_exports__.Fx;
-var __webpack_exports__getFootPointsOnBezierCertified = __webpack_exports__.PZ;
-var __webpack_exports__getFootPointsOnBezierPolysCertified = __webpack_exports__.b0;
-var __webpack_exports__getFootpointPoly = __webpack_exports__.w9;
-var __webpack_exports__getFootpointPolyDd = __webpack_exports__.c1;
-var __webpack_exports__getFootpointPolyExact = __webpack_exports__.Fi;
-var __webpack_exports__getHodograph = __webpack_exports__.v2;
-var __webpack_exports__getImplicitForm1 = __webpack_exports__._z;
-var __webpack_exports__getImplicitForm1Dd = __webpack_exports__.xV;
-var __webpack_exports__getImplicitForm1DdWithRunningError = __webpack_exports__.Kd;
-var __webpack_exports__getImplicitForm1ErrorCounters = __webpack_exports__.sp;
-var __webpack_exports__getImplicitForm1Exact = __webpack_exports__.MA;
-var __webpack_exports__getImplicitForm2 = __webpack_exports__.pr;
-var __webpack_exports__getImplicitForm2Dd = __webpack_exports__.i2;
-var __webpack_exports__getImplicitForm2DdWithRunningError = __webpack_exports__.HL;
-var __webpack_exports__getImplicitForm2ErrorCounters = __webpack_exports__.AI;
-var __webpack_exports__getImplicitForm2Exact = __webpack_exports__.LX;
-var __webpack_exports__getImplicitForm3 = __webpack_exports__.q3;
-var __webpack_exports__getImplicitForm3Dd = __webpack_exports__.wj;
-var __webpack_exports__getImplicitForm3DdWithRunningError = __webpack_exports__.pt;
-var __webpack_exports__getImplicitForm3ErrorCounters = __webpack_exports__.Vh;
-var __webpack_exports__getImplicitForm3Exact = __webpack_exports__.gt;
-var __webpack_exports__getInflections = __webpack_exports__.Qi;
-var __webpack_exports__getInterfaceRotation = __webpack_exports__.Nl;
-var __webpack_exports__getIntervalBox = __webpack_exports__.mk;
-var __webpack_exports__getIntervalBoxDd = __webpack_exports__.I3;
-var __webpack_exports__getTAtLength = __webpack_exports__.n;
-var __webpack_exports__getXBoundsTight = __webpack_exports__.vx;
-var __webpack_exports__getYBoundsTight = __webpack_exports__.pJ;
-var __webpack_exports__hausdorffDistance = __webpack_exports__.OT;
-var __webpack_exports__hausdorffDistanceOneSided = __webpack_exports__.sn;
-var __webpack_exports__intersectBoxes = __webpack_exports__.wN;
-var __webpack_exports__isCollinear = __webpack_exports__.cp;
-var __webpack_exports__isCubicReallyLine = __webpack_exports__.Hz;
-var __webpack_exports__isCubicReallyQuad = __webpack_exports__.gd;
-var __webpack_exports__isHorizontal = __webpack_exports__.wE;
-var __webpack_exports__isPointOnBezierExtension = __webpack_exports__.Xn;
-var __webpack_exports__isQuadObtuse = __webpack_exports__.p0;
-var __webpack_exports__isQuadReallyLine = __webpack_exports__.NI;
-var __webpack_exports__isReallyPoint = __webpack_exports__.GV;
-var __webpack_exports__isSelfOverlapping = __webpack_exports__._2;
-var __webpack_exports__isVertical = __webpack_exports__.Ll;
-var __webpack_exports__length = __webpack_exports__.kE;
-var __webpack_exports__lineToCubic = __webpack_exports__.w2;
-var __webpack_exports__lineToQuadratic = __webpack_exports__.L8;
-var __webpack_exports__maxAbsCoordinate = __webpack_exports__.he;
-var __webpack_exports__normal = __webpack_exports__.mJ;
-var __webpack_exports__quadraticToCubic = __webpack_exports__.d3;
-var __webpack_exports__quadraticToPolyline = __webpack_exports__.q8;
-var __webpack_exports__reduceOrderIfPossible = __webpack_exports__.Ut;
-var __webpack_exports__reverse = __webpack_exports__.S3;
-var __webpack_exports__setCubicSpeeds = __webpack_exports__.Bm;
-var __webpack_exports__splitByCurvature = __webpack_exports__.ZP;
-var __webpack_exports__splitByCurvatureAndLength = __webpack_exports__.xO;
-var __webpack_exports__splitByLength = __webpack_exports__.GQ;
-var __webpack_exports__tFromXY = __webpack_exports__.Uo;
-var __webpack_exports__tangent = __webpack_exports__.s6;
-var __webpack_exports__tangentAt0 = __webpack_exports__.Cz;
-var __webpack_exports__tangentAt0Exact = __webpack_exports__.Vo;
-var __webpack_exports__tangentAt1 = __webpack_exports__.LC;
-var __webpack_exports__tangentAt1Exact = __webpack_exports__.Tb;
-var __webpack_exports__tangentExact = __webpack_exports__.x_;
-var __webpack_exports__toCubic = __webpack_exports__.rA;
-var __webpack_exports__toPowerBasis = __webpack_exports__.iq;
-var __webpack_exports__toPowerBasisDd = __webpack_exports__.rQ;
-var __webpack_exports__toPowerBasisDdWithRunningError = __webpack_exports__.l7;
-var __webpack_exports__toPowerBasisErrorCounters = __webpack_exports__.XK;
-var __webpack_exports__toPowerBasisExact = __webpack_exports__.K_;
-var __webpack_exports__toPowerBasisWithRunningError = __webpack_exports__.jU;
-var __webpack_exports__toPowerBasis_1stDerivative = __webpack_exports__.iN;
-var __webpack_exports__toPowerBasis_1stDerivativeDd = __webpack_exports__.iv;
-var __webpack_exports__toPowerBasis_1stDerivativeErrorCounters = __webpack_exports__.bn;
-var __webpack_exports__toPowerBasis_1stDerivativeExact = __webpack_exports__.oh;
-var __webpack_exports__toPowerBasis_2ndDerivative = __webpack_exports__.O6;
-var __webpack_exports__toPowerBasis_2ndDerivativeDd = __webpack_exports__.Kr;
-var __webpack_exports__toPowerBasis_2ndDerivativeExact = __webpack_exports__.hJ;
-var __webpack_exports__toPowerBasis_3rdDerivative = __webpack_exports__.ai;
-var __webpack_exports__toPowerBasis_3rdDerivativeDd = __webpack_exports__.J8;
-var __webpack_exports__toPowerBasis_3rdDerivativeExact = __webpack_exports__._A;
-var __webpack_exports__toString = __webpack_exports__.BB;
-var __webpack_exports__totalAbsoluteCurvature = __webpack_exports__._G;
-var __webpack_exports__totalCurvature = __webpack_exports__.Ce;
-var __webpack_exports__totalLength = __webpack_exports__.Cv;
-var __webpack_exports___ = __webpack_exports__.H8;
-var __webpack_exports___ = __webpack_exports__.Uv;
-var __webpack_exports___ = __webpack_exports__.Ef;
+var __webpack_exports__areBoxesIntersecting = __webpack_exports__.r9;
+var __webpack_exports__area = __webpack_exports__.Wc;
+var __webpack_exports__bezierBezierIntersection = __webpack_exports__.G6;
+var __webpack_exports__bezierBezierIntersectionBoundless = __webpack_exports__.$Z;
+var __webpack_exports__bezierBezierIntersectionFast = __webpack_exports__.EK;
+var __webpack_exports__bezierSelfIntersection = __webpack_exports__.nd;
+var __webpack_exports__circleBezierIntersection = __webpack_exports__.pH;
+var __webpack_exports__classification = __webpack_exports__.xs;
+var __webpack_exports__classifications = __webpack_exports__.Ug;
+var __webpack_exports__classify = __webpack_exports__.L8;
+var __webpack_exports__clone = __webpack_exports__.o8;
+var __webpack_exports__closestPointOnBezier = __webpack_exports__.GC;
+var __webpack_exports__closestPointOnBezierCertified = __webpack_exports__.d2;
+var __webpack_exports__closestPointsBetweenBeziers = __webpack_exports__.HE;
+var __webpack_exports__controlPointLinesLength = __webpack_exports__.hB;
+var __webpack_exports__cubicFromAnglesAndSpeeds = __webpack_exports__.ex;
+var __webpack_exports__cubicThroughPointGiven013 = __webpack_exports__.rM;
+var __webpack_exports__cubicToAnglesAndSpeeds = __webpack_exports__.ZS;
+var __webpack_exports__cubicToHybridQuadratic = __webpack_exports__.o1;
+var __webpack_exports__cubicToQuadratic = __webpack_exports__.ks;
+var __webpack_exports__curvature = __webpack_exports__.E0;
+var __webpack_exports__curviness = __webpack_exports__.$c;
+var __webpack_exports__ddCurvature = __webpack_exports__.EC;
+var __webpack_exports__eCurvature = __webpack_exports__.Lh;
+var __webpack_exports__equal = __webpack_exports__.LC;
+var __webpack_exports__evalDeCasteljau = __webpack_exports__.u7;
+var __webpack_exports__evalDeCasteljauDd = __webpack_exports__.w4;
+var __webpack_exports__evalDeCasteljauError = __webpack_exports__.g5;
+var __webpack_exports__evalDeCasteljauWithErr = __webpack_exports__.RK;
+var __webpack_exports__evalDeCasteljauWithErrDd = __webpack_exports__.rR;
+var __webpack_exports__evaluate = __webpack_exports__._3;
+var __webpack_exports__evaluate2ndDerivative = __webpack_exports__.L;
+var __webpack_exports__evaluate2ndDerivativeAt0 = __webpack_exports__.i$;
+var __webpack_exports__evaluate2ndDerivativeAt0Exact = __webpack_exports__.XZ;
+var __webpack_exports__evaluate2ndDerivativeAt1 = __webpack_exports__.r$;
+var __webpack_exports__evaluate2ndDerivativeAt1Exact = __webpack_exports__.EZ;
+var __webpack_exports__evaluate2ndDerivativeExact = __webpack_exports__.Sb;
+var __webpack_exports__evaluateExact = __webpack_exports__.xW;
+var __webpack_exports__evaluateImplicit1 = __webpack_exports__.WA;
+var __webpack_exports__evaluateImplicit2 = __webpack_exports__.PD;
+var __webpack_exports__evaluateImplicit3 = __webpack_exports__.Ik;
+var __webpack_exports__fitQuadsToCubic = __webpack_exports__.fb;
+var __webpack_exports__fromPowerBasis = __webpack_exports__.Ci;
+var __webpack_exports__fromTo = __webpack_exports__.e8;
+var __webpack_exports__fromToInclErrorBound = __webpack_exports__.CR;
+var __webpack_exports__furthestPointOnBezier = __webpack_exports__["in"];
+var __webpack_exports__generateCuspAtHalf3 = __webpack_exports__.IY;
+var __webpack_exports__generateQuarterCircle = __webpack_exports__.Cl;
+var __webpack_exports__generateSelfIntersecting = __webpack_exports__.bs;
+var __webpack_exports__getAbsAreaBetween = __webpack_exports__.Sw;
+var __webpack_exports__getBendingEnergy = __webpack_exports__.Qj;
+var __webpack_exports__getBoundingBox = __webpack_exports__.UX;
+var __webpack_exports__getBoundingBoxTight = __webpack_exports__.I5;
+var __webpack_exports__getBoundingHull = __webpack_exports__._y;
+var __webpack_exports__getBounds = __webpack_exports__.gW;
+var __webpack_exports__getCoeffsBezBez = __webpack_exports__.v0;
+var __webpack_exports__getControlPointBox = __webpack_exports__.lX;
+var __webpack_exports__getCubicSpeeds = __webpack_exports__.jK;
+var __webpack_exports__getCurvatureExtrema = __webpack_exports__.YV;
+var __webpack_exports__getCurvatureExtremaDd = __webpack_exports__.IB;
+var __webpack_exports__getCurvatureExtremaE = __webpack_exports__.Tc;
+var __webpack_exports__getEndpointIntersections = __webpack_exports__.cR;
+var __webpack_exports__getFootPointsOnBezierCertified = __webpack_exports__.RH;
+var __webpack_exports__getFootPointsOnBezierPolysCertified = __webpack_exports__.GF;
+var __webpack_exports__getFootpointPoly = __webpack_exports__.vd;
+var __webpack_exports__getFootpointPolyDd = __webpack_exports__.jT;
+var __webpack_exports__getFootpointPolyExact = __webpack_exports__.mK;
+var __webpack_exports__getHodograph = __webpack_exports__.rh;
+var __webpack_exports__getImplicitForm1 = __webpack_exports__.TX;
+var __webpack_exports__getImplicitForm1Dd = __webpack_exports__.bJ;
+var __webpack_exports__getImplicitForm1DdWithRunningError = __webpack_exports__.O5;
+var __webpack_exports__getImplicitForm1ErrorCounters = __webpack_exports__.oB;
+var __webpack_exports__getImplicitForm1Exact = __webpack_exports__.Ep;
+var __webpack_exports__getImplicitForm2 = __webpack_exports__.Md;
+var __webpack_exports__getImplicitForm2Dd = __webpack_exports__.w3;
+var __webpack_exports__getImplicitForm2DdWithRunningError = __webpack_exports__.x1;
+var __webpack_exports__getImplicitForm2ErrorCounters = __webpack_exports__.RN;
+var __webpack_exports__getImplicitForm2Exact = __webpack_exports__.Dk;
+var __webpack_exports__getImplicitForm3 = __webpack_exports__.FB;
+var __webpack_exports__getImplicitForm3Dd = __webpack_exports__.LQ;
+var __webpack_exports__getImplicitForm3DdWithRunningError = __webpack_exports__.DR;
+var __webpack_exports__getImplicitForm3ErrorCounters = __webpack_exports__.bK;
+var __webpack_exports__getImplicitForm3Exact = __webpack_exports__.s_;
+var __webpack_exports__getInflections = __webpack_exports__.vH;
+var __webpack_exports__getInterfaceRotation = __webpack_exports__.e4;
+var __webpack_exports__getIntervalBox = __webpack_exports__.TY;
+var __webpack_exports__getIntervalBoxDd = __webpack_exports__.z4;
+var __webpack_exports__getTAtLength = __webpack_exports__.Qf;
+var __webpack_exports__getXBoundsTight = __webpack_exports__.is;
+var __webpack_exports__getYBoundsTight = __webpack_exports__.Rk;
+var __webpack_exports__hausdorffDistance = __webpack_exports__.gV;
+var __webpack_exports__hausdorffDistanceOneSided = __webpack_exports__.L1;
+var __webpack_exports__intersectBoxes = __webpack_exports__.NZ;
+var __webpack_exports__isCollinear = __webpack_exports__.SG;
+var __webpack_exports__isCubicReallyLine = __webpack_exports__.Mz;
+var __webpack_exports__isCubicReallyQuad = __webpack_exports__.RA;
+var __webpack_exports__isHorizontal = __webpack_exports__.$b;
+var __webpack_exports__isPointOnBezierExtension = __webpack_exports__.IF;
+var __webpack_exports__isQuadObtuse = __webpack_exports__.Un;
+var __webpack_exports__isQuadReallyLine = __webpack_exports__.pf;
+var __webpack_exports__isReallyPoint = __webpack_exports__.Qr;
+var __webpack_exports__isSelfOverlapping = __webpack_exports__.Ag;
+var __webpack_exports__isVertical = __webpack_exports__.fk;
+var __webpack_exports__length = __webpack_exports__.Bw;
+var __webpack_exports__lineToCubic = __webpack_exports__.uw;
+var __webpack_exports__lineToQuadratic = __webpack_exports__.cZ;
+var __webpack_exports__maxAbsCoordinate = __webpack_exports__.LX;
+var __webpack_exports__normal = __webpack_exports__.qb;
+var __webpack_exports__quadraticToCubic = __webpack_exports__._f;
+var __webpack_exports__quadraticToPolyline = __webpack_exports__.i2;
+var __webpack_exports__reduceOrderIfPossible = __webpack_exports__.DD;
+var __webpack_exports__reverse = __webpack_exports__.BE;
+var __webpack_exports__setCubicSpeeds = __webpack_exports__.ve;
+var __webpack_exports__splitByCurvature = __webpack_exports__.FH;
+var __webpack_exports__splitByCurvatureAndLength = __webpack_exports__.ey;
+var __webpack_exports__splitByLength = __webpack_exports__.OX;
+var __webpack_exports__tFromXY = __webpack_exports__.jX;
+var __webpack_exports__tangent = __webpack_exports__.KR;
+var __webpack_exports__tangentAt0 = __webpack_exports__.Hf;
+var __webpack_exports__tangentAt0Exact = __webpack_exports__.um;
+var __webpack_exports__tangentAt1 = __webpack_exports__.AY;
+var __webpack_exports__tangentAt1Exact = __webpack_exports__.zr;
+var __webpack_exports__tangentExact = __webpack_exports__.Bg;
+var __webpack_exports__toCubic = __webpack_exports__.Oj;
+var __webpack_exports__toPowerBasis = __webpack_exports__.V4;
+var __webpack_exports__toPowerBasisDd = __webpack_exports__.bL;
+var __webpack_exports__toPowerBasisDdWithRunningError = __webpack_exports__.CP;
+var __webpack_exports__toPowerBasisErrorCounters = __webpack_exports__.wr;
+var __webpack_exports__toPowerBasisExact = __webpack_exports__._K;
+var __webpack_exports__toPowerBasisWithRunningError = __webpack_exports__.SP;
+var __webpack_exports__toPowerBasis_1stDerivative = __webpack_exports__.pn;
+var __webpack_exports__toPowerBasis_1stDerivativeDd = __webpack_exports__.$0;
+var __webpack_exports__toPowerBasis_1stDerivativeErrorCounters = __webpack_exports__.eT;
+var __webpack_exports__toPowerBasis_1stDerivativeExact = __webpack_exports__.gw;
+var __webpack_exports__toPowerBasis_2ndDerivative = __webpack_exports__.rC;
+var __webpack_exports__toPowerBasis_2ndDerivativeDd = __webpack_exports__.Hm;
+var __webpack_exports__toPowerBasis_2ndDerivativeExact = __webpack_exports__.yb;
+var __webpack_exports__toPowerBasis_3rdDerivative = __webpack_exports__.qg;
+var __webpack_exports__toPowerBasis_3rdDerivativeDd = __webpack_exports__.kd;
+var __webpack_exports__toPowerBasis_3rdDerivativeExact = __webpack_exports__.RJ;
+var __webpack_exports__toString = __webpack_exports__.dI;
+var __webpack_exports__totalAbsoluteCurvature = __webpack_exports__.hM;
+var __webpack_exports__totalCurvature = __webpack_exports__.wu;
+var __webpack_exports__totalLength = __webpack_exports__["do"];
+var __webpack_exports___ = __webpack_exports__.e7;
+var __webpack_exports___ = __webpack_exports__.ZH;
+var __webpack_exports___ = __webpack_exports__.LZ;
 export { __webpack_exports__areBoxesIntersecting as areBoxesIntersecting, __webpack_exports__area as area, __webpack_exports__bezierBezierIntersection as bezierBezierIntersection, __webpack_exports__bezierBezierIntersectionBoundless as bezierBezierIntersectionBoundless, __webpack_exports__bezierBezierIntersectionFast as bezierBezierIntersectionFast, __webpack_exports__bezierSelfIntersection as bezierSelfIntersection, __webpack_exports__circleBezierIntersection as circleBezierIntersection, __webpack_exports__classification as classification, __webpack_exports__classifications as classifications, __webpack_exports__classify as classify, __webpack_exports__clone as clone, __webpack_exports__closestPointOnBezier as closestPointOnBezier, __webpack_exports__closestPointOnBezierCertified as closestPointOnBezierCertified, __webpack_exports__closestPointsBetweenBeziers as closestPointsBetweenBeziers, __webpack_exports__controlPointLinesLength as controlPointLinesLength, __webpack_exports__cubicFromAnglesAndSpeeds as cubicFromAnglesAndSpeeds, __webpack_exports__cubicThroughPointGiven013 as cubicThroughPointGiven013, __webpack_exports__cubicToAnglesAndSpeeds as cubicToAnglesAndSpeeds, __webpack_exports__cubicToHybridQuadratic as cubicToHybridQuadratic, __webpack_exports__cubicToQuadratic as cubicToQuadratic, __webpack_exports__curvature as curvature, __webpack_exports__curviness as curviness, __webpack_exports__ddCurvature as ddCurvature, __webpack_exports__eCurvature as eCurvature, __webpack_exports__equal as equal, __webpack_exports__evalDeCasteljau as evalDeCasteljau, __webpack_exports__evalDeCasteljauDd as evalDeCasteljauDd, __webpack_exports__evalDeCasteljauError as evalDeCasteljauError, __webpack_exports__evalDeCasteljauWithErr as evalDeCasteljauWithErr, __webpack_exports__evalDeCasteljauWithErrDd as evalDeCasteljauWithErrDd, __webpack_exports__evaluate as evaluate, __webpack_exports__evaluate2ndDerivative as evaluate2ndDerivative, __webpack_exports__evaluate2ndDerivativeAt0 as evaluate2ndDerivativeAt0, __webpack_exports__evaluate2ndDerivativeAt0Exact as evaluate2ndDerivativeAt0Exact, __webpack_exports__evaluate2ndDerivativeAt1 as evaluate2ndDerivativeAt1, __webpack_exports__evaluate2ndDerivativeAt1Exact as evaluate2ndDerivativeAt1Exact, __webpack_exports__evaluate2ndDerivativeExact as evaluate2ndDerivativeExact, __webpack_exports__evaluateExact as evaluateExact, __webpack_exports__evaluateImplicit1 as evaluateImplicit1, __webpack_exports__evaluateImplicit2 as evaluateImplicit2, __webpack_exports__evaluateImplicit3 as evaluateImplicit3, __webpack_exports__fitQuadsToCubic as fitQuadsToCubic, __webpack_exports__fromPowerBasis as fromPowerBasis, __webpack_exports__fromTo as fromTo, __webpack_exports__fromToInclErrorBound as fromToInclErrorBound, __webpack_exports__furthestPointOnBezier as furthestPointOnBezier, __webpack_exports__generateCuspAtHalf3 as generateCuspAtHalf3, __webpack_exports__generateQuarterCircle as generateQuarterCircle, __webpack_exports__generateSelfIntersecting as generateSelfIntersecting, __webpack_exports__getAbsAreaBetween as getAbsAreaBetween, __webpack_exports__getBendingEnergy as getBendingEnergy, __webpack_exports__getBoundingBox as getBoundingBox, __webpack_exports__getBoundingBoxTight as getBoundingBoxTight, __webpack_exports__getBoundingHull as getBoundingHull, __webpack_exports__getBounds as getBounds, __webpack_exports__getCoeffsBezBez as getCoeffsBezBez, __webpack_exports__getControlPointBox as getControlPointBox, __webpack_exports__getCubicSpeeds as getCubicSpeeds, __webpack_exports__getCurvatureExtrema as getCurvatureExtrema, __webpack_exports__getCurvatureExtremaDd as getCurvatureExtremaDd, __webpack_exports__getCurvatureExtremaE as getCurvatureExtremaE, __webpack_exports__getEndpointIntersections as getEndpointIntersections, __webpack_exports__getFootPointsOnBezierCertified as getFootPointsOnBezierCertified, __webpack_exports__getFootPointsOnBezierPolysCertified as getFootPointsOnBezierPolysCertified, __webpack_exports__getFootpointPoly as getFootpointPoly, __webpack_exports__getFootpointPolyDd as getFootpointPolyDd, __webpack_exports__getFootpointPolyExact as getFootpointPolyExact, __webpack_exports__getHodograph as getHodograph, __webpack_exports__getImplicitForm1 as getImplicitForm1, __webpack_exports__getImplicitForm1Dd as getImplicitForm1Dd, __webpack_exports__getImplicitForm1DdWithRunningError as getImplicitForm1DdWithRunningError, __webpack_exports__getImplicitForm1ErrorCounters as getImplicitForm1ErrorCounters, __webpack_exports__getImplicitForm1Exact as getImplicitForm1Exact, __webpack_exports__getImplicitForm2 as getImplicitForm2, __webpack_exports__getImplicitForm2Dd as getImplicitForm2Dd, __webpack_exports__getImplicitForm2DdWithRunningError as getImplicitForm2DdWithRunningError, __webpack_exports__getImplicitForm2ErrorCounters as getImplicitForm2ErrorCounters, __webpack_exports__getImplicitForm2Exact as getImplicitForm2Exact, __webpack_exports__getImplicitForm3 as getImplicitForm3, __webpack_exports__getImplicitForm3Dd as getImplicitForm3Dd, __webpack_exports__getImplicitForm3DdWithRunningError as getImplicitForm3DdWithRunningError, __webpack_exports__getImplicitForm3ErrorCounters as getImplicitForm3ErrorCounters, __webpack_exports__getImplicitForm3Exact as getImplicitForm3Exact, __webpack_exports__getInflections as getInflections, __webpack_exports__getInterfaceRotation as getInterfaceRotation, __webpack_exports__getIntervalBox as getIntervalBox, __webpack_exports__getIntervalBoxDd as getIntervalBoxDd, __webpack_exports__getTAtLength as getTAtLength, __webpack_exports__getXBoundsTight as getXBoundsTight, __webpack_exports__getYBoundsTight as getYBoundsTight, __webpack_exports__hausdorffDistance as hausdorffDistance, __webpack_exports__hausdorffDistanceOneSided as hausdorffDistanceOneSided, __webpack_exports__intersectBoxes as intersectBoxes, __webpack_exports__isCollinear as isCollinear, __webpack_exports__isCubicReallyLine as isCubicReallyLine, __webpack_exports__isCubicReallyQuad as isCubicReallyQuad, __webpack_exports__isHorizontal as isHorizontal, __webpack_exports__isPointOnBezierExtension as isPointOnBezierExtension, __webpack_exports__isQuadObtuse as isQuadObtuse, __webpack_exports__isQuadReallyLine as isQuadReallyLine, __webpack_exports__isReallyPoint as isReallyPoint, __webpack_exports__isSelfOverlapping as isSelfOverlapping, __webpack_exports__isVertical as isVertical, __webpack_exports__length as length, __webpack_exports__lineToCubic as lineToCubic, __webpack_exports__lineToQuadratic as lineToQuadratic, __webpack_exports__maxAbsCoordinate as maxAbsCoordinate, __webpack_exports__normal as normal, __webpack_exports__quadraticToCubic as quadraticToCubic, __webpack_exports__quadraticToPolyline as quadraticToPolyline, __webpack_exports__reduceOrderIfPossible as reduceOrderIfPossible, __webpack_exports__reverse as reverse, __webpack_exports__setCubicSpeeds as setCubicSpeeds, __webpack_exports__splitByCurvature as splitByCurvature, __webpack_exports__splitByCurvatureAndLength as splitByCurvatureAndLength, __webpack_exports__splitByLength as splitByLength, __webpack_exports__tFromXY as tFromXY, __webpack_exports__tangent as tangent, __webpack_exports__tangentAt0 as tangentAt0, __webpack_exports__tangentAt0Exact as tangentAt0Exact, __webpack_exports__tangentAt1 as tangentAt1, __webpack_exports__tangentAt1Exact as tangentAt1Exact, __webpack_exports__tangentExact as tangentExact, __webpack_exports__toCubic as toCubic, __webpack_exports__toPowerBasis as toPowerBasis, __webpack_exports__toPowerBasisDd as toPowerBasisDd, __webpack_exports__toPowerBasisDdWithRunningError as toPowerBasisDdWithRunningError, __webpack_exports__toPowerBasisErrorCounters as toPowerBasisErrorCounters, __webpack_exports__toPowerBasisExact as toPowerBasisExact, __webpack_exports__toPowerBasisWithRunningError as toPowerBasisWithRunningError, __webpack_exports__toPowerBasis_1stDerivative as toPowerBasis_1stDerivative, __webpack_exports__toPowerBasis_1stDerivativeDd as toPowerBasis_1stDerivativeDd, __webpack_exports__toPowerBasis_1stDerivativeErrorCounters as toPowerBasis_1stDerivativeErrorCounters, __webpack_exports__toPowerBasis_1stDerivativeExact as toPowerBasis_1stDerivativeExact, __webpack_exports__toPowerBasis_2ndDerivative as toPowerBasis_2ndDerivative, __webpack_exports__toPowerBasis_2ndDerivativeDd as toPowerBasis_2ndDerivativeDd, __webpack_exports__toPowerBasis_2ndDerivativeExact as toPowerBasis_2ndDerivativeExact, __webpack_exports__toPowerBasis_3rdDerivative as toPowerBasis_3rdDerivative, __webpack_exports__toPowerBasis_3rdDerivativeDd as toPowerBasis_3rdDerivativeDd, __webpack_exports__toPowerBasis_3rdDerivativeExact as toPowerBasis_3rdDerivativeExact, __webpack_exports__toString as toString, __webpack_exports__totalAbsoluteCurvature as totalAbsoluteCurvature, __webpack_exports__totalCurvature as totalCurvature, __webpack_exports__totalLength as totalLength, __webpack_exports___ as γ, __webpack_exports___ as γγ, __webpack_exports___ as κ };

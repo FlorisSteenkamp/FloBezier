@@ -119,11 +119,11 @@ function getClosestOnBezier3FromPointErrorCounters(ps, p) {
     const t0_ = ((x01_ + 6 * x00_) +
         (y01_ + 6 * y00_));
     return [
-        t5_,
-        t4_,
-        t3_,
-        t2_,
-        t1_,
+        t5_, // <9>
+        t4_, // <10>
+        t3_, // <10>
+        t2_, // <10>
+        t1_, // <9>
         t0_ // <7>
     ];
 }
@@ -212,9 +212,9 @@ function getClosestOnBezier2FromPointErrorCounters(ps, p) {
     const t0_ = (y01_ + y00_) +
         (x01_ + x00_);
     return [
-        t3_,
-        t2_,
-        t1_,
+        t3_, // <7>
+        t2_, // <8>
+        t1_, // <7>
         t0_ // <5>
     ];
 }
@@ -274,7 +274,7 @@ function getClosestOnBezier1FromPointErrorCounters(ps, p) {
     // <5>t0 = <5>(s1 - s2);
     const t0 = s1_ + s2_;
     return [
-        t1,
+        t1, // <6>
         t0 // <5>
     ];
 }
