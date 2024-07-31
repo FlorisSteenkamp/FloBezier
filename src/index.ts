@@ -76,6 +76,7 @@ import { toPowerBasisDdWithRunningError } from './to-power-basis/to-power-basis/
 import { toPowerBasisErrorCounters } from './to-power-basis/to-power-basis/to-power-basis-error-counters.js';
 import { toPowerBasis_1stDerivativeErrorCounters } from './to-power-basis/to-power-basis-1st-derivative/to-power-basis-1st-derivative-error-counters.js';
 import { normal } from './local-properties-at-t/normal/normal.js';
+import { normal2 } from './local-properties-at-t/normal/normal2.js';
 import { bezierBezierIntersection } from './intersection/bezier-bezier-intersection/bezier-bezier-intersection.js';
 import { toCubic } from './transformation/degree-or-type/to-cubic.js';
 import { κ, curvature } from './local-properties-at-t/curvature.js';
@@ -182,6 +183,7 @@ export {
 	ddCurvature,
 	tangent,
 	normal,
+	normal2,
 
 	getTAtLength,
 
