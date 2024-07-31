@@ -16,6 +16,7 @@ import { γ, γγ } from './error-analysis/error-analysis.js'
 import { fromToInclErrorBound } from './transformation/split/from-to-incl-error-bound.js';
 import { fromTo } from './transformation/split/from-to.js';
 import { fitQuadsToCubic } from './fit/fit-quads-to-cubic.js';
+import { fitQuadsToCubicHausdorff } from './fit/fit-quads-to-cubic-hausdorff.js';
 import { getControlPointBox } from './global-properties/bounds/get-control-point-box.js';
 import { closestPointOnBezier } from './simultaneous-properties/closest-and-furthest-point-on-bezier/closest-point-on-bezier.js';
 import { furthestPointOnBezier } from './simultaneous-properties/closest-and-furthest-point-on-bezier/furthest-point-on-bezier.js';
@@ -305,6 +306,7 @@ export {
 
 	getControlPointBox,
 	fitQuadsToCubic,
+	fitQuadsToCubicHausdorff,
 
 	lineToQuadratic,
 	lineToCubic,

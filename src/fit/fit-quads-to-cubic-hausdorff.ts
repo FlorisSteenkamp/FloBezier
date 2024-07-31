@@ -1,8 +1,8 @@
 import { classify } from "../global-properties/classification/classify.js";
 import { fromTo3InclErrorBound } from "../transformation/split/from-to/from-to-3-incl-error-bound.js";
 import { cubicToQuadratic } from "../transformation/degree-or-type/cubic-to-quadratic.js";
-import { getAbsAreaBetween } from './get-abs-area-between.js';
 import { bezierSelfIntersection } from '../intersection/self-intersection/bezier-self-intersection.js';
+import { hausdorffDistance } from '../simultaneous-properties/hausdorff-distance/hausdorff-distance.js';
 
 
 /**
@@ -16,12 +16,12 @@ import { bezierSelfIntersection } from '../intersection/self-intersection/bezier
  * 
  * @param ps a cubic bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- * @param tolerance tolerance given as the maximum total absolute area difference 
- * between the two curves
+ * @param tolerance tolerance given as the maximum hausdorff distance between
+ * the two curves
  * 
  * @doc mdx
  */
-function fitQuadsToCubic(
+function fitQuadsToCubicHausdorff(
         ps: number[][], 
         tolerance: number): number[][][] {
 
@@ -84,9 +84,8 @@ function fitQuadsToCubic(
         /** the piece of the cubic bezier to approximate */
         const psCubic = fromTo3InclErrorBound(ps, tS, tE).ps;
         const psQuad = cubicToQuadratic(psCubic);
-        const spanRatio = tE - tS;
         if (psQuad === undefined || 
-            spanRatio*getAbsAreaBetween(psQuad, psCubic) > tolerance) {
+            hausdorffDistance(psQuad, psCubic) > tolerance) {
 
             const tM = (tE + tS)/2;
             stack.push([tS,tM], [tM,tE]);  // split cubic in 2 equal pieces
@@ -99,4 +98,4 @@ function fitQuadsToCubic(
 }
 
 
-export { fitQuadsToCubic }
+export { fitQuadsToCubicHausdorff }

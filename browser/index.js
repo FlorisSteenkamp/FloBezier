@@ -66,6 +66,7 @@ __webpack_require__.d(__webpack_exports__, {
   PD: () => (/* reexport */ evaluateImplicit2),
   Ik: () => (/* reexport */ evaluateImplicit3),
   fb: () => (/* reexport */ fitQuadsToCubic),
+  H: () => (/* reexport */ fitQuadsToCubicHausdorff),
   Ci: () => (/* reexport */ fromPowerBasis),
   e8: () => (/* reexport */ fromTo),
   CR: () => (/* reexport */ fromToInclErrorBound),
@@ -18426,38 +18427,24 @@ function fitQuadsToCubic(ps, tolerance) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/bounds/get-control-point-box.ts
+;// CONCATENATED MODULE: ./src/global-properties/length/control-point-lines-length.ts
+
 /**
- * Returns a tight axis-aligned bounding box of the given bezier curve's control
- * points. (Note that the box is not a tight bound of the bezier curve itself.)
+ * Returns an upper bound for the length of the given bezier curve - this bound
+ * is not very strict as it uses the sum of the straight-line distances between
+ * control points as a measure.
  *
- * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param ps an order 0,1,2 or 3 bezier curve given as an array of its control
+ * points, e.g. `[[1,2],[3,4],[5,6],[7,8]]`
  *
  * @doc mdx
  */
-function getControlPointBox(ps) {
-    let minX = Number.POSITIVE_INFINITY;
-    let maxX = Number.NEGATIVE_INFINITY;
-    let minY = Number.POSITIVE_INFINITY;
-    let maxY = Number.NEGATIVE_INFINITY;
-    for (const p of ps) {
-        const x = p[0];
-        const y = p[1];
-        if (x < minX) {
-            minX = x;
-        }
-        if (x > maxX) {
-            maxX = x;
-        }
-        if (y < minY) {
-            minY = y;
-        }
-        if (y > maxY) {
-            maxY = y;
-        }
+function controlPointLinesLength(ps) {
+    let totalLength = 0;
+    for (let i = 0; i < ps.length - 1; i++) {
+        totalLength += distanceBetween(ps[i], ps[i + 1]);
     }
-    return [[minX, minY], [maxX, maxY]];
+    return totalLength;
 }
 
 
@@ -19052,6 +19039,420 @@ function furthestPointOnBezier(ps, p) {
     }
     // keep TypeScript happy; `minP` cannot be `undefined` here
     return maxP;
+}
+
+
+;// CONCATENATED MODULE: ./src/error-analysis/max-abs-coordinate.ts
+/**
+ * Returns the maximum absolute value of the coordinates of the control points
+ * of the given bezier curve.
+ *
+ * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ *
+ * @doc
+ */
+function maxAbsCoordinate(ps) {
+    let m = Number.NEGATIVE_INFINITY;
+    for (let i = 0; i < ps.length; i++) {
+        const p = ps[i];
+        const absX = Math.abs(p[0]);
+        const absY = Math.abs(p[1]);
+        if (absX > m) {
+            m = absX;
+        }
+        if (absY > m) {
+            m = absY;
+        }
+    }
+    return m;
+}
+
+
+;// CONCATENATED MODULE: ./src/simultaneous-properties/hausdorff-distance/get-max-hausdorff.ts
+/** @internal */
+function getMaxHausdorff(i) {
+    return Math.max(i.hL + i.hEL, i.hR + i.hER);
+}
+
+
+;// CONCATENATED MODULE: ./src/simultaneous-properties/hausdorff-distance/hausdorff-compare.ts
+
+/**
+ * @param a
+ * @param b
+ *
+ * @internal
+ */
+function hausdorffCompare(a, b) {
+    const diff = (getMaxHausdorff(a) - getMaxHausdorff(b));
+    if (diff !== 0) {
+        return diff;
+    }
+    //diff = a.tS - b.tS;
+    //if (diff !== 0) { return diff; }
+    //return a.tE - b.tE;
+    return a.tS - b.tS;
+}
+
+
+;// CONCATENATED MODULE: ./src/simultaneous-properties/heap.ts
+/**
+ * see [Wikipedia](https://en.wikipedia.org/wiki/Heap_(data_structure))
+ *
+ * @internal
+ */
+class Heap {
+    compare;
+    heap = [];
+    constructor(compare) {
+        this.compare = compare;
+    }
+    insert(t) {
+        const heap = this.heap;
+        heap.push(t);
+        // Swim up
+        let i = heap.length - 1;
+        while (true) {
+            const parentIdx = (i - 1 - (i + 1) % 2) / 2;
+            if (parentIdx === -1) {
+                return;
+            }
+            const parent = heap[parentIdx];
+            if (this.compare(t, parent) < 0) {
+                break;
+            }
+            // Swap and update indexes and variables
+            heap[parentIdx] = t;
+            heap[i] = parent;
+            i = parentIdx;
+        }
+    }
+    popMax() {
+        const heap = this.heap;
+        const maxT = heap[0];
+        heap[0] = heap[heap.length - 1];
+        heap.length--;
+        this.swimDown();
+        return maxT;
+    }
+    swimDown() {
+        const heap = this.heap;
+        const len = heap.length;
+        let i = 0;
+        // Swim down
+        while (true) {
+            const leftIdx = 2 * i + 1;
+            if (leftIdx >= len) {
+                break; // there's no left or right child
+            }
+            const rightIdx = 2 * i + 2;
+            const swapIdx = (rightIdx >= len) || (this.compare(heap[leftIdx], heap[rightIdx]) > 0)
+                ? leftIdx
+                : rightIdx;
+            const swapChild = heap[swapIdx];
+            const parent = heap[i];
+            if (this.compare(parent, swapChild) > 0) {
+                break;
+            }
+            // Swap and update indexes
+            heap[swapIdx] = parent;
+            heap[i] = swapChild;
+            i = swapIdx;
+        }
+    }
+    swapMinOrMax(t) {
+        this.heap[0] = t;
+        this.swimDown();
+    }
+    /* ignore coverage */
+    static getParentIdx(i) { return (i - 1 - (i + 1) % 2) / 2; }
+    static getLeftChild(i) { return 2 * i + 1; }
+    static getRightChild(i) { return 2 * i + 2; }
+}
+
+
+;// CONCATENATED MODULE: ./src/simultaneous-properties/hausdorff-distance/hausdorff-distance-one-sided.ts
+
+
+
+
+
+
+
+
+
+
+/** @internal */
+const hausdorff_distance_one_sided_max = Math.max;
+// We need to calculate `H(A,B)`, the two sided Hausdorff distance between
+// the bezier curves `A` and `B` which equals `max(h(A,B), h(B,A))`, where
+// `h(A,B)` is the one sided Hausdorff distance from `A` to `B`
+// Let: ωf(σ) = sup{ |f(t) − f(t′)| : t, t′ ∈ [a,b] with |t − t′| ≤ σ }
+// where: δS = max[ (1 ≤ i ≤ M+1)(ti − ti−1) ] is the maximum distance between 
+// two consecutive parameter values
+// Lemma 2.1: 
+//   h(A,S) ≤ ωf(δS/2) and
+//   h(B,T) ≤ ωg(δT/2)
+// Theorem 2.3: (both curves discretized)
+//   |h(S,T) − h(A,B)| ≤ max[ h(A,S), h(B,T) ] 
+//                     ≤ max[ ωf(δS/2), ωg(δT/2) ]
+//  
+// (only A discretized)
+// |h(S,B) − h(A,B)| ≤ ωf(δS/2)
+/**
+ * Calculates and returns an accurate approximation to the one-sided Hausdorff
+ * distance from the bezier curve `A` to the bezier curve `B`.
+ *
+ * * partially based off [Computing the Hausdorff distance between two sets of parametric curves](https://www.semanticscholar.org/paper/COMPUTING-THE-HAUSDORFF-DISTANCE-BETWEEN-TWO-SETS-Kim-McLean/d2bd6529c4b118e389e1db209d8f1bf7467f9016)
+ *
+ * @param A a bezier curve (the 'from' curve) given by an ordered array of its
+ * control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param B a bezier curve (the 'to' curve) given by an ordered array of its
+ * control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param tolerance optional; defaults to `Math.max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000`;
+ * if the calculated absolute error bound is less than this, the result is
+ * returned; this is *not* a hard tolerance and the bound can be less
+ * accurate in hard cases (due to the `maxIterations` parameter). Luckily
+ * however, specifically the lower bound will be very accurate due to
+ * its fast convergence in such hard cases (see the paper)
+ * @param maxIterations optional; defaults to `50`; if the desired guaranteed error bound
+ * has not been achieved after `maxIterations` then the result will be returned
+ *
+ * @doc mdx
+ */
+function hausdorffDistanceOneSided(A, B, tolerance, maxIterations = 50) {
+    if (A.length === 1) {
+        return closestPointOnBezier(B, A[0]).d;
+    }
+    if (B.length === 1) {
+        return furthestPointOnBezier(A, B[0]).d;
+    }
+    if (A.length === 2 && B.length === 2) {
+        // Seperately handle the simple case of two lines
+        // Find minimum distance from endpoints of A to B:
+        const EA0 = closestPointOnBezier(B, A[0]).d;
+        const EA1 = closestPointOnBezier(B, A[A.length - 1]).d;
+        return EA0 > EA1 ? EA0 : EA1;
+    }
+    const l = hausdorff_distance_one_sided_max(maxAbsCoordinate(A), maxAbsCoordinate(B));
+    tolerance = tolerance || l / 1000_000;
+    // an array of intervals
+    const [eL, eR] = calcHErrorBound(A, 0, 1);
+    const d0 = closestPointOnBezier(B, A[0]).d;
+    const d1 = closestPointOnBezier(B, A[A.length - 1]).d;
+    const initialInterval = {
+        tS: 0, tE: 1,
+        hL: d0, hR: d1, hEL: eL, hER: eR
+    };
+    const heap = new Heap(hausdorffCompare);
+    heap.insert(initialInterval);
+    let j = 0;
+    let bestHUpper = Number.POSITIVE_INFINITY;
+    let bestHLower = Number.NEGATIVE_INFINITY;
+    while (true) {
+        const interval = heap.heap[0]; // peek max
+        const { tS, tE, hL, hR } = interval;
+        const tM = (tS + tE) / 2;
+        const [ELL, ELR] = calcHErrorBound(A, tS, tM);
+        const [ERL, ERR] = calcHErrorBound(A, tM, tE);
+        //---- get hM ---------------------------
+        const pM = evalDeCasteljau(A, tM);
+        const pB = closestPointOnBezier(B, pM).p;
+        const hM = distanceBetween(pM, pB);
+        //---------------------------------------
+        const h = hausdorff_distance_one_sided_max(hL, hM, hR);
+        if (h > bestHLower) {
+            bestHLower = h;
+        }
+        bestHUpper = getMaxHausdorff(interval);
+        if (bestHUpper - bestHLower < tolerance) {
+            // The lower bound is by far the best approximation for difficult cases (see the paper).
+            return bestHLower;
+        }
+        if (j++ > maxIterations) {
+            // The lower bound is by far the best approximation for difficult cases (see the paper).
+            return bestHLower;
+        }
+        const iL = { tS, tE: tM, hL, hR: hM, hEL: ELL, hER: ELR };
+        const iR = { tS: tM, tE, hL: hM, hR, hEL: ERL, hER: ERR };
+        heap.swapMinOrMax(iL);
+        heap.insert(iR);
+    }
+}
+// Let: ωf(σ) = sup{ |f(t) − f(t′)| : t, t′ ∈ [a,b] with |t − t′| ≤ σ }
+//
+// |h(S,B) − h(A,B)| ≤ ωf(δS/2)
+// where: δS = max_(1≤i≤M+1)[ (ti − ti−1) ] is the maximum distance between 
+// two consecutive parameter values
+/**
+ * @internal
+ */
+function calcHErrorBound(A, tS, tE) {
+    // To calculate an upper bound for ωf(δS/2) we can either check the max 
+    // absolute tangent values on curve segments or use the control point 
+    // lengths as an upper bound.
+    const tM = (tE + tS) / 2; // since the formula says `δS/2` so divide by 2
+    const psL = fromTo(A, tS, tM);
+    const psR = fromTo(A, tM, tE);
+    const eL = controlPointLinesLength(psL);
+    const eR = controlPointLinesLength(psR);
+    return [eL, eR];
+}
+
+
+;// CONCATENATED MODULE: ./src/simultaneous-properties/hausdorff-distance/hausdorff-distance.ts
+
+/** @internal */
+const hausdorff_distance_max = Math.max;
+/**
+ * Calculates and returns the (two-sided) Hausdorff distance between the bezier
+ * curves `A` and `B` as `[min,max]` where `min` is the minimum
+ * guaranteed and `max` is the maximum guaranteed Hausdorff distance. The `min`
+ * value will be a *much* more accurate result in general.
+ *
+ * * partially based off [Computing the Hausdorff distance between two sets of parametric curves](https://www.semanticscholar.org/paper/COMPUTING-THE-HAUSDORFF-DISTANCE-BETWEEN-TWO-SETS-Kim-McLean/d2bd6529c4b118e389e1db209d8f1bf7467f9016)
+ *
+ * @param A a bezier curve given by an ordered array of its control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param B a bezier curve given by an ordered array of its control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param tolerance optional; defaults to `Math.max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000`;
+ * if the calculated absolute error bound is less than this, the result is
+ * returned; this is *not* a hard tolerance and the returned bound can be less
+ * accurate in hard cases (due to the `maxIterations` parameter). Luckily
+ * however, specifically the lower bound returned will be very accurate due to
+ * its fast convergence in such hard cases (see the paper)
+ * @param maxIterations optional; defaults to `50`; if the desired guaranteed error bound
+ * has not been achieved after `maxIterations` then the result will be returned
+ *
+ * @doc mdx
+ */
+function hausdorffDistance(A, B, tolerance, maxIterations) {
+    const AB = hausdorffDistanceOneSided(A, B, tolerance, maxIterations);
+    const BA = hausdorffDistanceOneSided(B, A, tolerance, maxIterations);
+    return hausdorff_distance_max(AB, BA);
+}
+
+
+;// CONCATENATED MODULE: ./src/fit/fit-quads-to-cubic-hausdorff.ts
+
+
+
+
+
+/**
+ * Approximate the given cubic bezier curve (up to the given tolerance) by
+ * fitting an array of ordered (by `t` value) piecewise bezier curves
+ * (of quadratic order or less).
+ *
+ * * the start and end point of each approximating curve lies on the cubic
+ * curve and the the tangents of each approximating curve coincide with that of
+ * the cubic at each such point
+ *
+ * @param ps a cubic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param tolerance tolerance given as the maximum hausdorff distance between
+ * the two curves
+ *
+ * @doc mdx
+ */
+function fitQuadsToCubicHausdorff(ps, tolerance) {
+    if (ps.length < 4) {
+        throw new Error('Only cubic bezier curves are supported by this function.');
+    }
+    const { collinear, realOrder, nodeType } = classify(ps);
+    // if all points collinear or a line (or point)
+    if (collinear || realOrder <= 1) {
+        // return a quad that's a line between the first and last points
+        // return [ps[0], [(ps[0][0] + ps[3][0])/2, (ps[0][1] + ps[3][1])/2], ps[3]];
+        return [[ps[0], ps[3]]];
+    }
+    if (realOrder === 2) {
+        // already a quadratic in disguise
+        // It is not possible that `toQuadraticFromCubic(ps)` be undefined here
+        // since the `real order` is exactly 2 and the control points are *not*
+        // collinear.
+        return [cubicToQuadratic(ps)];
+    }
+    const stack = [];
+    // if endpoints coincide
+    if (ps[0][0] === ps[3][0] && ps[0][1] === ps[3][1]) {
+        stack.push([0, 0.5], [0.5, 1]);
+    }
+    else if (nodeType === 'cusp') {
+        const t = bezierSelfIntersection(ps)[0];
+        if (t !== undefined) {
+            // split at cusp IF the cusp is within [0,1]
+            stack.push([0, t], [t, 1]);
+        }
+        else {
+            stack.push([0, 1]);
+        }
+    }
+    else if (nodeType === 'crunode') {
+        const ts = bezierSelfIntersection(ps);
+        if (ts.length > 1) {
+            stack.push([0, ts[0]], [ts[0], ts[1]], [ts[1], 1]); // split at intersections
+        }
+        else {
+            // the intersection is outside the range [0,1]
+            stack.push([0, 1]);
+        }
+    }
+    else {
+        stack.push([0, 1]);
+    }
+    const qs = [];
+    while (stack.length !== 0) {
+        const ts = stack.pop();
+        const [tS, tE] = ts;
+        /** the piece of the cubic bezier to approximate */
+        const psCubic = fromTo3InclErrorBound(ps, tS, tE).ps;
+        const psQuad = cubicToQuadratic(psCubic);
+        if (psQuad === undefined ||
+            hausdorffDistance(psQuad, psCubic) > tolerance) {
+            const tM = (tE + tS) / 2;
+            stack.push([tS, tM], [tM, tE]); // split cubic in 2 equal pieces
+        }
+        else {
+            qs.push(psQuad);
+        }
+    }
+    return qs.reverse();
+}
+
+
+;// CONCATENATED MODULE: ./src/global-properties/bounds/get-control-point-box.ts
+/**
+ * Returns a tight axis-aligned bounding box of the given bezier curve's control
+ * points. (Note that the box is not a tight bound of the bezier curve itself.)
+ *
+ * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ *
+ * @doc mdx
+ */
+function getControlPointBox(ps) {
+    let minX = Number.POSITIVE_INFINITY;
+    let maxX = Number.NEGATIVE_INFINITY;
+    let minY = Number.POSITIVE_INFINITY;
+    let maxY = Number.NEGATIVE_INFINITY;
+    for (const p of ps) {
+        const x = p[0];
+        const y = p[1];
+        if (x < minX) {
+            minX = x;
+        }
+        if (x > maxX) {
+            maxX = x;
+        }
+        if (y < minY) {
+            minY = y;
+        }
+        if (y > maxY) {
+            maxY = y;
+        }
+    }
+    return [[minX, minY], [maxX, maxY]];
 }
 
 
@@ -23507,318 +23908,6 @@ function getFootPointsOnBezierCertified(ps, p, lb = 0, ub = 1) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/length/control-point-lines-length.ts
-
-/**
- * Returns an upper bound for the length of the given bezier curve - this bound
- * is not very strict as it uses the sum of the straight-line distances between
- * control points as a measure.
- *
- * @param ps an order 0,1,2 or 3 bezier curve given as an array of its control
- * points, e.g. `[[1,2],[3,4],[5,6],[7,8]]`
- *
- * @doc mdx
- */
-function controlPointLinesLength(ps) {
-    let totalLength = 0;
-    for (let i = 0; i < ps.length - 1; i++) {
-        totalLength += distanceBetween(ps[i], ps[i + 1]);
-    }
-    return totalLength;
-}
-
-
-;// CONCATENATED MODULE: ./src/error-analysis/max-abs-coordinate.ts
-/**
- * Returns the maximum absolute value of the coordinates of the control points
- * of the given bezier curve.
- *
- * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- *
- * @doc
- */
-function maxAbsCoordinate(ps) {
-    let m = Number.NEGATIVE_INFINITY;
-    for (let i = 0; i < ps.length; i++) {
-        const p = ps[i];
-        const absX = Math.abs(p[0]);
-        const absY = Math.abs(p[1]);
-        if (absX > m) {
-            m = absX;
-        }
-        if (absY > m) {
-            m = absY;
-        }
-    }
-    return m;
-}
-
-
-;// CONCATENATED MODULE: ./src/simultaneous-properties/hausdorff-distance/get-max-hausdorff.ts
-/** @internal */
-function getMaxHausdorff(i) {
-    return Math.max(i.hL + i.hEL, i.hR + i.hER);
-}
-
-
-;// CONCATENATED MODULE: ./src/simultaneous-properties/hausdorff-distance/hausdorff-compare.ts
-
-/**
- * @param a
- * @param b
- *
- * @internal
- */
-function hausdorffCompare(a, b) {
-    const diff = (getMaxHausdorff(a) - getMaxHausdorff(b));
-    if (diff !== 0) {
-        return diff;
-    }
-    //diff = a.tS - b.tS;
-    //if (diff !== 0) { return diff; }
-    //return a.tE - b.tE;
-    return a.tS - b.tS;
-}
-
-
-;// CONCATENATED MODULE: ./src/simultaneous-properties/heap.ts
-/**
- * see [Wikipedia](https://en.wikipedia.org/wiki/Heap_(data_structure))
- *
- * @internal
- */
-class Heap {
-    compare;
-    heap = [];
-    constructor(compare) {
-        this.compare = compare;
-    }
-    insert(t) {
-        const heap = this.heap;
-        heap.push(t);
-        // Swim up
-        let i = heap.length - 1;
-        while (true) {
-            const parentIdx = (i - 1 - (i + 1) % 2) / 2;
-            if (parentIdx === -1) {
-                return;
-            }
-            const parent = heap[parentIdx];
-            if (this.compare(t, parent) < 0) {
-                break;
-            }
-            // Swap and update indexes and variables
-            heap[parentIdx] = t;
-            heap[i] = parent;
-            i = parentIdx;
-        }
-    }
-    popMax() {
-        const heap = this.heap;
-        const maxT = heap[0];
-        heap[0] = heap[heap.length - 1];
-        heap.length--;
-        this.swimDown();
-        return maxT;
-    }
-    swimDown() {
-        const heap = this.heap;
-        const len = heap.length;
-        let i = 0;
-        // Swim down
-        while (true) {
-            const leftIdx = 2 * i + 1;
-            if (leftIdx >= len) {
-                break; // there's no left or right child
-            }
-            const rightIdx = 2 * i + 2;
-            const swapIdx = (rightIdx >= len) || (this.compare(heap[leftIdx], heap[rightIdx]) > 0)
-                ? leftIdx
-                : rightIdx;
-            const swapChild = heap[swapIdx];
-            const parent = heap[i];
-            if (this.compare(parent, swapChild) > 0) {
-                break;
-            }
-            // Swap and update indexes
-            heap[swapIdx] = parent;
-            heap[i] = swapChild;
-            i = swapIdx;
-        }
-    }
-    swapMinOrMax(t) {
-        this.heap[0] = t;
-        this.swimDown();
-    }
-    /* ignore coverage */
-    static getParentIdx(i) { return (i - 1 - (i + 1) % 2) / 2; }
-    static getLeftChild(i) { return 2 * i + 1; }
-    static getRightChild(i) { return 2 * i + 2; }
-}
-
-
-;// CONCATENATED MODULE: ./src/simultaneous-properties/hausdorff-distance/hausdorff-distance-one-sided.ts
-
-
-
-
-
-
-
-
-
-
-/** @internal */
-const hausdorff_distance_one_sided_max = Math.max;
-// We need to calculate `H(A,B)`, the two sided Hausdorff distance between
-// the bezier curves `A` and `B` which equals `max(h(A,B), h(B,A))`, where
-// `h(A,B)` is the one sided Hausdorff distance from `A` to `B`
-// Let: ωf(σ) = sup{ |f(t) − f(t′)| : t, t′ ∈ [a,b] with |t − t′| ≤ σ }
-// where: δS = max[ (1 ≤ i ≤ M+1)(ti − ti−1) ] is the maximum distance between 
-// two consecutive parameter values
-// Lemma 2.1: 
-//   h(A,S) ≤ ωf(δS/2) and
-//   h(B,T) ≤ ωg(δT/2)
-// Theorem 2.3: (both curves discretized)
-//   |h(S,T) − h(A,B)| ≤ max[ h(A,S), h(B,T) ] 
-//                     ≤ max[ ωf(δS/2), ωg(δT/2) ]
-//  
-// (only A discretized)
-// |h(S,B) − h(A,B)| ≤ ωf(δS/2)
-/**
- * Calculates and returns an accurate approximation to the one-sided Hausdorff
- * distance from the bezier curve `A` to the bezier curve `B`.
- *
- * * partially based off [Computing the Hausdorff distance between two sets of parametric curves](https://www.semanticscholar.org/paper/COMPUTING-THE-HAUSDORFF-DISTANCE-BETWEEN-TWO-SETS-Kim-McLean/d2bd6529c4b118e389e1db209d8f1bf7467f9016)
- *
- * @param A a bezier curve (the 'from' curve) given by an ordered array of its
- * control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
- * @param B a bezier curve (the 'to' curve) given by an ordered array of its
- * control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
- * @param tolerance optional; defaults to `Math.max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000`;
- * if the calculated absolute error bound is less than this, the result is
- * returned; this is *not* a hard tolerance and the bound can be less
- * accurate in hard cases (due to the `maxIterations` parameter). Luckily
- * however, specifically the lower bound will be very accurate due to
- * its fast convergence in such hard cases (see the paper)
- * @param maxIterations optional; defaults to `50`; if the desired guaranteed error bound
- * has not been achieved after `maxIterations` then the result will be returned
- *
- * @doc mdx
- */
-function hausdorffDistanceOneSided(A, B, tolerance, maxIterations = 50) {
-    if (A.length === 1) {
-        return closestPointOnBezier(B, A[0]).d;
-    }
-    if (B.length === 1) {
-        return furthestPointOnBezier(A, B[0]).d;
-    }
-    if (A.length === 2 && B.length === 2) {
-        // Seperately handle the simple case of two lines
-        // Find minimum distance from endpoints of A to B:
-        const EA0 = closestPointOnBezier(B, A[0]).d;
-        const EA1 = closestPointOnBezier(B, A[A.length - 1]).d;
-        return EA0 > EA1 ? EA0 : EA1;
-    }
-    const l = hausdorff_distance_one_sided_max(maxAbsCoordinate(A), maxAbsCoordinate(B));
-    tolerance = tolerance || l / 1000_000;
-    // an array of intervals
-    const [eL, eR] = calcHErrorBound(A, 0, 1);
-    const d0 = closestPointOnBezier(B, A[0]).d;
-    const d1 = closestPointOnBezier(B, A[A.length - 1]).d;
-    const initialInterval = {
-        tS: 0, tE: 1,
-        hL: d0, hR: d1, hEL: eL, hER: eR
-    };
-    const heap = new Heap(hausdorffCompare);
-    heap.insert(initialInterval);
-    let j = 0;
-    let bestHUpper = Number.POSITIVE_INFINITY;
-    let bestHLower = Number.NEGATIVE_INFINITY;
-    while (true) {
-        const interval = heap.heap[0]; // peek max
-        const { tS, tE, hL, hR } = interval;
-        const tM = (tS + tE) / 2;
-        const [ELL, ELR] = calcHErrorBound(A, tS, tM);
-        const [ERL, ERR] = calcHErrorBound(A, tM, tE);
-        //---- get hM ---------------------------
-        const pM = evalDeCasteljau(A, tM);
-        const pB = closestPointOnBezier(B, pM).p;
-        const hM = distanceBetween(pM, pB);
-        //---------------------------------------
-        const h = hausdorff_distance_one_sided_max(hL, hM, hR);
-        if (h > bestHLower) {
-            bestHLower = h;
-        }
-        bestHUpper = getMaxHausdorff(interval);
-        if (bestHUpper - bestHLower < tolerance) {
-            // The lower bound is by far the best approximation for difficult cases (see the paper).
-            return bestHLower;
-        }
-        if (j++ > maxIterations) {
-            // The lower bound is by far the best approximation for difficult cases (see the paper).
-            return bestHLower;
-        }
-        const iL = { tS, tE: tM, hL, hR: hM, hEL: ELL, hER: ELR };
-        const iR = { tS: tM, tE, hL: hM, hR, hEL: ERL, hER: ERR };
-        heap.swapMinOrMax(iL);
-        heap.insert(iR);
-    }
-}
-// Let: ωf(σ) = sup{ |f(t) − f(t′)| : t, t′ ∈ [a,b] with |t − t′| ≤ σ }
-//
-// |h(S,B) − h(A,B)| ≤ ωf(δS/2)
-// where: δS = max_(1≤i≤M+1)[ (ti − ti−1) ] is the maximum distance between 
-// two consecutive parameter values
-/**
- * @internal
- */
-function calcHErrorBound(A, tS, tE) {
-    // To calculate an upper bound for ωf(δS/2) we can either check the max 
-    // absolute tangent values on curve segments or use the control point 
-    // lengths as an upper bound.
-    const tM = (tE + tS) / 2; // since the formula says `δS/2` so divide by 2
-    const psL = fromTo(A, tS, tM);
-    const psR = fromTo(A, tM, tE);
-    const eL = controlPointLinesLength(psL);
-    const eR = controlPointLinesLength(psR);
-    return [eL, eR];
-}
-
-
-;// CONCATENATED MODULE: ./src/simultaneous-properties/hausdorff-distance/hausdorff-distance.ts
-
-/** @internal */
-const hausdorff_distance_max = Math.max;
-/**
- * Calculates and returns the (two-sided) Hausdorff distance between the bezier
- * curves `A` and `B` as `[min,max]` where `min` is the minimum
- * guaranteed and `max` is the maximum guaranteed Hausdorff distance. The `min`
- * value will be a *much* more accurate result in general.
- *
- * * partially based off [Computing the Hausdorff distance between two sets of parametric curves](https://www.semanticscholar.org/paper/COMPUTING-THE-HAUSDORFF-DISTANCE-BETWEEN-TWO-SETS-Kim-McLean/d2bd6529c4b118e389e1db209d8f1bf7467f9016)
- *
- * @param A a bezier curve given by an ordered array of its control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
- * @param B a bezier curve given by an ordered array of its control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
- * @param tolerance optional; defaults to `Math.max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000`;
- * if the calculated absolute error bound is less than this, the result is
- * returned; this is *not* a hard tolerance and the returned bound can be less
- * accurate in hard cases (due to the `maxIterations` parameter). Luckily
- * however, specifically the lower bound returned will be very accurate due to
- * its fast convergence in such hard cases (see the paper)
- * @param maxIterations optional; defaults to `50`; if the desired guaranteed error bound
- * has not been achieved after `maxIterations` then the result will be returned
- *
- * @doc mdx
- */
-function hausdorffDistance(A, B, tolerance, maxIterations) {
-    const AB = hausdorffDistanceOneSided(A, B, tolerance, maxIterations);
-    const BA = hausdorffDistanceOneSided(B, A, tolerance, maxIterations);
-    return hausdorff_distance_max(AB, BA);
-}
-
-
 ;// CONCATENATED MODULE: ./src/transformation/split/split-by-length.ts
 
 
@@ -26778,6 +26867,7 @@ function closest_distance_between_beziers_calcHErrorBound(A, tS, tE) {
 
 
 
+
 var __webpack_exports__areBoxesIntersecting = __webpack_exports__.r9;
 var __webpack_exports__area = __webpack_exports__.Wc;
 var __webpack_exports__bezierBezierIntersection = __webpack_exports__.G6;
@@ -26820,6 +26910,7 @@ var __webpack_exports__evaluateImplicit1 = __webpack_exports__.WA;
 var __webpack_exports__evaluateImplicit2 = __webpack_exports__.PD;
 var __webpack_exports__evaluateImplicit3 = __webpack_exports__.Ik;
 var __webpack_exports__fitQuadsToCubic = __webpack_exports__.fb;
+var __webpack_exports__fitQuadsToCubicHausdorff = __webpack_exports__.H;
 var __webpack_exports__fromPowerBasis = __webpack_exports__.Ci;
 var __webpack_exports__fromTo = __webpack_exports__.e8;
 var __webpack_exports__fromToInclErrorBound = __webpack_exports__.CR;
@@ -26926,4 +27017,4 @@ var __webpack_exports__totalLength = __webpack_exports__["do"];
 var __webpack_exports___ = __webpack_exports__.e7;
 var __webpack_exports___ = __webpack_exports__.ZH;
 var __webpack_exports___ = __webpack_exports__.LZ;
-export { __webpack_exports__areBoxesIntersecting as areBoxesIntersecting, __webpack_exports__area as area, __webpack_exports__bezierBezierIntersection as bezierBezierIntersection, __webpack_exports__bezierBezierIntersectionBoundless as bezierBezierIntersectionBoundless, __webpack_exports__bezierBezierIntersectionFast as bezierBezierIntersectionFast, __webpack_exports__bezierSelfIntersection as bezierSelfIntersection, __webpack_exports__circleBezierIntersection as circleBezierIntersection, __webpack_exports__classification as classification, __webpack_exports__classifications as classifications, __webpack_exports__classify as classify, __webpack_exports__clone as clone, __webpack_exports__closestPointOnBezier as closestPointOnBezier, __webpack_exports__closestPointOnBezierCertified as closestPointOnBezierCertified, __webpack_exports__closestPointsBetweenBeziers as closestPointsBetweenBeziers, __webpack_exports__controlPointLinesLength as controlPointLinesLength, __webpack_exports__cubicFromAnglesAndSpeeds as cubicFromAnglesAndSpeeds, __webpack_exports__cubicThroughPointGiven013 as cubicThroughPointGiven013, __webpack_exports__cubicToAnglesAndSpeeds as cubicToAnglesAndSpeeds, __webpack_exports__cubicToHybridQuadratic as cubicToHybridQuadratic, __webpack_exports__cubicToQuadratic as cubicToQuadratic, __webpack_exports__curvature as curvature, __webpack_exports__curviness as curviness, __webpack_exports__ddCurvature as ddCurvature, __webpack_exports__eCurvature as eCurvature, __webpack_exports__equal as equal, __webpack_exports__evalDeCasteljau as evalDeCasteljau, __webpack_exports__evalDeCasteljauDd as evalDeCasteljauDd, __webpack_exports__evalDeCasteljauError as evalDeCasteljauError, __webpack_exports__evalDeCasteljauWithErr as evalDeCasteljauWithErr, __webpack_exports__evalDeCasteljauWithErrDd as evalDeCasteljauWithErrDd, __webpack_exports__evaluate as evaluate, __webpack_exports__evaluate2ndDerivative as evaluate2ndDerivative, __webpack_exports__evaluate2ndDerivativeAt0 as evaluate2ndDerivativeAt0, __webpack_exports__evaluate2ndDerivativeAt0Exact as evaluate2ndDerivativeAt0Exact, __webpack_exports__evaluate2ndDerivativeAt1 as evaluate2ndDerivativeAt1, __webpack_exports__evaluate2ndDerivativeAt1Exact as evaluate2ndDerivativeAt1Exact, __webpack_exports__evaluate2ndDerivativeExact as evaluate2ndDerivativeExact, __webpack_exports__evaluateExact as evaluateExact, __webpack_exports__evaluateImplicit1 as evaluateImplicit1, __webpack_exports__evaluateImplicit2 as evaluateImplicit2, __webpack_exports__evaluateImplicit3 as evaluateImplicit3, __webpack_exports__fitQuadsToCubic as fitQuadsToCubic, __webpack_exports__fromPowerBasis as fromPowerBasis, __webpack_exports__fromTo as fromTo, __webpack_exports__fromToInclErrorBound as fromToInclErrorBound, __webpack_exports__furthestPointOnBezier as furthestPointOnBezier, __webpack_exports__generateCuspAtHalf3 as generateCuspAtHalf3, __webpack_exports__generateQuarterCircle as generateQuarterCircle, __webpack_exports__generateSelfIntersecting as generateSelfIntersecting, __webpack_exports__getAbsAreaBetween as getAbsAreaBetween, __webpack_exports__getBendingEnergy as getBendingEnergy, __webpack_exports__getBoundingBox as getBoundingBox, __webpack_exports__getBoundingBoxTight as getBoundingBoxTight, __webpack_exports__getBoundingHull as getBoundingHull, __webpack_exports__getBounds as getBounds, __webpack_exports__getCoeffsBezBez as getCoeffsBezBez, __webpack_exports__getControlPointBox as getControlPointBox, __webpack_exports__getCubicSpeeds as getCubicSpeeds, __webpack_exports__getCurvatureExtrema as getCurvatureExtrema, __webpack_exports__getCurvatureExtremaDd as getCurvatureExtremaDd, __webpack_exports__getCurvatureExtremaE as getCurvatureExtremaE, __webpack_exports__getEndpointIntersections as getEndpointIntersections, __webpack_exports__getFootPointsOnBezierCertified as getFootPointsOnBezierCertified, __webpack_exports__getFootPointsOnBezierPolysCertified as getFootPointsOnBezierPolysCertified, __webpack_exports__getFootpointPoly as getFootpointPoly, __webpack_exports__getFootpointPolyDd as getFootpointPolyDd, __webpack_exports__getFootpointPolyExact as getFootpointPolyExact, __webpack_exports__getHodograph as getHodograph, __webpack_exports__getImplicitForm1 as getImplicitForm1, __webpack_exports__getImplicitForm1Dd as getImplicitForm1Dd, __webpack_exports__getImplicitForm1DdWithRunningError as getImplicitForm1DdWithRunningError, __webpack_exports__getImplicitForm1ErrorCounters as getImplicitForm1ErrorCounters, __webpack_exports__getImplicitForm1Exact as getImplicitForm1Exact, __webpack_exports__getImplicitForm2 as getImplicitForm2, __webpack_exports__getImplicitForm2Dd as getImplicitForm2Dd, __webpack_exports__getImplicitForm2DdWithRunningError as getImplicitForm2DdWithRunningError, __webpack_exports__getImplicitForm2ErrorCounters as getImplicitForm2ErrorCounters, __webpack_exports__getImplicitForm2Exact as getImplicitForm2Exact, __webpack_exports__getImplicitForm3 as getImplicitForm3, __webpack_exports__getImplicitForm3Dd as getImplicitForm3Dd, __webpack_exports__getImplicitForm3DdWithRunningError as getImplicitForm3DdWithRunningError, __webpack_exports__getImplicitForm3ErrorCounters as getImplicitForm3ErrorCounters, __webpack_exports__getImplicitForm3Exact as getImplicitForm3Exact, __webpack_exports__getInflections as getInflections, __webpack_exports__getInterfaceRotation as getInterfaceRotation, __webpack_exports__getIntervalBox as getIntervalBox, __webpack_exports__getIntervalBoxDd as getIntervalBoxDd, __webpack_exports__getTAtLength as getTAtLength, __webpack_exports__getXBoundsTight as getXBoundsTight, __webpack_exports__getYBoundsTight as getYBoundsTight, __webpack_exports__hausdorffDistance as hausdorffDistance, __webpack_exports__hausdorffDistanceOneSided as hausdorffDistanceOneSided, __webpack_exports__intersectBoxes as intersectBoxes, __webpack_exports__isCollinear as isCollinear, __webpack_exports__isCubicReallyLine as isCubicReallyLine, __webpack_exports__isCubicReallyQuad as isCubicReallyQuad, __webpack_exports__isHorizontal as isHorizontal, __webpack_exports__isPointOnBezierExtension as isPointOnBezierExtension, __webpack_exports__isQuadObtuse as isQuadObtuse, __webpack_exports__isQuadReallyLine as isQuadReallyLine, __webpack_exports__isReallyPoint as isReallyPoint, __webpack_exports__isSelfOverlapping as isSelfOverlapping, __webpack_exports__isVertical as isVertical, __webpack_exports__length as length, __webpack_exports__lineToCubic as lineToCubic, __webpack_exports__lineToQuadratic as lineToQuadratic, __webpack_exports__maxAbsCoordinate as maxAbsCoordinate, __webpack_exports__normal as normal, __webpack_exports__normal2 as normal2, __webpack_exports__quadraticToCubic as quadraticToCubic, __webpack_exports__quadraticToPolyline as quadraticToPolyline, __webpack_exports__reduceOrderIfPossible as reduceOrderIfPossible, __webpack_exports__reverse as reverse, __webpack_exports__setCubicSpeeds as setCubicSpeeds, __webpack_exports__splitByCurvature as splitByCurvature, __webpack_exports__splitByCurvatureAndLength as splitByCurvatureAndLength, __webpack_exports__splitByLength as splitByLength, __webpack_exports__tFromXY as tFromXY, __webpack_exports__tangent as tangent, __webpack_exports__tangentAt0 as tangentAt0, __webpack_exports__tangentAt0Exact as tangentAt0Exact, __webpack_exports__tangentAt1 as tangentAt1, __webpack_exports__tangentAt1Exact as tangentAt1Exact, __webpack_exports__tangentExact as tangentExact, __webpack_exports__toCubic as toCubic, __webpack_exports__toPowerBasis as toPowerBasis, __webpack_exports__toPowerBasisDd as toPowerBasisDd, __webpack_exports__toPowerBasisDdWithRunningError as toPowerBasisDdWithRunningError, __webpack_exports__toPowerBasisErrorCounters as toPowerBasisErrorCounters, __webpack_exports__toPowerBasisExact as toPowerBasisExact, __webpack_exports__toPowerBasisWithRunningError as toPowerBasisWithRunningError, __webpack_exports__toPowerBasis_1stDerivative as toPowerBasis_1stDerivative, __webpack_exports__toPowerBasis_1stDerivativeDd as toPowerBasis_1stDerivativeDd, __webpack_exports__toPowerBasis_1stDerivativeErrorCounters as toPowerBasis_1stDerivativeErrorCounters, __webpack_exports__toPowerBasis_1stDerivativeExact as toPowerBasis_1stDerivativeExact, __webpack_exports__toPowerBasis_2ndDerivative as toPowerBasis_2ndDerivative, __webpack_exports__toPowerBasis_2ndDerivativeDd as toPowerBasis_2ndDerivativeDd, __webpack_exports__toPowerBasis_2ndDerivativeExact as toPowerBasis_2ndDerivativeExact, __webpack_exports__toPowerBasis_3rdDerivative as toPowerBasis_3rdDerivative, __webpack_exports__toPowerBasis_3rdDerivativeDd as toPowerBasis_3rdDerivativeDd, __webpack_exports__toPowerBasis_3rdDerivativeExact as toPowerBasis_3rdDerivativeExact, __webpack_exports__toString as toString, __webpack_exports__totalAbsoluteCurvature as totalAbsoluteCurvature, __webpack_exports__totalCurvature as totalCurvature, __webpack_exports__totalLength as totalLength, __webpack_exports___ as γ, __webpack_exports___ as γγ, __webpack_exports___ as κ };
+export { __webpack_exports__areBoxesIntersecting as areBoxesIntersecting, __webpack_exports__area as area, __webpack_exports__bezierBezierIntersection as bezierBezierIntersection, __webpack_exports__bezierBezierIntersectionBoundless as bezierBezierIntersectionBoundless, __webpack_exports__bezierBezierIntersectionFast as bezierBezierIntersectionFast, __webpack_exports__bezierSelfIntersection as bezierSelfIntersection, __webpack_exports__circleBezierIntersection as circleBezierIntersection, __webpack_exports__classification as classification, __webpack_exports__classifications as classifications, __webpack_exports__classify as classify, __webpack_exports__clone as clone, __webpack_exports__closestPointOnBezier as closestPointOnBezier, __webpack_exports__closestPointOnBezierCertified as closestPointOnBezierCertified, __webpack_exports__closestPointsBetweenBeziers as closestPointsBetweenBeziers, __webpack_exports__controlPointLinesLength as controlPointLinesLength, __webpack_exports__cubicFromAnglesAndSpeeds as cubicFromAnglesAndSpeeds, __webpack_exports__cubicThroughPointGiven013 as cubicThroughPointGiven013, __webpack_exports__cubicToAnglesAndSpeeds as cubicToAnglesAndSpeeds, __webpack_exports__cubicToHybridQuadratic as cubicToHybridQuadratic, __webpack_exports__cubicToQuadratic as cubicToQuadratic, __webpack_exports__curvature as curvature, __webpack_exports__curviness as curviness, __webpack_exports__ddCurvature as ddCurvature, __webpack_exports__eCurvature as eCurvature, __webpack_exports__equal as equal, __webpack_exports__evalDeCasteljau as evalDeCasteljau, __webpack_exports__evalDeCasteljauDd as evalDeCasteljauDd, __webpack_exports__evalDeCasteljauError as evalDeCasteljauError, __webpack_exports__evalDeCasteljauWithErr as evalDeCasteljauWithErr, __webpack_exports__evalDeCasteljauWithErrDd as evalDeCasteljauWithErrDd, __webpack_exports__evaluate as evaluate, __webpack_exports__evaluate2ndDerivative as evaluate2ndDerivative, __webpack_exports__evaluate2ndDerivativeAt0 as evaluate2ndDerivativeAt0, __webpack_exports__evaluate2ndDerivativeAt0Exact as evaluate2ndDerivativeAt0Exact, __webpack_exports__evaluate2ndDerivativeAt1 as evaluate2ndDerivativeAt1, __webpack_exports__evaluate2ndDerivativeAt1Exact as evaluate2ndDerivativeAt1Exact, __webpack_exports__evaluate2ndDerivativeExact as evaluate2ndDerivativeExact, __webpack_exports__evaluateExact as evaluateExact, __webpack_exports__evaluateImplicit1 as evaluateImplicit1, __webpack_exports__evaluateImplicit2 as evaluateImplicit2, __webpack_exports__evaluateImplicit3 as evaluateImplicit3, __webpack_exports__fitQuadsToCubic as fitQuadsToCubic, __webpack_exports__fitQuadsToCubicHausdorff as fitQuadsToCubicHausdorff, __webpack_exports__fromPowerBasis as fromPowerBasis, __webpack_exports__fromTo as fromTo, __webpack_exports__fromToInclErrorBound as fromToInclErrorBound, __webpack_exports__furthestPointOnBezier as furthestPointOnBezier, __webpack_exports__generateCuspAtHalf3 as generateCuspAtHalf3, __webpack_exports__generateQuarterCircle as generateQuarterCircle, __webpack_exports__generateSelfIntersecting as generateSelfIntersecting, __webpack_exports__getAbsAreaBetween as getAbsAreaBetween, __webpack_exports__getBendingEnergy as getBendingEnergy, __webpack_exports__getBoundingBox as getBoundingBox, __webpack_exports__getBoundingBoxTight as getBoundingBoxTight, __webpack_exports__getBoundingHull as getBoundingHull, __webpack_exports__getBounds as getBounds, __webpack_exports__getCoeffsBezBez as getCoeffsBezBez, __webpack_exports__getControlPointBox as getControlPointBox, __webpack_exports__getCubicSpeeds as getCubicSpeeds, __webpack_exports__getCurvatureExtrema as getCurvatureExtrema, __webpack_exports__getCurvatureExtremaDd as getCurvatureExtremaDd, __webpack_exports__getCurvatureExtremaE as getCurvatureExtremaE, __webpack_exports__getEndpointIntersections as getEndpointIntersections, __webpack_exports__getFootPointsOnBezierCertified as getFootPointsOnBezierCertified, __webpack_exports__getFootPointsOnBezierPolysCertified as getFootPointsOnBezierPolysCertified, __webpack_exports__getFootpointPoly as getFootpointPoly, __webpack_exports__getFootpointPolyDd as getFootpointPolyDd, __webpack_exports__getFootpointPolyExact as getFootpointPolyExact, __webpack_exports__getHodograph as getHodograph, __webpack_exports__getImplicitForm1 as getImplicitForm1, __webpack_exports__getImplicitForm1Dd as getImplicitForm1Dd, __webpack_exports__getImplicitForm1DdWithRunningError as getImplicitForm1DdWithRunningError, __webpack_exports__getImplicitForm1ErrorCounters as getImplicitForm1ErrorCounters, __webpack_exports__getImplicitForm1Exact as getImplicitForm1Exact, __webpack_exports__getImplicitForm2 as getImplicitForm2, __webpack_exports__getImplicitForm2Dd as getImplicitForm2Dd, __webpack_exports__getImplicitForm2DdWithRunningError as getImplicitForm2DdWithRunningError, __webpack_exports__getImplicitForm2ErrorCounters as getImplicitForm2ErrorCounters, __webpack_exports__getImplicitForm2Exact as getImplicitForm2Exact, __webpack_exports__getImplicitForm3 as getImplicitForm3, __webpack_exports__getImplicitForm3Dd as getImplicitForm3Dd, __webpack_exports__getImplicitForm3DdWithRunningError as getImplicitForm3DdWithRunningError, __webpack_exports__getImplicitForm3ErrorCounters as getImplicitForm3ErrorCounters, __webpack_exports__getImplicitForm3Exact as getImplicitForm3Exact, __webpack_exports__getInflections as getInflections, __webpack_exports__getInterfaceRotation as getInterfaceRotation, __webpack_exports__getIntervalBox as getIntervalBox, __webpack_exports__getIntervalBoxDd as getIntervalBoxDd, __webpack_exports__getTAtLength as getTAtLength, __webpack_exports__getXBoundsTight as getXBoundsTight, __webpack_exports__getYBoundsTight as getYBoundsTight, __webpack_exports__hausdorffDistance as hausdorffDistance, __webpack_exports__hausdorffDistanceOneSided as hausdorffDistanceOneSided, __webpack_exports__intersectBoxes as intersectBoxes, __webpack_exports__isCollinear as isCollinear, __webpack_exports__isCubicReallyLine as isCubicReallyLine, __webpack_exports__isCubicReallyQuad as isCubicReallyQuad, __webpack_exports__isHorizontal as isHorizontal, __webpack_exports__isPointOnBezierExtension as isPointOnBezierExtension, __webpack_exports__isQuadObtuse as isQuadObtuse, __webpack_exports__isQuadReallyLine as isQuadReallyLine, __webpack_exports__isReallyPoint as isReallyPoint, __webpack_exports__isSelfOverlapping as isSelfOverlapping, __webpack_exports__isVertical as isVertical, __webpack_exports__length as length, __webpack_exports__lineToCubic as lineToCubic, __webpack_exports__lineToQuadratic as lineToQuadratic, __webpack_exports__maxAbsCoordinate as maxAbsCoordinate, __webpack_exports__normal as normal, __webpack_exports__normal2 as normal2, __webpack_exports__quadraticToCubic as quadraticToCubic, __webpack_exports__quadraticToPolyline as quadraticToPolyline, __webpack_exports__reduceOrderIfPossible as reduceOrderIfPossible, __webpack_exports__reverse as reverse, __webpack_exports__setCubicSpeeds as setCubicSpeeds, __webpack_exports__splitByCurvature as splitByCurvature, __webpack_exports__splitByCurvatureAndLength as splitByCurvatureAndLength, __webpack_exports__splitByLength as splitByLength, __webpack_exports__tFromXY as tFromXY, __webpack_exports__tangent as tangent, __webpack_exports__tangentAt0 as tangentAt0, __webpack_exports__tangentAt0Exact as tangentAt0Exact, __webpack_exports__tangentAt1 as tangentAt1, __webpack_exports__tangentAt1Exact as tangentAt1Exact, __webpack_exports__tangentExact as tangentExact, __webpack_exports__toCubic as toCubic, __webpack_exports__toPowerBasis as toPowerBasis, __webpack_exports__toPowerBasisDd as toPowerBasisDd, __webpack_exports__toPowerBasisDdWithRunningError as toPowerBasisDdWithRunningError, __webpack_exports__toPowerBasisErrorCounters as toPowerBasisErrorCounters, __webpack_exports__toPowerBasisExact as toPowerBasisExact, __webpack_exports__toPowerBasisWithRunningError as toPowerBasisWithRunningError, __webpack_exports__toPowerBasis_1stDerivative as toPowerBasis_1stDerivative, __webpack_exports__toPowerBasis_1stDerivativeDd as toPowerBasis_1stDerivativeDd, __webpack_exports__toPowerBasis_1stDerivativeErrorCounters as toPowerBasis_1stDerivativeErrorCounters, __webpack_exports__toPowerBasis_1stDerivativeExact as toPowerBasis_1stDerivativeExact, __webpack_exports__toPowerBasis_2ndDerivative as toPowerBasis_2ndDerivative, __webpack_exports__toPowerBasis_2ndDerivativeDd as toPowerBasis_2ndDerivativeDd, __webpack_exports__toPowerBasis_2ndDerivativeExact as toPowerBasis_2ndDerivativeExact, __webpack_exports__toPowerBasis_3rdDerivative as toPowerBasis_3rdDerivative, __webpack_exports__toPowerBasis_3rdDerivativeDd as toPowerBasis_3rdDerivativeDd, __webpack_exports__toPowerBasis_3rdDerivativeExact as toPowerBasis_3rdDerivativeExact, __webpack_exports__toString as toString, __webpack_exports__totalAbsoluteCurvature as totalAbsoluteCurvature, __webpack_exports__totalCurvature as totalCurvature, __webpack_exports__totalLength as totalLength, __webpack_exports___ as γ, __webpack_exports___ as γγ, __webpack_exports___ as κ };
