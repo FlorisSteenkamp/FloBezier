@@ -1,6 +1,7 @@
-import { normal } from "./normal.ts";
+import { normal } from "./normal.js";
 import { fromTo as fromToVec } from "flo-vector2d";
-import { fromTo as fromToBezier } from "../../split/from-to.js";
+import { fromTo as fromToBezier } from "../../transformation/split/from-to.js";
+
 
 /**
  * Returns a normal vector (not necessarily of unit length) of a bezier curve
