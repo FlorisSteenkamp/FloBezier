@@ -2,7 +2,7 @@
     "name": "flo-bezier3",
     "sideEffects": false,
     "description": "Purely functional linear, quadratic and cubic bezier library, including accurate, robust bezier intersection.",
-    "version": "5.0.2",
+    "version": "5.0.3",
     "author": {
         "name": "Floris Steenkamp"
     },
