@@ -1,6 +1,6 @@
-import { operators as bigFloatOperators } from "big-float-ts";
 import { twoDiff, twoSum } from 'double-double';
 import { expansionProduct, eDiff, scaleExpansion2, fastExpansionSum, growExpansion } from 'big-float-ts';
+import { eSign as _eSign, eCompare as _eCompare } from 'big-float-ts';
 import { γ } from "../../error-analysis/error-analysis.js";
 import { isReallyPoint } from "./is-really-point.js";
 import { isQuadReallyLine } from "./is-quad-really-line.js";
@@ -11,7 +11,8 @@ import { getCoeffsBez3WithRunningError } from '../../intersection//self-intersec
 import { getCoeffsBez3Exact } from "../../intersection/self-intersection/get-coefficients/exact/get-coeffs-bez3-exact.js";
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const { eSign, eCompare } = bigFloatOperators;
+const eSign = _eSign;
+const eCompare = _eCompare;
 
 
 const edif = eDiff;

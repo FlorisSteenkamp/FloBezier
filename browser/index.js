@@ -212,9 +212,9 @@ function two_product_twoProduct(a, b) {
 
 //# sourceMappingURL=two-product.js.map
 ;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/fast-expansion-sum.js
-
+// import { eCompress } from "./e-compress.js";
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const compress = (/* unused pure expression or super */ null && (eCompress));
+// const compress = eCompress;
 /**
  * Returns the result of adding two expansions.
  *
@@ -516,7 +516,7 @@ const resulterrbound = 3.330669073875471e-16;
  * Hence, orient2d() is usually quite fast, but will run more slowly when the
  * input points are collinear or nearly so.
  */
-function orient2d_orient2d(A, B, C) {
+function orient2d(A, B, C) {
     const detleft = (A[0] - C[0]) * (B[1] - C[1]);
     const detright = (A[1] - C[1]) * (B[0] - C[0]);
     const det = detleft - detright;
@@ -634,7 +634,7 @@ function grahamScan(ps, includeRedundantPoints) {
     // Sort by orientation of `p` with the x-axis, then by Manhattan distance.
     //-------------------------------------------------------------------------
     _ps.sort((a, b) => {
-        let res = -orient2d_orient2d(p, a, b); // res: +tive if ⟳ => a > b
+        let res = -orient2d(p, a, b); // res: +tive if ⟳ => a > b
         if (res !== 0) {
             return res;
         }
@@ -652,7 +652,7 @@ function grahamScan(ps, includeRedundantPoints) {
     const stack = [];
     for (const p of ps_) {
         while (stack.length >= 2) {
-            const orientation = orient2d_orient2d(stack[stack.length - 2], stack[stack.length - 1], p);
+            const orientation = orient2d(stack[stack.length - 2], stack[stack.length - 1], p);
             const clockwise = orientation < 0;
             if (clockwise) {
                 stack.pop();
@@ -676,7 +676,7 @@ function grahamScan(ps, includeRedundantPoints) {
             const pM = stack[i];
             const pE = stack[i_];
             // The `dot` is to take care of lines back-overlapping themselves
-            if (orient2d_orient2d(pS, pM, pE) !== 0 || dot(pS, pM, pE) < 0) {
+            if (orient2d(pS, pM, pE) !== 0 || dot(pS, pM, pE) < 0) {
                 stack_.push(pM);
             }
         }
@@ -734,303 +734,43 @@ function filterEqualPoints(ps) {
 const getBoundingHull = grahamScan;
 
 
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-sign.js
+;// CONCATENATED MODULE: ./node_modules/double-double/node/basic/two-diff.js
 /**
- * Returns the sign of the given expansion.
+ * Returns the exact result of subtracting b from a.
  *
- * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ * @param a minuend - a double-double precision floating point number
+ * @param b subtrahend - a double-double precision floating point number
+ */
+function two_diff_twoDiff(a, b) {
+    const x = a - b;
+    const bvirt = a - x;
+    const y = (a - (x + bvirt)) + (bvirt - b);
+    return [y, x];
+}
+
+//# sourceMappingURL=two-diff.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/basic/two-sum.js
+/**
+ * Returns the exact result of adding two doubles.
  *
- * From Shewchuk: "A nonoverlapping expansion is desirable because it is easy to
- * determine its sign (take the sign of the largest component) ... "
+ * * the resulting array is the reverse of the standard twoSum in the literature.
  *
- * @param e A floating point expansion with zeroes eliminated.
- */
-function e_sign_eSign(e) {
-    return e[e.length - 1];
-}
-
-//# sourceMappingURL=e-sign.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/double-to-octets.js
-// Modified from https://github.com/bartaz/ieee754-visualization/
-// under the MIT license
-// Copyright 2013 Bartek Szopka (original author)
-/**
- * Returns the ieee-574 8 bytes composing the given double, starting from the
- * sign bit and ending in the lsb of the significand.
- * e.g. 123.456 -> [64, 94, 221, 47, 26, 159, 190, 119]
- */
-function doubleToOctets(number) {
-    const buffer = new ArrayBuffer(8);
-    new DataView(buffer).setFloat64(0, number, false);
-    return Array.from(new Uint8Array(buffer));
-}
-
-//# sourceMappingURL=double-to-octets.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/double-to-binary-string.js
-// Modified from https://github.com/bartaz/ieee754-visualization/
-// under the MIT license
-// Copyright 2013 Bartek Szopka (original author)
-
-function doubleToBinaryString(number) {
-    return octetsToBinaryString(doubleToOctets(number));
-}
-/**
- * @param octets The 8 bytes composing a double (msb first)
- */
-function octetsToBinaryString(octets) {
-    return octets
-        .map(int8ToBinaryString)
-        .join('');
-}
-/**
- * intToBinaryString(8) -> "00001000"
- */
-function int8ToBinaryString(i) {
-    let iStr = i.toString(2);
-    for (; iStr.length < 8; iStr = "0" + iStr)
-        ;
-    return iStr;
-}
-
-//# sourceMappingURL=double-to-binary-string.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/parse-double.js
-// Modified from https://github.com/bartaz/ieee754-visualization/
-// under the MIT license
-// Copyright 2013 Bartek Szopka (original author)
-
-
-/**
- * Returns the relevant parts of the given IEEE-754 double. The returned
- * exponent has been normalized (i.e. 1023 ha been subtracted) and the
- * significand has the hidden bit added if appropriate.
- * See https://github.com/bartaz/ieee754-visualization
- */
-function parseDouble(x) {
-    const parts = doubleToOctets(x);
-    const p0 = parts[0];
-    const p1 = parts[1];
-    const sign = p0 >> 7;
-    const exponent_ = ((p0 & 127) << 4) + ((p1 & 0b11110000) >> 4);
-    //---- Check for negative / positive zero / denormalized numbers.
-    const hiddenMsb = exponent_ === 0 ? 0 : 16;
-    // Note: exponent === 0 => 0 or denormalized number (a.k.a. subnormal number).
-    const exponent = exponent_ === 0
-        ? exponent_ - 1022 // Subnormals use a biased exponent of 1 (not 0!)
-        : exponent_ - 1023;
-    //---- Break up the significand into bytes
-    const significand = parts.slice(1);
-    significand[0] = (p1 & 15) + hiddenMsb;
-    return {
-        sign,
-        exponent,
-        significand
-    };
-}
-/**
- * Returns the relevant parts of the given IEEE-754 double.
- * See https://github.com/bartaz/ieee754-visualization.
- * This is a slower version of parseDouble that gives binary string
- * representations of the components.
- */
-function parseDoubleDetailed(x) {
-    const str = doubleToBinaryString(x);
-    // sign{1} exponent{11} fraction{52} === 64 bits (+1 hidden!)
-    const [, sign, exponent, significand] = str.match(/^(.)(.{11})(.{52})$/);
-    const exponent_ = parseInt(exponent, 2);
-    const hidden = exponent_ === 0 ? "0" : "1";
-    return {
-        full: sign + exponent + hidden + significand,
-        sign,
-        exponent,
-        hidden,
-        significand
-    };
-}
-
-//# sourceMappingURL=parse-double.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/significand.js
-
-/**
- * Return the significand of the given double with the hidden bit added (in case
- * a is not subnormal or 0, etc.)
- * @param a A double
- */
-function significand(a) {
-    return parseDouble(a).significand;
-}
-
-//# sourceMappingURL=significand.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/get-max-set-bit.js
-
-/**
- * Returns the lowest set bit of the given value in [1, (2**31)-1],
- * i.e. from 1 up to 2147483647 else if no bit is set (input === 0) returns
- * NaN, otherwise if the number is out of range returns a non-finite
- * number.
- * See https://stackoverflow.com/a/35190288/2010061
- */
-function getLowestSetBit_(a) {
-    return Math.log2(a & -a);
-}
-/**
- * Returns the lowest set bit of the given number's significand (where the lsb
- * is bit 0 and the msb is bit 52). If no bit is set (input === 0 or +-inf or
- * NaN) returns NaN.
- * See https://stackoverflow.com/a/35190288/2010061
- */
-function getLowestSetBit(a) {
-    if (a === 0 || !Number.isFinite(a)) {
-        // There is no lowest set bit
-        return NaN;
-    }
-    // Note: the significand includes the hidden bit!
-    const s = significand(a);
-    const len = s.length;
-    for (let i = len - 1; i >= 0; i--) {
-        if (s[i] === 0) {
-            continue;
-        }
-        const l = getLowestSetBit_(s[i]);
-        if (Number.isFinite(l)) {
-            return (8 * (len - i - 1)) + l;
-        }
-    }
-    return NaN;
-}
-/**
- * Returns the highest set bit of the given value in [1, 255], i.e. from 1 up
- * to 255. If the input number === 0 returns NaN.
- * See https://stackoverflow.com/a/35190288/2010061
- */
-function getHighestSetBit_(a) {
-    return a >= 128 ? 7
-        : a >= 64 ? 6
-            : a >= 32 ? 5
-                : a >= 16 ? 4
-                    : a >= 8 ? 3
-                        : a >= 4 ? 2
-                            : a >= 2 ? 1
-                                : a >= 1 ? 0
-                                    : NaN;
-}
-/**
- * Returns the highest set bit of the given double. If no bit is set (input
- * === 0 or +/-inf or NaN) returns NaN.
- * See https://stackoverflow.com/a/35190288/2010061
- */
-function getHighestSetBit(a) {
-    if (a === 0 || !Number.isFinite(a)) {
-        // There is no lowest set bit
-        return NaN;
-    }
-    // At this point there must be a highest set bit (always === 52 if the 
-    // number is not a subnormal.
-    const s = significand(a);
-    const len = s.length;
-    for (let i = 0; i < len; i++) {
-        const l = getHighestSetBit_(s[i]);
-        if (Number.isFinite(l)) {
-            return (8 * (len - i - 1)) + l;
-        }
-    }
-    return NaN;
-}
-
-//# sourceMappingURL=get-max-set-bit.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/exponent.js
-
-/**
- * Returns the normalized exponent of the given number.
- * @param a A double
- */
-function exponent(a) {
-    return parseDouble(a).exponent;
-}
-
-//# sourceMappingURL=exponent.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/msb-exponent.js
-
-
-/**
- * Returns the true exponent of the msb that is set of the given number or
- * NaN if a === 0 or +-inf or NaN.
- * @param a An array of numbers to check
- */
-function msbExponent(a) {
-    if (a === 0 || !Number.isFinite(a)) {
-        return NaN;
-    }
-    const e = exponent(a);
-    // Will return e for all but subnormal numbers
-    return getHighestSetBit(a) - 52 + e;
-}
-
-//# sourceMappingURL=msb-exponent.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/basic/reduce-significand.js
-/**
- * Truncates a floating point value's significand and returns the result.
- * Similar to split, but with the ability to specify the number of bits to keep.
+ * Theorem 7 (Knuth): Let a and b be p-bit floating-point numbers. Then the
+ * following algorithm will produce a nonoverlapping expansion x + y such that
+ * a + b = x + y, where x is an approximation to a + b and y is the roundoff
+ * error in the calculation of x.
  *
- * Theorem 17 (Veltkamp-Dekker): Let a be a p-bit floating-point number, where
- * p >= 3. Choose a splitting point s such that p/2 <= s <= p-1. Then the
- * following algorithm will produce a (p-s)-bit value a_hi and a
- * nonoverlapping (s-1)-bit value a_lo such that abs(a_hi) >= abs(a_lo) and
- * a = a_hi + a_lo.
- *
- * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
- *
- * @param a a double
- * @param bits the number of significand bits to leave intact
+ * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
  */
-function reduceSignificand(a, bits) {
-    const s = 53 - bits;
-    const f = 2 ** s + 1;
-    const c = f * a;
-    const r = c - (c - a);
-    return r;
+function two_sum_twoSum(a, b) {
+    const x = a + b;
+    const bv = x - a;
+    return [(a - (x - bv)) + (b - bv), x];
 }
+// inlined
+//const R = a + b; const _ = R - a; const r = (a - (R - _)) + (b - _); return [r,R]
 
-//# sourceMappingURL=reduce-significand.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-to-bitlength.js
-
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const sign = e_sign_eSign;
-const e_to_bitlength_compress = e_compress_eCompress;
-/**
- * Returns a floating point expansion accurate to the given number of bits.
- * Extraneous bits are discarded.
- * @param a a floating point expansion
- * @param l the number of accurate bits to keep
- */
-// TODO - make faster
-function eToBitlength(a, l) {
-    a = e_to_bitlength_compress(a);
-    if (sign(a) === 0) {
-        return [0];
-    }
-    const maxMsb = msbExponent(a[a.length - 1]);
-    let msb = maxMsb;
-    let i = a.length - 1; // start at most significant byte
-    while (i > 0) {
-        const msb_ = msbExponent(a[i - 1]);
-        if (maxMsb - msb_ > l) {
-            break;
-        }
-        msb = msb_;
-        i--;
-    }
-    const keepBits = Math.min(l - (maxMsb - msb), 53);
-    let b = a[i];
-    b = reduceSignificand(b, keepBits);
-    const result = a.slice(i);
-    result[0] = b;
-    return result;
-}
-
-//# sourceMappingURL=e-to-bitlength.js.map
+//# sourceMappingURL=two-sum.js.map
 ;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/scale-expansion.js
 
 
@@ -1041,7 +781,7 @@ const scale_expansion_f = 134217729; // 2**27 + 1;
 const tp = (/* unused pure expression or super */ null && (twoProduct));
 const ts = (/* unused pure expression or super */ null && (twoSum));
 const fts = (/* unused pure expression or super */ null && (fastTwoSum));
-const scale_expansion_compress = (/* unused pure expression or super */ null && (eCompress));
+const compress = (/* unused pure expression or super */ null && (eCompress));
 /**
  * Returns the result of multiplying an expansion by a double.
  *
@@ -1237,112 +977,6 @@ function expansionProduct(e, f) {
 }
 
 //# sourceMappingURL=expansion-product.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/bit-length.js
-
-
-
-
-/**
- * Returns the bit-length of the significand of the given number in such a way
- * that trailing zeros are not counted.
- * @param a A double precision floating point number
- */
-function bitLength(a) {
-    if (a === 0) {
-        return 0;
-    }
-    return getHighestSetBit(a) - getLowestSetBit(a) + 1;
-}
-/**
- * Returns the bit-length of the significand of the given floating point
- * expansion in such a way that trailing zeros are not counted.
- * * precondition: subnormals not currently supported
- * @param a A double precision floating point expansion
- */
-function expBitLength(a) {
-    const a_ = e_compress_eCompress(a);
-    if (e_sign_eSign(a_) === 0) {
-        return 0;
-    }
-    const msbyte = a_[a_.length - 1];
-    const lsbyte = a_[0];
-    return exponent(msbyte) - exponent(lsbyte) + (53 - getLowestSetBit(lsbyte));
-}
-
-//# sourceMappingURL=bit-length.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-div.js
-
-
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const mult = expansionProduct;
-const toBitlength = eToBitlength;
-const e_div_bitLength = expBitLength;
-const diff = eDiff;
-const estimate = eEstimate;
-/**
- * Returns the result of a/b using Goldschmidt division.
- *
- * The result will only be exact if b|a, i.e. if b divides a exactly, else the
- * result will be rounded to the longest bitlength between a and b.
- *
- * @param a the numerator
- * @param b the denominator
- *
- * @param expansionLength the bitlength/53 of the final result, e.g. 1 means
- * standard double precision, 2 means double-double, etc up to a max of about 20 at
- * which point underflow cease precision improvement. If the division is known
- * to be exact beforehand (such as in the pseudo remainder sequence algorithm)
- * then set expansionLength === 0 and an exact division will be done.
- */
-// TODO - test this function properly or replace with a better one
-function eDiv(N, D, expansionLength) {
-    let D_ = D;
-    let N_ = N;
-    let exact = false;
-    let resultBitlengthUpperBound = 0;
-    if (!expansionLength) {
-        const bitlengthN = e_div_bitLength(N_);
-        const bitlengthD = e_div_bitLength(D_);
-        // resultBitlengthUpperBound is only valid if the division is known
-        // to be exact
-        resultBitlengthUpperBound = bitlengthN - bitlengthD + 1;
-        expansionLength = (resultBitlengthUpperBound / 53) + 1;
-        exact = true;
-    }
-    let F = [1 / estimate(D_)]; // Initial guess - out by 1/2 upls
-    let i = 1;
-    while (true) {
-        N_ = mult(N_, F);
-        // The precision bitlength doubles on each iteration
-        if (i > expansionLength) {
-            // we now have roughly double the needed precision - we actually 
-            // only require about the precision and then round properly - this
-            // could be implemented in the future.
-            if (exact) {
-                // We must throw away bits known to be zero. 
-                // Any bits > expansionLength * 53 must be thrown away as they
-                // are wrong - all other bits are exact.
-                N_ = toBitlength(N_, resultBitlengthUpperBound);
-                // TODO - below is just for testing - remove later
-                //if (compare(mult(D, N_), N) !== 0) {
-                //    console.log(mult(D, N_))
-                //    throw new Error(`division in-exact - probably due to underflow, N: ${N}, D: ${D}, Result: ${N_}, product: ${mult(D, N_)}`); 
-                //} 
-                return N_;
-            }
-            // Returning only significant bits helps with sign determination later on.
-            return N_.slice(N_.length - expansionLength, N_.length);
-        }
-        D_ = mult(D_, F);
-        F = diff([2], D_);
-        i *= 2;
-    }
-}
-
-//# sourceMappingURL=e-div.js.map
 ;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/grow-expansion.js
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
@@ -1390,219 +1024,24 @@ function growExpansion(e, b) {
 }
 
 //# sourceMappingURL=grow-expansion.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/basic/two-sum.js
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-sign.js
 /**
- * Returns the exact result of adding two doubles.
- *
- * * the resulting array is the reverse of the standard twoSum in the literature.
- *
- * Theorem 7 (Knuth): Let a and b be p-bit floating-point numbers. Then the
- * following algorithm will produce a nonoverlapping expansion x + y such that
- * a + b = x + y, where x is an approximation to a + b and y is the roundoff
- * error in the calculation of x.
- *
- * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
- */
-function two_sum_twoSum(a, b) {
-    const x = a + b;
-    const bv = x - a;
-    return [(a - (x - bv)) + (b - bv), x];
-}
-// inlined
-//const R = a + b; const _ = R - a; const r = (a - (R - _)) + (b - _); return [r,R]
-
-//# sourceMappingURL=two-sum.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-sum.js
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const e_sum_ts = two_sum_twoSum;
-const addDouble = growExpansion;
-const e_sum_add = fastExpansionSum;
-/**
- * Returns the result of summing an array of floating point expansions.
- *
- * * The result is exact in the form of a non-overlapping floating point
- * expansion.
+ * Returns the sign of the given expansion such that a negative value means a
+ * negative sign and a positive value means a positive sign, 0 meaning 0 of
+ * course.
  *
  * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
  *
- * @param terms An array of numbers to be summed; A term is represented by a
- * floating point expansion.
- */
-// The terms parameter were chosen to always be expansions in order to keep the 
-// function monomorhic, but whether it's really worth it I am not sure.
-function eSum(terms) {
-    let total = [0];
-    for (let i = 0; i < terms.length; i++) {
-        const term = terms[i];
-        // add
-        if (term.length === 1) {
-            if (total.length === 1) {
-                total = e_sum_ts(total[0], term[0]);
-            }
-            else {
-                total = addDouble(total, term[0]);
-            }
-        }
-        else {
-            if (total.length === 1) {
-                total = addDouble(term, total[0]);
-            }
-            else {
-                total = e_sum_add(total, term);
-            }
-        }
-    }
-    return total;
-}
-
-//# sourceMappingURL=e-sum.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-long-divide.js
-
-
-
-
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const e_long_divide_eNegativeOf = eNegativeOf;
-const e_long_divide_fastExpansionSum = fastExpansionSum;
-const e_long_divide_eCompress = e_compress_eCompress;
-const e_long_divide_growExpansion = growExpansion;
-const e_long_divide_eSum = eSum;
-const e_long_divide_scaleExpansion = scaleExpansion;
-const e_long_divide_eDiff = eDiff;
-const e_long_divide_sign = Math.sign;
-function eLongDivide(N, D) {
-    N = e_long_divide_eCompress(N);
-    D = e_long_divide_eCompress(D);
-    // get the most significant double
-    // out by at most 1 ulp, exact if d < MAX_SAFE_INT
-    const d = D[D.length - 1];
-    // trivial cases
-    if (D.length === 1) {
-        if (d === 0) {
-            throw new Error('division by zero');
-        }
-        if (d === 1) {
-            return { div: N, rem: [0] };
-        }
-        if (d === -1) {
-            return { div: e_long_divide_eNegativeOf(N), rem: [0] };
-        }
-    }
-    const signN = e_long_divide_sign(N[N.length - 1]);
-    if (signN === 0) {
-        return { div: [0], rem: [0] };
-    }
-    const signD = e_long_divide_sign(d);
-    const divs = [];
-    let oldLen = 0;
-    while (true) {
-        const rems = [];
-        // loop from big `n[i]` to small `n[i]`
-        for (let i = N.length - 1; i >= 0; i--) {
-            const n = N[i];
-            // `n % d` is the exact rem (for rem < MAX_SAFE_INTEGER) but is preliminary 
-            // as it is subject to round-off for rem > MAX_SAFE_INTEGER; thus out by at 
-            // most 1/2 ulp
-            // Due to roundoff (and the fact we'e using `d` and not `D`!), `_div` does 
-            // not necessarily represent the exact quotient.
-            const div = Math.round((n - (n % d)) / d);
-            // get the remainder by calculating `rem = n - d*div`
-            rems.push(e_long_divide_scaleExpansion(D, div)); // exact
-            if (div === 0) {
-                break;
-            }
-            divs.push(div);
-        }
-        N = e_long_divide_eCompress(e_long_divide_eDiff(N, e_long_divide_eSum(rems)));
-        if (oldLen === divs.length) {
-            break;
-        }
-        oldLen = divs.length;
-    }
-    let rem = N;
-    let div = [0];
-    for (let i = 0; i < divs.length; i++) {
-        div = e_long_divide_growExpansion(div, divs[i]);
-    }
-    div = e_long_divide_eCompress(div);
-    //----------------------
-    // fix signs (possibly)
-    //----------------------
-    //const signDiv = sign(div[div.length-1]);
-    const signRem = e_long_divide_sign(rem[rem.length - 1]);
-    //const signND = signN * signD;
-    // We must have:
-    // sign(div) === sign(n) * sign(d)
-    // sign(rem) === sign(n)
-    // At this point: `signN !== 0` and `signD !== 0`
-    if (signRem !== 0 && signRem !== signN) {
-        if (signN > 0) {
-            if (signD > 0) {
-                // div = div - 1  (div is positive)
-                // rem = rem + D
-                div = e_long_divide_growExpansion(div, -1);
-                rem = e_long_divide_fastExpansionSum(rem, D);
-            }
-            else {
-                // div = div + 1  (div is positive)
-                // rem = rem - D
-                div = e_long_divide_growExpansion(div, +1);
-                rem = e_long_divide_fastExpansionSum(rem, e_long_divide_eNegativeOf(D));
-            }
-        }
-        else if (signN < 0) {
-            if (signD > 0) {
-                // div = div + 1 (div is negative)
-                // rem = rem - D
-                div = e_long_divide_growExpansion(div, +1);
-                rem = e_long_divide_fastExpansionSum(rem, e_long_divide_eNegativeOf(D));
-            }
-            else {
-                // div = div - 1  (div is positive)
-                // rem = rem + D
-                div = e_long_divide_growExpansion(div, -1);
-                rem = e_long_divide_fastExpansionSum(rem, D);
-            }
-        }
-    }
-    return { div, rem };
-}
-
-//# sourceMappingURL=e-long-divide.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-int-div.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const e_int_div_eLongDivide = eLongDivide;
-/**
- * Returns the result of the integer division a/b.
+ * From Shewchuk: "A nonoverlapping expansion is desirable because it is easy to
+ * determine its sign (take the sign of the largest component) ... "
  *
- * * **precondition:** a and b must be integers, b !== 0
+ * @param e A floating point expansion with zeroes eliminated.
  */
-function eIntDiv(a, b) {
-    return e_int_div_eLongDivide(a, b).div;
+function eSign(e) {
+    return e[e.length - 1];
 }
 
-//# sourceMappingURL=e-int-div.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-rem.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const e_rem_eLongDivide = eLongDivide;
-/**
- * Returns a % b
- *
- * * **precondition:** a and b must be integers, b !== 0
- */
-function eRem(a, b) {
-    return e_rem_eLongDivide(a, b).rem;
-}
-
-//# sourceMappingURL=e-rem.js.map
+//# sourceMappingURL=e-sign.js.map
 ;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-compare.js
 
 
@@ -1620,2752 +1059,21 @@ function eRem(a, b) {
  * @param b another floating point expansion
  */
 function eCompare(a, b) {
-    return e_sign_eSign(eDiff(a, b));
+    return eSign(eDiff(a, b));
 }
 
 //# sourceMappingURL=e-compare.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-abs.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const e_abs_sign = (/* unused pure expression or super */ null && (eSign));
-const e_abs_negativeOf = eNegativeOf;
-/**
- * Returns the absolute value of the given floating point expansion.
- *
- * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
- *
- * @param e a floating point expansion
- */
-function eAbs(e) {
-    if (e[e.length - 1] < 0) {
-        return e_abs_negativeOf(e);
-    }
-    return e;
-}
-
-//# sourceMappingURL=e-abs.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/basic/fast-two-diff.js
-/**
- * Returns the difference and exact error of subtracting two floating point
- * numbers.
- * Uses an EFT (error-free transformation), i.e. a-b === x+y exactly.
- * The returned result is a non-overlapping expansion (smallest value first!).
- *
- * Precondition: abs(a) >= abs(b) - A fast test that can be used is
- * (a > b) === (a > -b)
- *
- * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
- */
-function fastTwoDiff(a, b) {
-    const x = a - b;
-    const y = (a - x) - b;
-    return [y, x];
-}
-
-//# sourceMappingURL=fast-two-diff.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/basic/fast-two-sum.js
-/**
- * Returns the sum and exact error of adding two floating point numbers.
- * Uses an EFT (error-free transformation), i.e. a+b === x+y exactly.
- * The returned sum is a non-overlapping expansion (smallest value first!).
- *
- * Precondition: abs(a) >= abs(b) - A fast test that can be used is
- * (a > b) === (a > -b)
- *
- * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
- */
-function fast_two_sum_fastTwoSum(a, b) {
-    const x = a + b;
-    return [b - (x - a), x];
-}
-// inlined
-//const R = a + b; const r = b - (R - a); return [r, R];
-
-//# sourceMappingURL=fast-two-sum.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-mult-by-2.js
-/**
- * Returns the result of multiplying a floating point expansion by 2.
- * * **error free**
- * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
- *
- * @param e a floating point expansion
- */
-function eMultBy2(e) {
-    const e_ = [];
-    for (let i = 0; i < e.length; i++) {
-        e_.push(2 * e[i]);
-    }
-    return e_;
-}
-
-//# sourceMappingURL=e-mult-by-2.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-mult-by-neg-2.js
-/**
- * Multiply a floating point expansion by -2.
- * * **error free**
- * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
- *
- * @param e a floating point expansion
- */
-function eMultByNeg2(e) {
-    const e_ = [];
-    for (let i = 0; i < e.length; i++) {
-        e_.push(-2 * e[i]);
-    }
-    return e_;
-}
-
-//# sourceMappingURL=e-mult-by-neg-2.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-div-by-2.js
-/**
- * Returns the result of dividing a floating point expansion by 2.
- * * **error free**
- *
- * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
- *
- * @param e a floating point expansion
- */
-function eDivBy2(e) {
-    const e_ = [];
-    for (let i = 0; i < e.length; i++) {
-        e_.push(0.5 * e[i]);
-    }
-    return e_;
-}
-
-//# sourceMappingURL=e-div-by-2.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/basic/split.js
-/**
- * === Math.ceil(p/2) where p is the # of significand bits in a double === 53.
- */
-const split_f = 134217729; // 2**27 + 1;
-/**
- * Returns the result of splitting a double into 2 26-bit doubles.
- *
- * Theorem 17 (Veltkamp-Dekker): Let a be a p-bit floating-point number, where
- * p >= 3. Choose a splitting point s such that p/2 <= s <= p-1. Then the
- * following algorithm will produce a (p-s)-bit value a_hi and a
- * nonoverlapping (s-1)-bit value a_lo such that abs(a_hi) >= abs(a_lo) and
- * a = a_hi + a_lo.
- *
- * see e.g. [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
- * @param a A double floating point number
- */
-function split(a) {
-    const c = split_f * a;
-    const a_h = c - (c - a);
-    const a_l = a - a_h;
-    return [a_h, a_l];
-}
-// inlined - input a, output a_h, a_l
-// const c = f * a; const a_h = c - (c - a); const a_l = a - a_h; return [a_h, a_l];
-
-//# sourceMappingURL=split.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/is-bit-aligned.js
-
-
-/**
- * Returns true if the given number is bit-aligned in the sense that its a
- * multiple of a given power of 2, say e, and such that the number, say a,
- * conforms to: a/2^e < 2^(l-e), where l is the max allowed bit length.
- * This essentially means the numbers act somewhat like fixed-point numbers
- * which can drastically speed up some geometric algorithms and also reduce
- * their complexity.
- *
- * Visually:
- * These numbers (a,b and c) are bit aligned with e === 3 and max
- * bitlength === 6:
- *    a -> 00|101100|000
- *    b -> 00|000100|000
- *    c -> 00|110111|000
- * These are not
- *    a -> 01|101100|000
- *    b -> 00|000100|000
- * These are not
- *    a -> 00|101100|000
- *    b -> 00|000100|100
- * These are not
- *    a -> 00|101100|100
- *    b -> 00|000100|100
- * @param as An array of numbers to check
- * @param maxBitLength The max allowed bitlength
- * @param gridSpacingExponent The grid spacing === 1^gridSpacingExponent
- */
-function isBitAligned(a, maxBitLength, gridSpacingExponent) {
-    if (a === 0) {
-        return true;
-    }
-    const e = exponent(a);
-    const maxSetBit = getHighestSetBit(a) - 52 + e;
-    const minSetBit = getLowestSetBit(a) - 52 + e;
-    const minBitBigEnough = minSetBit >= gridSpacingExponent;
-    const maxBitSmallEnough = maxSetBit <= maxBitLength - 1 + gridSpacingExponent;
-    return minBitBigEnough && maxBitSmallEnough;
-}
-
-//# sourceMappingURL=is-bit-aligned.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/lsb-exponent.js
-
-
-/**
- * Returns the true exponent of the lsb that is set of the given number or
- * NaN if a === 0 or +-inf or NaN.
- * @param a An array of numbers to check
- */
-function lsbExponent(a) {
-    if (a === 0 || !Number.isFinite(a)) {
-        return NaN;
-    }
-    const e = exponent(a);
-    return getLowestSetBit(a) - 52 + e;
-}
-
-//# sourceMappingURL=lsb-exponent.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-calculate.js
-
-
-
-
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const e_calculate_mult = expansionProduct;
-const e_calculate_tp = two_product_twoProduct;
-const e_calculate_multByDouble = scaleExpansion;
-const e_calculate_ts = two_sum_twoSum;
-const e_calculate_addDouble = growExpansion;
-const e_calculate_add = fastExpansionSum;
-const e_calculate_compress = (/* unused pure expression or super */ null && (eCompress));
-/**
- * Return the result of summing an array of terms, each term being an array of
- * floating point expansions to be multiplied together.
- *
- * * The result is exact in the form of a non-overlapping floating point
- * expansion.
- * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
- *
- * @param terms An array of terms to be summed; A term consists of an
- * array of floating point expansions to be multiplied together.
- */
-// The terms parameter were chosen to always be expansions in order to keep the 
-// function monomorhic, but whether it's really worth it I am not sure.
-function eCalculate(terms) {
-    let total = [0];
-    for (let i = 0; i < terms.length; i++) {
-        const term = terms[i];
-        let product = term[0];
-        for (let j = 1; j < term.length; j++) {
-            const multiplicant = term[j];
-            if (multiplicant.length == 1) {
-                if (product.length === 1) {
-                    product = e_calculate_tp(product[0], multiplicant[0]);
-                }
-                else {
-                    product = e_calculate_multByDouble(product, multiplicant[0]);
-                }
-            }
-            else if (product.length === 1) {
-                product = e_calculate_multByDouble(multiplicant, product[0]);
-            }
-            else {
-                product = e_calculate_mult(multiplicant, product);
-            }
-        }
-        // add
-        if (product.length === 1) {
-            if (total.length === 1) {
-                total = e_calculate_ts(total[0], product[0]);
-            }
-            else {
-                total = e_calculate_addDouble(total, product[0]);
-            }
-        }
-        else {
-            if (total.length === 1) {
-                total = e_calculate_addDouble(product, total[0]);
-            }
-            else {
-                total = e_calculate_add(total, product);
-            }
-        }
-    }
-    //return compress(total);
-    return total;
-}
-
-//# sourceMappingURL=e-calculate.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-product.js
-
-
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const e_product_mult = expansionProduct;
-const e_product_tp = two_product_twoProduct;
-const e_product_multByDouble = scaleExpansion;
-const e_product_compress = e_compress_eCompress;
-/**
- * Return the result of multiplying together an array of floating point
- * expansions.
- *
- * * The result is exact in the form of a non-overlapping floating point
- * expansion.
- *
- * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
- *
- * @param terms an array of multiplicands
- */
-function eProduct(term) {
-    let product = term[0];
-    for (let j = 1; j < term.length; j++) {
-        const multiplicant = term[j];
-        if (multiplicant.length == 1) {
-            if (product.length === 1) {
-                product = e_product_tp(product[0], multiplicant[0]);
-            }
-            else {
-                product = e_product_multByDouble(product, multiplicant[0]);
-            }
-        }
-        else if (product.length === 1) {
-            product = e_product_multByDouble(multiplicant, product[0]);
-        }
-        else {
-            product = e_product_mult(multiplicant, product);
-        }
-    }
-    return e_product_compress(product);
-    //return product;
-}
-
-//# sourceMappingURL=e-product.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-int-pow.js
-
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const e_int_pow_mult = expansionProduct;
-const prod = eProduct;
-/**
- * Returns a**i, where i is a non-negative integer.
- * @param a a floating point expansion
- */
-// TODO - this algorithm's speed can easily be improved significantly using 'repeated squaring'
-function eIntPow(a, p) {
-    // a^0 === 1
-    if (p === 0) {
-        return [1];
-    }
-    // a^1 === a
-    if (p === 1) {
-        return a;
-    }
-    if (p === 2) {
-        return e_int_pow_mult(a, a);
-    }
-    const as = [];
-    for (let i = 0; i < p; i++) {
-        as.push(a);
-    }
-    return prod(as);
-}
-
-//# sourceMappingURL=e-int-pow.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-to-double-double.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const e_to_double_double_compress = e_compress_eCompress;
-/**
- * Returns the result of converting a floating point expansion to a
- * double-double precision floating point number.
- */
-function eToDd(e) {
-    e = e_to_double_double_compress(e);
-    const len = e.length;
-    if (len === 2) {
-        return e; // already a double-double
-    }
-    else if (len === 1) {
-        return [0, e[0]]; // double-doubles have a fixed length of 2
-    }
-    return [e[len - 2], e[len - 1]]; // return only most significant parts
-}
-
-//# sourceMappingURL=e-to-double-double.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/is-overlapping.js
-
-
-/**
- * Returns true if a and b overlaps, false otherwise.
- *
- * Two floating-point values x and y are nonoverlapping if the least significant
- * nonzero bit of x is more significant than the most significant nonzero bit of
- * y.
- *
- * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
- *
- * Implemented for testing purposes.
- * @param a a double
- * @param b another double
- */
-function isOverlapping(a, b) {
-    return !isNonOverlapping(a, b);
-}
-/**
- * Returns true if a and b does not overlap, false otherwise.
- *
- * Two floating-point values x and y are nonoverlapping if the least significant
- * nonzero bit of x is more significant than the most significant nonzero bit of
- * y.
- *
- * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
- *
- * Implemented for testing purposes.
- *
- * @param a A double
- * @param b Another double
- */
-function isNonOverlapping(a, b) {
-    if (a === 0 || b === 0) {
-        return true;
-    }
-    if (Math.abs(b) > Math.abs(a)) {
-        [a, b] = [b, a];
-    }
-    // At this point abs(a) > abs(b)
-    const l = getLowestSetBit(a);
-    const h = getHighestSetBit(b);
-    const shift = exponent(a) - exponent(b);
-    return (l + shift) > h;
-}
-/**
- * Returns true if all components of the given floating point expansion is
- * non-overlapping, false otherwise.
- *
- * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
- *
- * @param e a double floating point expansion
- */
-function isNonOverlappingAll(e) {
-    for (let i = 1; i < e.length; i++) {
-        if (isOverlapping(e[i - 1], e[i])) {
-            return false;
-        }
-    }
-    return true;
-}
-
-//# sourceMappingURL=is-overlapping.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/is-adjacent.js
-
-/**
- * Returns true if x and y are adjacent, false otherwise.
- *
- * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
- * for details
- *
- * @param x a double floating point number
- * @param y another double floating point number
- */
-function isAdjacent(x, y) {
-    return isOverlapping(x, y) ||
-        isOverlapping(x, 2 * y) ||
-        isOverlapping(2 * x, y);
-}
-
-//# sourceMappingURL=is-adjacent.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-is-integer.js
-
-function eIsInteger(a) {
-    a = e_compress_eCompress(a);
-    for (let i = 0; i < a.length; i++) {
-        if (a[i] % 1 !== 0) {
-            return false;
-        }
-    }
-    return true;
-}
-
-//# sourceMappingURL=e-is-integer.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/index.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Aliases for some functions which names were not changed due to them being
-// used extensively in the literature with a particular recognizable name
-const eAdd = fastExpansionSum;
-const eAddDouble = growExpansion;
-const eMult = expansionProduct;
-const eMultDouble1 = scaleExpansion;
-const eMultDouble2 = scaleExpansion2;
-const operators = {
-    //---- basic ----//
-    fastTwoDiff: fastTwoDiff,
-    fastTwoSum: fast_two_sum_fastTwoSum,
-    split: split,
-    twoDiff: twoDiff,
-    twoProduct: two_product_twoProduct,
-    twoSum: two_sum_twoSum,
-    reduceSignificand: reduceSignificand,
-    //---- double floating point expansions ----//
-    fastExpansionSum: fastExpansionSum, eAdd,
-    growExpansion: growExpansion, eAddDouble,
-    expansionProduct: expansionProduct, eMult,
-    scaleExpansion: scaleExpansion, eMultDouble1,
-    scaleExpansion2: scaleExpansion2, eMultDouble2,
-    eDiv: eDiv,
-    eLongDivide: eLongDivide,
-    eIntDiv: eIntDiv,
-    eRem: eRem,
-    eCompress: e_compress_eCompress,
-    eEstimate: eEstimate,
-    eDiff: eDiff,
-    eNegativeOf: eNegativeOf,
-    eMultBy2: eMultBy2,
-    eMultByNeg2: eMultByNeg2,
-    eDivBy2: eDivBy2,
-    eSign: e_sign_eSign,
-    eCompare: eCompare,
-    eAbs: eAbs,
-    eToBitlength: eToBitlength,
-    eIntPow: eIntPow,
-    eCalculate: eCalculate,
-    eSum: eSum,
-    eProduct: eProduct,
-    eToDd: eToDd,
-    //---- double floating point representation ----//
-    parseDouble: parseDouble,
-    parseDoubleDetailed: parseDoubleDetailed,
-    isBitAligned: isBitAligned,
-    msbExponent: msbExponent,
-    lsbExponent: lsbExponent,
-    bitLength: bitLength,
-    expBitLength: expBitLength,
-    doubleToBinaryString: doubleToBinaryString,
-    doubleToOctets: doubleToOctets,
-    getHighestSetBit: getHighestSetBit,
-    getLowestSetBit: getLowestSetBit,
-    exponent: exponent,
-    significand: significand,
-    //---- geometric primitives
-    orient2d: orient2d_orient2d,
-    //---- others
-    isAdjacent: isAdjacent,
-    isNonOverlappingAll: isNonOverlappingAll,
-    eIsInteger: eIsInteger
-};
-
-
-//# sourceMappingURL=index.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-diff-dd.js
-/**
- * Returns the result of subtracting the second given double-double-precision
- * floating point number from the first.
- *
- * * relative error bound: 3u^2 + 13u^3, i.e. fl(a-b) = (a-b)(1+ϵ),
- * where ϵ <= 3u^2 + 13u^3, u = 0.5 * Number.EPSILON
- * * the error bound is not sharp - the worst case that could be found by the
- * authors were 2.25u^2
- *
- * ALGORITHM 6 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
- * @param x a double-double precision floating point number
- * @param y another double-double precision floating point number
- */
-function ddDiffDd(x, y) {
-    const xl = x[0];
-    const xh = x[1];
-    const yl = y[0];
-    const yh = y[1];
-    //const [sl,sh] = twoSum(xh,yh);
-    const sh = xh - yh;
-    const _1 = sh - xh;
-    const sl = (xh - (sh - _1)) + (-yh - _1);
-    //const [tl,th] = twoSum(xl,yl);
-    const th = xl - yl;
-    const _2 = th - xl;
-    const tl = (xl - (th - _2)) + (-yl - _2);
-    const c = sl + th;
-    //const [vl,vh] = fastTwoSum(sh,c)
-    const vh = sh + c;
-    const vl = c - (vh - sh);
-    const w = tl + vl;
-    //const [zl,zh] = fastTwoSum(vh,w)
-    const zh = vh + w;
-    const zl = w - (zh - vh);
-    return [zl, zh];
-}
-
-//# sourceMappingURL=dd-diff-dd.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-min.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-/** @internal */
-const dd_min_diff = ddDiffDd;
-/**
- * Returns the minimum of a and b.
- * @param a a double-double precision floating point number
- * @param b another double-double precision floating point number
- */
-function ddMin(a, b) {
-    const res = dd_min_diff(a, b)[1];
-    return res > 0 ? b : a;
-}
-
-//# sourceMappingURL=dd-min.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-max.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-/** @internal */
-const dd_max_diff = ddDiffDd;
-/**
- * Returns the maximum of a and b.
- * @param a a double-double precision floating point number
- * @param b another double-double precision floating point number
- */
-function ddMax(a, b) {
-    const res = dd_max_diff(a, b)[1];
-    return res > 0 ? a : b;
-}
-
-//# sourceMappingURL=dd-max.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-sqrt.js
-/** @internal */
-const dd_sqrt_f = 134217729; // 2**27 + 1;
-// Taken from https://github.com/munrocket/double.js/blob/master/src/double.ts
-// Unfortunately no error bound given
-/**
- * Returns the square root of a double-double as a double-double.
- * * no error bound is returned
- *
- * @param x a double-double precision floating point number
- */
-// TODO - calculate an error bound and add to function description
-function ddSqrt(x) {
-    const xl = x[0];
-    const xh = x[1];
-    if (xh === 0) {
-        return [0, 0];
-    }
-    const s = Math.sqrt(xh);
-    //const [tl,th] = twoSquare(s);
-    const th = s * s;
-    const c = dd_sqrt_f * s;
-    const ah = c - (c - s);
-    const al = s - ah;
-    const tl = (al * al) - ((th - (ah * ah)) - 2 * (ah * al));
-    const e = (xh - th - tl + xl) * 0.5 / s;
-    return [e - ((s + e) - s), s + e];
-}
-
-//# sourceMappingURL=dd-sqrt.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-mixed-double-double/double-sqrt.js
-/** @internal */
-const double_sqrt_f = 134217729; // 2**27 + 1;
-// Taken from https://github.com/munrocket/double.js/blob/master/src/double.ts
-// Unfortunately no error bound given
-/**
- * Returns the square root of a double as a double-double.
- * * no error bound is returned
- */
-// TODO - calculate an error bound and add to function description
-function doubleSqrt(x) {
-    if (x === 0) {
-        return [0, 0];
-    }
-    const s = Math.sqrt(x);
-    //const [tl,th] = twoSquare(s);
-    const th = s * s;
-    const c = double_sqrt_f * s;
-    const ah = c - (c - s);
-    const al = s - ah;
-    const tl = (al * al) - ((th - (ah * ah)) - 2 * (ah * al));
-    const e = (x - th - tl) * 0.5 / s;
-    x = s + e;
-    const xl = e - (x - s);
-    return [xl, x];
-}
-
-//# sourceMappingURL=double-sqrt.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-with-err/sqrt-with-err.js
-/** @internal */
-const eps = Number.EPSILON;
-/**
- * Returns the result of the square root of a double floating point number
- * together with an absolute error bound where x_ is an absolute error
- * bound on the input value.
- * * see also "A Reduced Product of Absolute and Relative Error Bounds for Floating-point Analysis"
- * by Maxime Jacquemin, Sylvie Putot, and Franck Vedrine
- * @param x numerator
- * @param x_ absolute value error bound in numerator
- */
-function sqrtWithErr(x, x_) {
-    // Note: it is assumed x + x_ >= 0, else the error in x_ was wrong in the
-    // first place (since we can't have a negative input to the square root)
-    // estimate the result of the square root
-    if (x - x_ <= 0) {
-        const est = x > 0 ? Math.sqrt(x) : 0;
-        return {
-            est,
-            err: Math.max(Math.sqrt(x + x_) - est, est)
-        };
-    }
-    const est = Math.sqrt(x);
-    const minSqrt = Math.sqrt(x - x_);
-    const maxSqrt = Math.sqrt(x + x_);
-    const err = Math.max(Math.abs(minSqrt - est), Math.abs(maxSqrt - est));
-    //err += eps*abs(est + err);
-    //err = eps*abs(est + err);
-    // approx relative input error
-    //const rel = x_/abs(x);
-    // propogated error bound
-    //const err = est*(Math.sqrt(1 + rel) - 1) + u*abs(est);
-    return { est, err };
-}
-
-//# sourceMappingURL=sqrt-with-err.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-abs.js
-/**
- * Returns the absolute value of the given double-double precision floating
- * point number.
- * @param f a double-double precision floating point number
- */
-function ddAbs(f) {
-    const Q = f[1];
-    return (Q < 0) ? [-f[0], -Q] : f;
-}
-
-//# sourceMappingURL=dd-abs.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-mixed-double-double/dd-add-double.js
-/**
- * Returns the result of adding a double to a double-double precision floating
- * point number.
- *
- * * relative error bound: 2u^2, i.e. fl(a+b) = (a+b)(1+ϵ),
- * where ϵ <= 2u^2, u = 0.5 * Number.EPSILON
- * * the error bound is sharp
- *
- * ALGORITHM 4 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
- * @param x a double-double precision floating point number
- * @param y a double precision floating point number
- */
-function ddAddDouble(x, y) {
-    const xl = x[0];
-    const xh = x[1];
-    //const [sl,sh] = twoSum(xh, y);
-    const sh = xh + y;
-    const c = sh - xh;
-    const sl = (xh - (sh - c)) + (y - c);
-    const v = xl + sl;
-    //const [zl,zh] = fastTwoSum(sh,v);
-    const zh = sh + v;
-    const zl = v - (zh - sh);
-    return [zl, zh];
-}
-
-//# sourceMappingURL=dd-add-double.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-add-dd.js
-/**
- * Returns the result of adding two double-double-precision floating point
- * numbers.
- *
- * * relative error bound: 3u^2 + 13u^3, i.e. fl(a+b) = (a+b)(1+ϵ),
- * where ϵ <= 3u^2 + 13u^3, u = 0.5 * Number.EPSILON
- * * the error bound is not sharp - the worst case that could be found by the
- * authors were 2.25u^2
- *
- * ALGORITHM 6 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
- * @param x a double-double precision floating point number
- * @param y another double-double precision floating point number
- */
-function ddAddDd(x, y) {
-    const xl = x[0];
-    const xh = x[1];
-    const yl = y[0];
-    const yh = y[1];
-    //const [sl,sh] = twoSum(xh,yh);
-    const sh = xh + yh;
-    const _1 = sh - xh;
-    const sl = (xh - (sh - _1)) + (yh - _1);
-    //const [tl,th] = twoSum(xl,yl);
-    const th = xl + yl;
-    const _2 = th - xl;
-    const tl = (xl - (th - _2)) + (yl - _2);
-    const c = sl + th;
-    //const [vl,vh] = fastTwoSum(sh,c)
-    const vh = sh + c;
-    const vl = c - (vh - sh);
-    const w = tl + vl;
-    //const [zl,zh] = fastTwoSum(vh,w)
-    const zh = vh + w;
-    const zl = w - (zh - vh);
-    return [zl, zh];
-}
-
-//# sourceMappingURL=dd-add-dd.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-mult-dd.js
-/** @internal */
-const dd_mult_dd_f = 2 ** 27 + 1;
-/**
- * Returns the product of two double-double-precision floating point numbers.
- *
- * * relative error bound: 7u^2, i.e. fl(a+b) = (a+b)(1+ϵ),
- * where ϵ <= 7u^2, u = 0.5 * Number.EPSILON
- * the error bound is not sharp - the worst case that could be found by the
- * authors were 5u^2
- *
- * * ALGORITHM 10 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
- * @param x a double-double precision floating point number
- * @param y another double-double precision floating point number
- */
-function ddMultDd(x, y) {
-    const xh = x[1];
-    const yh = y[1];
-    //const [cl1,ch] = twoProduct(xh,yh);
-    const ch = xh * yh;
-    const c = dd_mult_dd_f * xh;
-    const ah = c - (c - xh);
-    const al = xh - ah;
-    const d = dd_mult_dd_f * yh;
-    const bh = d - (d - yh);
-    const bl = yh - bh;
-    const cl1 = (al * bl) - ((ch - (ah * bh)) - (al * bh) - (ah * bl));
-    //return fastTwoSum(ch,cl1 + (xh*yl + xl*yh));
-    const b = cl1 + (xh * y[0] + x[0] * yh);
-    const xx = ch + b;
-    return [b - (xx - ch), xx];
-}
-
-//# sourceMappingURL=dd-mult-dd.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/multi/dd-product.js
-
-/**
- * Returns the result of multiplying together an array of double-double-precision
- * floating point numbers naively (i.e. not using pairwise addition to reduce
- * error a bit).
- *
- * * an error bound is given by: (n-1)(1+ϵ),
- * where ϵ <= 7u^2, u = 0.5 * Number.EPSILON
- */
-function ddProduct(qs) {
-    let q = qs[0];
-    for (let i = 1; i < qs.length; i++) {
-        q = ddMultDd(q, qs[i]);
-    }
-    return q;
-}
-
-//# sourceMappingURL=dd-product.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/multi/dd-sum.js
-
-/**
- * Returns the result of summing an array of double-double-precision floating
- * point numbers naively (i.e. not using pairwise addition to reduce error a bit).
- *
- * * an error bound is given by: (n-1)(1+ϵ),
- * where ϵ <= 3u^2 + 13u^3, u = 0.5 * Number.EPSILON
- */
-function ddSum(qs) {
-    let q = qs[0];
-    for (let i = 1; i < qs.length; i++) {
-        q = ddAddDd(q, qs[i]);
-    }
-    return q;
-}
-
-//# sourceMappingURL=dd-sum.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-compare.js
-/**
- * Returns 0 if a === b, a +tive value if a > b or a negative value if a < b.
- *
- * @param x a double-double precision floating point number
- * @param y another double-double precision floating point number
- */
-function ddCompare(x, y) {
-    //return ddDiffDd(x,y)[1];
-    const xl = x[0];
-    const xh = x[1];
-    const yl = y[0];
-    const yh = y[1];
-    //const [sl,sh] = twoSum(xh,yh);
-    const sh = xh - yh;
-    const _1 = sh - xh;
-    const sl = (xh - (sh - _1)) + (-yh - _1);
-    //const [tl,th] = twoSum(xl,yl);
-    const th = xl - yl;
-    const _2 = th - xl;
-    const tl = (xl - (th - _2)) + (-yl - _2);
-    const c = sl + th;
-    //const [vl,vh] = fastTwoSum(sh,c)
-    const vh = sh + c;
-    const vl = c - (vh - sh);
-    const w = tl + vl;
-    //const [zl,zh] = fastTwoSum(vh,w)
-    const zh = vh + w;
-    return zh;
-}
-
-//# sourceMappingURL=dd-compare.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-mixed-double-double/dd-mult-double.js
-/** @internal */
-const dd_mult_double_f = 134217729; // 2**27 + 1;
-/**
- * Returns the product of a double-double-precision floating point number and a
- * double.
- *
- * * slower than ALGORITHM 8 (one call to fastTwoSum more) but about 2x more
- * accurate
- * * relative error bound: 1.5u^2 + 4u^3, i.e. fl(a+b) = (a+b)(1+ϵ),
- * where ϵ <= 1.5u^2 + 4u^3, u = 0.5 * Number.EPSILON
- * * the bound is very sharp
- * * probably prefer `ddMultDouble2` due to extra speed
- *
- * * ALGORITHM 7 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
- * @param y a double
- * @param x a double-double precision floating point number
- */
-function ddMultDouble1(y, x) {
-    const xl = x[0];
-    const xh = x[1];
-    //const [cl1,ch] = twoProduct(xh,y);
-    const ch = xh * y;
-    const c = dd_mult_double_f * xh;
-    const ah = c - (c - xh);
-    const al = xh - ah;
-    const d = dd_mult_double_f * y;
-    const bh = d - (d - y);
-    const bl = y - bh;
-    const cl1 = (al * bl) - ((ch - (ah * bh)) - (al * bh) - (ah * bl));
-    const cl2 = xl * y;
-    //const [tl1,th] = fastTwoSum(ch,cl2);
-    const th = ch + cl2;
-    const tl1 = cl2 - (th - ch);
-    const tl2 = tl1 + cl1;
-    //const [zl,zh] = fastTwoSum(th,tl2);
-    const zh = th + tl2;
-    const zl = tl2 - (zh - th);
-    return [zl, zh];
-}
-/**
- * Returns the product of a double-double-precision floating point number and a double.
- *
- * * faster than ALGORITHM 7 (one call to fastTwoSum less) but about 2x less
- * accurate
- * * relative error bound: 3u^2, i.e. fl(a*b) = (a*b)(1+ϵ),
- * where ϵ <= 3u^2, u = 0.5 * Number.EPSILON
- * * the bound is sharp
- * * probably prefer this algorithm due to extra speed
- *
- * * ALGORITHM 8 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
- * @param y a double
- * @param x a double-double precision floating point number
- */
-function ddMultDouble2(y, x) {
-    const xl = x[0];
-    const xh = x[1];
-    //const [cl1,ch] = twoProduct(xh,y);
-    const ch = xh * y;
-    const c = dd_mult_double_f * xh;
-    const ah = c - (c - xh);
-    const al = xh - ah;
-    const d = dd_mult_double_f * y;
-    const bh = d - (d - y);
-    const bl = y - bh;
-    const cl1 = (al * bl) - ((ch - (ah * bh)) - (al * bh) - (ah * bl));
-    const cl2 = xl * y;
-    const cl3 = cl1 + cl2;
-    //return fastTwoSum(ch,cl3);
-    const xx = ch + cl3;
-    return [cl3 - (xx - ch), xx];
-}
-
-//# sourceMappingURL=dd-mult-double.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-mult-by-2.js
-/**
- * Returns the result of multiplying the given double-double by 2.
- * * The result is exact
- * @param f a double-double precision floating point number
- */
-function ddMultBy2(f) {
-    return [2 * f[0], 2 * f[1]];
-}
-
-//# sourceMappingURL=dd-mult-by-2.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-mult-by-4.js
-/**
- * Returns the result of multiplying the given double-double by 4.
- * * The result is exact
- * @param f a double-double precision floating point number
- */
-function ddMultBy4(f) {
-    return [4 * f[0], 4 * f[1]];
-}
-
-//# sourceMappingURL=dd-mult-by-4.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-div-by-2.js
-/**
- * Returns the result of dividing the given double-double by 2.
- * @param f a double-double precision floating point number
- */
-function ddDivBy2(f) {
-    return [f[0] / 2, f[1] / 2];
-}
-
-//# sourceMappingURL=dd-div-by-2.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-mult-by-neg-2.js
-/**
- * Returns the result of multiplying the given double-double by -2.
- * * The result is exact
- * @param f a double-double precision floating point number
- */
-function ddMultByNeg2(f) {
-    return [-2 * f[0], -2 * f[1]];
-}
-
-//# sourceMappingURL=dd-mult-by-neg-2.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-mult-by-neg-4.js
-/**
- * Returns the result of multiplying the given double-double by -4.
- * * The result is exact
- * @param f a double-double precision floating point number
- */
-function ddMultByNeg4(f) {
-    return [-4 * f[0], -4 * f[1]];
-}
-
-//# sourceMappingURL=dd-mult-by-neg-4.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-mixed-double-double/dd-div-double.js
-/** @internal */
-const dd_div_double_f = 134217729; // 2**27 + 1;
-/**
- * Returns the result of dividing a double-double-precision floating point
- * number by a double.
- *
- * * relative error bound: 3u^2, i.e. fl(a/b) = (a/b)(1+ϵ), where ϵ <= 3u^2,
- * u = 0.5 * Number.EPSILON
- * * the bound is very sharp
- *
- * * ALGORITHM 15 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
- * @param x a double-double precision floating point number
- * @param y the double-precision divisor
- */
-function ddDivDouble(x, y) {
-    const xl = x[0];
-    const xh = x[1];
-    const th = xh / y;
-    //const [πl,πh] = twoProduct(th,y);
-    const πh = th * y;
-    const c = dd_div_double_f * th;
-    const ah = c - (c - th);
-    const al = th - ah;
-    const d = dd_div_double_f * y;
-    const bh = d - (d - y);
-    const bl = y - bh;
-    const πl = (al * bl) - ((πh - (ah * bh)) - (al * bh) - (ah * bl));
-    const δh = xh - πh; // exact operation
-    const δt = δh - πl; // exact operation
-    const δ = δt + xl;
-    const tl = δ / y;
-    //return fastTwoSum(th,tl);
-    const rl = th + tl;
-    return [tl - (rl - th), rl];
-}
-
-//# sourceMappingURL=dd-div-double.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-div-dd.js
-/** @internal */
-const dd_div_dd_f = 134217729; // 2**27 + 1;
-/**
- * Returns the result of dividing two double-double-precision floating point
- * numbers, i.e. returns x/y.
- *
- * * relative error bound: 15u^2 + 56u^3, i.e. fl(a/b) = (a/b)(1+ϵ),
- * where ϵ <= 15u^2 + 56u^3, u = 0.5 * Number.EPSILON
- * * the largest error found was 8.465u^2
- *
- * * ALGORITHM 17 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
- * @param x a double-double precision floating point number
- * @param y another double-double precision floating point number
- */
-function ddDivDd(x, y) {
-    const xl = x[0];
-    const xh = x[1];
-    const yl = y[0];
-    const yh = y[1];
-    const th = xh / yh;
-    // approximation to th*(yh + yl) using Algorithm 7
-    //const [rl,rh] = ddMultDouble1(th,[yl,yh]);  
-    const ch = yh * th;
-    const c = dd_div_dd_f * yh;
-    const ah = c - (c - yh);
-    const al = yh - ah;
-    const d = dd_div_dd_f * th;
-    const bh = d - (d - th);
-    const bl = th - bh;
-    const cl1 = (al * bl) - ((ch - (ah * bh)) - (al * bh) - (ah * bl));
-    const cl2 = yl * th;
-    const th_ = ch + cl2;
-    const tl1 = cl2 - (th_ - ch);
-    const tl2 = tl1 + cl1;
-    const rh = th_ + tl2;
-    const rl = tl2 - (rh - th_);
-    const πh = xh - rh; // exact operation
-    const δl = xl - rl;
-    const δ = πh + δl;
-    const tl = δ / yh;
-    //return fastTwoSum(th,tl);
-    const xx = th + tl;
-    return [tl - (xx - th), xx];
-}
-
-//# sourceMappingURL=dd-div-dd.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-negative-of.js
-/**
- * Returns the negative of the given double-double precision floating point
- * number.
- * * the result is exact
- * @param f a double-double precision floating point number
- */
-function ddNegativeOf(f) {
-    return [-f[0], -f[1]];
-}
-
-//# sourceMappingURL=dd-negative-of.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-sign.js
-/**
- * Returns the sign of the given double-double-precision floating point number.
- * * a positive or negative double or zero is returned - not necessarily +1, 0
- * or -1
- * * prefer inlining this - it is really only here for reference
- */
-function ddSign(f) {
-    return f[1];
-}
-
-//# sourceMappingURL=dd-sign.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/basic/fast-two-diff.js
-/**
- * Returns the difference and exact error of subtracting two floating point
- * numbers.
- * Uses an EFT (error-free transformation), i.e. `a-b === x+y` exactly.
- * The returned result is a non-overlapping expansion (smallest value first!).
- *
- * * **precondition:** `abs(a) >= abs(b)` - A fast test that can be used is
- * `(a > b) === (a > -b)`
- *
- * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
- */
-function fast_two_diff_fastTwoDiff(a, b) {
-    const x = a - b;
-    const y = (a - x) - b;
-    return [y, x];
-}
-
-//# sourceMappingURL=fast-two-diff.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/basic/fast-two-sum.js
-/**
- * Returns the sum and exact error of adding two floating point numbers.
- * Uses an EFT (error-free transformation), i.e. a+b === x+y exactly.
- * The returned sum is a non-overlapping expansion (smallest value first!).
- *
- * Precondition: abs(a) >= abs(b) - A fast test that can be used is
- * (a > b) === (a > -b)
- *
- * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
- */
-function basic_fast_two_sum_fastTwoSum(a, b) {
-    const x = a + b;
-    return [b - (x - a), x];
-}
-// inlined
-//const R = a + b; const r = b - (R - a); return [r, R];
-
-//# sourceMappingURL=fast-two-sum.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/basic/split.js
-/**
- * === 2^Math.ceil(p/2) + 1 where p is the # of significand bits in a double === 53.
- * @internal
- */
-const basic_split_f = 134217729; // 2**27 + 1;
-/**
- * Returns the result of splitting a double into 2 26-bit doubles.
- *
- * Theorem 17 (Veltkamp-Dekker): Let a be a p-bit floating-point number, where
- * p >= 3. Choose a splitting point s such that p/2 <= s <= p-1. Then the
- * following algorithm will produce a (p-s)-bit value a_hi and a
- * nonoverlapping (s-1)-bit value a_lo such that abs(a_hi) >= abs(a_lo) and
- * a = a_hi + a_lo.
- *
- * see e.g. [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
- * @param a A double floating point number
- */
-function split_split(a) {
-    const c = basic_split_f * a;
-    const a_h = c - (c - a);
-    const a_l = a - a_h;
-    return [a_h, a_l];
-}
-// inlined - input a, output a_h, a_l
-// const c = f * a; const a_h = c - (c - a); const a_l = a - a_h; return [a_h, a_l];
-
-//# sourceMappingURL=split.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/basic/two-diff.js
-/**
- * Returns the exact result of subtracting b from a.
- *
- * @param a minuend - a double-double precision floating point number
- * @param b subtrahend - a double-double precision floating point number
- */
-function two_diff_twoDiff(a, b) {
-    const x = a - b;
-    const bvirt = a - x;
-    const y = (a - (x + bvirt)) + (bvirt - b);
-    return [y, x];
-}
-
-//# sourceMappingURL=two-diff.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/basic/two-product.js
-/** @internal */
-const two_product_f = 134217729; // 2**27 + 1;
-/**
- * Returns the exact result of multiplying two doubles.
- *
- * * the resulting array is the reverse of the standard twoSum in the literature.
- *
- * Theorem 18 (Shewchuk): Let a and b be p-bit floating-point numbers, where
- * p >= 6. Then the following algorithm will produce a nonoverlapping expansion
- * x + y such that ab = x + y, where x is an approximation to ab and y
- * represents the roundoff error in the calculation of x. Furthermore, if
- * round-to-even tiebreaking is used, x and y are non-adjacent.
- *
- * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
- * @param a A double
- * @param b Another double
- */
-function basic_two_product_twoProduct(a, b) {
-    const x = a * b;
-    //const [ah, al] = split(a);
-    const c = two_product_f * a;
-    const ah = c - (c - a);
-    const al = a - ah;
-    //const [bh, bl] = split(b);
-    const d = two_product_f * b;
-    const bh = d - (d - b);
-    const bl = b - bh;
-    const y = (al * bl) - ((x - (ah * bh)) - (al * bh) - (ah * bl));
-    //const err1 = x - (ah * bh);
-    //const err2 = err1 - (al * bh);
-    //const err3 = err2 - (ah * bl);
-    //const y = (al * bl) - err3;
-    return [y, x];
-}
-
-//# sourceMappingURL=two-product.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-mixed-double-double/double-div-double.js
-/** @internal */
-const double_div_double_f = 134217729; // 2**27 + 1;
-/**
- * Returns the result of dividing a double-precision floating point
- * number by a double with the result given as a double-double.
- * This is a slight modification of ddDivDd.
- *
- * * **!! NOT an error-free transformation !!**
- * * relative error bound: 3u^2, i.e. fl(a/b) = (a/b)(1+ϵ), where ϵ <= 3u^2,
- * u = 0.5 * Number.EPSILON
- *
- * * ALGORITHM 15 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
- * (slightly modified)
- * @param x dividend
- * @param y divisor
- */
-function doubleDivDouble(x, y) {
-    const th = x / y;
-    //const [πl,πh] = twoProduct(th,y);
-    const πh = th * y;
-    const c = double_div_double_f * th;
-    const ah = c - (c - th);
-    const al = th - ah;
-    const d = double_div_double_f * y;
-    const bh = d - (d - y);
-    const bl = y - bh;
-    const πl = (al * bl) - ((πh - (ah * bh)) - (al * bh) - (ah * bl));
-    const δh = x - πh; // exact operation
-    const δt = δh - πl; // exact operation
-    const tl = δt / y;
-    //return fastTwoSum(th,tl);
-    const xx = th + tl;
-    return [tl - (xx - th), xx];
-}
-
-//# sourceMappingURL=double-div-double.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/basic/two-sum.js
-/**
- * Returns the exact result of adding two doubles.
- *
- * * the resulting array is the reverse of the standard twoSum in the literature.
- *
- * Theorem 7 (Knuth): Let a and b be p-bit floating-point numbers. Then the
- * following algorithm will produce a nonoverlapping expansion x + y such that
- * a + b = x + y, where x is an approximation to a + b and y is the roundoff
- * error in the calculation of x.
- *
- * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
- */
-function basic_two_sum_twoSum(a, b) {
-    const x = a + b;
-    const bv = x - a;
-    return [(a - (x - bv)) + (b - bv), x];
-}
-// inlined
-//const R = a + b; const _ = R - a; const r = (a - (R - _)) + (b - _); return [r,R]
-
-//# sourceMappingURL=two-sum.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/basic/reduce-significand.js
-/**
- * Truncates a floating point value's significand and returns the result.
- * Similar to split, but with the ability to specify the number of bits to keep.
- *
- * **Theorem 17 (Veltkamp-Dekker)**: Let a be a p-bit floating-point number, where
- * p >= 3. Choose a splitting point s such that p/2 <= s <= p-1. Then the
- * following algorithm will produce a (p-s)-bit value a_hi and a
- * nonoverlapping (s-1)-bit value a_lo such that abs(a_hi) >= abs(a_lo) and
- * a = a_hi + a_lo.
- *
- * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
- *
- * @param a a double
- * @param bits the number of significand bits to leave intact
- */
-function reduce_significand_reduceSignificand(a, bits) {
-    const s = 53 - bits;
-    const f = 2 ** s + 1;
-    const c = f * a;
-    const r = c - (c - a);
-    return r;
-}
-
-//# sourceMappingURL=reduce-significand.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-representation/double-to-octets.js
-// Modified from https://github.com/bartaz/ieee754-visualization/
-// under the MIT license
-// Copyright 2013 Bartek Szopka (original author)
-/**
- * Returns the ieee-574 8 bytes composing the given double, starting from the
- * sign bit and ending in the lsb of the significand.
- * e.g. 123.456 -> [64, 94, 221, 47, 26, 159, 190, 119]
- * @internal
- */
-function double_to_octets_doubleToOctets(number) {
-    const buffer = new ArrayBuffer(8);
-    new DataView(buffer).setFloat64(0, number, false);
-    return Array.from(new Uint8Array(buffer));
-}
-
-//# sourceMappingURL=double-to-octets.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-representation/double-to-binary-string.js
-// Modified from https://github.com/bartaz/ieee754-visualization/
-// under the MIT license
-// Copyright 2013 Bartek Szopka (original author)
-
-/** @internal */
-function double_to_binary_string_doubleToBinaryString(number) {
-    return double_to_binary_string_octetsToBinaryString(double_to_octets_doubleToOctets(number));
-}
-/**
- * @param octets The 8 bytes composing a double (msb first)
- * @internal
- */
-function double_to_binary_string_octetsToBinaryString(octets) {
-    return octets
-        .map(double_to_binary_string_int8ToBinaryString)
-        .join('');
-}
-/**
- * intToBinaryString(8) -> "00001000"
- * @internal
- */
-function double_to_binary_string_int8ToBinaryString(i) {
-    let iStr = i.toString(2);
-    for (; iStr.length < 8; iStr = "0" + iStr)
-        ;
-    return iStr;
-}
-
-//# sourceMappingURL=double-to-binary-string.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-representation/parse-double.js
-// Modified from https://github.com/bartaz/ieee754-visualization/
-// under the MIT license
-// Copyright 2013 Bartek Szopka (original author)
-
-
-/**
- * Returns the relevant parts of the given IEEE-754 double. The returned
- * exponent has been normalized (i.e. 1023 ha been subtracted) and the
- * significand has the hidden bit added if appropriate.
- * See https://github.com/bartaz/ieee754-visualization
- */
-function parse_double_parseDouble(x) {
-    const parts = double_to_octets_doubleToOctets(x);
-    const p0 = parts[0];
-    const p1 = parts[1];
-    const sign = p0 >> 7;
-    const exponent_ = ((p0 & 127) << 4) + ((p1 & 0b11110000) >> 4);
-    //---- Check for negative / positive zero / denormalized numbers.
-    const hiddenMsb = exponent_ === 0 ? 0 : 16;
-    // Note: exponent === 0 => 0 or denormalized number (a.k.a. subnormal number).
-    const exponent = exponent_ === 0
-        ? exponent_ - 1022 // Subnormals use a biased exponent of 1 (not 0!)
-        : exponent_ - 1023;
-    //---- Break up the significand into bytes
-    const significand = parts.slice(1);
-    significand[0] = (p1 & 15) + hiddenMsb;
-    return {
-        sign,
-        exponent,
-        significand
-    };
-}
-/**
- * Returns the relevant parts of the given IEEE-754 double.
- * See https://github.com/bartaz/ieee754-visualization.
- * This is a slower version of parseDouble that gives binary string
- * representations of the components.
- */
-function parse_double_parseDoubleDetailed(x) {
-    const str = double_to_binary_string_doubleToBinaryString(x);
-    // sign{1} exponent{11} fraction{52} === 64 bits (+1 hidden!)
-    const [, sign, exponent, significand] = str.match(/^(.)(.{11})(.{52})$/);
-    const exponent_ = parseInt(exponent, 2);
-    const hidden = exponent_ === 0 ? "0" : "1";
-    return {
-        full: sign + exponent + hidden + significand,
-        sign,
-        exponent,
-        hidden,
-        significand
-    };
-}
-
-//# sourceMappingURL=parse-double.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-representation/significand.js
-
-/**
- * Return the significand of the given double with the hidden bit added (in case
- * a is not subnormal or 0, etc.)
- *
- * @param a A double
- */
-function significand_significand(a) {
-    return parse_double_parseDouble(a).significand;
-}
-
-//# sourceMappingURL=significand.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-representation/get-max-set-bit.js
-
-/**
- * Returns the lowest set bit of the given value in [1, (2**31)-1],
- * i.e. from 1 up to 2147483647 else if no bit is set (input === 0) returns
- * NaN, otherwise if the number is out of range returns a non-finite
- * number.
- * See https://stackoverflow.com/a/35190288/2010061
- * @internal
- */
-function get_max_set_bit_getLowestSetBit_(a) {
-    return Math.log2(a & -a);
-}
-/**
- * Returns the lowest set bit of the given number's significand (where the lsb
- * is bit 0 and the msb is bit 52). If no bit is set (input === 0 or +-inf or
- * NaN) returns NaN.
- * See https://stackoverflow.com/a/35190288/2010061
- */
-function get_max_set_bit_getLowestSetBit(a) {
-    if (a === 0 || !Number.isFinite(a)) {
-        // There is no lowest set bit
-        return NaN;
-    }
-    // Note: the significand includes the hidden bit!
-    const s = significand_significand(a);
-    const len = s.length;
-    for (let i = len - 1; i >= 0; i--) {
-        if (s[i] === 0) {
-            continue;
-        }
-        const l = get_max_set_bit_getLowestSetBit_(s[i]);
-        if (Number.isFinite(l)) {
-            return (8 * (len - i - 1)) + l;
-        }
-    }
-    return NaN;
-}
-/**
- * Returns the highest set bit of the given value in [1, 255], i.e. from 1 up
- * to 255. If the input number === 0 returns NaN.
- * See https://stackoverflow.com/a/35190288/2010061
- * @internal
- */
-function get_max_set_bit_getHighestSetBit_(a) {
-    return a >= 128 ? 7
-        : a >= 64 ? 6
-            : a >= 32 ? 5
-                : a >= 16 ? 4
-                    : a >= 8 ? 3
-                        : a >= 4 ? 2
-                            : a >= 2 ? 1
-                                : a >= 1 ? 0
-                                    : NaN;
-}
-/**
- * Returns the highest set bit of the given double. If no bit is set (input
- * === 0 or +/-inf or NaN) returns NaN.
- * See https://stackoverflow.com/a/35190288/2010061
- */
-function get_max_set_bit_getHighestSetBit(a) {
-    if (a === 0 || !Number.isFinite(a)) {
-        // There is no lowest set bit
-        return NaN;
-    }
-    // At this point there must be a highest set bit (always === 52 if the 
-    // number is not a subnormal.
-    const s = significand_significand(a);
-    const len = s.length;
-    for (let i = 0; i < len; i++) {
-        const l = get_max_set_bit_getHighestSetBit_(s[i]);
-        if (Number.isFinite(l)) {
-            return (8 * (len - i - 1)) + l;
-        }
-    }
-    return NaN;
-}
-
-//# sourceMappingURL=get-max-set-bit.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-representation/exponent.js
-
-/**
- * Returns the normalized exponent of the given number.
- * @param a A double
- */
-function exponent_exponent(a) {
-    return parse_double_parseDouble(a).exponent;
-}
-
-//# sourceMappingURL=exponent.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-representation/is-bit-aligned.js
-
-
-/**
- * Returns true if the given number is bit-aligned in the sense that its a
- * multiple of a given power of 2, say e, and such that the number, say a,
- * conforms to: a/2^e < 2^(l-e), where l is the max allowed bit length.
- * This essentially means the numbers act somewhat like fixed-point numbers
- * which can drastically speed up some geometric algorithms and also reduce
- * their complexity.
- *
- * Visually:
- * These numbers (a,b and c) are grid aligned with e === 3 and max
- * bitlength === 6:
- *   a -> 00|101100|000
- *   b -> 00|000100|000
- *   c -> 00|110111|000
- * These are not
- *   a -> 01|101100|000
- *   b -> 00|000100|000
- * These are not
- *   a -> 00|101100|000
- *   b -> 00|000100|100
- * These are not
- *   a -> 00|101100|100
- *   b -> 00|000100|100
- * @param as An array of numbers to check
- * @param maxBitLength The max allowed bitlength
- * @param gridSpacingExponent The grid spacing === 1^gridSpacingExponent
- */
-function is_bit_aligned_isBitAligned(a, maxBitLength, gridSpacingExponent) {
-    if (a === 0) {
-        return true;
-    }
-    const e = exponent_exponent(a);
-    const maxSetBit = get_max_set_bit_getHighestSetBit(a) - 52 + e;
-    const minSetBit = get_max_set_bit_getLowestSetBit(a) - 52 + e;
-    const minBitBigEnough = minSetBit >= gridSpacingExponent;
-    const maxBitSmallEnough = maxSetBit <= maxBitLength - 1 + gridSpacingExponent;
-    return minBitBigEnough && maxBitSmallEnough;
-}
-
-//# sourceMappingURL=is-bit-aligned.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-representation/msb-exponent.js
-
-
-/**
- * Returns the true exponent of the msb that is set of the given number or
- * NaN if a === 0 or +-inf or NaN.
- * @param a An array of numbers to check
- */
-function msb_exponent_msbExponent(a) {
-    if (a === 0 || !Number.isFinite(a)) {
-        return NaN;
-    }
-    const e = exponent_exponent(a);
-    // Will return e for all but subnormal numbers
-    return get_max_set_bit_getHighestSetBit(a) - 52 + e;
-}
-
-//# sourceMappingURL=msb-exponent.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-representation/lsb-exponent.js
-
-
-/**
- * Returns the true exponent of the lsb that is set of the given number or
- * NaN if a === 0 or +-inf or NaN.
- * @param a An array of numbers to check
- */
-function lsb_exponent_lsbExponent(a) {
-    if (a === 0 || !Number.isFinite(a)) {
-        return NaN;
-    }
-    const e = exponent_exponent(a);
-    return get_max_set_bit_getLowestSetBit(a) - 52 + e;
-}
-
-//# sourceMappingURL=lsb-exponent.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-representation/bit-length.js
-
-/**
- * Returns the bit-length of the significand of the given number in such a way
- * that trailing zeros are not counted.
- * @param a a double precision floating point number
- */
-function bit_length_bitLength(a) {
-    if (a === 0) {
-        return 0;
-    }
-    return get_max_set_bit_getHighestSetBit(a) - get_max_set_bit_getLowestSetBit(a) + 1;
-}
-
-//# sourceMappingURL=bit-length.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double-with-error/dd-div-dd-with-error.js
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-/** @internal */
-const div = ddDivDd;
-/** @internal */
-const dd_div_dd_with_error_eps = Number.EPSILON;
-/** @internal */
-const u = dd_div_dd_with_error_eps / 2;
-/** @internal */
-const uu = u * u;
-/**
- * Returns the result of dividing two double-double-precision floating point
- * numbers together with an absolute error bound where nE and dE are absolute
- * error bounds on the *input* values.
- *
- * @param numer numerator - a double-double-precision float
- * @param denom denominator - a double-double-precision float
- * @param nE absolute value error bound in numerator
- * @param dE absolute value error bound in denominator
- */
-function ddDivDdWithError(numer, denom, nE, dE) {
-    const n = numer[0];
-    const N = numer[1];
-    const d = denom[0];
-    const D = denom[1];
-    // estimate the result of the division
-    const est = div(numer, denom);
-    const _n = Math.abs(n + N); // absolute value of estimate of n accurate to within 1/2 ulp
-    const _d = Math.abs(d + D); // absolute value of estimate of d accurate to within 1/2 ulp
-    const δd = u * _d; // the max error in the rounding to _d
-    // if the error in the denominator is too high the error can be 
-    // arbitrarily high
-    const minD = _d - δd - dE;
-    // maxErr is only valid if minD > 0
-    if (minD <= 0) {
-        // the error can be arbitrarily high; est is mostly irrelevant
-        return { est, err: Number.POSITIVE_INFINITY };
-    }
-    const err = ((_d * nE + _n * dE) / minD ** 2) + 9 * uu * Math.abs(_n / _d);
-    return { est, err };
-}
-
-//# sourceMappingURL=dd-div-dd-with-error.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-with-err/div-with-err.js
-/** @internal */
-const div_with_err_u = Number.EPSILON / 2;
-/**
- * Returns the result of dividing two double floating point numbers
- * together with an absolute error bound where nE and dE are absolute error
- * bounds on the input values.
- * @param n numerator
- * @param d denominator
- * @param nE absolute value error bound in numerator
- * @param dE absolute value error bound in denominator
- */
-function divWithErr(n, d, nE, dE) {
-    // estimate the result of the division
-    const est = n / d;
-    const _n = Math.abs(n);
-    const _d = Math.abs(d);
-    // if the error in the denominator is too high the error can be 
-    // arbitrarily high
-    const minD = _d - dE;
-    // maxErr is only valid if minD > 0
-    if (minD <= 0) {
-        // the error can be arbitrarily high; est is mostly irrelevant
-        return { est, err: Number.POSITIVE_INFINITY };
-    }
-    const err = ((_d * nE + _n * dE) / minD ** 2) + div_with_err_u * Math.abs(_n / _d);
-    return { est, err };
-}
-
-//# sourceMappingURL=div-with-err.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/get-zeros-str.js
-/**
- * Returns a string having the given number of zeros.
- *
- * @internal
- */
-function getZerosStr(n) {
-    return new Array(n + 1).join('0');
-}
-
-//# sourceMappingURL=get-zeros-str.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/mult-str-by-pow-of-10.js
-
-/**
- * * string must not contain an `'e'`, e.g. `'1e-10'` is not allowed
- *
- * @internal
- */
-function multStrByPowOf10(s, pow) {
-    if (pow === 0 || Number(s) === 0) {
-        return s;
-    }
-    const negative = s.indexOf('-') !== -1;
-    const negativeStr = negative ? '-' : '';
-    if (negative) {
-        s = s.slice(1);
-    }
-    if (s.startsWith('+')) {
-        s = s.slice(1);
-    }
-    const idx = s.indexOf('.');
-    if (pow > 0) {
-        // shift dot right
-        if (idx === -1) {
-            const zeros = getZerosStr(pow);
-            return negativeStr + s + zeros;
-        }
-        const [bef, aft] = s.split('.'); //?
-        if (aft.length < pow) {
-            return negativeStr + bef + aft + getZerosStr(pow - aft.length);
-        }
-        else {
-            const aftP1 = aft.substring(0, pow); //?
-            const aftP2 = aft.substring(pow);
-            return negativeStr + bef + aftP1 + (aftP2 ? '.' + aftP2 : '');
-        }
-    }
-    // shift dot left
-    pow = -pow;
-    let bef = '';
-    let aft = '';
-    if (idx === -1) {
-        bef = s;
-    }
-    else {
-        [bef, aft] = s.split('.');
-    }
-    if (bef.length === pow) {
-        return negativeStr + '0.' + bef + aft;
-    }
-    else if (bef.length > pow) {
-        const l = bef.length - pow; //?
-        const befP1 = bef.substring(0, l); //?
-        const befP2 = bef.substring(l); //?
-        return negativeStr + befP1 + '.' + befP2 + aft;
-    }
-    else {
-        const l = pow - bef.length; //?
-        const zeros = getZerosStr(l) || '0';
-        return negativeStr + '0.' + zeros + bef + aft;
-    }
-}
-
-//# sourceMappingURL=mult-str-by-pow-of-10.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/dd-to-str/dd-to-str.js
-
-const { floor, max, round, log2, log10, ceil } = Math;
-const LOG2_10 = log2(1024) / log10(1024);
-/**
- * Converts the given double-double precision value to a string and returns the
- * result.
- *
- * * there will always be enough decimal digits returned but some could be
- * extraneous.
- *
- * @param dd
- */
-function ddToStr(dd) {
-    let [l, h] = dd;
-    let negative = false;
-    if (h < 0) {
-        h = -h;
-        l = -l;
-        negative = true;
-    }
-    if (h === 0) {
-        return '0';
-    }
-    const scale2 = max(0, -floor(log2(h)) + 3 * 53);
-    if (scale2 === 0) {
-        const llb = BigInt(round(l));
-        const hhb = BigInt(round(h));
-        const str = (llb + hhb).toString();
-        return negative ? '-' + str : str;
-    }
-    const scale2b = BigInt(scale2);
-    const scale10 = ceil(scale2 / LOG2_10);
-    const scale10b = BigInt(scale10);
-    const ll = l * (2 ** scale2);
-    const hh = h * (2 ** scale2);
-    const llb = BigInt(round(ll));
-    const hhb = BigInt(round(hh));
-    const b = (llb + hhb) * (10n ** scale10b);
-    const bb = b / (2n ** (scale2b));
-    let bStr = bb.toString();
-    let str = multStrByPowOf10(bStr, -scale10);
-    str = removeExtraneousZeros(str);
-    return negative ? '-' + str : str;
-}
-function removeExtraneousZeros(str) {
-    const idx = str.indexOf('.');
-    if (idx === -1) {
-        return str;
-    }
-    let i = 0;
-    let c = 0;
-    while (i < str.length) {
-        if (str[str.length - 1 - i] === '0') {
-            c++;
-        }
-        else {
-            break;
-        }
-        i++;
-    }
-    if (c > 0) {
-        str = str.slice(0, str.length - c);
-    }
-    if (str.endsWith('.')) {
-        str = str.slice(0, str.length - 1);
-    }
-    return str;
-}
-
-//# sourceMappingURL=dd-to-str.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/get-num-leading-zeros-after-point.js
-/**
- * Returns the number of leading zeros (plus 1) after the decimal point or `0`
- * if the number is >= 1 or equal to zero.
- *
- * * the number string must be positive
- * * the number string must not start with a `+` sign
- * * the number string must must be a simple decimal expansion, e.g. no `e-8`
- * at the end
- *
- * Examples:
- * `getNumLeadingZeros(0.1)    // => 0`
- * `getNumLeadingZeros(0.001)  // => 2`
- * `getNumLeadingZeros(3.001)  // => 0`
- * `getNumLeadingZeros(13)     // => 0`
- * `getNumLeadingZeros(0)      // => 0
- *
- * @param str
- *
- * @internal
- */
-function getNumLeadingZerosAfterPoint(str) {
-    if (!str.startsWith('0.')) {
-        return 0;
-    }
-    if (Number(str) === 0) {
-        return 0;
-    }
-    let numLeadingZeros = 1;
-    for (let i = 0; i < str.length; i++) {
-        if (str[i + 2] === '0') {
-            numLeadingZeros++;
-        }
-        else {
-            break;
-        }
-    }
-    return numLeadingZeros;
-}
-
-//# sourceMappingURL=get-num-leading-zeros-after-point.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/set-0-from-to.js
-/**
- *
- * @param str
- * @param from
- * @param to
- *
- * @internal
- */
-function set0FromTo(str, from, to) {
-    // TODO - this function is currently slow since it replaces one zero at a time.
-    const pointAt = str.indexOf('.');
-    let i = from + (pointAt !== -1 && pointAt < from ? 1 : 0);
-    let j = i;
-    to = to || str.length;
-    while (i < to) {
-        if (str[j] === '.') {
-            j++;
-            continue;
-        }
-        str = set0At(str, j);
-        i++;
-        j++;
-    }
-    return str;
-}
-/**
- * @internal
- */
-function set0At(str, idx) {
-    if (idx > str.length - 1) {
-        return str;
-    }
-    ;
-    return str.substring(0, idx) + '0' + str.substring(idx + 1);
-}
-
-//# sourceMappingURL=set-0-from-to.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/num-significant-digits.js
-/**
- * The number of significant digits per nibble.
- *
- * Since we use 3 nibbles there are 3*15 significant decimal figures looked at
- * to convert a string to a double-double.
- */
-const d = 15;
-
-//# sourceMappingURL=num-significant-digits.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/get-parts.js
-
-
-
-/**
- * Returns the following parts of the number string as an object:
- * * `Z`
- * * `seH` -> the exact high part string if interpreted as a real number
- * * `seL` -> the exact low part string if interpreted as a real number
- * * `seC` -> the exact correction part string if interpreted as a real number;
- * this is used for correctly rounding the lsb; interestingly ECMASCRIPT only
- * checks up to 20 significant figures for rounding purposes (we check 45)
- *
- * @param str
- *
- * @internal
- */
-function getParts(str) {
-    if (str.startsWith('+')) {
-        str = str.slice(1);
-    }
-    let pointAt = str.indexOf('.');
-    if (pointAt === -1) {
-        str += '.0';
-    }
-    pointAt = str.indexOf('.');
-    const Z = getNumLeadingZerosAfterPoint(str);
-    // Lengthen string to `3*d` significant figures
-    if (str.length < 3 * d + 1) {
-        const zeros = new Array(3 * d + 2 - str.length).join('0');
-        str += zeros;
-    }
-    // Shorten string to `3*d` significant figures
-    str = str.slice(0, 3 * d + (pointAt >= 3 * d ? 0 : 1) + Z);
-    if (pointAt >= 3 * d) {
-        // Take care of numbers > 10**(3*d)
-        const zeros = new Array(pointAt - 3 * d + 1).join('0');
-        str += zeros;
-    }
-    let seH = set0FromTo(str, d + Z);
-    let seL = set0FromTo(str, 0, d + Z);
-    seL = set0FromTo(seL, 2 * d + Z);
-    let seC = set0FromTo(str, 0, 2 * d + Z);
-    return { Z, seH, seL, seC };
-}
-
-//# sourceMappingURL=get-parts.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/add-1-ulp.js
-const { EPSILON: add_1_ulp_eps } = Number;
-const add_1_ulp_u = add_1_ulp_eps / 2;
-const es = (add_1_ulp_eps ** 2) / 2;
-const ups = add_1_ulp_u + es;
-/**
- * Add one unit in the last place (ulp) to the given number.
- *
- * * subnormal numbers (and 0) are returned unaltered
- *
- * @internal
- */
-function add1Ulp(n) {
-    return n > 0 ? n + n * ups : n - n * ups;
-}
-
-//# sourceMappingURL=add-1-ulp.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/get-num-leading-zeros.js
-/**
- * Returns the number of leading extraneous zeros before the decimal point.
- *
- * @param str
- *
- * @internal
- */
-function getNumLeadingZeros(str) {
-    if (Number(str) === 0) {
-        return 0;
-    }
-    if (str.startsWith('0.')) {
-        return 0;
-    }
-    let numLeadingZeros = 0;
-    let i = 0;
-    for (; i < str.length; i++) {
-        if (str[i] === '0') {
-            numLeadingZeros++;
-        }
-        else {
-            break;
-        }
-    }
-    if (str[i] === '.') {
-        return 0;
-    }
-    return numLeadingZeros;
-}
-
-//# sourceMappingURL=get-num-leading-zeros.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/get-num-leading-zeros-before-point.js
-/**
- * Returns the number of leading zeros before the decimal point.
- *
- * @param str
- *
- * @internal
- */
-function getNumLeadingZerosBeforePoint(str) {
-    if (str.startsWith('0.')) {
-        return 0;
-    }
-    if (Number(str) === 0) {
-        return 0;
-    }
-    const idx = str.indexOf('.');
-    return idx === -1 ? str.length : idx;
-}
-
-//# sourceMappingURL=get-num-leading-zeros-before-point.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/extract-exp.js
-function extractExp(s) {
-    const idx = s.indexOf('e');
-    let exp = 0;
-    if (idx !== -1) {
-        exp = Number(s.slice(idx + 1));
-        s = s.slice(0, idx);
-    }
-    return { s, exp };
-}
-
-//# sourceMappingURL=extract-exp.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/normalize-str.js
-
-
-
-
-/**
- *
- * @param s
- *
- * @internal
- */
-function normalizeStr(s) {
-    if (Number(s) === 0) {
-        return { str: '0', exp: 0, negative: false };
-    }
-    const negative = s.startsWith('-');
-    if (negative) {
-        s = s.slice(1);
-    }
-    let exp = 0;
-    ({ s, exp } = extractExp(s));
-    let str;
-    const z = getNumLeadingZerosAfterPoint(s);
-    if (z > 0) {
-        s = s.slice(z + 1);
-        str = s[0] + '.' + s.slice(1);
-        exp = exp - z;
-    }
-    else {
-        const Z = getNumLeadingZerosBeforePoint(s);
-        s = s.split('').filter(s => s !== '.').join('');
-        str = s[0] + '.' + s.slice(1);
-        exp = exp + Z - 1;
-    }
-    str = str.slice(0, 3 * d + 1);
-    if (str.length < 3 * d + 1) {
-        const zeros = new Array(3 * d + 1 - str.length).join('0');
-        str += zeros;
-    }
-    return { str, exp, negative };
-}
-
-//# sourceMappingURL=normalize-str.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/get-power-of-10.js
-
-
-
-/**
- *
- * @param a
- * @param b
- *
- * @internal
- */
-function ddMultD(a, b) {
-    return ddMultDouble1(b, a);
-}
-/**
- *
- * @param pow
- *
- * @internal
- */
-function getPowerOf10(pow) {
-    // `10**21` (possibly `10**22`) is the max power of 10 that is exact in double
-    // precision
-    // we multiply in pairs to minimize error, e.g.
-    const m = pow % 21;
-    const d = (pow - m) / 21;
-    const x = 10 ** m;
-    if (d === 0) {
-        return [0, x]; // exact
-    }
-    const a = 10 ** 21;
-    const ax = basic_two_product_twoProduct(a, x);
-    const aa = basic_two_product_twoProduct(a, a);
-    const aax = ddMultD(aa, x);
-    const a4 = ddMultDd(aa, aa);
-    const aaax = ddMultDd(aa, ax);
-    const a8 = ddMultDd(a4, a4);
-    const a4x = ddMultD(a4, x);
-    const a4ax = ddMultDd(a4, ax);
-    const a4aax = ddMultDd(a4, aax);
-    const a4aaax = ddMultDd(a4, aaax);
-    if (d === 1) {
-        return ax;
-    }
-    if (d === 2) {
-        return aax;
-    }
-    if (d === 3) {
-        return aaax;
-    }
-    if (d === 4) {
-        return a4x;
-    }
-    if (d === 5) {
-        return a4ax;
-    }
-    if (d === 6) {
-        return a4aax;
-    }
-    if (d === 7) {
-        return a4aaax;
-    }
-    if (d === 8) {
-        return ddMultD(a8, x);
-    }
-    if (d === 9) {
-        return ddMultDd(a8, ax);
-    }
-    if (d === 10) {
-        return ddMultDd(a8, aax);
-    }
-    if (d === 11) {
-        return ddMultDd(a8, aaax);
-    }
-    if (d === 12) {
-        return ddMultDd(a8, a4x);
-    }
-    if (d === 13) {
-        return ddMultDd(a8, a4ax);
-    }
-    if (d === 14) {
-        return ddMultDd(a8, a4aax);
-    }
-    if (d === 15) {
-        return ddMultDd(a8, a4aaax);
-    }
-    throw new Error('`exp` must be between 0 and 308; This is a bug');
-}
-
-//# sourceMappingURL=get-power-of-10.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/str-to-dd/str-to-dd.js
-
-
-
-
-
-
-
-
-
-
-
-
-const { abs } = Math;
-// How to print floating-point numbers accurately (behind a paywall)
-// https://dl.acm.org/doi/10.1145/989393.989431
-// Chromium implementation at https://chromium.googlesource.com/v8/v8/+/refs/heads/main/src/base/numbers/strtod.cc
-// that converts a string to a double.
-/**
- * Converts the given decimal string to a double-double and returns the result.
- *
- * * accurate to within `1` ulp^2
- *
- * @param str a string to convert to double-double precision
- *
- * Examples:
- * ```
- * strToDd('3.14159265358979323846264338327950')  //=> [1.2246467991473535e-16, 3.141592653589793]
- * strToDd('6.0221408e+23')  //=> [-2097152, 6.0221408e+23]
- * ```
- */
-function strToDd(str) {
-    const { str: s, exp, negative } = normalizeStr(str);
-    if (negative) {
-        str = str.slice(1);
-    }
-    // get exact low, high and correction string parts
-    let { Z, seH: eH, seL: eL, seC: eC } = getParts(s);
-    // adding 1 ulp ensures the string significant digits are correct up to a point
-    const H = add1Ulp(Number(eH));
-    const _sHC = H.toFixed(3 * d);
-    const sHC = set0FromTo(_sHC, 0, d + Z);
-    // get exact high correction low and high string parts
-    let { Z: Z2, seH: seHCH, seL: seHCL } = getParts(sHC);
-    const HCH = add1Ulp(Number(seHCH));
-    const sHCH = HCH.toFixed(3 * d);
-    const sHCL = set0FromTo(sHCH, Z2, d + Z2 + 1);
-    // get exact low correction string part
-    let L = add1Ulp(Number(eL));
-    const lZ1 = getNumLeadingZeros(eL);
-    let sLC = L.toFixed(3 * d);
-    sLC = set0FromTo(sLC, d + Z - lZ1, 2 * d + Z + 1 - lZ1);
-    const HCL = Number(sHCL);
-    const LC = Number(sLC);
-    const C = Number(eC);
-    const HCHL = Number(seHCL);
-    // (correction         ) - (low    ) + (high)
-    // (HCL - LC + C - HCHL) - (HCH + L) + (H   )
-    const rL = ddAddDd(basic_two_sum_twoSum(HCL, -LC), basic_two_sum_twoSum(C, -HCHL)); // correction term
-    const rHL = ddAddDouble(basic_two_sum_twoSum(L, -HCH), H);
-    let r = ddAddDd(rHL, rL);
-    // get accurate power of 10
-    const exp10 = getPowerOf10(abs(exp));
-    r = exp === 0
-        ? r
-        : exp < 0
-            ? ddDivDd(r, exp10)
-            : ddMultDd(r, exp10);
-    const q = (add1Ulp(r[1]) - r[1]);
-    // remove extraneous bits (not strictly necessary)
-    r[0] = r[0] + q / 2 - q / 2;
-    r = negative ? r.map(r => -r) : [r[0], r[1]];
-    return r;
-}
-
-//# sourceMappingURL=str-to-dd.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/constants.js
-// import { strToDd } from "./str-to-dd/str-to-dd.js";
-const PIDd = [1.2246467991473535e-16, 3.141592653589793];
-const eDd = (/* unused pure expression or super */ null && ([1.4456468917292502e-16, 2.718281828459045]));
-const ln2Dd = (/* unused pure expression or super */ null && ([2.3190468138463e-17, 0.6931471805599453]));
-const eulerDd = (/* unused pure expression or super */ null && ([-4.942915152430649e-18, 0.5772156649015329]));
-// strToDd('0.5772156649015328606065120900824024310421593359399235988057672348');//?
-
-//# sourceMappingURL=constants.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-gt.js
-/**
- * Returns `true` if `x1 > x2`, `false` otherwise.
- *
- * @param x1 a double-double precision floating point number
- * @param x2 a double-double precision floating point number
- */
-function ddGt(x1, x2) {
-    if (x1[1] > x2[1]) {
-        return true;
-    }
-    if (x1[1] < x2[1]) {
-        return false;
-    }
-    if (x1[0] > x2[0]) {
-        return true;
-    }
-    return false;
-}
-
-//# sourceMappingURL=dd-gt.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-sin.js
-
-
-
-
-
-
-
-
-
-const { trunc } = Math;
-// See https://gist.github.com/publik-void/067f7f2fef32dbe5c27d6e215f824c91#sin-abs-error-minimized-degree-33
-// Maximum relative error: 1.64002557798425265331386526431095701e-39
-// Maximum absolute error: 7.80601195686311420504782780641951757e-41
-const a0 = [0, 1];
-const a1 = strToDd('-0.166666666666666666666666666666666667');
-const a2 = strToDd('0.00833333333333333333333333333333333069');
-const a3 = strToDd('-0.000198412698412698412698412698412671319');
-const a4 = strToDd('2.75573192239858906525573192223995808e-6');
-const a5 = strToDd('-2.50521083854417187750521077962123682e-8');
-const a6 = strToDd('1.60590438368216145993922289621550506e-10');
-const a7 = strToDd('-7.64716373181981647587481187300831335e-13');
-const a8 = strToDd('2.81145725434552075980975905006999319e-15');
-const a9 = strToDd('-8.22063524662432650297086257962703293e-18');
-const aa = strToDd('1.95729410633890026175367390152305383e-20');
-const ab = strToDd('-3.86817017051340241224838720319634797e-23');
-const ac = strToDd('6.44695023999222092772271073593727141e-26');
-const ad = strToDd('-9.1836779606017064087088551595474321e-29');
-const ae = strToDd('1.13078207057779775850779192271873238e-31');
-const af = strToDd('1.19290046424220296937971101373203567e-34');
-const PIDd_2 = ddDivDouble(PIDd, 2);
-const PIDd2 = ddMultDouble1(2, PIDd);
-/**
- * Returns the sine of x.
- *
- * @param θ a double-double precision floating point number
- *
- * @example
- * ```
- * import { PIDd } from 'double-double';
- * import { ddDivDouble } from 'double-double';
- *
- * ddSin(ddDivDouble(PIDd,6));  //=> [0,0.5]
- * ```
- */
-function ddSin(θ) {
-    let negate = θ[1] < 0;
-    if (negate) {
-        θ = [-θ[0], -θ[1]];
-    }
-    if (ddGt(θ, PIDd)) {
-        const _c = ddDivDd(θ, PIDd2);
-        const c = trunc(_c[1] + _c[0]);
-        θ = ddDiffDd(θ, ddMultDouble1(c, PIDd2));
-    }
-    if (ddGt(θ, PIDd)) {
-        // between 𝜋 and 2𝜋
-        θ = ddDiffDd(θ, PIDd);
-        negate = !negate;
-    }
-    if (ddGt(θ, PIDd_2)) {
-        // between 𝜋/2 and 𝜋
-        θ = ddDiffDd(PIDd, θ);
-    }
-    const x1 = θ;
-    const x2 = ddMultDd(θ, θ);
-    const r = ddMultDd(x1, (ddAddDd(a0, ddMultDd(x2, (ddAddDd(a1, ddMultDd(x2, (ddAddDd(a2, ddMultDd(x2, (ddAddDd(a3, ddMultDd(x2, (ddAddDd(a4, ddMultDd(x2, (ddAddDd(a5, ddMultDd(x2, (ddAddDd(a6, ddMultDd(x2, (ddAddDd(a7, ddMultDd(x2, (ddAddDd(a8, ddMultDd(x2, (ddAddDd(a9, ddMultDd(x2, (ddAddDd(aa, ddMultDd(x2, (ddAddDd(ab, ddMultDd(x2, (ddAddDd(ac, ddMultDd(x2, (ddAddDd(ad, ddMultDd(x2, (ddDiffDd(ae, ddMultDd(x2, af))))))))))))))))))))))))))))))))))))))))))))));
-    return negate ? [-r[0], -r[1]] : r;
-}
-
-//# sourceMappingURL=dd-sin.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-cos.js
-
-
-
-
-// See https://gist.github.com/publik-void/067f7f2fef32dbe5c27d6e215f824c91#sin-abs-error-minimized-degree-33
-// Maximum relative error: 1.64002557798425265331386526431095701e-39
-// Maximum absolute error: 7.80601195686311420504782780641951757e-41
-const dd_cos_PIDd_2 = ddDivDouble(PIDd, 2);
-/**
- * Returns the cosine of x.
- *
- * @param θ a double-double precision floating point number
- *
- * @example
- * ```
- * import { PIDd } from 'double-double';
- * import { ddDivDouble } from 'double-double';
- *
- * ddCos(ddDivDouble(PIDd,6));  //=> [5.017542110902477e-17, 0.8660254037844386]
- * ```
- */
-function ddCos(θ) {
-    const x_ = ddAddDd(θ, dd_cos_PIDd_2);
-    return ddSin(x_);
-}
-
-//# sourceMappingURL=dd-cos.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-eq.js
-/**
- * Returns `true` if `x1 === x2`, `false` otherwise.
- *
- * @param x1 a double-double precision floating point number
- * @param x2 a double-double precision floating point number
- */
-function ddEq(x1, x2) {
-    return x1[0] === x2[0] && x1[1] === x2[1];
-}
-
-//# sourceMappingURL=dd-eq.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-gte.js
-/**
- * Returns `true` if `x1 >= x2`, `false` otherwise.
- *
- * @param x1 a double-double precision floating point number
- * @param x2 a double-double precision floating point number
- */
-function ddGte(x1, x2) {
-    if (x1[1] > x2[1]) {
-        return true;
-    }
-    if (x1[1] < x2[1]) {
-        return false;
-    }
-    if (x1[0] >= x2[0]) {
-        return true;
-    }
-    return false;
-}
-
-//# sourceMappingURL=dd-gte.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-lt.js
-/**
- * Returns `true` if `x1 < x2`, `false` otherwise.
- *
- * @param x1 a double-double precision floating point number
- * @param x2 a double-double precision floating point number
- */
-function ddLt(x1, x2) {
-    if (x1[1] < x2[1]) {
-        return true;
-    }
-    if (x1[1] > x2[1]) {
-        return false;
-    }
-    if (x1[0] < x2[0]) {
-        return true;
-    }
-    return false;
-}
-
-//# sourceMappingURL=dd-lt.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-lte.js
-/**
- * Returns `true` if `x1 <= x2`, `false` otherwise.
- *
- * @param x1 a double-double precision floating point number
- * @param x2 a double-double precision floating point number
- */
-function ddLte(x1, x2) {
-    if (x1[1] < x2[1]) {
-        return true;
-    }
-    if (x1[1] > x2[1]) {
-        return false;
-    }
-    if (x1[0] <= x2[0]) {
-        return true;
-    }
-    return false;
-}
-
-//# sourceMappingURL=dd-lte.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-mixed-double-double/dd-diff-double.js
-/**
- * Returns the result of subtracting the second given double-precision
- * floating point number from the first double-double precision float.
- *
- * * relative error bound: 3u^2 + 13u^3, i.e. fl(a-b) = (a-b)(1+ϵ),
- * where ϵ <= 3u^2 + 13u^3, u = 0.5 * Number.EPSILON
- * * the error bound is not sharp - the worst case that could be found by the
- * authors were 2.25u^2
- *
- * ALGORITHM 6 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
- * @param x a double-double precision floating point number
- * @param y a double precision floating point number
- */
-function ddDiffDouble(x, y) {
-    const xl = x[0];
-    const xh = x[1];
-    //const [sl,sh] = twoSum(xh,yh);
-    const sh = xh - y;
-    const _1 = sh - xh;
-    const sl = (xh - (sh - _1)) + (-y - _1);
-    //const [tl,th] = twoSum(xl,yl);
-    const th = xl;
-    const _2 = th - xl;
-    const tl = (xl - (th - _2)) - _2;
-    const c = sl + th;
-    //const [vl,vh] = fastTwoSum(sh,c)
-    const vh = sh + c;
-    const vl = c - (vh - sh);
-    const w = tl + vl;
-    //const [zl,zh] = fastTwoSum(vh,w)
-    const zh = vh + w;
-    const zl = w - (zh - vh);
-    return [zl, zh];
-}
-
-//# sourceMappingURL=dd-diff-double.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/index.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const node_ddMultDouble2 = ddMultDouble2;
-const node_parseDoubleDetailed = parse_double_parseDoubleDetailed;
-const node_getLowestSetBit = get_max_set_bit_getLowestSetBit;
-const node_ddMin = ddMin;
-const node_ddMax = ddMax;
-const node_ddSqrt = ddSqrt;
-const node_doubleSqrt = doubleSqrt;
-const node_sqrtWithErr = sqrtWithErr;
-const node_ddAbs = ddAbs;
-const node_ddAddDouble = ddAddDouble;
-const node_ddAddDd = ddAddDd;
-const node_ddProduct = ddProduct;
-const node_ddSum = ddSum;
-const node_ddCompare = ddCompare;
-const node_ddDiffDd = ddDiffDd;
-const node_ddMultDouble1 = ddMultDouble1;
-const node_ddMultBy2 = ddMultBy2;
-const node_ddMultBy4 = ddMultBy4;
-const node_ddDivBy2 = ddDivBy2;
-const node_ddMultByNeg2 = ddMultByNeg2;
-const node_ddMultByNeg4 = ddMultByNeg4;
-const node_ddMultDd = ddMultDd;
-const node_ddDivDouble = ddDivDouble;
-const node_ddDivDd = ddDivDd;
-const node_ddNegativeOf = ddNegativeOf;
-const node_ddSign = ddSign;
-const node_fastTwoDiff = fast_two_diff_fastTwoDiff;
-const node_fastTwoSum = basic_fast_two_sum_fastTwoSum;
-const node_split = split_split;
-const node_twoDiff = two_diff_twoDiff;
-const node_twoProduct = basic_two_product_twoProduct;
-const node_doubleDivDouble = doubleDivDouble;
-const node_twoSum = basic_two_sum_twoSum;
-const node_reduceSignificand = reduce_significand_reduceSignificand;
-const node_parseDouble = parse_double_parseDouble;
-const node_isBitAligned = is_bit_aligned_isBitAligned;
-const node_msbExponent = msb_exponent_msbExponent;
-const node_lsbExponent = lsb_exponent_lsbExponent;
-const node_bitLength = bit_length_bitLength;
-const node_exponent = exponent_exponent;
-const node_significand = significand_significand;
-const node_doubleToBinaryString = double_to_binary_string_doubleToBinaryString;
-const node_doubleToOctets = double_to_octets_doubleToOctets;
-const node_getHighestSetBit = get_max_set_bit_getHighestSetBit;
-const node_ddDivDdWithError = ddDivDdWithError;
-const node_divWithErr = divWithErr;
-const node_ddToStr = ddToStr;
-const node_strToDd = strToDd;
-const node_ddSin = ddSin;
-const node_ddCos = ddCos;
-const node_ddEq = ddEq;
-const node_ddGt = ddGt;
-const node_ddGte = ddGte;
-const node_ddLt = ddLt;
-const node_ddLte = ddLte;
-const node_ddDiffDouble = ddDiffDouble;
-const node_operators = {
-    //---- basic ----//
-    fastTwoDiff: node_fastTwoDiff,
-    fastTwoSum: node_fastTwoSum,
-    split: node_split,
-    twoDiff: node_twoDiff,
-    twoProduct: node_twoProduct,
-    doubleDivDouble: node_doubleDivDouble,
-    twoSum: node_twoSum,
-    reduceSignificand: node_reduceSignificand,
-    //---- double-double precision ----//
-    doubleSqrt: node_doubleSqrt,
-    ddSqrt: node_ddSqrt,
-    ddAbs: node_ddAbs,
-    ddAddDouble: node_ddAddDouble,
-    ddAddDd: node_ddAddDd,
-    ddProduct: node_ddProduct,
-    ddSum: node_ddSum,
-    ddCompare: node_ddCompare,
-    ddDiffDd: node_ddDiffDd,
-    ddMultDouble1: node_ddMultDouble1,
-    ddMultDouble2: node_ddMultDouble2,
-    ddMultDd: node_ddMultDd,
-    ddDivDouble: node_ddDivDouble,
-    ddDivDd: node_ddDivDd,
-    ddNegativeOf: node_ddNegativeOf,
-    ddSign: node_ddSign,
-    ddMultBy2: node_ddMultBy2,
-    ddMultBy4: node_ddMultBy4,
-    ddDivBy2: node_ddDivBy2,
-    ddMultByNeg2: node_ddMultByNeg2,
-    ddMultByNeg4: node_ddMultByNeg4,
-    ddMin: node_ddMin,
-    ddMax: node_ddMax,
-    ddSin: node_ddSin,
-    ddCos: node_ddCos,
-    ddEq: node_ddEq,
-    ddGt: node_ddGt,
-    ddGte: node_ddGte,
-    ddLt: node_ddLt,
-    ddLte: node_ddLte,
-    ddDiffDouble: node_ddDiffDouble,
-    //---- double-double precision error propagation - with error bound on input parameters
-    ddDivDdWithError: node_ddDivDdWithError,
-    //---- double precision error propagation - with error bound on input parameters
-    divWithErr: node_divWithErr,
-    sqrtWithErr: node_sqrtWithErr,
-    //---- double floating point representation ----//
-    parseDouble: node_parseDouble,
-    parseDoubleDetailed: node_parseDoubleDetailed,
-    isBitAligned: node_isBitAligned,
-    msbExponent: node_msbExponent,
-    lsbExponent: node_lsbExponent,
-    bitLength: node_bitLength,
-    doubleToBinaryString: node_doubleToBinaryString,
-    doubleToOctets: node_doubleToOctets,
-    getHighestSetBit: node_getHighestSetBit,
-    getLowestSetBit: node_getLowestSetBit,
-    exponent: node_exponent,
-    significand: node_significand,
-    ddToStr: node_ddToStr,
-    strToDd: node_strToDd
-};
-
-
-node_ddEq;
-node_ddGt;
-node_ddGte;
-node_ddLt;
-node_ddLte;
-node_ddDiffDouble;
-//# sourceMappingURL=index.js.map
 ;// CONCATENATED MODULE: ./src/error-analysis/error-analysis.ts
-const error_analysis_u = Number.EPSILON / 2;
-const error_analysis_uu = error_analysis_u * error_analysis_u;
+const u = Number.EPSILON / 2;
+const uu = u * u;
 /** @internal */
 function γ(n) {
-    const nu = n * error_analysis_u;
+    const nu = n * u;
     return nu / (1 - nu);
 }
 /** @internal */
 function γγ(n) {
-    const nuu = n * error_analysis_uu;
+    const nuu = n * uu;
     return nuu / (1 - nuu);
 }
 
@@ -4394,13 +1102,35 @@ function isReallyPoint(ps) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/basic/two-sum.js
+/**
+ * Returns the exact result of adding two doubles.
+ *
+ * * the resulting array is the reverse of the standard twoSum in the literature.
+ *
+ * Theorem 7 (Knuth): Let a and b be p-bit floating-point numbers. Then the
+ * following algorithm will produce a nonoverlapping expansion x + y such that
+ * a + b = x + y, where x is an approximation to a + b and y is the roundoff
+ * error in the calculation of x.
+ *
+ * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
+ */
+function basic_two_sum_twoSum(a, b) {
+    const x = a + b;
+    const bv = x - a;
+    return [(a - (x - bv)) + (b - bv), x];
+}
+// inlined
+//const R = a + b; const _ = R - a; const r = (a - (R - _)) + (b - _); return [r,R]
+
+//# sourceMappingURL=two-sum.js.map
 ;// CONCATENATED MODULE: ./src/global-properties/classification/is-quad-really-line.ts
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
 const ediff = eDiff;
-const esign = e_sign_eSign;
-const is_quad_really_line_ts = two_sum_twoSum;
-const { abs: is_quad_really_line_abs } = Math;
+const esign = eSign;
+const is_quad_really_line_ts = basic_two_sum_twoSum;
+const { abs } = Math;
 /**
  * Returns `true` if the given quadratic bezier curve is really a linear curve
  * (or a point), i.e. if all control points collinear *and* it can be converted
@@ -4421,20 +1151,20 @@ function isQuadReallyLine(ps) {
     // Calculate an approximation of the above with error bounds and use it as
     // a fast filter.
     const q = x0 + x2;
-    const _q_ = is_quad_really_line_abs(q); // the absolute error bound in q (after multipliciation by `u`)
+    const _q_ = abs(q); // the absolute error bound in q (after multipliciation by `u`)
     const w = q - 2 * x1;
-    const w_ = _q_ + is_quad_really_line_abs(w); // the absolute error bound in w
+    const w_ = _q_ + abs(w); // the absolute error bound in w
     // if w cannot possibly be zero, i.e. if the error is smaller than the value
-    if (is_quad_really_line_abs(w) - w_ > 0) {
+    if (abs(w) - w_ > 0) {
         // fast filter passed
         return false;
     }
     const r = y0 + y2;
-    const _r_ = is_quad_really_line_abs(r); // the absolute error bound in r (after multipliciation by `u`)
+    const _r_ = abs(r); // the absolute error bound in r (after multipliciation by `u`)
     const z = r - 2 * y1;
-    const z_ = _r_ + is_quad_really_line_abs(z); // the absolute error bound in w
+    const z_ = _r_ + abs(z); // the absolute error bound in w
     // if the error is smaller than the value
-    if (is_quad_really_line_abs(z) - z_ > 0) {
+    if (abs(z) - z_ > 0) {
         // fast filter passed
         return false;
     }
@@ -4449,7 +1179,7 @@ function isQuadReallyLine(ps) {
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
 const is_cubic_really_quad_tp = two_product_twoProduct;
 const fes = fastExpansionSum;
-const is_cubic_really_quad_esign = e_sign_eSign;
+const is_cubic_really_quad_esign = eSign;
 const is_cubic_really_quad_ediff = eDiff;
 const is_cubic_really_quad_u = Number.EPSILON / 2;
 const is_cubic_really_quad_abs = Math.abs;
@@ -4510,7 +1240,7 @@ function isCubicReallyQuad(ps) {
 ;// CONCATENATED MODULE: ./src/global-properties/classification/is-collinear.ts
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const { orient2d: is_collinear_orient2d } = operators;
+const is_collinear_orient2d = orient2d;
 /**
  * Returns `true` if the given bezier curve has all control points collinear,
  * `false` otherwise.
@@ -4586,8 +1316,8 @@ function isVertical(ps) {
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const sce = scaleExpansion;
 const is_cubic_really_line_ediff = eDiff;
-const is_cubic_really_line_ts = two_sum_twoSum;
-const is_cubic_really_line_esign = e_sign_eSign;
+const is_cubic_really_line_ts = basic_two_sum_twoSum;
+const is_cubic_really_line_esign = eSign;
 /**
  * Returns `true` if the given bezier curve has all control points collinear
  * *and* it can be converted to an order 1 bezier curve (a line) such that the
@@ -4876,10 +1606,10 @@ function getCoeffsBez3WithRunningError(ps) {
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const td = twoDiff;
-const to_power_basis_exact_ts = two_sum_twoSum;
+const to_power_basis_exact_ts = basic_two_sum_twoSum;
 const to_power_basis_exact_sce = scaleExpansion2;
 const ge = growExpansion;
-const to_power_basis_exact_eAdd = eAdd;
+const eAdd = fastExpansionSum;
 /**
  * Returns the *exact* power basis representation of a bezier curve of order
  * cubic or less.
@@ -4915,7 +1645,7 @@ function toPowerBasis3Exact(ps) {
     const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
     return [[
             // (x3 - x0) + 3*(x1 - x2)
-            to_power_basis_exact_eAdd(td(x3, x0), to_power_basis_exact_sce(3, td(x1, x2))),
+            eAdd(td(x3, x0), to_power_basis_exact_sce(3, td(x1, x2))),
             // OR
             // (x3 - x0) - (2*x2 + x2) + (2*x1 + x1)
             //eAdd(eAdd(td(x3,x0), ts(-2*x2, -x2)), ts(2*x1, x1))
@@ -4927,7 +1657,7 @@ function toPowerBasis3Exact(ps) {
             [x0]
         ], [
             //ge(ge(sce(3, td(y1, y2)), y3), -y0),
-            to_power_basis_exact_eAdd(td(y3, y0), to_power_basis_exact_sce(3, td(y1, y2))),
+            eAdd(td(y3, y0), to_power_basis_exact_sce(3, td(y1, y2))),
             //sce(3, ge(td(y2, 2*y1), y0)),
             to_power_basis_exact_sce(3, ge(to_power_basis_exact_ts(y2, y0), -2 * y1)),
             to_power_basis_exact_sce(3, td(y1, y0)),
@@ -5029,12 +1759,13 @@ function getCoeffsBez3Exact(ps) {
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const { eSign: classify_eSign, eCompare: classify_eCompare } = operators;
+const classify_eSign = eSign;
+const classify_eCompare = eCompare;
 const edif = eDiff;
 const classify_epr = expansionProduct;
 const classify_sce = scaleExpansion2;
-const classify_td = node_twoDiff;
-const classify_ts = node_twoSum;
+const classify_td = two_diff_twoDiff;
+const classify_ts = two_sum_twoSum;
 const classify_fes = fastExpansionSum;
 const classify_ge = growExpansion;
 const classify_abs = Math.abs;
@@ -6144,13 +2875,128 @@ function splitAtBoth2(ps, tS, tE) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/double-double/node/basic/two-product.js
+/** @internal */
+const two_product_f = 134217729; // 2**27 + 1;
+/**
+ * Returns the exact result of multiplying two doubles.
+ *
+ * * the resulting array is the reverse of the standard twoSum in the literature.
+ *
+ * Theorem 18 (Shewchuk): Let a and b be p-bit floating-point numbers, where
+ * p >= 6. Then the following algorithm will produce a nonoverlapping expansion
+ * x + y such that ab = x + y, where x is an approximation to ab and y
+ * represents the roundoff error in the calculation of x. Furthermore, if
+ * round-to-even tiebreaking is used, x and y are non-adjacent.
+ *
+ * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
+ * @param a A double
+ * @param b Another double
+ */
+function basic_two_product_twoProduct(a, b) {
+    const x = a * b;
+    //const [ah, al] = split(a);
+    const c = two_product_f * a;
+    const ah = c - (c - a);
+    const al = a - ah;
+    //const [bh, bl] = split(b);
+    const d = two_product_f * b;
+    const bh = d - (d - b);
+    const bl = b - bh;
+    const y = (al * bl) - ((x - (ah * bh)) - (al * bh) - (ah * bl));
+    //const err1 = x - (ah * bh);
+    //const err2 = err1 - (al * bh);
+    //const err3 = err2 - (ah * bl);
+    //const y = (al * bl) - err3;
+    return [y, x];
+}
+
+//# sourceMappingURL=two-product.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-add-dd.js
+/**
+ * Returns the result of adding two double-double-precision floating point
+ * numbers.
+ *
+ * * relative error bound: 3u^2 + 13u^3, i.e. fl(a+b) = (a+b)(1+ϵ),
+ * where ϵ <= 3u^2 + 13u^3, u = 0.5 * Number.EPSILON
+ * * the error bound is not sharp - the worst case that could be found by the
+ * authors were 2.25u^2
+ *
+ * ALGORITHM 6 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
+ * @param x a double-double precision floating point number
+ * @param y another double-double precision floating point number
+ */
+function ddAddDd(x, y) {
+    const xl = x[0];
+    const xh = x[1];
+    const yl = y[0];
+    const yh = y[1];
+    //const [sl,sh] = twoSum(xh,yh);
+    const sh = xh + yh;
+    const _1 = sh - xh;
+    const sl = (xh - (sh - _1)) + (yh - _1);
+    //const [tl,th] = twoSum(xl,yl);
+    const th = xl + yl;
+    const _2 = th - xl;
+    const tl = (xl - (th - _2)) + (yl - _2);
+    const c = sl + th;
+    //const [vl,vh] = fastTwoSum(sh,c)
+    const vh = sh + c;
+    const vl = c - (vh - sh);
+    const w = tl + vl;
+    //const [zl,zh] = fastTwoSum(vh,w)
+    const zh = vh + w;
+    const zl = w - (zh - vh);
+    return [zl, zh];
+}
+
+//# sourceMappingURL=dd-add-dd.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-diff-dd.js
+/**
+ * Returns the result of subtracting the second given double-double-precision
+ * floating point number from the first.
+ *
+ * * relative error bound: 3u^2 + 13u^3, i.e. fl(a-b) = (a-b)(1+ϵ),
+ * where ϵ <= 3u^2 + 13u^3, u = 0.5 * Number.EPSILON
+ * * the error bound is not sharp - the worst case that could be found by the
+ * authors were 2.25u^2
+ *
+ * ALGORITHM 6 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
+ * @param x a double-double precision floating point number
+ * @param y another double-double precision floating point number
+ */
+function ddDiffDd(x, y) {
+    const xl = x[0];
+    const xh = x[1];
+    const yl = y[0];
+    const yh = y[1];
+    //const [sl,sh] = twoSum(xh,yh);
+    const sh = xh - yh;
+    const _1 = sh - xh;
+    const sl = (xh - (sh - _1)) + (-yh - _1);
+    //const [tl,th] = twoSum(xl,yl);
+    const th = xl - yl;
+    const _2 = th - xl;
+    const tl = (xl - (th - _2)) + (-yl - _2);
+    const c = sl + th;
+    //const [vl,vh] = fastTwoSum(sh,c)
+    const vh = sh + c;
+    const vl = c - (vh - sh);
+    const w = tl + vl;
+    //const [zl,zh] = fastTwoSum(vh,w)
+    const zh = vh + w;
+    const zl = w - (zh - vh);
+    return [zl, zh];
+}
+
+//# sourceMappingURL=dd-diff-dd.js.map
 ;// CONCATENATED MODULE: ./src/simultaneous-properties/get-interface-rotation.ts
 
 
 
-const get_interface_rotation_tp = node_twoProduct;
-const get_interface_rotation_ddAddDd = node_ddAddDd;
-const get_interface_rotation_ddDiffDd = node_ddDiffDd;
+const get_interface_rotation_tp = basic_two_product_twoProduct;
+const get_interface_rotation_ddAddDd = ddAddDd;
+const get_interface_rotation_ddDiffDd = ddDiffDd;
 const { atan2 } = Math;
 /**
  * Returns the rotation angle (-𝜋 <= θ <= 𝜋 *guaranteed*) from some vector to
@@ -7233,9 +4079,9 @@ function clone(ps) {
 
 
 ;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/naive/brent.js
-const brent_eps = Number.EPSILON;
+const eps = Number.EPSILON;
 const brent_abs = Math.abs;
-const brent_max = Math.max;
+const max = Math.max;
 /**
  * Returns a refined root given a root bracketed in the interval (a,b) of the
  * given function using Brent's Method. Any function can be supplied (it
@@ -7295,7 +4141,7 @@ function brent(f, lb, ub) {
             fb = fc;
             fc = fa;
         }
-        const δ = 2 * brent_eps * brent_max(1, brent_abs(a), brent_abs(b));
+        const δ = 2 * eps * max(1, brent_abs(a), brent_abs(b));
         const m = 0.5 * (c - b);
         //if (abs(m) <= δ || fb === 0) {
         if (brent_abs(m) <= δ) {
@@ -7669,10 +4515,10 @@ function fromToInclErrorBound(ps, tS, tE) {
 const cubic_to_quadratic_epr = expansionProduct;
 const cubic_to_quadratic_td = twoDiff;
 const cubic_to_quadratic_ediff = eDiff;
-const cubic_to_quadratic_esign = e_sign_eSign;
-const cubic_to_quadratic_estimate = eEstimate;
+const cubic_to_quadratic_esign = eSign;
+const estimate = eEstimate;
 const cubic_to_quadratic_sce = scaleExpansion;
-const cubic_to_quadratic_ts = two_sum_twoSum;
+const cubic_to_quadratic_ts = basic_two_sum_twoSum;
 /**
  * Returns a quadratic approximation to the given cubic bezier curve.
  *
@@ -7705,8 +4551,8 @@ function cubicToQuadratic(ps, preserveTangents = false) {
                 //   (3*(x1 + x2) - (x0 + x3)) / 4, 
                 //   (3*(y1 + y2) - (y0 + y3)) / 4
                 // ]
-                cubic_to_quadratic_estimate(cubic_to_quadratic_ediff(cubic_to_quadratic_sce(cubic_to_quadratic_ts(x1 / 4, x2 / 4), 3), cubic_to_quadratic_ts(x0 / 4, x3 / 4))),
-                cubic_to_quadratic_estimate(cubic_to_quadratic_ediff(cubic_to_quadratic_sce(cubic_to_quadratic_ts(y1 / 4, y2 / 4), 3), cubic_to_quadratic_ts(y0 / 4, y3 / 4)))
+                estimate(cubic_to_quadratic_ediff(cubic_to_quadratic_sce(cubic_to_quadratic_ts(x1 / 4, x2 / 4), 3), cubic_to_quadratic_ts(x0 / 4, x3 / 4))),
+                estimate(cubic_to_quadratic_ediff(cubic_to_quadratic_sce(cubic_to_quadratic_ts(y1 / 4, y2 / 4), 3), cubic_to_quadratic_ts(y0 / 4, y3 / 4)))
             ],
             [x3, y3]
         ];
@@ -7752,10 +4598,10 @@ function llIntersection(l1, l2) {
     const x3_ = cubic_to_quadratic_td(x3, x1);
     const y3_ = cubic_to_quadratic_td(y3, y1);
     const b = cubic_to_quadratic_ediff(cubic_to_quadratic_epr(y3_, x1_), cubic_to_quadratic_epr(x3_, y1_));
-    const bb = cubic_to_quadratic_estimate(b) / cubic_to_quadratic_estimate(denom);
+    const bb = estimate(b) / estimate(denom);
     return [
-        x3 + bb * cubic_to_quadratic_estimate(x2_),
-        y3 + bb * cubic_to_quadratic_estimate(y2_)
+        x3 + bb * estimate(x2_),
+        y3 + bb * estimate(y2_)
     ];
 }
 
@@ -7833,12 +4679,86 @@ function error_analysis_gamma_(n) {
 }
 
 //# sourceMappingURL=gamma.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-mixed-double-double/dd-mult-double.js
+/** @internal */
+const dd_mult_double_f = 134217729; // 2**27 + 1;
+/**
+ * Returns the product of a double-double-precision floating point number and a
+ * double.
+ *
+ * * slower than ALGORITHM 8 (one call to fastTwoSum more) but about 2x more
+ * accurate
+ * * relative error bound: 1.5u^2 + 4u^3, i.e. fl(a+b) = (a+b)(1+ϵ),
+ * where ϵ <= 1.5u^2 + 4u^3, u = 0.5 * Number.EPSILON
+ * * the bound is very sharp
+ * * probably prefer `ddMultDouble2` due to extra speed
+ *
+ * * ALGORITHM 7 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
+ * @param y a double
+ * @param x a double-double precision floating point number
+ */
+function ddMultDouble1(y, x) {
+    const xl = x[0];
+    const xh = x[1];
+    //const [cl1,ch] = twoProduct(xh,y);
+    const ch = xh * y;
+    const c = dd_mult_double_f * xh;
+    const ah = c - (c - xh);
+    const al = xh - ah;
+    const d = dd_mult_double_f * y;
+    const bh = d - (d - y);
+    const bl = y - bh;
+    const cl1 = (al * bl) - ((ch - (ah * bh)) - (al * bh) - (ah * bl));
+    const cl2 = xl * y;
+    //const [tl1,th] = fastTwoSum(ch,cl2);
+    const th = ch + cl2;
+    const tl1 = cl2 - (th - ch);
+    const tl2 = tl1 + cl1;
+    //const [zl,zh] = fastTwoSum(th,tl2);
+    const zh = th + tl2;
+    const zl = tl2 - (zh - th);
+    return [zl, zh];
+}
+/**
+ * Returns the product of a double-double-precision floating point number and a double.
+ *
+ * * faster than ALGORITHM 7 (one call to fastTwoSum less) but about 2x less
+ * accurate
+ * * relative error bound: 3u^2, i.e. fl(a*b) = (a*b)(1+ϵ),
+ * where ϵ <= 3u^2, u = 0.5 * Number.EPSILON
+ * * the bound is sharp
+ * * probably prefer this algorithm due to extra speed
+ *
+ * * ALGORITHM 8 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
+ * @param y a double
+ * @param x a double-double precision floating point number
+ */
+function ddMultDouble2(y, x) {
+    const xl = x[0];
+    const xh = x[1];
+    //const [cl1,ch] = twoProduct(xh,y);
+    const ch = xh * y;
+    const c = dd_mult_double_f * xh;
+    const ah = c - (c - xh);
+    const al = xh - ah;
+    const d = dd_mult_double_f * y;
+    const bh = d - (d - y);
+    const bl = y - bh;
+    const cl1 = (al * bl) - ((ch - (ah * bh)) - (al * bh) - (ah * bl));
+    const cl2 = xl * y;
+    const cl3 = cl1 + cl2;
+    //return fastTwoSum(ch,cl3);
+    const xx = ch + cl3;
+    return [cl3 - (xx - ch), xx];
+}
+
+//# sourceMappingURL=dd-mult-double.js.map
 ;// CONCATENATED MODULE: ./node_modules/flo-poly/node/calculus/double-double/dd-differentiate-with-err.js
 
 
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const dd_differentiate_with_err_ddMultDouble2 = node_ddMultDouble2;
+const dd_differentiate_with_err_ddMultDouble2 = ddMultDouble2;
 const dd_differentiate_with_err_eEstimate = eEstimate;
 const γγ3 = error_analysis_gamma_(3);
 /**
@@ -7909,7 +4829,7 @@ function eDifferentiate(p) {
 
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const eft_horner_twoSum = two_sum_twoSum;
+const eft_horner_twoSum = basic_two_sum_twoSum;
 const eft_horner_twoProduct = two_product_twoProduct;
 /**
  * Returns an EFT (error free transformation) for the Horner evaluation of a
@@ -8628,7 +5548,7 @@ const all_roots_certified_positiveRootUpperBound_LMQ = positiveRootUpperBound_LM
 const all_roots_certified_eDifferentiate = eDifferentiate;
 const all_roots_certified_eEstimate = eEstimate;
 const all_roots_certified_hornerWithRunningError = hornerWithRunningError;
-const all_roots_certified_eSign = e_sign_eSign;
+const all_roots_certified_eSign = eSign;
 const all_roots_certified_max = Math.max;
 const min = Math.min;
 const all_roots_certified_abs = Math.abs;
@@ -9048,13 +5968,75 @@ function joinRoots(rs) {
 }
 
 //# sourceMappingURL=all-roots-certified.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-mult-dd.js
+/** @internal */
+const dd_mult_dd_f = 2 ** 27 + 1;
+/**
+ * Returns the product of two double-double-precision floating point numbers.
+ *
+ * * relative error bound: 7u^2, i.e. fl(a+b) = (a+b)(1+ϵ),
+ * where ϵ <= 7u^2, u = 0.5 * Number.EPSILON
+ * the error bound is not sharp - the worst case that could be found by the
+ * authors were 5u^2
+ *
+ * * ALGORITHM 10 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
+ * @param x a double-double precision floating point number
+ * @param y another double-double precision floating point number
+ */
+function ddMultDd(x, y) {
+    const xh = x[1];
+    const yh = y[1];
+    //const [cl1,ch] = twoProduct(xh,yh);
+    const ch = xh * yh;
+    const c = dd_mult_dd_f * xh;
+    const ah = c - (c - xh);
+    const al = xh - ah;
+    const d = dd_mult_dd_f * yh;
+    const bh = d - (d - yh);
+    const bl = yh - bh;
+    const cl1 = (al * bl) - ((ch - (ah * bh)) - (al * bh) - (ah * bl));
+    //return fastTwoSum(ch,cl1 + (xh*yl + xl*yh));
+    const b = cl1 + (xh * y[0] + x[0] * yh);
+    const xx = ch + b;
+    return [b - (xx - ch), xx];
+}
+
+//# sourceMappingURL=dd-mult-dd.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-mixed-double-double/dd-add-double.js
+/**
+ * Returns the result of adding a double to a double-double precision floating
+ * point number.
+ *
+ * * relative error bound: 2u^2, i.e. fl(a+b) = (a+b)(1+ϵ),
+ * where ϵ <= 2u^2, u = 0.5 * Number.EPSILON
+ * * the error bound is sharp
+ *
+ * ALGORITHM 4 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
+ * @param x a double-double precision floating point number
+ * @param y a double precision floating point number
+ */
+function ddAddDouble(x, y) {
+    const xl = x[0];
+    const xh = x[1];
+    //const [sl,sh] = twoSum(xh, y);
+    const sh = xh + y;
+    const c = sh - xh;
+    const sl = (xh - (sh - c)) + (y - c);
+    const v = xl + sl;
+    //const [zl,zh] = fastTwoSum(sh,v);
+    const zh = sh + v;
+    const zl = v - (zh - sh);
+    return [zl, zh];
+}
+
+//# sourceMappingURL=dd-add-double.js.map
 ;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const to_power_basis_dd_with_running_error_td = node_twoDiff; // error -> 0
-const qmd = node_ddMultDouble2; // error -> 3*u²
-const qaq = node_ddAddDd;
-const qad = node_ddAddDouble; // error -> 2*u²
+const to_power_basis_dd_with_running_error_td = two_diff_twoDiff; // error -> 0
+const qmd = ddMultDouble2; // error -> 3*u²
+const qaq = ddAddDd;
+const qad = ddAddDouble; // error -> 2*u²
 const to_power_basis_dd_with_running_error_abs = Math.abs;
 /**
  * Returns the power basis representation of a bezier curve of order cubic or
@@ -9206,8 +6188,8 @@ function toPowerBasis0DdWithRunningError(ps) {
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const qdq = node_ddDiffDd; // error -> 3*γ²
-const get_implicit_form1_dd_with_running_error_qmd = node_ddMultDouble2;
+const qdq = ddDiffDd; // error -> 3*γ²
+const get_implicit_form1_dd_with_running_error_qmd = ddMultDouble2;
 const eno = eNegativeOf;
 const get_implicit_form1_dd_with_running_error_abs = Math.abs;
 /**
@@ -9255,9 +6237,9 @@ function getImplicitForm1DdWithRunningError(ps) {
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_coeffs_bez1_bez1_dd_qaq = node_ddAddDd;
-const get_coeffs_bez1_bez1_dd_qmd = node_ddMultDouble2;
-const qmq = node_ddMultDd;
+const get_coeffs_bez1_bez1_dd_qaq = ddAddDd;
+const get_coeffs_bez1_bez1_dd_qmd = ddMultDouble2;
+const qmq = ddMultDd;
 const get_coeffs_bez1_bez1_dd_abs = Math.abs;
 const get_coeffs_bez1_bez1_dd_3 = γγ(3);
 /**
@@ -9326,15 +6308,38 @@ function getCoeffsBez1Bez1Dd(ps1, ps2) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-negative-of.js
+/**
+ * Returns the negative of the given double-double precision floating point
+ * number.
+ * * the result is exact
+ * @param f a double-double precision floating point number
+ */
+function ddNegativeOf(f) {
+    return [-f[0], -f[1]];
+}
+
+//# sourceMappingURL=dd-negative-of.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-mult-by-2.js
+/**
+ * Returns the result of multiplying the given double-double by 2.
+ * * The result is exact
+ * @param f a double-double precision floating point number
+ */
+function ddMultBy2(f) {
+    return [2 * f[0], 2 * f[1]];
+}
+
+//# sourceMappingURL=dd-mult-by-2.js.map
 ;// CONCATENATED MODULE: ./src/implicit-form/double-double/get-implicit-form2-dd-with-running-error.ts
 
 
-const qno = node_ddNegativeOf; // error -> 0
-const qm2 = node_ddMultBy2; // error -> 0 
+const qno = ddNegativeOf; // error -> 0
+const qm2 = ddMultBy2; // error -> 0 
 //const qmd2 = qMultDouble1;  // error -> 1.5*γ²
-const get_implicit_form2_dd_with_running_error_qmd = node_ddMultDouble2; // error -> 3*γ²
-const get_implicit_form2_dd_with_running_error_qmq = node_ddMultDd; // error -> 7*γ² (theoretical), 5*γ² (worst found), we use 6*γ²
-const get_implicit_form2_dd_with_running_error_qdq = node_ddDiffDd; // error -> 3*γ²
+const get_implicit_form2_dd_with_running_error_qmd = ddMultDouble2; // error -> 3*γ²
+const get_implicit_form2_dd_with_running_error_qmq = ddMultDd; // error -> 7*γ² (theoretical), 5*γ² (worst found), we use 6*γ²
+const get_implicit_form2_dd_with_running_error_qdq = ddDiffDd; // error -> 3*γ²
 const get_implicit_form2_dd_with_running_error_abs = Math.abs;
 /**
  * Returns a double-double precision implicit form of the given quadratic
@@ -9477,11 +6482,11 @@ function getImplicitForm2DdWithRunningError(ps) {
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_coeffs_bez2_bez1_dd_tp = node_twoProduct;
-const get_coeffs_bez2_bez1_dd_qm2 = node_ddMultBy2;
-const get_coeffs_bez2_bez1_dd_qmd = node_ddMultDouble2;
-const get_coeffs_bez2_bez1_dd_qmq = node_ddMultDd;
-const get_coeffs_bez2_bez1_dd_qaq = node_ddAddDd;
+const get_coeffs_bez2_bez1_dd_tp = basic_two_product_twoProduct;
+const get_coeffs_bez2_bez1_dd_qm2 = ddMultBy2;
+const get_coeffs_bez2_bez1_dd_qmd = ddMultDouble2;
+const get_coeffs_bez2_bez1_dd_qmq = ddMultDd;
+const get_coeffs_bez2_bez1_dd_qaq = ddAddDd;
 const get_coeffs_bez2_bez1_dd_abs = Math.abs;
 const get_coeffs_bez2_bez1_dd_3 = γγ(3);
 /**
@@ -9637,18 +6642,28 @@ function getCoeffsBez2Bez1Dd(ps1, ps2) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-div-by-2.js
+/**
+ * Returns the result of dividing the given double-double by 2.
+ * @param f a double-double precision floating point number
+ */
+function ddDivBy2(f) {
+    return [f[0] / 2, f[1] / 2];
+}
+
+//# sourceMappingURL=dd-div-by-2.js.map
 ;// CONCATENATED MODULE: ./src/implicit-form/double-double/get-implicit-form3-dd-with-running-error.ts
 
 
 const get_implicit_form3_dd_with_running_error_abs = Math.abs;
-const get_implicit_form3_dd_with_running_error_qno = node_ddNegativeOf; // error -> 0
-const get_implicit_form3_dd_with_running_error_qm2 = node_ddMultBy2; // error -> 0 
-const qd2 = node_ddDivBy2; // error -> 0 
+const get_implicit_form3_dd_with_running_error_qno = ddNegativeOf; // error -> 0
+const get_implicit_form3_dd_with_running_error_qm2 = ddMultBy2; // error -> 0 
+const qd2 = ddDivBy2; // error -> 0 
 //const qmd2 = qMultDouble1;  // error -> 1.5*γ²
-const get_implicit_form3_dd_with_running_error_qmd = node_ddMultDouble2; // error -> 3*γ²
-const get_implicit_form3_dd_with_running_error_qmq = node_ddMultDd; // error -> 5*γ² (worst found), 7*γ² (theoretical), we use 6*γ²
-const get_implicit_form3_dd_with_running_error_qdq = node_ddDiffDd; // error -> 3*γ²
-const get_implicit_form3_dd_with_running_error_qaq = node_ddAddDd; // error -> 3*γ²
+const get_implicit_form3_dd_with_running_error_qmd = ddMultDouble2; // error -> 3*γ²
+const get_implicit_form3_dd_with_running_error_qmq = ddMultDd; // error -> 5*γ² (worst found), 7*γ² (theoretical), we use 6*γ²
+const get_implicit_form3_dd_with_running_error_qdq = ddDiffDd; // error -> 3*γ²
+const get_implicit_form3_dd_with_running_error_qaq = ddAddDd; // error -> 3*γ²
 /**
  * Returns a double-double precision implicit form of the given cubic
  * bezier curve curve and a coefficientwise error bound.
@@ -10028,11 +7043,11 @@ function getImplicitForm3DdWithRunningError(ps) {
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_coeffs_bez3_bez1_dd_tp = node_twoProduct;
-const get_coeffs_bez3_bez1_dd_qm2 = node_ddMultBy2;
-const get_coeffs_bez3_bez1_dd_qmd = node_ddMultDouble2;
-const get_coeffs_bez3_bez1_dd_qmq = node_ddMultDd;
-const get_coeffs_bez3_bez1_dd_qaq = node_ddAddDd;
+const get_coeffs_bez3_bez1_dd_tp = basic_two_product_twoProduct;
+const get_coeffs_bez3_bez1_dd_qm2 = ddMultBy2;
+const get_coeffs_bez3_bez1_dd_qmd = ddMultDouble2;
+const get_coeffs_bez3_bez1_dd_qmq = ddMultDd;
+const get_coeffs_bez3_bez1_dd_qaq = ddAddDd;
 const get_coeffs_bez3_bez1_dd_abs = Math.abs;
 const get_coeffs_bez3_bez1_dd_3 = γγ(3);
 /**
@@ -10355,9 +7370,9 @@ function getCoeffsBez3Bez1Dd(ps1, ps2) {
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const get_coeffs_bez1_bez2_dd_tp = (/* unused pure expression or super */ null && (twoProduct));
-const get_coeffs_bez1_bez2_dd_qaq = node_ddAddDd;
-const get_coeffs_bez1_bez2_dd_qmd = node_ddMultDouble2;
-const get_coeffs_bez1_bez2_dd_qmq = node_ddMultDd;
+const get_coeffs_bez1_bez2_dd_qaq = ddAddDd;
+const get_coeffs_bez1_bez2_dd_qmd = ddMultDouble2;
+const get_coeffs_bez1_bez2_dd_qmq = ddMultDd;
 const get_coeffs_bez1_bez2_dd_abs = Math.abs;
 const get_coeffs_bez1_bez2_dd_3 = γγ(3);
 /**
@@ -10444,11 +7459,11 @@ function getCoeffsBez1Bez2Dd(ps1, ps2) {
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_coeffs_bez2_bez2_dd_tp = node_twoProduct;
-const get_coeffs_bez2_bez2_dd_qm2 = node_ddMultBy2;
-const get_coeffs_bez2_bez2_dd_qmd = node_ddMultDouble2;
-const get_coeffs_bez2_bez2_dd_qmq = node_ddMultDd;
-const get_coeffs_bez2_bez2_dd_qaq = node_ddAddDd;
+const get_coeffs_bez2_bez2_dd_tp = basic_two_product_twoProduct;
+const get_coeffs_bez2_bez2_dd_qm2 = ddMultBy2;
+const get_coeffs_bez2_bez2_dd_qmd = ddMultDouble2;
+const get_coeffs_bez2_bez2_dd_qmq = ddMultDd;
+const get_coeffs_bez2_bez2_dd_qaq = ddAddDd;
 const get_coeffs_bez2_bez2_dd_abs = Math.abs;
 const get_coeffs_bez2_bez2_dd_3 = γγ(3);
 /**
@@ -10748,11 +7763,11 @@ function getCoeffsBez2Bez2Dd(ps1, ps2) {
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_coeffs_bez3_bez2_dd_tp = node_twoProduct;
-const get_coeffs_bez3_bez2_dd_qm2 = node_ddMultBy2;
-const get_coeffs_bez3_bez2_dd_qmd = node_ddMultDouble2;
-const get_coeffs_bez3_bez2_dd_qmq = node_ddMultDd;
-const get_coeffs_bez3_bez2_dd_qaq = node_ddAddDd;
+const get_coeffs_bez3_bez2_dd_tp = basic_two_product_twoProduct;
+const get_coeffs_bez3_bez2_dd_qm2 = ddMultBy2;
+const get_coeffs_bez3_bez2_dd_qmd = ddMultDouble2;
+const get_coeffs_bez3_bez2_dd_qmq = ddMultDd;
+const get_coeffs_bez3_bez2_dd_qaq = ddAddDd;
 const get_coeffs_bez3_bez2_dd_abs = Math.abs;
 const get_coeffs_bez3_bez2_dd_3 = γγ(3);
 /**
@@ -11484,9 +8499,9 @@ function getCoeffsBez3Bez2Dd(ps1, ps2) {
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const get_coeffs_bez1_bez3_dd_tp = (/* unused pure expression or super */ null && (twoProduct));
-const get_coeffs_bez1_bez3_dd_qaq = node_ddAddDd;
-const get_coeffs_bez1_bez3_dd_qmd = node_ddMultDouble2;
-const get_coeffs_bez1_bez3_dd_qmq = node_ddMultDd;
+const get_coeffs_bez1_bez3_dd_qaq = ddAddDd;
+const get_coeffs_bez1_bez3_dd_qmd = ddMultDouble2;
+const get_coeffs_bez1_bez3_dd_qmq = ddMultDd;
 const get_coeffs_bez1_bez3_dd_abs = Math.abs;
 const get_coeffs_bez1_bez3_dd_3 = γγ(3);
 /**
@@ -11562,11 +8577,11 @@ function getCoeffsBez1Bez3Dd(ps1, ps2) {
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_coeffs_bez2_bez3_dd_tp = node_twoProduct;
-const get_coeffs_bez2_bez3_dd_qm2 = node_ddMultBy2;
-const get_coeffs_bez2_bez3_dd_qmd = node_ddMultDouble2;
-const get_coeffs_bez2_bez3_dd_qmq = node_ddMultDd;
-const get_coeffs_bez2_bez3_dd_qaq = node_ddAddDd;
+const get_coeffs_bez2_bez3_dd_tp = basic_two_product_twoProduct;
+const get_coeffs_bez2_bez3_dd_qm2 = ddMultBy2;
+const get_coeffs_bez2_bez3_dd_qmd = ddMultDouble2;
+const get_coeffs_bez2_bez3_dd_qmq = ddMultDd;
+const get_coeffs_bez2_bez3_dd_qaq = ddAddDd;
 const get_coeffs_bez2_bez3_dd_abs = Math.abs;
 const get_coeffs_bez2_bez3_dd_3 = γγ(3);
 /**
@@ -12003,11 +9018,11 @@ function getCoeffsBez2Bez3Dd(ps1, ps2) {
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_coeffs_bez3_bez3_dd_tp = node_twoProduct;
-const get_coeffs_bez3_bez3_dd_qm2 = node_ddMultBy2;
-const get_coeffs_bez3_bez3_dd_qmd = node_ddMultDouble2;
-const get_coeffs_bez3_bez3_dd_qmq = node_ddMultDd;
-const get_coeffs_bez3_bez3_dd_qaq = node_ddAddDd;
+const get_coeffs_bez3_bez3_dd_tp = basic_two_product_twoProduct;
+const get_coeffs_bez3_bez3_dd_qm2 = ddMultBy2;
+const get_coeffs_bez3_bez3_dd_qmd = ddMultDouble2;
+const get_coeffs_bez3_bez3_dd_qmq = ddMultDd;
+const get_coeffs_bez3_bez3_dd_qaq = ddAddDd;
 const get_coeffs_bez3_bez3_dd_abs = Math.abs;
 const get_coeffs_bez3_bez3_dd_3 = γγ(3);
 /**
@@ -13270,7 +10285,7 @@ function getCoeffsBez3Bez3Dd(ps1, ps2) {
 const get_implicit_form1_exact_sce = scaleExpansion2;
 const get_implicit_form1_exact_edif = eDiff;
 const get_implicit_form1_exact_eno = eNegativeOf;
-const get_implicit_form1_exact_eSign = e_sign_eSign;
+const get_implicit_form1_exact_eSign = eSign;
 /**
  * Returns the *exact* implicit form of the given linear bezier curve (a line
  * segment) or `undefined` if the line degenerates to a point.
@@ -13369,6 +10384,23 @@ function getCoeffsBez1Bez1Exact(ps1, ps2) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-mult-by-2.js
+/**
+ * Returns the result of multiplying a floating point expansion by 2.
+ * * **error free**
+ * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ *
+ * @param e a floating point expansion
+ */
+function eMultBy2(e) {
+    const e_ = [];
+    for (let i = 0; i < e.length; i++) {
+        e_.push(2 * e[i]);
+    }
+    return e_;
+}
+
+//# sourceMappingURL=e-mult-by-2.js.map
 ;// CONCATENATED MODULE: ./src/implicit-form/exact/get-implicit-form2-exact.ts
 
 
@@ -13406,7 +10438,7 @@ function getImplicitForm2Exact(ps) {
  */
 function getImplicitForm2ExactPb(pspb) {
     const [[a2, a1, [a0]], [b2, b1, [b0]]] = pspb;
-    if (e_sign_eSign(a2) === 0 && e_sign_eSign(b2) === 0) {
+    if (eSign(a2) === 0 && eSign(b2) === 0) {
         // the input bezier curve is in fact not quadratic but has order < 2
         return getImplicitForm1ExactPb([[a1, [a0]], [b1, [b0]]]);
     }
@@ -13464,7 +10496,7 @@ const get_coeffs_bez2_bez1_exact_sce = scaleExpansion2;
 const get_coeffs_bez2_bez1_exact_epr = expansionProduct;
 const get_coeffs_bez2_bez1_exact_fes = fastExpansionSum;
 const get_coeffs_bez2_bez1_exact_em2 = eMultBy2;
-const get_coeffs_bez2_bez1_exact_eSign = e_sign_eSign;
+const get_coeffs_bez2_bez1_exact_eSign = eSign;
 /**
  * Returns an error-free polynomial in 1 variable
  * whose roots are the parameter values of the intersection points of an order
@@ -13546,6 +10578,24 @@ function getCoeffsBez2Bez1Exact(ps1, ps2) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-div-by-2.js
+/**
+ * Returns the result of dividing a floating point expansion by 2.
+ * * **error free**
+ *
+ * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ *
+ * @param e a floating point expansion
+ */
+function eDivBy2(e) {
+    const e_ = [];
+    for (let i = 0; i < e.length; i++) {
+        e_.push(0.5 * e[i]);
+    }
+    return e_;
+}
+
+//# sourceMappingURL=e-div-by-2.js.map
 ;// CONCATENATED MODULE: ./src/implicit-form/exact/get-implicit-form3-exact.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
@@ -13559,7 +10609,7 @@ const get_implicit_form3_exact_edif = eDiff;
 const get_implicit_form3_exact_eno = eNegativeOf;
 const get_implicit_form3_exact_em2 = eMultBy2;
 const ed2 = eDivBy2;
-const get_implicit_form3_exact_eSign = e_sign_eSign;
+const get_implicit_form3_exact_eSign = eSign;
 /**
  * Returns the exact implicit form of the given cubic bezier curve
  * or `undefined` if the curve degenerates to a point.
@@ -13704,7 +10754,7 @@ const get_coeffs_bez3_bez1_exact_sce = scaleExpansion2;
 const get_coeffs_bez3_bez1_exact_epr = expansionProduct;
 const get_coeffs_bez3_bez1_exact_fes = fastExpansionSum;
 const get_coeffs_bez3_bez1_exact_em2 = eMultBy2;
-const get_coeffs_bez3_bez1_exact_eSign = e_sign_eSign;
+const get_coeffs_bez3_bez1_exact_eSign = eSign;
 /**
  * Returns an error-free polynomial in 1 variable
  * whose roots are the parameter values of the intersection points of an order
@@ -13862,7 +10912,7 @@ function getCoeffsBez3Bez1Exact(ps1, ps2) {
 const get_coeffs_bez1_bez2_exact_sce = scaleExpansion2;
 const get_coeffs_bez1_bez2_exact_epr = expansionProduct;
 const get_coeffs_bez1_bez2_exact_fes = fastExpansionSum;
-const get_coeffs_bez1_bez2_exact_eSign = e_sign_eSign;
+const get_coeffs_bez1_bez2_exact_eSign = eSign;
 /**
  * Returns an error-free polynomial in 1 variable
  * whose roots are the parameter values of the intersection points of an order
@@ -13933,7 +10983,7 @@ const get_coeffs_bez2_bez2_exact_sce = scaleExpansion2;
 const get_coeffs_bez2_bez2_exact_epr = expansionProduct;
 const get_coeffs_bez2_bez2_exact_fes = fastExpansionSum;
 const get_coeffs_bez2_bez2_exact_em2 = eMultBy2;
-const get_coeffs_bez2_bez2_exact_eSign = e_sign_eSign;
+const get_coeffs_bez2_bez2_exact_eSign = eSign;
 /**
  * Returns an error-free polynomial in 1 variable
  * whose roots are the parameter values of the intersection points of 2 order
@@ -14088,7 +11138,7 @@ const get_coeffs_bez3_bez2_exact_sce = scaleExpansion2;
 const get_coeffs_bez3_bez2_exact_epr = expansionProduct;
 const get_coeffs_bez3_bez2_exact_fes = fastExpansionSum;
 const get_coeffs_bez3_bez2_exact_em2 = eMultBy2;
-const get_coeffs_bez3_bez2_exact_eSign = e_sign_eSign;
+const get_coeffs_bez3_bez2_exact_eSign = eSign;
 /**
  * Returns an error-free polynomial in 1 variable
  * whose roots are the parameter values of the intersection points of an order
@@ -14409,7 +11459,7 @@ function getCoeffsBez3Bez2Exact(ps1, ps2) {
 const get_coeffs_bez1_bez3_exact_sce = scaleExpansion2;
 const get_coeffs_bez1_bez3_exact_epr = expansionProduct;
 const get_coeffs_bez1_bez3_exact_fes = fastExpansionSum;
-const get_coeffs_bez1_bez3_exact_eSign = e_sign_eSign;
+const get_coeffs_bez1_bez3_exact_eSign = eSign;
 /**
  * Returns an error-free polynomial in 1 variable
  * whose roots are the parameter values of the intersection points of an order
@@ -14485,7 +11535,7 @@ const get_coeffs_bez2_bez3_exact_sce = scaleExpansion2;
 const get_coeffs_bez2_bez3_exact_epr = expansionProduct;
 const get_coeffs_bez2_bez3_exact_fes = fastExpansionSum;
 const get_coeffs_bez2_bez3_exact_em2 = eMultBy2;
-const get_coeffs_bez2_bez3_exact_eSign = e_sign_eSign;
+const get_coeffs_bez2_bez3_exact_eSign = eSign;
 /**
  * Returns an error-free polynomial in 1 variable
  * whose roots are the parameter values of the intersection points of an order
@@ -14690,7 +11740,7 @@ const get_coeffs_bez3_bez3_exact_sce = scaleExpansion2;
 const get_coeffs_bez3_bez3_exact_epr = expansionProduct;
 const get_coeffs_bez3_bez3_exact_fes = fastExpansionSum;
 const get_coeffs_bez3_bez3_exact_em2 = eMultBy2;
-const get_coeffs_bez3_bez3_exact_eSign = e_sign_eSign;
+const get_coeffs_bez3_bez3_exact_eSign = eSign;
 /**
  * Returns an error-free polynomial in in 1 variable
  * whose roots are the parameter values of the intersection points of 2 order
@@ -15208,6 +12258,27 @@ function bezierBezierIntersectionBoundless(ps1, ps2) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-to-double-double.js
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
+const e_to_double_double_compress = e_compress_eCompress;
+/**
+ * Returns the result of converting a floating point expansion to a
+ * double-double precision floating point number.
+ */
+function eToDd(e) {
+    e = e_to_double_double_compress(e);
+    const len = e.length;
+    if (len === 2) {
+        return e; // already a double-double
+    }
+    else if (len === 1) {
+        return [0, e[0]]; // double-doubles have a fixed length of 2
+    }
+    return [e[len - 2], e[len - 1]]; // return only most significant parts
+}
+
+//# sourceMappingURL=e-to-double-double.js.map
 ;// CONCATENATED MODULE: ./src/simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension-1.ts
 
 
@@ -15215,12 +12286,12 @@ function bezierBezierIntersectionBoundless(ps1, ps2) {
 
 
 
-const is_point_on_bezier_extension_1_qaq = node_ddAddDd;
+const is_point_on_bezier_extension_1_qaq = ddAddDd;
 const is_point_on_bezier_extension_1_epr = expansionProduct;
 const is_point_on_bezier_extension_1_fes = fastExpansionSum;
-const is_point_on_bezier_extension_1_sign = e_sign_eSign;
+const sign = eSign;
 const is_point_on_bezier_extension_1_estimate = eEstimate;
-const is_point_on_bezier_extension_1_qmq = node_ddMultDd;
+const is_point_on_bezier_extension_1_qmq = ddMultDd;
 const etodd = eToDd;
 const is_point_on_bezier_extension_1_abs = Math.abs;
 const is_point_on_bezier_extension_1_3 = γγ(3);
@@ -15295,7 +12366,7 @@ function isPointOnBezierExtension1(ps, p) {
         const vᵧy = is_point_on_bezier_extension_1_epr(ye, vᵧ);
         // const h = vₓ*x + vᵧ*y + v;
         const hh = is_point_on_bezier_extension_1_fes(is_point_on_bezier_extension_1_fes(vₓx, vᵧy), v);
-        return is_point_on_bezier_extension_1_sign(hh) === 0; // <= calculation was exact
+        return sign(hh) === 0; // <= calculation was exact
     }
 }
 
@@ -15585,11 +12656,11 @@ function getImplicitForm2ErrorCounters(ps) {
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 
 
-const is_point_on_bezier_extension_2_qmq = node_ddMultDd;
-const is_point_on_bezier_extension_2_qaq = node_ddAddDd;
+const is_point_on_bezier_extension_2_qmq = ddMultDd;
+const is_point_on_bezier_extension_2_qaq = ddAddDd;
 const is_point_on_bezier_extension_2_epr = expansionProduct;
 const is_point_on_bezier_extension_2_fes = fastExpansionSum;
-const is_point_on_bezier_extension_2_sign = e_sign_eSign;
+const is_point_on_bezier_extension_2_sign = eSign;
 const is_point_on_bezier_extension_2_estimate = eEstimate;
 const is_point_on_bezier_extension_2_etodd = eToDd;
 const is_point_on_bezier_extension_2_abs = Math.abs;
@@ -15944,11 +13015,11 @@ function getImplicitForm3ErrorCounters(ps) {
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 
 
-const is_point_on_bezier_extension_3_qmq = node_ddMultDd;
-const is_point_on_bezier_extension_3_qaq = node_ddAddDd;
+const is_point_on_bezier_extension_3_qmq = ddMultDd;
+const is_point_on_bezier_extension_3_qaq = ddAddDd;
 const is_point_on_bezier_extension_3_epr = expansionProduct;
 const is_point_on_bezier_extension_3_fes = fastExpansionSum;
-const is_point_on_bezier_extension_3_sign = e_sign_eSign;
+const is_point_on_bezier_extension_3_sign = eSign;
 const is_point_on_bezier_extension_3_estimate = eEstimate;
 const is_point_on_bezier_extension_3_etodd = eToDd;
 const is_point_on_bezier_extension_3_abs = Math.abs;
@@ -16235,11 +13306,11 @@ function isPointOnBezierExtension(ps, p) {
 ;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis/double-double/to-power-basis-dd.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const to_power_basis_dd_td = node_twoDiff; // error -> 0
-const to_power_basis_dd_qmd = node_ddMultDouble2; // error -> 3*u²
-const to_power_basis_dd_qaq = node_ddAddDd;
-const to_power_basis_dd_qad = node_ddAddDouble; // error -> 2*u²
-const to_power_basis_dd_ts = node_twoSum;
+const to_power_basis_dd_td = two_diff_twoDiff; // error -> 0
+const to_power_basis_dd_qmd = ddMultDouble2; // error -> 3*u²
+const to_power_basis_dd_qaq = ddAddDd;
+const to_power_basis_dd_qad = ddAddDouble; // error -> 2*u²
+const to_power_basis_dd_ts = two_sum_twoSum;
 /**
  * Returns the power basis representation of a bezier curve of order cubic or
  * less.
@@ -17037,6 +14108,186 @@ function intersectBoxes(a, b) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-mult-by-neg-2.js
+/**
+ * Multiply a floating point expansion by -2.
+ * * **error free**
+ * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ *
+ * @param e a floating point expansion
+ */
+function eMultByNeg2(e) {
+    const e_ = [];
+    for (let i = 0; i < e.length; i++) {
+        e_.push(-2 * e[i]);
+    }
+    return e_;
+}
+
+//# sourceMappingURL=e-mult-by-neg-2.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-abs.js
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
+const e_abs_negativeOf = eNegativeOf;
+/**
+ * Returns the absolute value of the given floating point expansion.
+ *
+ * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ *
+ * @param e a floating point expansion
+ */
+function eAbs(e) {
+    if (e[e.length - 1] < 0) {
+        return e_abs_negativeOf(e);
+    }
+    return e;
+}
+
+//# sourceMappingURL=e-abs.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-div-dd.js
+/** @internal */
+const dd_div_dd_f = 134217729; // 2**27 + 1;
+/**
+ * Returns the result of dividing two double-double-precision floating point
+ * numbers, i.e. returns x/y.
+ *
+ * * relative error bound: 15u^2 + 56u^3, i.e. fl(a/b) = (a/b)(1+ϵ),
+ * where ϵ <= 15u^2 + 56u^3, u = 0.5 * Number.EPSILON
+ * * the largest error found was 8.465u^2
+ *
+ * * ALGORITHM 17 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
+ * @param x a double-double precision floating point number
+ * @param y another double-double precision floating point number
+ */
+function ddDivDd(x, y) {
+    const xl = x[0];
+    const xh = x[1];
+    const yl = y[0];
+    const yh = y[1];
+    const th = xh / yh;
+    // approximation to th*(yh + yl) using Algorithm 7
+    //const [rl,rh] = ddMultDouble1(th,[yl,yh]);  
+    const ch = yh * th;
+    const c = dd_div_dd_f * yh;
+    const ah = c - (c - yh);
+    const al = yh - ah;
+    const d = dd_div_dd_f * th;
+    const bh = d - (d - th);
+    const bl = th - bh;
+    const cl1 = (al * bl) - ((ch - (ah * bh)) - (al * bh) - (ah * bl));
+    const cl2 = yl * th;
+    const th_ = ch + cl2;
+    const tl1 = cl2 - (th_ - ch);
+    const tl2 = tl1 + cl1;
+    const rh = th_ + tl2;
+    const rl = tl2 - (rh - th_);
+    const πh = xh - rh; // exact operation
+    const δl = xl - rl;
+    const δ = πh + δl;
+    const tl = δ / yh;
+    //return fastTwoSum(th,tl);
+    const xx = th + tl;
+    return [tl - (xx - th), xx];
+}
+
+//# sourceMappingURL=dd-div-dd.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-with-err/sqrt-with-err.js
+/** @internal */
+const sqrt_with_err_eps = Number.EPSILON;
+/**
+ * Returns the result of the square root of a double floating point number
+ * together with an absolute error bound where x_ is an absolute error
+ * bound on the input value.
+ * * see also "A Reduced Product of Absolute and Relative Error Bounds for Floating-point Analysis"
+ * by Maxime Jacquemin, Sylvie Putot, and Franck Vedrine
+ * @param x numerator
+ * @param x_ absolute value error bound in numerator
+ */
+function sqrtWithErr(x, x_) {
+    // Note: it is assumed x + x_ >= 0, else the error in x_ was wrong in the
+    // first place (since we can't have a negative input to the square root)
+    // estimate the result of the square root
+    if (x - x_ <= 0) {
+        const est = x > 0 ? Math.sqrt(x) : 0;
+        return {
+            est,
+            err: Math.max(Math.sqrt(x + x_) - est, est)
+        };
+    }
+    const est = Math.sqrt(x);
+    const minSqrt = Math.sqrt(x - x_);
+    const maxSqrt = Math.sqrt(x + x_);
+    const err = Math.max(Math.abs(minSqrt - est), Math.abs(maxSqrt - est));
+    //err += eps*abs(est + err);
+    //err = eps*abs(est + err);
+    // approx relative input error
+    //const rel = x_/abs(x);
+    // propogated error bound
+    //const err = est*(Math.sqrt(1 + rel) - 1) + u*abs(est);
+    return { est, err };
+}
+
+//# sourceMappingURL=sqrt-with-err.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-with-err/div-with-err.js
+/** @internal */
+const div_with_err_u = Number.EPSILON / 2;
+/**
+ * Returns the result of dividing two double floating point numbers
+ * together with an absolute error bound where nE and dE are absolute error
+ * bounds on the input values.
+ * @param n numerator
+ * @param d denominator
+ * @param nE absolute value error bound in numerator
+ * @param dE absolute value error bound in denominator
+ */
+function divWithErr(n, d, nE, dE) {
+    // estimate the result of the division
+    const est = n / d;
+    const _n = Math.abs(n);
+    const _d = Math.abs(d);
+    // if the error in the denominator is too high the error can be 
+    // arbitrarily high
+    const minD = _d - dE;
+    // maxErr is only valid if minD > 0
+    if (minD <= 0) {
+        // the error can be arbitrarily high; est is mostly irrelevant
+        return { est, err: Number.POSITIVE_INFINITY };
+    }
+    const err = ((_d * nE + _n * dE) / minD ** 2) + div_with_err_u * Math.abs(_n / _d);
+    return { est, err };
+}
+
+//# sourceMappingURL=div-with-err.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-sqrt.js
+/** @internal */
+const dd_sqrt_f = 134217729; // 2**27 + 1;
+// Taken from https://github.com/munrocket/double.js/blob/master/src/double.ts
+// Unfortunately no error bound given
+/**
+ * Returns the square root of a double-double as a double-double.
+ * * no error bound is returned
+ *
+ * @param x a double-double precision floating point number
+ */
+// TODO - calculate an error bound and add to function description
+function ddSqrt(x) {
+    const xl = x[0];
+    const xh = x[1];
+    if (xh === 0) {
+        return [0, 0];
+    }
+    const s = Math.sqrt(xh);
+    //const [tl,th] = twoSquare(s);
+    const th = s * s;
+    const c = dd_sqrt_f * s;
+    const ah = c - (c - s);
+    const al = s - ah;
+    const tl = (al * al) - ((th - (ah * ah)) - 2 * (ah * al));
+    const e = (xh - th - tl + xl) * 0.5 / s;
+    return [e - ((s + e) - s), s + e];
+}
+
+//# sourceMappingURL=dd-sqrt.js.map
 ;// CONCATENATED MODULE: ./src/intersection/self-intersection/bezier-self-intersection.ts
 
 
@@ -17046,12 +14297,12 @@ function intersectBoxes(a, b) {
 const bezier_self_intersection_edif = eDiff;
 const bezier_self_intersection_epr = expansionProduct;
 const bezier_self_intersection_sce = scaleExpansion2;
-const bezier_self_intersection_td = node_twoDiff;
-const bezier_self_intersection_ts = node_twoSum;
-const bezier_self_intersection_qno = node_ddNegativeOf;
-const bezier_self_intersection_qaq = node_ddAddDd;
-const bezier_self_intersection_qm2 = node_ddMultBy2;
-const qdivq = node_ddDivDd;
+const bezier_self_intersection_td = two_diff_twoDiff;
+const bezier_self_intersection_ts = two_sum_twoSum;
+const bezier_self_intersection_qno = ddNegativeOf;
+const bezier_self_intersection_qaq = ddAddDd;
+const bezier_self_intersection_qm2 = ddMultBy2;
+const qdivq = ddDivDd;
 const bezier_self_intersection_fes = fastExpansionSum;
 const bezier_self_intersection_ge = growExpansion;
 const bezier_self_intersection_eps = Number.EPSILON;
@@ -17125,7 +14376,7 @@ function bezierSelfIntersection(ps, inRange = true) {
     // if the discriminant is definitely positive
     if (Discr > Discr_) {
         // calculate roots naively as a fast pre-filter
-        const { est: D, err: D_ } = node_sqrtWithErr(Discr, Discr_);
+        const { est: D, err: D_ } = sqrtWithErr(Discr, Discr_);
         let q1;
         if (b >= 0) {
             // const r1 = (-b - D) / 2*a;
@@ -17138,8 +14389,8 @@ function bezierSelfIntersection(ps, inRange = true) {
             q1 = -b + D;
         }
         const q1_ = b_ + D_ + bezier_self_intersection_1 * bezier_self_intersection_abs(q1);
-        const { est: r1, err: r1_ } = node_divWithErr(q1, 2 * a, q1_, 2 * a_);
-        const { est: r2, err: r2_ } = node_divWithErr(2 * c, q1, 2 * c_, q1_);
+        const { est: r1, err: r1_ } = divWithErr(q1, 2 * a, q1_, 2 * a_);
+        const { est: r2, err: r2_ } = divWithErr(2 * c, q1, 2 * c_, q1_);
         // the actual 'filter' follows
         if (inRange) {
             // IF at least one root is not in [0,1]
@@ -17162,18 +14413,18 @@ function bezierSelfIntersection(ps, inRange = true) {
     let [A, B, C] = getCoeffsBez3Exact(ps);
     // exact - Discr = b^2 - 4ac
     const eDiscr = bezier_self_intersection_edif(bezier_self_intersection_epr(B, B), bezier_self_intersection_sce(4, bezier_self_intersection_epr(A, C)));
-    const sgnDiscr = e_sign_eSign(eDiscr);
+    const sgnDiscr = eSign(eDiscr);
     if (sgnDiscr < 0) {
         // sgn < 0 => no real roots => no cusp or double point for t in [0,1]
         return [];
     }
     if (sgnDiscr > 0) {
-        const D = node_ddSqrt(eToDd(eDiscr));
+        const D = ddSqrt(eToDd(eDiscr));
         A = eToDd(A);
         B = eToDd(B);
         C = eToDd(C);
         let nBD;
-        if (e_sign_eSign(B) >= 0) {
+        if (eSign(B) >= 0) {
             nBD = bezier_self_intersection_qno(bezier_self_intersection_qaq(B, D));
             //t1 = (-B - D) / (2*A);
             //t2 = (2*C) / (-B - D);
@@ -17218,8 +14469,8 @@ function bezierSelfIntersection(ps, inRange = true) {
     // sign === 0 => cusp
     // set t = b/d = b/-2a
     const d = eMultByNeg2(A);
-    const sgnB = e_sign_eSign(B);
-    const sgnD = e_sign_eSign(d);
+    const sgnB = eSign(B);
+    const sgnD = eSign(d);
     // if result is negative the cusp is outside the bezier endpoints
     const sgn_ = sgnB * sgnD;
     if (sgn_ < 0) {
@@ -17286,6 +14537,366 @@ function ensureRange(t, min1Sign) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/double-to-octets.js
+// Modified from https://github.com/bartaz/ieee754-visualization/
+// under the MIT license
+// Copyright 2013 Bartek Szopka (original author)
+/**
+ * Returns the ieee-574 8 bytes composing the given double, starting from the
+ * sign bit and ending in the lsb of the significand.
+ * e.g. 123.456 -> [64, 94, 221, 47, 26, 159, 190, 119]
+ */
+function doubleToOctets(number) {
+    const buffer = new ArrayBuffer(8);
+    new DataView(buffer).setFloat64(0, number, false);
+    return Array.from(new Uint8Array(buffer));
+}
+
+//# sourceMappingURL=double-to-octets.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/parse-double.js
+// Modified from https://github.com/bartaz/ieee754-visualization/
+// under the MIT license
+// Copyright 2013 Bartek Szopka (original author)
+
+
+/**
+ * Returns the relevant parts of the given IEEE-754 double. The returned
+ * exponent has been normalized (i.e. 1023 ha been subtracted) and the
+ * significand has the hidden bit added if appropriate.
+ * See https://github.com/bartaz/ieee754-visualization
+ */
+function parseDouble(x) {
+    const parts = doubleToOctets(x);
+    const p0 = parts[0];
+    const p1 = parts[1];
+    const sign = p0 >> 7;
+    const exponent_ = ((p0 & 127) << 4) + ((p1 & 0b11110000) >> 4);
+    //---- Check for negative / positive zero / denormalized numbers.
+    const hiddenMsb = exponent_ === 0 ? 0 : 16;
+    // Note: exponent === 0 => 0 or denormalized number (a.k.a. subnormal number).
+    const exponent = exponent_ === 0
+        ? exponent_ - 1022 // Subnormals use a biased exponent of 1 (not 0!)
+        : exponent_ - 1023;
+    //---- Break up the significand into bytes
+    const significand = parts.slice(1);
+    significand[0] = (p1 & 15) + hiddenMsb;
+    return {
+        sign,
+        exponent,
+        significand
+    };
+}
+/**
+ * Returns the relevant parts of the given IEEE-754 double.
+ * See https://github.com/bartaz/ieee754-visualization.
+ * This is a slower version of parseDouble that gives binary string
+ * representations of the components.
+ */
+function parseDoubleDetailed(x) {
+    const str = doubleToBinaryString(x);
+    // sign{1} exponent{11} fraction{52} === 64 bits (+1 hidden!)
+    const [, sign, exponent, significand] = str.match(/^(.)(.{11})(.{52})$/);
+    const exponent_ = parseInt(exponent, 2);
+    const hidden = exponent_ === 0 ? "0" : "1";
+    return {
+        full: sign + exponent + hidden + significand,
+        sign,
+        exponent,
+        hidden,
+        significand
+    };
+}
+
+//# sourceMappingURL=parse-double.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/significand.js
+
+/**
+ * Return the significand of the given double with the hidden bit added (in case
+ * a is not subnormal or 0, etc.)
+ * @param a A double
+ */
+function significand(a) {
+    return parseDouble(a).significand;
+}
+
+//# sourceMappingURL=significand.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/get-max-set-bit.js
+
+/**
+ * Returns the lowest set bit of the given value in [1, (2**31)-1],
+ * i.e. from 1 up to 2147483647 else if no bit is set (input === 0) returns
+ * NaN, otherwise if the number is out of range returns a non-finite
+ * number.
+ * See https://stackoverflow.com/a/35190288/2010061
+ */
+function getLowestSetBit_(a) {
+    return Math.log2(a & -a);
+}
+/**
+ * Returns the lowest set bit of the given number's significand (where the lsb
+ * is bit 0 and the msb is bit 52). If no bit is set (input === 0 or +-inf or
+ * NaN) returns NaN.
+ * See https://stackoverflow.com/a/35190288/2010061
+ */
+function getLowestSetBit(a) {
+    if (a === 0 || !Number.isFinite(a)) {
+        // There is no lowest set bit
+        return NaN;
+    }
+    // Note: the significand includes the hidden bit!
+    const s = significand(a);
+    const len = s.length;
+    for (let i = len - 1; i >= 0; i--) {
+        if (s[i] === 0) {
+            continue;
+        }
+        const l = getLowestSetBit_(s[i]);
+        if (Number.isFinite(l)) {
+            return (8 * (len - i - 1)) + l;
+        }
+    }
+    return NaN;
+}
+/**
+ * Returns the highest set bit of the given value in [1, 255], i.e. from 1 up
+ * to 255. If the input number === 0 returns NaN.
+ * See https://stackoverflow.com/a/35190288/2010061
+ */
+function getHighestSetBit_(a) {
+    return a >= 128 ? 7
+        : a >= 64 ? 6
+            : a >= 32 ? 5
+                : a >= 16 ? 4
+                    : a >= 8 ? 3
+                        : a >= 4 ? 2
+                            : a >= 2 ? 1
+                                : a >= 1 ? 0
+                                    : NaN;
+}
+/**
+ * Returns the highest set bit of the given double. If no bit is set (input
+ * === 0 or +/-inf or NaN) returns NaN.
+ * See https://stackoverflow.com/a/35190288/2010061
+ */
+function getHighestSetBit(a) {
+    if (a === 0 || !Number.isFinite(a)) {
+        // There is no lowest set bit
+        return NaN;
+    }
+    // At this point there must be a highest set bit (always === 52 if the 
+    // number is not a subnormal.
+    const s = significand(a);
+    const len = s.length;
+    for (let i = 0; i < len; i++) {
+        const l = getHighestSetBit_(s[i]);
+        if (Number.isFinite(l)) {
+            return (8 * (len - i - 1)) + l;
+        }
+    }
+    return NaN;
+}
+
+//# sourceMappingURL=get-max-set-bit.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/exponent.js
+
+/**
+ * Returns the normalized exponent of the given number.
+ * @param a A double
+ */
+function exponent(a) {
+    return parseDouble(a).exponent;
+}
+
+//# sourceMappingURL=exponent.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/msb-exponent.js
+
+
+/**
+ * Returns the true exponent of the msb that is set of the given number or
+ * NaN if a === 0 or +-inf or NaN.
+ * @param a An array of numbers to check
+ */
+function msbExponent(a) {
+    if (a === 0 || !Number.isFinite(a)) {
+        return NaN;
+    }
+    const e = exponent(a);
+    // Will return e for all but subnormal numbers
+    return getHighestSetBit(a) - 52 + e;
+}
+
+//# sourceMappingURL=msb-exponent.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/basic/reduce-significand.js
+/**
+ * Truncates a floating point value's significand and returns the result.
+ * Similar to split, but with the ability to specify the number of bits to keep.
+ *
+ * Theorem 17 (Veltkamp-Dekker): Let a be a p-bit floating-point number, where
+ * p >= 3. Choose a splitting point s such that p/2 <= s <= p-1. Then the
+ * following algorithm will produce a (p-s)-bit value a_hi and a
+ * nonoverlapping (s-1)-bit value a_lo such that abs(a_hi) >= abs(a_lo) and
+ * a = a_hi + a_lo.
+ *
+ * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ *
+ * @param a a double
+ * @param bits the number of significand bits to leave intact
+ */
+function reduceSignificand(a, bits) {
+    const s = 53 - bits;
+    const f = 2 ** s + 1;
+    const c = f * a;
+    const r = c - (c - a);
+    return r;
+}
+
+//# sourceMappingURL=reduce-significand.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-to-bitlength.js
+
+
+
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
+const e_to_bitlength_sign = eSign;
+const e_to_bitlength_compress = e_compress_eCompress;
+/**
+ * Returns a floating point expansion accurate to the given number of bits.
+ * Extraneous bits are discarded.
+ * @param a a floating point expansion
+ * @param l the number of accurate bits to keep
+ */
+// TODO - make faster
+function eToBitlength(a, l) {
+    a = e_to_bitlength_compress(a);
+    if (e_to_bitlength_sign(a) === 0) {
+        return [0];
+    }
+    const maxMsb = msbExponent(a[a.length - 1]);
+    let msb = maxMsb;
+    let i = a.length - 1; // start at most significant byte
+    while (i > 0) {
+        const msb_ = msbExponent(a[i - 1]);
+        if (maxMsb - msb_ > l) {
+            break;
+        }
+        msb = msb_;
+        i--;
+    }
+    const keepBits = Math.min(l - (maxMsb - msb), 53);
+    let b = a[i];
+    b = reduceSignificand(b, keepBits);
+    const result = a.slice(i);
+    result[0] = b;
+    return result;
+}
+
+//# sourceMappingURL=e-to-bitlength.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/bit-length.js
+
+
+
+
+/**
+ * Returns the bit-length of the significand of the given number in such a way
+ * that trailing zeros are not counted.
+ * @param a A double precision floating point number
+ */
+function bitLength(a) {
+    if (a === 0) {
+        return 0;
+    }
+    return getHighestSetBit(a) - getLowestSetBit(a) + 1;
+}
+/**
+ * Returns the bit-length of the significand of the given floating point
+ * expansion in such a way that trailing zeros are not counted.
+ * * precondition: subnormals not currently supported
+ * @param a A double precision floating point expansion
+ */
+function expBitLength(a) {
+    const a_ = e_compress_eCompress(a);
+    if (eSign(a_) === 0) {
+        return 0;
+    }
+    const msbyte = a_[a_.length - 1];
+    const lsbyte = a_[0];
+    return exponent(msbyte) - exponent(lsbyte) + (53 - getLowestSetBit(lsbyte));
+}
+
+//# sourceMappingURL=bit-length.js.map
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-div.js
+
+
+
+
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
+const mult = expansionProduct;
+const toBitlength = eToBitlength;
+const e_div_bitLength = expBitLength;
+const diff = eDiff;
+const e_div_estimate = eEstimate;
+/**
+ * Returns the result of a/b using Goldschmidt division.
+ *
+ * The result will only be exact if b|a, i.e. if b divides a exactly, else the
+ * result will be rounded to the longest bitlength between a and b.
+ *
+ * @param a the numerator
+ * @param b the denominator
+ *
+ * @param expansionLength the bitlength/53 of the final result, e.g. 1 means
+ * standard double precision, 2 means double-double, etc up to a max of about 20 at
+ * which point underflow cease precision improvement. If the division is known
+ * to be exact beforehand (such as in the pseudo remainder sequence algorithm)
+ * then set expansionLength === 0 and an exact division will be done.
+ */
+// TODO - test this function properly or replace with a better one
+function eDiv(N, D, expansionLength) {
+    let D_ = D;
+    let N_ = N;
+    let exact = false;
+    let resultBitlengthUpperBound = 0;
+    if (!expansionLength) {
+        const bitlengthN = e_div_bitLength(N_);
+        const bitlengthD = e_div_bitLength(D_);
+        // resultBitlengthUpperBound is only valid if the division is known
+        // to be exact
+        resultBitlengthUpperBound = bitlengthN - bitlengthD + 1;
+        expansionLength = (resultBitlengthUpperBound / 53) + 1;
+        exact = true;
+    }
+    let F = [1 / e_div_estimate(D_)]; // Initial guess - out by 1/2 upls
+    let i = 1;
+    while (true) {
+        N_ = mult(N_, F);
+        // The precision bitlength doubles on each iteration
+        if (i > expansionLength) {
+            // we now have roughly double the needed precision - we actually 
+            // only require about the precision and then round properly - this
+            // could be implemented in the future.
+            if (exact) {
+                // We must throw away bits known to be zero. 
+                // Any bits > expansionLength * 53 must be thrown away as they
+                // are wrong - all other bits are exact.
+                N_ = toBitlength(N_, resultBitlengthUpperBound);
+                // TODO - below is just for testing - remove later
+                //if (compare(mult(D, N_), N) !== 0) {
+                //    console.log(mult(D, N_))
+                //    throw new Error(`division in-exact - probably due to underflow, N: ${N}, D: ${D}, Result: ${N_}, product: ${mult(D, N_)}`); 
+                //} 
+                return N_;
+            }
+            // Returning only significant bits helps with sign determination later on.
+            return N_.slice(N_.length - expansionLength, N_.length);
+        }
+        D_ = mult(D_, F);
+        F = diff([2], D_);
+        i *= 2;
+    }
+}
+
+//# sourceMappingURL=e-div.js.map
 ;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/er-estimate.ts
 
 /**
@@ -17313,7 +14924,7 @@ function erEstimate(a) {
  * @internal
  */
 function erSign(a) {
-    return e_sign_eSign(a[0]) * e_sign_eSign(a[1]);
+    return eSign(a[0]) * eSign(a[1]);
 }
 
 
@@ -17352,7 +14963,7 @@ function getTransform1(_xyA, _xyB) {
     // Both `_xyB[0][0]` and `_xyB[1][0]` can't be zero else we would have had
     // a lower order bezier curve. Also, if `_xyB[0][0]` is zero 
     // then `_xyA[0][0]` will also be zero (and same with the y coordinate)
-    const coord = e_sign_eSign(_xyA[0][0]) === 0 ? 1 : 0;
+    const coord = eSign(_xyA[0][0]) === 0 ? 1 : 0;
     const xyA = _xyA[coord];
     const xyB = _xyB[coord];
     return getTransformedTs1(xyA, xyB);
@@ -17405,9 +15016,9 @@ const getAB1 = getAB(getTransform1);
  * @internal
  */
 function erCompare(a, b) {
-    return (eCompare(eMult(a[0], b[1]), eMult(a[1], b[0])) *
-        e_sign_eSign(a[1]) *
-        e_sign_eSign(b[1]));
+    return (eCompare(expansionProduct(a[0], b[1]), expansionProduct(a[1], b[0])) *
+        eSign(a[1]) *
+        eSign(b[1]));
 }
 
 
@@ -17577,7 +15188,7 @@ function bigintToExpansion(b) {
 
 
 ;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/b-sqrt.ts
-const { round: b_sqrt_round, sqrt } = Math;
+const { round, sqrt } = Math;
 /**
  * Returns the square root of a bigint.
  *
@@ -17594,7 +15205,7 @@ function bSqrt(v) {
         }
         return v;
     }
-    let x0 = BigInt(b_sqrt_round(sqrt(Number(v))));
+    let x0 = BigInt(round(sqrt(Number(v))));
     while (true) {
         const x1 = (x0 + v / x0) >> 1n;
         if (x1 === x0) {
@@ -17704,8 +15315,8 @@ function getTransformedTs2(A, B) {
     //    = (-r1 - N*p1/D)/(N*2*p2/D)
     //    = (-r1*D - N*p1)/(N*2*p2)
     return [
-        [eDiff(eMult(r1, D), eMult(p1, N)), eMult(N, eMultBy2(p2))],
-        [eDiff(eMult(r1, eNegativeOf(D)), eMult(p1, N)), eMult(N, eMultBy2(p2))]
+        [eDiff(expansionProduct(r1, D), expansionProduct(p1, N)), expansionProduct(N, eMultBy2(p2))],
+        [eDiff(expansionProduct(r1, eNegativeOf(D)), expansionProduct(p1, N)), expansionProduct(N, eMultBy2(p2))]
     ].sort(erCompare);
 }
 
@@ -17722,7 +15333,7 @@ function getAB2(psA, psB) {
     // Both `_xyB[0][0]` and `_xyB[1][0]` can't be zero else we would have had
     // a lower order bezier curve. Also, if `_xyB[0][0]` is zero 
     // then `_xyA[0][0]` will also be zero (and same with the y coordinate)
-    const coord = e_sign_eSign(_xyA[0][0]) === 0 ? 0 : e_sign_eSign(_xyA[1][0]) === 0 ? 1 : -1;
+    const coord = eSign(_xyA[0][0]) === 0 ? 0 : eSign(_xyA[1][0]) === 0 ? 1 : -1;
     if (coord !== -1) {
         const psA0c = psA[0][coord];
         const psA2c = psA[2][coord];
@@ -17804,7 +15415,7 @@ function getTransform3(xyA, xyB) {
     // Both `_xyB[0][0]` and `_xyB[1][0]` can't be zero else we would have had
     // a lower order bezier curve. Also, if `_xyB[0][0]` is zero 
     // then `_xyA[0][0]` will also be zero (and same with the y coordinate)
-    const coord = e_sign_eSign(xyA[0][0]) === 0 ? 1 : 0;
+    const coord = eSign(xyA[0][0]) === 0 ? 1 : 0;
     const xyA_ = xyA[coord];
     const xyB_ = xyB[coord];
     return getTransformedTs3(xyA_, xyB_);
@@ -17845,13 +15456,13 @@ function getTransformedTs3(A, B) {
     //  =>   d = (r2/cc - p2)/(3*p3)
     const NN = eSquare(C[0]);
     return [
-        eDiff(eMult(r2, eSquare(C[1])), eMult(p2, NN)),
-        eMult(scaleExpansion2(3, p3), NN)
+        eDiff(expansionProduct(r2, eSquare(C[1])), expansionProduct(p2, NN)),
+        expansionProduct(scaleExpansion2(3, p3), NN)
     ];
 }
 /** @internal */
 function eSquare(v) {
-    return eMult(v, v);
+    return expansionProduct(v, v);
 }
 
 
@@ -17865,8 +15476,8 @@ const getAB3 = getAB(getTransform3);
 ;// CONCATENATED MODULE: ./src/sub-1-ulp.ts
 const { EPSILON: sub_1_ulp_eps } = Number;
 const sub_1_ulp_u = sub_1_ulp_eps / 2;
-const sub_1_ulp_es = (sub_1_ulp_eps ** 2) / 2;
-const sub_1_ulp_ups = sub_1_ulp_u + sub_1_ulp_es;
+const es = (sub_1_ulp_eps ** 2) / 2;
+const ups = sub_1_ulp_u + es;
 /**
  * Subtract one unit in the last place (ulp) from the given number
  *
@@ -17874,22 +15485,22 @@ const sub_1_ulp_ups = sub_1_ulp_u + sub_1_ulp_es;
  * @internal
  */
 function sub1Ulp(n) {
-    return n > 0 ? n - n * sub_1_ulp_ups : n + n * sub_1_ulp_ups;
+    return n > 0 ? n - n * ups : n + n * ups;
 }
 
 
 ;// CONCATENATED MODULE: ./src/add-1-ulp.ts
-const { EPSILON: src_add_1_ulp_eps } = Number;
-const src_add_1_ulp_u = src_add_1_ulp_eps / 2;
-const add_1_ulp_es = (src_add_1_ulp_eps ** 2) / 2;
-const add_1_ulp_ups = src_add_1_ulp_u + add_1_ulp_es;
+const { EPSILON: add_1_ulp_eps } = Number;
+const add_1_ulp_u = add_1_ulp_eps / 2;
+const add_1_ulp_es = (add_1_ulp_eps ** 2) / 2;
+const add_1_ulp_ups = add_1_ulp_u + add_1_ulp_es;
 /**
  * Add one unit in the last place (ulp) to the given number
  *
  * * subnormal numbers (and 0) are returned unaltered
  * @internal
  */
-function add_1_ulp_add1Ulp(n) {
+function add1Ulp(n) {
     return n > 0 ? n + n * add_1_ulp_ups : n - n * add_1_ulp_ups;
 }
 
@@ -17986,7 +15597,7 @@ function sub2Ulp(v) {
 }
 /** @internal */
 function add2Ulp(v) {
-    return add_1_ulp_add1Ulp(add_1_ulp_add1Ulp(v));
+    return add1Ulp(add1Ulp(v));
 }
 /** @internal */
 function getMinMaxT(t) {
@@ -18590,7 +16201,7 @@ function getFootpointPoly1(ps, p) {
  * @param p a point
  * @param q another point
  */
-function squared_distance_between_squaredDistanceBetween(p, q) {
+function squaredDistanceBetween(p, q) {
     const x = q[0] - p[0];
     const y = q[1] - p[1];
     return x * x + y * y;
@@ -18969,7 +16580,7 @@ function closestPointOnBezier(ps, p) {
     let minP = undefined;
     for (const t of ts) {
         const p_ = evalDeCasteljau(ps, t);
-        const dSquared = squared_distance_between_squaredDistanceBetween(p_, p);
+        const dSquared = squaredDistanceBetween(p_, p);
         if (dSquared < minDSquared) {
             minDSquared = dSquared;
             minP = { p: p_, t, d: closest_point_on_bezier_sqrt(dSquared) };
@@ -19031,7 +16642,7 @@ function furthestPointOnBezier(ps, p) {
     let maxP = undefined;
     for (const t of ts) {
         const p_ = evalDeCasteljau(ps, t);
-        const dSquared = squared_distance_between_squaredDistanceBetween(p_, p);
+        const dSquared = squaredDistanceBetween(p_, p);
         if (dSquared > maxDSquared) {
             maxDSquared = dSquared;
             maxP = { p: p_, t, d: furthest_point_on_bezier_sqrt(dSquared) };
@@ -19891,129 +17502,17 @@ function quadraticRoots(a, b, c) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/index.js
-//==================================
-// 2d vector pure functions library
-//==================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * Three 2d points are a counter-clockwise turn if ccw > 0, clockwise if
- * ccw < 0, and colinear if ccw === 0 because ccw is a determinant that gives
- * twice the signed area of the triangle formed by the points a, b and c.
- * * **certified**
- * @param A The first point
- * @param B The second point
- * @param C The third point
- */
-const ccw = (/* unused pure expression or super */ null && (orient2d));
+;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/from-to.js
 /**
  * Returns the second 2-vector minus the first.
  * @param p the first vector
  * @param q the second vector
   */
-function node_fromTo(p, q) {
+function from_to_fromTo(p, q) {
     return [q[0] - p[0], q[1] - p[1]];
 }
-/**
- * Performs linear interpolation between two 2d points and returns the
- * resulting point.
- * @param p the first point.
- * @param q the second point.
- * @param t the interpolation fraction (often in [0,1]).
- */
-function interpolate(p, q, t) {
-    return [
-        p[0] + (q[0] - p[0]) * t,
-        p[1] + (q[1] - p[1]) * t
-    ];
-}
-/**
- * Returns the mean of two 2d points.
- * @param ps the two points
- */
-function mean(ps) {
-    const p = ps[0];
-    const q = ps[1];
-    return [(p[0] + q[0]) / 2, (p[1] + q[1]) / 2];
-}
-/**
-* Returns true if two 2-vectors are identical (by value), false otherwise.
-* @param a a 2d vector
-* @param b another 2d vector
-*/
-function node_equal(a, b) {
-    return (a[0] === b[0] && a[1] === b[1]);
-}
-/**
- * Returns the closest point to the array of 2d points or if the array is empty
- * returns undefined.
- * @param p
- * @param ps
- */
-function getClosestTo(p, ps) {
-    let closestPoint = undefined;
-    let closestDistance = Number.POSITIVE_INFINITY;
-    for (let i = 0; i < ps.length; i++) {
-        const q = ps[i];
-        const d = squaredDistanceBetween(p, q);
-        if (d < closestDistance) {
-            closestPoint = q;
-            closestDistance = d;
-        }
-    }
-    return closestPoint;
-}
-/**
- * Returns the closest point to the array of 2d points by providing a distance
- * function. If the given array is empty, returns undefined.
- * @param p
- * @param ps
- * @param f a function that takes the object and returns a point in order to
- * apply the Euclidian distance.
- */
-function getObjClosestTo(p, ps, f) {
-    let closestObj = undefined; // Closest Point
-    let closestDistance = Number.POSITIVE_INFINITY;
-    for (let i = 0; i < ps.length; i++) {
-        const o = ps[i];
-        const d = squaredDistanceBetween(p, f(o));
-        if (d < closestDistance) {
-            closestObj = o;
-            closestDistance = d;
-        }
-    }
-    return closestObj;
-}
 
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=from-to.js.map
 ;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/distance-and-length/to-length.js
 /**
  * Returns the given 2-vector scaled to the given length.
@@ -20028,8 +17527,8 @@ function toLength(p, length) {
 //# sourceMappingURL=to-length.js.map
 ;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection-fast/get-distance-to-line-function.ts
 
-const get_distance_to_line_function_tp = node_twoProduct;
-const get_distance_to_line_function_qdq = node_ddDiffDd;
+const get_distance_to_line_function_tp = basic_two_product_twoProduct;
+const get_distance_to_line_function_qdq = ddDiffDd;
 const get_distance_to_line_function_abs = Math.abs;
 const get_distance_to_line_function_eps = Number.EPSILON;
 const get_distance_to_line_function_u = get_distance_to_line_function_eps / 2;
@@ -20098,7 +17597,7 @@ function getDistanceToLineFunction(pS, pE) {
 const check_intersection_in_ranges_getDistanceToLineFunction = getDistanceToLineFunction;
 const check_intersection_in_ranges_geoClip = geoClip;
 const check_intersection_in_ranges_fromToInclErrorBound = fromToInclErrorBound;
-const fromToVect = node_fromTo;
+const fromToVect = from_to_fromTo;
 const check_intersection_in_ranges_translate = translate;
 const check_intersection_in_ranges_toLength = toLength;
 /**
@@ -20587,11 +18086,11 @@ function evalDeCasteljauWithErr(ps, t) {
 ;// CONCATENATED MODULE: ./src/local-properties-at-t/evaluate/double-double/eval-de-casteljau-dd.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const eval_de_casteljau_dd_qmq = node_ddMultDd;
-const eval_de_casteljau_dd_qaq = node_ddAddDd;
-const eval_de_casteljau_dd_qdq = node_ddDiffDd;
-const eval_de_casteljau_dd_td = node_twoDiff;
-const eval_de_casteljau_dd_qad = node_ddAddDouble;
+const eval_de_casteljau_dd_qmq = ddMultDd;
+const eval_de_casteljau_dd_qaq = ddAddDd;
+const eval_de_casteljau_dd_qdq = ddDiffDd;
+const eval_de_casteljau_dd_td = two_diff_twoDiff;
+const eval_de_casteljau_dd_qad = ddAddDouble;
 /**
  * Returns the resulting point (in double-double precision) of evaluating the
  * given bezier curve at the given parameter `t` (given as a double-double
@@ -20885,14 +18384,14 @@ function evaluateImplicit3(cs, x, y) {
 ;// CONCATENATED MODULE: ./src/implicit-form/double-double/get-implicit-form3-dd.ts
 
 
-const get_implicit_form3_dd_qno = node_ddNegativeOf; // error -> 0
-const get_implicit_form3_dd_qm2 = node_ddMultBy2; // error -> 0 
-const get_implicit_form3_dd_qd2 = node_ddDivBy2; // error -> 0 
+const get_implicit_form3_dd_qno = ddNegativeOf; // error -> 0
+const get_implicit_form3_dd_qm2 = ddMultBy2; // error -> 0 
+const get_implicit_form3_dd_qd2 = ddDivBy2; // error -> 0 
 //const qmd2 = qMultDouble1;  // error -> 1.5*γ²
-const get_implicit_form3_dd_qmd = node_ddMultDouble2; // error -> 3*γ²
-const get_implicit_form3_dd_qmq = node_ddMultDd; // error -> 5*γ² (worst found), 7*γ² (theoretical), we use 6*γ²
-const get_implicit_form3_dd_qdq = node_ddDiffDd; // error -> 3*γ²
-const get_implicit_form3_dd_qaq = node_ddAddDd; // error -> 3*γ²
+const get_implicit_form3_dd_qmd = ddMultDouble2; // error -> 3*γ²
+const get_implicit_form3_dd_qmq = ddMultDd; // error -> 5*γ² (worst found), 7*γ² (theoretical), we use 6*γ²
+const get_implicit_form3_dd_qdq = ddDiffDd; // error -> 3*γ²
+const get_implicit_form3_dd_qaq = ddAddDd; // error -> 3*γ²
 /**
  * Returns a double-double precision implicit form of the given cubic bezier
  * curve.
@@ -20998,12 +18497,12 @@ function evaluateImplicit2(cs, x, y) {
 ;// CONCATENATED MODULE: ./src/implicit-form/double-double/get-implicit-form2-dd.ts
 
 
-const get_implicit_form2_dd_qno = node_ddNegativeOf; // error -> 0
-const get_implicit_form2_dd_qm2 = node_ddMultBy2; // error -> 0 
+const get_implicit_form2_dd_qno = ddNegativeOf; // error -> 0
+const get_implicit_form2_dd_qm2 = ddMultBy2; // error -> 0 
 //const qmd2 = qMultDouble1;  // error -> 1.5*γ²
-const get_implicit_form2_dd_qmd = node_ddMultDouble2; // error -> 3*γ²
-const get_implicit_form2_dd_qmq = node_ddMultDd; // error -> 7*γ² (theoretical), 5*γ² (worst found), we use 6*γ²
-const get_implicit_form2_dd_qdq = node_ddDiffDd; // error -> 3*γ²
+const get_implicit_form2_dd_qmd = ddMultDouble2; // error -> 3*γ²
+const get_implicit_form2_dd_qmq = ddMultDd; // error -> 7*γ² (theoretical), 5*γ² (worst found), we use 6*γ²
+const get_implicit_form2_dd_qdq = ddDiffDd; // error -> 3*γ²
 /**
  * Returns a double-double precision implicit form of the given quadratic
  * bezier curve and a coefficientwise error bound.
@@ -21118,9 +18617,9 @@ function getImplicitForm1(ps) {
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_implicit_form1_dd_qdq = node_ddDiffDd; // error -> 3*γ²
-const get_implicit_form1_dd_qmd = node_ddMultDouble2;
-const get_implicit_form1_dd_qno = node_ddNegativeOf;
+const get_implicit_form1_dd_qdq = ddDiffDd; // error -> 3*γ²
+const get_implicit_form1_dd_qmd = ddMultDouble2;
+const get_implicit_form1_dd_qno = ddNegativeOf;
 /**
  * Returns a double-double precision implicit form of the given
  * linear bezier curve.
@@ -21570,11 +19069,11 @@ function toPowerBasis_3rdDerivative(ps) {
 ;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis-1st-derivative/double-double/to-power-basis-1st-derivative-dd.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const to_power_basis_1st_derivative_dd_ts = node_twoSum; // error -> 0
-const to_power_basis_1st_derivative_dd_td = node_twoDiff; // error -> 0
-const to_power_basis_1st_derivative_dd_qmd = node_ddMultDouble2; // error -> 3*u²
-const to_power_basis_1st_derivative_dd_qaq = node_ddAddDd;
-const to_power_basis_1st_derivative_dd_qad = node_ddAddDouble; // error -> 2*u²
+const to_power_basis_1st_derivative_dd_ts = two_sum_twoSum; // error -> 0
+const to_power_basis_1st_derivative_dd_td = two_diff_twoDiff; // error -> 0
+const to_power_basis_1st_derivative_dd_qmd = ddMultDouble2; // error -> 3*u²
+const to_power_basis_1st_derivative_dd_qaq = ddAddDd;
+const to_power_basis_1st_derivative_dd_qad = ddAddDouble; // error -> 2*u²
 /**
  * Returns the derivative of the power basis representation of a bezier
  * curve of order cubic or less (with intermediate calculations done in
@@ -21652,10 +19151,10 @@ function toPowerBasis1_1stDerivativeDd(ps) {
 
 ;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis-2nd-derivative/double-double/to-power-basis-2nd-derivative-dd.ts
 
-const to_power_basis_2nd_derivative_dd_td = node_twoDiff;
-const to_power_basis_2nd_derivative_dd_qaq = node_ddAddDd;
-const to_power_basis_2nd_derivative_dd_qmd = node_ddMultDouble2;
-const to_power_basis_2nd_derivative_dd_qad = node_ddAddDouble;
+const to_power_basis_2nd_derivative_dd_td = two_diff_twoDiff;
+const to_power_basis_2nd_derivative_dd_qaq = ddAddDd;
+const to_power_basis_2nd_derivative_dd_qmd = ddMultDouble2;
+const to_power_basis_2nd_derivative_dd_qad = ddAddDouble;
 /**
  * Returns the 2nd derivative of the power basis representation of a bezier
  * curve of order cubic or less (with intermediate calculations done in
@@ -21699,9 +19198,9 @@ function toPowerBasis_2ndDerivativeDd(ps) {
 
 ;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis-3rd-derivative/double-double/to-power-basis-3rd-derivative-dd.ts
 
-const to_power_basis_3rd_derivative_dd_td = node_twoDiff;
-const to_power_basis_3rd_derivative_dd_qaq = node_ddAddDd;
-const to_power_basis_3rd_derivative_dd_qmd = node_ddMultDouble2;
+const to_power_basis_3rd_derivative_dd_td = two_diff_twoDiff;
+const to_power_basis_3rd_derivative_dd_qaq = ddAddDd;
+const to_power_basis_3rd_derivative_dd_qmd = ddMultDouble2;
 /**
  * Returns the 3rd derivative of the power basis representation of a bezier
  * curve of order cubic or less (with intermediate calculations done in
@@ -21738,9 +19237,9 @@ function toPowerBasis_3rdDerivativeDd(ps) {
 ;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis-1st-derivative/exact/to-power-basis-1st-derivative-exact.ts
 
 const to_power_basis_1st_derivative_exact_td = twoDiff;
-const to_power_basis_1st_derivative_exact_ts = two_sum_twoSum;
+const to_power_basis_1st_derivative_exact_ts = basic_two_sum_twoSum;
 const to_power_basis_1st_derivative_exact_sce = scaleExpansion2;
-const eadd = eAdd;
+const eadd = fastExpansionSum;
 const to_power_basis_1st_derivative_exact_ge = growExpansion;
 /**
  * Returns the *exact* derivative of the power basis representation of a
@@ -21811,7 +19310,7 @@ function toPowerBasis1_1stDerivativeExact(ps) {
 
 const to_power_basis_2nd_derivative_exact_td = twoDiff;
 const to_power_basis_2nd_derivative_exact_sce = scaleExpansion2;
-const to_power_basis_2nd_derivative_exact_eadd = eAdd;
+const to_power_basis_2nd_derivative_exact_eadd = fastExpansionSum;
 const to_power_basis_2nd_derivative_exact_ge = growExpansion;
 /**
  * Returns the *exact* 2nd derivative of the power basis representation of a
@@ -21858,7 +19357,7 @@ function toPowerBasis_2ndDerivativeExact(ps) {
 
 const to_power_basis_3rd_derivative_exact_td = twoDiff;
 const to_power_basis_3rd_derivative_exact_sce = scaleExpansion2;
-const to_power_basis_3rd_derivative_exact_eadd = eAdd;
+const to_power_basis_3rd_derivative_exact_eadd = fastExpansionSum;
 /**
  * Returns the *exact* 3rd derivative of the power basis representation of a
  * bezier curve of order cubic or less.
@@ -22105,13 +19604,13 @@ function normal2(ps, t) {
             // Points 0 and 1 coincide
             if (x1 !== x2 || y1 !== y2) {
                 // Point 2 does not coincide
-                const v = node_fromTo(ps[0], ps[2]);
+                const v = from_to_fromTo(ps[0], ps[2]);
                 return [-v[1], v[0]]; // tangent === [v[0], v[1]]
             }
             // Point 2 also coincides. Now, only return a normal if point 3 does not coincide.
             if (x2 !== x3 || y2 !== y3) {
                 // Point 3 does not coincide
-                const v = node_fromTo(ps[0], ps[3]);
+                const v = from_to_fromTo(ps[0], ps[3]);
                 return [-v[1], v[0]]; // tangent === [v[0], v[1]]
             }
             // All four points coincide. No normal possible.
@@ -22121,13 +19620,13 @@ function normal2(ps, t) {
             // Point 3 and 2 coincide
             if (x2 !== x1 || y2 !== y1) {
                 // Point 1 does not coincide
-                const v = node_fromTo(ps[1], ps[3]);
+                const v = from_to_fromTo(ps[1], ps[3]);
                 return [-v[1], v[0]]; // tangent === [v[0], v[1]]
             }
             // Point 1 also coincides. Now, only return a normal if point 0 does not coincide.
             if (x1 !== x0 || y1 !== y0) {
                 // Point 0 does not coincide.
-                const v = node_fromTo(ps[0], ps[3]);
+                const v = from_to_fromTo(ps[0], ps[3]);
                 return [-v[1], v[0]]; // tangent === [v[0], v[1]]
             }
             // Case that all four points coincide is already handled before.
@@ -22135,14 +19634,14 @@ function normal2(ps, t) {
         // An interior cusp is the only remaining cause of the degenerate normal
         // Split curve at the cusp
         const ps_ = fromTo(ps, t, 1);
-        const v = node_fromTo(ps_[0], ps_[2]);
+        const v = from_to_fromTo(ps_[0], ps_[2]);
         return [-v[1], v[0]]; // tangent === [v[0], v[1]]
     }
     if (ps.length === 3) {
         const [[x0, y0], [x1, y1], [x2, y2]] = ps;
         if (x0 !== x2 || y0 !== y2) {
             // Points 0 and 1, or points 1 and 2 coincide, but not all three
-            const v = node_fromTo(ps[0], ps[2]);
+            const v = from_to_fromTo(ps[0], ps[2]);
             return [-v[1], v[0]]; // tangent === [v[0], v[1]]
         }
     }
@@ -22292,9 +19791,9 @@ function eCurvature(ps, t) {
     const dy = eHorner(dY, t);
     const ddx = eHorner(ddX, t);
     const ddy = eHorner(ddY, t);
-    const a = e_compress_eCompress(eDiff(eMult(dx, ddy), eMult(dy, ddx)));
-    const _b = e_compress_eCompress(eAdd(eMult(dx, dx), eMult(dy, dy)));
-    const __b = eMult(_b, eMult(_b, _b));
+    const a = e_compress_eCompress(eDiff(expansionProduct(dx, ddy), expansionProduct(dy, ddx)));
+    const _b = e_compress_eCompress(fastExpansionSum(expansionProduct(dx, dx), expansionProduct(dy, dy)));
+    const __b = expansionProduct(_b, expansionProduct(_b, _b));
     const b = Math.sqrt(__b[__b.length - 1]);
     const a_ = a[a.length - 1];
     return a_ / b;
@@ -22304,8 +19803,8 @@ function eCurvature(ps, t) {
 ;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double-double/dd-horner.js
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const dd_horner_qaq = node_ddAddDd;
-const dd_horner_qmd = node_ddMultDouble2;
+const dd_horner_qaq = ddAddDd;
+const dd_horner_qmd = ddMultDouble2;
 /**
  * Returns the exact result (bar underflow / overflow) of evaluating a
  * univariate polynomial using Horner's method - the result is returned as a
@@ -22334,9 +19833,9 @@ ddHorner([[0, 1], [0, 1], [0, -2], [0, 3]], 0.25); //?
 
 
 
-const dd_curvature_qmq = node_ddMultDd;
-const dd_curvature_qaq = node_ddAddDd;
-const dd_curvature_qdq = node_ddDiffDd;
+const dd_curvature_qmq = ddMultDd;
+const dd_curvature_qaq = ddAddDd;
+const dd_curvature_qdq = ddDiffDd;
 /**
  * Returns the curvature `κ` of the given linear, quadratic or cubic bezier
  * curve at a specific given parameter value `t`.
@@ -22387,9 +19886,9 @@ function dot_dot(a, b) {
  * @doc mdx
  */
 function isQuadObtuse(ps) {
-    const v0 = node_fromTo(ps[0], ps[1]);
-    const v1 = node_fromTo(ps[1], ps[2]);
-    const v2 = node_fromTo(ps[2], ps[0]);
+    const v0 = from_to_fromTo(ps[0], ps[1]);
+    const v1 = from_to_fromTo(ps[1], ps[2]);
+    const v2 = from_to_fromTo(ps[2], ps[0]);
     const angleP0Obtuse = dot_dot(v2, v0) > 0;
     const angleP2Obtuse = dot_dot(v1, v2) > 0;
     return angleP0Obtuse || angleP2Obtuse;
@@ -22426,12 +19925,12 @@ function isQuadFlat(ps, tolerance) {
         tolerance = maxCoordinate * 2 ** -10;
     }
     if (x0 === x2 && y0 === y2) {
-        const d = squared_distance_between_squaredDistanceBetween(p0, p1) / 4;
+        const d = squaredDistanceBetween(p0, p1) / 4;
         return d <= tolerance ** 2;
     }
     const [x, y] = evalDeCasteljau(ps, 0.5);
     const numerator = ((y2 - y0) * x - (x2 - x0) * y + x2 * y0 - y2 * x0) ** 2;
-    const denominator = squared_distance_between_squaredDistanceBetween(p0, p2);
+    const denominator = squaredDistanceBetween(p0, p2);
     const dSquared = numerator / denominator;
     return dSquared <= tolerance ** 2;
 }
@@ -22554,20 +20053,96 @@ function quadraticToPolyline(ps, tolerance) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double-with-error/dd-div-dd-with-error.js
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
+/** @internal */
+const div = ddDivDd;
+/** @internal */
+const dd_div_dd_with_error_eps = Number.EPSILON;
+/** @internal */
+const dd_div_dd_with_error_u = dd_div_dd_with_error_eps / 2;
+/** @internal */
+const dd_div_dd_with_error_uu = dd_div_dd_with_error_u * dd_div_dd_with_error_u;
+/**
+ * Returns the result of dividing two double-double-precision floating point
+ * numbers together with an absolute error bound where nE and dE are absolute
+ * error bounds on the *input* values.
+ *
+ * @param numer numerator - a double-double-precision float
+ * @param denom denominator - a double-double-precision float
+ * @param nE absolute value error bound in numerator
+ * @param dE absolute value error bound in denominator
+ */
+function ddDivDdWithError(numer, denom, nE, dE) {
+    const n = numer[0];
+    const N = numer[1];
+    const d = denom[0];
+    const D = denom[1];
+    // estimate the result of the division
+    const est = div(numer, denom);
+    const _n = Math.abs(n + N); // absolute value of estimate of n accurate to within 1/2 ulp
+    const _d = Math.abs(d + D); // absolute value of estimate of d accurate to within 1/2 ulp
+    const δd = dd_div_dd_with_error_u * _d; // the max error in the rounding to _d
+    // if the error in the denominator is too high the error can be 
+    // arbitrarily high
+    const minD = _d - δd - dE;
+    // maxErr is only valid if minD > 0
+    if (minD <= 0) {
+        // the error can be arbitrarily high; est is mostly irrelevant
+        return { est, err: Number.POSITIVE_INFINITY };
+    }
+    const err = ((_d * nE + _n * dE) / minD ** 2) + 9 * dd_div_dd_with_error_uu * Math.abs(_n / _d);
+    return { est, err };
+}
+
+//# sourceMappingURL=dd-div-dd-with-error.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-min.js
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
+/** @internal */
+const dd_min_diff = ddDiffDd;
+/**
+ * Returns the minimum of a and b.
+ * @param a a double-double precision floating point number
+ * @param b another double-double precision floating point number
+ */
+function ddMin(a, b) {
+    const res = dd_min_diff(a, b)[1];
+    return res > 0 ? b : a;
+}
+
+//# sourceMappingURL=dd-min.js.map
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-max.js
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
+/** @internal */
+const dd_max_diff = ddDiffDd;
+/**
+ * Returns the maximum of a and b.
+ * @param a a double-double precision floating point number
+ * @param b another double-double precision floating point number
+ */
+function ddMax(a, b) {
+    const res = dd_max_diff(a, b)[1];
+    return res > 0 ? a : b;
+}
+
+//# sourceMappingURL=dd-max.js.map
 ;// CONCATENATED MODULE: ./src/global-properties/bounds/get-interval-box/get-interval-box-dd.ts
 
 
 
 
-const get_interval_box_dd_ddDiffDd = node_ddDiffDd;
-const get_interval_box_dd_ddDivDdWithError = node_ddDivDdWithError;
-const get_interval_box_dd_ddAddDouble = node_ddAddDouble;
-const get_interval_box_dd_ddMultDd = node_ddMultDd;
-const get_interval_box_dd_ddMultDouble2 = node_ddMultDouble2;
-const get_interval_box_dd_ddAddDd = node_ddAddDd;
-const get_interval_box_dd_ddMultBy2 = node_ddMultBy2;
-const get_interval_box_dd_ddMin = node_ddMin;
-const get_interval_box_dd_ddMax = node_ddMax;
+const get_interval_box_dd_ddDiffDd = ddDiffDd;
+const get_interval_box_dd_ddDivDdWithError = ddDivDdWithError;
+const get_interval_box_dd_ddAddDouble = ddAddDouble;
+const get_interval_box_dd_ddMultDd = ddMultDd;
+const get_interval_box_dd_ddMultDouble2 = ddMultDouble2;
+const get_interval_box_dd_ddAddDd = ddAddDd;
+const get_interval_box_dd_ddMultBy2 = ddMultBy2;
+const get_interval_box_dd_ddMin = ddMin;
+const get_interval_box_dd_ddMax = ddMax;
 const get_interval_box_dd_u = Number.EPSILON / 2;
 const get_interval_box_dd_uu = get_interval_box_dd_u * get_interval_box_dd_u;
 const get_interval_box_dd_abs = Math.abs;
@@ -22936,8 +20511,8 @@ function getIntervalBoxAtTDd(ps, t) {
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const root_interval_to_distance_squared_interval_estimate = eEstimate;
 const root_interval_to_distance_squared_interval_td = twoDiff;
-const emult = eMult;
-const root_interval_to_distance_squared_interval_eadd = eAdd;
+const emult = expansionProduct;
+const root_interval_to_distance_squared_interval_eadd = fastExpansionSum;
 const root_interval_to_distance_squared_interval_eps = Number.EPSILON;
 /**
  * Returns the distance interval squared given the root interval (currently
@@ -22988,16 +20563,27 @@ function rootIntervalToDistanceSquaredInterval(box, p) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-mult-by-4.js
+/**
+ * Returns the result of multiplying the given double-double by 4.
+ * * The result is exact
+ * @param f a double-double precision floating point number
+ */
+function ddMultBy4(f) {
+    return [4 * f[0], 4 * f[1]];
+}
+
+//# sourceMappingURL=dd-mult-by-4.js.map
 ;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double-double/get-footpoint-poly-3-dd.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_footpoint_poly_3_dd_td = node_twoDiff;
-const get_footpoint_poly_3_dd_qaq = node_ddAddDd;
-const get_footpoint_poly_3_dd_qmd = node_ddMultDouble2;
-const get_footpoint_poly_3_dd_qmq = node_ddMultDd;
-const get_footpoint_poly_3_dd_qm2 = node_ddMultBy2;
-const qm4 = node_ddMultBy4;
-const get_footpoint_poly_3_dd_qdq = node_ddDiffDd;
+const get_footpoint_poly_3_dd_td = two_diff_twoDiff;
+const get_footpoint_poly_3_dd_qaq = ddAddDd;
+const get_footpoint_poly_3_dd_qmd = ddMultDouble2;
+const get_footpoint_poly_3_dd_qmq = ddMultDd;
+const get_footpoint_poly_3_dd_qm2 = ddMultBy2;
+const qm4 = ddMultBy4;
+const get_footpoint_poly_3_dd_qdq = ddDiffDd;
 /**
  * Returns the polynomial whose roots are all the `t` values on the given bezier
  * curve such that the line from the given point to the point on the bezier
@@ -23086,13 +20672,13 @@ function getFootpointPoly3Dd(ps, p) {
 ;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double-double/get-footpoint-poly-2-dd.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_footpoint_poly_2_dd_td = node_twoDiff;
-const get_footpoint_poly_2_dd_qaq = node_ddAddDd;
-const get_footpoint_poly_2_dd_qmd = node_ddMultDouble2;
-const get_footpoint_poly_2_dd_qmq = node_ddMultDd;
-const get_footpoint_poly_2_dd_qm2 = node_ddMultBy2;
-const qdifq = node_ddDiffDd;
-const get_footpoint_poly_2_dd_qm4 = node_ddMultBy4;
+const get_footpoint_poly_2_dd_td = two_diff_twoDiff;
+const get_footpoint_poly_2_dd_qaq = ddAddDd;
+const get_footpoint_poly_2_dd_qmd = ddMultDouble2;
+const get_footpoint_poly_2_dd_qmq = ddMultDd;
+const get_footpoint_poly_2_dd_qm2 = ddMultBy2;
+const qdifq = ddDiffDd;
+const get_footpoint_poly_2_dd_qm4 = ddMultBy4;
 /**
  * Returns the polynomial whose roots are all the `t` values on the given bezier
  * curve such that the line from the given point to the point on the bezier
@@ -23146,13 +20732,24 @@ function getFootpointPoly2Dd(ps, p) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-mult-by-neg-2.js
+/**
+ * Returns the result of multiplying the given double-double by -2.
+ * * The result is exact
+ * @param f a double-double precision floating point number
+ */
+function ddMultByNeg2(f) {
+    return [-2 * f[0], -2 * f[1]];
+}
+
+//# sourceMappingURL=dd-mult-by-neg-2.js.map
 ;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double-double/get-footpoint-poly-1-dd.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_footpoint_poly_1_dd_tp = node_twoProduct;
-const get_footpoint_poly_1_dd_qaq = node_ddAddDd;
-const qmn2 = node_ddMultByNeg2;
-const get_footpoint_poly_1_dd_qdifq = node_ddDiffDd;
+const get_footpoint_poly_1_dd_tp = basic_two_product_twoProduct;
+const get_footpoint_poly_1_dd_qaq = ddAddDd;
+const qmn2 = ddMultByNeg2;
+const get_footpoint_poly_1_dd_qdifq = ddDiffDd;
 /**
  * Returns the polynomial whose roots are all the `t` values on the given bezier
  * curve such that the line from the given point to the point on the bezier
@@ -23194,11 +20791,11 @@ function getFootpointPoly1Dd(ps, p) {
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const get_footpoint_poly_3_exact_td = twoDiff;
-const get_footpoint_poly_3_exact_emult = eMult;
+const get_footpoint_poly_3_exact_emult = expansionProduct;
 const get_footpoint_poly_3_exact_sce = scaleExpansion2;
 const get_footpoint_poly_3_exact_em2 = eMultBy2;
 const emn2 = eMultByNeg2;
-const get_footpoint_poly_3_exact_eadd = eAdd;
+const get_footpoint_poly_3_exact_eadd = fastExpansionSum;
 const get_footpoint_poly_3_exact_ediff = eDiff;
 /**
  * Returns the *exact* polynomial whose roots are all the `t` values on the
@@ -23301,10 +20898,10 @@ function getFootpointPoly3Exact(ps, p) {
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const get_footpoint_poly_2_exact_td = twoDiff;
-const get_footpoint_poly_2_exact_emult = eMult;
+const get_footpoint_poly_2_exact_emult = expansionProduct;
 const get_footpoint_poly_2_exact_sce = scaleExpansion2;
 const get_footpoint_poly_2_exact_em2 = eMultBy2;
-const get_footpoint_poly_2_exact_eadd = eAdd;
+const get_footpoint_poly_2_exact_eadd = fastExpansionSum;
 const get_footpoint_poly_2_exact_ediff = eDiff;
 /**
  * Returns the result of multiplying a floating point expansion by 4.
@@ -23391,9 +20988,9 @@ function getFootpointPoly2Exact(ps, p) {
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const get_footpoint_poly_1_exact_td = twoDiff;
-const get_footpoint_poly_1_exact_emult = eMult;
+const get_footpoint_poly_1_exact_emult = expansionProduct;
 const get_footpoint_poly_1_exact_emn2 = eMultByNeg2;
-const get_footpoint_poly_1_exact_eadd = eAdd;
+const get_footpoint_poly_1_exact_eadd = fastExpansionSum;
 const get_footpoint_poly_1_exact_ediff = eDiff;
 /**
  * Returns the *exact* polynomial whose roots are all the `t` values on the
@@ -24176,7 +21773,7 @@ function getCurvatureExtrema(ps) {
 ;// CONCATENATED MODULE: ./node_modules/flo-poly/node/calculus/double-double/dd-differentiate.js
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const dd_differentiate_ddMultDouble2 = node_ddMultDouble2;
+const dd_differentiate_ddMultDouble2 = ddMultDouble2;
 /**
  * Returns the result of differentiating the given polynomial (with coefficients
  * given in double-double precision) in double-double precision.
@@ -24209,12 +21806,12 @@ function ddDifferentiate(p) {
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const get_abs_curvature_extrema_polys_dd_tp = (/* unused pure expression or super */ null && (twoProduct));
-const get_abs_curvature_extrema_polys_dd_qm2 = node_ddMultBy2;
-const get_abs_curvature_extrema_polys_dd_qm4 = node_ddMultBy4;
-const get_abs_curvature_extrema_polys_dd_qmd = node_ddMultDouble2;
-const get_abs_curvature_extrema_polys_dd_qmq = node_ddMultDd;
-const get_abs_curvature_extrema_polys_dd_qaq = node_ddAddDd;
-const get_abs_curvature_extrema_polys_dd_qdq = node_ddDiffDd;
+const get_abs_curvature_extrema_polys_dd_qm2 = ddMultBy2;
+const get_abs_curvature_extrema_polys_dd_qm4 = ddMultBy4;
+const get_abs_curvature_extrema_polys_dd_qmd = ddMultDouble2;
+const get_abs_curvature_extrema_polys_dd_qmq = ddMultDd;
+const get_abs_curvature_extrema_polys_dd_qaq = ddAddDd;
+const get_abs_curvature_extrema_polys_dd_qdq = ddDiffDd;
 /**
  * Returns the polynomials whose zeros are the `t` values of the local
  * minima / maxima of the absolute curvature for the given bezier curve.
@@ -24300,7 +21897,7 @@ function getAbsCurvatureExtremaPolysDd(ps) {
     const x5 = get_abs_curvature_extrema_polys_dd_qdq(x2, x1);
     const x6 = get_abs_curvature_extrema_polys_dd_qaq(z1, dx2_dy0);
     const x7 = get_abs_curvature_extrema_polys_dd_qaq(z7, dx2_dy0);
-    const x8 = get_abs_curvature_extrema_polys_dd_qaq(node_ddMultBy2(ddy0_dx1), ddy1_dx0);
+    const x8 = get_abs_curvature_extrema_polys_dd_qaq(ddMultBy2(ddy0_dx1), ddy1_dx0);
     // const t5 = 
     //     dx2_dx2*(dddx_dy1 - 3*dddy_dx1) + 
     //     dy2_dy2*(3*dddx_dy1 - dddy_dx1) + 
@@ -24308,7 +21905,7 @@ function getAbsCurvatureExtremaPolysDd(ps) {
     //     3*(z4*(ddy1_ddy1 - ddx1*ddx1) + z5*(ddx0*ddy1 + ddy0*ddx1));
     const a1 = get_abs_curvature_extrema_polys_dd_qmq(dx2_dx2, (get_abs_curvature_extrema_polys_dd_qdq(dddx_dy1, get_abs_curvature_extrema_polys_dd_qmd(3, dddy_dx1))));
     const a2 = get_abs_curvature_extrema_polys_dd_qmq(dy2_dy2, (get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qmd(3, dddx_dy1), dddy_dx1)));
-    const a3 = node_ddMultBy2(get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(dx2_dy2, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qmq(dddx, dx1), get_abs_curvature_extrema_polys_dd_qmq(dddy, dy1)), get_abs_curvature_extrema_polys_dd_qmd(3, get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qmq(ddy0, ddy1), get_abs_curvature_extrema_polys_dd_qmq(ddx0, ddx1)))))), get_abs_curvature_extrema_polys_dd_qmd(3, get_abs_curvature_extrema_polys_dd_qmq(get_abs_curvature_extrema_polys_dd_qmq(ddx1, ddy1), z6))));
+    const a3 = ddMultBy2(get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(dx2_dy2, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qmq(dddx, dx1), get_abs_curvature_extrema_polys_dd_qmq(dddy, dy1)), get_abs_curvature_extrema_polys_dd_qmd(3, get_abs_curvature_extrema_polys_dd_qdq(get_abs_curvature_extrema_polys_dd_qmq(ddy0, ddy1), get_abs_curvature_extrema_polys_dd_qmq(ddx0, ddx1)))))), get_abs_curvature_extrema_polys_dd_qmd(3, get_abs_curvature_extrema_polys_dd_qmq(get_abs_curvature_extrema_polys_dd_qmq(ddx1, ddy1), z6))));
     const a4 = get_abs_curvature_extrema_polys_dd_qmd(3, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(z4, (get_abs_curvature_extrema_polys_dd_qdq(ddy1_ddy1, get_abs_curvature_extrema_polys_dd_qmq(ddx1, ddx1)))), get_abs_curvature_extrema_polys_dd_qmq(z5, (get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qmq(ddx0, ddy1), get_abs_curvature_extrema_polys_dd_qmq(ddy0, ddx1)))))));
     const t5 = get_abs_curvature_extrema_polys_dd_qaq(get_abs_curvature_extrema_polys_dd_qaq(a1, a2), get_abs_curvature_extrema_polys_dd_qaq(a3, a4));
     // const t4 = 
@@ -24368,11 +21965,11 @@ function getAbsCurvatureExtremaPolysDd(ps) {
 ;// CONCATENATED MODULE: ./src/get-curvature-extrema-dd/get-curvature-extrema-quadratic-poly-dd.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_curvature_extrema_quadratic_poly_dd_td = node_twoDiff;
-const get_curvature_extrema_quadratic_poly_dd_qmd = node_ddMultDouble2;
-const get_curvature_extrema_quadratic_poly_dd_qmq = node_ddMultDd;
-const get_curvature_extrema_quadratic_poly_dd_qaq = node_ddAddDd;
-const get_curvature_extrema_quadratic_poly_dd_qdq = node_ddDiffDd;
+const get_curvature_extrema_quadratic_poly_dd_td = two_diff_twoDiff;
+const get_curvature_extrema_quadratic_poly_dd_qmd = ddMultDouble2;
+const get_curvature_extrema_quadratic_poly_dd_qmq = ddMultDd;
+const get_curvature_extrema_quadratic_poly_dd_qaq = ddAddDd;
+const get_curvature_extrema_quadratic_poly_dd_qdq = ddDiffDd;
 /**
  * Returns the polynomial whose zero is the t value of maximum absolute
  * curvature for the given *quadratic* bezier curve.
@@ -24399,7 +21996,7 @@ function getCurvatureExtremaQuadraticPolyDd(ps) {
     const wy = get_curvature_extrema_quadratic_poly_dd_qdq(y21, y10);
     const n = get_curvature_extrema_quadratic_poly_dd_qaq(get_curvature_extrema_quadratic_poly_dd_qdq(get_curvature_extrema_quadratic_poly_dd_qmd(x0, (get_curvature_extrema_quadratic_poly_dd_qdq(wx, [0, x1]))), get_curvature_extrema_quadratic_poly_dd_qmd(x1, (get_curvature_extrema_quadratic_poly_dd_qdq(x21, [0, x1])))), get_curvature_extrema_quadratic_poly_dd_qdq(get_curvature_extrema_quadratic_poly_dd_qmd(y0, (get_curvature_extrema_quadratic_poly_dd_qdq(wy, [0, y1]))), get_curvature_extrema_quadratic_poly_dd_qmd(y1, (get_curvature_extrema_quadratic_poly_dd_qdq(y21, [0, y1])))));
     const d = get_curvature_extrema_quadratic_poly_dd_qaq(get_curvature_extrema_quadratic_poly_dd_qmq(wx, wx), get_curvature_extrema_quadratic_poly_dd_qmq(wy, wy));
-    return [d, node_ddNegativeOf(n)];
+    return [d, ddNegativeOf(n)];
 }
 
 
@@ -24456,8 +22053,8 @@ function getCurvatureExtremaDd(ps) {
         const t = (ts[i].tS + ts[i].tE) / 2;
         const dp2_ = eHorner(dp2, t);
         const p1_ = eHorner(p1, t);
-        const secondDerivative = eMult(p1_, dp2_);
-        if (e_sign_eSign(secondDerivative) >= 0) {
+        const secondDerivative = expansionProduct(p1_, dp2_);
+        if (eSign(secondDerivative) >= 0) {
             minima.push(t);
         }
         else {
@@ -24478,9 +22075,9 @@ function getCurvatureExtremaDd(ps) {
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const get_abs_curvature_extrema_polys_e_em2 = eMultBy2;
 const get_abs_curvature_extrema_polys_e_em4 = (v) => eMultBy2(eMultBy2(v));
-const emd = eMultDouble1;
-const eme = eMult;
-const eae = eAdd;
+const emd = scaleExpansion;
+const eme = expansionProduct;
+const eae = fastExpansionSum;
 const ede = eDiff;
 /**
  * Returns the polynomials whose zeros are the `t` values of the local
@@ -24635,9 +22232,9 @@ function getAbsCurvatureExtremaPolysE(ps) {
 ;// CONCATENATED MODULE: ./src/get-curvature-extrema-e/get-curvature-extrema-quadratic-poly-e.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_curvature_extrema_quadratic_poly_e_emd = eMultDouble2;
-const get_curvature_extrema_quadratic_poly_e_eme = eMult;
-const get_curvature_extrema_quadratic_poly_e_eae = eAdd;
+const get_curvature_extrema_quadratic_poly_e_emd = scaleExpansion2;
+const get_curvature_extrema_quadratic_poly_e_eme = expansionProduct;
+const get_curvature_extrema_quadratic_poly_e_eae = fastExpansionSum;
 const get_curvature_extrema_quadratic_poly_e_ede = eDiff;
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const get_curvature_extrema_quadratic_poly_e_td = twoDiff;
@@ -24749,8 +22346,8 @@ function getCurvatureExtremaE(ps) {
         const t = (ts[i].tS + ts[i].tE) / 2;
         const dp2_ = eHorner(dp2, t);
         const p1_ = eHorner(p1, t);
-        const secondDerivative = eMult(p1_, dp2_);
-        if (e_sign_eSign(secondDerivative) >= 0) {
+        const secondDerivative = expansionProduct(p1_, dp2_);
+        if (eSign(secondDerivative) >= 0) {
             minima.push(t);
         }
         else {
@@ -25098,7 +22695,7 @@ function getBoundingBoxTight(ps) {
     let cosθ;
     // take care of the case the endpoints are close together
     const len = controlPointLinesLength(ps);
-    if (squared_distance_between_squaredDistanceBetween(ps[0], ps[ps.length - 1]) * 2 ** 8 < len * len) {
+    if (squaredDistanceBetween(ps[0], ps[ps.length - 1]) * 2 ** 8 < len * len) {
         const [xE_, yE_] = evalDeCasteljau(ps, 0.5);
         const hypotenuse = Math.sqrt((xE_ - xS) * (xE_ - xS) + (yE_ - yS) * (yE_ - yS));
         sinθ = (yE_ - yS) / hypotenuse;
@@ -25181,13 +22778,13 @@ function cubicToHybridQuadratic(ps) {
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_coeffs_dd_tp = node_twoProduct;
-const get_coeffs_dd_qaq = node_ddAddDd;
-const get_coeffs_dd_qm2 = node_ddMultBy2;
-const get_coeffs_dd_qmn2 = node_ddMultByNeg2;
-const get_coeffs_dd_qdifq = node_ddDiffDd;
-const get_coeffs_dd_qmq = node_ddMultDd;
-const get_coeffs_dd_qmd = node_ddMultDouble2;
+const get_coeffs_dd_tp = basic_two_product_twoProduct;
+const get_coeffs_dd_qaq = ddAddDd;
+const get_coeffs_dd_qm2 = ddMultBy2;
+const get_coeffs_dd_qmn2 = ddMultByNeg2;
+const get_coeffs_dd_qdifq = ddDiffDd;
+const get_coeffs_dd_qmq = ddMultDd;
+const get_coeffs_dd_qmd = ddMultDouble2;
 /**
  * @param circle a circle
  * @param ps a cubic bezier curve
@@ -25257,6 +22854,80 @@ function getCoeffsLinearDd(circle, ps) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-calculate.js
+
+
+
+
+
+
+
+// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
+const e_calculate_mult = expansionProduct;
+const e_calculate_tp = two_product_twoProduct;
+const e_calculate_multByDouble = scaleExpansion;
+const e_calculate_ts = basic_two_sum_twoSum;
+const addDouble = growExpansion;
+const e_calculate_add = fastExpansionSum;
+const e_calculate_compress = (/* unused pure expression or super */ null && (eCompress));
+/**
+ * Return the result of summing an array of terms, each term being an array of
+ * floating point expansions to be multiplied together.
+ *
+ * * The result is exact in the form of a non-overlapping floating point
+ * expansion.
+ * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ *
+ * @param terms An array of terms to be summed; A term consists of an
+ * array of floating point expansions to be multiplied together.
+ */
+// The terms parameter were chosen to always be expansions in order to keep the 
+// function monomorhic, but whether it's really worth it I am not sure.
+function eCalculate(terms) {
+    let total = [0];
+    for (let i = 0; i < terms.length; i++) {
+        const term = terms[i];
+        let product = term[0];
+        for (let j = 1; j < term.length; j++) {
+            const multiplicant = term[j];
+            if (multiplicant.length == 1) {
+                if (product.length === 1) {
+                    product = e_calculate_tp(product[0], multiplicant[0]);
+                }
+                else {
+                    product = e_calculate_multByDouble(product, multiplicant[0]);
+                }
+            }
+            else if (product.length === 1) {
+                product = e_calculate_multByDouble(multiplicant, product[0]);
+            }
+            else {
+                product = e_calculate_mult(multiplicant, product);
+            }
+        }
+        // add
+        if (product.length === 1) {
+            if (total.length === 1) {
+                total = e_calculate_ts(total[0], product[0]);
+            }
+            else {
+                total = addDouble(total, product[0]);
+            }
+        }
+        else {
+            if (total.length === 1) {
+                total = addDouble(product, total[0]);
+            }
+            else {
+                total = e_calculate_add(total, product);
+            }
+        }
+    }
+    //return compress(total);
+    return total;
+}
+
+//# sourceMappingURL=e-calculate.js.map
 ;// CONCATENATED MODULE: ./src/intersection/circle-bezier-intersection/exact/get-coeffs-exact.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
@@ -25832,7 +23503,7 @@ function tangentAt0Exact(ps) {
 
 ;// CONCATENATED MODULE: ./src/local-properties-at-t/evaluate-2nd-derivative/exact/evaluate-2nd-derivative-at-0-exact.ts
 
-const evaluate_2nd_derivative_at_0_exact_ts = two_sum_twoSum;
+const evaluate_2nd_derivative_at_0_exact_ts = basic_two_sum_twoSum;
 const evaluate_2nd_derivative_at_0_exact_sce = scaleExpansion2;
 const evaluate_2nd_derivative_at_0_exact_ge = growExpansion;
 /**
@@ -25912,7 +23583,7 @@ function tangentAt1Exact(ps) {
 
 ;// CONCATENATED MODULE: ./src/local-properties-at-t/evaluate-2nd-derivative/exact/evaluate-2nd-derivative-at-1-exact.ts
 
-const evaluate_2nd_derivative_at_1_exact_ts = two_sum_twoSum;
+const evaluate_2nd_derivative_at_1_exact_ts = basic_two_sum_twoSum;
 const evaluate_2nd_derivative_at_1_exact_sce = scaleExpansion2;
 const evaluate_2nd_derivative_at_1_exact_ge = growExpansion;
 /**
@@ -26488,8 +24159,8 @@ function getCubicSpeeds(ps) {
     const p3 = ps[3];
     const v = [p3[0] - p0[0], p3[1] - p0[1]]; // vector from 1st to last point
     const L = len(v);
-    const v01 = node_fromTo(p0, p1);
-    const v32 = node_fromTo(p3, p2);
+    const v01 = from_to_fromTo(p0, p1);
+    const v32 = from_to_fromTo(p3, p2);
     const s0 = 3 * len(v01) / L;
     const s1 = 3 * len(v32) / L;
     return [s0, s1];
@@ -26516,8 +24187,8 @@ function setCubicSpeeds(ps, s0, s1) {
     const p3 = ps[3];
     const v = [p3[0] - p0[0], p3[1] - p0[1]]; // vector from 1st to last point
     const L = len(v);
-    const v01 = node_fromTo(p0, p1);
-    const v32 = node_fromTo(p3, p2);
+    const v01 = from_to_fromTo(p0, p1);
+    const v32 = from_to_fromTo(p3, p2);
     const v01_ = toLength(v01, s0 / 3 * L);
     const p1_ = translate(p0, v01_);
     const v32_ = toLength(v32, s1 / 3 * L);
@@ -26724,7 +24395,6 @@ function closest_distance_between_beziers_calcHErrorBound(A, tS, tE) {
 
 
 ;// CONCATENATED MODULE: ./src/index.ts
-
 
 
 
