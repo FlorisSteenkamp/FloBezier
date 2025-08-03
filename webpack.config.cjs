@@ -1,6 +1,7 @@
-const path = require('path');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+const path = require('path');
 
 
 const config_Basic = {
@@ -24,12 +25,12 @@ const config_Basic = {
         rules: [{
             test: /\.tsx?$/,
             use: 'ts-loader',
+            options: { silent: true },
             exclude: /node_modules/,
             sideEffects: false
         }]
     },
     stats: {
-        // Don't display most things
         all: false,
         colors: true,
         errors: true,

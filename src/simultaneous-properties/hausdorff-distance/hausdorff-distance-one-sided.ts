@@ -164,3 +164,31 @@ function calcHErrorBound(
 
 
 export { hausdorffDistanceOneSided }
+
+
+// Quokka tests
+
+// const ls = [
+//     [[0,0],[1,1]],
+//     [[1,1],[2,1]],
+//     [[2,1],[3,2]],
+//     [[3,2],[4,1]],
+//     [[4,1],[5,0]]
+// ];
+// const b = [[0,0],[1,1],[4,1],[5,0]];
+// ls.map(l => hausdorffDistanceOneSided(l,b));//?
+// ls.map(l => hausdorffDistanceOneSided(b,l));//?
+
+// const q = [[0,0],[1,1],[2,0]];
+// const ts = Array.from({length: 4}, (_,i) => i/4);
+// ts.push(1);
+// const cs: number[][][] = [];
+
+// for (let i=0; i<ts.length - 1; i++) {
+//     const t1 = ts[i];//?
+//     const t2 = ts[1+i];//?
+//     const c = fromTo(q, t1, t2);
+//     cs.push(c);
+// }
+
+// hausdorffDistanceOneSided(cs[3], q);//?

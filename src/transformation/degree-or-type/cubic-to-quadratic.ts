@@ -71,11 +71,6 @@ function cubicToQuadratic(
     const pM = llIntersection(l1,l2);
     if (pM === undefined) {
         return undefined;
-        //return [
-        //    p0,
-        //    [(p0[0] + p3[0])/2, (p0[1] + p3[1])/2],
-        //    p3
-        //];
     }
 
     return [p0,pM,p3];
@@ -121,7 +116,7 @@ function llIntersection(
 	return [
 		x3 + bb*estimate(x2_), 
 		y3 + bb*estimate(y2_)
-	];    
+	];
 }
 
 

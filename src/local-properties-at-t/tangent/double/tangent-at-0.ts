@@ -48,3 +48,7 @@ function tangentAt0(ps: number[][]): number[] {
 
 
 export { tangentAt0 }
+
+
+// Quokka tests
+// tangentAt0([[0,0],[0,0],[2,1]]); //?

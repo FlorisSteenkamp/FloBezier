@@ -1,7 +1,6 @@
 import { len, reverse, rotate, scale, translate } from "flo-vector2d";
 import { AnglesAndSpeeds } from "../angles-and-speeds";
 
-
 const { cos, sin, atan2 } = Math;
 
 
@@ -22,7 +21,6 @@ const { cos, sin, atan2 } = Math;
  function cubicToAnglesAndSpeeds(
         ps: number[][]): AnglesAndSpeeds {
 
-    // [_x1,_y1],[_x2,_y2],[_x3,_y3]
     const p = ps[0];
 
     // move ps to origin
@@ -47,7 +45,6 @@ const { cos, sin, atan2 } = Math;
     
     const s0 = 3*len(TS);
     const s1 = 3*len(TE);
-
 
     return { α, β, s0, s1, L, rot, p };
 }
