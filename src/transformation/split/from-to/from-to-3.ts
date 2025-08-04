@@ -65,7 +65,7 @@ function splitRight3(
 	const y03 = y02 - t*(y02 - y12);
 
 
-    return [[x03, y03], [x12, y12], [x21, y21], [x30, y30]];
+    return [[x03, y03], [x12, y12], [x21, y21], p3];
 }
 
 
@@ -107,7 +107,7 @@ function splitLeft3(
 	const y12 = y11 - t*(y11 - y21);
 	const y03 = y02 - t*(y02 - y12);
 
-    return [[x00, y00], [x01, y01], [x02, y02], [x03, y03]];
+    return [p0, [x01, y01], [x02, y02], [x03, y03]];
 }
 
 

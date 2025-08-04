@@ -51,8 +51,7 @@ function splitRight1(
     return [
         [t*(x1 - x0) + x0,   // xx0
          t*(y1 - y0) + y0],  // yy0
-        [x1,   // xx1
-         y1]   // yy1
+        p1
     ];
 }
 
@@ -80,8 +79,7 @@ function splitLeft1(
     // --------------------------------------------------------
 
     return [
-        [x0,   // xx0
-         y0],  // yy0
+        p0,
         [t*(x1 - x0) + x0,   // xx1
          t*(y1 - y0) + y0]   // yy1
     ];
