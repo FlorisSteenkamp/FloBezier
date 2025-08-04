@@ -42,4 +42,6 @@ function tangentAt0(ps) {
     throw new Error('The given bezier curve must be of order <= 3.');
 }
 export { tangentAt0 };
+// Quokka tests
+// tangentAt0([[0,0],[0,0],[2,1]]); //?
 //# sourceMappingURL=tangent-at-0.js.map

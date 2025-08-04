@@ -250,11 +250,11 @@ function getClosestOnBezier1FromPointErrorCounters(ps, p) {
     const yp_ = abs(p[1]); // <0>
     // <1>xx0 <-- <1>(x0 - xp);
     const xx0_ = x0_ + xp_;
-    // <1>xx1 <-- <1>(x1 - xp);    
+    // <1>xx1 <-- <1>(x1 - xp);
     const xx1_ = x1_ + xp_;
-    // <1>yy0 <-- <1>(y0 - yp);    
+    // <1>yy0 <-- <1>(y0 - yp);
     const yy0_ = y0_ + yp_;
-    // <1>yy1 <-- <1>(y1 - yp);    
+    // <1>yy1 <-- <1>(y1 - yp);
     const yy1_ = y1_ + yp_;
     // <3>x00 <-- <3>(xx0*xx0);
     const x00_ = xx0_ * xx0_;

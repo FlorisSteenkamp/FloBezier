@@ -25,7 +25,9 @@ function getInterfaceRotation(a, b) {
     const v2 = a[1];
     const w1 = b[0];
     const w2 = b[1];
+    // w2*v1 - w1*v2;
     const A = ddDiffDd(tp(w2, v1), tp(w1, v2))[1];
+    // w1*v1 + w2*v2;
     const B = ddAddDd(tp(w1, v1), tp(w2, v2))[1];
     return atan2(A, B);
 }

@@ -15,7 +15,6 @@ const { cos, sin, atan2 } = Math;
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  */
 function cubicToAnglesAndSpeeds(ps) {
-    // [_x1,_y1],[_x2,_y2],[_x3,_y3]
     const p = ps[0];
     // move ps to origin
     ps = ps.map(translate(reverse(p)));

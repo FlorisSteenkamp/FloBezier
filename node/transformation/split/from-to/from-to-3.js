@@ -58,7 +58,7 @@ function splitRight3(ps, t) {
     const y02 = y01 - t * (y01 - y11);
     const y12 = y11 - t * (y11 - y21);
     const y03 = y02 - t * (y02 - y12);
-    return [[x03, y03], [x12, y12], [x21, y21], [x30, y30]];
+    return [[x03, y03], [x12, y12], [x21, y21], p3];
 }
 /**
  * Returns a bezier curve that starts at `t === 0` and ends at the given t
@@ -98,7 +98,7 @@ function splitLeft3(ps, t) {
     const y02 = y01 - t * (y01 - y11);
     const y12 = y11 - t * (y11 - y21);
     const y03 = y02 - t * (y02 - y12);
-    return [[x00, y00], [x01, y01], [x02, y02], [x03, y03]];
+    return [p0, [x01, y01], [x02, y02], [x03, y03]];
 }
 /**
  * Returns a bezier curve that starts and ends at the given `t` parameters.

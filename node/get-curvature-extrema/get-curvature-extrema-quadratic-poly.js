@@ -26,6 +26,13 @@ function getCurvatureExtremaQuadraticPoly(ps) {
         y0 * (wy - y1) - y1 * (y21 - y1);
     const d = wx * wx + wy * wy;
     return [d, -n];
+    // const nd = 
+    //     (x0*(x2 - 3*x1 + x0)) - (x1*(x2 - 2*x1)) + 
+    //     (y0*(y2 - 3*y1 + y0)) - (y1*(y2 - 2*y1));
+    // const nd = (
+    //     (x0*x2 - 3*x0*x1 + x0*x0 - x1*x2 + 2*x1*x1) + 
+    //     (y0*y2 - 3*y0*y1 + y0*y0 - y1*y2 + 2*y1*y1)) /
+    //     ((x2 - 2*x1 + x0)**2 + (y2 - 2*y1 + y0)**2);
 }
 export { getCurvatureExtremaQuadraticPoly };
 //# sourceMappingURL=get-curvature-extrema-quadratic-poly.js.map
