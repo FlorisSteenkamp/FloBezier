@@ -35,15 +35,19 @@ function cubicToQuadratic(
     //   x3 + 3*(x1 - x2) === x0 && 
     //   y3 + 3*(y1 - y2) === y0
 
+    const [p0,p1,p2,p3] = ps;
 
     // Take the midpoint of the moving line of the hybrid quadratic version of 
     // the cubic as the new quadratic's middle control point.
 
     if (!preserveTangents) {
-        const [[x0,y0],[x1,y1],[x2,y2],[x3,y3]] = ps;
+        const [x0,y0] = p0;
+        const [x1,y1] = p1;
+        const [x2,y2] = p2;
+        const [x3,y3] = p3;
         
         return [
-            [x0,y0],
+            p0,
             [
                 // [
                 //   (3*(x1 + x2) - (x0 + x3)) / 4, 
@@ -58,12 +62,12 @@ function cubicToQuadratic(
                     ts(y0/4, y3/4)
                 ))
             ],
-            [x3,y3]
+            p3
         ];
     }
 
     // At this point: `preserveTangents === true`
-    const [p0,p1,p2,p3] = ps;
+    
 
     const l1 = [p0, p1];
     const l2 = [p3, p2];
