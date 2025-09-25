@@ -2,6 +2,14 @@ Bug reports, pull requests and ⭐⭐⭐⭐⭐s are welcome and appreciated!
 
 ## Overview
 
+[![npm][1]][2] [![install size][3]][4] [![downloads][5]][2]
+
+[1]: https://img.shields.io/npm/v/flo-bezier3 "FloBezier, npm badge"
+[2]: https://www.npmjs.com/package/flo-bezier3 "FloBezier, npm link"
+[3]: https://packagephobia.now.sh/badge?p=flo-bezier3 "FloBezier size, badge"
+[4]: https://packagephobia.now.sh/result?p=flo-bezier3 "FloBezier size, link"
+[5]: https://badgen.now.sh/npm/dm/flo-bezier3 "FloBezier downloads, badge"
+
 The focus is to provide a portable, practical, easy-to-use, robust and fast bezier curve
 library with zero vendor lock-in.
 
