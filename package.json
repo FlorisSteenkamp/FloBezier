@@ -57,6 +57,7 @@
         "webpack-cli": "^6.0.1",
         "source-map-support": "^0.5.21"
     },
+    "files": ["node", "browser", "src"],
     "scripts": {
         "build": "npm run build-browser && npm run build-node",
         "build-node": "rimraf node && tsc",
