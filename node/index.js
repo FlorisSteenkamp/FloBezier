@@ -62,7 +62,7 @@ export { toPowerBasisDd } from './to-power-basis/to-power-basis/double-double/to
 export { toPowerBasis_1stDerivativeDd } from './to-power-basis/to-power-basis-1st-derivative/double-double/to-power-basis-1st-derivative-dd.js';
 export { toPowerBasis_2ndDerivativeDd } from './to-power-basis/to-power-basis-2nd-derivative/double-double/to-power-basis-2nd-derivative-dd.js';
 export { toPowerBasis_3rdDerivativeDd } from './to-power-basis/to-power-basis-3rd-derivative/double-double/to-power-basis-3rd-derivative-dd.js';
-export { toPowerBasisExact } from './to-power-basis/to-power-basis/exact/to-power-basis-exact.js';
+export { toPowerBasisExact, toPowerBasis0Exact, toPowerBasis1Exact, toPowerBasis2Exact, toPowerBasis3Exact } from './to-power-basis/to-power-basis/exact/to-power-basis-exact.js';
 export { toPowerBasis_1stDerivativeExact } from './to-power-basis/to-power-basis-1st-derivative/exact/to-power-basis-1st-derivative-exact.js';
 export { toPowerBasis_2ndDerivativeExact } from './to-power-basis/to-power-basis-2nd-derivative/exact/to-power-basis-2nd-derivative-exact.js';
 export { toPowerBasis_3rdDerivativeExact } from './to-power-basis/to-power-basis-3rd-derivative/exact/to-power-basis-3rd-derivative-exact.js';
