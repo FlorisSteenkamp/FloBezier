@@ -74,7 +74,12 @@ export { toPowerBasis_1stDerivativeExact } from './to-power-basis/to-power-basis
 export { toPowerBasis_2ndDerivativeExact } from './to-power-basis/to-power-basis-2nd-derivative/exact/to-power-basis-2nd-derivative-exact.js';
 export { toPowerBasis_3rdDerivativeExact } from './to-power-basis/to-power-basis-3rd-derivative/exact/to-power-basis-3rd-derivative-exact.js';
 export { toPowerBasisWithRunningError } from './to-power-basis/to-power-basis/double/to-power-basis-with-running-error.js';
-export { toPowerBasisDdWithRunningError } from './to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js';
+export {
+    toPowerBasisDdWithRunningError,
+    toPowerBasis1DdWithRunningError,
+	toPowerBasis2DdWithRunningError,
+	toPowerBasis3DdWithRunningError
+} from './to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js';
 export { toPowerBasisErrorCounters } from './to-power-basis/to-power-basis/to-power-basis-error-counters.js';
 export { toPowerBasis_1stDerivativeErrorCounters } from './to-power-basis/to-power-basis-1st-derivative/to-power-basis-1st-derivative-error-counters.js';
 export { normal } from './local-properties-at-t/normal/normal.js';
@@ -147,3 +152,4 @@ export { getCubicSpeeds } from './angles-and-speeds/bezier-by-angles-and-speeds/
 export { setCubicSpeeds } from './angles-and-speeds/bezier-by-angles-and-speeds/set-cubic-speeds.js';
 export { closestPointsBetweenBeziers } from './simultaneous-properties/closest-distance-between-beziers/closest-distance-between-beziers.js';
 export { maxAbsCoordinate } from './error-analysis/max-abs-coordinate.js';
+
