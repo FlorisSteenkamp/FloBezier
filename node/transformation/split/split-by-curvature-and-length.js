@@ -20,32 +20,24 @@ import { fromTo } from "./from-to.js";
  * @doc mdx
  */
 function splitByCurvatureAndLength(ps, maxCurviness = 0.4, maxLength = 10, minTSpan = 2 ** -16) {
-    const head = { r: [0, 1] };
-    let n = head;
-    while (n !== undefined) {
-        const ts_ = n.r;
-        const ps_ = fromTo(ps, ts_[0], ts_[1]);
-        if ((controlPointLinesLength(ps_) <= maxLength &&
-            curviness(ps_) <= maxCurviness) || ts_[1] - ts_[0] <= minTSpan) {
-            n = n.next;
+    const tsS = [0];
+    const tsE = [1];
+    while (true) {
+        const tS = tsS[tsS.length - 1];
+        const tE = tsE[tsE.length - 1];
+        const ps_ = fromTo(ps, tS, tE);
+        const l = controlPointLinesLength(ps_);
+        const c = curviness(ps_);
+        if ((l <= maxLength && c <= maxCurviness) || tE - tS <= minTSpan) {
+            tsS.push(tsE.pop());
+            if (tE === 1) {
+                return tsS;
+            }
             continue;
         }
-        const t = (ts_[0] + ts_[1]) / 2;
-        const L = [ts_[0], t];
-        const R = [t, ts_[1]];
-        n.r = L;
-        n.next = { r: R, next: n.next };
+        const t = (tS + tE) / 2;
+        tsE.push(t);
     }
-    n = head;
-    const ts = [];
-    while (n !== undefined) {
-        ts.push(n.r[0]);
-        if (n.next === undefined) {
-            ts.push(n.r[1]);
-        }
-        n = n.next;
-    }
-    return ts;
 }
 export { splitByCurvatureAndLength };
 //# sourceMappingURL=split-by-curvature-and-length.js.map

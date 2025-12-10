@@ -12,6 +12,8 @@ const sqrt = Math.sqrt;
  * * intermediate calculations are done in double precision
  * * in some cases there can be more than one closest point, e.g. on the axis
  * of symmetry of a parabola (in which case only one of the points are returned)
+ * * if `inclEndpoints` is `false` then `undefined` will be returned in case
+ * there is no closest point not on an endpoint
  * * the returned point(s) are objects with the following properties:
  *     * `p`: the closest point on the bezier curve
  *     * `t`: the parameter value of the point on the bezier curve
@@ -23,7 +25,7 @@ const sqrt = Math.sqrt;
  *
  * @doc mdx
  */
-function closestPointOnBezier(ps, p) {
+function closestPointOnBezier(ps, p, inclEndpoints = true) {
     let poly;
     if (ps.length === 4) {
         poly = getFootpointPoly3(ps, p);
@@ -41,8 +43,10 @@ function closestPointOnBezier(ps, p) {
         throw new Error('The given bezier curve must be of order <= 3.');
     }
     const ts = allRoots(poly, 0, 1);
-    ts.push(0);
-    ts.push(1);
+    if (inclEndpoints) {
+        ts.push(0);
+        ts.push(1);
+    }
     // Get point with minimum distance
     let minDSquared = Number.POSITIVE_INFINITY;
     let minP = undefined;

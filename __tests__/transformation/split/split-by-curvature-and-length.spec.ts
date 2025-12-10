@@ -1,11 +1,9 @@
-import { expect, assert, use } from 'chai';
+import { expect } from 'chai';
 import { describe } from 'mocha';
-import { nearly } from '../../helpers/chai-extend-nearly.js';
 import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../../helpers/random-rotate-and-translate.js';
-import { classify, fromTo, generateCuspAtHalf3, splitByCurvatureAndLength } from '../../../src/index.js';
+import { fromTo, generateCuspAtHalf3, splitByCurvatureAndLength } from '../../../src/index.js';
 
-use(nearly);
 
 describe('splitByCurvatureAndLength', function() {
 	it('it should correctly split some bezier curves according to maximum curviness and length',
