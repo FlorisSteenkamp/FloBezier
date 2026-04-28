@@ -126,6 +126,7 @@ export { tangentAt1 } from './local-properties-at-t/tangent/double/tangent-at-1.
 export { evaluate2ndDerivativeAt1 } from './local-properties-at-t/evaluate-2nd-derivative/double/evaluate-2nd-derivative-at-1.js';
 export { toString } from './transformation/to-string.js';
 export { bezierBezierIntersectionBoundless } from './intersection/bezier-bezier-intersection/bezier-bezier-intersection-boundless.js';
+export { bezierBezierIntersectionBoundlessBoth } from './intersection/bezier-bezier-intersection/bezier-bezier-intersection-boundless-both.js';
 export { getXBoundsTight } from './global-properties/bounds/get-x-bounds-tight.js';
 export { getYBoundsTight } from './global-properties/bounds/get-y-bounds-tight.js';
 export { getFootpointPolyExact } from "./simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/exact/get-footpoint-poly-exact.js";
@@ -140,4 +141,6 @@ export { getCubicSpeeds } from './angles-and-speeds/bezier-by-angles-and-speeds/
 export { setCubicSpeeds } from './angles-and-speeds/bezier-by-angles-and-speeds/set-cubic-speeds.js';
 export { closestPointsBetweenBeziers } from './simultaneous-properties/closest-distance-between-beziers/closest-distance-between-beziers.js';
 export { maxAbsCoordinate } from './error-analysis/max-abs-coordinate.js';
+export { generateArcFromQuads } from './create/generate-arc-from-quads.js';
+export { calcQuadOffsetCurveXPoint } from './offset/calc-quad-offset-x-point.js';
 //# sourceMappingURL=index.js.map

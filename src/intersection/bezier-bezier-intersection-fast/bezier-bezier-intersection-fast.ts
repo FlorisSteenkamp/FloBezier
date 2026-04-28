@@ -3,8 +3,6 @@ import type { Iteration } from './iteration.js';
 import { checkIntersectionInRanges as _checkIntersectionInRanges } from './check-intersection-in-ranges.js';
 import { bezierBezierIntersection as _bezierBezierIntersection } from '../bezier-bezier-intersection/bezier-bezier-intersection.js';
 
-declare const globalThis: typeof global & { __debug__: __Debug__ };
-
 
 const checkIntersectionInRanges = _checkIntersectionInRanges;
 const bezierBezierIntersection = _bezierBezierIntersection;

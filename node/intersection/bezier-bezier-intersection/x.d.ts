@@ -54,4 +54,5 @@ interface X {
 }
 /** @internal */
 declare function getPFromBox(box: number[][]): number[];
-export { X, getPFromBox };
+export type { X };
+export { getPFromBox };

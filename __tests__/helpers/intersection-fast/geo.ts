@@ -1,6 +1,7 @@
+import type { X } from '../../../src/index.js';
 import { updDs } from './upd-ds.js';
 import { checkResults } from './check-results.js';
-import { bezierBezierIntersectionFast, X } from '../../../src/index.js';
+import { bezierBezierIntersectionFast } from '../../../src/index.js';
 import { expect } from 'chai';
 
 

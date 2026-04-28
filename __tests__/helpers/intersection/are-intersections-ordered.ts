@@ -1,6 +1,6 @@
 // ignore file coverage
 
-import { X } from "../../../src/index.js";
+import type { X } from "../../../src/index.js";
 
 
 function areIntersectionsOrdered(xs: X[]): boolean {

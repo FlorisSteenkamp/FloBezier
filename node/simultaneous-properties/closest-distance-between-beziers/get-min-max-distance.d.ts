@@ -1,4 +1,4 @@
-import { DistanceInterval } from "./distance-interval";
+import { DistanceInterval } from "./distance-interval.js";
 /** @internal */
 declare function getMaxDistance(i: DistanceInterval): number;
 /** @internal */

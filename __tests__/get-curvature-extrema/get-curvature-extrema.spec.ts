@@ -1,8 +1,9 @@
 import { expect, assert, use } from 'chai';
 import { describe } from 'mocha';
+import type { Extrema } from '../../src/get-curvature-extrema/get-curvature-extrema.js';
 import { squares } from 'squares-rng';
 import { rotate, translate } from 'flo-vector2d';
-import { getCurvatureExtrema, curvature, Extrema } from '../../src/index.js';
+import { getCurvatureExtrema, curvature } from '../../src/index.js';
 import { createCubicThatsReallyQuad } from '../helpers/create-cubic-thats-really-quad.js';
 import { nearly } from '../helpers/chai-extend-nearly.js';
 

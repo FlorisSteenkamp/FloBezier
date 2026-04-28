@@ -8,8 +8,6 @@ import { translate as _translate } from 'flo-vector2d';
 import { getDistanceToLineFunction as _getDistanceToLineFunction } from "./get-distance-to-line-function.js";
 import { fromToInclErrorBound as _fromToInclErrorBound } from '../../transformation/split/from-to-incl-error-bound.js';
 
-declare const globalThis: typeof global & { __debug__: __Debug__ };
-
 const getDistanceToLineFunction = _getDistanceToLineFunction;
 const geoClip = _geoClip;
 const fromToInclErrorBound = _fromToInclErrorBound;

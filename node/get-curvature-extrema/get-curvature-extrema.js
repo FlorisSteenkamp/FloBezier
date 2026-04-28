@@ -6,7 +6,7 @@ import { cubicToQuadratic } from "../transformation/degree-or-type/cubic-to-quad
 import { getCurvatureExtremaQuadraticPoly } from './get-curvature-extrema-quadratic-poly.js';
 /**
  * Returns the parameter `t` values (in `[0,1]`) of local minimum / maximum
- * absolute curvature for the given bezier curve.
+ * absolute curvature for the given bezier curve as well as inflection points.
  *
  * If there are an infinite number of such `t` values (such as is the case for a
  * line), an empty array is returned.

@@ -2,8 +2,9 @@ import { expect, use } from "chai";
 import { eEstimate } from "big-float-ts";
 import { 
     bezierSelfIntersection, evaluateExact, generateSelfIntersecting, 
-    isPointOnBezierExtension, X 
+    isPointOnBezierExtension
 } from "../../../src/index.js";
+import type { X } from "../../../src/index.js";
 import { fromTo3 } from "../../../src/transformation/split/from-to/from-to-3.js";
 import { nearly } from "../../helpers/chai-extend-nearly.js";
 import { areIntersectionsInfinte } from "../../helpers/intersection/are-intersections-infinite.js";

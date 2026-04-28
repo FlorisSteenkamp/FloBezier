@@ -1,5 +1,5 @@
 import { len, reverse, rotate, scale, translate } from "flo-vector2d";
-import { AnglesAndSpeeds } from "../angles-and-speeds";
+import { AnglesAndSpeeds } from "../angles-and-speeds.js";
 
 const { cos, sin, atan2 } = Math;
 

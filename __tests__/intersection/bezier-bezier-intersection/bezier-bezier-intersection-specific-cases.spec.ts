@@ -1,5 +1,6 @@
 import { expect, use } from 'chai';
-import { bezierBezierIntersection, cubicToQuadratic, evaluateExact, generateSelfIntersecting, X } from '../../../src/index.js';
+import { bezierBezierIntersection, cubicToQuadratic, evaluateExact, generateSelfIntersecting } from '../../../src/index.js';
+import type { X } from '../../../src/index.js';
 import { getPssWithInfiniteXs } from '../../helpers/intersection/get-pss-with-infinite-xs.js';
 import { swapIntersections } from '../../helpers/intersection/swap-intersections.js';
 import { areIntersectionsOrdered } from '../../helpers/intersection/are-intersections-ordered.js';

@@ -74,4 +74,5 @@ function getPFromBox(box: number[][]) {
 }
 
 
-export { X, getPFromBox }
+export type { X }
+export { getPFromBox }

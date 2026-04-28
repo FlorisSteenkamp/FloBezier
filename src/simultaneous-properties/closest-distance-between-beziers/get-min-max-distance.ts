@@ -1,4 +1,4 @@
-import { DistanceInterval } from "./distance-interval";
+import { DistanceInterval } from "./distance-interval.js";
 
 const { min, max } = Math;
 

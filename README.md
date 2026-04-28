@@ -71,8 +71,7 @@ npm install flo-bezier3
 This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
 It can be used in `Node.js` or in a browser.
 
-Additionally, self-contained `ECMAScript Module` (ESM) files `index.js` and
-`index.min.js` in the `./browser` folder are provided.
+For direct browser support (without using a bundler), `index.js` and `index.min.js` are provided in the `./browser` folder.
 
 ## Usage
 
@@ -134,17 +133,10 @@ Since your webpack config file might still use `CommonJS` you must rename
 
 If you are using TypeScript:
 
-Since this is an [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)
-library you must use [resolve-typescript-plugin](https://www.npmjs.com/package/resolve-typescript-plugin) 
-(at least until webpack catches up with ESM?) in your `webpack.config.cjs` file.
+This is an [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)
+library.
 
-```cli
-npm install --save-dev resolve-typescript-plugin
-```
-
-and follow the instructions given at [resolve-typescript-plugin](https://www.npmjs.com/package/resolve-typescript-plugin).
-
-Additionally, follow this [guide](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c#how-can-i-make-my-typescript-project-output-esm).
+Follow this [guide](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c#how-can-i-make-my-typescript-project-output-esm).
 
 
 ## License

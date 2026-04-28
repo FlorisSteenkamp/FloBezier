@@ -1,4 +1,4 @@
-import { X } from "../../../src/index.js";
+import type { X } from "../../../src/index.js";
 
 const abs = Math.abs;
 

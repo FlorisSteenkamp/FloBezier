@@ -20,162 +20,8 @@
 /******/ })();
 /******/ 
 /************************************************************************/
-var __webpack_exports__ = {};
 
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, {
-  r9: () => (/* reexport */ areBoxesIntersecting),
-  Wc: () => (/* reexport */ area_area),
-  G6: () => (/* reexport */ bezierBezierIntersection),
-  $Z: () => (/* reexport */ bezierBezierIntersectionBoundless),
-  EK: () => (/* reexport */ bezierBezierIntersectionFast),
-  nd: () => (/* reexport */ bezierSelfIntersection),
-  pH: () => (/* reexport */ circleBezierIntersection),
-  xs: () => (/* reexport */ classification),
-  Ug: () => (/* reexport */ classifications),
-  L8: () => (/* reexport */ classify),
-  o8: () => (/* reexport */ clone),
-  GC: () => (/* reexport */ closestPointOnBezier),
-  d2: () => (/* reexport */ closestPointOnBezierCertified),
-  HE: () => (/* reexport */ closestPointsBetweenBeziers),
-  hB: () => (/* reexport */ controlPointLinesLength),
-  ex: () => (/* reexport */ cubicFromAnglesAndSpeeds),
-  rM: () => (/* reexport */ cubicThroughPointGiven013),
-  ZS: () => (/* reexport */ cubicToAnglesAndSpeeds),
-  o1: () => (/* reexport */ cubicToHybridQuadratic),
-  ks: () => (/* reexport */ cubicToQuadratic),
-  E0: () => (/* reexport */ curvature),
-  $c: () => (/* reexport */ curviness),
-  EC: () => (/* reexport */ ddCurvature),
-  Lh: () => (/* reexport */ eCurvature),
-  LC: () => (/* reexport */ equal),
-  u7: () => (/* reexport */ evalDeCasteljau),
-  w4: () => (/* reexport */ evalDeCasteljauDd),
-  g5: () => (/* reexport */ evalDeCasteljauError),
-  RK: () => (/* reexport */ evalDeCasteljauWithErr),
-  rR: () => (/* reexport */ evalDeCasteljauWithErrDd),
-  _3: () => (/* reexport */ evaluate),
-  L: () => (/* reexport */ evaluate2ndDerivative),
-  i$: () => (/* reexport */ evaluate2ndDerivativeAt0),
-  XZ: () => (/* reexport */ evaluate2ndDerivativeAt0Exact),
-  r$: () => (/* reexport */ evaluate2ndDerivativeAt1),
-  EZ: () => (/* reexport */ evaluate2ndDerivativeAt1Exact),
-  Sb: () => (/* reexport */ evaluate2ndDerivativeExact),
-  xW: () => (/* reexport */ evaluateExact),
-  WA: () => (/* reexport */ evaluateImplicit1),
-  PD: () => (/* reexport */ evaluateImplicit2),
-  Ik: () => (/* reexport */ evaluateImplicit3),
-  fb: () => (/* reexport */ fitQuadsToCubic),
-  H: () => (/* reexport */ fitQuadsToCubicHausdorff),
-  Ci: () => (/* reexport */ fromPowerBasis),
-  e8: () => (/* reexport */ fromTo),
-  CR: () => (/* reexport */ fromToInclErrorBound),
-  "in": () => (/* reexport */ furthestPointOnBezier),
-  IY: () => (/* reexport */ generateCuspAtHalf3),
-  Cl: () => (/* reexport */ generateQuarterCircle),
-  bs: () => (/* reexport */ generateSelfIntersecting),
-  Sw: () => (/* reexport */ getAbsAreaBetween),
-  Qj: () => (/* reexport */ getBendingEnergy),
-  UX: () => (/* reexport */ getBoundingBox),
-  I5: () => (/* reexport */ getBoundingBoxTight),
-  _y: () => (/* reexport */ getBoundingHull),
-  gW: () => (/* reexport */ getBounds),
-  v0: () => (/* reexport */ getCoeffsBezBez),
-  lX: () => (/* reexport */ getControlPointBox),
-  jK: () => (/* reexport */ getCubicSpeeds),
-  YV: () => (/* reexport */ getCurvatureExtrema),
-  IB: () => (/* reexport */ getCurvatureExtremaDd),
-  Tc: () => (/* reexport */ getCurvatureExtremaE),
-  cR: () => (/* reexport */ getEndpointIntersections),
-  RH: () => (/* reexport */ getFootPointsOnBezierCertified),
-  GF: () => (/* reexport */ getFootPointsOnBezierPolysCertified),
-  vd: () => (/* reexport */ getFootpointPoly),
-  jT: () => (/* reexport */ getFootpointPolyDd),
-  mK: () => (/* reexport */ getFootpointPolyExact),
-  rh: () => (/* reexport */ getHodograph),
-  TX: () => (/* reexport */ getImplicitForm1),
-  bJ: () => (/* reexport */ getImplicitForm1Dd),
-  O5: () => (/* reexport */ getImplicitForm1DdWithRunningError),
-  oB: () => (/* reexport */ getImplicitForm1ErrorCounters),
-  Ep: () => (/* reexport */ getImplicitForm1Exact),
-  Md: () => (/* reexport */ getImplicitForm2),
-  w3: () => (/* reexport */ getImplicitForm2Dd),
-  x1: () => (/* reexport */ getImplicitForm2DdWithRunningError),
-  RN: () => (/* reexport */ getImplicitForm2ErrorCounters),
-  Dk: () => (/* reexport */ getImplicitForm2Exact),
-  FB: () => (/* reexport */ getImplicitForm3),
-  LQ: () => (/* reexport */ getImplicitForm3Dd),
-  DR: () => (/* reexport */ getImplicitForm3DdWithRunningError),
-  bK: () => (/* reexport */ getImplicitForm3ErrorCounters),
-  s_: () => (/* reexport */ getImplicitForm3Exact),
-  vH: () => (/* reexport */ getInflections),
-  e4: () => (/* reexport */ getInterfaceRotation),
-  TY: () => (/* reexport */ getIntervalBox),
-  z4: () => (/* reexport */ getIntervalBoxDd),
-  Qf: () => (/* reexport */ getTAtLength),
-  is: () => (/* reexport */ getXBoundsTight),
-  Rk: () => (/* reexport */ getYBoundsTight),
-  gV: () => (/* reexport */ hausdorffDistance),
-  L1: () => (/* reexport */ hausdorffDistanceOneSided),
-  NZ: () => (/* reexport */ intersectBoxes),
-  SG: () => (/* reexport */ isCollinear),
-  Mz: () => (/* reexport */ isCubicReallyLine),
-  RA: () => (/* reexport */ isCubicReallyQuad),
-  $b: () => (/* reexport */ isHorizontal),
-  IF: () => (/* reexport */ isPointOnBezierExtension),
-  Un: () => (/* reexport */ isQuadObtuse),
-  pf: () => (/* reexport */ isQuadReallyLine),
-  Qr: () => (/* reexport */ isReallyPoint),
-  Ag: () => (/* reexport */ isSelfOverlapping),
-  fk: () => (/* reexport */ isVertical),
-  Bw: () => (/* reexport */ length_length),
-  uw: () => (/* reexport */ lineToCubic),
-  cZ: () => (/* reexport */ lineToQuadratic),
-  LX: () => (/* reexport */ maxAbsCoordinate),
-  qb: () => (/* reexport */ normal),
-  i8: () => (/* reexport */ normal2),
-  _f: () => (/* reexport */ quadraticToCubic),
-  i2: () => (/* reexport */ quadraticToPolyline),
-  DD: () => (/* reexport */ reduceOrderIfPossible),
-  BE: () => (/* reexport */ reverse),
-  ve: () => (/* reexport */ setCubicSpeeds),
-  FH: () => (/* reexport */ splitByCurvature),
-  ey: () => (/* reexport */ splitByCurvatureAndLength),
-  OX: () => (/* reexport */ splitByLength),
-  jX: () => (/* reexport */ tFromXY),
-  KR: () => (/* reexport */ tangent),
-  Hf: () => (/* reexport */ tangentAt0),
-  um: () => (/* reexport */ tangentAt0Exact),
-  AY: () => (/* reexport */ tangentAt1),
-  zr: () => (/* reexport */ tangentAt1Exact),
-  Bg: () => (/* reexport */ tangentExact),
-  Oj: () => (/* reexport */ toCubic),
-  V4: () => (/* reexport */ toPowerBasis),
-  bL: () => (/* reexport */ toPowerBasisDd),
-  CP: () => (/* reexport */ toPowerBasisDdWithRunningError),
-  wr: () => (/* reexport */ toPowerBasisErrorCounters),
-  _K: () => (/* reexport */ toPowerBasisExact),
-  SP: () => (/* reexport */ toPowerBasisWithRunningError),
-  pn: () => (/* reexport */ toPowerBasis_1stDerivative),
-  $0: () => (/* reexport */ toPowerBasis_1stDerivativeDd),
-  eT: () => (/* reexport */ toPowerBasis_1stDerivativeErrorCounters),
-  gw: () => (/* reexport */ toPowerBasis_1stDerivativeExact),
-  rC: () => (/* reexport */ toPowerBasis_2ndDerivative),
-  Hm: () => (/* reexport */ toPowerBasis_2ndDerivativeDd),
-  yb: () => (/* reexport */ toPowerBasis_2ndDerivativeExact),
-  qg: () => (/* reexport */ toPowerBasis_3rdDerivative),
-  kd: () => (/* reexport */ toPowerBasis_3rdDerivativeDd),
-  RJ: () => (/* reexport */ toPowerBasis_3rdDerivativeExact),
-  dI: () => (/* reexport */ to_string_toString),
-  hM: () => (/* reexport */ totalAbsoluteCurvature),
-  wu: () => (/* reexport */ totalCurvature),
-  "do": () => (/* reexport */ totalLength),
-  e7: () => (/* reexport */ γ),
-  ZH: () => (/* reexport */ γγ),
-  LZ: () => (/* reexport */ κ)
-});
-
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/basic/two-product.js
+;// ./node_modules/big-float-ts/node/basic/two-product.js
 const f = 134217729; // 2**27 + 1;
 /**
  * Returns the exact result of multiplying two doubles.
@@ -192,7 +38,7 @@ const f = 134217729; // 2**27 + 1;
  * @param a A double
  * @param b Another double
  */
-function two_product_twoProduct(a, b) {
+function twoProduct(a, b) {
     const x = a * b;
     //const [ah, al] = split(a);
     const c = f * a;
@@ -211,7 +57,7 @@ function two_product_twoProduct(a, b) {
 }
 
 //# sourceMappingURL=two-product.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/fast-expansion-sum.js
+;// ./node_modules/big-float-ts/node/double-expansion/fast-expansion-sum.js
 // import { eCompress } from "./e-compress.js";
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
 // const compress = eCompress;
@@ -356,7 +202,7 @@ function merge(e, f) {
 }
 
 //# sourceMappingURL=fast-expansion-sum.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-negative-of.js
+;// ./node_modules/big-float-ts/node/double-expansion/e-negative-of.js
 /**
  * Returns the negative of the given floating point expansion.
  * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
@@ -373,7 +219,7 @@ function eNegativeOf(e) {
 }
 
 //# sourceMappingURL=e-negative-of.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-diff.js
+;// ./node_modules/big-float-ts/node/double-expansion/e-diff.js
 
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
@@ -393,7 +239,7 @@ function eDiff(e, f) {
 }
 
 //# sourceMappingURL=e-diff.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-estimate.js
+;// ./node_modules/big-float-ts/node/double-expansion/e-estimate.js
 /**
  * Returns the result of the given floating point expansion rounded to a double
  * floating point number.
@@ -417,7 +263,7 @@ function eEstimate(e) {
 }
 
 //# sourceMappingURL=e-estimate.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/basic/two-diff.js
+;// ./node_modules/big-float-ts/node/basic/two-diff.js
 /**
  * Returns the exact result of subtracting b from a (as a floating point
  * expansion).
@@ -432,7 +278,7 @@ function twoDiff(a, b) {
 }
 
 //# sourceMappingURL=two-diff.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-compress.js
+;// ./node_modules/big-float-ts/node/double-expansion/e-compress.js
 /**
  * Returns the result of compressing the given floating point expansion.
  *
@@ -449,7 +295,7 @@ function twoDiff(a, b) {
  * magnitude. If h != 0, none of the h_i will be zero. Furthermore, the largest
  * component h_n approximates h with an error smaller than ulp(h_n).
  */
-function e_compress_eCompress(e) {
+function eCompress(e) {
     //return e;
     const e_ = e.slice();
     const m = e_.length;
@@ -486,7 +332,7 @@ function e_compress_eCompress(e) {
 }
 
 //# sourceMappingURL=e-compress.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/geometric-primitives/orient2d.js
+;// ./node_modules/big-float-ts/node/geometric-primitives/orient2d.js
 
 
 
@@ -554,7 +400,7 @@ function orient2dAdapt(A, B, C, detsum) {
     const bcx = B[0] - C[0];
     const acy = A[1] - C[1];
     const bcy = B[1] - C[1];
-    const b = eDiff(two_product_twoProduct(acx, bcy), two_product_twoProduct(acy, bcx));
+    const b = eDiff(twoProduct(acx, bcy), twoProduct(acy, bcx));
     let det = eEstimate(b);
     if (Math.abs(det) >= ccwerrboundB * detsum) {
         // Anti-clockwise or clockwise
@@ -574,18 +420,18 @@ function orient2dAdapt(A, B, C, detsum) {
     if (Math.abs(det) >= errbound) {
         return det;
     }
-    const a = eDiff(two_product_twoProduct(acxtail, bcy), two_product_twoProduct(acytail, bcx));
+    const a = eDiff(twoProduct(acxtail, bcy), twoProduct(acytail, bcx));
     const c = fastExpansionSum(b, a);
-    const d = eDiff(two_product_twoProduct(acx, bcytail), two_product_twoProduct(acy, bcxtail));
+    const d = eDiff(twoProduct(acx, bcytail), twoProduct(acy, bcxtail));
     const e = fastExpansionSum(c, d);
-    const f = eDiff(two_product_twoProduct(acxtail, bcytail), two_product_twoProduct(acytail, bcxtail));
+    const f = eDiff(twoProduct(acxtail, bcytail), twoProduct(acytail, bcxtail));
     let D = fastExpansionSum(e, f);
-    D = e_compress_eCompress(D);
+    D = eCompress(D);
     return D[D.length - 1];
 }
 
 //# sourceMappingURL=orient2d.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-graham-scan/node/get-smallest-idx-y-then-x.js
+;// ./node_modules/flo-graham-scan/node/get-smallest-idx-y-then-x.js
 /**
  * @internal
  */
@@ -607,7 +453,7 @@ function getSmallestIdxYThenX(ps) {
 }
 
 //# sourceMappingURL=get-smallest-idx-y-then-x.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-graham-scan/node/index.js
+;// ./node_modules/flo-graham-scan/node/index.js
 
 
 /**
@@ -714,7 +560,7 @@ function filterEqualPoints(ps) {
 }
 
 //# sourceMappingURL=index.js.map
-;// CONCATENATED MODULE: ./src/global-properties/bounds/get-bounding-hull.ts
+;// ./src/global-properties/bounds/get-bounding-hull.ts
 
 /**
  * Finds the convex hull of the given set of 2d points using the
@@ -734,7 +580,7 @@ function filterEqualPoints(ps) {
 const getBoundingHull = grahamScan;
 
 
-;// CONCATENATED MODULE: ./node_modules/double-double/node/basic/two-diff.js
+;// ./node_modules/double-double/node/basic/two-diff.js
 /**
  * Returns the exact result of subtracting b from a.
  *
@@ -749,7 +595,7 @@ function two_diff_twoDiff(a, b) {
 }
 
 //# sourceMappingURL=two-diff.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/basic/two-sum.js
+;// ./node_modules/double-double/node/basic/two-sum.js
 /**
  * Returns the exact result of adding two doubles.
  *
@@ -762,7 +608,7 @@ function two_diff_twoDiff(a, b) {
  *
  * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
  */
-function two_sum_twoSum(a, b) {
+function twoSum(a, b) {
     const x = a + b;
     const bv = x - a;
     return [(a - (x - bv)) + (b - bv), x];
@@ -771,17 +617,21 @@ function two_sum_twoSum(a, b) {
 //const R = a + b; const _ = R - a; const r = (a - (R - _)) + (b - _); return [r,R]
 
 //# sourceMappingURL=two-sum.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/scale-expansion.js
+;// ./node_modules/big-float-ts/node/double-expansion/scale-expansion.js
+/* unused harmony import specifier */ var scale_expansion_twoProduct;
+/* unused harmony import specifier */ var scale_expansion_twoSum;
+/* unused harmony import specifier */ var fastTwoSum;
+/* unused harmony import specifier */ var scale_expansion_eCompress;
 
 
 
 
 const scale_expansion_f = 134217729; // 2**27 + 1;
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const tp = (/* unused pure expression or super */ null && (twoProduct));
-const ts = (/* unused pure expression or super */ null && (twoSum));
+const tp = (/* unused pure expression or super */ null && (scale_expansion_twoProduct));
+const ts = (/* unused pure expression or super */ null && (scale_expansion_twoSum));
 const fts = (/* unused pure expression or super */ null && (fastTwoSum));
-const compress = (/* unused pure expression or super */ null && (eCompress));
+const compress = (/* unused pure expression or super */ null && (scale_expansion_eCompress));
 /**
  * Returns the result of multiplying an expansion by a double.
  *
@@ -942,14 +792,15 @@ function scaleExpansion2(b, e) {
 }
 
 //# sourceMappingURL=scale-expansion.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/expansion-product.js
+;// ./node_modules/big-float-ts/node/double-expansion/expansion-product.js
+/* unused harmony import specifier */ var expansion_product_eCompress;
 
 
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
 const multByDouble = scaleExpansion;
 const expansion_product_add = fastExpansionSum;
-const expansion_product_compress = (/* unused pure expression or super */ null && (eCompress));
+const expansion_product_compress = (/* unused pure expression or super */ null && (expansion_product_eCompress));
 /**
  * Returns the product of two double floating point expansions.
  *
@@ -977,10 +828,11 @@ function expansionProduct(e, f) {
 }
 
 //# sourceMappingURL=expansion-product.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/grow-expansion.js
+;// ./node_modules/big-float-ts/node/double-expansion/grow-expansion.js
+/* unused harmony import specifier */ var grow_expansion_eCompress;
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const grow_expansion_compress = (/* unused pure expression or super */ null && (eCompress));
+const grow_expansion_compress = (/* unused pure expression or super */ null && (grow_expansion_eCompress));
 /**
  * Returns the result of adding a double to an expansion.
  *
@@ -1024,7 +876,7 @@ function growExpansion(e, b) {
 }
 
 //# sourceMappingURL=grow-expansion.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-sign.js
+;// ./node_modules/big-float-ts/node/double-expansion/e-sign.js
 /**
  * Returns the sign of the given expansion such that a negative value means a
  * negative sign and a positive value means a positive sign, 0 meaning 0 of
@@ -1042,7 +894,7 @@ function eSign(e) {
 }
 
 //# sourceMappingURL=e-sign.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-compare.js
+;// ./node_modules/big-float-ts/node/double-expansion/e-compare.js
 
 
 /**
@@ -1063,7 +915,7 @@ function eCompare(a, b) {
 }
 
 //# sourceMappingURL=e-compare.js.map
-;// CONCATENATED MODULE: ./src/error-analysis/error-analysis.ts
+;// ./src/error-analysis/error-analysis.ts
 const u = Number.EPSILON / 2;
 const uu = u * u;
 /** @internal */
@@ -1080,7 +932,7 @@ function γγ(n) {
 γ(1); //=> 1.1102230246251568e-16
 γγ(3); //=> 3.697785493223493e-32
 
-;// CONCATENATED MODULE: ./src/global-properties/classification/is-really-point.ts
+;// ./src/global-properties/classification/is-really-point.ts
 /**
  * Returns `true` if the given bezier curve has all control points coincident,
  * `false` otherwise.
@@ -1102,7 +954,7 @@ function isReallyPoint(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/basic/two-sum.js
+;// ./node_modules/big-float-ts/node/basic/two-sum.js
 /**
  * Returns the exact result of adding two doubles.
  *
@@ -1115,7 +967,7 @@ function isReallyPoint(ps) {
  *
  * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
  */
-function basic_two_sum_twoSum(a, b) {
+function two_sum_twoSum(a, b) {
     const x = a + b;
     const bv = x - a;
     return [(a - (x - bv)) + (b - bv), x];
@@ -1124,12 +976,12 @@ function basic_two_sum_twoSum(a, b) {
 //const R = a + b; const _ = R - a; const r = (a - (R - _)) + (b - _); return [r,R]
 
 //# sourceMappingURL=two-sum.js.map
-;// CONCATENATED MODULE: ./src/global-properties/classification/is-quad-really-line.ts
+;// ./src/global-properties/classification/is-quad-really-line.ts
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
 const ediff = eDiff;
 const esign = eSign;
-const is_quad_really_line_ts = basic_two_sum_twoSum;
+const is_quad_really_line_ts = two_sum_twoSum;
 const { abs } = Math;
 /**
  * Returns `true` if the given quadratic bezier curve is really a linear curve
@@ -1174,10 +1026,10 @@ function isQuadReallyLine(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/classification/is-cubic-really-quad.ts
+;// ./src/global-properties/classification/is-cubic-really-quad.ts
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const is_cubic_really_quad_tp = two_product_twoProduct;
+const is_cubic_really_quad_tp = twoProduct;
 const fes = fastExpansionSum;
 const is_cubic_really_quad_esign = eSign;
 const is_cubic_really_quad_ediff = eDiff;
@@ -1237,7 +1089,7 @@ function isCubicReallyQuad(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/classification/is-collinear.ts
+;// ./src/global-properties/classification/is-collinear.ts
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
 const is_collinear_orient2d = orient2d;
@@ -1310,13 +1162,13 @@ function isVertical(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/classification/is-cubic-really-line.ts
+;// ./src/global-properties/classification/is-cubic-really-line.ts
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const sce = scaleExpansion;
 const is_cubic_really_line_ediff = eDiff;
-const is_cubic_really_line_ts = basic_two_sum_twoSum;
+const is_cubic_really_line_ts = two_sum_twoSum;
 const is_cubic_really_line_esign = eSign;
 /**
  * Returns `true` if the given bezier curve has all control points collinear
@@ -1357,7 +1209,7 @@ function isCubicReallyLine(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis/double/to-power-basis-with-running-error.ts
+;// ./src/to-power-basis/to-power-basis/double/to-power-basis-with-running-error.ts
 const to_power_basis_with_running_error_abs = Math.abs;
 /**
  * Returns the power basis representation of a bezier curve of order cubic or
@@ -1507,7 +1359,7 @@ function toPowerBasis0WithRunningError(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/self-intersection/get-coefficients/double/get-coeffs-bez3-with-running-error.ts
+;// ./src/intersection/self-intersection/get-coefficients/double/get-coeffs-bez3-with-running-error.ts
 
 
 const get_coeffs_bez3_with_running_error_abs = Math.abs;
@@ -1602,11 +1454,11 @@ function getCoeffsBez3WithRunningError(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis/exact/to-power-basis-exact.ts
+;// ./src/to-power-basis/to-power-basis/exact/to-power-basis-exact.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const td = twoDiff;
-const to_power_basis_exact_ts = basic_two_sum_twoSum;
+const to_power_basis_exact_ts = two_sum_twoSum;
 const to_power_basis_exact_sce = scaleExpansion2;
 const ge = growExpansion;
 const eAdd = fastExpansionSum;
@@ -1700,7 +1552,7 @@ function toPowerBasis0Exact(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/self-intersection/get-coefficients/exact/get-coeffs-bez3-exact.ts
+;// ./src/intersection/self-intersection/get-coefficients/exact/get-coeffs-bez3-exact.ts
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
@@ -1746,7 +1598,7 @@ function getCoeffsBez3Exact(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/classification/classify.ts
+;// ./src/global-properties/classification/classify.ts
 
 
 
@@ -1765,7 +1617,7 @@ const edif = eDiff;
 const classify_epr = expansionProduct;
 const classify_sce = scaleExpansion2;
 const classify_td = two_diff_twoDiff;
-const classify_ts = two_sum_twoSum;
+const classify_ts = twoSum;
 const classify_fes = fastExpansionSum;
 const classify_ge = growExpansion;
 const classify_abs = Math.abs;
@@ -1979,7 +1831,7 @@ function classifyGeneralCubic(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/calculus/double/integrate.js
+;// ./node_modules/flo-poly/node/calculus/double/integrate.js
 /**
  * Returns the result of integrating the given polynomial in double precision.
  *
@@ -2006,7 +1858,7 @@ function integrate(p, c) {
 }
 
 //# sourceMappingURL=integrate.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/double/remove-leading-zeros.js
+;// ./node_modules/flo-poly/node/basic/double/remove-leading-zeros.js
 /**
  * If the highest power coefficient of the given polynomial is 0 then
  * removeLeadingZeros can be called to remove all such highest terms so that
@@ -2037,7 +1889,7 @@ function removeLeadingZeros(p) {
 }
 
 //# sourceMappingURL=remove-leading-zeros.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/double/subtract.js
+;// ./node_modules/flo-poly/node/basic/double/subtract.js
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const subtract_removeLeadingZeros = removeLeadingZeros;
@@ -2078,7 +1930,7 @@ function subtract(p1, p2) {
 }
 
 //# sourceMappingURL=subtract.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/double/multiply.js
+;// ./node_modules/flo-poly/node/basic/double/multiply.js
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const multiply_removeLeadingZeros = removeLeadingZeros;
@@ -2093,6 +1945,7 @@ const multiply_removeLeadingZeros = removeLeadingZeros;
  * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
  * represents the polynomial `5x^2 - 3x`
  * @param p2 another polynomial.
+ *
  * @example
  * ```typescript
  * multiply([1,2,3], [2,5,3,5]); //=> [2, 9, 19, 26, 19, 15]
@@ -2118,7 +1971,7 @@ function multiply(p1, p2) {
 }
 
 //# sourceMappingURL=multiply.js.map
-;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis/double/to-power-basis.ts
+;// ./src/to-power-basis/to-power-basis/double/to-power-basis.ts
 /**
  * Returns the power basis representation of a bezier curve of order cubic or
  * less.
@@ -2195,7 +2048,7 @@ function toPowerBasis0(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.ts
+;// ./src/to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.ts
 /**
  * Returns the derivative of the power basis representation of a
  * bezier curve of order cubic or less (with intermediate calculations done in
@@ -2261,7 +2114,7 @@ function toPowerBasis1_1stDerivative(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/area.ts
+;// ./src/global-properties/area.ts
 
 
 
@@ -2285,7 +2138,7 @@ function area_area(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/distance-and-length/distance-between.js
+;// ./node_modules/flo-vector2d/node/distance-and-length/distance-between.js
 /**
  * Returns the distance between two 2d points.
  * @param p a point
@@ -2298,7 +2151,7 @@ function distanceBetween(p, q) {
 }
 
 //# sourceMappingURL=distance-between.js.map
-;// CONCATENATED MODULE: ./src/global-properties/length/length-bez1.ts
+;// ./src/global-properties/length/length-bez1.ts
 
 /**
  * Returns the curve length of the given line within the specified parameter
@@ -2320,7 +2173,7 @@ function lengthBez1(interval, ps) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/flo-gauss-quadrature/node/index.js
+;// ./node_modules/flo-gauss-quadrature/node/index.js
 // TODO A future improvement can be to use the Gauss–Kronrod rules
 // to estimate the error and thus choose a number of constants based
 // on the error. Maybe not.
@@ -2560,7 +2413,7 @@ const GAUSS_CONSTANTS = {
 };
 
 //# sourceMappingURL=index.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/horner.js
+;// ./node_modules/flo-poly/node/evaluate/double/horner.js
 /**
  * Returns the result of evaluating a univariate polynomial using
  * Horner's method in double precision floating point arithmetic.
@@ -2585,7 +2438,7 @@ function Horner(p, x) {
 //let E = p0[0]; for (let i=1; i<p0.length; i++) {E = E*x + p0[i]; }
 
 //# sourceMappingURL=horner.js.map
-;// CONCATENATED MODULE: ./src/local-properties-at-t/ds.ts
+;// ./src/local-properties-at-t/ds.ts
 
 
 /**
@@ -2609,7 +2462,7 @@ function ds(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/split/from-to/from-to-2-incl-error-bound.ts
+;// ./src/transformation/split/from-to/from-to-2-incl-error-bound.ts
 const from_to_2_incl_error_bound_abs = Math.abs;
 /** error free error bounds */
 const psErrorFree = [[0, 0], [0, 0], [0, 0]];
@@ -2875,7 +2728,7 @@ function splitAtBoth2(ps, tS, tE) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/double-double/node/basic/two-product.js
+;// ./node_modules/double-double/node/basic/two-product.js
 /** @internal */
 const two_product_f = 134217729; // 2**27 + 1;
 /**
@@ -2893,7 +2746,7 @@ const two_product_f = 134217729; // 2**27 + 1;
  * @param a A double
  * @param b Another double
  */
-function basic_two_product_twoProduct(a, b) {
+function two_product_twoProduct(a, b) {
     const x = a * b;
     //const [ah, al] = split(a);
     const c = two_product_f * a;
@@ -2912,7 +2765,7 @@ function basic_two_product_twoProduct(a, b) {
 }
 
 //# sourceMappingURL=two-product.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-add-dd.js
+;// ./node_modules/double-double/node/double-double/binary/dd-add-dd.js
 /**
  * Returns the result of adding two double-double-precision floating point
  * numbers.
@@ -2951,7 +2804,7 @@ function ddAddDd(x, y) {
 }
 
 //# sourceMappingURL=dd-add-dd.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-diff-dd.js
+;// ./node_modules/double-double/node/double-double/binary/dd-diff-dd.js
 /**
  * Returns the result of subtracting the second given double-double-precision
  * floating point number from the first.
@@ -2990,11 +2843,11 @@ function ddDiffDd(x, y) {
 }
 
 //# sourceMappingURL=dd-diff-dd.js.map
-;// CONCATENATED MODULE: ./src/simultaneous-properties/get-interface-rotation.ts
+;// ./src/simultaneous-properties/get-interface-rotation.ts
 
 
 
-const get_interface_rotation_tp = basic_two_product_twoProduct;
+const get_interface_rotation_tp = two_product_twoProduct;
 const get_interface_rotation_ddAddDd = ddAddDd;
 const get_interface_rotation_ddDiffDd = ddDiffDd;
 const { atan2 } = Math;
@@ -3018,13 +2871,15 @@ function getInterfaceRotation(a, b) {
     const v2 = a[1];
     const w1 = b[0];
     const w2 = b[1];
+    // w2*v1 - w1*v2;
     const A = get_interface_rotation_ddDiffDd(get_interface_rotation_tp(w2, v1), get_interface_rotation_tp(w1, v2))[1];
+    // w1*v1 + w2*v2;
     const B = get_interface_rotation_ddAddDd(get_interface_rotation_tp(w1, v1), get_interface_rotation_tp(w2, v2))[1];
     return atan2(A, B);
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/curviness.ts
+;// ./src/global-properties/curviness.ts
 
 const { abs: curviness_abs } = Math;
 /**
@@ -3068,7 +2923,7 @@ function curviness(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/split/from-to/from-to-3.ts
+;// ./src/transformation/split/from-to/from-to-3.ts
 /**
  * Returns a bezier curve that starts and ends at the given t parameters.
  *
@@ -3129,7 +2984,7 @@ function splitRight3(ps, t) {
     const y02 = y01 - t * (y01 - y11);
     const y12 = y11 - t * (y11 - y21);
     const y03 = y02 - t * (y02 - y12);
-    return [[x03, y03], [x12, y12], [x21, y21], [x30, y30]];
+    return [[x03, y03], [x12, y12], [x21, y21], p3];
 }
 /**
  * Returns a bezier curve that starts at `t === 0` and ends at the given t
@@ -3169,7 +3024,7 @@ function splitLeft3(ps, t) {
     const y02 = y01 - t * (y01 - y11);
     const y12 = y11 - t * (y11 - y21);
     const y03 = y02 - t * (y02 - y12);
-    return [[x00, y00], [x01, y01], [x02, y02], [x03, y03]];
+    return [p0, [x01, y01], [x02, y02], [x03, y03]];
 }
 /**
  * Returns a bezier curve that starts and ends at the given `t` parameters.
@@ -3228,7 +3083,7 @@ function splitAtBoth3(ps, tS, tE) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/split/from-to/from-to-2.ts
+;// ./src/transformation/split/from-to/from-to-2.ts
 /**
  * Returns a bezier curve that starts and ends at the given `t` parameters.
  *
@@ -3284,8 +3139,7 @@ function from_to_2_splitRight2(ps, t) {
             tt * (yA + yB) - (2 * t * yA - y0)], // yy0, split point y
         [t * xB + x1, // xx1
             t * yB + y1], // yy1
-        [x2, // xx2
-            y2] // yy2
+        p2
     ];
 }
 /**
@@ -3315,8 +3169,7 @@ function from_to_2_splitLeft2(ps, t) {
     const xA = x0 - x1;
     const yA = y0 - y1;
     return [
-        [x0, // xx0
-            y0], // yy0
+        p0,
         [-t * xA + x0, // xx1
             -t * yA + y0], // yy1
         [tt * (xA + (x2 - x1)) - (2 * t * xA - x0), // xx2 - split point x
@@ -3365,7 +3218,7 @@ function from_to_2_splitAtBoth2(ps, tS, tE) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/split/from-to/from-to-1.ts
+;// ./src/transformation/split/from-to/from-to-1.ts
 /**
  * Returns a bezier curve that starts and ends at the given `t` parameters.
  *
@@ -3411,8 +3264,7 @@ function splitRight1(ps, t) {
     return [
         [t * (x1 - x0) + x0, // xx0
             t * (y1 - y0) + y0], // yy0
-        [x1, // xx1
-            y1] // yy1
+        p1
     ];
 }
 /**
@@ -3436,8 +3288,7 @@ function splitLeft1(ps, t) {
     const y1 = p1[1];
     // --------------------------------------------------------
     return [
-        [x0, // xx0
-            y0], // yy0
+        p0,
         [t * (x1 - x0) + x0, // xx1
             t * (y1 - y0) + y0] // yy1
     ];
@@ -3471,7 +3322,7 @@ function splitAtBoth1(ps, tS, tE) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/split/from-to.ts
+;// ./src/transformation/split/from-to.ts
 
 
 
@@ -3505,7 +3356,7 @@ function fromTo(ps, tS, tE) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/split/split-by-curvature.ts
+;// ./src/transformation/split/split-by-curvature.ts
 
 
 /**
@@ -3526,36 +3377,27 @@ function fromTo(ps, tS, tE) {
  * @doc mdx
  */
 function splitByCurvature(ps, maxCurviness = 0.4, minTSpan = 2 ** -16) {
-    const head = { r: [0, 1] };
-    let n = head;
-    while (n !== undefined) {
-        const ts_ = n.r;
-        const ps_ = fromTo(ps, ts_[0], ts_[1]);
-        const curviness_ = curviness(ps_);
-        if (curviness_ <= maxCurviness || ts_[1] - ts_[0] <= minTSpan) {
-            n = n.next;
+    const tsS = [0];
+    const tsE = [1];
+    while (true) {
+        const tS = tsS[tsS.length - 1];
+        const tE = tsE[tsE.length - 1];
+        const ps_ = fromTo(ps, tS, tE);
+        const c = curviness(ps_);
+        if ((c <= maxCurviness) || tE - tS <= minTSpan) {
+            tsS.push(tsE.pop());
+            if (tE === 1) {
+                return tsS;
+            }
             continue;
         }
-        const t = (ts_[0] + ts_[1]) / 2;
-        const L = [ts_[0], t];
-        const R = [t, ts_[1]];
-        n.r = L;
-        n.next = { r: R, next: n.next };
+        const t = (tS + tE) / 2;
+        tsE.push(t);
     }
-    n = head;
-    const ts = [];
-    while (n !== undefined) {
-        ts.push(n.r[0]);
-        if (n.next === undefined) {
-            ts.push(n.r[1]);
-        }
-        n = n.next;
-    }
-    return ts;
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/length/length-bez2.ts
+;// ./src/global-properties/length/length-bez2.ts
 
 
 
@@ -3644,7 +3486,7 @@ function lengthBez2(interval: number[], ps: number[][]) {
 */
 
 
-;// CONCATENATED MODULE: ./src/transformation/split/from-to/from-to-3-incl-error-bound.ts
+;// ./src/transformation/split/from-to/from-to-3-incl-error-bound.ts
 const from_to_3_incl_error_bound_abs = Math.abs;
 /** error free error bounds */
 const from_to_3_incl_error_bound_psErrorFree = [[0, 0], [0, 0], [0, 0], [0, 0]];
@@ -3940,7 +3782,7 @@ function from_to_3_incl_error_bound_splitAtBoth3(ps, tS, tE) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/length/length-bez3.ts
+;// ./src/global-properties/length/length-bez3.ts
 
 
 
@@ -3985,7 +3827,7 @@ function lengthBez3(interval, ps, maxCurviness = 0.4, gaussOrder = 16) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/length/length.ts
+;// ./src/global-properties/length/length.ts
 
 
 
@@ -4023,7 +3865,7 @@ function length_length(interval, ps, maxCurviness = 0.4, gaussOrder = 16) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/length/total-length.ts
+;// ./src/global-properties/length/total-length.ts
 
 
 
@@ -4059,7 +3901,7 @@ function totalLength(ps, maxCurviness = 0.4, gaussOrder = 16) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/clone.ts
+;// ./src/transformation/clone.ts
 /**
  * Returns a clone of the given cubic bezier (with a different reference).
  *
@@ -4078,7 +3920,7 @@ function clone(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/naive/brent.js
+;// ./node_modules/flo-poly/node/roots/naive/brent.js
 const eps = Number.EPSILON;
 const brent_abs = Math.abs;
 const max = Math.max;
@@ -4216,7 +4058,7 @@ function brent(f, lb, ub) {
 }
 
 //# sourceMappingURL=brent.js.map
-;// CONCATENATED MODULE: ./src/local-properties-to-t/get-t-at-length.ts
+;// ./src/local-properties-to-t/get-t-at-length.ts
 
 
 /**
@@ -4238,7 +4080,7 @@ function getTAtLength(ps, s) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/equal.ts
+;// ./src/simultaneous-properties/equal.ts
 /**
  * Returns `true` if the two given bezier curves are exactly equal when compared
  * by value (deep equality), `false` otherwise
@@ -4265,7 +4107,7 @@ function equal(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/split/from-to/from-to-1-incl-error-bound.ts
+;// ./src/transformation/split/from-to/from-to-1-incl-error-bound.ts
 const from_to_1_incl_error_bound_abs = Math.abs;
 /** error free error bounds */
 const from_to_1_incl_error_bound_psErrorFree = [[0, 0], [0, 0]];
@@ -4471,7 +4313,7 @@ function from_to_1_incl_error_bound_splitAtBoth1(ps, tS, tE) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/split/from-to-incl-error-bound.ts
+;// ./src/transformation/split/from-to-incl-error-bound.ts
 
 
 
@@ -4509,7 +4351,7 @@ function fromToInclErrorBound(ps, tS, tE) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/degree-or-type/cubic-to-quadratic.ts
+;// ./src/transformation/degree-or-type/cubic-to-quadratic.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const cubic_to_quadratic_epr = expansionProduct;
@@ -4518,7 +4360,7 @@ const cubic_to_quadratic_ediff = eDiff;
 const cubic_to_quadratic_esign = eSign;
 const estimate = eEstimate;
 const cubic_to_quadratic_sce = scaleExpansion;
-const cubic_to_quadratic_ts = basic_two_sum_twoSum;
+const cubic_to_quadratic_ts = two_sum_twoSum;
 /**
  * Returns a quadratic approximation to the given cubic bezier curve.
  *
@@ -4540,12 +4382,16 @@ function cubicToQuadratic(ps, preserveTangents = false) {
     // Note: if cubic is really a quad then
     //   x3 + 3*(x1 - x2) === x0 && 
     //   y3 + 3*(y1 - y2) === y0
+    const [p0, p1, p2, p3] = ps;
     // Take the midpoint of the moving line of the hybrid quadratic version of 
     // the cubic as the new quadratic's middle control point.
     if (!preserveTangents) {
-        const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
+        const [x0, y0] = p0;
+        const [x1, y1] = p1;
+        const [x2, y2] = p2;
+        const [x3, y3] = p3;
         return [
-            [x0, y0],
+            p0,
             [
                 // [
                 //   (3*(x1 + x2) - (x0 + x3)) / 4, 
@@ -4554,21 +4400,15 @@ function cubicToQuadratic(ps, preserveTangents = false) {
                 estimate(cubic_to_quadratic_ediff(cubic_to_quadratic_sce(cubic_to_quadratic_ts(x1 / 4, x2 / 4), 3), cubic_to_quadratic_ts(x0 / 4, x3 / 4))),
                 estimate(cubic_to_quadratic_ediff(cubic_to_quadratic_sce(cubic_to_quadratic_ts(y1 / 4, y2 / 4), 3), cubic_to_quadratic_ts(y0 / 4, y3 / 4)))
             ],
-            [x3, y3]
+            p3
         ];
     }
     // At this point: `preserveTangents === true`
-    const [p0, p1, p2, p3] = ps;
     const l1 = [p0, p1];
     const l2 = [p3, p2];
     const pM = llIntersection(l1, l2);
     if (pM === undefined) {
         return undefined;
-        //return [
-        //    p0,
-        //    [(p0[0] + p3[0])/2, (p0[1] + p3[1])/2],
-        //    p3
-        //];
     }
     return [p0, pM, p3];
 }
@@ -4606,7 +4446,7 @@ function llIntersection(l1, l2) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/certified/root-interval.js
+;// ./node_modules/flo-poly/node/roots/certified/root-interval.js
 /**
  * Simple function that creates and returns an exact root (with a bracketing
  * interval width of 0 and multiplicity 1)
@@ -4631,7 +4471,7 @@ function mid(ri) {
 }
 
 //# sourceMappingURL=root-interval.js.map
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/x.ts
+;// ./src/intersection/bezier-bezier-intersection/x.ts
 /** @internal */
 function getPFromBox(box) {
     const tl = box[0];
@@ -4643,7 +4483,7 @@ function getPFromBox(box) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/error-analysis/gamma.js
+;// ./node_modules/flo-poly/node/error-analysis/gamma.js
 const gamma_u = Number.EPSILON / 2;
 const gamma_uu = gamma_u * gamma_u;
 /**
@@ -4679,7 +4519,7 @@ function error_analysis_gamma_(n) {
 }
 
 //# sourceMappingURL=gamma.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-mixed-double-double/dd-mult-double.js
+;// ./node_modules/double-double/node/double-mixed-double-double/dd-mult-double.js
 /** @internal */
 const dd_mult_double_f = 134217729; // 2**27 + 1;
 /**
@@ -4753,7 +4593,7 @@ function ddMultDouble2(y, x) {
 }
 
 //# sourceMappingURL=dd-mult-double.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/calculus/double-double/dd-differentiate-with-err.js
+;// ./node_modules/flo-poly/node/calculus/double-double/dd-differentiate-with-err.js
 
 
 
@@ -4796,7 +4636,7 @@ function ddDifferentiateWithError(pWithErr) {
 }
 
 //# sourceMappingURL=dd-differentiate-with-err.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/calculus/expansion/e-differentiate.js
+;// ./node_modules/flo-poly/node/calculus/expansion/e-differentiate.js
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const e_differentiate_scaleExpansion = scaleExpansion;
@@ -4825,12 +4665,12 @@ function eDifferentiate(p) {
 }
 
 //# sourceMappingURL=e-differentiate.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/eft-horner.js
+;// ./node_modules/flo-poly/node/evaluate/double/eft-horner.js
 
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
-const eft_horner_twoSum = basic_two_sum_twoSum;
-const eft_horner_twoProduct = two_product_twoProduct;
+const eft_horner_twoSum = two_sum_twoSum;
+const eft_horner_twoProduct = twoProduct;
 /**
  * Returns an EFT (error free transformation) for the Horner evaluation of a
  * polymial at a specified x. The result is returned as an object with
@@ -4869,7 +4709,7 @@ function EFTHorner(p, x) {
 //const pπ: number[] = []; const pσ: number[] = []; const σ: number; const r̂ = p[0];	for (const i=1; i<p.length; i++) { const [π,pi] = twoProduct(r̂,x); [σ,r̂] = twoSum(pi, p[i]); pπ.push(π); pσ.push(σ); } return { r̂, pπ, pσ }
 
 //# sourceMappingURL=eft-horner.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/horner-with-running-error.js
+;// ./node_modules/flo-poly/node/evaluate/double/horner-with-running-error.js
 const horner_with_running_error_abs = Math.abs;
 const horner_with_running_error_u = Number.EPSILON / 2;
 /**
@@ -4900,7 +4740,7 @@ function hornerWithRunningError(p, x) {
 //let r = p0[0]; let e1 = Math.abs(r) / 2; for (let i=1; i<p0.length; i++) { r = r*x + p0[i]; e1 = Math.abs(x)*e1 + Math.abs(r); } e1 = Number.EPSILON * (2*e1 - Math.abs(r));
 
 //# sourceMappingURL=horner-with-running-error.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/abs-horner.js
+;// ./node_modules/flo-poly/node/evaluate/double/abs-horner.js
 const abs_horner_abs = Math.abs;
 /**
  * Returns the result of evaluating a univariate polynomial using
@@ -4926,7 +4766,7 @@ function AbsHorner(p, x) {
 //let e2 = abs(p0[0]); for (let i=1; i<p0.length; i++) { e2 = e2*x + abs(p0[i]); }
 
 //# sourceMappingURL=abs-horner.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double/eval-certified.js
+;// ./node_modules/flo-poly/node/evaluate/double/eval-certified.js
 
 
 
@@ -5022,7 +4862,7 @@ function evalCertified(p, x, pE = undefined, multiplier = 1) {
 }
 
 //# sourceMappingURL=eval-certified.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/expansion/e-horner.js
+;// ./node_modules/flo-poly/node/evaluate/expansion/e-horner.js
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const e_horner_fes = fastExpansionSum;
@@ -5049,7 +4889,7 @@ function eHorner(p, x) {
 }
 
 //# sourceMappingURL=e-horner.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/certified/transpose-poly.js
+;// ./node_modules/flo-poly/node/roots/certified/transpose-poly.js
 /**
  * Transposes the given polynomial (given with multi-precision coefficients)
  * into multiple polynomials with each consecutive polynomial 'adjusting'
@@ -5074,7 +4914,7 @@ function transposePoly(p) {
 }
 
 //# sourceMappingURL=transpose-poly.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/certified/eval-adaptive.js
+;// ./node_modules/flo-poly/node/roots/certified/eval-adaptive.js
 
 
 
@@ -5114,7 +4954,7 @@ function evalAdaptive(p, pE, x, getPolyExact) {
 }
 
 //# sourceMappingURL=eval-adaptive.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/certified/refine-certified.js
+;// ./node_modules/flo-poly/node/roots/certified/refine-certified.js
 
 
 
@@ -5306,7 +5146,7 @@ function refineCertified(p, pE, lb, ub, fa, fb, getPolyExact, exact) {
 }
 
 //# sourceMappingURL=refine-certified.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/double/negate.js
+;// ./node_modules/flo-poly/node/basic/double/negate.js
 /**
  * Returns the negative of the given polynomial (p -> -p).
  *
@@ -5329,7 +5169,7 @@ function negate(p) {
 }
 
 //# sourceMappingURL=negate.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/basic/double/invert.js
+;// ./node_modules/flo-poly/node/basic/double/invert.js
 /**
  * Inverts the given polynomial by reversing the order of the coefficients,
  * i.e. p(x) -> x^deg(p) * p(1/x)
@@ -5350,7 +5190,7 @@ function invert(p) {
 }
 
 //# sourceMappingURL=invert.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/root-bounds/upper-to-lower-bound.js
+;// ./node_modules/flo-poly/node/roots/root-bounds/upper-to-lower-bound.js
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const upper_to_lower_bound_invert = invert;
@@ -5369,7 +5209,7 @@ function upperToLowerBound(positiveUpperBoundFunction) {
 }
 
 //# sourceMappingURL=upper-to-lower-bound.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/change-variables/double/reflect-about-y-axis.js
+;// ./node_modules/flo-poly/node/change-variables/double/reflect-about-y-axis.js
 /**
  * Returns the result of reflecting the given polynomial about the Y-axis, i.e.
  * perform the change of variables: p(x) <- p(-x).
@@ -5400,7 +5240,7 @@ function reflectAboutYAxis(p) {
 }
 
 //# sourceMappingURL=reflect-about-y-axis.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/root-bounds/positive-to-negative-bound.js
+;// ./node_modules/flo-poly/node/roots/root-bounds/positive-to-negative-bound.js
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const positive_to_negative_bound_reflectAboutYAxis = reflectAboutYAxis;
@@ -5419,7 +5259,7 @@ function positiveToNegativeBound(positiveBoundFunction) {
 }
 
 //# sourceMappingURL=positive-to-negative-bound.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/root-bounds/root-bounds-lmq.js
+;// ./node_modules/flo-poly/node/roots/root-bounds/root-bounds-lmq.js
 
 
 
@@ -5524,7 +5364,7 @@ const negativeRootLowerBound_LMQ = root_bounds_lmq_positiveToNegativeBound(posit
 const negativeRootUpperBound_LMQ = root_bounds_lmq_upperToLowerBound(negativeRootLowerBound_LMQ);
 
 //# sourceMappingURL=root-bounds-lmq.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/certified/all-roots-certified.js
+;// ./node_modules/flo-poly/node/roots/certified/all-roots-certified.js
 
 
 
@@ -5968,7 +5808,7 @@ function joinRoots(rs) {
 }
 
 //# sourceMappingURL=all-roots-certified.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-mult-dd.js
+;// ./node_modules/double-double/node/double-double/binary/dd-mult-dd.js
 /** @internal */
 const dd_mult_dd_f = 2 ** 27 + 1;
 /**
@@ -6002,7 +5842,7 @@ function ddMultDd(x, y) {
 }
 
 //# sourceMappingURL=dd-mult-dd.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-mixed-double-double/dd-add-double.js
+;// ./node_modules/double-double/node/double-mixed-double-double/dd-add-double.js
 /**
  * Returns the result of adding a double to a double-double precision floating
  * point number.
@@ -6030,7 +5870,7 @@ function ddAddDouble(x, y) {
 }
 
 //# sourceMappingURL=dd-add-double.js.map
-;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.ts
+;// ./src/to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const to_power_basis_dd_with_running_error_td = two_diff_twoDiff; // error -> 0
@@ -6183,7 +6023,7 @@ function toPowerBasis0DdWithRunningError(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/implicit-form/double-double/get-implicit-form1-dd-with-running-error.ts
+;// ./src/implicit-form/double-double/get-implicit-form1-dd-with-running-error.ts
 
 
 
@@ -6231,7 +6071,7 @@ function getImplicitForm1DdWithRunningError(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez1-dd.ts
+;// ./src/intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez1-dd.ts
 
 
 
@@ -6308,7 +6148,7 @@ function getCoeffsBez1Bez1Dd(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-negative-of.js
+;// ./node_modules/double-double/node/double-double/unary/dd-negative-of.js
 /**
  * Returns the negative of the given double-double precision floating point
  * number.
@@ -6320,7 +6160,7 @@ function ddNegativeOf(f) {
 }
 
 //# sourceMappingURL=dd-negative-of.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-mult-by-2.js
+;// ./node_modules/double-double/node/double-double/unary/dd-mult-by-2.js
 /**
  * Returns the result of multiplying the given double-double by 2.
  * * The result is exact
@@ -6331,7 +6171,7 @@ function ddMultBy2(f) {
 }
 
 //# sourceMappingURL=dd-mult-by-2.js.map
-;// CONCATENATED MODULE: ./src/implicit-form/double-double/get-implicit-form2-dd-with-running-error.ts
+;// ./src/implicit-form/double-double/get-implicit-form2-dd-with-running-error.ts
 
 
 const qno = ddNegativeOf; // error -> 0
@@ -6476,13 +6316,13 @@ function getImplicitForm2DdWithRunningError(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez2-bez1-dd.ts
+;// ./src/intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez2-bez1-dd.ts
 
 
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_coeffs_bez2_bez1_dd_tp = basic_two_product_twoProduct;
+const get_coeffs_bez2_bez1_dd_tp = two_product_twoProduct;
 const get_coeffs_bez2_bez1_dd_qm2 = ddMultBy2;
 const get_coeffs_bez2_bez1_dd_qmd = ddMultDouble2;
 const get_coeffs_bez2_bez1_dd_qmq = ddMultDd;
@@ -6642,7 +6482,7 @@ function getCoeffsBez2Bez1Dd(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-div-by-2.js
+;// ./node_modules/double-double/node/double-double/unary/dd-div-by-2.js
 /**
  * Returns the result of dividing the given double-double by 2.
  * @param f a double-double precision floating point number
@@ -6652,7 +6492,7 @@ function ddDivBy2(f) {
 }
 
 //# sourceMappingURL=dd-div-by-2.js.map
-;// CONCATENATED MODULE: ./src/implicit-form/double-double/get-implicit-form3-dd-with-running-error.ts
+;// ./src/implicit-form/double-double/get-implicit-form3-dd-with-running-error.ts
 
 
 const get_implicit_form3_dd_with_running_error_abs = Math.abs;
@@ -7037,13 +6877,13 @@ function getImplicitForm3DdWithRunningError(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez1-dd.ts
+;// ./src/intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez1-dd.ts
 
 
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_coeffs_bez3_bez1_dd_tp = basic_two_product_twoProduct;
+const get_coeffs_bez3_bez1_dd_tp = two_product_twoProduct;
 const get_coeffs_bez3_bez1_dd_qm2 = ddMultBy2;
 const get_coeffs_bez3_bez1_dd_qmd = ddMultDouble2;
 const get_coeffs_bez3_bez1_dd_qmq = ddMultDd;
@@ -7363,13 +7203,14 @@ function getCoeffsBez3Bez1Dd(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez2-dd.ts
+;// ./src/intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez2-dd.ts
+/* unused harmony import specifier */ var get_coeffs_bez1_bez2_dd_twoProduct;
 
 
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_coeffs_bez1_bez2_dd_tp = (/* unused pure expression or super */ null && (twoProduct));
+const get_coeffs_bez1_bez2_dd_tp = (/* unused pure expression or super */ null && (get_coeffs_bez1_bez2_dd_twoProduct));
 const get_coeffs_bez1_bez2_dd_qaq = ddAddDd;
 const get_coeffs_bez1_bez2_dd_qmd = ddMultDouble2;
 const get_coeffs_bez1_bez2_dd_qmq = ddMultDd;
@@ -7453,13 +7294,13 @@ function getCoeffsBez1Bez2Dd(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez2-bez2-dd.ts
+;// ./src/intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez2-bez2-dd.ts
 
 
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_coeffs_bez2_bez2_dd_tp = basic_two_product_twoProduct;
+const get_coeffs_bez2_bez2_dd_tp = two_product_twoProduct;
 const get_coeffs_bez2_bez2_dd_qm2 = ddMultBy2;
 const get_coeffs_bez2_bez2_dd_qmd = ddMultDouble2;
 const get_coeffs_bez2_bez2_dd_qmq = ddMultDd;
@@ -7757,13 +7598,13 @@ function getCoeffsBez2Bez2Dd(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez2-dd.ts
+;// ./src/intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez2-dd.ts
 
 
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_coeffs_bez3_bez2_dd_tp = basic_two_product_twoProduct;
+const get_coeffs_bez3_bez2_dd_tp = two_product_twoProduct;
 const get_coeffs_bez3_bez2_dd_qm2 = ddMultBy2;
 const get_coeffs_bez3_bez2_dd_qmd = ddMultDouble2;
 const get_coeffs_bez3_bez2_dd_qmq = ddMultDd;
@@ -8492,13 +8333,14 @@ function getCoeffsBez3Bez2Dd(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez3-dd.ts
+;// ./src/intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez1-bez3-dd.ts
+/* unused harmony import specifier */ var get_coeffs_bez1_bez3_dd_twoProduct;
 
 
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_coeffs_bez1_bez3_dd_tp = (/* unused pure expression or super */ null && (twoProduct));
+const get_coeffs_bez1_bez3_dd_tp = (/* unused pure expression or super */ null && (get_coeffs_bez1_bez3_dd_twoProduct));
 const get_coeffs_bez1_bez3_dd_qaq = ddAddDd;
 const get_coeffs_bez1_bez3_dd_qmd = ddMultDouble2;
 const get_coeffs_bez1_bez3_dd_qmq = ddMultDd;
@@ -8571,13 +8413,13 @@ function getCoeffsBez1Bez3Dd(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez2-bez3-dd.ts
+;// ./src/intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez2-bez3-dd.ts
 
 
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_coeffs_bez2_bez3_dd_tp = basic_two_product_twoProduct;
+const get_coeffs_bez2_bez3_dd_tp = two_product_twoProduct;
 const get_coeffs_bez2_bez3_dd_qm2 = ddMultBy2;
 const get_coeffs_bez2_bez3_dd_qmd = ddMultDouble2;
 const get_coeffs_bez2_bez3_dd_qmq = ddMultDd;
@@ -9012,13 +8854,13 @@ function getCoeffsBez2Bez3Dd(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez3-dd.ts
+;// ./src/intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez3-dd.ts
 
 
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_coeffs_bez3_bez3_dd_tp = basic_two_product_twoProduct;
+const get_coeffs_bez3_bez3_dd_tp = two_product_twoProduct;
 const get_coeffs_bez3_bez3_dd_qm2 = ddMultBy2;
 const get_coeffs_bez3_bez3_dd_qmd = ddMultDouble2;
 const get_coeffs_bez3_bez3_dd_qmq = ddMultDd;
@@ -10277,7 +10119,7 @@ function getCoeffsBez3Bez3Dd(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./src/implicit-form/exact/get-implicit-form1-exact.ts
+;// ./src/implicit-form/exact/get-implicit-form1-exact.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 
@@ -10326,7 +10168,7 @@ function getImplicitForm1ExactPb(pspb) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez1-exact.ts
+;// ./src/intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez1-exact.ts
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
@@ -10384,7 +10226,7 @@ function getCoeffsBez1Bez1Exact(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-mult-by-2.js
+;// ./node_modules/big-float-ts/node/double-expansion/e-mult-by-2.js
 /**
  * Returns the result of multiplying a floating point expansion by 2.
  * * **error free**
@@ -10401,7 +10243,7 @@ function eMultBy2(e) {
 }
 
 //# sourceMappingURL=e-mult-by-2.js.map
-;// CONCATENATED MODULE: ./src/implicit-form/exact/get-implicit-form2-exact.ts
+;// ./src/implicit-form/exact/get-implicit-form2-exact.ts
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
@@ -10485,13 +10327,13 @@ function getImplicitForm2ExactPb(pspb) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez2-bez1-exact.ts
+;// ./src/intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez2-bez1-exact.ts
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 
 
-const get_coeffs_bez2_bez1_exact_tp = two_product_twoProduct; // error -> 0
+const get_coeffs_bez2_bez1_exact_tp = twoProduct; // error -> 0
 const get_coeffs_bez2_bez1_exact_sce = scaleExpansion2;
 const get_coeffs_bez2_bez1_exact_epr = expansionProduct;
 const get_coeffs_bez2_bez1_exact_fes = fastExpansionSum;
@@ -10578,7 +10420,7 @@ function getCoeffsBez2Bez1Exact(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-div-by-2.js
+;// ./node_modules/big-float-ts/node/double-expansion/e-div-by-2.js
 /**
  * Returns the result of dividing a floating point expansion by 2.
  * * **error free**
@@ -10596,7 +10438,7 @@ function eDivBy2(e) {
 }
 
 //# sourceMappingURL=e-div-by-2.js.map
-;// CONCATENATED MODULE: ./src/implicit-form/exact/get-implicit-form3-exact.ts
+;// ./src/implicit-form/exact/get-implicit-form3-exact.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 
@@ -10742,14 +10584,14 @@ function getImplicitForm3ExactPb(pspb) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez1-exact.ts
+;// ./src/intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez1-exact.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 
 
 
 
-const get_coeffs_bez3_bez1_exact_tp = two_product_twoProduct; // error -> 0
+const get_coeffs_bez3_bez1_exact_tp = twoProduct; // error -> 0
 const get_coeffs_bez3_bez1_exact_sce = scaleExpansion2;
 const get_coeffs_bez3_bez1_exact_epr = expansionProduct;
 const get_coeffs_bez3_bez1_exact_fes = fastExpansionSum;
@@ -10903,7 +10745,7 @@ function getCoeffsBez3Bez1Exact(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez2-exact.ts
+;// ./src/intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez2-exact.ts
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
@@ -10971,14 +10813,14 @@ function getCoeffsBez1Bez2Exact(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez2-bez2-exact.ts
+;// ./src/intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez2-bez2-exact.ts
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 
 
 
-const get_coeffs_bez2_bez2_exact_tp = two_product_twoProduct; // error -> 0
+const get_coeffs_bez2_bez2_exact_tp = twoProduct; // error -> 0
 const get_coeffs_bez2_bez2_exact_sce = scaleExpansion2;
 const get_coeffs_bez2_bez2_exact_epr = expansionProduct;
 const get_coeffs_bez2_bez2_exact_fes = fastExpansionSum;
@@ -11125,7 +10967,7 @@ function getCoeffsBez2Bez2Exact(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez2-exact.ts
+;// ./src/intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez2-exact.ts
 
 
 
@@ -11133,7 +10975,7 @@ function getCoeffsBez2Bez2Exact(ps1, ps2) {
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 
-const get_coeffs_bez3_bez2_exact_tp = two_product_twoProduct; // error -> 0
+const get_coeffs_bez3_bez2_exact_tp = twoProduct; // error -> 0
 const get_coeffs_bez3_bez2_exact_sce = scaleExpansion2;
 const get_coeffs_bez3_bez2_exact_epr = expansionProduct;
 const get_coeffs_bez3_bez2_exact_fes = fastExpansionSum;
@@ -11449,7 +11291,7 @@ function getCoeffsBez3Bez2Exact(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez3-exact.ts
+;// ./src/intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez1-bez3-exact.ts
 
 
 
@@ -11522,7 +11364,7 @@ function getCoeffsBez1Bez3Exact(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez2-bez3-exact.ts
+;// ./src/intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez2-bez3-exact.ts
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
@@ -11530,7 +11372,7 @@ function getCoeffsBez1Bez3Exact(ps1, ps2) {
 
 
 
-const get_coeffs_bez2_bez3_exact_tp = two_product_twoProduct; // error -> 0
+const get_coeffs_bez2_bez3_exact_tp = twoProduct; // error -> 0
 const get_coeffs_bez2_bez3_exact_sce = scaleExpansion2;
 const get_coeffs_bez2_bez3_exact_epr = expansionProduct;
 const get_coeffs_bez2_bez3_exact_fes = fastExpansionSum;
@@ -11727,7 +11569,7 @@ function getCoeffsBez2Bez3Exact(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez3-exact.ts
+;// ./src/intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez3-exact.ts
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
@@ -11735,7 +11577,7 @@ function getCoeffsBez2Bez3Exact(ps1, ps2) {
 
 
 
-const get_coeffs_bez3_bez3_exact_tp = two_product_twoProduct; // error -> 0
+const get_coeffs_bez3_bez3_exact_tp = twoProduct; // error -> 0
 const get_coeffs_bez3_bez3_exact_sce = scaleExpansion2;
 const get_coeffs_bez3_bez3_exact_epr = expansionProduct;
 const get_coeffs_bez3_bez3_exact_fes = fastExpansionSum;
@@ -12173,7 +12015,7 @@ function getCoeffsBez3Bez3Exact(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/get-coefficients/get-coeffs-bez-bez.ts
+;// ./src/intersection/bezier-bezier-intersection/get-coefficients/get-coeffs-bez-bez.ts
 
 
 
@@ -12230,7 +12072,7 @@ function getCoeffsBezBez(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/bezier-bezier-intersection-boundless.ts
+;// ./src/intersection/bezier-bezier-intersection/bezier-bezier-intersection-boundless.ts
 
 
 /**
@@ -12258,10 +12100,10 @@ function bezierBezierIntersectionBoundless(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-to-double-double.js
+;// ./node_modules/big-float-ts/node/double-expansion/e-to-double-double.js
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const e_to_double_double_compress = e_compress_eCompress;
+const e_to_double_double_compress = eCompress;
 /**
  * Returns the result of converting a floating point expansion to a
  * double-double precision floating point number.
@@ -12279,7 +12121,7 @@ function eToDd(e) {
 }
 
 //# sourceMappingURL=e-to-double-double.js.map
-;// CONCATENATED MODULE: ./src/simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension-1.ts
+;// ./src/simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension-1.ts
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
@@ -12371,7 +12213,7 @@ function isPointOnBezierExtension1(ps, p) {
 }
 
 
-;// CONCATENATED MODULE: ./src/implicit-form/double/get-implicit-form2.ts
+;// ./src/implicit-form/double/get-implicit-form2.ts
 
 /**
  * Returns the implicit form of the given quadratic bezier curve.
@@ -12403,7 +12245,7 @@ function getImplicitForm2(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis/to-power-basis-error-counters.ts
+;// ./src/to-power-basis/to-power-basis/to-power-basis-error-counters.ts
 // Note: 
 // Error counters of double-double will actually be slightly less but
 // we can use this for both double and double-double precision.
@@ -12562,7 +12404,7 @@ function toPowerBasis3ErrorCounters(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/implicit-form/get-error-counters/get-implicit-form2-error-counters.ts
+;// ./src/implicit-form/get-error-counters/get-implicit-form2-error-counters.ts
 
 const get_implicit_form2_error_counters_abs = Math.abs;
 /**
@@ -12647,7 +12489,7 @@ function getImplicitForm2ErrorCounters(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension-2.ts
+;// ./src/simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension-2.ts
 
 
 
@@ -12812,7 +12654,7 @@ function isPointOnBezierExtension2(ps, p) {
 }
 
 
-;// CONCATENATED MODULE: ./src/implicit-form/double/get-implicit-form3.ts
+;// ./src/implicit-form/double/get-implicit-form3.ts
 
 /**
  * Returns the implicit form of the given cubic bezier curve.
@@ -12867,7 +12709,7 @@ function getImplicitForm3(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/implicit-form/get-error-counters/get-implicit-form3-error-counters.ts
+;// ./src/implicit-form/get-error-counters/get-implicit-form3-error-counters.ts
 
 const get_implicit_form3_error_counters_abs = Math.abs;
 /**
@@ -13006,7 +12848,7 @@ function getImplicitForm3ErrorCounters(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension-3.ts
+;// ./src/simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension-3.ts
 
 
 
@@ -13266,7 +13108,7 @@ function isPointOnBezierExtension3(ps, p) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension.ts
+;// ./src/simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension.ts
 
 
 
@@ -13294,8 +13136,8 @@ function isPointOnBezierExtension(ps, p) {
         return isPointOnBezierExtension1(ps, p);
     }
     if (ps.length === 1) {
-        const x = e_compress_eCompress(p[0]);
-        const y = e_compress_eCompress(p[1]);
+        const x = eCompress(p[0]);
+        const y = eCompress(p[1]);
         return (x.length === 1 && y.length === 1 &&
             x[0] === ps[0][0] && y[0] === ps[0][1]);
     }
@@ -13303,14 +13145,14 @@ function isPointOnBezierExtension(ps, p) {
 }
 
 
-;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis/double-double/to-power-basis-dd.ts
+;// ./src/to-power-basis/to-power-basis/double-double/to-power-basis-dd.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const to_power_basis_dd_td = two_diff_twoDiff; // error -> 0
 const to_power_basis_dd_qmd = ddMultDouble2; // error -> 3*u²
 const to_power_basis_dd_qaq = ddAddDd;
 const to_power_basis_dd_qad = ddAddDouble; // error -> 2*u²
-const to_power_basis_dd_ts = two_sum_twoSum;
+const to_power_basis_dd_ts = twoSum;
 /**
  * Returns the power basis representation of a bezier curve of order cubic or
  * less.
@@ -13422,7 +13264,7 @@ function toPowerBasis0Dd(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-to-t/t-from-xy.ts
+;// ./src/local-properties-to-t/t-from-xy.ts
 
 
 
@@ -13682,7 +13524,7 @@ function combineRoots(r, s) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/evaluate/double/eval-de-casteljau.ts
+;// ./src/local-properties-at-t/evaluate/double/eval-de-casteljau.ts
 /**
  * Returns the resulting point of evaluating the given bezier curve at the
  * given parameter `t`.
@@ -13744,7 +13586,7 @@ function evalDeCasteljau(ps, t) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/evaluate/eval-de-casteljau-error.ts
+;// ./src/local-properties-at-t/evaluate/eval-de-casteljau-error.ts
 const eval_de_casteljau_error_abs = Math.abs;
 /**
  * Returns a representation of the error (from which an absolute error bound
@@ -13890,7 +13732,7 @@ function evalDeCasteljauError(ps, t) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/bounds/get-interval-box/get-interval-box.ts
+;// ./src/global-properties/bounds/get-interval-box/get-interval-box.ts
 
 
 
@@ -14064,7 +13906,7 @@ function getIntervalBoxAtT(ps, t) {
 
 // 416
 
-;// CONCATENATED MODULE: ./src/boxes/intersect-boxes.ts
+;// ./src/boxes/intersect-boxes.ts
 const intersect_boxes_min = Math.min;
 const intersect_boxes_max = Math.max;
 /**
@@ -14108,7 +13950,7 @@ function intersectBoxes(a, b) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-mult-by-neg-2.js
+;// ./node_modules/big-float-ts/node/double-expansion/e-mult-by-neg-2.js
 /**
  * Multiply a floating point expansion by -2.
  * * **error free**
@@ -14125,7 +13967,7 @@ function eMultByNeg2(e) {
 }
 
 //# sourceMappingURL=e-mult-by-neg-2.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-abs.js
+;// ./node_modules/big-float-ts/node/double-expansion/e-abs.js
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
 const e_abs_negativeOf = eNegativeOf;
@@ -14144,7 +13986,7 @@ function eAbs(e) {
 }
 
 //# sourceMappingURL=e-abs.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-div-dd.js
+;// ./node_modules/double-double/node/double-double/binary/dd-div-dd.js
 /** @internal */
 const dd_div_dd_f = 134217729; // 2**27 + 1;
 /**
@@ -14191,7 +14033,7 @@ function ddDivDd(x, y) {
 }
 
 //# sourceMappingURL=dd-div-dd.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-with-err/sqrt-with-err.js
+;// ./node_modules/double-double/node/double-with-err/sqrt-with-err.js
 /** @internal */
 const sqrt_with_err_eps = Number.EPSILON;
 /**
@@ -14228,7 +14070,7 @@ function sqrtWithErr(x, x_) {
 }
 
 //# sourceMappingURL=sqrt-with-err.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-with-err/div-with-err.js
+;// ./node_modules/double-double/node/double-with-err/div-with-err.js
 /** @internal */
 const div_with_err_u = Number.EPSILON / 2;
 /**
@@ -14258,7 +14100,7 @@ function divWithErr(n, d, nE, dE) {
 }
 
 //# sourceMappingURL=div-with-err.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-sqrt.js
+;// ./node_modules/double-double/node/double-double/unary/dd-sqrt.js
 /** @internal */
 const dd_sqrt_f = 134217729; // 2**27 + 1;
 // Taken from https://github.com/munrocket/double.js/blob/master/src/double.ts
@@ -14288,7 +14130,7 @@ function ddSqrt(x) {
 }
 
 //# sourceMappingURL=dd-sqrt.js.map
-;// CONCATENATED MODULE: ./src/intersection/self-intersection/bezier-self-intersection.ts
+;// ./src/intersection/self-intersection/bezier-self-intersection.ts
 
 
 
@@ -14298,7 +14140,7 @@ const bezier_self_intersection_edif = eDiff;
 const bezier_self_intersection_epr = expansionProduct;
 const bezier_self_intersection_sce = scaleExpansion2;
 const bezier_self_intersection_td = two_diff_twoDiff;
-const bezier_self_intersection_ts = two_sum_twoSum;
+const bezier_self_intersection_ts = twoSum;
 const bezier_self_intersection_qno = ddNegativeOf;
 const bezier_self_intersection_qaq = ddAddDd;
 const bezier_self_intersection_qm2 = ddMultBy2;
@@ -14488,7 +14330,7 @@ function bezierSelfIntersection(ps, inRange = true) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/reduce-order-if-possible.ts
+;// ./src/transformation/reduce-order-if-possible.ts
 
 
 
@@ -14519,7 +14361,7 @@ function reduceOrderIfPossible(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/ensure-range.ts
+;// ./src/intersection/get-endpoint-intersections/ensure-range.ts
 const ensure_range_eps = Number.EPSILON;
 const ensure_range_u = ensure_range_eps / 2;
 /**
@@ -14537,7 +14379,7 @@ function ensureRange(t, min1Sign) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/double-to-octets.js
+;// ./node_modules/big-float-ts/node/double-representation/double-to-octets.js
 // Modified from https://github.com/bartaz/ieee754-visualization/
 // under the MIT license
 // Copyright 2013 Bartek Szopka (original author)
@@ -14553,7 +14395,8 @@ function doubleToOctets(number) {
 }
 
 //# sourceMappingURL=double-to-octets.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/parse-double.js
+;// ./node_modules/big-float-ts/node/double-representation/parse-double.js
+/* unused harmony import specifier */ var doubleToBinaryString;
 // Modified from https://github.com/bartaz/ieee754-visualization/
 // under the MIT license
 // Copyright 2013 Bartek Szopka (original author)
@@ -14570,7 +14413,7 @@ function parseDouble(x) {
     const p0 = parts[0];
     const p1 = parts[1];
     const sign = p0 >> 7;
-    const exponent_ = ((p0 & 127) << 4) + ((p1 & 0b11110000) >> 4);
+    const exponent_ = ((p0 & 0b0111_1111) << 4) + ((p1 & 0b11110000) >> 4);
     //---- Check for negative / positive zero / denormalized numbers.
     const hiddenMsb = exponent_ === 0 ? 0 : 16;
     // Note: exponent === 0 => 0 or denormalized number (a.k.a. subnormal number).
@@ -14579,7 +14422,7 @@ function parseDouble(x) {
         : exponent_ - 1023;
     //---- Break up the significand into bytes
     const significand = parts.slice(1);
-    significand[0] = (p1 & 15) + hiddenMsb;
+    significand[0] = (p1 & 0b0000_1111) + hiddenMsb;
     return {
         sign,
         exponent,
@@ -14608,7 +14451,7 @@ function parseDoubleDetailed(x) {
 }
 
 //# sourceMappingURL=parse-double.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/significand.js
+;// ./node_modules/big-float-ts/node/double-representation/significand.js
 
 /**
  * Return the significand of the given double with the hidden bit added (in case
@@ -14620,7 +14463,7 @@ function significand(a) {
 }
 
 //# sourceMappingURL=significand.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/get-max-set-bit.js
+;// ./node_modules/big-float-ts/node/double-representation/get-max-set-bit.js
 
 /**
  * Returns the lowest set bit of the given value in [1, (2**31)-1],
@@ -14697,7 +14540,7 @@ function getHighestSetBit(a) {
 }
 
 //# sourceMappingURL=get-max-set-bit.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/exponent.js
+;// ./node_modules/big-float-ts/node/double-representation/exponent.js
 
 /**
  * Returns the normalized exponent of the given number.
@@ -14708,7 +14551,7 @@ function exponent(a) {
 }
 
 //# sourceMappingURL=exponent.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/msb-exponent.js
+;// ./node_modules/big-float-ts/node/double-representation/msb-exponent.js
 
 
 /**
@@ -14726,7 +14569,7 @@ function msbExponent(a) {
 }
 
 //# sourceMappingURL=msb-exponent.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/basic/reduce-significand.js
+;// ./node_modules/big-float-ts/node/basic/reduce-significand.js
 /**
  * Truncates a floating point value's significand and returns the result.
  * Similar to split, but with the ability to specify the number of bits to keep.
@@ -14751,14 +14594,14 @@ function reduceSignificand(a, bits) {
 }
 
 //# sourceMappingURL=reduce-significand.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-to-bitlength.js
+;// ./node_modules/big-float-ts/node/double-expansion/e-to-bitlength.js
 
 
 
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
 const e_to_bitlength_sign = eSign;
-const e_to_bitlength_compress = e_compress_eCompress;
+const e_to_bitlength_compress = eCompress;
 /**
  * Returns a floating point expansion accurate to the given number of bits.
  * Extraneous bits are discarded.
@@ -14791,7 +14634,7 @@ function eToBitlength(a, l) {
 }
 
 //# sourceMappingURL=e-to-bitlength.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-representation/bit-length.js
+;// ./node_modules/big-float-ts/node/double-representation/bit-length.js
 
 
 
@@ -14814,7 +14657,7 @@ function bitLength(a) {
  * @param a A double precision floating point expansion
  */
 function expBitLength(a) {
-    const a_ = e_compress_eCompress(a);
+    const a_ = eCompress(a);
     if (eSign(a_) === 0) {
         return 0;
     }
@@ -14824,7 +14667,7 @@ function expBitLength(a) {
 }
 
 //# sourceMappingURL=bit-length.js.map
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-div.js
+;// ./node_modules/big-float-ts/node/double-expansion/e-div.js
 
 
 
@@ -14897,7 +14740,7 @@ function eDiv(N, D, expansionLength) {
 }
 
 //# sourceMappingURL=e-div.js.map
-;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/er-estimate.ts
+;// ./src/intersection/get-endpoint-intersections/er-estimate.ts
 
 /**
  * Estimates the result of the given expansion rational.
@@ -14914,7 +14757,7 @@ function erEstimate(a) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/er-sign.ts
+;// ./src/intersection/get-endpoint-intersections/er-sign.ts
 
 /**
  * Returns the sign of the given expansion rational.
@@ -14928,7 +14771,7 @@ function erSign(a) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/get-ab.ts
+;// ./src/intersection/get-endpoint-intersections/get-ab.ts
 
 
 
@@ -14956,7 +14799,7 @@ function getAB(getTransform) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/get-transform-1.ts
+;// ./src/intersection/get-endpoint-intersections/get-transform-1.ts
 
 /** @internal */
 function getTransform1(_xyA, _xyB) {
@@ -15001,14 +14844,14 @@ function getTransformedTs1(A, B) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/get-ab1.ts
+;// ./src/intersection/get-endpoint-intersections/get-ab1.ts
 
 
 /** @internal */
 const getAB1 = getAB(getTransform1);
 
 
-;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/er-compare.ts
+;// ./src/intersection/get-endpoint-intersections/er-compare.ts
 
 /**
  * Compares two expansion rationals.
@@ -15022,7 +14865,7 @@ function erCompare(a, b) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/scale-to-int/scale-floatss-to-bigintss.js
+;// ./node_modules/flo-poly/node/scale-to-int/scale-floatss-to-bigintss.js
 
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
@@ -15075,7 +14918,7 @@ function scaleFloatssToBigintss(ass) {
 }
 
 //# sourceMappingURL=scale-floatss-to-bigintss.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/gcd/bigint/b-integer-gcd.js
+;// ./node_modules/flo-poly/node/gcd/bigint/b-integer-gcd.js
 /**
  * Computes and returns the greatest common divisor of two integers a and b,
  * using the [Euclidean Algorithm](https://en.wikipedia.org/wiki/Euclidean_algorithm).
@@ -15159,7 +15002,7 @@ function bGcdIntsTree(vals: bigint[]): bigint {
 */
 
 //# sourceMappingURL=b-integer-gcd.js.map
-;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/bigint-to-expansion.ts
+;// ./src/intersection/get-endpoint-intersections/bigint-to-expansion.ts
 
 const maxSafe = BigInt(2 ** 53);
 /**
@@ -15183,11 +15026,11 @@ function bigintToExpansion(b) {
         b = q;
         i++;
     }
-    return e_compress_eCompress(e);
+    return eCompress(e);
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/b-sqrt.ts
+;// ./src/intersection/get-endpoint-intersections/b-sqrt.ts
 const { round, sqrt } = Math;
 /**
  * Returns the square root of a bigint.
@@ -15216,14 +15059,14 @@ function bSqrt(v) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/b-abs.ts
+;// ./src/intersection/get-endpoint-intersections/b-abs.ts
 /** @internal */
 function bAbs(n) {
     return n < 0n ? -n : n;
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/sum-bigints.ts
+;// ./src/intersection/get-endpoint-intersections/sum-bigints.ts
 /** @internal */
 function sumBigints(vs) {
     let total = 0n;
@@ -15234,7 +15077,7 @@ function sumBigints(vs) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/calc-exact-square-root.ts
+;// ./src/intersection/get-endpoint-intersections/calc-exact-square-root.ts
 
 
 
@@ -15260,7 +15103,7 @@ function calcExactSquareRoot(a) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/get-transform-2.ts
+;// ./src/intersection/get-endpoint-intersections/get-transform-2.ts
 
 
 
@@ -15321,7 +15164,7 @@ function getTransformedTs2(A, B) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/get-ab2.ts
+;// ./src/intersection/get-endpoint-intersections/get-ab2.ts
 
 
 
@@ -15345,14 +15188,14 @@ function getAB2(psA, psB) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/b-sign.ts
+;// ./src/intersection/get-endpoint-intersections/b-sign.ts
 /** @internal */
 function bSign(v) {
     return v > 0n ? 1n : v < 0n ? -1n : 0n;
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/b-cbrt.ts
+;// ./src/intersection/get-endpoint-intersections/b-cbrt.ts
 
 
 const { round: b_cbrt_round, cbrt } = Math;
@@ -15382,7 +15225,7 @@ function bCbrt(n) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/calc-exact-cube-root.ts
+;// ./src/intersection/get-endpoint-intersections/calc-exact-cube-root.ts
 
 
 
@@ -15407,7 +15250,7 @@ function calcExactCubeRoot(a) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/get-transform-3.ts
+;// ./src/intersection/get-endpoint-intersections/get-transform-3.ts
 
 
 /** @internal */
@@ -15466,14 +15309,14 @@ function eSquare(v) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/get-ab3.ts
+;// ./src/intersection/get-endpoint-intersections/get-ab3.ts
 
 
 /** @internal */
 const getAB3 = getAB(getTransform3);
 
 
-;// CONCATENATED MODULE: ./src/sub-1-ulp.ts
+;// ./src/sub-1-ulp.ts
 const { EPSILON: sub_1_ulp_eps } = Number;
 const sub_1_ulp_u = sub_1_ulp_eps / 2;
 const es = (sub_1_ulp_eps ** 2) / 2;
@@ -15489,7 +15332,7 @@ function sub1Ulp(n) {
 }
 
 
-;// CONCATENATED MODULE: ./src/add-1-ulp.ts
+;// ./src/add-1-ulp.ts
 const { EPSILON: add_1_ulp_eps } = Number;
 const add_1_ulp_u = add_1_ulp_eps / 2;
 const add_1_ulp_es = (add_1_ulp_eps ** 2) / 2;
@@ -15505,7 +15348,7 @@ function add1Ulp(n) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/get-endpoint-intersections/get-endpoint-intersections.ts
+;// ./src/intersection/get-endpoint-intersections/get-endpoint-intersections.ts
 
 
 
@@ -15610,7 +15453,7 @@ function getMinMaxT(t) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection/bezier-bezier-intersection.ts
+;// ./src/intersection/bezier-bezier-intersection/bezier-bezier-intersection.ts
 
 
 
@@ -15915,7 +15758,7 @@ function handlePointDegenerateCases(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./src/fit/get-abs-area-between.ts
+;// ./src/fit/get-abs-area-between.ts
 
 
 
@@ -15949,7 +15792,7 @@ function getAbsAreaBetween(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./src/fit/fit-quads-to-cubic.ts
+;// ./src/fit/fit-quads-to-cubic.ts
 
 
 
@@ -16038,7 +15881,7 @@ function fitQuadsToCubic(ps, tolerance) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/length/control-point-lines-length.ts
+;// ./src/global-properties/length/control-point-lines-length.ts
 
 /**
  * Returns an upper bound for the length of the given bezier curve - this bound
@@ -16059,7 +15902,7 @@ function controlPointLinesLength(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly-3.ts
+;// ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly-3.ts
 /** @internal */
 function getFootpointPoly3(ps, p) {
     //const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
@@ -16128,7 +15971,7 @@ function getFootpointPoly3(ps, p) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly-2.ts
+;// ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly-2.ts
 /** @internal */
 function getFootpointPoly2(ps, p) {
     //const [[x0, y0], [x1, y1], [x2, y2]] = ps;
@@ -16176,7 +16019,7 @@ function getFootpointPoly2(ps, p) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly-1.ts
+;// ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly-1.ts
 /** @internal */
 function getFootpointPoly1(ps, p) {
     const [[x0, y0], [x1, y1]] = ps;
@@ -16195,7 +16038,7 @@ function getFootpointPoly1(ps, p) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/distance-and-length/squared-distance-between.js
+;// ./node_modules/flo-vector2d/node/distance-and-length/squared-distance-between.js
 /**
  * Returns the squared distance between two 2d points.
  * @param p a point
@@ -16208,7 +16051,7 @@ function squaredDistanceBetween(p, q) {
 }
 
 //# sourceMappingURL=squared-distance-between.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/calculus/double/differentiate.js
+;// ./node_modules/flo-poly/node/calculus/double/differentiate.js
 /**
  * Returns the result of differentiating the given polynomial in double
  * precision.
@@ -16234,7 +16077,7 @@ function differentiate(p) {
 }
 
 //# sourceMappingURL=differentiate.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/naive/brent-poly.js
+;// ./node_modules/flo-poly/node/roots/naive/brent-poly.js
 
 const brent_poly_Horner = Horner;
 const brent_poly_eps = Number.EPSILON;
@@ -16380,7 +16223,7 @@ function brentPoly(p, lb, ub, fa = brent_poly_Horner(p, lb), fb = brent_poly_Hor
 }
 
 //# sourceMappingURL=brent-poly.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/naive/all-roots.js
+;// ./node_modules/flo-poly/node/roots/naive/all-roots.js
 
 
 
@@ -16529,7 +16372,7 @@ function allRoots(p, lb = Number.NEGATIVE_INFINITY, ub = Number.POSITIVE_INFINIT
 }
 
 //# sourceMappingURL=all-roots.js.map
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/closest-point-on-bezier.ts
+;// ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/closest-point-on-bezier.ts
 
 
 
@@ -16544,6 +16387,8 @@ const closest_point_on_bezier_sqrt = Math.sqrt;
  * * intermediate calculations are done in double precision
  * * in some cases there can be more than one closest point, e.g. on the axis
  * of symmetry of a parabola (in which case only one of the points are returned)
+ * * if `inclEndpoints` is `false` then `undefined` will be returned in case
+ * there is no closest point not on an endpoint
  * * the returned point(s) are objects with the following properties:
  *     * `p`: the closest point on the bezier curve
  *     * `t`: the parameter value of the point on the bezier curve
@@ -16555,7 +16400,7 @@ const closest_point_on_bezier_sqrt = Math.sqrt;
  *
  * @doc mdx
  */
-function closestPointOnBezier(ps, p) {
+function closestPointOnBezier(ps, p, inclEndpoints = true) {
     let poly;
     if (ps.length === 4) {
         poly = getFootpointPoly3(ps, p);
@@ -16573,8 +16418,10 @@ function closestPointOnBezier(ps, p) {
         throw new Error('The given bezier curve must be of order <= 3.');
     }
     const ts = allRoots(poly, 0, 1);
-    ts.push(0);
-    ts.push(1);
+    if (inclEndpoints) {
+        ts.push(0);
+        ts.push(1);
+    }
     // Get point with minimum distance
     let minDSquared = Number.POSITIVE_INFINITY;
     let minP = undefined;
@@ -16591,7 +16438,7 @@ function closestPointOnBezier(ps, p) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/furthest-point-on-bezier.ts
+;// ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/furthest-point-on-bezier.ts
 
 
 
@@ -16653,7 +16500,7 @@ function furthestPointOnBezier(ps, p) {
 }
 
 
-;// CONCATENATED MODULE: ./src/error-analysis/max-abs-coordinate.ts
+;// ./src/error-analysis/max-abs-coordinate.ts
 /**
  * Returns the maximum absolute value of the coordinates of the control points
  * of the given bezier curve.
@@ -16680,14 +16527,14 @@ function maxAbsCoordinate(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/hausdorff-distance/get-max-hausdorff.ts
+;// ./src/simultaneous-properties/hausdorff-distance/get-max-hausdorff.ts
 /** @internal */
 function getMaxHausdorff(i) {
     return Math.max(i.hL + i.hEL, i.hR + i.hER);
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/hausdorff-distance/hausdorff-compare.ts
+;// ./src/simultaneous-properties/hausdorff-distance/hausdorff-compare.ts
 
 /**
  * @param a
@@ -16707,7 +16554,7 @@ function hausdorffCompare(a, b) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/heap.ts
+;// ./src/simultaneous-properties/heap.ts
 /**
  * see [Wikipedia](https://en.wikipedia.org/wiki/Heap_(data_structure))
  *
@@ -16783,7 +16630,7 @@ class Heap {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/hausdorff-distance/hausdorff-distance-one-sided.ts
+;// ./src/simultaneous-properties/hausdorff-distance/hausdorff-distance-one-sided.ts
 
 
 
@@ -16911,8 +16758,30 @@ function calcHErrorBound(A, tS, tE) {
     return [eL, eR];
 }
 
+// Quokka tests
+// const ls = [
+//     [[0,0],[1,1]],
+//     [[1,1],[2,1]],
+//     [[2,1],[3,2]],
+//     [[3,2],[4,1]],
+//     [[4,1],[5,0]]
+// ];
+// const b = [[0,0],[1,1],[4,1],[5,0]];
+// ls.map(l => hausdorffDistanceOneSided(l,b));//?
+// ls.map(l => hausdorffDistanceOneSided(b,l));//?
+// const q = [[0,0],[1,1],[2,0]];
+// const ts = Array.from({length: 4}, (_,i) => i/4);
+// ts.push(1);
+// const cs: number[][][] = [];
+// for (let i=0; i<ts.length - 1; i++) {
+//     const t1 = ts[i];//?
+//     const t2 = ts[1+i];//?
+//     const c = fromTo(q, t1, t2);
+//     cs.push(c);
+// }
+// hausdorffDistanceOneSided(cs[3], q);//?
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/hausdorff-distance/hausdorff-distance.ts
+;// ./src/simultaneous-properties/hausdorff-distance/hausdorff-distance.ts
 
 /** @internal */
 const hausdorff_distance_max = Math.max;
@@ -16944,7 +16813,7 @@ function hausdorffDistance(A, B, tolerance, maxIterations) {
 }
 
 
-;// CONCATENATED MODULE: ./src/fit/fit-quads-to-cubic-hausdorff.ts
+;// ./src/fit/fit-quads-to-cubic-hausdorff.ts
 
 
 
@@ -17032,7 +16901,7 @@ function fitQuadsToCubicHausdorff(ps, tolerance) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/bounds/get-control-point-box.ts
+;// ./src/global-properties/bounds/get-control-point-box.ts
 /**
  * Returns a tight axis-aligned bounding box of the given bezier curve's control
  * points. (Note that the box is not a tight bound of the bezier curve itself.)
@@ -17067,7 +16936,7 @@ function getControlPointBox(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/affine-transformations/translate/translate.js
+;// ./node_modules/flo-vector2d/node/affine-transformations/translate/translate.js
 // From: https://en.wikipedia.org/wiki/Affine_transformation
 // "If X is the point set of an affine space, then every affine transformation 
 // on X can be represented as the composition of a linear transformation on X 
@@ -17081,7 +16950,7 @@ function translate(a, b) {
 }
 
 //# sourceMappingURL=translate.js.map
-;// CONCATENATED MODULE: ./src/create/generate-quarter-circle.ts
+;// ./src/create/generate-quarter-circle.ts
 
 /**
  * Returns a cubic bezier curve that is an approximation of the unit quarter
@@ -17101,7 +16970,7 @@ function generateQuarterCircle(scale, translation) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection-fast/clip/to-hybrid-quadratic.ts
+;// ./src/intersection/bezier-bezier-intersection-fast/clip/to-hybrid-quadratic.ts
 /**
  * Returns a hybrid quadratic bezier curve with error bounds (with the first
  * and last control points omitted).
@@ -17163,8 +17032,9 @@ function toHybridQuadratic(G) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection-fast/clip/geo-clip.ts
+;// ./src/intersection/bezier-bezier-intersection-fast/clip/geo-clip.ts
 
+// declare const globalThis: typeof global & { __debug__: __Debug__ };
 const geo_clip_toHybridQuadratic = toHybridQuadratic;
 const geo_clip_min = Math.min;
 const geo_clip_max = Math.max;
@@ -17502,7 +17372,7 @@ function quadraticRoots(a, b, c) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/from-to.js
+;// ./node_modules/flo-vector2d/node/from-to.js
 /**
  * Returns the second 2-vector minus the first.
  * @param p the first vector
@@ -17513,7 +17383,7 @@ function from_to_fromTo(p, q) {
 }
 
 //# sourceMappingURL=from-to.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/distance-and-length/to-length.js
+;// ./node_modules/flo-vector2d/node/distance-and-length/to-length.js
 /**
  * Returns the given 2-vector scaled to the given length.
  * @param p a vector
@@ -17525,9 +17395,9 @@ function toLength(p, length) {
 }
 
 //# sourceMappingURL=to-length.js.map
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection-fast/get-distance-to-line-function.ts
+;// ./src/intersection/bezier-bezier-intersection-fast/get-distance-to-line-function.ts
 
-const get_distance_to_line_function_tp = basic_two_product_twoProduct;
+const get_distance_to_line_function_tp = two_product_twoProduct;
 const get_distance_to_line_function_qdq = ddDiffDd;
 const get_distance_to_line_function_abs = Math.abs;
 const get_distance_to_line_function_eps = Number.EPSILON;
@@ -17587,7 +17457,7 @@ function getDistanceToLineFunction(pS, pE) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection-fast/check-intersection-in-ranges.ts
+;// ./src/intersection/bezier-bezier-intersection-fast/check-intersection-in-ranges.ts
 
 
 
@@ -17817,7 +17687,7 @@ function getFatlineDebugInfo(FS, FE, dMin, dMax) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/bezier-bezier-intersection-fast/bezier-bezier-intersection-fast.ts
+;// ./src/intersection/bezier-bezier-intersection-fast/bezier-bezier-intersection-fast.ts
 
 
 const bezier_bezier_intersection_fast_checkIntersectionInRanges = checkIntersectionInRanges;
@@ -18002,7 +17872,7 @@ function implicit(ps1, ps2) {
 }
 
 
-;// CONCATENATED MODULE: ./src/boxes/are-boxes-intersecting.ts
+;// ./src/boxes/are-boxes-intersecting.ts
 /**
  * Returns `true` if the 2 given axis-aligned rectangular boxes intersect.
  *
@@ -18040,7 +17910,7 @@ function areBoxesIntersecting(closed, a, b) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/evaluate/double/eval-de-casteljau-with-err.ts
+;// ./src/local-properties-at-t/evaluate/double/eval-de-casteljau-with-err.ts
 
 
 
@@ -18083,7 +17953,7 @@ function evalDeCasteljauWithErr(ps, t) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/evaluate/double-double/eval-de-casteljau-dd.ts
+;// ./src/local-properties-at-t/evaluate/double-double/eval-de-casteljau-dd.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const eval_de_casteljau_dd_qmq = ddMultDd;
@@ -18155,7 +18025,7 @@ function evalDeCasteljauDd(ps, t) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/evaluate/double-double/eval-de-casteljau-with-err-dd.ts
+;// ./src/local-properties-at-t/evaluate/double-double/eval-de-casteljau-with-err-dd.ts
 
 
 
@@ -18200,7 +18070,7 @@ function evalDeCasteljauWithErrDd(ps, t) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/get-inflections.ts
+;// ./src/global-properties/get-inflections.ts
 
 /**
  * Returns the given order 1,2 or 3 bezier curve's inflection point `t`
@@ -18236,7 +18106,7 @@ function getInflections(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/total-absolute-curvature.ts
+;// ./src/global-properties/total-absolute-curvature.ts
 
 
 
@@ -18328,7 +18198,7 @@ function totalCurvature(ps, interval = [0, 1]) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/reverse.ts
+;// ./src/transformation/reverse.ts
 /**
  * Returns the given points (e.g. bezier curve) in reverse order.
  *
@@ -18347,7 +18217,7 @@ function reverse(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/implicit-form/evaluate/double/evaluate-implicit3.ts
+;// ./src/implicit-form/evaluate/double/evaluate-implicit3.ts
 /**
  * Evaluates and returns the result of evaluating the given implicit function
  * (a degree 3 bivariate polynomial in `x` and `y`) at the point `[x,y]`.
@@ -18381,7 +18251,7 @@ function evaluateImplicit3(cs, x, y) {
 }
 
 
-;// CONCATENATED MODULE: ./src/implicit-form/double-double/get-implicit-form3-dd.ts
+;// ./src/implicit-form/double-double/get-implicit-form3-dd.ts
 
 
 const get_implicit_form3_dd_qno = ddNegativeOf; // error -> 0
@@ -18469,7 +18339,7 @@ function getImplicitForm3Dd(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/implicit-form/evaluate/double/evaluate-implicit2.ts
+;// ./src/implicit-form/evaluate/double/evaluate-implicit2.ts
 /**
  * Evaluates and returns the result of evaluating the given implicit function
  * (a degree 2 bivariate polynomial in `x` and `y`) at the point `[x,y]`.
@@ -18494,7 +18364,7 @@ function evaluateImplicit2(cs, x, y) {
 }
 
 
-;// CONCATENATED MODULE: ./src/implicit-form/double-double/get-implicit-form2-dd.ts
+;// ./src/implicit-form/double-double/get-implicit-form2-dd.ts
 
 
 const get_implicit_form2_dd_qno = ddNegativeOf; // error -> 0
@@ -18560,7 +18430,7 @@ function getImplicitForm2Dd(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/implicit-form/evaluate/double/evaluate-implicit1.ts
+;// ./src/implicit-form/evaluate/double/evaluate-implicit1.ts
 /**
  * Evaluates and returns the result of evaluating the given implicit function
  * (a degree 1 bivariate polynomial in `x` and `y`) at the point `[x,y]`.
@@ -18585,7 +18455,7 @@ function evaluateImplicit1(cs, x, y) {
 }
 
 
-;// CONCATENATED MODULE: ./src/implicit-form/double/get-implicit-form1.ts
+;// ./src/implicit-form/double/get-implicit-form1.ts
 
 /**
  * Returns the implicit form of the given linear bezier curve, i.e. line
@@ -18613,7 +18483,7 @@ function getImplicitForm1(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/implicit-form/double-double/get-implicit-form1-dd.ts
+;// ./src/implicit-form/double-double/get-implicit-form1-dd.ts
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
@@ -18648,7 +18518,7 @@ function getImplicitForm1Dd(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/implicit-form/get-error-counters/get-implicit-form1-error-counters.ts
+;// ./src/implicit-form/get-error-counters/get-implicit-form1-error-counters.ts
 
 const get_implicit_form1_error_counters_abs = Math.abs;
 /**
@@ -18708,7 +18578,7 @@ function getImplicitForm1ErrorCounters(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/from-power-basis/from-power-basis.ts
+;// ./src/from-power-basis/from-power-basis.ts
 /**
  * Returns the Bernstein basis representation (i.e. control points) of a line,
  * quadratic or cubic bezier given its power bases.
@@ -18770,7 +18640,7 @@ function fromPowerBasis(cs) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/get-hodograph.ts
+;// ./src/transformation/get-hodograph.ts
 /**
  * Returns the hodograph of the given bezier curve.
  *
@@ -18812,7 +18682,7 @@ function getHodograph(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/create/generate-cusp-at-half-t.ts
+;// ./src/create/generate-cusp-at-half-t.ts
 /**
  * Returns the cubic bezier curve control points with a zero tangent vector
  * (i.e. `[0,0]`) at `t = 0.5` (i.e. a 'cusp') at the given point with
@@ -18885,7 +18755,7 @@ e + 2*f + 4*g + 8*h = 8*yz
 3*y1 - g = 3*y0
 */
 
-;// CONCATENATED MODULE: ./src/create/generate-self-intersecting.ts
+;// ./src/create/generate-self-intersecting.ts
 /**
  * Returns the cubic bezier curve with given starting, 2nd and 3rd control
  * points such that there is a self-intersection.
@@ -18965,7 +18835,7 @@ function generateSelfIntersecting(p0, p1, p2, ts) {
 }
 
 
-;// CONCATENATED MODULE: ./src/create/cubic-through-point-given013.ts
+;// ./src/create/cubic-through-point-given013.ts
 /**
  * Generates and returns a cubic bezier curve going through a specific point
  * given control points 0,1 and 3.
@@ -18990,7 +18860,7 @@ function cubicThroughPointGiven013(ps, p, t) {
 }
 
 
-;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis-2nd-derivative/double/to-power-basis-2nd-derivative.ts
+;// ./src/to-power-basis/to-power-basis-2nd-derivative/double/to-power-basis-2nd-derivative.ts
 /**
  * Returns the 2nd derivative of the power basis representation of a
  * bezier curve of order cubic or less (with intermediate calculations done in
@@ -19032,7 +18902,7 @@ function toPowerBasis_2ndDerivative(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis-3rd-derivative/double/to-power-basis-3rd-derivative.ts
+;// ./src/to-power-basis/to-power-basis-3rd-derivative/double/to-power-basis-3rd-derivative.ts
 /**
  * Returns the 3rd derivative of the power basis representation of a bezier
  * curve of order cubic or less (with intermediate calculations done in
@@ -19066,10 +18936,10 @@ function toPowerBasis_3rdDerivative(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis-1st-derivative/double-double/to-power-basis-1st-derivative-dd.ts
+;// ./src/to-power-basis/to-power-basis-1st-derivative/double-double/to-power-basis-1st-derivative-dd.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const to_power_basis_1st_derivative_dd_ts = two_sum_twoSum; // error -> 0
+const to_power_basis_1st_derivative_dd_ts = twoSum; // error -> 0
 const to_power_basis_1st_derivative_dd_td = two_diff_twoDiff; // error -> 0
 const to_power_basis_1st_derivative_dd_qmd = ddMultDouble2; // error -> 3*u²
 const to_power_basis_1st_derivative_dd_qaq = ddAddDd;
@@ -19149,7 +19019,7 @@ function toPowerBasis1_1stDerivativeDd(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis-2nd-derivative/double-double/to-power-basis-2nd-derivative-dd.ts
+;// ./src/to-power-basis/to-power-basis-2nd-derivative/double-double/to-power-basis-2nd-derivative-dd.ts
 
 const to_power_basis_2nd_derivative_dd_td = two_diff_twoDiff;
 const to_power_basis_2nd_derivative_dd_qaq = ddAddDd;
@@ -19196,7 +19066,7 @@ function toPowerBasis_2ndDerivativeDd(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis-3rd-derivative/double-double/to-power-basis-3rd-derivative-dd.ts
+;// ./src/to-power-basis/to-power-basis-3rd-derivative/double-double/to-power-basis-3rd-derivative-dd.ts
 
 const to_power_basis_3rd_derivative_dd_td = two_diff_twoDiff;
 const to_power_basis_3rd_derivative_dd_qaq = ddAddDd;
@@ -19234,10 +19104,10 @@ function toPowerBasis_3rdDerivativeDd(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis-1st-derivative/exact/to-power-basis-1st-derivative-exact.ts
+;// ./src/to-power-basis/to-power-basis-1st-derivative/exact/to-power-basis-1st-derivative-exact.ts
 
 const to_power_basis_1st_derivative_exact_td = twoDiff;
-const to_power_basis_1st_derivative_exact_ts = basic_two_sum_twoSum;
+const to_power_basis_1st_derivative_exact_ts = two_sum_twoSum;
 const to_power_basis_1st_derivative_exact_sce = scaleExpansion2;
 const eadd = fastExpansionSum;
 const to_power_basis_1st_derivative_exact_ge = growExpansion;
@@ -19306,7 +19176,7 @@ function toPowerBasis1_1stDerivativeExact(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis-2nd-derivative/exact/to-power-basis-2nd-derivative-exact.ts
+;// ./src/to-power-basis/to-power-basis-2nd-derivative/exact/to-power-basis-2nd-derivative-exact.ts
 
 const to_power_basis_2nd_derivative_exact_td = twoDiff;
 const to_power_basis_2nd_derivative_exact_sce = scaleExpansion2;
@@ -19353,7 +19223,7 @@ function toPowerBasis_2ndDerivativeExact(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis-3rd-derivative/exact/to-power-basis-3rd-derivative-exact.ts
+;// ./src/to-power-basis/to-power-basis-3rd-derivative/exact/to-power-basis-3rd-derivative-exact.ts
 
 const to_power_basis_3rd_derivative_exact_td = twoDiff;
 const to_power_basis_3rd_derivative_exact_sce = scaleExpansion2;
@@ -19391,7 +19261,7 @@ function toPowerBasis_3rdDerivativeExact(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/to-power-basis/to-power-basis-1st-derivative/to-power-basis-1st-derivative-error-counters.ts
+;// ./src/to-power-basis/to-power-basis-1st-derivative/to-power-basis-1st-derivative-error-counters.ts
 // For double precision the error bound === γ * <counter> * `error_`
 // For double-double precision the error bound === γγ3 * <counter> * `error_`
 const to_power_basis_1st_derivative_error_counters_abs = Math.abs;
@@ -19549,7 +19419,7 @@ function toPowerBasis3_1stDerivativeErrorCounters(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/normal/normal.ts
+;// ./src/local-properties-at-t/normal/normal.ts
 
 
 /**
@@ -19574,7 +19444,7 @@ function normal(ps, t) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/normal/normal2.ts
+;// ./src/local-properties-at-t/normal/normal2.ts
 
 
 
@@ -19649,7 +19519,7 @@ function normal2(ps, t) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/degree-or-type/line-to-cubic.ts
+;// ./src/transformation/degree-or-type/line-to-cubic.ts
 /**
  * Returns a cubic bezier from the given line with evenly spaced control points.
  *
@@ -19670,7 +19540,7 @@ function lineToCubic(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/degree-or-type/quadratic-to-cubic.ts
+;// ./src/transformation/degree-or-type/quadratic-to-cubic.ts
 /**
  * Returns the cubic version of the given quadratic bezier curve (by degree
  * elevation).
@@ -19694,7 +19564,7 @@ function quadraticToCubic(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/degree-or-type/to-cubic.ts
+;// ./src/transformation/degree-or-type/to-cubic.ts
 
 
 /**
@@ -19728,7 +19598,7 @@ function toCubic(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/curvature.ts
+;// ./src/local-properties-at-t/curvature.ts
 
 
 
@@ -19770,7 +19640,7 @@ function curvature(ps, t) {
 const κ = curvature;
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/e-curvature.ts
+;// ./src/local-properties-at-t/e-curvature.ts
 
 
 
@@ -19791,8 +19661,8 @@ function eCurvature(ps, t) {
     const dy = eHorner(dY, t);
     const ddx = eHorner(ddX, t);
     const ddy = eHorner(ddY, t);
-    const a = e_compress_eCompress(eDiff(expansionProduct(dx, ddy), expansionProduct(dy, ddx)));
-    const _b = e_compress_eCompress(fastExpansionSum(expansionProduct(dx, dx), expansionProduct(dy, dy)));
+    const a = eCompress(eDiff(expansionProduct(dx, ddy), expansionProduct(dy, ddx)));
+    const _b = eCompress(fastExpansionSum(expansionProduct(dx, dx), expansionProduct(dy, dy)));
     const __b = expansionProduct(_b, expansionProduct(_b, _b));
     const b = Math.sqrt(__b[__b.length - 1]);
     const a_ = a[a.length - 1];
@@ -19800,7 +19670,7 @@ function eCurvature(ps, t) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/evaluate/double-double/dd-horner.js
+;// ./node_modules/flo-poly/node/evaluate/double-double/dd-horner.js
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const dd_horner_qaq = ddAddDd;
@@ -19825,10 +19695,11 @@ function ddHorner(p, x) {
     }
     return q;
 }
-ddHorner([[0, 1], [0, 1], [0, -2], [0, 3]], 0.25); //?
 
+// Quokka tests
+// ddHorner([[0,1],[0,1],[0,-2],[0,3]], 0.25); //?
 //# sourceMappingURL=dd-horner.js.map
-;// CONCATENATED MODULE: ./src/local-properties-at-t/dd-curvature.ts
+;// ./src/local-properties-at-t/dd-curvature.ts
 
 
 
@@ -19861,7 +19732,7 @@ function ddCurvature(ps, t) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/dot.js
+;// ./node_modules/flo-vector2d/node/dot.js
 /**
  * Returns the dot (inner) product between two 2-vectors.
  * @param a the first vector
@@ -19872,7 +19743,7 @@ function dot_dot(a, b) {
 }
 
 //# sourceMappingURL=dot.js.map
-;// CONCATENATED MODULE: ./src/global-properties/classification/is-quad-obtuse.ts
+;// ./src/global-properties/classification/is-quad-obtuse.ts
 
 /**
  * Returns `true` if the given quadratic bezier is obtuse, `false` otherwise (i.e.
@@ -19895,7 +19766,7 @@ function isQuadObtuse(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/classification/is-quad-flat.ts
+;// ./src/global-properties/classification/is-quad-flat.ts
 
 
 
@@ -19936,7 +19807,7 @@ function isQuadFlat(ps, tolerance) {
 }
 
 
-;// CONCATENATED MODULE: ./src/fit/quadratic-to-polyline.ts
+;// ./src/fit/quadratic-to-polyline.ts
 
 
 const { abs: quadratic_to_polyline_abs, max: quadratic_to_polyline_max } = Math;
@@ -20053,7 +19924,7 @@ function quadraticToPolyline(ps, tolerance) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double-with-error/dd-div-dd-with-error.js
+;// ./node_modules/double-double/node/double-double-with-error/dd-div-dd-with-error.js
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
 /** @internal */
@@ -20097,7 +19968,7 @@ function ddDivDdWithError(numer, denom, nE, dE) {
 }
 
 //# sourceMappingURL=dd-div-dd-with-error.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-min.js
+;// ./node_modules/double-double/node/double-double/binary/dd-min.js
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
 /** @internal */
@@ -20113,7 +19984,7 @@ function ddMin(a, b) {
 }
 
 //# sourceMappingURL=dd-min.js.map
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/binary/dd-max.js
+;// ./node_modules/double-double/node/double-double/binary/dd-max.js
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
 /** @internal */
@@ -20129,7 +20000,7 @@ function ddMax(a, b) {
 }
 
 //# sourceMappingURL=dd-max.js.map
-;// CONCATENATED MODULE: ./src/global-properties/bounds/get-interval-box/get-interval-box-dd.ts
+;// ./src/global-properties/bounds/get-interval-box/get-interval-box-dd.ts
 
 
 
@@ -20506,7 +20377,7 @@ function getIntervalBoxAtTDd(ps, t) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/root-interval-to-distance-squared-interval.ts
+;// ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/root-interval-to-distance-squared-interval.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const root_interval_to_distance_squared_interval_estimate = eEstimate;
@@ -20563,7 +20434,7 @@ function rootIntervalToDistanceSquaredInterval(box, p) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-mult-by-4.js
+;// ./node_modules/double-double/node/double-double/unary/dd-mult-by-4.js
 /**
  * Returns the result of multiplying the given double-double by 4.
  * * The result is exact
@@ -20574,7 +20445,7 @@ function ddMultBy4(f) {
 }
 
 //# sourceMappingURL=dd-mult-by-4.js.map
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double-double/get-footpoint-poly-3-dd.ts
+;// ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double-double/get-footpoint-poly-3-dd.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const get_footpoint_poly_3_dd_td = two_diff_twoDiff;
@@ -20669,7 +20540,7 @@ function getFootpointPoly3Dd(ps, p) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double-double/get-footpoint-poly-2-dd.ts
+;// ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double-double/get-footpoint-poly-2-dd.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const get_footpoint_poly_2_dd_td = two_diff_twoDiff;
@@ -20732,7 +20603,7 @@ function getFootpointPoly2Dd(ps, p) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/double-double/node/double-double/unary/dd-mult-by-neg-2.js
+;// ./node_modules/double-double/node/double-double/unary/dd-mult-by-neg-2.js
 /**
  * Returns the result of multiplying the given double-double by -2.
  * * The result is exact
@@ -20743,10 +20614,10 @@ function ddMultByNeg2(f) {
 }
 
 //# sourceMappingURL=dd-mult-by-neg-2.js.map
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double-double/get-footpoint-poly-1-dd.ts
+;// ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double-double/get-footpoint-poly-1-dd.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_footpoint_poly_1_dd_tp = basic_two_product_twoProduct;
+const get_footpoint_poly_1_dd_tp = two_product_twoProduct;
 const get_footpoint_poly_1_dd_qaq = ddAddDd;
 const qmn2 = ddMultByNeg2;
 const get_footpoint_poly_1_dd_qdifq = ddDiffDd;
@@ -20787,7 +20658,7 @@ function getFootpointPoly1Dd(ps, p) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/exact/get-footpoint-poly-3-exact.ts
+;// ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/exact/get-footpoint-poly-3-exact.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const get_footpoint_poly_3_exact_td = twoDiff;
@@ -20894,7 +20765,7 @@ function getFootpointPoly3Exact(ps, p) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/exact/get-footpoint-poly-2-exact.ts
+;// ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/exact/get-footpoint-poly-2-exact.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const get_footpoint_poly_2_exact_td = twoDiff;
@@ -20984,7 +20855,7 @@ function getFootpointPoly2Exact(ps, p) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/exact/get-footpoint-poly-1-exact.ts
+;// ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/exact/get-footpoint-poly-1-exact.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const get_footpoint_poly_1_exact_td = twoDiff;
@@ -21031,7 +20902,7 @@ function getFootpointPoly1Exact(ps, p) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/get-closest-on-bezier-from-point-error-counters.ts
+;// ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/get-closest-on-bezier-from-point-error-counters.ts
 const get_closest_on_bezier_from_point_error_counters_abs = Math.abs;
 /**
  * Returns a representation of the error when calculating the polynomial whose
@@ -21284,11 +21155,11 @@ function getClosestOnBezier1FromPointErrorCounters(ps, p) {
     const yp_ = get_closest_on_bezier_from_point_error_counters_abs(p[1]); // <0>
     // <1>xx0 <-- <1>(x0 - xp);
     const xx0_ = x0_ + xp_;
-    // <1>xx1 <-- <1>(x1 - xp);    
+    // <1>xx1 <-- <1>(x1 - xp);
     const xx1_ = x1_ + xp_;
-    // <1>yy0 <-- <1>(y0 - yp);    
+    // <1>yy0 <-- <1>(y0 - yp);
     const yy0_ = y0_ + yp_;
-    // <1>yy1 <-- <1>(y1 - yp);    
+    // <1>yy1 <-- <1>(y1 - yp);
     const yy1_ = y1_ + yp_;
     // <3>x00 <-- <3>(xx0*xx0);
     const x00_ = xx0_ * xx0_;
@@ -21314,7 +21185,7 @@ function getClosestOnBezier1FromPointErrorCounters(ps, p) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-foot-points-polys-on-bezier-certified.ts
+;// ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-foot-points-polys-on-bezier-certified.ts
 
 
 
@@ -21383,7 +21254,7 @@ function getFootPointsOnBezierPolysCertified(ps, p) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/closest-point-on-bezier-certified.ts
+;// ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/closest-point-on-bezier-certified.ts
 
 
 
@@ -21449,7 +21320,7 @@ function closestPointOnBezierCertified(ps, p, lb = 0, ub = 1) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-foot-points-on-bezier-certified.ts
+;// ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-foot-points-on-bezier-certified.ts
 
 
 
@@ -21505,7 +21376,7 @@ function getFootPointsOnBezierCertified(ps, p, lb = 0, ub = 1) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/split/split-by-length.ts
+;// ./src/transformation/split/split-by-length.ts
 
 
 /**
@@ -21520,35 +21391,27 @@ function getFootPointsOnBezierCertified(ps, p, lb = 0, ub = 1) {
  * @doc mdx
  */
 function splitByLength(ps, maxLength) {
-    const head = { r: [0, 1] };
-    let n = head;
-    while (n !== undefined) {
-        const ts_ = n.r;
-        const ps_ = fromTo(ps, ts_[0], ts_[1]);
-        if (controlPointLinesLength(ps_) <= maxLength) {
-            n = n.next;
+    const tsS = [0];
+    const tsE = [1];
+    while (true) {
+        const tS = tsS[tsS.length - 1];
+        const tE = tsE[tsE.length - 1];
+        const ps_ = fromTo(ps, tS, tE);
+        const l = controlPointLinesLength(ps_);
+        if (l <= maxLength) {
+            tsS.push(tsE.pop());
+            if (tE === 1) {
+                return tsS;
+            }
             continue;
         }
-        const t = (ts_[0] + ts_[1]) / 2;
-        const L = [ts_[0], t];
-        const R = [t, ts_[1]];
-        n.r = L;
-        n.next = { r: R, next: n.next };
+        const t = (tS + tE) / 2;
+        tsE.push(t);
     }
-    n = head;
-    const ts = [];
-    while (n !== undefined) {
-        ts.push(n.r[0]);
-        if (n.next === undefined) {
-            ts.push(n.r[1]);
-        }
-        n = n.next;
-    }
-    return ts;
 }
 
 
-;// CONCATENATED MODULE: ./src/get-curvature-extrema/get-abs-curvature-extrema-polys.ts
+;// ./src/get-curvature-extrema/get-abs-curvature-extrema-polys.ts
 
 
 
@@ -21673,7 +21536,7 @@ function getAbsCurvatureExtremaPolys(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/get-curvature-extrema/get-curvature-extrema-quadratic-poly.ts
+;// ./src/get-curvature-extrema/get-curvature-extrema-quadratic-poly.ts
 /**
  * Returns the polynomial whose zero is the t value of maximum absolute
  * curvature for the given *quadratic* bezier curve.
@@ -21702,10 +21565,17 @@ function getCurvatureExtremaQuadraticPoly(ps) {
         y0 * (wy - y1) - y1 * (y21 - y1);
     const d = wx * wx + wy * wy;
     return [d, -n];
+    // const nd = 
+    //     (x0*(x2 - 3*x1 + x0)) - (x1*(x2 - 2*x1)) + 
+    //     (y0*(y2 - 3*y1 + y0)) - (y1*(y2 - 2*y1));
+    // const nd = (
+    //     (x0*x2 - 3*x0*x1 + x0*x0 - x1*x2 + 2*x1*x1) + 
+    //     (y0*y2 - 3*y0*y1 + y0*y0 - y1*y2 + 2*y1*y1)) /
+    //     ((x2 - 2*x1 + x0)**2 + (y2 - 2*y1 + y0)**2);
 }
 
 
-;// CONCATENATED MODULE: ./src/get-curvature-extrema/get-curvature-extrema.ts
+;// ./src/get-curvature-extrema/get-curvature-extrema.ts
 
 
 
@@ -21714,7 +21584,7 @@ function getCurvatureExtremaQuadraticPoly(ps) {
 
 /**
  * Returns the parameter `t` values (in `[0,1]`) of local minimum / maximum
- * absolute curvature for the given bezier curve.
+ * absolute curvature for the given bezier curve as well as inflection points.
  *
  * If there are an infinite number of such `t` values (such as is the case for a
  * line), an empty array is returned.
@@ -21770,7 +21640,7 @@ function getCurvatureExtrema(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/calculus/double-double/dd-differentiate.js
+;// ./node_modules/flo-poly/node/calculus/double-double/dd-differentiate.js
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗ Otherwise code is too slow❗
 const dd_differentiate_ddMultDouble2 = ddMultDouble2;
@@ -21799,13 +21669,14 @@ function ddDifferentiate(p) {
 }
 
 //# sourceMappingURL=dd-differentiate.js.map
-;// CONCATENATED MODULE: ./src/get-curvature-extrema-dd/get-abs-curvature-extrema-polys-dd.ts
+;// ./src/get-curvature-extrema-dd/get-abs-curvature-extrema-polys-dd.ts
+/* unused harmony import specifier */ var get_abs_curvature_extrema_polys_dd_twoProduct;
 
 
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_abs_curvature_extrema_polys_dd_tp = (/* unused pure expression or super */ null && (twoProduct));
+const get_abs_curvature_extrema_polys_dd_tp = (/* unused pure expression or super */ null && (get_abs_curvature_extrema_polys_dd_twoProduct));
 const get_abs_curvature_extrema_polys_dd_qm2 = ddMultBy2;
 const get_abs_curvature_extrema_polys_dd_qm4 = ddMultBy4;
 const get_abs_curvature_extrema_polys_dd_qmd = ddMultDouble2;
@@ -21962,7 +21833,7 @@ function getAbsCurvatureExtremaPolysDd(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/get-curvature-extrema-dd/get-curvature-extrema-quadratic-poly-dd.ts
+;// ./src/get-curvature-extrema-dd/get-curvature-extrema-quadratic-poly-dd.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const get_curvature_extrema_quadratic_poly_dd_td = two_diff_twoDiff;
@@ -22000,7 +21871,7 @@ function getCurvatureExtremaQuadraticPolyDd(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/get-curvature-extrema-dd/get-curvature-extrema-dd.ts
+;// ./src/get-curvature-extrema-dd/get-curvature-extrema-dd.ts
 
 
 
@@ -22067,7 +21938,7 @@ function getCurvatureExtremaDd(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/get-curvature-extrema-e/get-abs-curvature-extrema-polys-e.ts
+;// ./src/get-curvature-extrema-e/get-abs-curvature-extrema-polys-e.ts
 
 
 
@@ -22229,7 +22100,7 @@ function getAbsCurvatureExtremaPolysE(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/get-curvature-extrema-e/get-curvature-extrema-quadratic-poly-e.ts
+;// ./src/get-curvature-extrema-e/get-curvature-extrema-quadratic-poly-e.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const get_curvature_extrema_quadratic_poly_e_emd = scaleExpansion2;
@@ -22268,7 +22139,7 @@ function getCurvatureExtremaQuadraticPolyE(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/get-curvature-extrema-e/get-curvature-extrema-e.ts
+;// ./src/get-curvature-extrema-e/get-curvature-extrema-e.ts
 
 
 
@@ -22360,7 +22231,7 @@ function getCurvatureExtremaE(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/split/split-by-curvature-and-length.ts
+;// ./src/transformation/split/split-by-curvature-and-length.ts
 
 
 
@@ -22383,36 +22254,28 @@ function getCurvatureExtremaE(ps) {
  * @doc mdx
  */
 function splitByCurvatureAndLength(ps, maxCurviness = 0.4, maxLength = 10, minTSpan = 2 ** -16) {
-    const head = { r: [0, 1] };
-    let n = head;
-    while (n !== undefined) {
-        const ts_ = n.r;
-        const ps_ = fromTo(ps, ts_[0], ts_[1]);
-        if ((controlPointLinesLength(ps_) <= maxLength &&
-            curviness(ps_) <= maxCurviness) || ts_[1] - ts_[0] <= minTSpan) {
-            n = n.next;
+    const tsS = [0];
+    const tsE = [1];
+    while (true) {
+        const tS = tsS[tsS.length - 1];
+        const tE = tsE[tsE.length - 1];
+        const ps_ = fromTo(ps, tS, tE);
+        const l = controlPointLinesLength(ps_);
+        const c = curviness(ps_);
+        if ((l <= maxLength && c <= maxCurviness) || tE - tS <= minTSpan) {
+            tsS.push(tsE.pop());
+            if (tE === 1) {
+                return tsS;
+            }
             continue;
         }
-        const t = (ts_[0] + ts_[1]) / 2;
-        const L = [ts_[0], t];
-        const R = [t, ts_[1]];
-        n.r = L;
-        n.next = { r: R, next: n.next };
+        const t = (tS + tE) / 2;
+        tsE.push(t);
     }
-    n = head;
-    const ts = [];
-    while (n !== undefined) {
-        ts.push(n.r[0]);
-        if (n.next === undefined) {
-            ts.push(n.r[1]);
-        }
-        n = n.next;
-    }
-    return ts;
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/classification/is-self-overlapping.ts
+;// ./src/global-properties/classification/is-self-overlapping.ts
 
 /**
  * Returns `true` if the given bezier has all control points collinear and
@@ -22474,13 +22337,19 @@ function isMonotone(xs) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/bounds/get-bounds.ts
+;// ./src/global-properties/bounds/get-bounds.ts
 
 
 
 /**
  * Returns an axis-aligned bounding box together with the `t` values where the
- * bounds on the bezier are reached.
+ * bounds on the bezier are reached in the form:
+ * ```
+ * {
+ *      ts: [[tMinX, tMinY], [tMaxX, tMaxY]];
+ *      box: [[minX,  minY], [maxX,  maxY ]];
+ * }
+ * ```
  *
  * @param ps an order 1,2 or 3 bezier curve given as an array of its control
  * points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
@@ -22536,7 +22405,7 @@ function getBounds(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/affine-transformations/linear/rotate.js
+;// ./node_modules/flo-vector2d/node/affine-transformations/linear/rotate.js
 function rotate(sinθ, cosθ, p) {
     function rotateByθ(p) {
         return [
@@ -22549,14 +22418,14 @@ function rotate(sinθ, cosθ, p) {
 }
 
 //# sourceMappingURL=rotate.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-poly/node/roots/certified/all-roots-certified-simplified.js
+;// ./node_modules/flo-poly/node/roots/certified/all-roots-certified-simplified.js
 
 function allRootsCertifiedSimplified(p, lb = Number.NEGATIVE_INFINITY, ub = Number.POSITIVE_INFINITY, returnUndefinedForZeroPoly) {
     return allRootsCertified(p.map(c => [0, c]), lb, ub, undefined, undefined, returnUndefinedForZeroPoly);
 }
 
 //# sourceMappingURL=all-roots-certified-simplified.js.map
-;// CONCATENATED MODULE: ./src/global-properties/bounds/get-x-bounds-tight.ts
+;// ./src/global-properties/bounds/get-x-bounds-tight.ts
 
 
 
@@ -22602,7 +22471,7 @@ function getXBoundsTight(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/bounds/get-y-bounds-tight.ts
+;// ./src/global-properties/bounds/get-y-bounds-tight.ts
 
 
 
@@ -22648,7 +22517,7 @@ function getYBoundsTight(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/bounds/get-bounding-box.ts
+;// ./src/global-properties/bounds/get-bounding-box.ts
 
 
 /**
@@ -22673,7 +22542,7 @@ function getBoundingBox(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/bounds/get-bounding-box-tight.ts
+;// ./src/global-properties/bounds/get-bounding-box-tight.ts
 
 
 
@@ -22738,7 +22607,7 @@ function getNormalizedBoundingBox(ps, sinθ, cosθ) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/degree-or-type/cubic-to-hybrid-quadratic.ts
+;// ./src/transformation/degree-or-type/cubic-to-hybrid-quadratic.ts
 /**
  * Returns the hybrid quadratic version of the given cubic bezier. For a
  * definition of hybrid quadratic bezier curves please see
@@ -22774,11 +22643,11 @@ function cubicToHybridQuadratic(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/circle-bezier-intersection/double-double/get-coeffs-dd.ts
+;// ./src/intersection/circle-bezier-intersection/double-double/get-coeffs-dd.ts
 
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const get_coeffs_dd_tp = basic_two_product_twoProduct;
+const get_coeffs_dd_tp = two_product_twoProduct;
 const get_coeffs_dd_qaq = ddAddDd;
 const get_coeffs_dd_qm2 = ddMultBy2;
 const get_coeffs_dd_qmn2 = ddMultByNeg2;
@@ -22854,7 +22723,8 @@ function getCoeffsLinearDd(circle, ps) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/big-float-ts/node/double-expansion/e-calculate.js
+;// ./node_modules/big-float-ts/node/double-expansion/e-calculate.js
+/* unused harmony import specifier */ var e_calculate_eCompress;
 
 
 
@@ -22864,12 +22734,12 @@ function getCoeffsLinearDd(circle, ps) {
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
 const e_calculate_mult = expansionProduct;
-const e_calculate_tp = two_product_twoProduct;
+const e_calculate_tp = twoProduct;
 const e_calculate_multByDouble = scaleExpansion;
-const e_calculate_ts = basic_two_sum_twoSum;
+const e_calculate_ts = two_sum_twoSum;
 const addDouble = growExpansion;
 const e_calculate_add = fastExpansionSum;
-const e_calculate_compress = (/* unused pure expression or super */ null && (eCompress));
+const e_calculate_compress = (/* unused pure expression or super */ null && (e_calculate_eCompress));
 /**
  * Return the result of summing an array of terms, each term being an array of
  * floating point expansions to be multiplied together.
@@ -22928,11 +22798,11 @@ function eCalculate(terms) {
 }
 
 //# sourceMappingURL=e-calculate.js.map
-;// CONCATENATED MODULE: ./src/intersection/circle-bezier-intersection/exact/get-coeffs-exact.ts
+;// ./src/intersection/circle-bezier-intersection/exact/get-coeffs-exact.ts
 
 // We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 
-const get_coeffs_exact_tp = two_product_twoProduct;
+const get_coeffs_exact_tp = twoProduct;
 const calc = eCalculate;
 const get_coeffs_exact_sce = scaleExpansion;
 /**
@@ -23085,7 +22955,7 @@ function getCoeffsLinearExact(circle, ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/circle-bezier-intersection/get-circle-bezier-intersection-error-counters.ts
+;// ./src/intersection/circle-bezier-intersection/get-circle-bezier-intersection-error-counters.ts
 
 const get_circle_bezier_intersection_error_counters_abs = Math.abs;
 /**
@@ -23226,7 +23096,7 @@ function getCoeffsLinearErrorCounters(circle, ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/intersection/circle-bezier-intersection/circle-bezier-intersection.ts
+;// ./src/intersection/circle-bezier-intersection/circle-bezier-intersection.ts
 
 
 
@@ -23289,7 +23159,7 @@ function circleBezierIntersection(circle, ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/evaluate/exact/evaluate-exact.ts
+;// ./src/local-properties-at-t/evaluate/exact/evaluate-exact.ts
 
 
 /**
@@ -23320,7 +23190,7 @@ function evaluateExact(ps, t) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/evaluate/double/evaluate.ts
+;// ./src/local-properties-at-t/evaluate/double/evaluate.ts
 
 
 /**
@@ -23354,7 +23224,7 @@ function evaluate(ps, t) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/degree-or-type/line-to-quadratic.ts
+;// ./src/transformation/degree-or-type/line-to-quadratic.ts
 /**
  * Returns a quadratic bezier from the given line with evenly spaced control points.
  *
@@ -23372,7 +23242,7 @@ function lineToQuadratic(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/tangent/double/tangent.ts
+;// ./src/local-properties-at-t/tangent/double/tangent.ts
 
 
 /**
@@ -23397,7 +23267,7 @@ function tangent(ps, t) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/evaluate-2nd-derivative/double/evaluate-2nd-derivative.ts
+;// ./src/local-properties-at-t/evaluate-2nd-derivative/double/evaluate-2nd-derivative.ts
 
 
 /**
@@ -23420,7 +23290,7 @@ function evaluate2ndDerivative(ps, t) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/tangent/exact/tangent-exact.ts
+;// ./src/local-properties-at-t/tangent/exact/tangent-exact.ts
 
 
 /**
@@ -23440,7 +23310,7 @@ function tangentExact(ps, t) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/evaluate-2nd-derivative/exact/evaluate-2nd-derivative-exact.ts
+;// ./src/local-properties-at-t/evaluate-2nd-derivative/exact/evaluate-2nd-derivative-exact.ts
 
 
 /**
@@ -23458,7 +23328,7 @@ function evaluate2ndDerivativeExact(ps, t) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/tangent/exact/tangent-at-0-exact.ts
+;// ./src/local-properties-at-t/tangent/exact/tangent-at-0-exact.ts
 
 const tangent_at_0_exact_td = twoDiff;
 const tangent_at_0_exact_sce = scaleExpansion2;
@@ -23501,9 +23371,9 @@ function tangentAt0Exact(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/evaluate-2nd-derivative/exact/evaluate-2nd-derivative-at-0-exact.ts
+;// ./src/local-properties-at-t/evaluate-2nd-derivative/exact/evaluate-2nd-derivative-at-0-exact.ts
 
-const evaluate_2nd_derivative_at_0_exact_ts = basic_two_sum_twoSum;
+const evaluate_2nd_derivative_at_0_exact_ts = two_sum_twoSum;
 const evaluate_2nd_derivative_at_0_exact_sce = scaleExpansion2;
 const evaluate_2nd_derivative_at_0_exact_ge = growExpansion;
 /**
@@ -23536,7 +23406,7 @@ function evaluate2ndDerivativeAt0Exact(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/tangent/exact/tangent-at-1-exact.ts
+;// ./src/local-properties-at-t/tangent/exact/tangent-at-1-exact.ts
 
 const tangent_at_1_exact_td = twoDiff;
 const tangent_at_1_exact_sce = scaleExpansion2;
@@ -23581,9 +23451,9 @@ function tangentAt1Exact(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/evaluate-2nd-derivative/exact/evaluate-2nd-derivative-at-1-exact.ts
+;// ./src/local-properties-at-t/evaluate-2nd-derivative/exact/evaluate-2nd-derivative-at-1-exact.ts
 
-const evaluate_2nd_derivative_at_1_exact_ts = basic_two_sum_twoSum;
+const evaluate_2nd_derivative_at_1_exact_ts = two_sum_twoSum;
 const evaluate_2nd_derivative_at_1_exact_sce = scaleExpansion2;
 const evaluate_2nd_derivative_at_1_exact_ge = growExpansion;
 /**
@@ -23616,7 +23486,7 @@ function evaluate2ndDerivativeAt1Exact(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/tangent/double/tangent-at-0.ts
+;// ./src/local-properties-at-t/tangent/double/tangent-at-0.ts
 /**
  * Returns the tangent vector (not necessarily of unit length) of an
  * order 0,1,2 or 3 bezier curve at `t === 0`, i.e.
@@ -23661,8 +23531,10 @@ function tangentAt0(ps) {
     throw new Error('The given bezier curve must be of order <= 3.');
 }
 
+// Quokka tests
+// tangentAt0([[0,0],[0,0],[2,1]]); //?
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/evaluate-2nd-derivative/double/evaluate-2nd-derivative-at-0.ts
+;// ./src/local-properties-at-t/evaluate-2nd-derivative/double/evaluate-2nd-derivative-at-0.ts
 /**
  * Returns the result, `[x,y]`, of evaluating the 2nd derivative of a linear,
  * quadratic or cubic bezier curve's power basis at `t === 0`.
@@ -23699,7 +23571,7 @@ function evaluate2ndDerivativeAt0(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/tangent/double/tangent-at-1.ts
+;// ./src/local-properties-at-t/tangent/double/tangent-at-1.ts
 /**
  * Returns the tangent vector (not necessarily of unit length) of an
  * order 0,1,2 or 3 bezier curve at `t === 1`, i.e.
@@ -23747,7 +23619,7 @@ function tangentAt1(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/local-properties-at-t/evaluate-2nd-derivative/double/evaluate-2nd-derivative-at-1.ts
+;// ./src/local-properties-at-t/evaluate-2nd-derivative/double/evaluate-2nd-derivative-at-1.ts
 /**
  * Returns the result, `[x,y]`, of evaluating the 2nd derivative of a linear,
  * quadratic or cubic bezier curve's power basis at `t === 1`.
@@ -23784,7 +23656,7 @@ function evaluate2ndDerivativeAt1(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/transformation/to-string.ts
+;// ./src/transformation/to-string.ts
 /**
  * Returns a 'human readable' string representation of the given bezier curve.
  *
@@ -23798,7 +23670,35 @@ function to_string_toString(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/exact/get-footpoint-poly-exact.ts
+;// ./src/intersection/bezier-bezier-intersection/bezier-bezier-intersection-boundless-both.ts
+
+
+/**
+ * Returns the intersection between any of two linear, quadratic or cubic bezier
+ * curves without limiting the `t` parameter value of either curve
+ * in [0,1], i.e. `t ∈ [-∞,+∞]`.
+ *
+ * * if the two curves have an infinite number of intersections `undefined` is returned
+ * * the second bezier curve's parameter `t` values are returned *ordered* by `t` value
+ *
+ * * **precondition:** the bezier curves must be of lowest possible
+ * representable order, i.e. cubics are really cubics, etc. (else
+ * use [[reduceOrderIfPossible]] first)
+ *
+ * @param ps1 an order 1,2 or 3 bezier curve given as an array of its control
+ * points, e.g. `[[1,2],[3,4],[5,7],[0,0]]`
+ * @param ps2 an order 1,2 or 3 bezier curve given as an array of its control
+ * points, e.g. `[[1,2],[3,4],[5,7],[0,0]]`
+ *
+ * @internal but still exported for backwards compatibility
+ */
+function bezierBezierIntersectionBoundlessBoth(ps1, ps2) {
+    const { coeffs, errBound, getPExact } = getCoeffsBezBez(ps1, ps2);
+    return allRootsCertified(coeffs, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, errBound, getPExact, true);
+}
+
+
+;// ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/exact/get-footpoint-poly-exact.ts
 
 
 
@@ -23830,7 +23730,7 @@ function getFootpointPolyExact(ps, p) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly.ts
+;// ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly.ts
 
 
 
@@ -23862,7 +23762,7 @@ function getFootpointPoly(ps, p) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double-double/get-footpoint-poly-dd.ts
+;// ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double-double/get-footpoint-poly-dd.ts
 
 
 
@@ -23892,7 +23792,7 @@ function getFootpointPolyDd(ps, p) {
 }
 
 
-;// CONCATENATED MODULE: ./src/global-properties/get-bending-energy.ts
+;// ./src/global-properties/get-bending-energy.ts
 
 
 
@@ -24040,7 +23940,7 @@ function κi2(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/angles-and-speeds/bezier-by-angles-and-speeds/cubic-from-angles-and-speeds.ts
+;// ./src/angles-and-speeds/bezier-by-angles-and-speeds/cubic-from-angles-and-speeds.ts
 
 
 const { cos, sin } = Math;
@@ -24072,7 +23972,7 @@ function cubicFromAnglesAndSpeeds(anglesAndSpeeds) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/affine-transformations/linear/reverse.js
+;// ./node_modules/flo-vector2d/node/affine-transformations/linear/reverse.js
 /**
  * Returns the given 2-vector reversed (i.e. scaled by -1).
  * @param p a vector
@@ -24082,7 +23982,7 @@ function reverse_reverse(p) {
 }
 
 //# sourceMappingURL=reverse.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/affine-transformations/linear/scale.js
+;// ./node_modules/flo-vector2d/node/affine-transformations/linear/scale.js
 /**
  * Returns a scaled version of the given 2-vector.
  * @param p a vector
@@ -24093,7 +23993,7 @@ function scale(p, c) {
 }
 
 //# sourceMappingURL=scale.js.map
-;// CONCATENATED MODULE: ./node_modules/flo-vector2d/node/distance-and-length/len.js
+;// ./node_modules/flo-vector2d/node/distance-and-length/len.js
 /**
  * Returns the length of the given 2-vector.
  * @param p a 2d vector
@@ -24103,7 +24003,7 @@ function len(p) {
 }
 
 //# sourceMappingURL=len.js.map
-;// CONCATENATED MODULE: ./src/angles-and-speeds/bezier-by-angles-and-speeds/cubic-to-angles-and-speeds.ts
+;// ./src/angles-and-speeds/bezier-by-angles-and-speeds/cubic-to-angles-and-speeds.ts
 
 const { cos: cubic_to_angles_and_speeds_cos, sin: cubic_to_angles_and_speeds_sin, atan2: cubic_to_angles_and_speeds_atan2 } = Math;
 /**
@@ -24121,7 +24021,6 @@ const { cos: cubic_to_angles_and_speeds_cos, sin: cubic_to_angles_and_speeds_sin
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  */
 function cubicToAnglesAndSpeeds(ps) {
-    // [_x1,_y1],[_x2,_y2],[_x3,_y3]
     const p = ps[0];
     // move ps to origin
     ps = ps.map(translate(reverse_reverse(p)));
@@ -24143,7 +24042,7 @@ function cubicToAnglesAndSpeeds(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/angles-and-speeds/bezier-by-angles-and-speeds/get-cubic-speeds.ts
+;// ./src/angles-and-speeds/bezier-by-angles-and-speeds/get-cubic-speeds.ts
 
 /**
  * For the given bernstein basis cubic bezier curve return its initial and
@@ -24167,7 +24066,7 @@ function getCubicSpeeds(ps) {
 }
 
 
-;// CONCATENATED MODULE: ./src/angles-and-speeds/bezier-by-angles-and-speeds/set-cubic-speeds.ts
+;// ./src/angles-and-speeds/bezier-by-angles-and-speeds/set-cubic-speeds.ts
 
 /**
  * For the given bernstein basis cubic bezier curve return a new cubic bezier
@@ -24197,10 +24096,10 @@ function setCubicSpeeds(ps, s0, s1) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-distance-between-beziers/get-min-max-distance.ts
+;// ./src/simultaneous-properties/closest-distance-between-beziers/get-min-max-distance.ts
 const { min: get_min_max_distance_min, max: get_min_max_distance_max } = Math;
 /** @internal */
-function get_min_max_distance_getMaxDistance(i) {
+function getMaxDistance(i) {
     return get_min_max_distance_max(i.dL + i.eL, i.dR + i.eR);
 }
 /** @internal */
@@ -24209,7 +24108,8 @@ function getMinDistance(i) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-distance-between-beziers/distance-compare.ts
+;// ./src/simultaneous-properties/closest-distance-between-beziers/distance-compare.ts
+/* unused harmony import specifier */ var distance_compare_getMaxDistance;
 
 /**
  * @param a
@@ -24218,7 +24118,7 @@ function getMinDistance(i) {
  * @internal
  */
 function distanceCompareMaxAsc(a, b) {
-    const diff = (getMaxDistance(a) - getMaxDistance(b));
+    const diff = (distance_compare_getMaxDistance(a) - distance_compare_getMaxDistance(b));
     if (diff !== 0) {
         return diff;
     }
@@ -24234,7 +24134,7 @@ function distanceCompareMinDesc(a, b) {
 }
 
 
-;// CONCATENATED MODULE: ./src/simultaneous-properties/closest-distance-between-beziers/closest-distance-between-beziers.ts
+;// ./src/simultaneous-properties/closest-distance-between-beziers/closest-distance-between-beziers.ts
 
 
 
@@ -24394,12 +24294,216 @@ function closest_distance_between_beziers_calcHErrorBound(A, tS, tE) {
 }
 
 
-;// CONCATENATED MODULE: ./src/index.ts
+;// ./node_modules/flo-vector2d/node/distance-and-length/length-squared.js
+/**
+ * Returns the squared length of the given 2-vector.
+ * @param p a vector
+ */
+function lengthSquared(v) {
+    return v[0] * v[0] + v[1] * v[1];
+}
+
+//# sourceMappingURL=length-squared.js.map
+;// ./src/create/generate-arc-from-quads.ts
+
+
+
+
+const { sqrt: generate_arc_from_quads_sqrt, atan2: generate_arc_from_quads_atan2, PI: π, tan, SQRT1_2: s2, sin: generate_arc_from_quads_sin, cos: generate_arc_from_quads_cos } = Math;
+const C = tan(π / 8);
+/**
+ * Quadratic beziers curve that are an approximation of the unit
+ * circle starting from the x-axis.
+ *
+ * @doc mdx
+ */
+const circle = [
+    [[1, 0], [1, C], [s2, s2]],
+    [[s2, s2], [C, 1], [0, 1]],
+    [[0, 1], [-C, 1], [-s2, s2]],
+    [[-s2, s2], [-1, C], [-1, 0]],
+    [[-1, 0], [-1, -C], [-s2, -s2]],
+    [[-s2, -s2], [-C, -1], [0, -1]],
+    [[0, -1], [C, -1], [s2, -s2]],
+    [[s2, -s2], [1, -C], [1, 0]]
+];
+/**
+ * Returns an arc approximation using unit eighth circle quadratic bezier
+ * curves. The result is returned as an array of quadratic bezier curves.
+ *
+ * * if the last returned arc is approximately smaller than 2**-40 of a quarter
+ * circle it is not added to the returned value
+ * * if the last returned arc is approximately (1 - 2**-40) of a quarter
+ * circle a full quarter circle is added to the returned value
+ *
+ * @param c arc circle center
+ * @param p1 arc goes from this point
+ * @param p2 to a point on a line from c to this point (since the problem is over-specified)
+ * (if `p1` and `p2` lies on a line through c a full circle is generated using
+ * 8 quadratic bezier curves)
+ *
+ * @doc mdx
+ */
+function generateArcFromQuads(c, p1, p2) {
+    const c0 = c[0];
+    const c1 = c[1];
+    const p10 = p1[0];
+    const p11 = p1[1];
+    const p20 = p2[0];
+    const p21 = p2[1];
+    if (p10 === c0 && p11 === c1) {
+        return [];
+    }
+    // move to origin
+    const p1_ = [p10 - c0, p11 - c1];
+    const p2_ = [p20 - c0, p21 - c1];
+    const θ = (getInterfaceRotation(p1_, p2_) + 2 * π) % (2 * π);
+    const φ = generate_arc_from_quads_atan2(p1_[1], p1_[0]);
+    const sinφ = generate_arc_from_quads_sin(φ);
+    const cosφ = generate_arc_from_quads_cos(φ);
+    const rad = generate_arc_from_quads_sqrt(lengthSquared(p1_));
+    const rot = rotate(sinφ, cosφ);
+    const trans = translate(c);
+    let Φ = 0;
+    let i = 0;
+    let pss = [];
+    while (Φ < θ) {
+        Φ += π / 4;
+        const ps = circle[i];
+        pss.push(ps);
+        i++;
+    }
+    const ps_ = pss[pss.length - 1];
+    const ray = toLength(rotate(-sinφ, cosφ, p2_), 2);
+    const r = bezierBezierIntersection([[0, 0], ray], ps_);
+    if (r.length === 0) { // just missed
+        const _pss = pss.map(ps => ps.map(p => trans(rot(scale(p, rad)))));
+        _pss[0][0][0] = p1[0];
+        _pss[0][0][1] = p1[1];
+        return _pss;
+    }
+    let t = r[0].t2;
+    if (t < 2 ** -40) { // last piece is too small
+        pss.pop();
+        if (pss.length === 0) {
+            return [];
+        }
+        const _pss = pss.map(ps => ps.map(p => trans(rot(scale(p, rad)))));
+        _pss[0][0][0] = p1[0];
+        _pss[0][0][1] = p1[1];
+        return _pss;
+    }
+    if (t > 1 - 2 ** -40) {
+        t = 1;
+    }
+    const _ps_ = fromTo(ps_, 0, t);
+    pss.pop();
+    pss.push(_ps_);
+    const _pss = pss.map(ps => ps.map(p => trans(rot(scale(p, rad)))));
+    _pss[0][0][0] = p1[0];
+    _pss[0][0][1] = p1[1];
+    return _pss;
+}
+
+
+;// ./src/offset/get-quad-offset-curve-functions.ts
+
+const { sqrt: get_quad_offset_curve_functions_sqrt } = Math;
+function getQuadOffsetCurveFunctions(ps, D) {
+    const [[a, b, c], [d, e, f]] = toPowerBasis(ps);
+    return {
+        X: (t) => {
+            const T = (2 * a * t + b) ** 2 + (2 * d * t + e) ** 2;
+            return D * (2 * d * t + e) / get_quad_offset_curve_functions_sqrt(T) + a * t ** 2 + b * t + c;
+        },
+        Y: (t) => {
+            const T = (2 * a * t + b) ** 2 + (2 * d * t + e) ** 2;
+            return D * (-2 * a * t - b) / get_quad_offset_curve_functions_sqrt(T) + d * t ** 2 + e * t + f;
+        }
+    };
+}
+
+
+;// ./src/offset/calc-quad-offset-x-point.ts
+
 
 
 
+const { sign: calc_quad_offset_x_point_sign, abs: calc_quad_offset_x_point_abs } = Math;
+const { EPSILON: calc_quad_offset_x_point_eps } = Number;
+/**
+ * Calculates and returns the point (as the `t` value) of intersection of the
+ * offset curves of a quadratic bezier curve (if any).
+ *
+ * * returns `undefined` if no such point exist
+ * * offset is in normal direction of curve as `t` goes from `0` to `1`
+ * * offset can be negative
+ *
+ * * see [this Desmos graph (zoom out)](https://www.desmos.com/calculator/eynkl9vzwb)
+  *
+ * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param D distance of offset curve (can be negative)
+ *
+ * @doc mdx
+ */
+function calcQuadOffsetCurveXPoint(ps, D) {
+    const m = getCurvatureExtrema(ps).maxima?.[0];
+    if (m === undefined) {
+        // extrema not within [0,1] or curve is degenerate
+        return undefined;
+    }
+    // cached values (values under sqrt)
+    //----------------------------------
+    // const T = (2*a*t + b)**2 + (2*d*t + e)**2;
+    // const S = (2*a*s + b)**2 + (2*d*s + e)**2;
+    // Offset curve (in terms of `t`)
+    //-----------------------------------
+    // const Oxt = D*( 2*d*t + e)/sqrt(T) + a*t**2 + b*t + c;
+    // const Oyt = D*(-2*a*t - b)/sqrt(T) + d*t**2 + e*t + f;
+    // Both these equations must vanish - one is numerically more stable than
+    // the other depending on the orientation of the quadratic bezier curve.
+    //--------------------------------------------------------------------
+    // const X = D*( 2*d*t + e)/sqrt(T) + a*t**2 + b*t + c - (D*( 2*d*s + e)/sqrt(S) + a*s**2 + b*s + c);
+    // const Y = D*(-2*a*t - b)/sqrt(T) + d*t**2 + e*t + f - (D*(-2*a*s - b)/sqrt(S) + d*s**2 + e*s + f);
+    const n = normal(ps, m);
+    const ratio = calc_quad_offset_x_point_abs(n[1] / n[0]);
+    const _O = getQuadOffsetCurveFunctions(ps, D);
+    // for numerical stability
+    const O = ratio < 1
+        ? _O.X
+        : _O.Y;
+    function XY(t) {
+        // s !== t at this point
+        const s = 2 * m - t; // (due to symmetry of quadratic)
+        const _v = O(t) - O(s);
+        const v = _v / (s - t); // this division removes the unwanted trivial root at t === s
+        if (Number.isFinite(v)) {
+            return v;
+        }
+        return calc_quad_offset_x_point_sign(s - t) * 4 * calc_quad_offset_x_point_eps;
+    }
+    const F = 2 ** 16 * calc_quad_offset_x_point_eps;
+    const C = F * m; // assume some "large" error for now - improve precision later for guaranteed error bounds 
+    const _m = m - C;
+    const m_ = m + C;
+    // if (_m < F || m_ > 1 - F) {
+    //     // intersection is very close to endpoint
+    //     return undefined;
+    // }
+    const rS = brent(XY, -0.125, _m);
+    const rE = brent(XY, m_, 1.125);
+    return [rS, rE];
+}
 
+// Quokka tests
+// import { rotate90Degrees } from 'flo-vector2d';
+// const ps = [[-175,200],[-160,125],[-120,200]];
+// calcQuadOffsetCurveXPoint(ps, -20);//?
+// const ps90 = ps.map(rotate90Degrees);
+// calcQuadOffsetCurveXPoint(ps90, -20);//?
 
+;// ./src/index.ts
 
 
 
@@ -24538,153 +24642,12 @@ function closest_distance_between_beziers_calcHErrorBound(A, tS, tE) {
 
 
 
-var __webpack_exports__areBoxesIntersecting = __webpack_exports__.r9;
-var __webpack_exports__area = __webpack_exports__.Wc;
-var __webpack_exports__bezierBezierIntersection = __webpack_exports__.G6;
-var __webpack_exports__bezierBezierIntersectionBoundless = __webpack_exports__.$Z;
-var __webpack_exports__bezierBezierIntersectionFast = __webpack_exports__.EK;
-var __webpack_exports__bezierSelfIntersection = __webpack_exports__.nd;
-var __webpack_exports__circleBezierIntersection = __webpack_exports__.pH;
-var __webpack_exports__classification = __webpack_exports__.xs;
-var __webpack_exports__classifications = __webpack_exports__.Ug;
-var __webpack_exports__classify = __webpack_exports__.L8;
-var __webpack_exports__clone = __webpack_exports__.o8;
-var __webpack_exports__closestPointOnBezier = __webpack_exports__.GC;
-var __webpack_exports__closestPointOnBezierCertified = __webpack_exports__.d2;
-var __webpack_exports__closestPointsBetweenBeziers = __webpack_exports__.HE;
-var __webpack_exports__controlPointLinesLength = __webpack_exports__.hB;
-var __webpack_exports__cubicFromAnglesAndSpeeds = __webpack_exports__.ex;
-var __webpack_exports__cubicThroughPointGiven013 = __webpack_exports__.rM;
-var __webpack_exports__cubicToAnglesAndSpeeds = __webpack_exports__.ZS;
-var __webpack_exports__cubicToHybridQuadratic = __webpack_exports__.o1;
-var __webpack_exports__cubicToQuadratic = __webpack_exports__.ks;
-var __webpack_exports__curvature = __webpack_exports__.E0;
-var __webpack_exports__curviness = __webpack_exports__.$c;
-var __webpack_exports__ddCurvature = __webpack_exports__.EC;
-var __webpack_exports__eCurvature = __webpack_exports__.Lh;
-var __webpack_exports__equal = __webpack_exports__.LC;
-var __webpack_exports__evalDeCasteljau = __webpack_exports__.u7;
-var __webpack_exports__evalDeCasteljauDd = __webpack_exports__.w4;
-var __webpack_exports__evalDeCasteljauError = __webpack_exports__.g5;
-var __webpack_exports__evalDeCasteljauWithErr = __webpack_exports__.RK;
-var __webpack_exports__evalDeCasteljauWithErrDd = __webpack_exports__.rR;
-var __webpack_exports__evaluate = __webpack_exports__._3;
-var __webpack_exports__evaluate2ndDerivative = __webpack_exports__.L;
-var __webpack_exports__evaluate2ndDerivativeAt0 = __webpack_exports__.i$;
-var __webpack_exports__evaluate2ndDerivativeAt0Exact = __webpack_exports__.XZ;
-var __webpack_exports__evaluate2ndDerivativeAt1 = __webpack_exports__.r$;
-var __webpack_exports__evaluate2ndDerivativeAt1Exact = __webpack_exports__.EZ;
-var __webpack_exports__evaluate2ndDerivativeExact = __webpack_exports__.Sb;
-var __webpack_exports__evaluateExact = __webpack_exports__.xW;
-var __webpack_exports__evaluateImplicit1 = __webpack_exports__.WA;
-var __webpack_exports__evaluateImplicit2 = __webpack_exports__.PD;
-var __webpack_exports__evaluateImplicit3 = __webpack_exports__.Ik;
-var __webpack_exports__fitQuadsToCubic = __webpack_exports__.fb;
-var __webpack_exports__fitQuadsToCubicHausdorff = __webpack_exports__.H;
-var __webpack_exports__fromPowerBasis = __webpack_exports__.Ci;
-var __webpack_exports__fromTo = __webpack_exports__.e8;
-var __webpack_exports__fromToInclErrorBound = __webpack_exports__.CR;
-var __webpack_exports__furthestPointOnBezier = __webpack_exports__["in"];
-var __webpack_exports__generateCuspAtHalf3 = __webpack_exports__.IY;
-var __webpack_exports__generateQuarterCircle = __webpack_exports__.Cl;
-var __webpack_exports__generateSelfIntersecting = __webpack_exports__.bs;
-var __webpack_exports__getAbsAreaBetween = __webpack_exports__.Sw;
-var __webpack_exports__getBendingEnergy = __webpack_exports__.Qj;
-var __webpack_exports__getBoundingBox = __webpack_exports__.UX;
-var __webpack_exports__getBoundingBoxTight = __webpack_exports__.I5;
-var __webpack_exports__getBoundingHull = __webpack_exports__._y;
-var __webpack_exports__getBounds = __webpack_exports__.gW;
-var __webpack_exports__getCoeffsBezBez = __webpack_exports__.v0;
-var __webpack_exports__getControlPointBox = __webpack_exports__.lX;
-var __webpack_exports__getCubicSpeeds = __webpack_exports__.jK;
-var __webpack_exports__getCurvatureExtrema = __webpack_exports__.YV;
-var __webpack_exports__getCurvatureExtremaDd = __webpack_exports__.IB;
-var __webpack_exports__getCurvatureExtremaE = __webpack_exports__.Tc;
-var __webpack_exports__getEndpointIntersections = __webpack_exports__.cR;
-var __webpack_exports__getFootPointsOnBezierCertified = __webpack_exports__.RH;
-var __webpack_exports__getFootPointsOnBezierPolysCertified = __webpack_exports__.GF;
-var __webpack_exports__getFootpointPoly = __webpack_exports__.vd;
-var __webpack_exports__getFootpointPolyDd = __webpack_exports__.jT;
-var __webpack_exports__getFootpointPolyExact = __webpack_exports__.mK;
-var __webpack_exports__getHodograph = __webpack_exports__.rh;
-var __webpack_exports__getImplicitForm1 = __webpack_exports__.TX;
-var __webpack_exports__getImplicitForm1Dd = __webpack_exports__.bJ;
-var __webpack_exports__getImplicitForm1DdWithRunningError = __webpack_exports__.O5;
-var __webpack_exports__getImplicitForm1ErrorCounters = __webpack_exports__.oB;
-var __webpack_exports__getImplicitForm1Exact = __webpack_exports__.Ep;
-var __webpack_exports__getImplicitForm2 = __webpack_exports__.Md;
-var __webpack_exports__getImplicitForm2Dd = __webpack_exports__.w3;
-var __webpack_exports__getImplicitForm2DdWithRunningError = __webpack_exports__.x1;
-var __webpack_exports__getImplicitForm2ErrorCounters = __webpack_exports__.RN;
-var __webpack_exports__getImplicitForm2Exact = __webpack_exports__.Dk;
-var __webpack_exports__getImplicitForm3 = __webpack_exports__.FB;
-var __webpack_exports__getImplicitForm3Dd = __webpack_exports__.LQ;
-var __webpack_exports__getImplicitForm3DdWithRunningError = __webpack_exports__.DR;
-var __webpack_exports__getImplicitForm3ErrorCounters = __webpack_exports__.bK;
-var __webpack_exports__getImplicitForm3Exact = __webpack_exports__.s_;
-var __webpack_exports__getInflections = __webpack_exports__.vH;
-var __webpack_exports__getInterfaceRotation = __webpack_exports__.e4;
-var __webpack_exports__getIntervalBox = __webpack_exports__.TY;
-var __webpack_exports__getIntervalBoxDd = __webpack_exports__.z4;
-var __webpack_exports__getTAtLength = __webpack_exports__.Qf;
-var __webpack_exports__getXBoundsTight = __webpack_exports__.is;
-var __webpack_exports__getYBoundsTight = __webpack_exports__.Rk;
-var __webpack_exports__hausdorffDistance = __webpack_exports__.gV;
-var __webpack_exports__hausdorffDistanceOneSided = __webpack_exports__.L1;
-var __webpack_exports__intersectBoxes = __webpack_exports__.NZ;
-var __webpack_exports__isCollinear = __webpack_exports__.SG;
-var __webpack_exports__isCubicReallyLine = __webpack_exports__.Mz;
-var __webpack_exports__isCubicReallyQuad = __webpack_exports__.RA;
-var __webpack_exports__isHorizontal = __webpack_exports__.$b;
-var __webpack_exports__isPointOnBezierExtension = __webpack_exports__.IF;
-var __webpack_exports__isQuadObtuse = __webpack_exports__.Un;
-var __webpack_exports__isQuadReallyLine = __webpack_exports__.pf;
-var __webpack_exports__isReallyPoint = __webpack_exports__.Qr;
-var __webpack_exports__isSelfOverlapping = __webpack_exports__.Ag;
-var __webpack_exports__isVertical = __webpack_exports__.fk;
-var __webpack_exports__length = __webpack_exports__.Bw;
-var __webpack_exports__lineToCubic = __webpack_exports__.uw;
-var __webpack_exports__lineToQuadratic = __webpack_exports__.cZ;
-var __webpack_exports__maxAbsCoordinate = __webpack_exports__.LX;
-var __webpack_exports__normal = __webpack_exports__.qb;
-var __webpack_exports__normal2 = __webpack_exports__.i8;
-var __webpack_exports__quadraticToCubic = __webpack_exports__._f;
-var __webpack_exports__quadraticToPolyline = __webpack_exports__.i2;
-var __webpack_exports__reduceOrderIfPossible = __webpack_exports__.DD;
-var __webpack_exports__reverse = __webpack_exports__.BE;
-var __webpack_exports__setCubicSpeeds = __webpack_exports__.ve;
-var __webpack_exports__splitByCurvature = __webpack_exports__.FH;
-var __webpack_exports__splitByCurvatureAndLength = __webpack_exports__.ey;
-var __webpack_exports__splitByLength = __webpack_exports__.OX;
-var __webpack_exports__tFromXY = __webpack_exports__.jX;
-var __webpack_exports__tangent = __webpack_exports__.KR;
-var __webpack_exports__tangentAt0 = __webpack_exports__.Hf;
-var __webpack_exports__tangentAt0Exact = __webpack_exports__.um;
-var __webpack_exports__tangentAt1 = __webpack_exports__.AY;
-var __webpack_exports__tangentAt1Exact = __webpack_exports__.zr;
-var __webpack_exports__tangentExact = __webpack_exports__.Bg;
-var __webpack_exports__toCubic = __webpack_exports__.Oj;
-var __webpack_exports__toPowerBasis = __webpack_exports__.V4;
-var __webpack_exports__toPowerBasisDd = __webpack_exports__.bL;
-var __webpack_exports__toPowerBasisDdWithRunningError = __webpack_exports__.CP;
-var __webpack_exports__toPowerBasisErrorCounters = __webpack_exports__.wr;
-var __webpack_exports__toPowerBasisExact = __webpack_exports__._K;
-var __webpack_exports__toPowerBasisWithRunningError = __webpack_exports__.SP;
-var __webpack_exports__toPowerBasis_1stDerivative = __webpack_exports__.pn;
-var __webpack_exports__toPowerBasis_1stDerivativeDd = __webpack_exports__.$0;
-var __webpack_exports__toPowerBasis_1stDerivativeErrorCounters = __webpack_exports__.eT;
-var __webpack_exports__toPowerBasis_1stDerivativeExact = __webpack_exports__.gw;
-var __webpack_exports__toPowerBasis_2ndDerivative = __webpack_exports__.rC;
-var __webpack_exports__toPowerBasis_2ndDerivativeDd = __webpack_exports__.Hm;
-var __webpack_exports__toPowerBasis_2ndDerivativeExact = __webpack_exports__.yb;
-var __webpack_exports__toPowerBasis_3rdDerivative = __webpack_exports__.qg;
-var __webpack_exports__toPowerBasis_3rdDerivativeDd = __webpack_exports__.kd;
-var __webpack_exports__toPowerBasis_3rdDerivativeExact = __webpack_exports__.RJ;
-var __webpack_exports__toString = __webpack_exports__.dI;
-var __webpack_exports__totalAbsoluteCurvature = __webpack_exports__.hM;
-var __webpack_exports__totalCurvature = __webpack_exports__.wu;
-var __webpack_exports__totalLength = __webpack_exports__["do"];
-var __webpack_exports___ = __webpack_exports__.e7;
-var __webpack_exports___ = __webpack_exports__.ZH;
-var __webpack_exports___ = __webpack_exports__.LZ;
-export { __webpack_exports__areBoxesIntersecting as areBoxesIntersecting, __webpack_exports__area as area, __webpack_exports__bezierBezierIntersection as bezierBezierIntersection, __webpack_exports__bezierBezierIntersectionBoundless as bezierBezierIntersectionBoundless, __webpack_exports__bezierBezierIntersectionFast as bezierBezierIntersectionFast, __webpack_exports__bezierSelfIntersection as bezierSelfIntersection, __webpack_exports__circleBezierIntersection as circleBezierIntersection, __webpack_exports__classification as classification, __webpack_exports__classifications as classifications, __webpack_exports__classify as classify, __webpack_exports__clone as clone, __webpack_exports__closestPointOnBezier as closestPointOnBezier, __webpack_exports__closestPointOnBezierCertified as closestPointOnBezierCertified, __webpack_exports__closestPointsBetweenBeziers as closestPointsBetweenBeziers, __webpack_exports__controlPointLinesLength as controlPointLinesLength, __webpack_exports__cubicFromAnglesAndSpeeds as cubicFromAnglesAndSpeeds, __webpack_exports__cubicThroughPointGiven013 as cubicThroughPointGiven013, __webpack_exports__cubicToAnglesAndSpeeds as cubicToAnglesAndSpeeds, __webpack_exports__cubicToHybridQuadratic as cubicToHybridQuadratic, __webpack_exports__cubicToQuadratic as cubicToQuadratic, __webpack_exports__curvature as curvature, __webpack_exports__curviness as curviness, __webpack_exports__ddCurvature as ddCurvature, __webpack_exports__eCurvature as eCurvature, __webpack_exports__equal as equal, __webpack_exports__evalDeCasteljau as evalDeCasteljau, __webpack_exports__evalDeCasteljauDd as evalDeCasteljauDd, __webpack_exports__evalDeCasteljauError as evalDeCasteljauError, __webpack_exports__evalDeCasteljauWithErr as evalDeCasteljauWithErr, __webpack_exports__evalDeCasteljauWithErrDd as evalDeCasteljauWithErrDd, __webpack_exports__evaluate as evaluate, __webpack_exports__evaluate2ndDerivative as evaluate2ndDerivative, __webpack_exports__evaluate2ndDerivativeAt0 as evaluate2ndDerivativeAt0, __webpack_exports__evaluate2ndDerivativeAt0Exact as evaluate2ndDerivativeAt0Exact, __webpack_exports__evaluate2ndDerivativeAt1 as evaluate2ndDerivativeAt1, __webpack_exports__evaluate2ndDerivativeAt1Exact as evaluate2ndDerivativeAt1Exact, __webpack_exports__evaluate2ndDerivativeExact as evaluate2ndDerivativeExact, __webpack_exports__evaluateExact as evaluateExact, __webpack_exports__evaluateImplicit1 as evaluateImplicit1, __webpack_exports__evaluateImplicit2 as evaluateImplicit2, __webpack_exports__evaluateImplicit3 as evaluateImplicit3, __webpack_exports__fitQuadsToCubic as fitQuadsToCubic, __webpack_exports__fitQuadsToCubicHausdorff as fitQuadsToCubicHausdorff, __webpack_exports__fromPowerBasis as fromPowerBasis, __webpack_exports__fromTo as fromTo, __webpack_exports__fromToInclErrorBound as fromToInclErrorBound, __webpack_exports__furthestPointOnBezier as furthestPointOnBezier, __webpack_exports__generateCuspAtHalf3 as generateCuspAtHalf3, __webpack_exports__generateQuarterCircle as generateQuarterCircle, __webpack_exports__generateSelfIntersecting as generateSelfIntersecting, __webpack_exports__getAbsAreaBetween as getAbsAreaBetween, __webpack_exports__getBendingEnergy as getBendingEnergy, __webpack_exports__getBoundingBox as getBoundingBox, __webpack_exports__getBoundingBoxTight as getBoundingBoxTight, __webpack_exports__getBoundingHull as getBoundingHull, __webpack_exports__getBounds as getBounds, __webpack_exports__getCoeffsBezBez as getCoeffsBezBez, __webpack_exports__getControlPointBox as getControlPointBox, __webpack_exports__getCubicSpeeds as getCubicSpeeds, __webpack_exports__getCurvatureExtrema as getCurvatureExtrema, __webpack_exports__getCurvatureExtremaDd as getCurvatureExtremaDd, __webpack_exports__getCurvatureExtremaE as getCurvatureExtremaE, __webpack_exports__getEndpointIntersections as getEndpointIntersections, __webpack_exports__getFootPointsOnBezierCertified as getFootPointsOnBezierCertified, __webpack_exports__getFootPointsOnBezierPolysCertified as getFootPointsOnBezierPolysCertified, __webpack_exports__getFootpointPoly as getFootpointPoly, __webpack_exports__getFootpointPolyDd as getFootpointPolyDd, __webpack_exports__getFootpointPolyExact as getFootpointPolyExact, __webpack_exports__getHodograph as getHodograph, __webpack_exports__getImplicitForm1 as getImplicitForm1, __webpack_exports__getImplicitForm1Dd as getImplicitForm1Dd, __webpack_exports__getImplicitForm1DdWithRunningError as getImplicitForm1DdWithRunningError, __webpack_exports__getImplicitForm1ErrorCounters as getImplicitForm1ErrorCounters, __webpack_exports__getImplicitForm1Exact as getImplicitForm1Exact, __webpack_exports__getImplicitForm2 as getImplicitForm2, __webpack_exports__getImplicitForm2Dd as getImplicitForm2Dd, __webpack_exports__getImplicitForm2DdWithRunningError as getImplicitForm2DdWithRunningError, __webpack_exports__getImplicitForm2ErrorCounters as getImplicitForm2ErrorCounters, __webpack_exports__getImplicitForm2Exact as getImplicitForm2Exact, __webpack_exports__getImplicitForm3 as getImplicitForm3, __webpack_exports__getImplicitForm3Dd as getImplicitForm3Dd, __webpack_exports__getImplicitForm3DdWithRunningError as getImplicitForm3DdWithRunningError, __webpack_exports__getImplicitForm3ErrorCounters as getImplicitForm3ErrorCounters, __webpack_exports__getImplicitForm3Exact as getImplicitForm3Exact, __webpack_exports__getInflections as getInflections, __webpack_exports__getInterfaceRotation as getInterfaceRotation, __webpack_exports__getIntervalBox as getIntervalBox, __webpack_exports__getIntervalBoxDd as getIntervalBoxDd, __webpack_exports__getTAtLength as getTAtLength, __webpack_exports__getXBoundsTight as getXBoundsTight, __webpack_exports__getYBoundsTight as getYBoundsTight, __webpack_exports__hausdorffDistance as hausdorffDistance, __webpack_exports__hausdorffDistanceOneSided as hausdorffDistanceOneSided, __webpack_exports__intersectBoxes as intersectBoxes, __webpack_exports__isCollinear as isCollinear, __webpack_exports__isCubicReallyLine as isCubicReallyLine, __webpack_exports__isCubicReallyQuad as isCubicReallyQuad, __webpack_exports__isHorizontal as isHorizontal, __webpack_exports__isPointOnBezierExtension as isPointOnBezierExtension, __webpack_exports__isQuadObtuse as isQuadObtuse, __webpack_exports__isQuadReallyLine as isQuadReallyLine, __webpack_exports__isReallyPoint as isReallyPoint, __webpack_exports__isSelfOverlapping as isSelfOverlapping, __webpack_exports__isVertical as isVertical, __webpack_exports__length as length, __webpack_exports__lineToCubic as lineToCubic, __webpack_exports__lineToQuadratic as lineToQuadratic, __webpack_exports__maxAbsCoordinate as maxAbsCoordinate, __webpack_exports__normal as normal, __webpack_exports__normal2 as normal2, __webpack_exports__quadraticToCubic as quadraticToCubic, __webpack_exports__quadraticToPolyline as quadraticToPolyline, __webpack_exports__reduceOrderIfPossible as reduceOrderIfPossible, __webpack_exports__reverse as reverse, __webpack_exports__setCubicSpeeds as setCubicSpeeds, __webpack_exports__splitByCurvature as splitByCurvature, __webpack_exports__splitByCurvatureAndLength as splitByCurvatureAndLength, __webpack_exports__splitByLength as splitByLength, __webpack_exports__tFromXY as tFromXY, __webpack_exports__tangent as tangent, __webpack_exports__tangentAt0 as tangentAt0, __webpack_exports__tangentAt0Exact as tangentAt0Exact, __webpack_exports__tangentAt1 as tangentAt1, __webpack_exports__tangentAt1Exact as tangentAt1Exact, __webpack_exports__tangentExact as tangentExact, __webpack_exports__toCubic as toCubic, __webpack_exports__toPowerBasis as toPowerBasis, __webpack_exports__toPowerBasisDd as toPowerBasisDd, __webpack_exports__toPowerBasisDdWithRunningError as toPowerBasisDdWithRunningError, __webpack_exports__toPowerBasisErrorCounters as toPowerBasisErrorCounters, __webpack_exports__toPowerBasisExact as toPowerBasisExact, __webpack_exports__toPowerBasisWithRunningError as toPowerBasisWithRunningError, __webpack_exports__toPowerBasis_1stDerivative as toPowerBasis_1stDerivative, __webpack_exports__toPowerBasis_1stDerivativeDd as toPowerBasis_1stDerivativeDd, __webpack_exports__toPowerBasis_1stDerivativeErrorCounters as toPowerBasis_1stDerivativeErrorCounters, __webpack_exports__toPowerBasis_1stDerivativeExact as toPowerBasis_1stDerivativeExact, __webpack_exports__toPowerBasis_2ndDerivative as toPowerBasis_2ndDerivative, __webpack_exports__toPowerBasis_2ndDerivativeDd as toPowerBasis_2ndDerivativeDd, __webpack_exports__toPowerBasis_2ndDerivativeExact as toPowerBasis_2ndDerivativeExact, __webpack_exports__toPowerBasis_3rdDerivative as toPowerBasis_3rdDerivative, __webpack_exports__toPowerBasis_3rdDerivativeDd as toPowerBasis_3rdDerivativeDd, __webpack_exports__toPowerBasis_3rdDerivativeExact as toPowerBasis_3rdDerivativeExact, __webpack_exports__toString as toString, __webpack_exports__totalAbsoluteCurvature as totalAbsoluteCurvature, __webpack_exports__totalCurvature as totalCurvature, __webpack_exports__totalLength as totalLength, __webpack_exports___ as γ, __webpack_exports___ as γγ, __webpack_exports___ as κ };
+
+
+
+
+
+
+
+
+export { areBoxesIntersecting, area_area as area, bezierBezierIntersection, bezierBezierIntersectionBoundless, bezierBezierIntersectionBoundlessBoth, bezierBezierIntersectionFast, bezierSelfIntersection, calcQuadOffsetCurveXPoint, circleBezierIntersection, classification, classifications, classify, clone, closestPointOnBezier, closestPointOnBezierCertified, closestPointsBetweenBeziers, controlPointLinesLength, cubicFromAnglesAndSpeeds, cubicThroughPointGiven013, cubicToAnglesAndSpeeds, cubicToHybridQuadratic, cubicToQuadratic, curvature, curviness, ddCurvature, eCurvature, equal, evalDeCasteljau, evalDeCasteljauDd, evalDeCasteljauError, evalDeCasteljauWithErr, evalDeCasteljauWithErrDd, evaluate, evaluate2ndDerivative, evaluate2ndDerivativeAt0, evaluate2ndDerivativeAt0Exact, evaluate2ndDerivativeAt1, evaluate2ndDerivativeAt1Exact, evaluate2ndDerivativeExact, evaluateExact, evaluateImplicit1, evaluateImplicit2, evaluateImplicit3, fitQuadsToCubic, fitQuadsToCubicHausdorff, fromPowerBasis, fromTo, fromToInclErrorBound, furthestPointOnBezier, generateArcFromQuads, generateCuspAtHalf3, generateQuarterCircle, generateSelfIntersecting, getAbsAreaBetween, getBendingEnergy, getBoundingBox, getBoundingBoxTight, getBoundingHull, getBounds, getCoeffsBezBez, getControlPointBox, getCubicSpeeds, getCurvatureExtrema, getCurvatureExtremaDd, getCurvatureExtremaE, getEndpointIntersections, getFootPointsOnBezierCertified, getFootPointsOnBezierPolysCertified, getFootpointPoly, getFootpointPolyDd, getFootpointPolyExact, getHodograph, getImplicitForm1, getImplicitForm1Dd, getImplicitForm1DdWithRunningError, getImplicitForm1ErrorCounters, getImplicitForm1Exact, getImplicitForm2, getImplicitForm2Dd, getImplicitForm2DdWithRunningError, getImplicitForm2ErrorCounters, getImplicitForm2Exact, getImplicitForm3, getImplicitForm3Dd, getImplicitForm3DdWithRunningError, getImplicitForm3ErrorCounters, getImplicitForm3Exact, getInflections, getInterfaceRotation, getIntervalBox, getIntervalBoxDd, getTAtLength, getXBoundsTight, getYBoundsTight, hausdorffDistance, hausdorffDistanceOneSided, intersectBoxes, isCollinear, isCubicReallyLine, isCubicReallyQuad, isHorizontal, isPointOnBezierExtension, isQuadObtuse, isQuadReallyLine, isReallyPoint, isSelfOverlapping, isVertical, length_length as length, lineToCubic, lineToQuadratic, maxAbsCoordinate, normal, normal2, quadraticToCubic, quadraticToPolyline, reduceOrderIfPossible, reverse, setCubicSpeeds, splitByCurvature, splitByCurvatureAndLength, splitByLength, tFromXY, tangent, tangentAt0, tangentAt0Exact, tangentAt1, tangentAt1Exact, tangentExact, toCubic, toPowerBasis, toPowerBasis0Exact, toPowerBasis1DdWithRunningError, toPowerBasis1Exact, toPowerBasis2DdWithRunningError, toPowerBasis2Exact, toPowerBasis3DdWithRunningError, toPowerBasis3Exact, toPowerBasisDd, toPowerBasisDdWithRunningError, toPowerBasisErrorCounters, toPowerBasisExact, toPowerBasisWithRunningError, toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeDd, toPowerBasis_1stDerivativeErrorCounters, toPowerBasis_1stDerivativeExact, toPowerBasis_2ndDerivative, toPowerBasis_2ndDerivativeDd, toPowerBasis_2ndDerivativeExact, toPowerBasis_3rdDerivative, toPowerBasis_3rdDerivativeDd, toPowerBasis_3rdDerivativeExact, to_string_toString as toString, totalAbsoluteCurvature, totalCurvature, totalLength, γ, γγ, κ };

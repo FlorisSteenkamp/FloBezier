@@ -1,7 +1,7 @@
 import type { __Debug__ } from '../debug.js';
 import { toHybridQuadratic as _toHybridQuadratic } from './to-hybrid-quadratic.js';
 
-declare const globalThis: typeof global & { __debug__: __Debug__ };
+// declare const globalThis: typeof global & { __debug__: __Debug__ };
 
 
 const toHybridQuadratic = _toHybridQuadratic;

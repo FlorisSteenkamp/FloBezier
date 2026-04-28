@@ -1,4 +1,4 @@
-import { ddDifferentiate, allRootsCertified, eHorner, eDifferentiate } from "flo-poly";
+import { allRootsCertified, eHorner, eDifferentiate } from "flo-poly";
 import { eDiff, eMult, eSign } from 'big-float-ts';
 import { getAbsCurvatureExtremaPolysE } from "./get-abs-curvature-extrema-polys-e.js";
 import { isCollinear } from "../global-properties/classification/is-collinear.js";

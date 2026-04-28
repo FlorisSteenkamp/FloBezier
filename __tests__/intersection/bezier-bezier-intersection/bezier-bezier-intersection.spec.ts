@@ -2,7 +2,7 @@ import { expect, assert } from 'chai';
 import { describe } from 'mocha';
 import { bezierBezierIntersection, evaluateExact } from '../../../src/index.js';
 import { getPss } from '../../helpers/intersection/get-pss.js';
-import { X } from "../../../src/index.js";
+import type { X } from "../../../src/index.js";
 import { eAdd, eDiff, eEstimate, eMult } from 'big-float-ts';
 import { add1Ulp } from '../../../src/add-1-ulp.js';
 import { sub1Ulp } from '../../../src/sub-1-ulp.js';

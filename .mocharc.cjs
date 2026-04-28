@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-    require: "ts-node/register",
+    // require: "ts-node/register",
     extension: ['ts', 'tsx'],
     spec: ['__tests__/**/*.spec.ts'],
     recursive: true,

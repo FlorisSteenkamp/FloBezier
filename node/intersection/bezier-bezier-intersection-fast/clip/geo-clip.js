@@ -1,4 +1,5 @@
 import { toHybridQuadratic as _toHybridQuadratic } from './to-hybrid-quadratic.js';
+// declare const globalThis: typeof global & { __debug__: __Debug__ };
 const toHybridQuadratic = _toHybridQuadratic;
 const min = Math.min;
 const max = Math.max;

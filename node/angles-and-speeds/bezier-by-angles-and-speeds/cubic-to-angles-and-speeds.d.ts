@@ -1,4 +1,4 @@
-import { AnglesAndSpeeds } from "../angles-and-speeds";
+import { AnglesAndSpeeds } from "../angles-and-speeds.js";
 /**
  * For the given bernstein cubic bezier curve basis return the angles-and-speeds
  * basis coefficients, i.e.

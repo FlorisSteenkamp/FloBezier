@@ -5,15 +5,15 @@
  */
 interface Extrema {
     /** list of paramter t values where minima occur */
-    minima: number[];
+    readonly minima: number[];
     /** list of paramter t values where maxima occur */
-    maxima: number[];
+    readonly maxima: number[];
     /** list of paramter t values where inflection points occur */
-    inflections: number[];
+    readonly inflections: number[];
 }
 /**
  * Returns the parameter `t` values (in `[0,1]`) of local minimum / maximum
- * absolute curvature for the given bezier curve.
+ * absolute curvature for the given bezier curve as well as inflection points.
  *
  * If there are an infinite number of such `t` values (such as is the case for a
  * line), an empty array is returned.
@@ -27,4 +27,5 @@ interface Extrema {
  * @doc mdx
  */
 declare function getCurvatureExtrema(ps: number[][]): Extrema;
-export { getCurvatureExtrema, Extrema };
+export type { Extrema };
+export { getCurvatureExtrema };

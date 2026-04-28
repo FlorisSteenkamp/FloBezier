@@ -1,4 +1,4 @@
-import { X } from "../../../src/index.js";
+import type { X } from "../../../src/index.js";
 
 
 function swapIntersections(xs: X[]): X[] {

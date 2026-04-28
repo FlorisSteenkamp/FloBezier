@@ -1,0 +1,8 @@
+﻿Report: Relative import/export specifiers in src NOT ending with .js
+Generated: 2026-04-27 11:32:07
+TOTAL_MATCH_LINES=0
+FILES_WITH_MATCHES=0
+
+File|Count
+
+Details: File|Line|Specifier

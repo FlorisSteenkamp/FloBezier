@@ -67,18 +67,18 @@ const config_EsmMinify = {
 
 
 /** ESM, not minified */ 
-// const config_EsmNoMinify = {
-//     ...config_Basic,
-//     output: {
-//         ...config_Basic.output,
-//         filename: 'index.js',
-//     },
-//     optimization: { minimize: false },
-// };
+const config_EsmNoMinify = {
+    ...config_Basic,
+    output: {
+        ...config_Basic.output,
+        filename: 'index.js',
+    },
+    optimization: { minimize: false },
+};
 
 
 module.exports = [
     config_EsmMinify,
-    // config_EsmNoMinify
+    config_EsmNoMinify
 ];
 

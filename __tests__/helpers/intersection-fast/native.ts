@@ -1,4 +1,5 @@
-import { bezierBezierIntersection, X } from "../../../src/index.js";
+import { bezierBezierIntersection } from "../../../src/index.js";
+import type { X } from "../../../src/index.js";
 
 
 function native(pss: number[][][]): X[][] {
