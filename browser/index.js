@@ -1,25 +1,444 @@
-/******/ // The require scope
-/******/ var __webpack_require__ = {};
-/******/ 
-/************************************************************************/
-/******/ /* webpack/runtime/define property getters */
-/******/ (() => {
-/******/ 	// define getter functions for harmony exports
-/******/ 	__webpack_require__.d = (exports, definition) => {
-/******/ 		for(var key in definition) {
-/******/ 			if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 				Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 			}
-/******/ 		}
-/******/ 	};
-/******/ })();
-/******/ 
-/******/ /* webpack/runtime/hasOwnProperty shorthand */
-/******/ (() => {
-/******/ 	__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ })();
-/******/ 
-/************************************************************************/
+
+;// ./src/transformation/split/from-to/from-to-3.ts
+/**
+ * Returns a bezier curve that starts and ends at the given t parameters.
+ *
+ * @param ps a cubic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param tS the `t` parameter where the resultant bezier should start
+ * @param tE the `t` parameter where the resultant bezier should end
+ *
+ * @internal
+ */
+function fromTo3(ps, tS, tE) {
+    if (tS === 0) {
+        if (tE === 1) {
+            return ps;
+        }
+        return splitLeft3(ps, tE);
+    }
+    if (tE === 1) {
+        return splitRight3(ps, tS);
+    }
+    return splitAtBoth3(ps, tS, tE);
+}
+/**
+ * Returns a bezier curve that starts at the given t parameter and ends
+ * at `t === 1`.
+ *
+ * @param ps a cubic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param t the `t` parameter where the resultant bezier should start
+ *
+ * @internal
+ */
+function splitRight3(ps, t) {
+    // --------------------------------------------------------
+    // const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const p2 = ps[2];
+    const p3 = ps[3];
+    const x00 = p0[0];
+    const y00 = p0[1];
+    const x10 = p1[0];
+    const y10 = p1[1];
+    const x20 = p2[0];
+    const y20 = p2[1];
+    const x30 = p3[0];
+    const y30 = p3[1];
+    // --------------------------------------------------------
+    const x01 = x00 - t * (x00 - x10);
+    const x11 = x10 - t * (x10 - x20);
+    const x21 = x20 - t * (x20 - x30);
+    const x02 = x01 - t * (x01 - x11);
+    const x12 = x11 - t * (x11 - x21);
+    const x03 = x02 - t * (x02 - x12);
+    const y01 = y00 - t * (y00 - y10);
+    const y11 = y10 - t * (y10 - y20);
+    const y21 = y20 - t * (y20 - y30);
+    const y02 = y01 - t * (y01 - y11);
+    const y12 = y11 - t * (y11 - y21);
+    const y03 = y02 - t * (y02 - y12);
+    return [[x03, y03], [x12, y12], [x21, y21], p3];
+}
+/**
+ * Returns a bezier curve that starts at `t === 0` and ends at the given t
+ * parameter.
+ *
+ * @param ps a cubic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param t the `t` parameter where the resultant bezier should end
+ *
+ * @internal
+ */
+function splitLeft3(ps, t) {
+    // --------------------------------------------------------
+    // const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const p2 = ps[2];
+    const p3 = ps[3];
+    const x00 = p0[0];
+    const y00 = p0[1];
+    const x10 = p1[0];
+    const y10 = p1[1];
+    const x20 = p2[0];
+    const y20 = p2[1];
+    const x30 = p3[0];
+    const y30 = p3[1];
+    // --------------------------------------------------------
+    const x01 = x00 - t * (x00 - x10);
+    const x11 = x10 - t * (x10 - x20);
+    const x21 = x20 - t * (x20 - x30);
+    const x02 = x01 - t * (x01 - x11);
+    const x12 = x11 - t * (x11 - x21);
+    const x03 = x02 - t * (x02 - x12);
+    const y01 = y00 - t * (y00 - y10);
+    const y11 = y10 - t * (y10 - y20);
+    const y21 = y20 - t * (y20 - y30);
+    const y02 = y01 - t * (y01 - y11);
+    const y12 = y11 - t * (y11 - y21);
+    const y03 = y02 - t * (y02 - y12);
+    return [p0, [x01, y01], [x02, y02], [x03, y03]];
+}
+/**
+ * Returns a bezier curve that starts and ends at the given `t` parameters.
+ *
+ * @param ps a cubic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param tS the `t` parameter where the resultant bezier should start
+ * @param tE the `t` parameter where the resultant bezier should end
+ *
+ * @internal
+ */
+function splitAtBoth3(ps, tS, tE) {
+    // --------------------------------------------------------
+    // const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const p2 = ps[2];
+    const p3 = ps[3];
+    const x0 = p0[0];
+    const y0 = p0[1];
+    const x1 = p1[0];
+    const y1 = p1[1];
+    const x2 = p2[0];
+    const y2 = p2[1];
+    const x3 = p3[0];
+    const y3 = p3[1];
+    // --------------------------------------------------------
+    const ttS = tS * tS;
+    const tttS = tS * ttS;
+    const ttE = tE * tE;
+    const tttE = tE * ttE;
+    const tStE = tS * tE;
+    const xA = x0 - x1;
+    const xB = x2 - x1;
+    const xC = x3 - x0;
+    const xD = xA + xB;
+    const tSxA = tS * xA;
+    const tExA = tE * xA;
+    const xC3xB = xC - 3 * xB;
+    const yA = y0 - y1;
+    const yB = y2 - y1;
+    const yC = y3 - y0;
+    const yD = yA + yB;
+    const tSyA = tS * yA;
+    const tEyA = tE * yA;
+    const yC3yB = yC - 3 * yB;
+    const xx0 = tttS * xC3xB + (3 * tS * (tS * xD - xA) + x0);
+    const xx1 = tStE * (tS * xC3xB + 2 * xD) + ((ttS * xD + x0) - (tExA + 2 * tSxA));
+    const xx2 = tStE * (tE * xC3xB + 2 * xD) + ((ttE * xD + x0) - (2 * tExA + tSxA));
+    const xx3 = tttE * xC3xB + (3 * tE * (tE * xD - xA) + x0);
+    const yy0 = tttS * yC3yB + (3 * tS * (tS * yD - yA) + y0);
+    const yy1 = tStE * (tS * yC3yB + 2 * yD) + ((ttS * yD + y0) - (tEyA + 2 * tSyA));
+    const yy2 = tStE * (tE * yC3yB + 2 * yD) + ((ttE * yD + y0) - (2 * tEyA + tSyA));
+    const yy3 = tttE * yC3yB + (3 * tE * (tE * yD - yA) + y0);
+    return [[xx0, yy0], [xx1, yy1], [xx2, yy2], [xx3, yy3]];
+}
+
+
+;// ./src/transformation/split/from-to/from-to-2.ts
+/**
+ * Returns a bezier curve that starts and ends at the given `t` parameters.
+ *
+ * @param ps a quadratic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
+ * @param tS the `t` parameter where the resultant bezier should start
+ * @param tE the `t` parameter where the resultant bezier should end
+ *
+ * @internal
+ */
+function fromTo2(ps, tS, tE) {
+    if (tS === 0) {
+        if (tE === 1) {
+            return ps;
+        }
+        return splitLeft2(ps, tE);
+    }
+    if (tE === 1) {
+        return splitRight2(ps, tS);
+    }
+    return splitAtBoth2(ps, tS, tE);
+}
+/**
+ * Returns a bezier curve that starts at the given t parameter and ends
+ * at `t === 1`.
+ *
+ * @param ps a quadratic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
+ * @param t the `t` parameter where the resultant bezier should start
+ *
+ * @internal
+ */
+function splitRight2(ps, t) {
+    // --------------------------------------------------------
+    // const [[x0, y0], [x1, y1], [x2, y2]] = ps; 
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const p2 = ps[2];
+    const x0 = p0[0];
+    const y0 = p0[1];
+    const x1 = p1[0];
+    const y1 = p1[1];
+    const x2 = p2[0];
+    const y2 = p2[1];
+    // --------------------------------------------------------
+    const tt = t * t;
+    const xA = x0 - x1;
+    const xB = x2 - x1;
+    const yA = y0 - y1;
+    const yB = y2 - y1;
+    return [
+        [tt * (xA + xB) - (2 * t * xA - x0), // xx0, split point x
+            tt * (yA + yB) - (2 * t * yA - y0)], // yy0, split point y
+        [t * xB + x1, // xx1
+            t * yB + y1], // yy1
+        p2
+    ];
+}
+/**
+ * Returns a bezier curve that starts at `t === 0` and ends at the given `t`
+ * parameter.
+ *
+ * @param ps a quadratic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
+ * @param t the `t` parameter where the resultant bezier should end
+ *
+ * @internal
+ */
+function splitLeft2(ps, t) {
+    // --------------------------------------------------------
+    // const [[x0, y0], [x1, y1], [x2, y2]] = ps; 
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const p2 = ps[2];
+    const x0 = p0[0];
+    const y0 = p0[1];
+    const x1 = p1[0];
+    const y1 = p1[1];
+    const x2 = p2[0];
+    const y2 = p2[1];
+    // --------------------------------------------------------
+    const tt = t * t;
+    const xA = x0 - x1;
+    const yA = y0 - y1;
+    return [
+        p0,
+        [-t * xA + x0, // xx1
+            -t * yA + y0], // yy1
+        [tt * (xA + (x2 - x1)) - (2 * t * xA - x0), // xx2 - split point x
+            tt * (yA + (y2 - y1)) - (2 * t * yA - y0)] // yy2 - split point y
+    ];
+}
+/**
+ * Returns a bezier curve that starts and ends at the given `t` parameters.
+ *
+ * @param ps a quadratic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
+ * @param tS the `t` parameter where the resultant bezier should start
+ * @param tE the `t` parameter where the resultant bezier should end
+ *
+ * @internal
+ */
+function splitAtBoth2(ps, tS, tE) {
+    // --------------------------------------------------------
+    // const [[x0, y0], [x1, y1], [x2, y2]] = ps; 
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const p2 = ps[2];
+    const x0 = p0[0];
+    const y0 = p0[1];
+    const x1 = p1[0];
+    const y1 = p1[1];
+    const x2 = p2[0];
+    const y2 = p2[1];
+    // --------------------------------------------------------
+    const ttS = tS * tS;
+    const ttE = tE * tE;
+    const tStE = tS * tE;
+    const xA = x0 - x1;
+    const xB = x2 - x1;
+    const xC = xA + xB;
+    const yA = y0 - y1;
+    const yB = y2 - y1;
+    const yC = yA + yB;
+    const xx0 = ttS * xC - (2 * tS * xA - x0);
+    const xx1 = tStE * xC - (xA * (tE + tS) - x0);
+    const xx2 = ttE * xC - (2 * tE * xA - x0);
+    const yy0 = ttS * yC - (2 * tS * yA - y0);
+    const yy1 = tStE * yC - (yA * (tE + tS) - y0);
+    const yy2 = ttE * yC - (2 * tE * yA - y0);
+    return [[xx0, yy0], [xx1, yy1], [xx2, yy2]];
+}
+
+
+;// ./src/transformation/split/from-to/from-to-1.ts
+/**
+ * Returns a bezier curve that starts and ends at the given `t` parameters.
+ *
+ * @param ps a lineer bezier curve (a line) given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1]]`
+ * @param tS the `t` parameter where the resultant bezier should start
+ * @param tE the `t` parameter where the resultant bezier should end
+ *
+ * @internal
+ */
+function fromTo1(ps, tS, tE) {
+    if (tS === 0) {
+        if (tE === 1) {
+            return ps;
+        }
+        return splitLeft1(ps, tE);
+    }
+    if (tE === 1) {
+        return splitRight1(ps, tS);
+    }
+    return splitAtBoth1(ps, tS, tE);
+}
+/**
+ * Returns a bezier curve that starts at the given `t` parameter and ends
+ * at `t === 1`.
+ *
+ * @param ps a lineer bezier curve (a line) given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1]]`
+ * @param t the `t` parameter where the resultant bezier should start
+ *
+ * @internal
+ */
+function splitRight1(ps, t) {
+    // --------------------------------------------------------
+    // const [[x0, y0], [x1, y1]] = ps; 
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const x0 = p0[0];
+    const y0 = p0[1];
+    const x1 = p1[0];
+    const y1 = p1[1];
+    // --------------------------------------------------------
+    return [
+        [t * (x1 - x0) + x0, // xx0
+            t * (y1 - y0) + y0], // yy0
+        p1
+    ];
+}
+/**
+ * Returns a bezier curve that starts at `t === 0` and ends at the given `t`
+ * parameter.
+ *
+ * @param ps a lineer bezier curve (a line) given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1]]`
+ * @param t the `t` parameter where the resultant bezier should end
+ *
+ * @internal
+ */
+function splitLeft1(ps, t) {
+    // --------------------------------------------------------
+    // const [[x0, y0], [x1, y1]] = ps; 
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const x0 = p0[0];
+    const y0 = p0[1];
+    const x1 = p1[0];
+    const y1 = p1[1];
+    // --------------------------------------------------------
+    return [
+        p0,
+        [t * (x1 - x0) + x0, // xx1
+            t * (y1 - y0) + y0] // yy1
+    ];
+}
+/**
+ * Returns a bezier curve that starts and ends at the given `t` parameters.
+ *
+ * @param ps a lineer bezier curve (a line) given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1]]`
+ * @param tS the `t` parameter where the resultant bezier should start
+ * @param tE the `t` parameter where the resultant bezier should end
+ *
+ * @internal
+ */
+function splitAtBoth1(ps, tS, tE) {
+    // --------------------------------------------------------
+    // const [[x0, y0], [x1, y1]] = ps; 
+    const p0 = ps[0];
+    const p1 = ps[1];
+    const x0 = p0[0];
+    const y0 = p0[1];
+    const x1 = p1[0];
+    const y1 = p1[1];
+    // --------------------------------------------------------
+    return [
+        [tS * (x1 - x0) + x0, // xx0
+            tS * (y1 - y0) + y0], // yy0
+        [tE * (x1 - x0) + x0, // xx1
+            tE * (y1 - y0) + y0] // yy1
+    ];
+}
+
+
+;// ./src/transformation/split/from-to.ts
+
+
+
+const from_to_fromTo3 = fromTo3;
+const from_to_fromTo2 = fromTo2;
+const from_to_fromTo1 = fromTo1;
+/**
+ * Returns a bezier curve that starts and ends at the given `t` parameters.
+ *
+ * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param tS the `t` parameter where the resultant bezier should start
+ * @param tE the `t` parameter where the resultant bezier should end
+ *
+ * @doc mdx
+ */
+function fromTo(ps, tS, tE) {
+    if (ps.length === 4) {
+        return from_to_fromTo3(ps, tS, tE);
+    }
+    if (ps.length === 3) {
+        return from_to_fromTo2(ps, tS, tE);
+    }
+    if (ps.length === 2) {
+        return from_to_fromTo1(ps, tS, tE);
+    }
+    if (ps.length === 1) {
+        return ps;
+    }
+    throw new Error('The given bezier curve must be of order <= 3.');
+}
+
+
+;// ./src/bezier-piece/bezier-piece-to-bezier.ts
+
+function bezierPieceToBezier(piece) {
+    const { ps, ts } = piece;
+    return fromTo(ps, ts[0], ts[1]);
+}
+
 
 ;// ./node_modules/big-float-ts/node/basic/two-product.js
 const f = 134217729; // 2**27 + 1;
@@ -2483,12 +2902,12 @@ function fromTo2InclErrorBound(ps, tS, tE) {
         if (tE === 1) {
             return { ps, _ps: psErrorFree };
         }
-        return splitLeft2(ps, tE);
+        return from_to_2_incl_error_bound_splitLeft2(ps, tE);
     }
     if (tE === 1) {
-        return splitRight2(ps, tS);
+        return from_to_2_incl_error_bound_splitRight2(ps, tS);
     }
-    return splitAtBoth2(ps, tS, tE);
+    return from_to_2_incl_error_bound_splitAtBoth2(ps, tS, tE);
 }
 /**
  * Returns a bezier curve that starts at the given t parameter and ends
@@ -2501,7 +2920,7 @@ function fromTo2InclErrorBound(ps, tS, tE) {
  *
  * @internal
  */
-function splitRight2(ps, t) {
+function from_to_2_incl_error_bound_splitRight2(ps, t) {
     // --------------------------------------------------------
     // const [[x0, y0], [x1, y1], [x2, y2]] = ps; 
     const p0 = ps[0]; // exact
@@ -2579,7 +2998,7 @@ function splitRight2(ps, t) {
  *
  * @internal
  */
-function splitLeft2(ps, t) {
+function from_to_2_incl_error_bound_splitLeft2(ps, t) {
     // --------------------------------------------------------
     // const [[x0, y0], [x1, y1], [x2, y2]] = ps; 
     const p0 = ps[0]; // exact 
@@ -2654,7 +3073,7 @@ function splitLeft2(ps, t) {
  *
  * @internal
  */
-function splitAtBoth2(ps, tS, tE) {
+function from_to_2_incl_error_bound_splitAtBoth2(ps, tS, tE) {
     // --------------------------------------------------------
     // const [[x0, y0], [x1, y1], [x2, y2]] = ps; 
     const p0 = ps[0]; // exact
@@ -2920,439 +3339,6 @@ function curviness(ps) {
         total += curviness_abs(getInterfaceRotation(vs[i], vs[i + 1]));
     }
     return total;
-}
-
-
-;// ./src/transformation/split/from-to/from-to-3.ts
-/**
- * Returns a bezier curve that starts and ends at the given t parameters.
- *
- * @param ps a cubic bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- * @param tS the `t` parameter where the resultant bezier should start
- * @param tE the `t` parameter where the resultant bezier should end
- *
- * @internal
- */
-function fromTo3(ps, tS, tE) {
-    if (tS === 0) {
-        if (tE === 1) {
-            return ps;
-        }
-        return splitLeft3(ps, tE);
-    }
-    if (tE === 1) {
-        return splitRight3(ps, tS);
-    }
-    return splitAtBoth3(ps, tS, tE);
-}
-/**
- * Returns a bezier curve that starts at the given t parameter and ends
- * at `t === 1`.
- *
- * @param ps a cubic bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- * @param t the `t` parameter where the resultant bezier should start
- *
- * @internal
- */
-function splitRight3(ps, t) {
-    // --------------------------------------------------------
-    // const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
-    const p0 = ps[0];
-    const p1 = ps[1];
-    const p2 = ps[2];
-    const p3 = ps[3];
-    const x00 = p0[0];
-    const y00 = p0[1];
-    const x10 = p1[0];
-    const y10 = p1[1];
-    const x20 = p2[0];
-    const y20 = p2[1];
-    const x30 = p3[0];
-    const y30 = p3[1];
-    // --------------------------------------------------------
-    const x01 = x00 - t * (x00 - x10);
-    const x11 = x10 - t * (x10 - x20);
-    const x21 = x20 - t * (x20 - x30);
-    const x02 = x01 - t * (x01 - x11);
-    const x12 = x11 - t * (x11 - x21);
-    const x03 = x02 - t * (x02 - x12);
-    const y01 = y00 - t * (y00 - y10);
-    const y11 = y10 - t * (y10 - y20);
-    const y21 = y20 - t * (y20 - y30);
-    const y02 = y01 - t * (y01 - y11);
-    const y12 = y11 - t * (y11 - y21);
-    const y03 = y02 - t * (y02 - y12);
-    return [[x03, y03], [x12, y12], [x21, y21], p3];
-}
-/**
- * Returns a bezier curve that starts at `t === 0` and ends at the given t
- * parameter.
- *
- * @param ps a cubic bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- * @param t the `t` parameter where the resultant bezier should end
- *
- * @internal
- */
-function splitLeft3(ps, t) {
-    // --------------------------------------------------------
-    // const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
-    const p0 = ps[0];
-    const p1 = ps[1];
-    const p2 = ps[2];
-    const p3 = ps[3];
-    const x00 = p0[0];
-    const y00 = p0[1];
-    const x10 = p1[0];
-    const y10 = p1[1];
-    const x20 = p2[0];
-    const y20 = p2[1];
-    const x30 = p3[0];
-    const y30 = p3[1];
-    // --------------------------------------------------------
-    const x01 = x00 - t * (x00 - x10);
-    const x11 = x10 - t * (x10 - x20);
-    const x21 = x20 - t * (x20 - x30);
-    const x02 = x01 - t * (x01 - x11);
-    const x12 = x11 - t * (x11 - x21);
-    const x03 = x02 - t * (x02 - x12);
-    const y01 = y00 - t * (y00 - y10);
-    const y11 = y10 - t * (y10 - y20);
-    const y21 = y20 - t * (y20 - y30);
-    const y02 = y01 - t * (y01 - y11);
-    const y12 = y11 - t * (y11 - y21);
-    const y03 = y02 - t * (y02 - y12);
-    return [p0, [x01, y01], [x02, y02], [x03, y03]];
-}
-/**
- * Returns a bezier curve that starts and ends at the given `t` parameters.
- *
- * @param ps a cubic bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- * @param tS the `t` parameter where the resultant bezier should start
- * @param tE the `t` parameter where the resultant bezier should end
- *
- * @internal
- */
-function splitAtBoth3(ps, tS, tE) {
-    // --------------------------------------------------------
-    // const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps; 
-    const p0 = ps[0];
-    const p1 = ps[1];
-    const p2 = ps[2];
-    const p3 = ps[3];
-    const x0 = p0[0];
-    const y0 = p0[1];
-    const x1 = p1[0];
-    const y1 = p1[1];
-    const x2 = p2[0];
-    const y2 = p2[1];
-    const x3 = p3[0];
-    const y3 = p3[1];
-    // --------------------------------------------------------
-    const ttS = tS * tS;
-    const tttS = tS * ttS;
-    const ttE = tE * tE;
-    const tttE = tE * ttE;
-    const tStE = tS * tE;
-    const xA = x0 - x1;
-    const xB = x2 - x1;
-    const xC = x3 - x0;
-    const xD = xA + xB;
-    const tSxA = tS * xA;
-    const tExA = tE * xA;
-    const xC3xB = xC - 3 * xB;
-    const yA = y0 - y1;
-    const yB = y2 - y1;
-    const yC = y3 - y0;
-    const yD = yA + yB;
-    const tSyA = tS * yA;
-    const tEyA = tE * yA;
-    const yC3yB = yC - 3 * yB;
-    const xx0 = tttS * xC3xB + (3 * tS * (tS * xD - xA) + x0);
-    const xx1 = tStE * (tS * xC3xB + 2 * xD) + ((ttS * xD + x0) - (tExA + 2 * tSxA));
-    const xx2 = tStE * (tE * xC3xB + 2 * xD) + ((ttE * xD + x0) - (2 * tExA + tSxA));
-    const xx3 = tttE * xC3xB + (3 * tE * (tE * xD - xA) + x0);
-    const yy0 = tttS * yC3yB + (3 * tS * (tS * yD - yA) + y0);
-    const yy1 = tStE * (tS * yC3yB + 2 * yD) + ((ttS * yD + y0) - (tEyA + 2 * tSyA));
-    const yy2 = tStE * (tE * yC3yB + 2 * yD) + ((ttE * yD + y0) - (2 * tEyA + tSyA));
-    const yy3 = tttE * yC3yB + (3 * tE * (tE * yD - yA) + y0);
-    return [[xx0, yy0], [xx1, yy1], [xx2, yy2], [xx3, yy3]];
-}
-
-
-;// ./src/transformation/split/from-to/from-to-2.ts
-/**
- * Returns a bezier curve that starts and ends at the given `t` parameters.
- *
- * @param ps a quadratic bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
- * @param tS the `t` parameter where the resultant bezier should start
- * @param tE the `t` parameter where the resultant bezier should end
- *
- * @internal
- */
-function fromTo2(ps, tS, tE) {
-    if (tS === 0) {
-        if (tE === 1) {
-            return ps;
-        }
-        return from_to_2_splitLeft2(ps, tE);
-    }
-    if (tE === 1) {
-        return from_to_2_splitRight2(ps, tS);
-    }
-    return from_to_2_splitAtBoth2(ps, tS, tE);
-}
-/**
- * Returns a bezier curve that starts at the given t parameter and ends
- * at `t === 1`.
- *
- * @param ps a quadratic bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
- * @param t the `t` parameter where the resultant bezier should start
- *
- * @internal
- */
-function from_to_2_splitRight2(ps, t) {
-    // --------------------------------------------------------
-    // const [[x0, y0], [x1, y1], [x2, y2]] = ps; 
-    const p0 = ps[0];
-    const p1 = ps[1];
-    const p2 = ps[2];
-    const x0 = p0[0];
-    const y0 = p0[1];
-    const x1 = p1[0];
-    const y1 = p1[1];
-    const x2 = p2[0];
-    const y2 = p2[1];
-    // --------------------------------------------------------
-    const tt = t * t;
-    const xA = x0 - x1;
-    const xB = x2 - x1;
-    const yA = y0 - y1;
-    const yB = y2 - y1;
-    return [
-        [tt * (xA + xB) - (2 * t * xA - x0), // xx0, split point x
-            tt * (yA + yB) - (2 * t * yA - y0)], // yy0, split point y
-        [t * xB + x1, // xx1
-            t * yB + y1], // yy1
-        p2
-    ];
-}
-/**
- * Returns a bezier curve that starts at `t === 0` and ends at the given `t`
- * parameter.
- *
- * @param ps a quadratic bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
- * @param t the `t` parameter where the resultant bezier should end
- *
- * @internal
- */
-function from_to_2_splitLeft2(ps, t) {
-    // --------------------------------------------------------
-    // const [[x0, y0], [x1, y1], [x2, y2]] = ps; 
-    const p0 = ps[0];
-    const p1 = ps[1];
-    const p2 = ps[2];
-    const x0 = p0[0];
-    const y0 = p0[1];
-    const x1 = p1[0];
-    const y1 = p1[1];
-    const x2 = p2[0];
-    const y2 = p2[1];
-    // --------------------------------------------------------
-    const tt = t * t;
-    const xA = x0 - x1;
-    const yA = y0 - y1;
-    return [
-        p0,
-        [-t * xA + x0, // xx1
-            -t * yA + y0], // yy1
-        [tt * (xA + (x2 - x1)) - (2 * t * xA - x0), // xx2 - split point x
-            tt * (yA + (y2 - y1)) - (2 * t * yA - y0)] // yy2 - split point y
-    ];
-}
-/**
- * Returns a bezier curve that starts and ends at the given `t` parameters.
- *
- * @param ps a quadratic bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
- * @param tS the `t` parameter where the resultant bezier should start
- * @param tE the `t` parameter where the resultant bezier should end
- *
- * @internal
- */
-function from_to_2_splitAtBoth2(ps, tS, tE) {
-    // --------------------------------------------------------
-    // const [[x0, y0], [x1, y1], [x2, y2]] = ps; 
-    const p0 = ps[0];
-    const p1 = ps[1];
-    const p2 = ps[2];
-    const x0 = p0[0];
-    const y0 = p0[1];
-    const x1 = p1[0];
-    const y1 = p1[1];
-    const x2 = p2[0];
-    const y2 = p2[1];
-    // --------------------------------------------------------
-    const ttS = tS * tS;
-    const ttE = tE * tE;
-    const tStE = tS * tE;
-    const xA = x0 - x1;
-    const xB = x2 - x1;
-    const xC = xA + xB;
-    const yA = y0 - y1;
-    const yB = y2 - y1;
-    const yC = yA + yB;
-    const xx0 = ttS * xC - (2 * tS * xA - x0);
-    const xx1 = tStE * xC - (xA * (tE + tS) - x0);
-    const xx2 = ttE * xC - (2 * tE * xA - x0);
-    const yy0 = ttS * yC - (2 * tS * yA - y0);
-    const yy1 = tStE * yC - (yA * (tE + tS) - y0);
-    const yy2 = ttE * yC - (2 * tE * yA - y0);
-    return [[xx0, yy0], [xx1, yy1], [xx2, yy2]];
-}
-
-
-;// ./src/transformation/split/from-to/from-to-1.ts
-/**
- * Returns a bezier curve that starts and ends at the given `t` parameters.
- *
- * @param ps a lineer bezier curve (a line) given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1]]`
- * @param tS the `t` parameter where the resultant bezier should start
- * @param tE the `t` parameter where the resultant bezier should end
- *
- * @internal
- */
-function fromTo1(ps, tS, tE) {
-    if (tS === 0) {
-        if (tE === 1) {
-            return ps;
-        }
-        return splitLeft1(ps, tE);
-    }
-    if (tE === 1) {
-        return splitRight1(ps, tS);
-    }
-    return splitAtBoth1(ps, tS, tE);
-}
-/**
- * Returns a bezier curve that starts at the given `t` parameter and ends
- * at `t === 1`.
- *
- * @param ps a lineer bezier curve (a line) given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1]]`
- * @param t the `t` parameter where the resultant bezier should start
- *
- * @internal
- */
-function splitRight1(ps, t) {
-    // --------------------------------------------------------
-    // const [[x0, y0], [x1, y1]] = ps; 
-    const p0 = ps[0];
-    const p1 = ps[1];
-    const x0 = p0[0];
-    const y0 = p0[1];
-    const x1 = p1[0];
-    const y1 = p1[1];
-    // --------------------------------------------------------
-    return [
-        [t * (x1 - x0) + x0, // xx0
-            t * (y1 - y0) + y0], // yy0
-        p1
-    ];
-}
-/**
- * Returns a bezier curve that starts at `t === 0` and ends at the given `t`
- * parameter.
- *
- * @param ps a lineer bezier curve (a line) given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1]]`
- * @param t the `t` parameter where the resultant bezier should end
- *
- * @internal
- */
-function splitLeft1(ps, t) {
-    // --------------------------------------------------------
-    // const [[x0, y0], [x1, y1]] = ps; 
-    const p0 = ps[0];
-    const p1 = ps[1];
-    const x0 = p0[0];
-    const y0 = p0[1];
-    const x1 = p1[0];
-    const y1 = p1[1];
-    // --------------------------------------------------------
-    return [
-        p0,
-        [t * (x1 - x0) + x0, // xx1
-            t * (y1 - y0) + y0] // yy1
-    ];
-}
-/**
- * Returns a bezier curve that starts and ends at the given `t` parameters.
- *
- * @param ps a lineer bezier curve (a line) given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1]]`
- * @param tS the `t` parameter where the resultant bezier should start
- * @param tE the `t` parameter where the resultant bezier should end
- *
- * @internal
- */
-function splitAtBoth1(ps, tS, tE) {
-    // --------------------------------------------------------
-    // const [[x0, y0], [x1, y1]] = ps; 
-    const p0 = ps[0];
-    const p1 = ps[1];
-    const x0 = p0[0];
-    const y0 = p0[1];
-    const x1 = p1[0];
-    const y1 = p1[1];
-    // --------------------------------------------------------
-    return [
-        [tS * (x1 - x0) + x0, // xx0
-            tS * (y1 - y0) + y0], // yy0
-        [tE * (x1 - x0) + x0, // xx1
-            tE * (y1 - y0) + y0] // yy1
-    ];
-}
-
-
-;// ./src/transformation/split/from-to.ts
-
-
-
-const from_to_fromTo3 = fromTo3;
-const from_to_fromTo2 = fromTo2;
-const from_to_fromTo1 = fromTo1;
-/**
- * Returns a bezier curve that starts and ends at the given `t` parameters.
- *
- * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- * @param tS the `t` parameter where the resultant bezier should start
- * @param tE the `t` parameter where the resultant bezier should end
- *
- * @doc mdx
- */
-function fromTo(ps, tS, tE) {
-    if (ps.length === 4) {
-        return from_to_fromTo3(ps, tS, tE);
-    }
-    if (ps.length === 3) {
-        return from_to_fromTo2(ps, tS, tE);
-    }
-    if (ps.length === 2) {
-        return from_to_fromTo1(ps, tS, tE);
-    }
-    if (ps.length === 1) {
-        return ps;
-    }
-    throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 
@@ -24650,4 +24636,5 @@ function calcQuadOffsetCurveXPoint(ps, D) {
 
 
 
-export { areBoxesIntersecting, area_area as area, bezierBezierIntersection, bezierBezierIntersectionBoundless, bezierBezierIntersectionBoundlessBoth, bezierBezierIntersectionFast, bezierSelfIntersection, calcQuadOffsetCurveXPoint, circleBezierIntersection, classification, classifications, classify, clone, closestPointOnBezier, closestPointOnBezierCertified, closestPointsBetweenBeziers, controlPointLinesLength, cubicFromAnglesAndSpeeds, cubicThroughPointGiven013, cubicToAnglesAndSpeeds, cubicToHybridQuadratic, cubicToQuadratic, curvature, curviness, ddCurvature, eCurvature, equal, evalDeCasteljau, evalDeCasteljauDd, evalDeCasteljauError, evalDeCasteljauWithErr, evalDeCasteljauWithErrDd, evaluate, evaluate2ndDerivative, evaluate2ndDerivativeAt0, evaluate2ndDerivativeAt0Exact, evaluate2ndDerivativeAt1, evaluate2ndDerivativeAt1Exact, evaluate2ndDerivativeExact, evaluateExact, evaluateImplicit1, evaluateImplicit2, evaluateImplicit3, fitQuadsToCubic, fitQuadsToCubicHausdorff, fromPowerBasis, fromTo, fromToInclErrorBound, furthestPointOnBezier, generateArcFromQuads, generateCuspAtHalf3, generateQuarterCircle, generateSelfIntersecting, getAbsAreaBetween, getBendingEnergy, getBoundingBox, getBoundingBoxTight, getBoundingHull, getBounds, getCoeffsBezBez, getControlPointBox, getCubicSpeeds, getCurvatureExtrema, getCurvatureExtremaDd, getCurvatureExtremaE, getEndpointIntersections, getFootPointsOnBezierCertified, getFootPointsOnBezierPolysCertified, getFootpointPoly, getFootpointPolyDd, getFootpointPolyExact, getHodograph, getImplicitForm1, getImplicitForm1Dd, getImplicitForm1DdWithRunningError, getImplicitForm1ErrorCounters, getImplicitForm1Exact, getImplicitForm2, getImplicitForm2Dd, getImplicitForm2DdWithRunningError, getImplicitForm2ErrorCounters, getImplicitForm2Exact, getImplicitForm3, getImplicitForm3Dd, getImplicitForm3DdWithRunningError, getImplicitForm3ErrorCounters, getImplicitForm3Exact, getInflections, getInterfaceRotation, getIntervalBox, getIntervalBoxDd, getTAtLength, getXBoundsTight, getYBoundsTight, hausdorffDistance, hausdorffDistanceOneSided, intersectBoxes, isCollinear, isCubicReallyLine, isCubicReallyQuad, isHorizontal, isPointOnBezierExtension, isQuadObtuse, isQuadReallyLine, isReallyPoint, isSelfOverlapping, isVertical, length_length as length, lineToCubic, lineToQuadratic, maxAbsCoordinate, normal, normal2, quadraticToCubic, quadraticToPolyline, reduceOrderIfPossible, reverse, setCubicSpeeds, splitByCurvature, splitByCurvatureAndLength, splitByLength, tFromXY, tangent, tangentAt0, tangentAt0Exact, tangentAt1, tangentAt1Exact, tangentExact, toCubic, toPowerBasis, toPowerBasis0Exact, toPowerBasis1DdWithRunningError, toPowerBasis1Exact, toPowerBasis2DdWithRunningError, toPowerBasis2Exact, toPowerBasis3DdWithRunningError, toPowerBasis3Exact, toPowerBasisDd, toPowerBasisDdWithRunningError, toPowerBasisErrorCounters, toPowerBasisExact, toPowerBasisWithRunningError, toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeDd, toPowerBasis_1stDerivativeErrorCounters, toPowerBasis_1stDerivativeExact, toPowerBasis_2ndDerivative, toPowerBasis_2ndDerivativeDd, toPowerBasis_2ndDerivativeExact, toPowerBasis_3rdDerivative, toPowerBasis_3rdDerivativeDd, toPowerBasis_3rdDerivativeExact, to_string_toString as toString, totalAbsoluteCurvature, totalCurvature, totalLength, γ, γγ, κ };
+
+export { areBoxesIntersecting, area_area as area, bezierBezierIntersection, bezierBezierIntersectionBoundless, bezierBezierIntersectionBoundlessBoth, bezierBezierIntersectionFast, bezierPieceToBezier, bezierSelfIntersection, calcQuadOffsetCurveXPoint, circleBezierIntersection, classification, classifications, classify, clone, closestPointOnBezier, closestPointOnBezierCertified, closestPointsBetweenBeziers, controlPointLinesLength, cubicFromAnglesAndSpeeds, cubicThroughPointGiven013, cubicToAnglesAndSpeeds, cubicToHybridQuadratic, cubicToQuadratic, curvature, curviness, ddCurvature, eCurvature, equal, evalDeCasteljau, evalDeCasteljauDd, evalDeCasteljauError, evalDeCasteljauWithErr, evalDeCasteljauWithErrDd, evaluate, evaluate2ndDerivative, evaluate2ndDerivativeAt0, evaluate2ndDerivativeAt0Exact, evaluate2ndDerivativeAt1, evaluate2ndDerivativeAt1Exact, evaluate2ndDerivativeExact, evaluateExact, evaluateImplicit1, evaluateImplicit2, evaluateImplicit3, fitQuadsToCubic, fitQuadsToCubicHausdorff, fromPowerBasis, fromTo, fromToInclErrorBound, furthestPointOnBezier, generateArcFromQuads, generateCuspAtHalf3, generateQuarterCircle, generateSelfIntersecting, getAbsAreaBetween, getBendingEnergy, getBoundingBox, getBoundingBoxTight, getBoundingHull, getBounds, getCoeffsBezBez, getControlPointBox, getCubicSpeeds, getCurvatureExtrema, getCurvatureExtremaDd, getCurvatureExtremaE, getEndpointIntersections, getFootPointsOnBezierCertified, getFootPointsOnBezierPolysCertified, getFootpointPoly, getFootpointPolyDd, getFootpointPolyExact, getHodograph, getImplicitForm1, getImplicitForm1Dd, getImplicitForm1DdWithRunningError, getImplicitForm1ErrorCounters, getImplicitForm1Exact, getImplicitForm2, getImplicitForm2Dd, getImplicitForm2DdWithRunningError, getImplicitForm2ErrorCounters, getImplicitForm2Exact, getImplicitForm3, getImplicitForm3Dd, getImplicitForm3DdWithRunningError, getImplicitForm3ErrorCounters, getImplicitForm3Exact, getInflections, getInterfaceRotation, getIntervalBox, getIntervalBoxDd, getTAtLength, getXBoundsTight, getYBoundsTight, hausdorffDistance, hausdorffDistanceOneSided, intersectBoxes, isCollinear, isCubicReallyLine, isCubicReallyQuad, isHorizontal, isPointOnBezierExtension, isQuadObtuse, isQuadReallyLine, isReallyPoint, isSelfOverlapping, isVertical, length_length as length, lineToCubic, lineToQuadratic, maxAbsCoordinate, normal, normal2, quadraticToCubic, quadraticToPolyline, reduceOrderIfPossible, reverse, setCubicSpeeds, splitByCurvature, splitByCurvatureAndLength, splitByLength, tFromXY, tangent, tangentAt0, tangentAt0Exact, tangentAt1, tangentAt1Exact, tangentExact, toCubic, toPowerBasis, toPowerBasis0Exact, toPowerBasis1DdWithRunningError, toPowerBasis1Exact, toPowerBasis2DdWithRunningError, toPowerBasis2Exact, toPowerBasis3DdWithRunningError, toPowerBasis3Exact, toPowerBasisDd, toPowerBasisDdWithRunningError, toPowerBasisErrorCounters, toPowerBasisExact, toPowerBasisWithRunningError, toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeDd, toPowerBasis_1stDerivativeErrorCounters, toPowerBasis_1stDerivativeExact, toPowerBasis_2ndDerivative, toPowerBasis_2ndDerivativeDd, toPowerBasis_2ndDerivativeExact, toPowerBasis_3rdDerivative, toPowerBasis_3rdDerivativeDd, toPowerBasis_3rdDerivativeExact, to_string_toString as toString, totalAbsoluteCurvature, totalCurvature, totalLength, γ, γγ, κ };

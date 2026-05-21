@@ -1,9 +1,10 @@
-export type { BezierPiece } from './bezier-piece.js';
+export type { BezierPiece } from './bezier-piece/bezier-piece.js';
 export type { Bound, XBounds, YBounds } from './global-properties/bounds/bounds.js';
 export type { X } from './intersection/bezier-bezier-intersection/x.js';
 export type { Extrema } from './get-curvature-extrema/get-curvature-extrema.js';
 export type { ClassificationType, Classification, NodeType } from './global-properties/classification/classify.js';
 export type { AnglesAndSpeeds } from './angles-and-speeds/angles-and-speeds.js';
+export { bezierPieceToBezier } from './bezier-piece/bezier-piece-to-bezier.js';
 export { getBoundingHull } from './global-properties/bounds/get-bounding-hull.js';
 export { classify, classifications, classification } from './global-properties/classification/classify.js';
 export { area } from './global-properties/area.js';
