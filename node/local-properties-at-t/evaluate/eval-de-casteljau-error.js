@@ -29,18 +29,18 @@ const abs = Math.abs;
  * ```
  * // for cubic bezier curves
  * return [
- * 	x_,  // <E> === 3T + 9
- * 	y_   // <E> === 3T + 9
+ *     x_,  // <E> === 3T + 9
+ *     y_   // <E> === 3T + 9
  * ];
  * // for quadratic bezier curves
  * return [
- * 	x_,  // <E> === 2T + 6
- * 	y_   // <E> === 2T + 6
+ *     x_,  // <E> === 2T + 6
+ *     y_   // <E> === 2T + 6
  * ];
  * // for linear bezier curves (i.e. lines)
  * return [
- * 	x_,  // <E> === T + 3
- * 	y_   // <E> === T + 3
+ *     x_,  // <E> === T + 3
+ *     y_   // <E> === T + 3
  * ];
  * ```
  *

@@ -90,15 +90,15 @@ function getBendingEnergyByGauss(
  */
 function κi3(ps: number[][]) {
     /*
-	return (t: number): number => {
-		const [dx, dy] = tangent(ps, t); 
-		const [ddx, ddy] = evaluate2ndDerivative(ps, t);
+    return (t: number): number => {
+        const [dx, dy] = tangent(ps, t); 
+        const [ddx, ddy] = evaluate2ndDerivative(ps, t);
 
-		const a = (dx*ddy - dy*ddx)**2;
-		const b = sqrt((dx*dx + dy*dy)**5);
+        const a = (dx*ddy - dy*ddx)**2;
+        const b = sqrt((dx*dx + dy*dy)**5);
 
-		return a/b;
-	}
+        return a/b;
+    }
     */
     const p0 = ps[0];
     const p1 = ps[1];
@@ -119,7 +119,7 @@ function κi3(ps: number[][]) {
     const C = ((x2 + x0) - 2*x1);
     const D = ((y2 + y0) - 2*y1);
 
-	return (t: number): number => {
+    return (t: number): number => {
         const tt = t*t;
 
         const dx_3 = tt*A + 2*t*C + (x1 - x0);
@@ -128,12 +128,12 @@ function κi3(ps: number[][]) {
         const ddx_6 = t*A + C;
         const ddy_6 = t*B + D;
     
-		const a = dx_3*ddy_6 - dy_3*ddx_6;
+        const a = dx_3*ddy_6 - dy_3*ddx_6;
         const c = dx_3*dx_3 + dy_3*dy_3;
-		const b = c*c*sqrt(c);
+        const b = c*c*sqrt(c);
 
         return (4/3)*a*a/b;
-	}
+    }
 }
 
 
@@ -145,15 +145,15 @@ function κi3(ps: number[][]) {
  */
 function κi2(ps: number[][]) {
     /*
-	return (t: number): number => {
-		const [dx, dy] = tangent(ps, t); 
-		const [ddx, ddy] = evaluate2ndDerivative(ps, t);
+    return (t: number): number => {
+        const [dx, dy] = tangent(ps, t); 
+        const [ddx, ddy] = evaluate2ndDerivative(ps, t);
 
-		const a = (dx*ddy - dy*ddx)**2;
-		const b = sqrt((dx*dx + dy*dy)**5);
+        const a = (dx*ddy - dy*ddx)**2;
+        const b = sqrt((dx*dx + dy*dy)**5);
 
-		return a/b;
-	}
+        return a/b;
+    }
     */
     const p0 = ps[0];
     const p1 = ps[1];
@@ -169,7 +169,7 @@ function κi2(ps: number[][]) {
     const A = x2 - 2*x1 + x0;
     const B = y2 - 2*y1 + y0;
 
-	return (t: number): number => {
+    return (t: number): number => {
         const dx = A*t + (x1 - x0);
         const dy = B*t + (y1 - y0);
         const ddx = A;
@@ -177,10 +177,10 @@ function κi2(ps: number[][]) {
 
         const a = dx*ddy - dy*ddx;
         const c = dx*dx + dy*dy;
-		const b = c*c*sqrt(c);
+        const b = c*c*sqrt(c);
 
-		return 0.5*a*a/b;
-	}
+        return 0.5*a*a/b;
+    }
 }
 
 

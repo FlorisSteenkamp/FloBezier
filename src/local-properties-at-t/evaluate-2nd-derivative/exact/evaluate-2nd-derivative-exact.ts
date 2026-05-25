@@ -12,9 +12,9 @@ import { eHorner } from 'flo-poly';
  * @doc mdx
  */
 function evaluate2ndDerivativeExact(ps: number[][], t: number): number[][] {
-	const [ddPsX, ddPsY] = toPowerBasis_2ndDerivativeExact(ps);
+    const [ddPsX, ddPsY] = toPowerBasis_2ndDerivativeExact(ps);
 
-	return [eHorner(ddPsX, t), eHorner(ddPsY, t)];
+    return [eHorner(ddPsX, t), eHorner(ddPsY, t)];
 }
 
 

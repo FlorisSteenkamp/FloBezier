@@ -84,8 +84,8 @@ export { toPowerBasisWithRunningError } from './to-power-basis/to-power-basis/do
 export {
     toPowerBasisDdWithRunningError,
     toPowerBasis1DdWithRunningError,
-	toPowerBasis2DdWithRunningError,
-	toPowerBasis3DdWithRunningError
+    toPowerBasis2DdWithRunningError,
+    toPowerBasis3DdWithRunningError
 } from './to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js';
 export { toPowerBasisErrorCounters } from './to-power-basis/to-power-basis/to-power-basis-error-counters.js';
 export { toPowerBasis_1stDerivativeErrorCounters } from './to-power-basis/to-power-basis-1st-derivative/to-power-basis-1st-derivative-error-counters.js';

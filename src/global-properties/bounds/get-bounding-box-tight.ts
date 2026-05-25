@@ -16,35 +16,35 @@ import { evalDeCasteljau } from "../../local-properties-at-t/evaluate/double/eva
  */
 function getBoundingBoxTight(ps: number[][]): number[][] {
     const [xS, yS] = ps[0];
-	const [xE, yE] = ps[ps.length-1];
-	
-	let sinθ: number;
-	let cosθ: number;
+    const [xE, yE] = ps[ps.length-1];
+    
+    let sinθ: number;
+    let cosθ: number;
 
-	// take care of the case the endpoints are close together
-	const len = controlPointLinesLength(ps);
-	if (squaredDistanceBetween(ps[0], ps[ps.length-1]) * 2**8 < len*len) { 
-		const [xE_, yE_] = evalDeCasteljau(ps, 0.5);
-		const hypotenuse = Math.sqrt((xE_-xS)*(xE_-xS) + (yE_-yS)*(yE_-yS));
-		sinθ = (yE_ - yS) / hypotenuse;
-		cosθ = (xE_ - xS) / hypotenuse;
-	} else {
-		const hypotenuse = Math.sqrt((xE-xS)*(xE-xS) + (yE-yS)*(yE-yS));
-		sinθ = (yE - yS) / hypotenuse;
-		cosθ = (xE - xS) / hypotenuse;
-	}
-	
-	const box = getNormalizedBoundingBox(ps, sinθ, cosθ);
-	
-	const [[p0x,p0y],[p1x,p1y]] = box;
+    // take care of the case the endpoints are close together
+    const len = controlPointLinesLength(ps);
+    if (squaredDistanceBetween(ps[0], ps[ps.length-1]) * 2**8 < len*len) { 
+        const [xE_, yE_] = evalDeCasteljau(ps, 0.5);
+        const hypotenuse = Math.sqrt((xE_-xS)*(xE_-xS) + (yE_-yS)*(yE_-yS));
+        sinθ = (yE_ - yS) / hypotenuse;
+        cosθ = (xE_ - xS) / hypotenuse;
+    } else {
+        const hypotenuse = Math.sqrt((xE-xS)*(xE-xS) + (yE-yS)*(yE-yS));
+        sinθ = (yE - yS) / hypotenuse;
+        cosθ = (xE - xS) / hypotenuse;
+    }
+    
+    const box = getNormalizedBoundingBox(ps, sinθ, cosθ);
+    
+    const [[p0x,p0y],[p1x,p1y]] = box;
 
-	const axisAlignedBox = [ 
-		box[0], [p1x, p0y],
-		box[1], [p0x, p1y]
-	];
+    const axisAlignedBox = [ 
+        box[0], [p1x, p0y],
+        box[1], [p0x, p1y]
+    ];
 
-	const rotate_ = rotate(sinθ, cosθ);
-	return axisAlignedBox.map(p => translate(ps[0], rotate_(p)));
+    const rotate_ = rotate(sinθ, cosθ);
+    return axisAlignedBox.map(p => translate(ps[0], rotate_(p)));
 }
 
 
@@ -64,14 +64,14 @@ function getBoundingBoxTight(ps: number[][]): number[][] {
  * @internal
  */
 function getNormalizedBoundingBox(
-		ps: number[][], sinθ: number, cosθ: number): number[][] {
+        ps: number[][], sinθ: number, cosθ: number): number[][] {
 
-	const vectorToOrigin = ps[0].map(x => -x);
-	
-	const f = translate(vectorToOrigin);
-	const boundingPs = ps.map(p => rotate(-sinθ, cosθ, f(p)));
-	
-	return getBoundingBox(boundingPs);
+    const vectorToOrigin = ps[0].map(x => -x);
+    
+    const f = translate(vectorToOrigin);
+    const boundingPs = ps.map(p => rotate(-sinθ, cosθ, f(p)));
+    
+    return getBoundingBox(boundingPs);
 }
 
 

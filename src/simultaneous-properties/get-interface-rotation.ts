@@ -25,20 +25,20 @@ const { atan2 } = Math;
  * @param b the second 2d vector
  */
  function getInterfaceRotation(
-		a: number[],
-		b: number[]): number {
+        a: number[],
+        b: number[]): number {
 
-	const v1 = a[0];
-	const v2 = a[1];
-	const w1 = b[0];
-	const w2 = b[1];
+    const v1 = a[0];
+    const v2 = a[1];
+    const w1 = b[0];
+    const w2 = b[1];
 
-	// w2*v1 - w1*v2;
-	const A = ddDiffDd(tp(w2,v1), tp(w1,v2))[1];
-	// w1*v1 + w2*v2;
-	const B = ddAddDd(tp(w1,v1), tp(w2,v2))[1];
+    // w2*v1 - w1*v2;
+    const A = ddDiffDd(tp(w2,v1), tp(w1,v2))[1];
+    // w1*v1 + w2*v2;
+    const B = ddAddDd(tp(w1,v1), tp(w2,v2))[1];
 
-	return atan2(A,B);
+    return atan2(A,B);
 }
 
 

@@ -21,36 +21,36 @@ import { fromTo3InclErrorBound } from "../../transformation/split/from-to/from-t
  * @internal
  */
  function lengthBez3(
-	 	interval: number[], 
-		ps: number[][],
-		maxCurviness = 0.4,
-		gaussOrder: 4|16|64 = 16): number {
+         interval: number[], 
+        ps: number[][],
+        maxCurviness = 0.4,
+        gaussOrder: 4|16|64 = 16): number {
 
-	const tS = interval[0];
-	const tE = interval[1];
+    const tS = interval[0];
+    const tE = interval[1];
 
-	if (tS === tE) { return 0; }
+    if (tS === tE) { return 0; }
 
-	const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
-	// Keep line below to ensure zero length curve returns zero!
-	if (x0 === x1 && x1 === x2 && x2 === x3 &&
-		y0 === y1 && y1 === y2 && y2 === y3) {
+    const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
+    // Keep line below to ensure zero length curve returns zero!
+    if (x0 === x1 && x1 === x2 && x2 === x3 &&
+        y0 === y1 && y1 === y2 && y2 === y3) {
 
-		return 0;
-	}
+        return 0;
+    }
 
-	const ps_ = fromTo3InclErrorBound(ps,tS,tE).ps;
-	const ts = splitByCurvature(ps_, maxCurviness);
+    const ps_ = fromTo3InclErrorBound(ps,tS,tE).ps;
+    const ts = splitByCurvature(ps_, maxCurviness);
 
-	let total = 0;
-	for (let i=0; i<ts.length-1; i++) {
-		const tS = ts[i];
-		const tE = ts[i+1];
+    let total = 0;
+    for (let i=0; i<ts.length-1; i++) {
+        const tS = ts[i];
+        const tE = ts[i+1];
 
-		total += gaussQuadrature(ds(ps_), [tS,tE], gaussOrder);
-	}
+        total += gaussQuadrature(ds(ps_), [tS,tE], gaussOrder);
+    }
 
-	return total;
+    return total;
 }
 
 

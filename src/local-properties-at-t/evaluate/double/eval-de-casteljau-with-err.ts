@@ -26,29 +26,29 @@ const γ1 = γ(1);
  * @doc mdx
  **/
 function evalDeCasteljauWithErr(
-		ps: number[][], 
-		t: number): { p: number[], pE: number[] } {
+        ps: number[][], 
+        t: number): { p: number[], pE: number[] } {
 
-	const p = evalDeCasteljau(ps, t);
-	const pE = evalDeCasteljauError(ps, [0,t]);
+    const p = evalDeCasteljau(ps, t);
+    const pE = evalDeCasteljauError(ps, [0,t]);
 
-	if (ps.length === 4) {
-		return { p, pE: pE.map(e => 9*γ1*e) };
-	} 
-	
-	if (ps.length === 3) {
-		return { p, pE: pE.map(e => 6*γ1*e) };
-	} 
-	
-	if (ps.length === 2) {
-		return { p, pE: pE.map(e => 3*γ1*e) };
-	} 
-	
-	if (ps.length === 1) {
-		return { p: ps[0], pE: [0,0] };
-	}
+    if (ps.length === 4) {
+        return { p, pE: pE.map(e => 9*γ1*e) };
+    } 
+    
+    if (ps.length === 3) {
+        return { p, pE: pE.map(e => 6*γ1*e) };
+    } 
+    
+    if (ps.length === 2) {
+        return { p, pE: pE.map(e => 3*γ1*e) };
+    } 
+    
+    if (ps.length === 1) {
+        return { p: ps[0], pE: [0,0] };
+    }
 
-	throw new Error('The given bezier curve must be of order <= 3.');
+    throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 

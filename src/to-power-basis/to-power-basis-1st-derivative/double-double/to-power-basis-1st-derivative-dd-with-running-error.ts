@@ -31,23 +31,23 @@ const { abs } = Math;
             errorBound: number[][];
         } {
 
-	if (ps.length === 4) {
-		return toPowerBasis3_1stDerivativeDd_WithRunningError(ps);
-	}
+    if (ps.length === 4) {
+        return toPowerBasis3_1stDerivativeDd_WithRunningError(ps);
+    }
 
     if (ps.length === 3) {
-		return toPowerBasis2_1stDerivativeDd_WithRunningError(ps);
-	}
+        return toPowerBasis2_1stDerivativeDd_WithRunningError(ps);
+    }
 
     if (ps.length === 2) {
-		return toPowerBasis1_1stDerivativeDd_WithRunningError(ps);
-	}
+        return toPowerBasis1_1stDerivativeDd_WithRunningError(ps);
+    }
 
     if (ps.length === 1) {
         return [[[0,0]], [[0,0]]];
     }
 
-	throw new Error('The given bezier curve must be of order <= 3.');
+    throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 
@@ -115,9 +115,9 @@ function toPowerBasis3_1stDerivativeDd_WithRunningError(ps: number[][]): {
 
 
     return {
-		coeffs: [coeffsX, coeffsY],
-		errorBound: [errBoundX, errBoundY]
-	}
+        coeffs: [coeffsX, coeffsY],
+        errorBound: [errBoundX, errBoundY]
+    }
 }
 
 
@@ -153,11 +153,11 @@ function toPowerBasis2_1stDerivativeDd_WithRunningError(ps: number[][]): {
 
 
     return {
-		coeffs: [coeffsX, coeffsY],
-		errorBound: [errBoundX, errBoundY]
-	}
+        coeffs: [coeffsX, coeffsY],
+        errorBound: [errBoundX, errBoundY]
+    }
 } 
-	
+    
 
 /** @internal *//*
 function toPowerBasis1_1stDerivativeDd_WithRunningError(ps: number[][]): number[][][] {

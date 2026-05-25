@@ -16,12 +16,12 @@ import { Horner } from 'flo-poly';
  * @doc mdx
  */
 function normal(ps: number[][], t: number): number[] {
-	const [dX, dY] = toPowerBasis_1stDerivative(ps);
+    const [dX, dY] = toPowerBasis_1stDerivative(ps);
 
-	return [
-		-Horner(dY,t),
-		Horner(dX,t)
-	];
+    return [
+        -Horner(dY,t),
+        Horner(dX,t)
+    ];
 }
 
 

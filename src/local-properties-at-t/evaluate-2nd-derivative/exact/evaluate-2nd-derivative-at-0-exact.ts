@@ -14,29 +14,29 @@ const ge = growExpansion;
  * @doc
  */
 function evaluate2ndDerivativeAt0Exact(
-		ps: number[][]): number[][] {
+        ps: number[][]): number[][] {
 
-	if (ps.length === 4) {
-		const [[x0,y0], [x1,y1], [x2,y2]] = ps;
-		return [
-			sce(6,ge(ts(x2,x0), -2*x1)),
-			sce(6,ge(ts(y2,y0), -2*y1))
-		];
-	} 
-	
-	if (ps.length === 3) {
-		const [[x0,y0], [x1,y1], [x2,y2]] = ps;
-		return [
-			ge(ts(2*x2,2*x0), -4*x1),
-			ge(ts(2*y2,2*y0), -4*y1) 
-		];
-	} 
-	
-	if (ps.length <= 2) {
-		return [[0], [0]];
-	}
+    if (ps.length === 4) {
+        const [[x0,y0], [x1,y1], [x2,y2]] = ps;
+        return [
+            sce(6,ge(ts(x2,x0), -2*x1)),
+            sce(6,ge(ts(y2,y0), -2*y1))
+        ];
+    } 
+    
+    if (ps.length === 3) {
+        const [[x0,y0], [x1,y1], [x2,y2]] = ps;
+        return [
+            ge(ts(2*x2,2*x0), -4*x1),
+            ge(ts(2*y2,2*y0), -4*y1) 
+        ];
+    } 
+    
+    if (ps.length <= 2) {
+        return [[0], [0]];
+    }
 
-	throw new Error('The given bezier curve must be of order <= 3');
+    throw new Error('The given bezier curve must be of order <= 3');
 }
 
 

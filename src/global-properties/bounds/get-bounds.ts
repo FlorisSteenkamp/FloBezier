@@ -19,47 +19,47 @@ import { evalDeCasteljau } from "../../local-properties-at-t/evaluate/double/eva
  * @doc mdx
  */
 function getBounds(
-		ps: number[][]): { ts: number[][]; box: number[][]; } {
+        ps: number[][]): { ts: number[][]; box: number[][]; } {
 
-	// Roots of derivative
-	const dxy = toPowerBasis_1stDerivative(ps);
-	const rootsX = allRoots(dxy[0],0,1);
-	const rootsY = allRoots(dxy[1],0,1);
-		
-	// Endpoints
-	rootsX.push(0, 1); 
-	rootsY.push(0, 1);
-	
-	let minX = Number.POSITIVE_INFINITY;
-	let maxX = Number.NEGATIVE_INFINITY;
-	let minY = Number.POSITIVE_INFINITY;
-	let maxY = Number.NEGATIVE_INFINITY;
-	
-	let tMinX: number;
-	let tMaxX: number;
-	let tMinY: number;
-	let tMaxY: number;
+    // Roots of derivative
+    const dxy = toPowerBasis_1stDerivative(ps);
+    const rootsX = allRoots(dxy[0],0,1);
+    const rootsY = allRoots(dxy[1],0,1);
+        
+    // Endpoints
+    rootsX.push(0, 1); 
+    rootsY.push(0, 1);
+    
+    let minX = Number.POSITIVE_INFINITY;
+    let maxX = Number.NEGATIVE_INFINITY;
+    let minY = Number.POSITIVE_INFINITY;
+    let maxY = Number.NEGATIVE_INFINITY;
+    
+    let tMinX: number;
+    let tMaxX: number;
+    let tMinY: number;
+    let tMaxY: number;
 
-	// Test points
-	for (let i=0; i<rootsX.length; i++) {
-		const t = rootsX[i];
-		const [x,] = evalDeCasteljau(ps, t);
-		if (x < minX) { minX = x;  tMinX = t; }
-		if (x > maxX) { maxX = x;  tMaxX = t; }
-	}
-	for (let i=0; i<rootsY.length; i++) {
-		const t = rootsY[i]; 
-		const [,y] = evalDeCasteljau(ps, t);  
-		if (y < minY) { minY = y;  tMinY = t; }
-		if (y > maxY) { maxY = y;  tMaxY = t; }
-	}
-	
-	// `tMinX`, ... is guaranteed defined below - TS was (understandably) 
-	// unable to follow the logic.
-	const ts  = [[tMinX!, tMinY!], [tMaxX!, tMaxY!]];
-	const box = [[minX,  minY ], [maxX,  maxY ]];
-	
-	return { ts, box };
+    // Test points
+    for (let i=0; i<rootsX.length; i++) {
+        const t = rootsX[i];
+        const [x,] = evalDeCasteljau(ps, t);
+        if (x < minX) { minX = x;  tMinX = t; }
+        if (x > maxX) { maxX = x;  tMaxX = t; }
+    }
+    for (let i=0; i<rootsY.length; i++) {
+        const t = rootsY[i]; 
+        const [,y] = evalDeCasteljau(ps, t);  
+        if (y < minY) { minY = y;  tMinY = t; }
+        if (y > maxY) { maxY = y;  tMaxY = t; }
+    }
+    
+    // `tMinX`, ... is guaranteed defined below - TS was (understandably) 
+    // unable to follow the logic.
+    const ts  = [[tMinX!, tMinY!], [tMaxX!, tMaxY!]];
+    const box = [[minX,  minY ], [maxX,  maxY ]];
+    
+    return { ts, box };
 }
 
 

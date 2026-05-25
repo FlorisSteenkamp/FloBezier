@@ -39,14 +39,14 @@ interface Extrema {
  */
 function getCurvatureExtremaDd(ps: number[][]): Extrema {
     if (isCollinear(ps)) {
-		return { minima: [], maxima: [], inflections: [] };
-	}
+        return { minima: [], maxima: [], inflections: [] };
+    }
 
-	if (ps.length === 4 && isCubicReallyQuad(ps)) {
+    if (ps.length === 4 && isCubicReallyQuad(ps)) {
         ps = cubicToQuadratic(ps)!;
-	}
+    }
 
-	if (ps.length === 3) {
+    if (ps.length === 3) {
         const poly = getCurvatureExtremaQuadraticPolyDd(ps);
         const maxima = allRootsCertified(poly, 0, 1);
         return {

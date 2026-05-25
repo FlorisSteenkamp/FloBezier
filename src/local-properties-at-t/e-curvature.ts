@@ -19,18 +19,18 @@ function eCurvature(ps: number[][], t: number): number {
     const [dX,dY] = toPowerBasis_1stDerivativeExact(ps);
     const [ddX,ddY] = toPowerBasis_2ndDerivativeExact(ps);
 
-	const dx  = eHorner(dX, t);
-	const dy  = eHorner(dY, t);
-	const ddx = eHorner(ddX, t);
-	const ddy = eHorner(ddY, t);
-	
-	const a = eCompress(eDiff(eMult(dx,ddy),eMult(dy,ddx)));
-	const _b = eCompress(eAdd(eMult(dx,dx),eMult(dy,dy)));
-	const __b = eMult(_b,eMult(_b,_b));
-	const b = Math.sqrt(__b[__b.length-1]);
-	const a_ = a[a.length-1];
+    const dx  = eHorner(dX, t);
+    const dy  = eHorner(dY, t);
+    const ddx = eHorner(ddX, t);
+    const ddy = eHorner(ddY, t);
+    
+    const a = eCompress(eDiff(eMult(dx,ddy),eMult(dy,ddx)));
+    const _b = eCompress(eAdd(eMult(dx,dx),eMult(dy,dy)));
+    const __b = eMult(_b,eMult(_b,_b));
+    const b = Math.sqrt(__b[__b.length-1]);
+    const a_ = a[a.length-1];
 
-	return a_/b;
+    return a_/b;
 }
 
 

@@ -22,31 +22,31 @@ const ge = growExpansion;
  * @doc
  */
 function toPowerBasis_2ndDerivativeExact(ps: number[][]): number[][][] {
-	if (ps.length === 4) {
-		const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
-		return [[
-			sce(6,(eadd(td(x3,x0), sce(3,(td(x1,x2)))))),
-			sce(6,(ge(td(x2,2*x1),x0)))
-		], [
-			sce(6,(eadd(td(y3,y0), sce(3,(td(y1,y2)))))),
-			sce(6,(ge(td(y2,2*y1),y0)))
-		]]
-	} 
-	
-	if (ps.length === 3) {
-		const [[x0,y0], [x1,y1], [x2,y2]] = ps;
-		return [[
-			ge(td(2*x2,4*x1),2*x0)
-		], [
-			ge(td(2*y2,4*y1),2*y0)
-		]];
-	} 
-	
-	if (ps.length <= 2) {
-		return [[[0]],[[0]]];
-	}
+    if (ps.length === 4) {
+        const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
+        return [[
+            sce(6,(eadd(td(x3,x0), sce(3,(td(x1,x2)))))),
+            sce(6,(ge(td(x2,2*x1),x0)))
+        ], [
+            sce(6,(eadd(td(y3,y0), sce(3,(td(y1,y2)))))),
+            sce(6,(ge(td(y2,2*y1),y0)))
+        ]]
+    } 
+    
+    if (ps.length === 3) {
+        const [[x0,y0], [x1,y1], [x2,y2]] = ps;
+        return [[
+            ge(td(2*x2,4*x1),2*x0)
+        ], [
+            ge(td(2*y2,4*y1),2*y0)
+        ]];
+    } 
+    
+    if (ps.length <= 2) {
+        return [[[0]],[[0]]];
+    }
 
-	throw new Error('The given bezier curve must be of order <= 3.');	
+    throw new Error('The given bezier curve must be of order <= 3.');    
 }
 
 

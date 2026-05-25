@@ -266,19 +266,19 @@ function quadraticRoots(
 
     const D1 = b*b;  // <1>D1 (error counters)
     const D2 = 4*a*c;  // <1>D2
-	const D = D1 - D2;
+    const D = D1 - D2;
     // <2>D <= D1 - D2;  // <2>(<1>D1 + <1>D2)
     const _D = D1 + abs(D2);
     const D_ = 2*u*_D;
-	
-	if (D + D_ < 0) {
-		// no real roots possible
-		return []; 
-	}
+    
+    if (D + D_ < 0) {
+        // no real roots possible
+        return []; 
+    }
 
     // at this point `D + D_ >= 0`
 
-	if (D + D_ === 0) {
+    if (D + D_ === 0) {
         const r = -b/(2*a);
         const E = abs(r*u);  // single division error
 
@@ -291,7 +291,7 @@ function quadraticRoots(
 
         // we return the root interval pairs inline to account for error
         return [Emin, Emax];  
-	}
+    }
 
     // at this point `D + D_ > 0`
 

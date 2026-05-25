@@ -12264,44 +12264,44 @@ const to_power_basis_error_counters_abs = Math.abs;
  * ```
  * // for cubic bezier curves
  * return [
- * 	[
- * 		x3,  // <E> === 3
- * 		x2,  // <E> === 3
- * 		x1,  // <E> === 2
- * 		0,
- * 	],
- * 	[
- * 		y3,  // <E> === 3
- * 		y2,  // <E> === 3
- * 		y1,  // <E> === 2
- * 		0,
- * 	]
+ *     [
+ *         x3,  // <E> === 3
+ *         x2,  // <E> === 3
+ *         x1,  // <E> === 2
+ *         0,
+ *     ],
+ *     [
+ *         y3,  // <E> === 3
+ *         y2,  // <E> === 3
+ *         y1,  // <E> === 2
+ *         0,
+ *     ]
  * ]
  *
  * // for quadratic bezier curves
  * return [
- * 	[
- * 		x2,  // <E> === 2
- * 		x1,  // <E> === 1
- * 		0,
- * 	],
- * 	[
- * 		y2,  // <E> === 2
- * 		y1,  // <E> === 1
- * 		0,
- * 	]
+ *     [
+ *         x2,  // <E> === 2
+ *         x1,  // <E> === 1
+ *         0,
+ *     ],
+ *     [
+ *         y2,  // <E> === 2
+ *         y1,  // <E> === 1
+ *         0,
+ *     ]
  * ];
  *
  * // for linear bezier curves (i.e. lines)
  * return [
- * 	[
- * 		x1_,  // <E> === 1
- * 		x0_   // <E> === 0
- * 	],
- * 	[
- * 		y1_,  // <E> === 1
- * 		y0_   // <E> === 0
- * 	]
+ *     [
+ *         x1_,  // <E> === 1
+ *         x0_   // <E> === 0
+ *     ],
+ *     [
+ *         y1_,  // <E> === 1
+ *         y0_   // <E> === 0
+ *     ]
  * ];
  * ```
  *
@@ -13604,18 +13604,18 @@ const eval_de_casteljau_error_abs = Math.abs;
  * ```
  * // for cubic bezier curves
  * return [
- * 	x_,  // <E> === 3T + 9
- * 	y_   // <E> === 3T + 9
+ *     x_,  // <E> === 3T + 9
+ *     y_   // <E> === 3T + 9
  * ];
  * // for quadratic bezier curves
  * return [
- * 	x_,  // <E> === 2T + 6
- * 	y_   // <E> === 2T + 6
+ *     x_,  // <E> === 2T + 6
+ *     y_   // <E> === 2T + 6
  * ];
  * // for linear bezier curves (i.e. lines)
  * return [
- * 	x_,  // <E> === T + 3
- * 	y_   // <E> === T + 3
+ *     x_,  // <E> === T + 3
+ *     y_   // <E> === T + 3
  * ];
  * ```
  *
@@ -19281,38 +19281,38 @@ const to_power_basis_1st_derivative_error_counters_abs = Math.abs;
  * ```
  * // for cubic bezier curves
  * return [
- * 	[
- * 		X2,  // <E> === D+3 (D = 0 for double, 1 for double-double precision)
- * 		X1,  // <E> === D+2
- * 		X0   // <E> === D+3
- * 	],
- * 	[
- * 		Y2,  // <E> === D+3
- * 		Y1,  // <E> === D+2
- * 		Y0   // <E> === D+3
- * 	]
+ *     [
+ *         X2,  // <E> === D+3 (D = 0 for double, 1 for double-double precision)
+ *         X1,  // <E> === D+2
+ *         X0   // <E> === D+3
+ *     ],
+ *     [
+ *         Y2,  // <E> === D+3
+ *         Y1,  // <E> === D+2
+ *         Y0   // <E> === D+3
+ *     ]
  * ]
  *
  * // for quadratic bezier curves
  * return [
- * 	[
- * 		X1,  // <E> === D+1 (D = 0 for double, 1 for double-double precision)
- * 		X0   // <E> === D
- * 	],
- * 	[
- * 		Y1,  // <E> === D+1
- * 		Y0   // <E> === D
- * 	]
+ *     [
+ *         X1,  // <E> === D+1 (D = 0 for double, 1 for double-double precision)
+ *         X0   // <E> === D
+ *     ],
+ *     [
+ *         Y1,  // <E> === D+1
+ *         Y0   // <E> === D
+ *     ]
  * ];
  *
  * // for linear bezier curves (i.e. lines)
  * return [
- * 	[
- * 		X0_  // <E> === D (D = 0 for double, 1 for double-double precision)
- * 	],
- * 	[
- * 		Y0_  // <E> === D
- * 	]
+ *     [
+ *         X0_  // <E> === D (D = 0 for double, 1 for double-double precision)
+ *     ],
+ *     [
+ *         Y0_  // <E> === D
+ *     ]
  * ];
  * ```
  *

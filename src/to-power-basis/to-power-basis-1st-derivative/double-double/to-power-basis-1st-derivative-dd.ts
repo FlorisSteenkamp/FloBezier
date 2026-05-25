@@ -24,23 +24,23 @@ const qad = ddAddDouble;    // error -> 2*u²
  * @doc
  */
  function toPowerBasis_1stDerivativeDd(ps: number[][]): number[][][] {
-	if (ps.length === 4) {
-		return toPowerBasis3_1stDerivativeDd(ps);
-	}
+    if (ps.length === 4) {
+        return toPowerBasis3_1stDerivativeDd(ps);
+    }
 
     if (ps.length === 3) {
-		return toPowerBasis2_1stDerivativeDd(ps);
-	}
+        return toPowerBasis2_1stDerivativeDd(ps);
+    }
 
     if (ps.length === 2) {
-		return toPowerBasis1_1stDerivativeDd(ps);
-	}
+        return toPowerBasis1_1stDerivativeDd(ps);
+    }
 
     if (ps.length === 1) {
         return [[[0,0]], [[0,0]]];
     }
 
-	throw new Error('The given bezier curve must be of order <= 3.');
+    throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 
@@ -81,7 +81,7 @@ function toPowerBasis2_1stDerivativeDd(ps: number[][]): number[][][] {
         td(2*y1,2*y0),
     ]];
 } 
-	
+    
 
 /** @internal */
 function toPowerBasis1_1stDerivativeDd(ps: number[][]): number[][][] {

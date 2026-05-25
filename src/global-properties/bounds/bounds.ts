@@ -3,10 +3,10 @@
  * A bound used in specifying bounding boxes of bezier curves.
  */
 interface Bound {
-	/** a certified (max `4*eps` for `t ∈ [0,1]`) `t` range containing the bound */
-	ts: number[];
-	/** a certified `box` containing the bound */
-	box: number[][];
+    /** a certified (max `4*eps` for `t ∈ [0,1]`) `t` range containing the bound */
+    ts: number[];
+    /** a certified `box` containing the bound */
+    box: number[][];
 }
 
 
@@ -14,8 +14,8 @@ interface Bound {
  * x-coordinate bounds used in specifying bounding boxes of bezier curves.
  */
 interface XBounds {
-	minX: Bound;
-	maxX: Bound; 
+    minX: Bound;
+    maxX: Bound; 
 }
 
 
@@ -23,8 +23,8 @@ interface XBounds {
  * y-coordinate bounds used in specifying bounding boxes of bezier curves.
  */
 interface YBounds {
-	minY: Bound;
-	maxY: Bound; 
+    minY: Bound;
+    maxY: Bound; 
 }
 
 

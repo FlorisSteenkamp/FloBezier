@@ -13,42 +13,42 @@ import { getIntervalBox } from './get-interval-box/get-interval-box.js';
  * @doc mdx
  */
  function getXBoundsTight(ps: number[][]): XBounds {
-	const pS = ps[0];
-	const pE = ps[ps.length-1];
+    const pS = ps[0];
+    const pE = ps[ps.length-1];
 
-	let minX: { ts: number[]; box: number[][]; };
-	let maxX: { ts: number[]; box: number[][]; };
-	if (pS[0] < pE[0]) {
-		minX = { ts: [0,0], box: [pS,pS] };
-		maxX = { ts: [1,1], box: [pE,pE] };
-	} else {
-		minX = { ts: [1,1], box: [pE,pE] };
-		maxX = { ts: [0,0], box: [pS,pS] };
-	}
+    let minX: { ts: number[]; box: number[][]; };
+    let maxX: { ts: number[]; box: number[][]; };
+    if (pS[0] < pE[0]) {
+        minX = { ts: [0,0], box: [pS,pS] };
+        maxX = { ts: [1,1], box: [pE,pE] };
+    } else {
+        minX = { ts: [1,1], box: [pE,pE] };
+        maxX = { ts: [0,0], box: [pS,pS] };
+    }
 
-	if (ps.length === 2) { 
-		return { minX, maxX }; 
-	}
+    if (ps.length === 2) { 
+        return { minX, maxX }; 
+    }
 
-	const [dx,] = toPowerBasis_1stDerivative(ps);
+    const [dx,] = toPowerBasis_1stDerivative(ps);
 
-	const rootsX = allRootsCertifiedSimplified(dx,0,1);
-		
-	// Test points
-	for (let i=0; i<rootsX.length; i++) {
-		const r = rootsX[i];
-		const ts = [r.tS, r.tE];
-		const box = getIntervalBox(ps, ts);
+    const rootsX = allRootsCertifiedSimplified(dx,0,1);
+        
+    // Test points
+    for (let i=0; i<rootsX.length; i++) {
+        const r = rootsX[i];
+        const ts = [r.tS, r.tE];
+        const box = getIntervalBox(ps, ts);
 
-		if (box[0][0] < minX.box[0][0]) { 
-			minX = { ts, box } 
-		}
-		if (box[1][0] > maxX.box[0][0]) { 
-			maxX = { ts, box } 
-		}
-	}
+        if (box[0][0] < minX.box[0][0]) { 
+            minX = { ts, box } 
+        }
+        if (box[1][0] > maxX.box[0][0]) { 
+            maxX = { ts, box } 
+        }
+    }
 
-	return { minX, maxX };
+    return { minX, maxX };
 }
 
 

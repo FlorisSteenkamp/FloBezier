@@ -15,13 +15,13 @@ import { getYBoundsTight } from "./get-y-bounds-tight.js";
  * @doc mdx
  */
 function getBoundingBox(ps: number[][]): number[][] {
-	const xBounds = getXBoundsTight(ps);
-	const yBounds = getYBoundsTight(ps);
+    const xBounds = getXBoundsTight(ps);
+    const yBounds = getYBoundsTight(ps);
 
-	return [
-		[xBounds.minX.box[0][0], yBounds.minY.box[0][1]],
-		[xBounds.maxX.box[1][0], yBounds.maxY.box[1][1]]
-	];
+    return [
+        [xBounds.minX.box[0][0], yBounds.minY.box[0][1]],
+        [xBounds.maxX.box[1][0], yBounds.maxY.box[1][1]]
+    ];
 }
 
 

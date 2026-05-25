@@ -16,24 +16,24 @@ import { quadraticToCubic } from "./quadratic-to-cubic.js";
  * @doc mdx
  */
 function toCubic(ps: number[][]): number[][] {
-	if (ps.length === 4) { // Cubic
-		return ps;
-	}
+    if (ps.length === 4) { // Cubic
+        return ps;
+    }
 
-	if (ps.length === 3) { // Quadratic
-		return quadraticToCubic(ps); 
-	} 
+    if (ps.length === 3) { // Quadratic
+        return quadraticToCubic(ps); 
+    } 
 
-	if (ps.length === 2) { // Linear
-		return lineToCubic(ps); 
-	}
-	
-	if (ps.length === 1) { // Point
-		const p = ps[0];
-		return [p,p,p,p]; 
-	}
+    if (ps.length === 2) { // Linear
+        return lineToCubic(ps); 
+    }
+    
+    if (ps.length === 1) { // Point
+        const p = ps[0];
+        return [p,p,p,p]; 
+    }
 
-	throw new Error('The given bezier curve must be of order <= 3.');
+    throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 

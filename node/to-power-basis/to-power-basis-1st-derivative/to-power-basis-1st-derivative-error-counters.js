@@ -31,38 +31,38 @@ const abs = Math.abs;
  * ```
  * // for cubic bezier curves
  * return [
- * 	[
- * 		X2,  // <E> === D+3 (D = 0 for double, 1 for double-double precision)
- * 		X1,  // <E> === D+2
- * 		X0   // <E> === D+3
- * 	],
- * 	[
- * 		Y2,  // <E> === D+3
- * 		Y1,  // <E> === D+2
- * 		Y0   // <E> === D+3
- * 	]
+ *     [
+ *         X2,  // <E> === D+3 (D = 0 for double, 1 for double-double precision)
+ *         X1,  // <E> === D+2
+ *         X0   // <E> === D+3
+ *     ],
+ *     [
+ *         Y2,  // <E> === D+3
+ *         Y1,  // <E> === D+2
+ *         Y0   // <E> === D+3
+ *     ]
  * ]
  *
  * // for quadratic bezier curves
  * return [
- * 	[
- * 		X1,  // <E> === D+1 (D = 0 for double, 1 for double-double precision)
- * 		X0   // <E> === D
- * 	],
- * 	[
- * 		Y1,  // <E> === D+1
- * 		Y0   // <E> === D
- * 	]
+ *     [
+ *         X1,  // <E> === D+1 (D = 0 for double, 1 for double-double precision)
+ *         X0   // <E> === D
+ *     ],
+ *     [
+ *         Y1,  // <E> === D+1
+ *         Y0   // <E> === D
+ *     ]
  * ];
  *
  * // for linear bezier curves (i.e. lines)
  * return [
- * 	[
- * 		X0_  // <E> === D (D = 0 for double, 1 for double-double precision)
- * 	],
- * 	[
- * 		Y0_  // <E> === D
- * 	]
+ *     [
+ *         X0_  // <E> === D (D = 0 for double, 1 for double-double precision)
+ *     ],
+ *     [
+ *         Y0_  // <E> === D
+ *     ]
  * ];
  * ```
  *

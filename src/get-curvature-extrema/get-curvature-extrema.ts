@@ -40,14 +40,14 @@ function getCurvatureExtrema(
         ps: number[][]): Extrema {
 
     if (isCollinear(ps)) {
-		return { minima: [], maxima: [], inflections: [] };
-	}
+        return { minima: [], maxima: [], inflections: [] };
+    }
 
-	if (ps.length === 4 && isCubicReallyQuad(ps)) {
+    if (ps.length === 4 && isCubicReallyQuad(ps)) {
         ps = cubicToQuadratic(ps)!;
-	}
+    }
 
-	if (ps.length === 3) {
+    if (ps.length === 3) {
         const poly = getCurvatureExtremaQuadraticPoly(ps);
         const maxima = allRoots(poly, 0, 1);
         return {

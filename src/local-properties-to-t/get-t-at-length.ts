@@ -13,14 +13,14 @@ import { length } from "../global-properties/length/length.js";
  * @doc mdx
  */
 function getTAtLength(
-		ps: number[][], 
-		s: number) {
+        ps: number[][], 
+        s: number) {
 
-	if (s === 0) { return 0; }
+    if (s === 0) { return 0; }
 
-	const lenAtT = (t: number) => length([0,t], ps); 
+    const lenAtT = (t: number) => length([0,t], ps); 
 
-	return brent(t => (lenAtT(t) - s), 0, 1.125);
+    return brent(t => (lenAtT(t) - s), 0, 1.125);
 }
 
 

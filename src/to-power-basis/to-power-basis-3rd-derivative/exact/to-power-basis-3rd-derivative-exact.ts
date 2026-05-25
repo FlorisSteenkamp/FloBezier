@@ -23,22 +23,22 @@ const eadd = eAdd;
  function toPowerBasis_3rdDerivativeExact(
         ps: number[][]): number[][][] {
 
-	if (ps.length === 4) {
-		const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
+    if (ps.length === 4) {
+        const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
 
-		return [[
-			sce(6,eadd(td(x3,x0),sce(3,td(x1,x2))))
-		], [
-			sce(6,eadd(td(y3,y0),sce(3,td(y1,y2))))
-		]];
-	} else if (ps.length <= 3) {
-		return [[[0]], [[0]]];
-	}
+        return [[
+            sce(6,eadd(td(x3,x0),sce(3,td(x1,x2))))
+        ], [
+            sce(6,eadd(td(y3,y0),sce(3,td(y1,y2))))
+        ]];
+    } else if (ps.length <= 3) {
+        return [[[0]], [[0]]];
+    }
 
-	// Note: if x0,x1,x2,x3 <= X (for some X) and t is an element of [0,1], then
-	// max(dddx)(t) <= 48*X for all t.
+    // Note: if x0,x1,x2,x3 <= X (for some X) and t is an element of [0,1], then
+    // max(dddx)(t) <= 48*X for all t.
 
-	throw new Error('The given bezier curve must be of order <= 3.');
+    throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 

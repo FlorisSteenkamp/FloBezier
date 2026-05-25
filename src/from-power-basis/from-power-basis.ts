@@ -14,53 +14,53 @@
  * @doc
  */
 function fromPowerBasis(cs: number[][]): number[][] {
-	const len = cs[0].length;
+    const len = cs[0].length;
 
-	if (len === 4) {
+    if (len === 4) {
         const [[a3, a2, a1, a0], [b3, b2, b1, b0]] = cs;
-		return [
-			[a0,
-			 b0],
-			[a0 + a1/3,
-			 b0 + b1/3],			 
-			[a0 + 2*a1/3 + a2/3,
-			 b0 + 2*b1/3 + b2/3],			 
-			[a0 + a1 + a2 + a3, 
-			 b0 + b1 + b2 + b3]
-		];
-	} 
-	
-	if (len === 3) {
-		const [[a2, a1, a0], [b2, b1, b0]] = cs;
-		return [
-			[a0,
-			 b0],
-			[a0 + a1/2,
-			 b0 + b1/2],
-			[a0 + a1 + a2,
-			 b0 + b1 + b2]
-		];
-	} 
-	
-	if (len === 2) {
-		const [[a1, a0], [b1, b0]] = cs;
-		return [
-			[a0,
-			 b0],
-			[a0 + a1,
-			 b0 + b1]
-		];
-	}
+        return [
+            [a0,
+             b0],
+            [a0 + a1/3,
+             b0 + b1/3],             
+            [a0 + 2*a1/3 + a2/3,
+             b0 + 2*b1/3 + b2/3],             
+            [a0 + a1 + a2 + a3, 
+             b0 + b1 + b2 + b3]
+        ];
+    } 
+    
+    if (len === 3) {
+        const [[a2, a1, a0], [b2, b1, b0]] = cs;
+        return [
+            [a0,
+             b0],
+            [a0 + a1/2,
+             b0 + b1/2],
+            [a0 + a1 + a2,
+             b0 + b1 + b2]
+        ];
+    } 
+    
+    if (len === 2) {
+        const [[a1, a0], [b1, b0]] = cs;
+        return [
+            [a0,
+             b0],
+            [a0 + a1,
+             b0 + b1]
+        ];
+    }
 
-	if (len === 1) {
-		const [[a0], [b0]] = cs;
-		return [
-			[a0,
-			 b0]
-		];
-	}
+    if (len === 1) {
+        const [[a0], [b0]] = cs;
+        return [
+            [a0,
+             b0]
+        ];
+    }
 
-	throw new Error('The given bezier curve must be of order <= 3.');
+    throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 

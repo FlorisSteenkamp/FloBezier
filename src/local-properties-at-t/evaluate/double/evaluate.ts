@@ -21,8 +21,8 @@ function evaluate(
         ps: number[][], 
         t: number): number[] {
 
-	const len = ps.length;
-	
+    const len = ps.length;
+    
     if (t === 0) { return ps[0]; }
     if (t === 1) { return ps[len-1]; }
 

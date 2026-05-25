@@ -264,13 +264,13 @@ function getFatlineDebugInfo(
     // get scale factor `d` to scale back to actual distances 
     // (not perfectly accurate due to rounding)
     const xS = FS[0];
-	const yS = FS[1];
-	const xE = FE[0];
-	const yE = FE[1];
+    const yS = FS[1];
+    const xE = FE[0];
+    const yE = FE[1];
     const s = yS - yE;
-	const t = xE - xS;
-	const u = xS*yE - xE*yS;
-	const d = Math.sqrt(s**2 + t**2);
+    const t = xE - xS;
+    const u = xS*yE - xE*yS;
+    const d = Math.sqrt(s**2 + t**2);
 
     const offsetMin = toLength(vFr, dMin/d);
     const offsetMax = toLength(vFr, dMax/d);

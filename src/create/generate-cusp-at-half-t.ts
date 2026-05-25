@@ -18,12 +18,12 @@ function generateCuspAtHalf3(
         pE: number[]): number[][] {
 
     // x3 - 3x2 + 3x1 - x0, // := a = coefficent of t^3
-	// 3x2 - 6x1 + 3x0,     // := b = coefficent of t^2
+    // 3x2 - 6x1 + 3x0,     // := b = coefficent of t^2
     // 3x1 - 3x0,           // := c = coefficent of t^1
     // x0,                  // := d = coefficent of t^0
 
     // y3 - 3y2 + 3y1 - y0, // := e = coefficent of t^3
-	// 3y2 - 6y1 + 3y0,     // := f = coefficent of t^2
+    // 3y2 - 6y1 + 3y0,     // := f = coefficent of t^2
     // 3y1 - 3y0,           // := g = coefficent of t^1
     // y0,                  // := h = coefficent of t^0
 

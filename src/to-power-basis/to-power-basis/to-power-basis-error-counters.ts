@@ -34,44 +34,44 @@ const abs = Math.abs;
  * ```
  * // for cubic bezier curves
  * return [ 
- * 	[
- * 		x3,  // <E> === 3
- * 		x2,  // <E> === 3
- * 		x1,  // <E> === 2
- * 		0,
- * 	],
- * 	[
- * 		y3,  // <E> === 3
- * 		y2,  // <E> === 3
- * 		y1,  // <E> === 2
- * 		0,
- * 	]
+ *     [
+ *         x3,  // <E> === 3
+ *         x2,  // <E> === 3
+ *         x1,  // <E> === 2
+ *         0,
+ *     ],
+ *     [
+ *         y3,  // <E> === 3
+ *         y2,  // <E> === 3
+ *         y1,  // <E> === 2
+ *         0,
+ *     ]
  * ]
  *
  * // for quadratic bezier curves
  * return [ 
- * 	[
- * 		x2,  // <E> === 2
- * 		x1,  // <E> === 1
- * 		0,
- * 	],
- * 	[
- * 		y2,  // <E> === 2
- * 		y1,  // <E> === 1
- * 		0,
- * 	]
+ *     [
+ *         x2,  // <E> === 2
+ *         x1,  // <E> === 1
+ *         0,
+ *     ],
+ *     [
+ *         y2,  // <E> === 2
+ *         y1,  // <E> === 1
+ *         0,
+ *     ]
  * ];
  * 
  * // for linear bezier curves (i.e. lines)
  * return [ 
- * 	[
- * 		x1_,  // <E> === 1
- * 		x0_   // <E> === 0
- * 	],
- * 	[
- * 		y1_,  // <E> === 1
- * 		y0_   // <E> === 0
- * 	]
+ *     [
+ *         x1_,  // <E> === 1
+ *         x0_   // <E> === 0
+ *     ],
+ *     [
+ *         y1_,  // <E> === 1
+ *         y0_   // <E> === 0
+ *     ]
  * ];
  * ```
  * 
@@ -81,109 +81,109 @@ const abs = Math.abs;
  * @doc mdx
  */
 function toPowerBasisErrorCounters(ps: number[][]): number[][] {
-	if (ps.length === 4) {
-		return toPowerBasis3ErrorCounters(ps);
-	} 
-	
-	if (ps.length === 3) {
-		return toPowerBasis2ErrorCounters(ps);
-	} 
-	
-	if (ps.length === 2) {
-		return toPowerBasis1ErrorCounters(ps);
-	}
+    if (ps.length === 4) {
+        return toPowerBasis3ErrorCounters(ps);
+    } 
+    
+    if (ps.length === 3) {
+        return toPowerBasis2ErrorCounters(ps);
+    } 
+    
+    if (ps.length === 2) {
+        return toPowerBasis1ErrorCounters(ps);
+    }
 
-	if (ps.length === 1) {
-		return [[0], [0]];
-	}
+    if (ps.length === 1) {
+        return [[0], [0]];
+    }
 
-	throw new Error('The given bezier curve must be of order <= 3.');
+    throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 
 /** @internal */
 function toPowerBasis1ErrorCounters(
-		ps: number[][]): number[][] {
+        ps: number[][]): number[][] {
 
-	const [[x0,y0], [x1,y1]] = ps;
+    const [[x0,y0], [x1,y1]] = ps;
 
-	const _x0 = abs(x0);
-	const _x1 = abs(x1);
-	const _y0 = abs(y0);
-	const _y1 = abs(y1);
+    const _x0 = abs(x0);
+    const _x1 = abs(x1);
+    const _y0 = abs(y0);
+    const _y1 = abs(y1);
 
-	return [
+    return [
         [
-			_x1 + _x0,  // <1> <= <1>(<0>x1 - <0>x0)
-			0,
-		], [
-			_y1 + _y0,  // <1>
-		    0,
+            _x1 + _x0,  // <1> <= <1>(<0>x1 - <0>x0)
+            0,
+        ], [
+            _y1 + _y0,  // <1>
+            0,
         ]
-	];
+    ];
 }
 
 
 /** @internal */
 function toPowerBasis2ErrorCounters(
-		ps: number[][]): number[][] {
+        ps: number[][]): number[][] {
 
-	const [[x0,y0], [x1,y1], [x2,y2]] = ps;
+    const [[x0,y0], [x1,y1], [x2,y2]] = ps;
 
-	const _x0 = abs(x0);
-	const _x1 = abs(x1);
-	const _x2 = abs(x2);
-	const _y0 = abs(y0);
-	const _y1 = abs(y1);
-	const _y2 = abs(y2);
+    const _x0 = abs(x0);
+    const _x1 = abs(x1);
+    const _x2 = abs(x2);
+    const _y0 = abs(y0);
+    const _y1 = abs(y1);
+    const _y2 = abs(y2);
 
-	return [
+    return [
         [
-			_x2 + _x0 + 2*_x1,  // <2> <= <2>(<1>(x2 + x0) - 2*x1)
-			2*(_x1 + _x0),      // <1> <= 2*<1>(x1 - x0)
-			0,
-		], [
-			_y2 + _y0 + 2*_y1,  // <2>
-			2*(_y1 + _y0),      // <1>
-			0,
-	    ]
+            _x2 + _x0 + 2*_x1,  // <2> <= <2>(<1>(x2 + x0) - 2*x1)
+            2*(_x1 + _x0),      // <1> <= 2*<1>(x1 - x0)
+            0,
+        ], [
+            _y2 + _y0 + 2*_y1,  // <2>
+            2*(_y1 + _y0),      // <1>
+            0,
+        ]
     ]
 }
 
 
 /** @internal */
 function toPowerBasis3ErrorCounters(
-		ps: number[][]): number[][] {
+        ps: number[][]): number[][] {
 
-	const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
+    const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
 
-	const _x0 = abs(x0);
-	const _x1 = abs(x1);
-	const _x2 = abs(x2);
-	const _x3 = abs(x3);
-	const _y0 = abs(y0);
-	const _y1 = abs(y1);
-	const _y2 = abs(y2);
-	const _y3 = abs(y3);
+    const _x0 = abs(x0);
+    const _x1 = abs(x1);
+    const _x2 = abs(x2);
+    const _x3 = abs(x3);
+    const _y0 = abs(y0);
+    const _y1 = abs(y1);
+    const _y2 = abs(y2);
+    const _y3 = abs(y3);
 
-	return [
+    return [
         [
-			_x3 + _x0 + 3*(_x1 + _x2),  // <3> <-- <3>(<1>(x3 - x0) + <2>(3*(<1>(x1 - x2))))
-			3*(_x2 + _x0 + 2*_x1),      // <3> <-- <3>(3*(<2>(<1>(x2 + x0) - 2*x1)))
-			3*(_x1 + _x0),              // <2> <-- <2>(3*(<1>(x1 - x0)))
-			0,
-		], [
-			_y3 + _y0 + 3*(_y1 + _y2),  // <3>
-			3*(_y2 + _y0 + 2*_y1),      // <3>
-			3*(_y1 + _y0),              // <2>
-			0,
-		]
+            _x3 + _x0 + 3*(_x1 + _x2),  // <3> <-- <3>(<1>(x3 - x0) + <2>(3*(<1>(x1 - x2))))
+            3*(_x2 + _x0 + 2*_x1),      // <3> <-- <3>(3*(<2>(<1>(x2 + x0) - 2*x1)))
+            3*(_x1 + _x0),              // <2> <-- <2>(3*(<1>(x1 - x0)))
+            0,
+        ], [
+            _y3 + _y0 + 3*(_y1 + _y2),  // <3>
+            3*(_y2 + _y0 + 2*_y1),      // <3>
+            3*(_y1 + _y0),              // <2>
+            0,
+        ]
     ];
 }
 
 export {
-	toPowerBasisErrorCounters,
-	toPowerBasis1ErrorCounters,
-	toPowerBasis2ErrorCounters,
-	toPowerBasis3ErrorCounters
+    toPowerBasisErrorCounters,
+    toPowerBasis1ErrorCounters,
+    toPowerBasis2ErrorCounters,
+    toPowerBasis3ErrorCounters
 }

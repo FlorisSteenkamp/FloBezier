@@ -8,7 +8,7 @@
  * @doc
  */
 function toString(ps: number[][]): string {
-	return `[${ps.map(p => `[${p.join(',')}]`).join(',')}]`;
+    return `[${ps.map(p => `[${p.join(',')}]`).join(',')}]`;
 }
 
 

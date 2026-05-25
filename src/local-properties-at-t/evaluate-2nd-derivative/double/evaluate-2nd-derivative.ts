@@ -14,12 +14,12 @@ import { Horner } from 'flo-poly';
  * @doc mdx
  */
 function evaluate2ndDerivative(ps: number[][], t: number): number[] {
-	const [ddPsX, ddPsY] = toPowerBasis_2ndDerivative(ps);
+    const [ddPsX, ddPsY] = toPowerBasis_2ndDerivative(ps);
 
-	return [
-		Horner(ddPsX, t),
-		Horner(ddPsY, t)
-	];
+    return [
+        Horner(ddPsX, t),
+        Horner(ddPsY, t)
+    ];
 }
 
 

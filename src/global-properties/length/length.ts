@@ -21,28 +21,28 @@ import { lengthBez3 } from './length-bez3.js';
  * @doc mdx
  */
 function length(
-		interval: number[], 
-		ps: number[][],
-		maxCurviness = 0.4,
-		gaussOrder: 4|16|64 = 16): number {
+        interval: number[], 
+        ps: number[][],
+        maxCurviness = 0.4,
+        gaussOrder: 4|16|64 = 16): number {
 
-	if (ps.length === 4) {
-		return lengthBez3(interval, ps, maxCurviness, gaussOrder);
-	}
+    if (ps.length === 4) {
+        return lengthBez3(interval, ps, maxCurviness, gaussOrder);
+    }
 
-	if (ps.length === 3) {
-		return lengthBez2(interval, ps, maxCurviness, gaussOrder);
-	}
+    if (ps.length === 3) {
+        return lengthBez2(interval, ps, maxCurviness, gaussOrder);
+    }
 
-	if (ps.length === 2) {
-		return lengthBez1(interval, ps);
-	}
+    if (ps.length === 2) {
+        return lengthBez1(interval, ps);
+    }
 
-	if (ps.length === 1) {
-		return 0;
-	}
+    if (ps.length === 1) {
+        return 0;
+    }
 
-	throw new Error('The given bezier curve must be of order <= 3.');
+    throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 

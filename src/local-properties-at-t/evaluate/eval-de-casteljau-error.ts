@@ -31,18 +31,18 @@ const abs = Math.abs;
  * ```
  * // for cubic bezier curves
  * return [ 
- * 	x_,  // <E> === 3T + 9
- * 	y_   // <E> === 3T + 9
+ *     x_,  // <E> === 3T + 9
+ *     y_   // <E> === 3T + 9
  * ];
  * // for quadratic bezier curves
  * return [ 
- * 	x_,  // <E> === 2T + 6
- * 	y_   // <E> === 2T + 6
+ *     x_,  // <E> === 2T + 6
+ *     y_   // <E> === 2T + 6
  * ];
  * // for linear bezier curves (i.e. lines)
  * return [ 
- * 	x_,  // <E> === T + 3
- * 	y_   // <E> === T + 3
+ *     x_,  // <E> === T + 3
+ *     y_   // <E> === T + 3
  * ];
  * ```
  * 
@@ -67,102 +67,102 @@ const abs = Math.abs;
  * @internal
  **/
 function evalDeCasteljauError(
-		ps: number[][], 
-		t: number[]): number[] {
+        ps: number[][], 
+        t: number[]): number[] {
 
-	if (t[0] === 0 && t[1] === 0) {
-		return [0,0];  // No error
-	} else if (t[0] === 0 && t[1] === 1) {
-		return [0,0];  // No error
-	}
+    if (t[0] === 0 && t[1] === 0) {
+        return [0,0];  // No error
+    } else if (t[0] === 0 && t[1] === 1) {
+        return [0,0];  // No error
+    }
 
-	const t_ = abs(t[1]);  // <T>
+    const t_ = abs(t[1]);  // <T>
 
-	// <M> --> the cost of multiplication === <1> except for `qmq` in which
-	// case it is <2>. One might as well just double the error in the end for
-	// double-double precision calculations (thus losing 1 bit) and take 
-	// <M> === 1 always. This simplifies the calculation a bit.
+    // <M> --> the cost of multiplication === <1> except for `qmq` in which
+    // case it is <2>. One might as well just double the error in the end for
+    // double-double precision calculations (thus losing 1 bit) and take 
+    // <M> === 1 always. This simplifies the calculation a bit.
 
-	if (ps.length === 4) {
-		const [[x0, y0], [x1,y1], [x2,y2], [x3, y3]] = ps;	
-		
-		const _x0 = abs(x0);  // <0>
-		const _y0 = abs(y0);  // <0>
-		const _x1 = abs(x1);  // <0>
-		const _y1 = abs(y1);  // <0>
-		const _x2 = abs(x2);  // <0>
-		const _y2 = abs(y2);  // <0>
-		const _x3 = abs(x3);  // <0>
-		const _y3 = abs(y3);  // <0>
+    if (ps.length === 4) {
+        const [[x0, y0], [x1,y1], [x2,y2], [x3, y3]] = ps;    
+        
+        const _x0 = abs(x0);  // <0>
+        const _y0 = abs(y0);  // <0>
+        const _x1 = abs(x1);  // <0>
+        const _y1 = abs(y1);  // <0>
+        const _x2 = abs(x2);  // <0>
+        const _y2 = abs(y2);  // <0>
+        const _x3 = abs(x3);  // <0>
+        const _y3 = abs(y3);  // <0>
 
-		// a01<T+3> <-- <T+3>(x0 + <T+2>(<1>(x1 + x0)*<T>t));
-		const a01_ = _x0 + (_x1 + _x0)*t_;
-		// a11<T+3> <-- <T+3>(x1 + <1>(<0>(x2 + x1)*<T>t));
-		const a11_ = _x1 + (_x2 + _x1)*t_;
-		// a21<T+3> <-- <T+3>(x2 + <1>(<0>(x3 + x2)*<T>t));
-		const a21_ = _x2 + (_x3 + _x2)*t_;
-		// a02<2T+6> <-- <2T+6>(<T+3>a01 + <2T+5>(<T+4>(<T+3>a11 + <T+3>a01)*<T>t));
-		const a02_ = a01_ + (a11_ + a01_)*t_;
-		// a12<2T+6> <-- <2T+6>(<T+3>a11 + <2T+5>(<T+4>(<T+3>a21 + <T+3>a11)*<T>t));
-		const a12_ = a11_ + (a21_ + a11_)*t_;
-		// x<3T+9> <-- <3T+9>(<2T+6>a02 + <3T+8>(<2T+7>(<2T+6>a12 + <2T+6>a02)*<T>t));
-		const x_ = a02_ + (a12_ + a02_)*t_;
-		
-		const b01_ = _y0 + (_y1 + _y0)*t_;
-		const b11_ = _y1 + (_y2 + _y1)*t_;
-		const b21_ = _y2 + (_y3 + _y2)*t_;
-		const b02_ = b01_ + (b11_ + b01_)*t_;
-		const b12_ = b11_ + (b21_ + b11_)*t_;
-		const y_ = b02_ + (b12_ + b02_)*t_;
+        // a01<T+3> <-- <T+3>(x0 + <T+2>(<1>(x1 + x0)*<T>t));
+        const a01_ = _x0 + (_x1 + _x0)*t_;
+        // a11<T+3> <-- <T+3>(x1 + <1>(<0>(x2 + x1)*<T>t));
+        const a11_ = _x1 + (_x2 + _x1)*t_;
+        // a21<T+3> <-- <T+3>(x2 + <1>(<0>(x3 + x2)*<T>t));
+        const a21_ = _x2 + (_x3 + _x2)*t_;
+        // a02<2T+6> <-- <2T+6>(<T+3>a01 + <2T+5>(<T+4>(<T+3>a11 + <T+3>a01)*<T>t));
+        const a02_ = a01_ + (a11_ + a01_)*t_;
+        // a12<2T+6> <-- <2T+6>(<T+3>a11 + <2T+5>(<T+4>(<T+3>a21 + <T+3>a11)*<T>t));
+        const a12_ = a11_ + (a21_ + a11_)*t_;
+        // x<3T+9> <-- <3T+9>(<2T+6>a02 + <3T+8>(<2T+7>(<2T+6>a12 + <2T+6>a02)*<T>t));
+        const x_ = a02_ + (a12_ + a02_)*t_;
+        
+        const b01_ = _y0 + (_y1 + _y0)*t_;
+        const b11_ = _y1 + (_y2 + _y1)*t_;
+        const b21_ = _y2 + (_y3 + _y2)*t_;
+        const b02_ = b01_ + (b11_ + b01_)*t_;
+        const b12_ = b11_ + (b21_ + b11_)*t_;
+        const y_ = b02_ + (b12_ + b02_)*t_;
 
-		return [x_,y_];
-	} 
-	
-	if (ps.length === 3) {
-		const [[x0,y0], [x1,y1], [x2,y2]] = ps;	
+        return [x_,y_];
+    } 
+    
+    if (ps.length === 3) {
+        const [[x0,y0], [x1,y1], [x2,y2]] = ps;    
 
-		const _x0 = abs(x0);
-		const _y0 = abs(y0);
-		const _x1 = abs(x1);
-		const _y1 = abs(y1);
-		const _x2 = abs(x2);
-		const _y2 = abs(y2);
+        const _x0 = abs(x0);
+        const _y0 = abs(y0);
+        const _x1 = abs(x1);
+        const _y1 = abs(y1);
+        const _x2 = abs(x2);
+        const _y2 = abs(y2);
 
-		// <T+3>a01 <-- <T+3>(x0 + <T+2>(<1>(x1 + x0)*<T>t));
-		const a01_ = _x0 + (_x1 + _x0)*t_;
-		// <T+3>a11 <-- <T+3>(x1 + <T+2>(<1>(x2 + x1)*<T>t));
-		const a11_ = _x1 + (_x2 + _x1)*t_;
-		// <2T+6>x <-- <2T+6>(<T+3>a01 + <2T+5>(<T+4>(<T+3>a11 + <T+3>a01)*<T>t));
-		const x_ = a01_ + (a11_ + a01_)*t_;
+        // <T+3>a01 <-- <T+3>(x0 + <T+2>(<1>(x1 + x0)*<T>t));
+        const a01_ = _x0 + (_x1 + _x0)*t_;
+        // <T+3>a11 <-- <T+3>(x1 + <T+2>(<1>(x2 + x1)*<T>t));
+        const a11_ = _x1 + (_x2 + _x1)*t_;
+        // <2T+6>x <-- <2T+6>(<T+3>a01 + <2T+5>(<T+4>(<T+3>a11 + <T+3>a01)*<T>t));
+        const x_ = a01_ + (a11_ + a01_)*t_;
 
-		const b01_ = _y0 + (_y1 + _y0)*t_;
-		const b11_ = _y1 + (_y2 + _y1)*t_;
-		const y_ = b01_ + (b11_ + b01_)*t_;
+        const b01_ = _y0 + (_y1 + _y0)*t_;
+        const b11_ = _y1 + (_y2 + _y1)*t_;
+        const y_ = b01_ + (b11_ + b01_)*t_;
 
-		return [x_,y_];
-	} 
-	
-	if (ps.length === 2) {
-		const [[x0, y0], [x1,y1]] = ps;	
+        return [x_,y_];
+    } 
+    
+    if (ps.length === 2) {
+        const [[x0, y0], [x1,y1]] = ps;    
 
-		const _x0 = abs(x0);
-		const _y0 = abs(y0);
-		const _x1 = abs(x1);
-		const _y1 = abs(y1);
+        const _x0 = abs(x0);
+        const _y0 = abs(y0);
+        const _x1 = abs(x1);
+        const _y1 = abs(y1);
 
-		// <T+3>x = <T+3>(x0 + <T+2>(<1>(x1 + x0)*<T>t));
-		const x_ = _x0 + (_x1 + _x0)*t_;
+        // <T+3>x = <T+3>(x0 + <T+2>(<1>(x1 + x0)*<T>t));
+        const x_ = _x0 + (_x1 + _x0)*t_;
 
-		const y_ = _y0 + (_y1 + _y0)*t_;
+        const y_ = _y0 + (_y1 + _y0)*t_;
 
-		return [x_,y_];
-	}
+        return [x_,y_];
+    }
 
-	if (ps.length === 1) {
-		return [0,0];
-	}
+    if (ps.length === 1) {
+        return [0,0];
+    }
 
-	throw new Error('The given bezier curve must be of order <= 3.');
+    throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 

@@ -22,18 +22,18 @@ function ddCurvature(ps: number[][], t: number): number {
     const [dX,dY] = toPowerBasis_1stDerivativeDd(ps);
     const [ddX,ddY] = toPowerBasis_2ndDerivativeDd(ps);
 
-	const dx  = ddHorner(dX, t);
-	const dy  = ddHorner(dY, t);
-	const ddx = ddHorner(ddX, t);
-	const ddy = ddHorner(ddY, t);
-	
-	const a = qdq(qmq(dx,ddy),qmq(dy,ddx));
-	const _b = qaq(qmq(dx,dx),qmq(dy,dy));
-	const __b = qmq(_b,qmq(_b,_b));
-	const b = Math.sqrt(__b[1]);
-	const a_ = a[1];
+    const dx  = ddHorner(dX, t);
+    const dy  = ddHorner(dY, t);
+    const ddx = ddHorner(ddX, t);
+    const ddy = ddHorner(ddY, t);
+    
+    const a = qdq(qmq(dx,ddy),qmq(dy,ddx));
+    const _b = qaq(qmq(dx,dx),qmq(dy,dy));
+    const __b = qmq(_b,qmq(_b,_b));
+    const b = Math.sqrt(__b[1]);
+    const a_ = a[1];
 
-	return a_/b;
+    return a_/b;
 }
 
 

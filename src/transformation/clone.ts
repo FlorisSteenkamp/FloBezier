@@ -8,13 +8,13 @@
  * @doc
  */
 function clone(ps: number[][]) {
-	const ps_: number[][] = [];
-	for (let i=0; i<ps.length; i++) {
-		const p = ps[i];
-		ps_.push([p[0],p[1]]);
-	}
+    const ps_: number[][] = [];
+    for (let i=0; i<ps.length; i++) {
+        const p = ps[i];
+        ps_.push([p[0],p[1]]);
+    }
 
-	return ps_;
+    return ps_;
 }
 
 

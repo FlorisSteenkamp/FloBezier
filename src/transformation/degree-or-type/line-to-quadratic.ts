@@ -7,13 +7,13 @@
  * @doc mdx
  */
 function lineToQuadratic(ps: number[][]) {
-	const [[x0,y0],[x1,y1]] = ps;
+    const [[x0,y0],[x1,y1]] = ps;
 
-	return [
-		[x0,y0],
-		[(x0 + x1)/2, (y0 + y1)/2],
-		[x1,y1]
-	];
+    return [
+        [x0,y0],
+        [(x0 + x1)/2, (y0 + y1)/2],
+        [x1,y1]
+    ];
 }
 
 

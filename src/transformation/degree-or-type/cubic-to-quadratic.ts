@@ -97,30 +97,30 @@ function llIntersection(
         l2: number[][]): number[] | undefined {
 
     const [[x1, y1], [x2, y2]] = l1; 
-	const [[x3, y3], [x4, y4]] = l2;
-	
-	const x1_ = td(x2,x1);
-	const y1_ = td(y2,y1);
-	const x2_ = td(x4,x3);
-	const y2_ = td(y4,y3);
-	
-	const denom = ediff(epr(x2_,y1_), epr(y2_,x1_));
-	if (esign(denom) === 0) {
-		// definitely parallel
-		return undefined;
-	}
+    const [[x3, y3], [x4, y4]] = l2;
+    
+    const x1_ = td(x2,x1);
+    const y1_ = td(y2,y1);
+    const x2_ = td(x4,x3);
+    const y2_ = td(y4,y3);
+    
+    const denom = ediff(epr(x2_,y1_), epr(y2_,x1_));
+    if (esign(denom) === 0) {
+        // definitely parallel
+        return undefined;
+    }
 
     const x3_ = td(x3,x1);
     const y3_ = td(y3,y1);
-	
-	const b = ediff(epr(y3_,x1_), epr(x3_,y1_));
+    
+    const b = ediff(epr(y3_,x1_), epr(x3_,y1_));
 
     const bb = estimate(b) / estimate(denom);
-	
-	return [
-		x3 + bb*estimate(x2_), 
-		y3 + bb*estimate(y2_)
-	];
+    
+    return [
+        x3 + bb*estimate(x2_), 
+        y3 + bb*estimate(y2_)
+    ];
 }
 
 

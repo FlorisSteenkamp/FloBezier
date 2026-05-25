@@ -50,19 +50,19 @@ function splitRight3(
     const x30 = p3[0]; const y30 = p3[1];
     // --------------------------------------------------------
 
-	const x01 = x00 - t*(x00 - x10);
-	const x11 = x10 - t*(x10 - x20);
-	const x21 = x20 - t*(x20 - x30);
-	const x02 = x01 - t*(x01 - x11);
-	const x12 = x11 - t*(x11 - x21);
-	const x03 = x02 - t*(x02 - x12);
+    const x01 = x00 - t*(x00 - x10);
+    const x11 = x10 - t*(x10 - x20);
+    const x21 = x20 - t*(x20 - x30);
+    const x02 = x01 - t*(x01 - x11);
+    const x12 = x11 - t*(x11 - x21);
+    const x03 = x02 - t*(x02 - x12);
 
     const y01 = y00 - t*(y00 - y10);
-	const y11 = y10 - t*(y10 - y20);
-	const y21 = y20 - t*(y20 - y30);
-	const y02 = y01 - t*(y01 - y11);
-	const y12 = y11 - t*(y11 - y21);
-	const y03 = y02 - t*(y02 - y12);
+    const y11 = y10 - t*(y10 - y20);
+    const y21 = y20 - t*(y20 - y30);
+    const y02 = y01 - t*(y01 - y11);
+    const y12 = y11 - t*(y11 - y21);
+    const y03 = y02 - t*(y02 - y12);
 
 
     return [[x03, y03], [x12, y12], [x21, y21], p3];
@@ -93,19 +93,19 @@ function splitLeft3(
     const x30 = p3[0]; const y30 = p3[1];
     // --------------------------------------------------------
 
-	const x01 = x00 - t*(x00 - x10);
-	const x11 = x10 - t*(x10 - x20);
-	const x21 = x20 - t*(x20 - x30);
-	const x02 = x01 - t*(x01 - x11);
-	const x12 = x11 - t*(x11 - x21);
-	const x03 = x02 - t*(x02 - x12);
+    const x01 = x00 - t*(x00 - x10);
+    const x11 = x10 - t*(x10 - x20);
+    const x21 = x20 - t*(x20 - x30);
+    const x02 = x01 - t*(x01 - x11);
+    const x12 = x11 - t*(x11 - x21);
+    const x03 = x02 - t*(x02 - x12);
 
     const y01 = y00 - t*(y00 - y10);
-	const y11 = y10 - t*(y10 - y20);
-	const y21 = y20 - t*(y20 - y30);
-	const y02 = y01 - t*(y01 - y11);
-	const y12 = y11 - t*(y11 - y21);
-	const y03 = y02 - t*(y02 - y12);
+    const y11 = y10 - t*(y10 - y20);
+    const y21 = y20 - t*(y20 - y30);
+    const y02 = y01 - t*(y01 - y11);
+    const y12 = y11 - t*(y11 - y21);
+    const y03 = y02 - t*(y02 - y12);
 
     return [p0, [x01, y01], [x02, y02], [x03, y03]];
 }

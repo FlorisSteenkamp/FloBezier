@@ -14,14 +14,14 @@ import { Horner } from 'flo-poly';
  * @internal
  */
 function ds(ps: number[][]) {
-	const [dX,dY] = toPowerBasis_1stDerivative(ps);
+    const [dX,dY] = toPowerBasis_1stDerivative(ps);
 
-	return function(t: number): number {
-		const dx = Horner(dX, t);
-		const dy = Horner(dY, t);
-		
-		return Math.sqrt(dx*dx + dy*dy);	
-	}
+    return function(t: number): number {
+        const dx = Horner(dX, t);
+        const dy = Horner(dY, t);
+        
+        return Math.sqrt(dx*dx + dy*dy);    
+    }
 }
 
 

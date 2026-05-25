@@ -65,19 +65,19 @@ function splitRight3(
     //   2. <k>a<l>b = <k + l + 1>ab
     //   3. fl(a) === <1>a
 
-	const x01 = x00 - t*(x00 - x10);
-	const x11 = x10 - t*(x10 - x20);
-	const x21 = x20 - t*(x20 - x30);
-	const x02 = x01 - t*(x01 - x11);
-	const x12 = x11 - t*(x11 - x21);
-	const x03 = x02 - t*(x02 - x12);
+    const x01 = x00 - t*(x00 - x10);
+    const x11 = x10 - t*(x10 - x20);
+    const x21 = x20 - t*(x20 - x30);
+    const x02 = x01 - t*(x01 - x11);
+    const x12 = x11 - t*(x11 - x21);
+    const x03 = x02 - t*(x02 - x12);
 
     const y01 = y00 - t*(y00 - y10);
-	const y11 = y10 - t*(y10 - y20);
-	const y21 = y20 - t*(y20 - y30);
-	const y02 = y01 - t*(y01 - y11);
-	const y12 = y11 - t*(y11 - y21);
-	const y03 = y02 - t*(y02 - y12);
+    const y11 = y10 - t*(y10 - y20);
+    const y21 = y20 - t*(y20 - y30);
+    const y02 = y01 - t*(y01 - y11);
+    const y12 = y11 - t*(y11 - y21);
+    const y03 = y02 - t*(y02 - y12);
 
     // -----------------------
     // Calculate error bounds
@@ -95,18 +95,18 @@ function splitRight3(
     const _y30 = abs(y30);
 
     const _x01 = _x00 + _t*(_x00 + _x10);  // <3>x01 = <3>(x00 - <2>(t*<1>(x00 - x10)))
-	const _x11 = _x10 + _t*(_x10 + _x20);  // <3>x11
-	const _x21 = _x20 + _t*(_x20 + _x30);  // <3>x21
-	const _x02 = _x01 + _t*(_x01 + _x11);  // <6>x02 = <6>(x01 - <5>(t*<4>(<3>x01 - <3>x11)))
-	const _x12 = _x11 + _t*(_x11 + _x21);  // <6>x12
-	const _x03 = _x02 + _t*(_x02 + _x12);  // <9>x03 = <9>(x02 - <8>(t*<7>(<6>x02 - <6>x12)))
+    const _x11 = _x10 + _t*(_x10 + _x20);  // <3>x11
+    const _x21 = _x20 + _t*(_x20 + _x30);  // <3>x21
+    const _x02 = _x01 + _t*(_x01 + _x11);  // <6>x02 = <6>(x01 - <5>(t*<4>(<3>x01 - <3>x11)))
+    const _x12 = _x11 + _t*(_x11 + _x21);  // <6>x12
+    const _x03 = _x02 + _t*(_x02 + _x12);  // <9>x03 = <9>(x02 - <8>(t*<7>(<6>x02 - <6>x12)))
 
     const _y01 = _y00 + _t*(_y00 + _y10);
-	const _y11 = _y10 + _t*(_y10 + _y20);
-	const _y21 = _y20 + _t*(_y20 + _y30);
-	const _y02 = _y01 + _t*(_y01 + _y11);
-	const _y12 = _y11 + _t*(_y11 + _y21);
-	const _y03 = _y02 + _t*(_y02 + _y12);
+    const _y11 = _y10 + _t*(_y10 + _y20);
+    const _y21 = _y20 + _t*(_y20 + _y30);
+    const _y02 = _y01 + _t*(_y01 + _y11);
+    const _y12 = _y11 + _t*(_y11 + _y21);
+    const _y03 = _y02 + _t*(_y02 + _y12);
 
     return {
         ps: [[x03, y03], [x12, y12], [x21, y21], [x30, y30]],
@@ -152,19 +152,19 @@ function splitLeft3(
     //   2. <k>a<l>b = <k + l + 1>ab
     //   3. fl(a) === <1>a
 
-	const x01 = x00 - t*(x00 - x10);
-	const x11 = x10 - t*(x10 - x20);
-	const x21 = x20 - t*(x20 - x30);
-	const x02 = x01 - t*(x01 - x11);
-	const x12 = x11 - t*(x11 - x21);
-	const x03 = x02 - t*(x02 - x12);
+    const x01 = x00 - t*(x00 - x10);
+    const x11 = x10 - t*(x10 - x20);
+    const x21 = x20 - t*(x20 - x30);
+    const x02 = x01 - t*(x01 - x11);
+    const x12 = x11 - t*(x11 - x21);
+    const x03 = x02 - t*(x02 - x12);
 
     const y01 = y00 - t*(y00 - y10);
-	const y11 = y10 - t*(y10 - y20);
-	const y21 = y20 - t*(y20 - y30);
-	const y02 = y01 - t*(y01 - y11);
-	const y12 = y11 - t*(y11 - y21);
-	const y03 = y02 - t*(y02 - y12);
+    const y11 = y10 - t*(y10 - y20);
+    const y21 = y20 - t*(y20 - y30);
+    const y02 = y01 - t*(y01 - y11);
+    const y12 = y11 - t*(y11 - y21);
+    const y03 = y02 - t*(y02 - y12);
 
     // -----------------------
     // Calculate error bounds
@@ -182,18 +182,18 @@ function splitLeft3(
     const _y30 = abs(y30);
 
     const _x01 = _x00 + _t*(_x00 + _x10);  // <3>x01 = <3>(x00 - <2>(t*<1>(x00 - x10)))
-	const _x11 = _x10 + _t*(_x10 + _x20);  // <3>x11
-	const _x21 = _x20 + _t*(_x20 + _x30);  // <3>x21
-	const _x02 = _x01 + _t*(_x01 + _x11);  // <6>x02 = <6>(x01 - <5>(t*<4>(<3>x01 - <3>x11)))
-	const _x12 = _x11 + _t*(_x11 + _x21);  // <6>x12
-	const _x03 = _x02 + _t*(_x02 + _x12);  // <9>x03 = <9>(x02 - <8>(t*<7>(<6>x02 - <6>x12)))
+    const _x11 = _x10 + _t*(_x10 + _x20);  // <3>x11
+    const _x21 = _x20 + _t*(_x20 + _x30);  // <3>x21
+    const _x02 = _x01 + _t*(_x01 + _x11);  // <6>x02 = <6>(x01 - <5>(t*<4>(<3>x01 - <3>x11)))
+    const _x12 = _x11 + _t*(_x11 + _x21);  // <6>x12
+    const _x03 = _x02 + _t*(_x02 + _x12);  // <9>x03 = <9>(x02 - <8>(t*<7>(<6>x02 - <6>x12)))
 
     const _y01 = _y00 + _t*(_y00 + _y10);
-	const _y11 = _y10 + _t*(_y10 + _y20);
-	const _y21 = _y20 + _t*(_y20 + _y30);
-	const _y02 = _y01 + _t*(_y01 + _y11);
-	const _y12 = _y11 + _t*(_y11 + _y21);
-	const _y03 = _y02 + _t*(_y02 + _y12);
+    const _y11 = _y10 + _t*(_y10 + _y20);
+    const _y21 = _y20 + _t*(_y20 + _y30);
+    const _y02 = _y01 + _t*(_y01 + _y11);
+    const _y12 = _y11 + _t*(_y11 + _y21);
+    const _y03 = _y02 + _t*(_y02 + _y12);
 
     return {
         ps: [[x00, y00], [x01, y01], [x02, y02], [x03, y03]],

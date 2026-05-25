@@ -15,39 +15,39 @@ const sce = scaleExpansion2;
  * @doc
  */
 function tangentAt1Exact(
-		ps: number[][]): number[][] {
+        ps: number[][]): number[][] {
 
-	if (ps.length === 4) {
-		const [x2,y2] = ps[2];
-		const [x3,y3] = ps[3];
-		return [
-			sce(3,td(x3,x2)),
+    if (ps.length === 4) {
+        const [x2,y2] = ps[2];
+        const [x3,y3] = ps[3];
+        return [
+            sce(3,td(x3,x2)),
             sce(3,td(y3,y2))
-		];
-	} 
-	
-	if (ps.length === 3) {
-		const [x1,y1] = ps[1];
-		const [x2,y2] = ps[2];
-		return [
-			td(2*x2,2*x1),
+        ];
+    } 
+    
+    if (ps.length === 3) {
+        const [x1,y1] = ps[1];
+        const [x2,y2] = ps[2];
+        return [
+            td(2*x2,2*x1),
             td(2*y2,2*y1),
-		];
-	} 
-	
-	if (ps.length === 2) {
-		const [[x0,y0], [x1,y1]] = ps;
-		return [
-			td(x1,x0),
+        ];
+    } 
+    
+    if (ps.length === 2) {
+        const [[x0,y0], [x1,y1]] = ps;
+        return [
+            td(x1,x0),
             td(y1,y0),
-		];
-	}
+        ];
+    }
 
-	if (ps.length === 1) {
-		return [[0],[0]];
-	}
+    if (ps.length === 1) {
+        return [[0],[0]];
+    }
 
-	throw new Error('The given bezier curve must be of order <= 3.');
+    throw new Error('The given bezier curve must be of order <= 3.');
 }
 
 
