@@ -5,6 +5,7 @@ export type { Extrema } from './get-curvature-extrema/get-curvature-extrema.js';
 export type { ClassificationType, Classification, NodeType } from './global-properties/classification/classify.js';
 export type { AnglesAndSpeeds } from './angles-and-speeds/angles-and-speeds.js';
 export { bezierPieceToBezier } from './bezier-piece/bezier-piece-to-bezier.js';
+export { isBezierPieceZeroLength } from './bezier-piece/is-bezier-piece-zero-length.js';
 export { getBoundingHull } from './global-properties/bounds/get-bounding-hull.js';
 export { classify, classifications, classification } from './global-properties/classification/classify.js';
 export { area } from './global-properties/area.js';
