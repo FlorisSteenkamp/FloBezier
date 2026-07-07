@@ -1,6 +1,5 @@
+import { twoProduct, eCalculate, scaleExpansion, eCompress } from "big-float-ts";
 import { toPowerBasis3Exact, toPowerBasis2Exact, toPowerBasis1Exact } from "../../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-import { twoProduct, eCalculate, scaleExpansion } from "big-float-ts";
 const tp = twoProduct;
 const calc = eCalculate;
 const sce = scaleExpansion;
@@ -61,7 +60,7 @@ function getCoeffsCubicExact(circle, ps) {
         [a0, a0], [[-2], a0, [cx]], [b0, b0], [[-2], b0, [cy]],
         [tp(cx, cx)], [tp(cy, cy)], [tp(-r, r)]
     ]);
-    return [t6, t5, t4, t3, t2, t1, t0];
+    return [t6, t5, t4, t3, t2, t1, t0].map(eCompress);
 }
 /**
  * Returns an error-free polynomial in 1 variable
@@ -110,7 +109,7 @@ function getCoeffsQuadraticExact(circle, ps) {
         [a0, a0], [[-2], a0, [cx]], [b0, b0], [[-2], b0, [cy]],
         [tp(cx, cx)], [tp(cy, cy)], [tp(-r, r)]
     ]);
-    return [t4, t3, t2, t1, t0];
+    return [t4, t3, t2, t1, t0].map(eCompress);
 }
 /**
  * Returns an error-free polynomial in 1 variable
@@ -150,7 +149,7 @@ function getCoeffsLinearExact(circle, ps) {
         [a0, a0], [[-2], a0, [cx]], [b0, b0], [[-2], b0, [cy]],
         [tp(cx, cx)], [tp(cy, cy)], [tp(-r, r)]
     ]);
-    return [t2, t1, t0];
+    return [t2, t1, t0].map(eCompress);
 }
 export { getCoeffsCubicExact, getCoeffsQuadraticExact, getCoeffsLinearExact };
 //# sourceMappingURL=get-coeffs-exact.js.map

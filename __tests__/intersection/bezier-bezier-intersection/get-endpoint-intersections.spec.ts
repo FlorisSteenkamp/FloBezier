@@ -1,4 +1,4 @@
-import { expect, use } from "chai";
+import { describe, expect, it } from '@jest/globals';
 import { eEstimate } from "big-float-ts";
 import { 
     bezierSelfIntersection, evaluateExact, generateSelfIntersecting, 
@@ -6,13 +6,10 @@ import {
 } from "../../../src/index.js";
 import type { X } from "../../../src/index.js";
 import { fromTo3 } from "../../../src/transformation/split/from-to/from-to-3.js";
-import { nearly } from "../../helpers/chai-extend-nearly.js";
 import { areIntersectionsInfinte } from "../../helpers/intersection/are-intersections-infinite.js";
 import { fromTo2 } from "../../../src/transformation/split/from-to/from-to-2.js";
 import { fromTo1 } from "../../../src/transformation/split/from-to/from-to-1.js";
 import { getEndpointIntersections } from "../../../src/intersection/get-endpoint-intersections/get-endpoint-intersections.js";
-
-use(nearly);
 
 
 describe('getEndpointIntersections', function() {
@@ -116,15 +113,13 @@ describe('getEndpointIntersections', function() {
             {
                 const R = getEndpointIntersections(ps,psA);
                 const rA = R.map(mapX(0));
-                // @ts-ignore - otherwise TypeScript gives an error on nearly
-                expect(rA).to.be.nearly(2**1,[0.25,0.5]);
+                expect(rA).toBeNearly(2**1,[0.25,0.5]);
             }
             
             {
                 const R = getEndpointIntersections(ps,psB);
                 const rA = R.map(mapX(0));
-                // @ts-ignore - otherwise TypeScript gives an error on nearly
-                expect(rA).to.be.nearly(2**1,[0.5,1]);
+                expect(rA).toBeNearly(2**1,[0.5,1]);
             }
        }
     });
@@ -148,7 +143,7 @@ function testEndpointXs(
         : [];
 
     // the below is a necessary precondition of `getEndpointIntersections`
-    expect(areIntersectionsInfinte(psA,psB)).to.be.true;
+    expect(areIntersectionsInfinte(psA,psB)).toEqual(true);
 
     for (let i=0; i<2; i++) {
         const [A,B,expectedA_,expectedB_] = i === 0 
@@ -164,14 +159,11 @@ function testEndpointXs(
             const r = getEndpointIntersections(A,B);
             const rA = r.map(mapX(0));
             const rB = r.map(mapX(1));
-            // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(rA).to.be.nearly(2**1,expectedA_);
-            // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(rB).to.be.nearly(2**1,expectedB_);
+            expect(rA).toBeNearly(2**1,expectedA_);
+            expect(rB).toBeNearly(2**1,expectedB_);
             for (let j=0; j<r.length; j++) {
                 expect(
-                    // @ts-ignore - otherwise TypeScript gives an error on nearly
-                    evaluateExact(B,expectedB_[j]).map(eEstimate)).to.be.nearly(2**4,
+                    evaluateExact(B,expectedB_[j]).map(eEstimate)).toBeNearly(2**4,
                     evaluateExact(A,expectedA_[j]).map(eEstimate)
                 );
             }
@@ -183,14 +175,11 @@ function testEndpointXs(
             const rB = r.map(mapX(1));
             const expectedAR = expectedA_.map(v => 1 - v).reverse();
             const expectedBR = expectedB_.slice().reverse();
-            // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(rA).to.be.nearly(2**1, expectedAR);
-            // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(rB).to.be.nearly(2**1, expectedBR);
+            expect(rA).toBeNearly(2**1, expectedAR);
+            expect(rB).toBeNearly(2**1, expectedBR);
             for (let j=0; j<r.length; j++) {
                 expect(
-                    // @ts-ignore - otherwise TypeScript gives an error on nearly
-                    evaluateExact(B,expectedBR[j]).map(eEstimate)).to.be.nearly(2**4,
+                    evaluateExact(B,expectedBR[j]).map(eEstimate)).toBeNearly(2**4,
                     evaluateExact(AR,expectedAR[j]).map(eEstimate)
                 );
             }
@@ -202,14 +191,11 @@ function testEndpointXs(
             const rB = r.map(mapX(1));
             const expectedAR = expectedA_;
             const expectedBR = expectedB_.map(v => 1 - v);
-            // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(rA).to.be.nearly(2**1, expectedAR);
-            // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(rB).to.be.nearly(2**1, expectedBR);
+            expect(rA).toBeNearly(2**1, expectedAR);
+            expect(rB).toBeNearly(2**1, expectedBR);
             for (let j=0; j<r.length; j++) {
                 expect(
-                    // @ts-ignore - otherwise TypeScript gives an error on nearly
-                    evaluateExact(BR,expectedBR[j]).map(eEstimate)).to.be.nearly(2**4,
+                    evaluateExact(BR,expectedBR[j]).map(eEstimate)).toBeNearly(2**4,
                     evaluateExact(A,expectedAR[j]).map(eEstimate)
                 );
             }
@@ -221,14 +207,11 @@ function testEndpointXs(
             const rB = r.map(mapX(1));
             const expectedAR = expectedA_.map(v => 1 - v).reverse();
             const expectedBR = expectedB_.map(v => 1 - v).reverse();
-            // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(rA).to.be.nearly(2**1, expectedAR);
-            // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(rB).to.be.nearly(2**1, expectedBR);
+            expect(rA).toBeNearly(2**1, expectedAR);
+            expect(rB).toBeNearly(2**1, expectedBR);
             for (let j=0; j<r.length; j++) {
                 expect(
-                    // @ts-ignore - otherwise TypeScript gives an error on nearly
-                    evaluateExact(BR,expectedBR[j]).map(eEstimate)).to.be.nearly(2**4,
+                    evaluateExact(BR,expectedBR[j]).map(eEstimate)).toBeNearly(2**4,
                     evaluateExact(AR,expectedAR[j]).map(eEstimate)
                 );
             }

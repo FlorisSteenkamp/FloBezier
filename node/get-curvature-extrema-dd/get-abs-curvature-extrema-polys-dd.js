@@ -1,9 +1,7 @@
-import { ddMultBy4, ddAddDd, ddDiffDd, ddMultBy2, ddMultDd, ddMultDouble2, twoProduct } from "double-double";
+import { ddMultBy4, ddAddDd, ddDiffDd, ddMultBy2, ddMultDd, ddMultDouble2 } from "double-double";
 import { toPowerBasis_1stDerivativeDd } from "../to-power-basis/to-power-basis-1st-derivative/double-double/to-power-basis-1st-derivative-dd.js";
 import { toPowerBasis_2ndDerivativeDd } from "../to-power-basis/to-power-basis-2nd-derivative/double-double/to-power-basis-2nd-derivative-dd.js";
 import { toPowerBasis_3rdDerivativeDd } from "../to-power-basis/to-power-basis-3rd-derivative/double-double/to-power-basis-3rd-derivative-dd.js";
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const tp = twoProduct;
 const qm2 = ddMultBy2;
 const qm4 = ddMultBy4;
 const qmd = ddMultDouble2;

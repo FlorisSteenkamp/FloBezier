@@ -1,12 +1,6 @@
 import type { ImplicitFormExact1, ImplicitFormExact2, ImplicitFormExact3 } from '../implicit-form-types.js';
 import { toPowerBasis3Exact } from '../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js';
-
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-import { 
-    expansionProduct, fastExpansionSum, scaleExpansion2, 
-    eDiff, eNegativeOf, eMultBy2, eDivBy2
-} from "big-float-ts";
-import { eSign as _eSign } from 'big-float-ts';
+import { expansionProduct, fastExpansionSum, scaleExpansion2, eDiff, eNegativeOf, eMultBy2, eDivBy2, eSign, eCompress } from "big-float-ts";
 import { getImplicitForm2ExactPb } from './get-implicit-form2-exact.js';
 
 const sce = scaleExpansion2;
@@ -16,7 +10,6 @@ const edif = eDiff;
 const eno = eNegativeOf;
 const em2 = eMultBy2;
 const ed2 = eDivBy2;
-const eSign = _eSign;
 
 
 /**
@@ -119,10 +112,10 @@ function getImplicitForm3ExactPb(
     const q3q6  = epr(q3,q6);
 
 
-    const vₓₓₓ = epr(eno(b3),b3b3);
-    const vₓₓᵧ = epr(sce(3,a3),b3b3);
-    const vₓᵧᵧ = epr(sce(-3,b3),a3a3);
-    const vᵧᵧᵧ = epr(a3,a3a3);
+    const vₓₓₓ = eCompress(epr(eno(b3),b3b3));
+    const vₓₓᵧ = eCompress(epr(sce(3,a3),b3b3));
+    const vₓᵧᵧ = eCompress(epr(sce(-3,b3),a3a3));
+    const vᵧᵧᵧ = eCompress(epr(a3,a3a3));
 
     const u1 = edif(sce(-3,q1), q5);
 
@@ -131,7 +124,7 @@ function getImplicitForm3ExactPb(
     const w2 = epr(q3,t1);
     const w3 = fes(w1,w2);
     const w4 = epr(tq2,b2b3);
-    const vₓₓ = fes(w3,w4);
+    const vₓₓ = eCompress(fes(w3,w4));
 
 
     //const vᵧᵧ = (u1*a3a3 + q3*t2) + tq2*a2a3;
@@ -139,7 +132,7 @@ function getImplicitForm3ExactPb(
     const w6 = epr(q3,t2);
     const w7 = fes(w5,w6);
     const w8 = epr(tq2,a2a3);
-    const vᵧᵧ = fes(w7,w8);
+    const vᵧᵧ = eCompress(fes(w7,w8));
     
 
     //const vₓᵧ = 2*(q3*(a2b2 - p2/2) - (u1*a3b3 + q2*p1));
@@ -148,7 +141,7 @@ function getImplicitForm3ExactPb(
     const wc = epr(q2,p1);
     const wd = fes(wb,wc);
     const wq = epr(q3,wa);
-    const vₓᵧ = em2(edif(wq,wd));
+    const vₓᵧ = eCompress(em2(edif(wq,wd)));
 
 
     //const s1 = (-3*q1q1 - 2*q1q5) + (tq2q4 + q3q6);
@@ -172,7 +165,7 @@ function getImplicitForm3ExactPb(
     const ws = epr(b2,s2);
     const wt = epr(b1,s3);
     const wn = fes(ws,wt);
-    const vₓ = fes(wm,wn);
+    const vₓ = eCompress(fes(wm,wn));
 
 
     //const vᵧ = -a3*s1 - (a2*s2 + a1*s3);
@@ -180,7 +173,7 @@ function getImplicitForm3ExactPb(
     const wu = epr(a2,s2);
     const wv = epr(a1,s3);
     const wp = fes(wu,wv);
-    const vᵧ = eno(fes(wo,wp));
+    const vᵧ = eCompress(eno(fes(wo,wp)));
 
 
     const v3 = edif(tq2q4,q1q1);
@@ -191,7 +184,7 @@ function getImplicitForm3ExactPb(
     const v6 = epr(q1,v1);
     
     //const v = q1*(tq2q4 - q1q1 - q1q5) + s3*q6 - q3q4*q4;
-    const v = fes(v6,v2);
+    const v = eCompress(fes(v6,v2));
 
     return { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v };
 }

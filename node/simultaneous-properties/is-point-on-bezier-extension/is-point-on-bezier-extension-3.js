@@ -1,18 +1,14 @@
+import { ddMultDd, ddAddDd } from "double-double";
+import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd } from 'big-float-ts';
 import { getImplicitForm3 } from "../../implicit-form/double/get-implicit-form3.js";
 import { getImplicitForm3ErrorCounters } from "../../implicit-form/get-error-counters/get-implicit-form3-error-counters.js";
 import { getImplicitForm3DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form3-dd-with-running-error.js";
 import { getImplicitForm3Exact } from "../../implicit-form/exact/get-implicit-form3-exact.js";
 import { γ, γγ } from '../../error-analysis/error-analysis.js';
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-import { ddMultDd, ddAddDd } from "double-double";
-import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd } from 'big-float-ts';
 const qmq = ddMultDd;
 const qaq = ddAddDd;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
-const sign = eSign;
-const estimate = eEstimate;
-const etodd = eToDd;
 const abs = Math.abs;
 const γ1 = γ(1);
 const γγ3 = γγ(3);
@@ -122,8 +118,8 @@ function isPointOnBezierExtension3(ps, p) {
         // const h =
         //   vₓₓₓ*x*x*x + vₓₓᵧ*x*x*y + vₓᵧᵧ*x*y*y + vᵧᵧᵧ*y*y*y + 
         //   vₓₓ*x*x + vₓᵧ*x*y + vᵧᵧ*y*y + vₓ*x + vᵧ*y + v;
-        const xd = etodd(xe);
-        const yd = etodd(ye);
+        const xd = eToDd(xe);
+        const yd = eToDd(ye);
         const _x = abs(x);
         const _y = abs(y);
         // we're multiplying by `γγ3` at the end but the error `x_` is only `γγ1`
@@ -198,7 +194,7 @@ function isPointOnBezierExtension3(ps, p) {
         const h = qaq(q6, q8);
         const h_ = q6_ + q8_ + abs(h[1]);
         // if the error is not too high too discern h away from zero
-        if (γγ3 * h_ < abs(estimate(h))) {
+        if (γγ3 * h_ < abs(eEstimate(h))) {
             return false; // <-- prefilter applied
         }
     }
@@ -252,7 +248,7 @@ function isPointOnBezierExtension3(ps, p) {
         const q7 = fes(vₓx, vᵧy);
         const q8 = fes(q7, v);
         const h = fes(q6, q8);
-        return sign(h) === 0; // <= calculation was exact
+        return eSign(h) === 0; // <= calculation was exact
     }
 }
 export { isPointOnBezierExtension3 };

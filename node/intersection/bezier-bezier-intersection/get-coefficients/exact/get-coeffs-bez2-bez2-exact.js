@@ -1,7 +1,6 @@
+import { twoProduct, expansionProduct, fastExpansionSum, scaleExpansion2, eMultBy2, eSign, eCompress } from "big-float-ts";
 import { getImplicitForm2ExactPb } from "../../../../implicit-form/exact/get-implicit-form2-exact.js";
 import { toPowerBasis2Exact } from "../../../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-import { twoProduct, expansionProduct, fastExpansionSum, scaleExpansion2, eMultBy2, eSign as _eSign } from "big-float-ts";
 import { getCoeffsBez1Bez2Exact } from "./get-coeffs-bez1-bez2-exact.js";
 import { getCoeffsBez2Bez1Exact } from "./get-coeffs-bez2-bez1-exact.js";
 const tp = twoProduct; // error -> 0
@@ -9,7 +8,6 @@ const sce = scaleExpansion2;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
 const em2 = eMultBy2;
-const eSign = _eSign;
 /**
  * Returns an error-free polynomial in 1 variable
  * whose roots are the parameter values of the intersection points of 2 order
@@ -147,7 +145,7 @@ function getCoeffsBez2Bez2Exact(ps1, ps2) {
     const q4 = fes(q2, q3);
     const v0 = fes(q4, v);
     const r = [v4, v3, v2, v1, v0];
-    return r;
+    return r.map(eCompress);
 }
 export { getCoeffsBez2Bez2Exact };
 //# sourceMappingURL=get-coeffs-bez2-bez2-exact.js.map

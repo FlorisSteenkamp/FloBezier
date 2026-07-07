@@ -1,14 +1,10 @@
 import { twoDiff, eMultDouble2, eMult, eAdd, eDiff, eNegativeOf } from "big-float-ts";
 
 
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const emd = eMultDouble2;
 const eme = eMult;
 const eae = eAdd;
 const ede = eDiff;
-
-
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const td = twoDiff;
 
 

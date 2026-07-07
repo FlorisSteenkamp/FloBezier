@@ -1,11 +1,10 @@
-import { type __Debug__ } from '../../../src/intersection/bezier-bezier-intersection-fast/debug.js';
+import { describe, expect, it } from '@jest/globals';
 import { getPss } from '../../helpers/intersection/get-pss.js';
 import { native } from '../../helpers/intersection-fast/native.js';
 import { geo } from '../../helpers/intersection-fast/geo.js';
 
 // the below is simply to increase coverage accuracy by activating debugging
-declare var globalThis: typeof global & { __debug__: __Debug__ };
-(globalThis.__debug__ as any) = { already: false, uid: 0, maxItersCount: 0 };
+(globalThis as any).__debug__ = { already: false, tree: undefined, currentIter: undefined as never, uid: 0, maxItersCount: 0 };
     
 
 describe('bezier3Intersection', function() {

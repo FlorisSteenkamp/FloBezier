@@ -1,5 +1,5 @@
-import { expect, assert } from 'chai';
-import { describe } from 'mocha';
+
+import { describe, expect, it } from '@jest/globals';
 import { bezierBezierIntersection, evaluateExact } from '../../../src/index.js';
 import { getPss } from '../../helpers/intersection/get-pss.js';
 import type { X } from "../../../src/index.js";
@@ -56,8 +56,12 @@ function testBezBezIntersection(
             const tA = tEA/2 + tSA/2;
             const tB = tEB/2 + tSB/2;
 
-            assert(tEA - tSA <= 4*eps, `expected ${tEA - tSA} to be less than or equal to ${4*eps}`);
-            assert(tEB - tSB <= 4*eps, `expected ${tEB - tSB} to be less than or equal to ${4*eps}`);
+            if (!(tEA - tSA <= 4*eps)) {
+                throw new Error(`expected ${tEA - tSA} to be less than or equal to ${4*eps}`);
+            }
+            if (!(tEB - tSB <= 4*eps)) {
+                throw new Error(`expected ${tEB - tSB} to be less than or equal to ${4*eps}`);
+            }
 
             const pA = evaluateExact(psA,tA);
             const pB = evaluateExact(psB,tB);
@@ -144,8 +148,8 @@ function checkTsAreAccurate(
     const eps1 = abs(tA - bestT1)/eps;
     const eps2 = abs(tB - bestT2)/eps;
 
-    expect(eps1).to.be.lessThanOrEqual(8);
-    expect(eps2).to.be.lessThanOrEqual(8);
+    expect(eps1).toBeLessThanOrEqual(8);
+    expect(eps2).toBeLessThanOrEqual(8);
 }
 
 
@@ -187,8 +191,8 @@ function ensureResultsAccurate(
     //'mean: ' + mean;
     //'stdDev: ' + stdDev;
 
-    expect(mean/eps).to.be.lessThanOrEqual(2);
-    expect(max/eps).to.be.lessThanOrEqual((2**1)*4);
+    expect(mean/eps).toBeLessThanOrEqual(2);
+    expect(max/eps).toBeLessThanOrEqual((2**1)*4);
 }
 
 

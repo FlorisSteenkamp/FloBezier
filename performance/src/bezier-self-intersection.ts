@@ -1,6 +1,7 @@
-import * as paper from 'paper';
 import { bezierSelfIntersection } from '../../src/index.js';
 import { toGrid } from './to-grid.js';
+
+declare const paper: any;
 
 
 const maxBitLength = 45;

@@ -1,9 +1,8 @@
+import { twoProduct, ddMultBy2, ddMultDouble2, ddMultDd, ddAddDd } from "double-double";
 import { getImplicitForm3DdWithRunningError } from "../../../../implicit-form/double-double/get-implicit-form3-dd-with-running-error.js";
 import { γγ } from "../../../../error-analysis/error-analysis.js";
 import { toPowerBasis3DdWithRunningError } from '../../../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js';
-import { twoProduct, ddMultBy2, ddMultDouble2, ddMultDd, ddAddDd } from "double-double";
 
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const tp  = twoProduct;
 const qm2 = ddMultBy2;
 const qmd = ddMultDouble2;
@@ -174,7 +173,7 @@ function getCoeffsBez3Bez3Dd(
     const $c1d2 = $c1*$d2;
     const $c1d3 = $c1*$d3;
     const $c2d1 = $c2*$d1;
-    const $c2c2 = $c2*$c2;    
+    const $c2c2 = $c2*$c2;
     const $c2c3 = $c2*$c3;
     const $c2d0 = $c2*d0;
     const $c2d2 = $c2*$d2;
@@ -239,7 +238,7 @@ function getCoeffsBez3Bez3Dd(
     const c2d3 = qmq(c2,d3);
     const c2d3_ = c2_*_d3 + _c2*d3_ + 2*abs($c2d3);
     const c3c3 = qmq(c3,c3);
-    const c3c3_ = 2*(c3_*_c3 + abs($c3c3));
+    const c3c3_ = 2*(c3_*_c3 + $c3c3);
     const c3d0 = qmd(d0,c3);
     const c3d0_ = _d0*c3_ + abs($c3d0);
     const c3d1 = qmq(c3,d1);
@@ -1304,7 +1303,7 @@ function getCoeffsBez3Bez3Dd(
 
     return {
         coeffs:   [v9, v8, v7, v6, v5, v4, v3, v2, v1, v0],
-        errBound: [γγ3*v9_, γγ3*v8_, γγ3*v7_, γγ3*v6_, γγ3*v5_, γγ3*v4_, γγ3*v3_, γγ3*v2_, γγ3*v1_, γγ3*v0_]
+        errBound: [v9_, v8_, v7_, v6_, v5_, v4_, v3_, v2_, v1_, v0_]  // still to be multiplied by `γγ3`
     };
 }
 

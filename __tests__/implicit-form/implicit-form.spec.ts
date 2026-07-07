@@ -2,8 +2,8 @@
 // Tests double, double-double and exact versions.
 ////////////////////////////////////////////////////
 
-import { expect, assert } from 'chai';
-import { describe } from 'mocha';
+
+import { describe, expect, it } from '@jest/globals';
 import { 
     getImplicitForm1, getImplicitForm2,  getImplicitForm3,
     getImplicitForm1DdWithRunningError, getImplicitForm2DdWithRunningError, getImplicitForm3DdWithRunningError,
@@ -149,7 +149,7 @@ const implFormExactFs = [,
 
 describe('implicit form', function() {
     it('it should find the implicit form (including error bound) of some beziers in double precision', 
-	function() {
+    function() {
         let i = 0;
         let j = 0;
         while (i < num) {
@@ -170,7 +170,7 @@ describe('implicit form', function() {
         }
     });
     it('it should find the implicit form (including error bound) of some beziers in double-double precision', 
-	function() {
+    function() {
         let i = 0;
         let j = 0;
         while (i < num) {
@@ -192,7 +192,7 @@ describe('implicit form', function() {
         }
     });
     it('it should find the implicit form (including error bound) of some specific beziers in double-double precision', 
-	function() {
+    function() {
         const a = 2**0;
         const b = 2**0;
         const bzs: number[][][] = [];
@@ -226,43 +226,43 @@ describe('implicit form', function() {
         {
             const ps = [[1,1],[1,1]];
             const r = getImplicitForm1Exact(ps);
-            expect(r).to.be.undefined;
+            expect(r).toBeUndefined();
         }
 
         {
             const ps = [[1,1],[2,2],[3,3]];
             const r = getImplicitForm2Exact(ps);
-            expect(r).to.eql({ vₓ: [-0,-2], vᵧ: [0,2], v: [0] });
+            expect(r).toEqual({ vₓ: [-0,-2], vᵧ: [0,2], v: [0] });
         }
 
         {
             const ps = [[1,1],[2,2],[3,3]];
             const r = getImplicitForm2Exact(ps);
-            expect(r).to.eql({ vₓ: [-0,-2], vᵧ: [0,2], v: [0] });
+            expect(r).toEqual({ vₓ: [-0,-2], vᵧ: [0,2], v: [0] });
         }
 
         {
             const ps = [[1,1],[3,3]];
             const r = getImplicitForm1Exact(ps);
-            expect(r).to.eql({ vₓ: [-0,-2], vᵧ: [0,2], v: [0] });
+            expect(r).toEqual({ vₓ: [-0,-2], vᵧ: [0,2], v: [0] });
         }
 
         {
             const ps = [[1,1],[2,2],[3,3],[4,4]];
             const r = getImplicitForm3Exact(ps);
-            expect(r).to.eql({ vₓ: [-3], vᵧ: [3], v: [0] });
+            expect(r).toEqual({ vₓ: [-3], vᵧ: [3], v: [0] });
         }
 
         {
             const ps = [[1,1],[1,1],[1,1],[1,1]];
             const r = getImplicitForm3Exact(ps);
-            expect(r).to.be.undefined;
+            expect(r).toBeUndefined();
         }
 
         {
             const ps = [[0,0],[1,1],[2,1],[3,0]];
             const r = getImplicitForm3Exact(ps);
-            expect(r).to.eql({ vₓₓ: [-9], vₓᵧ: [-0], vᵧᵧ: [-0], vₓ: [27], vᵧ: [-27], v: [-0] });
+            expect(r).toEqual({ vₓₓ: [-9], vₓᵧ: [-0], vᵧᵧ: [-0], vₓ: [27], vᵧ: [-27], v: [-0] });
         }
     });
 });
@@ -304,10 +304,12 @@ function testImplictForm(
             errBound  : ${errBound}
             `;
 
-        assert(errActual <= errBound, errStr);
+        if (!(errActual <= errBound)) {
+            throw new Error(errStr);
+        }
 
         if (implExclErr !== undefined) {
-            expect(rEst).to.eql(implExclErr[key]);
+            expect(rEst).toEqual(implExclErr[key]);
         }
     }
 }

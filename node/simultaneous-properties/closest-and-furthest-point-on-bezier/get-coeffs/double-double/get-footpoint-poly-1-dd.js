@@ -1,9 +1,7 @@
 import { twoProduct, ddAddDd, ddDiffDd, ddMultByNeg2 } from "double-double";
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const tp = twoProduct;
 const qaq = ddAddDd;
 const qmn2 = ddMultByNeg2;
-const qdifq = ddDiffDd;
 /**
  * Returns the polynomial whose roots are all the `t` values on the given bezier
  * curve such that the line from the given point to the point on the bezier
@@ -36,7 +34,7 @@ function getFootpointPoly1Dd(ps, p) {
     //const t1 = (x11 + y11) + (s2 - 2*s1)
     const t1 = qaq(qaq(x11, y11), qaq(s2, qmn2(s1)));
     //const t0 = s1 - s2;
-    const t0 = qdifq(s1, s2);
+    const t0 = ddDiffDd(s1, s2);
     return [t1, t0];
 }
 export { getFootpointPoly1Dd };

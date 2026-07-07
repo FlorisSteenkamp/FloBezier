@@ -1,9 +1,5 @@
 import { twoDiff, eEstimate, eMult, eAdd } from 'big-float-ts';
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const estimate = eEstimate;
 const td = twoDiff;
-const emult = eMult;
-const eadd = eAdd;
 const eps = Number.EPSILON;
 /**
  * Returns the distance interval squared given the root interval (currently
@@ -39,8 +35,8 @@ function rootIntervalToDistanceSquaredInterval(box, p) {
         /** distance to 1st corner of interval box - `distance² = x² + y²` */
         const ax = td(a, x); // a - x
         const by = td(b, y); // b - y
-        const dc1Exact = eadd(emult(ax, ax), emult(by, by)); // ax**2 + bx**2
-        const dc1 = estimate(dc1Exact);
+        const dc1Exact = eAdd(eMult(ax, ax), eMult(by, by)); // ax**2 + bx**2
+        const dc1 = eEstimate(dc1Exact);
         const dc1Min = dc1 * (1 - eps); // distance minus max error
         const dc1Max = dc1 * (1 + eps); // distance plus max error
         if (dc1Min <= minDSquared) {

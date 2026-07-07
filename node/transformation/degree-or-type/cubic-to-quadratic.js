@@ -1,10 +1,6 @@
 import { expansionProduct, twoDiff, eSign, eEstimate, eDiff, scaleExpansion, twoSum } from 'big-float-ts';
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const epr = expansionProduct;
 const td = twoDiff;
-const ediff = eDiff;
-const esign = eSign;
-const estimate = eEstimate;
 const sce = scaleExpansion;
 const ts = twoSum;
 /**
@@ -43,8 +39,8 @@ function cubicToQuadratic(ps, preserveTangents = false) {
                 //   (3*(x1 + x2) - (x0 + x3)) / 4, 
                 //   (3*(y1 + y2) - (y0 + y3)) / 4
                 // ]
-                estimate(ediff(sce(ts(x1 / 4, x2 / 4), 3), ts(x0 / 4, x3 / 4))),
-                estimate(ediff(sce(ts(y1 / 4, y2 / 4), 3), ts(y0 / 4, y3 / 4)))
+                eEstimate(eDiff(sce(ts(x1 / 4, x2 / 4), 3), ts(x0 / 4, x3 / 4))),
+                eEstimate(eDiff(sce(ts(y1 / 4, y2 / 4), 3), ts(y0 / 4, y3 / 4)))
             ],
             p3
         ];
@@ -76,18 +72,18 @@ function llIntersection(l1, l2) {
     const y1_ = td(y2, y1);
     const x2_ = td(x4, x3);
     const y2_ = td(y4, y3);
-    const denom = ediff(epr(x2_, y1_), epr(y2_, x1_));
-    if (esign(denom) === 0) {
+    const denom = eDiff(epr(x2_, y1_), epr(y2_, x1_));
+    if (eSign(denom) === 0) {
         // definitely parallel
         return undefined;
     }
     const x3_ = td(x3, x1);
     const y3_ = td(y3, y1);
-    const b = ediff(epr(y3_, x1_), epr(x3_, y1_));
-    const bb = estimate(b) / estimate(denom);
+    const b = eDiff(epr(y3_, x1_), epr(x3_, y1_));
+    const bb = eEstimate(b) / eEstimate(denom);
     return [
-        x3 + bb * estimate(x2_),
-        y3 + bb * estimate(y2_)
+        x3 + bb * eEstimate(x2_),
+        y3 + bb * eEstimate(y2_)
     ];
 }
 export { cubicToQuadratic };

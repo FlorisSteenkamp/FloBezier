@@ -1,10 +1,8 @@
 import { twoProduct, eDiff, fastExpansionSum, eSign } from "big-float-ts";
 
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
 const tp = twoProduct;
 const fes = fastExpansionSum;
-const esign = eSign;
-const ediff = eDiff;
+
 
 const u = Number.EPSILON / 2;
 const abs = Math.abs;
@@ -67,11 +65,11 @@ function isCubicReallyQuad(ps: number[][]) {
     // unable to filter - go slow and exact
 
     return (
-        esign(ediff(
+        eSign(eDiff(
             fes([x3], tp(3,x1)),
             fes([x0], tp(3,x2))
         )) === 0 &&
-        esign(ediff(
+        eSign(eDiff(
             fes([y3], tp(3,y1)),
             fes([y0], tp(3,y2))
         )) === 0

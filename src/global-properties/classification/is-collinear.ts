@@ -1,7 +1,4 @@
-import { orient2d as _orient2d } from "big-float-ts";
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const orient2d = _orient2d;
+import { orient2d } from "big-float-ts";
 
 
 /**

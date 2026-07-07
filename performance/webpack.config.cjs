@@ -4,8 +4,8 @@ const ResolveTypeScriptPlugin = require("resolve-typescript-plugin").default;
 
 
 module.exports = {
-    // mode: 'production',
-    mode: 'development',
+    mode: 'production',
+    // mode: 'development',
     entry: './src/test-bezier-intersection.ts',
     resolve: {
         alias: {
@@ -24,7 +24,12 @@ module.exports = {
         rules: [
             {
                 test: /\.tsx?$/,
-                use: 'ts-loader',
+                use: {
+                    loader: 'ts-loader',
+                    options: {
+                        transpileOnly: true
+                    }
+                },
                 exclude: /node_modules/
             }
         ]

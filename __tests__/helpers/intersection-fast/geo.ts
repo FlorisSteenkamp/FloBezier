@@ -1,8 +1,8 @@
+import { describe, expect, it } from '@jest/globals';
 import type { X } from '../../../src/index.js';
 import { updDs } from './upd-ds.js';
 import { checkResults } from './check-results.js';
 import { bezierBezierIntersectionFast } from '../../../src/index.js';
-import { expect } from 'chai';
 
 
 /**
@@ -24,7 +24,7 @@ function geo(
         total += tss.length;
         const xPairs = xPairss[i/2];
 
-        expect(xPairs.length).to.eql(tss.length);
+        expect(xPairs.length).toEqual(tss.length);
         
         updDs(ds, xPairs, tss.map(ts => ts[0]));
     }

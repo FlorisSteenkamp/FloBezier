@@ -1,9 +1,8 @@
-import { γγ } from "../../../../error-analysis/error-analysis.js";
 import { ddAddDd, ddMultDouble2, ddMultDd } from "double-double";
+import { γγ } from "../../../../error-analysis/error-analysis.js";
 import { getImplicitForm1DdWithRunningError } from "../../../../implicit-form/double-double/get-implicit-form1-dd-with-running-error.js";
 import { toPowerBasis1DdWithRunningError } from "../../../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js";
 
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const qaq = ddAddDd;
 const qmd = ddMultDouble2;
 const qmq = ddMultDd;
@@ -32,7 +31,10 @@ const γγ3 = γγ(3);
  * 
  * @internal
  */
-function getCoeffsBez1Bez1Dd(ps1: number[][], ps2: number[][]) {
+function getCoeffsBez1Bez1Dd(
+        ps1: number[][],
+        ps2: number[][]) {
+
     const {
         coeffs: { vₓ, vᵧ, v },  // all these are double-doubles
         errorBound: { v_ }
@@ -40,6 +42,7 @@ function getCoeffsBez1Bez1Dd(ps1: number[][], ps2: number[][]) {
 
     const [[c1,[,c0]],[d1,[,d0]]] = toPowerBasis1DdWithRunningError(ps2);
 
+    // Double precision versions of the above variables (i.e. the "high" part of the double-double)
     const $c1 = c1[1];
     const $d1 = d1[1];
     const $vₓ = vₓ[1];
@@ -83,7 +86,7 @@ function getCoeffsBez1Bez1Dd(ps1: number[][], ps2: number[][]) {
 
     return {
         coeffs:   [v1, v0],
-        errBound: [γγ3*v1_, γγ3*v0_]
+        errBound: [v1_, v0_]  // still to be multiplied by `γγ3`
     };
 }
 

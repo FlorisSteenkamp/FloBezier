@@ -179,8 +179,8 @@ function getCoincidingSelfIntersections(
     // this is a *very* rare case
     for (const t1 of ts1) {
         for (const t2 of ts2) {
-            const ri1 = { tS: t1-eps2, tE: t1+eps2, multiplicity: 1 };
-            const ri2 = { tS: t2-eps2, tE: t2+eps2, multiplicity: 1 };
+            const ri1 = { t: t1, tS: t1-eps2, tE: t1+eps2, multiplicity: 1 };
+            const ri2 = { t: t2, tS: t2-eps2, tE: t2+eps2, multiplicity: 1 };
             const box = getIntervalBox(ps1, [t1-eps2, t1+eps2]);
             // const box2 = getIntervalBox(ps2, [t2-eps2, t2+eps2]);
             xs.push({
@@ -309,7 +309,7 @@ function handlePointDegenerateCases(
             const p2 = ps2[0];
             if (p1[0] === p2[0] && p1[1] === p2[1]) {
                 // literally the same points - very degenerate
-                const ri = { tS: 0.5, tE: 0.5, multiplicity: 1 };
+                const ri = { t: 0.5, tS: 0.5, tE: 0.5, multiplicity: 1 };
                 return [
                     { 
                         p: p1, kind: 6, box,
@@ -324,8 +324,8 @@ function handlePointDegenerateCases(
             // keep TypeScript happy; at this point `tFromXY` cannot return `undefined`
             return tFromXY(ps2, p1).map(ri => ({
                 p: p1, kind: 6, box,
-                t1: 0.5, ri1: { tS: 0.5, tE: 0.5, multiplicity: 1 },
-                t2: mid(ri), ri2: ri,
+                t1: 0.5, ri1: { t: 0.5, tS: 0.5, tE: 0.5, multiplicity: 1 },
+                t2: ri.t, ri2: ri,
             }));
         }
         return [];
@@ -338,7 +338,7 @@ function handlePointDegenerateCases(
         return tFromXY(ps1, p2).map(ri => ({
             p: p2, kind: 6, box,
             t1: mid(ri), ri1: ri,
-            t2: 0.5, ri2: { tS: 0.5, tE: 0.5, multiplicity: 1 },
+            t2: 0.5, ri2: { t: 0.5, tS: 0.5, tE: 0.5, multiplicity: 1 },
         }));
     }
 

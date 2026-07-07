@@ -1,19 +1,9 @@
 import type { Iteration } from './iteration.js';
 import type { IterationExtras, __Debug__ } from './debug.js';
-import { geoClip as _geoClip } from './clip/geo-clip.js';
-import { fromTo as _fromToVect } from 'flo-vector2d';
-import { toLength as _toLength } from 'flo-vector2d';
-import { len as _len } from 'flo-vector2d';
-import { translate as _translate } from 'flo-vector2d';
-import { getDistanceToLineFunction as _getDistanceToLineFunction } from "./get-distance-to-line-function.js";
-import { fromToInclErrorBound as _fromToInclErrorBound } from '../../transformation/split/from-to-incl-error-bound.js';
-
-const getDistanceToLineFunction = _getDistanceToLineFunction;
-const geoClip = _geoClip;
-const fromToInclErrorBound = _fromToInclErrorBound;
-const fromToVect = _fromToVect;
-const translate = _translate;
-const toLength = _toLength;
+import { fromTo as fromToVect, translate, toLength } from 'flo-vector2d';
+import { geoClip } from './clip/geo-clip.js';
+import { getDistanceToLineFunction } from "./get-distance-to-line-function.js";
+import { fromToInclErrorBound } from '../../transformation/split/from-to-incl-error-bound.js';
 
 
 /** 

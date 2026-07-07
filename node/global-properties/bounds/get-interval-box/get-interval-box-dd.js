@@ -1,21 +1,10 @@
+import { ddDiffDd, ddDivDdWithError, ddAddDouble, ddMultDd, ddMultDouble2, ddAddDd, ddMultBy2, ddMin, ddMax, } from "double-double";
 import { evalDeCasteljauDd } from '../../../local-properties-at-t/evaluate/double-double/eval-de-casteljau-dd.js';
 import { evalDeCasteljauError } from '../../../local-properties-at-t/evaluate/eval-de-casteljau-error.js';
-import { γγ } from '../../../error-analysis/error-analysis.js';
-import { ddDiffDd as ddDiffDd_, ddDivDdWithError as ddDivDdWithError_, ddAddDouble as ddAddDouble_, ddMultDd as ddMultDd_, ddMultDouble2 as ddMultDouble2_, ddAddDd as ddAddDd_, ddMultBy2 as ddMultBy2_, ddMin as ddMin_, ddMax as ddMax_, } from "double-double";
-const ddDiffDd = ddDiffDd_;
-const ddDivDdWithError = ddDivDdWithError_;
-const ddAddDouble = ddAddDouble_;
-const ddMultDd = ddMultDd_;
-const ddMultDouble2 = ddMultDouble2_;
-const ddAddDd = ddAddDd_;
-const ddMultBy2 = ddMultBy2_;
-const ddMin = ddMin_;
-const ddMax = ddMax_;
-const u = Number.EPSILON / 2;
-const uu = u * u;
-const abs = Math.abs;
-const qdq = ddDiffDd;
+import { γγ3, u, uu } from '../../../error-analysis/error-analysis.js';
+const { abs } = Math;
 const qOne = [0, 1];
+const qdq = ddDiffDd;
 const qad = ddAddDouble;
 const qaq = ddAddDd;
 const qmq = ddMultDd;
@@ -24,7 +13,6 @@ const qm2 = ddMultBy2;
 const qDivQuadWithError = ddDivDdWithError;
 const qMin = ddMin;
 const qMax = ddMax;
-const γγ3 = γγ(3);
 /**
  * Returns an axis-aligned-box that is guaranteed to engulf the entire
  * given bezier curve from `t1` to `t2`. The returned box is given as an array

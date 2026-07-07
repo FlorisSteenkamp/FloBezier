@@ -1,11 +1,11 @@
+import { roots } from "flo-poly";
 import { getFootpointPoly3 } from "./get-coeffs/double/get-footpoint-poly-3.js";
 import { getFootpointPoly2 } from "./get-coeffs/double/get-footpoint-poly-2.js";
 import { getFootpointPoly1 } from "./get-coeffs/double/get-footpoint-poly-1.js";
 import { distanceBetween, squaredDistanceBetween } from "flo-vector2d";
-import { allRoots } from "flo-poly";
 import { evalDeCasteljau } from "../../local-properties-at-t/evaluate/double/eval-de-casteljau.js";
 
-const sqrt = Math.sqrt;
+const { sqrt } = Math;
 
 
 /**
@@ -46,7 +46,7 @@ function closestPointOnBezier(
         throw new Error('The given bezier curve must be of order <= 3.');
     }
 
-    const ts = allRoots(poly, 0, 1);
+    const ts = roots(poly, 0, 1)?.map(r => r.t) || [];
 
     if (inclEndpoints) {
         ts.push(0);

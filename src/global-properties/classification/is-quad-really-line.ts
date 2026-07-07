@@ -1,8 +1,5 @@
 import { eDiff, eSign, twoSum } from "big-float-ts";
 
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const ediff = eDiff;
-const esign = eSign;
 const ts = twoSum;
 
 const { abs } = Math;
@@ -54,8 +51,8 @@ function isQuadReallyLine(ps: number[][]) {
 
     // unable to filter - go slow and exact
     return (
-        esign(ediff(ts(x0, x2), [2*x1])) === 0 &&
-        esign(ediff(ts(y0, y2), [2*y1])) === 0
+        eSign(eDiff(ts(x0, x2), [2*x1])) === 0 &&
+        eSign(eDiff(ts(y0, y2), [2*y1])) === 0
     );
 }
 

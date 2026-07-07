@@ -1,11 +1,8 @@
 import { toPowerBasis1Exact } from "../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-import { scaleExpansion2, eDiff, eNegativeOf } from "big-float-ts";
-import { eSign as _eSign } from 'big-float-ts';
+import { scaleExpansion2, eDiff, eNegativeOf, eCompress } from "big-float-ts";
+import { eSign } from 'big-float-ts';
 const sce = scaleExpansion2;
-const edif = eDiff;
 const eno = eNegativeOf;
-const eSign = _eSign;
 /**
  * Returns the *exact* implicit form of the given linear bezier curve (a line
  * segment) or `undefined` if the line degenerates to a point.
@@ -41,7 +38,7 @@ function getImplicitForm1ExactPb(pspb) {
     const vₓ = eno(b1);
     const vᵧ = a1;
     //const v = a1*b0 - a0*b1;
-    const v = edif(sce(a0, b1), sce(b0, a1));
+    const v = eCompress(eDiff(sce(a0, b1), sce(b0, a1)));
     return { vₓ, vᵧ, v };
 }
 export { getImplicitForm1Exact, getImplicitForm1ExactPb };

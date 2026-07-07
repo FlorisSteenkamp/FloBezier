@@ -60,8 +60,8 @@ function getEndpointIntersections(
 
         return [{
             p: box[0], kind: 4, box,
-            t1: tA, ri1: { tS: tA, tE: tA, multiplicity: 1 },
-            t2: tB, ri2: { tS: tB, tE: tB, multiplicity: 1 }
+            t1: tA, ri1: { t: tA, tS: tA, tE: tA, multiplicity: 1 },
+            t2: tB, ri2: { t: tB, tS: tB, tE: tB, multiplicity: 1 }
         }];
     }
 
@@ -85,10 +85,10 @@ function getEndpointIntersections(
     const boxS = intersectBoxes(boxSA,boxSB)!;
     const boxE = intersectBoxes(boxEA,boxEB)!;
 
-    const riSA = { tS: tSAMin, tE: tSAMax, multiplicity: 1 };
-    const riSB = { tS: tSBMin, tE: tSBMax, multiplicity: 1 };
-    const riEA = { tS: tEAMin, tE: tEAMax, multiplicity: 1 };
-    const riEB = { tS: tEBMin, tE: tEBMax, multiplicity: 1 };
+    const riSA = { t: tSAMin, tS: tSAMin, tE: tSAMax, multiplicity: 1 };
+    const riSB = { t: tSBMin, tS: tSBMin, tE: tSBMax, multiplicity: 1 };
+    const riEA = { t: tEAMin, tS: tEAMin, tE: tEAMax, multiplicity: 1 };
+    const riEB = { t: tEBMin, tS: tEBMin, tE: tEBMax, multiplicity: 1 };
     return [
         { 
             p: getPFromBox(boxS), kind: 5, box: boxS,

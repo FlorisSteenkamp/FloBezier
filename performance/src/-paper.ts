@@ -1,9 +1,10 @@
-import * as Paper from 'paper' ;
 import { settings } from './settings.js'; 
 import { draw, ctx } from './draw-stuff.js';
 import { X } from "../../src/index.js";
 import { showResults } from './show-results.js';
 import { updDs } from './upd-ds.js';
+
+declare const paper: any;
 
 
 const { num, timingOnly } = settings;

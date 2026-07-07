@@ -1,4 +1,4 @@
-import { allRoots } from "flo-poly";
+import { roots } from "flo-poly";
 /**
  * Returns the given order 1,2 or 3 bezier curve's inflection point `t`
  * parameter values in ascending order.
@@ -29,7 +29,7 @@ function getInflections(ps) {
     const a = bx * cy - by * cx;
     const b = ax * cy - ay * cx;
     const c = ax * by - ay * bx;
-    return allRoots([a, b, c], 0, 1);
+    return roots([a, b, c], 0, 1).map(r => r.t);
 }
 export { getInflections };
 //# sourceMappingURL=get-inflections.js.map

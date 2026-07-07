@@ -1,4 +1,4 @@
-import { allRootsCertified, mid } from "flo-poly";
+import { roots } from "flo-poly";
 import { getIntervalBox } from "../../global-properties/bounds/get-interval-box/get-interval-box.js";
 import { getPFromBox } from "../../intersection/bezier-bezier-intersection/x.js";
 import { rootIntervalToDistanceSquaredInterval } from './root-interval-to-distance-squared-interval.js';
@@ -29,15 +29,15 @@ const { sqrt } = Math;
  */
 function closestPointOnBezierCertified(ps, p, lb = 0, ub = 1) {
     const { polyDd, polyE, getPolyExact } = getFootPointsOnBezierPolysCertified(ps, p);
-    const ris = allRootsCertified(polyDd, lb, ub, polyE, getPolyExact);
-    ris.push({ tS: lb, tE: lb, multiplicity: 1 });
-    ris.push({ tS: ub, tE: ub, multiplicity: 1 });
+    const ris = roots(polyDd, lb, ub, polyE, getPolyExact);
+    ris.push({ t: lb, tS: lb, tE: lb, multiplicity: 1 });
+    ris.push({ t: ub, tS: ub, tE: ub, multiplicity: 1 });
     const infos = ris.map((ri) => {
         const box = getIntervalBox(ps, [ri.tS, ri.tE]);
         const dSquaredI = rootIntervalToDistanceSquaredInterval(box, p);
         return {
             p: getPFromBox(box),
-            t: mid(ri),
+            t: ri.t,
             d: (sqrt(dSquaredI[0]) + sqrt(dSquaredI[1])) / 2,
             dSquaredI,
             box,

@@ -1,5 +1,5 @@
 import { toPowerBasis1ErrorCounters } from '../../to-power-basis/to-power-basis/to-power-basis-error-counters.js';
-const abs = Math.abs;
+const { abs } = Math;
 /**
  * Returns a representation of the error (from which an absolute error bound
  * can be calculated) when calculating the implicit form of the given bezier

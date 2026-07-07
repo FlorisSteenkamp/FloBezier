@@ -1,13 +1,10 @@
 import { eCompress, eEstimate } from 'big-float-ts';
-import { expect, assert, use } from 'chai';
-import { allRootsCertifiedSimplified } from 'flo-poly';
-import { describe } from 'mocha';
+import { describe, expect, it } from '@jest/globals';
 import { squares } from 'squares-rng';
 import { bezierBezierIntersectionFast, bezierSelfIntersection, classify, evaluate, evaluateExact, generateSelfIntersecting, isPointOnBezierExtension, tFromXY } from '../../src/index.js';
-import { nearly } from '../helpers/chai-extend-nearly.js';
 import { getRandomBezier } from '../helpers/get-random-bezier.js';
 
-use(nearly);
+
 
 const eps = Number.EPSILON;
 
@@ -33,125 +30,124 @@ function getPointExactlyOnCurve(order: 0|1|2|3, seed: number) {
 
 
 describe('tFromXY', function() {
-	it('it should return the correct `t` value given `x` and `y` values for some bezier curves',
-	function() {
-		{
+    it('it should return the correct `t` value given `x` and `y` values for some bezier curves',
+    function() {
+        {
 
             const cubic1 = [[6.4, 4.8], [15, 5], [1, 4], [10, 4]];
-const cubic2 = [[9.4, 0.4], [9.3, 10.3], [8.1, 0.1], [7.53125, 5.5]];
-const xs = bezierBezierIntersectionFast(cubic1, cubic2); //=> [[0.054810011880009446, 0.9516779285879586], ...
-// xs.length === 9
-const p1 = evaluate(cubic1,xs[0][0]);//?
-const p2 = evaluate(cubic2,xs[0][1]);//?
-// p === [7.617926141015109, 4.822433357454532]
+            const cubic2 = [[9.4, 0.4], [9.3, 10.3], [8.1, 0.1], [7.53125, 5.5]];
+            const xs = bezierBezierIntersectionFast(cubic1, cubic2); //=> [[0.054810011880009446, 0.9516779285879586], ...
+            // xs.length === 9
+            const p1 = evaluate(cubic1,xs[0][0]);//?
+            const p2 = evaluate(cubic2,xs[0][1]);//?
+            // p === [7.617926141015109, 4.822433357454532]
 
             for (let order=1;order<=3;order++) {
                 for (let i=0;i<=25;i++) {
                     const { ps, p, t: tExact } = getPointExactlyOnCurve(order as 0|1|2|3,i);
                     const ris = tFromXY(ps, p);
                     // it could be > 1 but would is unlikely as it would have to be at a crunode
-                    expect(ris.length).to.eql(1);  
+                    expect(ris.length).toEqual(1);  
                     const ri = ris[0];
                     // again, it could be > 1 but would is unlikely as it would have to be at a crunode
-                    expect(ri.multiplicity).to.eql(1);
+                    expect(ri.multiplicity).toEqual(1);
                     const span = ri.tE - ri.tS;
-                    assert(
-                        span <= 4*eps && ri.tS <= tExact && ri.tE >= tExact,
-                        'The `t` value is incorrect since it is not within bounds'
-                    );
+                    if (!(span <= 4*eps && ri.tS <= tExact && ri.tE >= tExact)) {
+                        throw new Error('The `t` value is incorrect since it is not within bounds');
+                    }
                 }
             }
-		}
-
-		{
-            const ps = getRandomBezier_(0)(0);
-			const p = ps[0];
-			const ris = tFromXY(ps, p);
-            expect(ris).to.eql([{ tS: 0.5, tE: 0.5, multiplicity: 1 }]);
-		}
+        }
 
         {
             const ps = getRandomBezier_(0)(0);
-			const p = [ps[0][0], ps[0][1] + 0.001];
-			const ris = tFromXY(ps, p);
-            expect(ris).to.eql([]);
-		}
+            const p = ps[0];
+            const ris = tFromXY(ps, p);
+            expect(ris).toEqual([{ t: 0.5, tS: 0.5, tE: 0.5, multiplicity: 1 }]);
+        }
+
+        {
+            const ps = getRandomBezier_(0)(0);
+            const p = [ps[0][0], ps[0][1] + 0.001];
+            const ris = tFromXY(ps, p);
+            expect(ris).toEqual([]);
+        }
 
         {
             const ps = [[1,2],[3,4],[4,3],[2,1],[2,1]];
-            expect(() => tFromXY(ps,[1,2])).to.throw();
+            expect(() => tFromXY(ps,[1,2])).toThrow();
         }
 
         // Lines
         {
             const ps = [[1,1],[1,1]];
             const r = tFromXY(ps,[1,1]);
-            expect(r).to.eql([{ tS: 0.5, tE: 0.5, multiplicity: 1 }]);
+            expect(r).toEqual([{ t: 0.5, tS: 0.5, tE: 0.5, multiplicity: 1 }]);
         }
 
         {
             const ps = [[1,1],[10,1]];
             const r = tFromXY(ps,[2,1]);
-            expect(r[0].tS).to.be.greaterThanOrEqual(1/9 - 2*eps);
-            expect(r[0].tE).to.be.lessThanOrEqual(1/9 + 2*eps);
+            expect(r[0].tS).toBeGreaterThanOrEqual(1/9 - 2*eps);
+            expect(r[0].tE).toBeLessThanOrEqual(1/9 + 2*eps);
         }
 
         {
             const ps = [[1,1],[10,1]];
             // the precondition isn't met to guarantee certification
-            expect(tFromXY(ps,[2,1.1])).to.eql([]);
+            expect(tFromXY(ps,[2,1.1])).toEqual([]);
         }
         
         {
             const ps = [[1,1],[3,3]];
             const r = tFromXY(ps,[2,2]);
-            expect(r[0].tS).to.be.greaterThanOrEqual(0.5 - 2*eps);
-            expect(r[0].tE).to.be.lessThanOrEqual(0.5 + 2*eps);
+            expect(r[0].tS).toBeGreaterThanOrEqual(0.5 - 2*eps);
+            expect(r[0].tE).toBeLessThanOrEqual(0.5 + 2*eps);
         }
 
         {
             const ps = [[1,1],[1,3]];
             const r = tFromXY(ps,[1,2]);
-            expect(r[0].tS).to.be.greaterThanOrEqual(0.5 - 2*eps);
-            expect(r[0].tE).to.be.lessThanOrEqual(0.5 + 2*eps);
+            expect(r[0].tS).toBeGreaterThanOrEqual(0.5 - 2*eps);
+            expect(r[0].tE).toBeLessThanOrEqual(0.5 + 2*eps);
         }
 
         // quadratics
         {
             const ps = [[1,1],[10,1], [20,1]];
             const r = tFromXY(ps,[2,1]);
-            expect(r.length).to.eql(1);
+            expect(r.length).toEqual(1);
         }
 
         {
             const ps = [[1,1],[1,10],[1,20]];
             const r = tFromXY(ps,[1,2]);
-            expect(r.length).to.eql(1);
+            expect(r.length).toEqual(1);
         }
         
         {
             const ps = [[1,1],[1,1],[1,1]];
             const r = tFromXY(ps,[1,1]);
-            expect(r).to.eql([{ tS: 0.5, tE: 0.5, multiplicity: 1 }]);
+            expect(r).toEqual([{ t: 0.5, tS: 0.5, tE: 0.5, multiplicity: 1 }]);
         }
 
         // cubics
         {
             const ps = [[1,1],[10,1],[20,1],[30,1]];
             const r = tFromXY(ps,[2,1]);
-            expect(r.length).to.eql(1);
+            expect(r.length).toEqual(1);
         }
 
         {
             const ps = [[1,1],[1,10],[1,20],[1,30]];
             const r = tFromXY(ps,[1,2]);
-            expect(r.length).to.eql(1);
+            expect(r.length).toEqual(1);
         }
         
         {
             const ps = [[1,1],[1,1],[1,1],[1,1]];
             const r = tFromXY(ps,[1,1]);
-            expect(r).to.eql([{ tS: 0.5, tE: 0.5, multiplicity: 1 }]);
+            expect(r).toEqual([{ t: 0.5, tS: 0.5, tE: 0.5, multiplicity: 1 }]);
         }
         // self-intersecting
         {
@@ -174,17 +170,15 @@ const p2 = evaluate(cubic2,xs[0][1]);//?
             // The results below are *certified* due to the preconditions being met.
             {
                 const r = tFromXY(ps,p1);
-                // @ts-ignore - otherwise TypeScript gives an error on nearly
-                expect(r).to.be.nearly(2**4, [
-                    { tS: 0.25, tE: 0.25, multiplicity: 1 },
-                    { tS: 0.75, tE: 0.75, multiplicity: 1 }
+                expect(r).toBeNearly(2**4, [
+                    { t: 0.25, tS: 0.25, tE: 0.25, multiplicity: 1 },
+                    { t: 0.75, tS: 0.75, tE: 0.75, multiplicity: 1 }
                 ]);
             }
             {
                 const r = tFromXY(ps,p2);
-                // @ts-ignore - otherwise TypeScript gives an error on nearly
-                expect(r).to.be.nearly(2**4, [
-                    { tS: 0.75, tE: 0.75, multiplicity: 1 }
+                expect(r).toBeNearly(2**4, [
+                    { t: 0.75, tS: 0.75, tE: 0.75, multiplicity: 1 }
                 ]);
             }
         }
@@ -207,5 +201,5 @@ const p2 = evaluate(cubic2,xs[0][1]);//?
             tFromXY(ps,p1);  //=> [{ tS: 0.125, tE: 0.125, multiplicity: 1 }]
             tFromXY(ps,p2);  //=> [{ tS: 0.75,  tE: 0.75,  multiplicity: 1 }]
         }
-	});
+    });
 });

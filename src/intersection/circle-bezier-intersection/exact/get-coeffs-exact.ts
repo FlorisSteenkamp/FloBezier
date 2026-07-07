@@ -1,8 +1,5 @@
+import { twoProduct, eCalculate, scaleExpansion, eCompress } from "big-float-ts";
 import { toPowerBasis3Exact, toPowerBasis2Exact, toPowerBasis1Exact } from "../../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
-
-
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-import { twoProduct, eCalculate, scaleExpansion } from "big-float-ts";
 
 const tp = twoProduct;
 const calc = eCalculate;
@@ -78,7 +75,7 @@ function getCoeffsCubicExact(
         [tp(cx,cx)], [tp(cy,cy)], [tp(-r,r)]
     ]);
 
-    return [t6, t5, t4, t3, t2, t1, t0];
+    return [t6, t5, t4, t3, t2, t1, t0].map(eCompress);
 }
 
 
@@ -139,7 +136,7 @@ function getCoeffsQuadraticExact(
         [tp(cx,cx)], [tp(cy,cy)], [tp(-r,r)]
     ]);
 
-    return [t4, t3, t2, t1, t0];
+    return [t4, t3, t2, t1, t0].map(eCompress);
 }
 
 
@@ -189,7 +186,7 @@ function getCoeffsLinearExact(
         [tp(cx,cx)], [tp(cy,cy)], [tp(-r,r)]
     ]);
 
-    return [t2, t1, t0];
+    return [t2, t1, t0].map(eCompress);
 }
 
 

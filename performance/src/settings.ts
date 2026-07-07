@@ -22,7 +22,7 @@ const maxCoordinateX = 1;
 const maxCoordinateY = 1/squashFactor;
 //const expMax = Math.ceil(Math.log2(Math.max(maxCoordinateX, maxCoordinateY)));
 const settings = {
-    timingOnly: false,
+    timingOnly: true,
     /** the number of bezier pairs (=== number of beziers / 2) */
     num: 100_000,
     maxBitLength: 53,

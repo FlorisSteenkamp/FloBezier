@@ -1,4 +1,4 @@
-import { allRootsCertified, RootInterval } from "flo-poly";
+import { roots, RootInterval } from "flo-poly";
 import { getCoeffsBezBez }  from './get-coefficients/get-coeffs-bez-bez.js';
 
 
@@ -27,7 +27,7 @@ function bezierBezierIntersectionBoundless(
    
     const { coeffs, errBound, getPExact } = getCoeffsBezBez(ps1,ps2);
 
-    return allRootsCertified(coeffs, 0, 1, errBound, getPExact, true);
+    return roots(coeffs, 0, 1, errBound, getPExact, true);
 }
 
 

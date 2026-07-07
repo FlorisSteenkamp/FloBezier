@@ -1,4 +1,4 @@
-import { RootInterval } from "flo-poly";
+import type { RootInterval } from "flo-poly";
 /**
  * Returns the footpoint(s) (and parameter `t` value(s)) on the
  * given bezier curve to the given point (with `t ∈ [0,1]`).

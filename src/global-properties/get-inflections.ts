@@ -1,4 +1,4 @@
-import { allRoots } from "flo-poly";
+import { roots } from "flo-poly";
 
 
 /** 
@@ -35,7 +35,7 @@ function getInflections(ps: number[][]): number[] {
     const b = ax*cy - ay*cx;
     const c = ax*by - ay*bx;
     
-    return allRoots([a,b,c], 0, 1);
+    return roots([a,b,c], 0, 1)?.map(r => r.t) || [];
 }
 
 

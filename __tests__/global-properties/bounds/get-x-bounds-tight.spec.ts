@@ -1,24 +1,19 @@
-/// <reference path="../../chai-extensions.d.ts" />
-import { expect, assert, use } from 'chai';
-import { describe } from 'mocha';
-import { getXBoundsTight } from '../../../src/index.js';
-import { nearly } from '../../helpers/chai-extend-nearly.js';
+import { describe, expect, it } from '@jest/globals';
+import { getXBoundsTight, XBounds } from '../../../src/index.js';
 import { getRandomCubic, getRandomLine, getRandomQuad } from '../../helpers/get-random-bezier.js';
 import { reverseXBoundTs } from '../../helpers/reverse-bound-ts.js';
-
-
-use(nearly);
+import { ObjOrArray } from '../../helpers/obj-or-array.js';
 
 
 describe('getXBoundsTight', function() {
-	it('it should find correct x bounds for some lines', 
-	function() {
-		const ps = getRandomLine(0);
-		const r = getXBoundsTight(ps);
+    it('it should find correct x bounds for some lines', 
+    function() {
+        const ps = getRandomLine(0);
+        const r = getXBoundsTight(ps);
         const rR = getXBoundsTight(ps.slice().reverse());
 
         const expected = {
-			minX: {
+            minX: {
                 ts: [0,0],
                 box: [
                     [-108.49686506776892,-13.011161175008596],
@@ -32,18 +27,16 @@ describe('getXBoundsTight', function() {
                     [-12.996895177132615,-6.992694835578803]
                 ]
             }
-		};
+        };
 
-        // @ts-ignore - otherwise TypeScript gives an error on nearly
-		expect(r).to.be.nearly(2**6, expected);
-        // @ts-ignore - otherwise TypeScript gives an error on nearly
-        expect(rR).to.be.nearly(2**6, reverseXBoundTs(expected));
-	});
+        expect(r).toBeNearly(2**6, expected);
+        expect(rR).toBeNearly(2**6, reverseXBoundTs(expected) as any);
+    });
 
     it('it should find correct x bounds for some quadratic bezier curves', 
-	function() {
-		const ps = getRandomQuad(0);
-		const r = getXBoundsTight(ps);
+    function() {
+        const ps = getRandomQuad(0);
+        const r = getXBoundsTight(ps);
         const rR = getXBoundsTight(ps.slice().reverse());
 
         const expected = {
@@ -63,20 +56,18 @@ describe('getXBoundsTight', function() {
             }
         };
 
-        // @ts-ignore - otherwise TypeScript gives an error on nearly
-		expect(r).to.be.nearly(2**6, expected);
-        // @ts-ignore - otherwise TypeScript gives an error on nearly
-        expect(rR).to.be.nearly(2**6, reverseXBoundTs(expected));
-	});
+        expect(r).toBeNearly(2**6, expected);
+        expect(rR).toBeNearly(2**6, reverseXBoundTs(expected) as any);
+    });
 
     it('it should find correct x bounds for some cubic bezier curves', 
-	function() {
+    function() {
         {
             const ps = getRandomCubic(0);
             const r = getXBoundsTight(ps);
             const rR = getXBoundsTight(ps.slice().reverse());
 
-            const expected = { 
+            const expected: XBounds = { 
                 minX: { 
                     ts: [0,0],
                     box: [
@@ -93,10 +84,8 @@ describe('getXBoundsTight', function() {
                 }
             };
 
-            // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(r).to.be.nearly(2**6, expected);
-            // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(rR).to.be.nearly(2**6, reverseXBoundTs(expected));
+            expect(r).toBeNearly(2**6, expected as any);
+            expect(rR).toBeNearly(2**6, reverseXBoundTs(expected) as any);
         }
         {
             const ps = [[0,0],[-1,1],[-1,2],[0,3]];
@@ -110,8 +99,7 @@ describe('getXBoundsTight', function() {
                 maxX: { ts: [0,0], box: [[0,0],[0,0]] }
             };
 
-            // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(r).to.be.nearly(2**6, expected);
+            expect(r).toBeNearly(2**6, expected);
         }
-	});
+    });
 });

@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { describe, expect, it } from '@jest/globals';
 
 
 function checkResults(
@@ -19,7 +19,7 @@ function checkResults(
     const stdDev = Math.sqrt(sumSquaredDiffs / total);
 
     // accuracy to be to within one billionth of the max coordinate
-    expect(max).to.be.lessThan(1e-9);  
+    expect(max).toBeLessThan(1e-9);  
 
     //'xs: ' + total;//?
     //'max: ' + max;//?

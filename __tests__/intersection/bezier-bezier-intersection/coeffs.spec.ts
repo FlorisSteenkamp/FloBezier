@@ -1,5 +1,5 @@
-import { expect, assert } from 'chai';
-import { describe } from 'mocha';
+
+import { describe, expect, it } from '@jest/globals';
 import { eEstimate, eDiff } from 'big-float-ts';
 import { randomCenteredAt0v2 } from '../../helpers/random-on-grid.js';
 import { getCoeffsBez3Bez3Dd } from '../../../src/intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez3-dd.js';
@@ -67,7 +67,7 @@ const implFormDdFs = [,
 
 describe('intersection coefficients', function() {
     it('it should find valid polynomial intersection coefficients (including error bound) of beziers in double-double precision (and for Shewchuk expansions)', 
-	function() {
+    function() {
         let i = 0;
         while (i++ < numTests) {
             let j = 5;
@@ -124,6 +124,8 @@ function testCoeffsDd(
         errActual  : ${errActual}
         errBound   : ${errBound}`;
 
-        assert(errActual <= errBound, errStr);
+        if (!(errActual <= errBound)) {
+            throw new Error(errStr);
+        }
     }
 }

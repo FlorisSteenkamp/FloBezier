@@ -1,7 +1,6 @@
 import { ddDiffDd, ddMultDouble2 } from 'double-double';
 import { eNegativeOf } from 'big-float-ts';
 import { toPowerBasis1DdWithRunningError } from '../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js';
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const qdq = ddDiffDd; // error -> 3*γ²
 const qmd = ddMultDouble2;
 const eno = eNegativeOf;

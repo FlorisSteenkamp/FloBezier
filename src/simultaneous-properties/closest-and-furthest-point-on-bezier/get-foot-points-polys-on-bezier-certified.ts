@@ -47,19 +47,22 @@ function getFootPointsOnBezierPolysCertified(
     if (order === 3) {
         return {
             polyDd: getFootpointPoly3Dd(ps, p), 
-            polyE: getClosestOnBezier3FromPointErrorCounters(ps, p).map(e => 10*γγ6*e), 
+            // polyE: getClosestOnBezier3FromPointErrorCounters(ps, p).map(e => 10*γγ6*e), 
+            polyE: getClosestOnBezier3FromPointErrorCounters(ps, p).map(e => 10*2*e), 
             getPolyExact: () => getFootpointPoly3Exact(ps, p)
         }
     } else if (order === 2) {
         return {
             polyDd: getFootpointPoly2Dd(ps, p), 
-            polyE: getClosestOnBezier2FromPointErrorCounters(ps, p).map(e => 8*γγ6*e), 
+            // polyE: getClosestOnBezier2FromPointErrorCounters(ps, p).map(e => 8*γγ6*e), 
+            polyE: getClosestOnBezier2FromPointErrorCounters(ps, p).map(e => 8*2*e), 
             getPolyExact: () => getFootpointPoly2Exact(ps, p)
         }
     } else if (order === 1) {
         return {
             polyDd: getFootpointPoly1Dd(ps, p), 
-            polyE: getClosestOnBezier1FromPointErrorCounters(ps, p).map(e => 6*γγ6*e), 
+            // polyE: getClosestOnBezier1FromPointErrorCounters(ps, p).map(e => 6*γγ6*e), 
+            polyE: getClosestOnBezier1FromPointErrorCounters(ps, p).map(e => 6*2*e), 
             getPolyExact: () => getFootpointPoly1Exact(ps, p)
         }
     } else if (order === 0) {
@@ -69,7 +72,7 @@ function getFootPointsOnBezierPolysCertified(
             getPolyExact: () => [[1]]
         }
     } else {
-        throw new Error('The given bezier curve must be of order <= 3');
+        throw new Error('The given bezier curve must be of order 1, 2 or 3');
     }
 }
 

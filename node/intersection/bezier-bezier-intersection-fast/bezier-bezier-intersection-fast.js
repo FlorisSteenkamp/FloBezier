@@ -1,10 +1,6 @@
-import { checkIntersectionInRanges as _checkIntersectionInRanges } from './check-intersection-in-ranges.js';
-import { bezierBezierIntersection as _bezierBezierIntersection } from '../bezier-bezier-intersection/bezier-bezier-intersection.js';
-const checkIntersectionInRanges = _checkIntersectionInRanges;
-const bezierBezierIntersection = _bezierBezierIntersection;
-const min = Math.min;
-const max = Math.max;
-const abs = Math.abs;
+import { checkIntersectionInRanges } from './check-intersection-in-ranges.js';
+import { bezierBezierIntersection } from '../bezier-bezier-intersection/bezier-bezier-intersection.js';
+const { min, max, abs } = Math;
 /**
  * The guarantee in accuracy of the `t` parameter value chosen to be reasonable
  * for this type of intersection algorithm.

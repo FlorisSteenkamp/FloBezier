@@ -1,4 +1,4 @@
-import { allRoots } from "flo-poly";
+import { roots } from "flo-poly";
 import { toPowerBasis_1stDerivative } from "../../to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.js";
 import { evalDeCasteljau } from "../../local-properties-at-t/evaluate/double/eval-de-casteljau.js";
 
@@ -23,8 +23,8 @@ function getBounds(
 
     // Roots of derivative
     const dxy = toPowerBasis_1stDerivative(ps);
-    const rootsX = allRoots(dxy[0],0,1);
-    const rootsY = allRoots(dxy[1],0,1);
+    const rootsX = roots(dxy[0],0,1)?.map(r => r.t) || [];
+    const rootsY = roots(dxy[1],0,1)?.map(r => r.t) || [];
         
     // Endpoints
     rootsX.push(0, 1); 

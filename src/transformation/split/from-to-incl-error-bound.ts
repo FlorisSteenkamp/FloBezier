@@ -1,10 +1,6 @@
-import { fromTo3InclErrorBound as fromTo3_ } from './from-to/from-to-3-incl-error-bound.js';
-import { fromTo2InclErrorBound as fromTo2_ } from './from-to/from-to-2-incl-error-bound.js';
-import { fromTo1InclErrorBound as fromTo1_ } from './from-to/from-to-1-incl-error-bound.js';
-
-const fromTo3 = fromTo3_;
-const fromTo2 = fromTo2_;
-const fromTo1 = fromTo1_;
+import { fromTo3InclErrorBound } from './from-to/from-to-3-incl-error-bound.js';
+import { fromTo2InclErrorBound } from './from-to/from-to-2-incl-error-bound.js';
+import { fromTo1InclErrorBound } from './from-to/from-to-1-incl-error-bound.js';
 
 
 /**
@@ -27,15 +23,15 @@ const fromTo1 = fromTo1_;
         tE: number): { ps: number[][]; _ps: number[][]; } {
 
     if (ps.length === 4) {
-        return fromTo3(ps, tS, tE);
+        return fromTo3InclErrorBound(ps, tS, tE);
     }
 
     if (ps.length === 3) {
-        return fromTo2(ps, tS, tE);
+        return fromTo2InclErrorBound(ps, tS, tE);
     }
 
     if (ps.length === 2) {
-        return fromTo1(ps, tS, tE);
+        return fromTo1InclErrorBound(ps, tS, tE);
     }
 
     if (ps.length === 1) {

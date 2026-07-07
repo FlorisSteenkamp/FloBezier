@@ -1,9 +1,5 @@
-import {
-    ddAddDd, ddDiffDd, ddMultDd, ddMultDouble2, ddNegativeOf, twoDiff
-} from "double-double";
+import { ddAddDd, ddDiffDd, ddMultDd, ddMultDouble2, ddNegativeOf, twoDiff } from "double-double";
 
-
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const td = twoDiff;
 const qmd = ddMultDouble2;
 const qmq = ddMultDd;

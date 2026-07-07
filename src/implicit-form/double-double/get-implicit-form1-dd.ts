@@ -1,7 +1,6 @@
 import { ddDiffDd, ddMultDouble2, ddNegativeOf } from 'double-double';
 import { toPowerBasis1Dd } from '../../to-power-basis/to-power-basis/double-double/to-power-basis-dd.js';
 
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const qdq = ddDiffDd;       // error -> 3*γ²
 const qmd = ddMultDouble2;
 const qno = ddNegativeOf;

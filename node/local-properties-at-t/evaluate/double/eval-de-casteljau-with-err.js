@@ -1,9 +1,6 @@
-import { evalDeCasteljauError as evalDeCasteljauError_ } from "../eval-de-casteljau-error.js";
-import { evalDeCasteljau as evalDeCasteljau_ } from "./eval-de-casteljau.js";
+import { evalDeCasteljauError } from "../eval-de-casteljau-error.js";
+import { evalDeCasteljau } from "./eval-de-casteljau.js";
 import { γ } from '../../../error-analysis/error-analysis.js';
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const evalDeCasteljau = evalDeCasteljau_;
-const evalDeCasteljauError = evalDeCasteljauError_;
 const γ1 = γ(1);
 /**
  * Returns the resulting point of evaluating the given bezier curve at the given

@@ -1,7 +1,6 @@
 import { toPowerBasis3Dd, toPowerBasis2Dd, toPowerBasis1Dd } from "../../../to-power-basis/to-power-basis/double-double/to-power-basis-dd.js";
 import { twoProduct, ddAddDd, ddMultByNeg2, ddMultBy2, ddDiffDd, ddMultDd, ddMultDouble2 } from "double-double";
 
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const tp = twoProduct;
 const qaq = ddAddDd;
 const qm2 = ddMultBy2;

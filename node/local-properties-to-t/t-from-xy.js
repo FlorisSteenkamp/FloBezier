@@ -1,12 +1,9 @@
-import { allRootsCertified } from 'flo-poly';
+import { roots } from 'flo-poly';
 import { toPowerBasis2Exact, toPowerBasis3Exact } from "../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
 import { toPowerBasis2DdWithRunningError, toPowerBasis3DdWithRunningError } from "../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js";
-import { twoDiff as twoDiff_ } from 'big-float-ts';
-import { γγ } from '../error-analysis/error-analysis.js';
+import { twoDiff } from 'big-float-ts';
 import { toPowerBasis1Dd } from '../to-power-basis/to-power-basis/double-double/to-power-basis-dd.js';
-const twoDiff = twoDiff_;
 const { min, max } = Math;
-const γγ3 = γγ(3);
 /**
  * Performs certified inversion, i.e. returns the `t` parameter value
  * interval(s) for the given `x` and `y` coordinates on the specified bezier
@@ -40,7 +37,7 @@ function tFromXY(ps, p) {
     if (ps.length === 1) {
         const p1 = ps[0];
         if (p1[0] === p[0] && p1[1] === p[1]) {
-            return [{ tS: 0.5, tE: 0.5, multiplicity: 1 }];
+            return [{ t: 0.5, tS: 0.5, tE: 0.5, multiplicity: 1 }];
         }
         return [];
     }
@@ -83,17 +80,17 @@ function tFromXY3(ps, p) {
         return pExactY;
     };
     // max 3 roots
-    const xrs = allRootsCertified(polyDdX, 0, 1, polyX_.map(c => γγ3 * c), getPExactX, true);
+    const xrs = roots(polyDdX, 0, 1, polyX_, getPExactX, true);
     // const xrsExp = xrs!.map(xr => refineK1(xr, getPExactX()));
     // max 3 roots
-    const yrs = allRootsCertified(polyDdY, 0, 1, polyY_.map(c => γγ3 * c), getPExactY, true);
+    const yrs = roots(polyDdY, 0, 1, polyY_, getPExactY, true);
     if (xrs === undefined) {
         // the `x` value of the point is on the curve for all `t` values
         // the curve must be a 'line' (can also be degenerate quadratic, etc.)
         if (yrs === undefined) {
             // the `y` value of the point is on the curve for all `t` values
             // the curve must be a point
-            return [{ tS: 0.5, tE: 0.5, multiplicity: 1 }];
+            return [{ t: 0.5, tS: 0.5, tE: 0.5, multiplicity: 1 }];
         }
         return yrs; //.map(r => [r.tS, r.tE]);
     }
@@ -157,16 +154,16 @@ function tFromXY2(ps, p) {
         return pExactY;
     };
     // max 2 roots
-    const xrs = allRootsCertified(polyDdX, 0, 1, polyX_.map(c => γγ3 * c), getPExactX, true);
+    const xrs = roots(polyDdX, 0, 1, polyX_, getPExactX, true);
     // max 2 roots
-    const yrs = allRootsCertified(polyDdY, 0, 1, polyY_.map(c => γγ3 * c), getPExactY, true);
+    const yrs = roots(polyDdY, 0, 1, polyY_, getPExactY, true);
     if (xrs === undefined) {
         // the `x` value of the point is on the curve for all `t` values
         // the curve must be a 'line'
         if (yrs === undefined) {
             // the `y` value of the point is on the curve for all `t` values
             // the curve must be a point
-            return [{ tS: 0.5, tE: 0.5, multiplicity: 1 }];
+            return [{ t: 0.5, tS: 0.5, tE: 0.5, multiplicity: 1 }];
         }
         return yrs;
     }
@@ -208,16 +205,16 @@ function tFromXY1(ps, p) {
     // subtract the y coordinate of the point
     const polyExactY = [..._polyDdY, twoDiff(tyDd, y)];
     // max 1 roots
-    const xrs = allRootsCertified(polyExactX, 0, 1, undefined, undefined, true);
+    const xrs = roots(polyExactX, 0, 1);
     // max 1 roots
-    const yrs = allRootsCertified(polyExactY, 0, 1, undefined, undefined, true);
+    const yrs = roots(polyExactY, 0, 1);
     if (xrs === undefined) {
         // the `x` value of the point is on the curve for all `t` values
         // the curve must be a vertical line
         if (yrs === undefined) {
             // the `y` value of the point is on the curve for all `t` values
             // the curve must be a point
-            return [{ tS: 0.5, tE: 0.5, multiplicity: 1 }];
+            return [{ t: 0.5, tS: 0.5, tE: 0.5, multiplicity: 1 }];
         }
         return yrs;
     }
@@ -247,13 +244,13 @@ function combineRoots(r, s) {
         if (r.tE < s.tS) {
             return undefined; // no overlap
         }
-        return { tS: s.tS, tE: max(r.tE, s.tE), multiplicity: min(r.multiplicity, s.multiplicity) };
+        return { t: s.t, tS: s.tS, tE: max(r.tE, s.tE), multiplicity: min(r.multiplicity, s.multiplicity) };
     }
     // case 2 - r.tS > s.tS
     if (s.tE < r.tS) {
         return undefined; // no overlap
     }
-    return { tS: r.tS, tE: max(r.tE, s.tE), multiplicity: min(r.multiplicity, s.multiplicity) };
+    return { t: r.tS, tS: r.tS, tE: max(r.tE, s.tE), multiplicity: min(r.multiplicity, s.multiplicity) };
 }
 export { tFromXY };
 //# sourceMappingURL=t-from-xy.js.map

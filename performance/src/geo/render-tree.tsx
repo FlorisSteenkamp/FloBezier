@@ -1,13 +1,30 @@
 import * as React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { IterationExtras } from '../../../src/intersection/bezier-bezier-intersection-fast/debug.js';
 import { Iteration } from '../../../src/intersection/bezier-bezier-intersection-fast/iteration.js';
 import { mapWithParent } from '../../react-svg-tree/src/helpers/tree-graph.js';
 import { $Tree } from '../../react-svg-tree/src/tree.js';
-import { $Node } from './$node.js';
 
 
 type IterationWithExtras = Iteration & IterationExtras;
+
+
+function $Node({ node, x, y, r }: { node: IterationWithExtras; x: number; y: number; r: number }) {
+    return (
+        <g>
+            <circle cx={x} cy={y} r={r} fill="#0b5" />
+            <text
+                x={x}
+                y={y + 1.5}
+                style={{ fontSize: 5 }}
+                textAnchor="middle"
+                fill="#fff"
+            >
+                {node.uid}
+            </text>
+        </g>
+    );
+}
 
 
 function renderTree(tree: IterationWithExtras) {
@@ -27,7 +44,7 @@ function renderTree(tree: IterationWithExtras) {
         }
     }
 
-    render(
+    createRoot(document.getElementById('root-div') as HTMLDivElement).render(
         <$Tree 
             getNodeSize={node => { return 8; }}
             getChildren={getChildren}
@@ -40,9 +57,7 @@ function renderTree(tree: IterationWithExtras) {
             siblingSeparation={5}
             subtreeSeparation={5}
             className="tree-svg"
-        />,
-
-        document.getElementById('root-div') as HTMLDivElement
+        />
     );
 }
   

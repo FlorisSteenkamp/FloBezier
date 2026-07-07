@@ -1,15 +1,7 @@
-import { assert, expect, use } from "chai";
-import { describe } from "mocha";
-import {
-  generateCuspAtHalf3,
-  normal,
-  normal2,
-  tangent,
-} from "../../../src/index.js";
-import { nearly } from "../../helpers/chai-extend-nearly.js";
+import { describe, expect, it } from '@jest/globals';
+import { generateCuspAtHalf3, normal, normal2, tangent, } from "../../../src/index.js";
 import { getRandomBezier } from "../../helpers/get-random-bezier.js";
 
-use(nearly);
 
 function degenerate_bezier(ps: number[][], mutation_idx: number) {
     // The mutation index specifies which case of degenerate bezier the curve will be modified to:
@@ -73,8 +65,7 @@ describe("normal2", function () {
                         let norm2 = normal2(ps, t);
                         let norm = normal(ps, Math.abs(t - 0.0001));
 
-                        // @ts-ignore - otherwise TypeScript gives an error on nearly
-                        // expect(norm2).to.be.nearly(2 ** 2, norm);
+                        // expect(norm2).toBeNearly(2 ** 2, norm);
                         }
                     }
                 }
@@ -85,7 +76,7 @@ describe("normal2", function () {
             //   const t = 0.5;
             //   let r = normal(ps, t);
             //   // for lines there should still be a normal defined
-            //   expect(r).to.eql([-0, 3]);
+            //   expect(r).toEqual([-0, 3]);
             // }
 
             // {
@@ -93,7 +84,7 @@ describe("normal2", function () {
             //   const t = 0.5;
             //   let r = normal(ps, t);
             //   // at cusp the normal vanishes
-            //   expect(r).to.eql([-0, 0]);
+            //   expect(r).toEqual([-0, 0]);
             // }
         },
     );

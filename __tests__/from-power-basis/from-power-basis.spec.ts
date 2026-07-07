@@ -1,5 +1,4 @@
-import { expect, assert } from 'chai';
-import { describe } from 'mocha';
+import { describe, expect, it } from '@jest/globals';
 import { fromPowerBasis, toPowerBasis } from '../../src/index.js';
 
 
@@ -34,7 +33,7 @@ function testFromPowerBasis(ps: number[][]) {
             let relError = Math.abs(c - c_) / maxAbsCoeff;
 
             // less than 5 ulps of error
-            assert(relError < Number.EPSILON * 2**5);
+            expect(relError < Number.EPSILON * 2**5).toBe(true);
         }
     }
 }
@@ -42,7 +41,7 @@ function testFromPowerBasis(ps: number[][]) {
 
 describe('fromPowerBasis', function() {
     it('it should correctly convert from power basis to Bernstein basis', 
-	function() {
+    function() {
         {
             const pss = [
                 [[3,3]],  // a point
@@ -62,6 +61,6 @@ describe('fromPowerBasis', function() {
 
     it('it should throw for invalid input', 
     function() {
-        expect(() => fromPowerBasis([[]])).to.throw();
+        expect(() => fromPowerBasis([[]])).toThrow();
     });
 });

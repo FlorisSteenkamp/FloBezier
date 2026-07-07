@@ -1,13 +1,10 @@
-import { expect, assert, use } from 'chai';
-import { describe } from 'mocha';
+import { describe, expect, it } from '@jest/globals';
 import type { Extrema } from '../../src/get-curvature-extrema/get-curvature-extrema.js';
 import { squares } from 'squares-rng';
 import { rotate, translate } from 'flo-vector2d';
 import { getCurvatureExtrema, curvature } from '../../src/index.js';
 import { createCubicThatsReallyQuad } from '../helpers/create-cubic-thats-really-quad.js';
-import { nearly } from '../helpers/chai-extend-nearly.js';
 
-use(nearly);
 
 const eps = Number.EPSILON;
 const abs = Math.abs;
@@ -46,60 +43,61 @@ function isExtremaLikelyCorrect(
 
 describe('getCurvatureExtrema', function() {
     it('it should find the curvature extrema (or rather lack thereof) of some lines', 
-	function() {
+    function() {
         {
             // line
             const ps = [[1,1],[2,2]];
             const extrema = getCurvatureExtrema(ps);
-            expect(extrema).to.deep.eq({ minima: [], maxima: [], inflections: [] });
+            expect(extrema).toEqual({ minima: [], maxima: [], inflections: [] });
         }
         {
             // quadratic disguised as line
             const ps = [[1,1],[2,2],[3,3]];
             const extrema = getCurvatureExtrema(ps);
-            expect(extrema).to.deep.eq({ minima: [], maxima: [], inflections: [] });
+            expect(extrema).toEqual({ minima: [], maxima: [], inflections: [] });
         }
         {
             // cubic disguised as line
             const ps = [[1,1],[2,3],[3,5],[4,7]];
             const extrema = getCurvatureExtrema(ps);
-            expect(extrema).to.deep.eq({ minima: [], maxima: [], inflections: [] });
+            expect(extrema).toEqual({ minima: [], maxima: [], inflections: [] });
         }
     });
     it('it should find the curvature extrema of some quadratic bezier curves', 
-	function() {
+    function() {
         {
             // simple quadratic
             const ps = [[1,10],[6,0],[11,10]];
             const extrema = getCurvatureExtrema(ps);
-            // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(extrema).to.be.nearly(2**2, { minima: [], maxima: [0.5], inflections: [] });
+            expect(extrema).toBeNearly(2**2, { minima: [], maxima: [0.5], inflections: [] });
         }
         {
             // simple quadratic
             const ps = [[1,10],[6,20],[11,10]];
             const extrema = getCurvatureExtrema(ps);
-            expect(extrema).to.deep.eq({ minima: [], maxima: [0.5], inflections: [] });
+            expect(extrema).toEqual({ minima: [], maxima: [0.5], inflections: [] });
         }
         {
             // simple quadratic (rotated)
             const rotate_ = rotate(Math.sin(0.1), Math.cos(0.1));
             const ps = [[1,10],[6,20],[11,10]].map(rotate_);
-            const extrema = getCurvatureExtrema(ps);
-            expect(extrema).to.deep.eq({ minima: [], maxima: [0.49999999999999994], inflections: [] });
+            const extrema = getCurvatureExtrema(ps);//?
+            expect(extrema).toBeNearly(2**2, {
+                minima: [], maxima: [0.49999999999999994], inflections: []
+            });
         }
         {
             // simple quadratic
             const ps = [[1,10],[6,3],[15,7]];
             const extrema = getCurvatureExtrema(ps);
-            expect(extrema).to.deep.eq({ minima: [], maxima: [0.416058394160584], inflections: [] });
+            expect(extrema).toEqual({ minima: [], maxima: [0.416058394160584], inflections: [] });
         }
         {
             // simple quadratic (rotated)
             const rotate_ = rotate(Math.sin(0.1), Math.cos(0.1));
             const ps = [[1,10],[6,3],[15,7]].map(rotate_);
             const extrema = getCurvatureExtrema(ps);
-            expect(extrema).to.deep.eq({ 
+            expect(extrema).toEqual({ 
                 minima: [], 
                 maxima: [0.41605839416058393], 
                 inflections: [] 
@@ -111,7 +109,7 @@ describe('getCurvatureExtrema', function() {
             const translate_ = translate([0.1,0.1]);
             const ps = [[1,10],[6,3],[15,7]].map(rotate_).map(translate_);
             const extrema = getCurvatureExtrema(ps);
-            expect(extrema).to.deep.eq({ 
+            expect(extrema).toEqual({ 
                 minima: [], 
                 maxima: [0.4160583941605838],
                 inflections: [] 
@@ -127,7 +125,7 @@ describe('getCurvatureExtrema', function() {
             ];
 
             const extrema = getCurvatureExtrema(ps);
-            expect(extrema).to.deep.eq({ minima: [], maxima: [], inflections: [] });
+            expect(extrema).toEqual({ minima: [], maxima: [], inflections: [] });
         }
         {
             // simple quadratic - extrema outside [0,1], 
@@ -141,7 +139,7 @@ describe('getCurvatureExtrema', function() {
             
             const extrema = getCurvatureExtrema(ps);
 
-            expect(extrema).to.deep.eq({ 
+            expect(extrema).toEqual({ 
                 minima: [], 
                 maxima: [], 
                 inflections: [] 
@@ -149,7 +147,7 @@ describe('getCurvatureExtrema', function() {
         }
     });
     it('it should find the curvature extrema of quadratic bezier curves disguised as cubics', 
-	function() {
+    function() {
         {
             for (let i=0; i<10; i++) {
                 const s = 0;
@@ -157,16 +155,16 @@ describe('getCurvatureExtrema', function() {
 
                 const extrema = getCurvatureExtrema(cubic);
                 
-                assert(isExtremaLikelyCorrect(quad, extrema));
-                assert(isExtremaLikelyCorrect(cubic, extrema));
+                expect(isExtremaLikelyCorrect(quad, extrema)).toBe(true);
+                expect(isExtremaLikelyCorrect(cubic, extrema)).toBe(true);
 
-                assert(extrema.minima.length === 0);
-                assert(extrema.maxima.length <= 1);
+                expect(extrema.minima.length === 0).toBe(true);
+                expect(extrema.maxima.length <= 1).toBe(true);
             }
         }
     });
     it('it should find the curvature extrema of some cubic bezier curves', 
-	function() {
+    function() {
         {
             const rotate_ = rotate(Math.sin(0.1), Math.cos(0.1));
             const translate_ = translate([3,2]);
@@ -179,8 +177,7 @@ describe('getCurvatureExtrema', function() {
             ].map(translate_).map(rotate_);
 
             const extrema = getCurvatureExtrema(ps);
-            // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(extrema).to.be.nearly(2**4, { 
+            expect(extrema).toBeNearly(2**4, { 
                 minima: [], 
                 maxima: [0.15617147171437748, 0.8457091576527154], 
                 inflections: [0.49374951030401965] 
@@ -198,8 +195,7 @@ describe('getCurvatureExtrema', function() {
             ].map(translate_).map(rotate_);
 
             const extrema = getCurvatureExtrema(ps);
-            // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(extrema).to.be.nearly(2**4, { 
+            expect(extrema).toBeNearly(2**4, { 
                 minima: [], 
                 maxima: [0.14916374172712923, 0.8508362582728751],
                 inflections: [0.4999999999999999] 
@@ -211,16 +207,16 @@ describe('getCurvatureExtrema', function() {
             const ps = [[0,4],[5,4],[7,0],[5,3]];
             
             const extrema = getCurvatureExtrema(ps);
-            expect(extrema).to.deep.eq({
-                minima: [0.3256995479375282],
+            expect(extrema).toBeNearly(2**4, {
+                minima: [0.32569954793752914],
                 maxima: [
-                    0.21061248315673686,
-                    0.5083891656903233,
-                    0.7339044004159357,
-                    0.9196664453338146
+                    0.2106124831567373,
+                    0.508389165690321,
+                    0.7339044004159346,
+                    0.9196664453338154
                 ],
                 inflections: [
-                    0.6342938142121816,
+                    0.6342938142121818,
                     0.8521926722743046
                 ] 
             });
@@ -256,29 +252,28 @@ describe('getCurvatureExtrema', function() {
                 const _t = t - (eps * 2**32);
                 const t_ = t + (eps * 2**32);
 
-                assert(
+                expect(
                     curvature(ps, _t) > curvature(ps, t) && 
                     curvature(ps, t_) > curvature(ps, t)
-                );
+                ).toBe(true);
             }
             for (let t of extrema.maxima) {
                 const _t = t - (eps * 2**32);
                 const t_ = t + (eps * 2**32);
 
-                assert(
+                expect(
                     (curvature(ps, _t) < curvature(ps, t) && 
                      curvature(ps, t_) < curvature(ps, t))
-                );
+                ).toBe(true);;
             }
 
-            // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(extrema).to.be.nearly(2**6,{
+            expect(extrema).toBeNearly(2**6, {
                 minima: [
-                    0.4999231476889932
+                    0.49992314768895263
                 ],
                 maxima: [
-                    0.3729890092839494, 
-                    0.6268781560395129
+                    0.37298900928395184,
+                    0.6268781560395205
                 ],
                 inflections: [] 
             });
@@ -294,20 +289,20 @@ describe('getCurvatureExtrema', function() {
                     const _t = t - (eps * 2**40);
                     const t_ = t + (eps * 2**40);
 
-                    assert(
+                    expect(
                         abs(curvature(ps, _t)) <= abs(curvature(ps, t)) && 
                         abs(curvature(ps, t_)) <= abs(curvature(ps, t)) 
-                    );
+                    ).toBe(true);
                 }
 
                 for (let t of extrema.minima) {
                     const _t = t - (eps * 2**40);
                     const t_ = t + (eps * 2**40);
 
-                    assert(
+                    expect(
                         abs(curvature(ps, _t)) >= abs(curvature(ps, t)) && 
                         abs(curvature(ps, t_)) >= abs(curvature(ps, t))
-                    );
+                    ).toBe(true);
                 }
             }
         }

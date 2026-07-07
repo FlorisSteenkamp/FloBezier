@@ -1,28 +1,23 @@
-import { expect, assert, use } from 'chai';
-import { describe } from 'mocha';
+import { describe, expect, it } from '@jest/globals';
 import { curvature, generateCuspAtHalf3 } from '../../src/index.js';
-import { nearly } from '../helpers/chai-extend-nearly.js';
 import { getRandomBezier } from '../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
-
 
 const abs = Math.abs;
 const sqrt = Math.sqrt;
 const 𝜋 = Math.PI;
 
-use(nearly);
-
 
 function radToDeg(rad: number): number {
-	return rad / (2*𝜋) * 360;
+    return rad / (2*𝜋) * 360;
 }
 
 
 describe('curvature', function() {
     const getRandomBezier_ = getRandomBezier(128, 53)(3);
 
-	it('it should calculate curvature accurately for some bezier curves',
-	function() {
+    it('it should calculate curvature accurately for some bezier curves',
+    function() {
         {
             // let ps = [[0,0], [100,0], [90,30], [50,-100]];
             let ps = [ 
@@ -42,14 +37,11 @@ describe('curvature', function() {
 
             const expected = 0.04118299445542509;
 
-            // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(r1).to.be.nearly(2**8, expected);
-            // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(r2).to.be.nearly(2**8, expected);
+            expect(r1).toBeNearly(2**8, expected);
+            expect(r2).toBeNearly(2**8, expected);
 
             const r3 = curvature(ps, t);
-            // @ts-ignore - otherwise TypeScript gives an error on nearly
-            expect(r3).to.be.nearly(2**8, expected);
+            expect(r3).toBeNearly(2**8, expected);
         }
 
         {
@@ -58,8 +50,8 @@ describe('curvature', function() {
                 const t = 0.5;
                 let r = curvature(ps, t);
                 // at cusp the curvature is infinite
-                expect(r).to.be.NaN;
+                expect(r).toBeNaN();
             }
         }
-	});
+    });
 });

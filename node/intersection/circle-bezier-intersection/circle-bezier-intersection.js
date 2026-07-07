@@ -1,6 +1,6 @@
 import { getCoeffsCubicDd, getCoeffsQuadraticDd, getCoeffsLinearDd } from './double-double/get-coeffs-dd.js';
 import { getCoeffsCubicExact, getCoeffsQuadraticExact, getCoeffsLinearExact } from './exact/get-coeffs-exact.js';
-import { allRootsCertified, mid } from 'flo-poly';
+import { roots } from 'flo-poly';
 import { getCoeffsCubicErrorCounters, getCoeffsLinearErrorCounters, getCoeffsQuadraticErrorCounters } from './get-circle-bezier-intersection-error-counters.js';
 import { γγ } from '../../error-analysis/error-analysis.js';
 import { getPFromBox } from '../bezier-bezier-intersection/x.js';
@@ -50,12 +50,13 @@ function circleBezierIntersection(circle, ps) {
     else {
         throw new Error('The given bezier curve must be of order 1, 2 or 3.');
     }
-    const polyE = _polyE.map(e => γγ6 * e);
-    const ris = (allRootsCertified(poly, 0, 1, polyE, () => getCoeffsExact(circle, ps), true) ||
-        [{ tS: 0.5, tE: 0.5, multiplicity: 1 }]);
+    // const polyE = _polyE.map(e => γγ6*e);
+    const polyE = _polyE.map(e => 2 * e);
+    const ris = (roots(poly, 0, 1, polyE, () => getCoeffsExact(circle, ps), true) ||
+        [{ t: 0.5, tS: 0.5, tE: 0.5, multiplicity: 1 }]);
     return ris.map(ri => {
         const box = getIntervalBox(ps, [ri.tS, ri.tE]);
-        return { p: getPFromBox(box), box, t: mid(ri), ri };
+        return { p: getPFromBox(box), box, t: ri.t, ri };
     });
 }
 export { circleBezierIntersection };

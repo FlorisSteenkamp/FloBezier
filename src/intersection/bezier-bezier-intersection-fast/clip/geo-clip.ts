@@ -1,16 +1,9 @@
 import type { __Debug__ } from '../debug.js';
-import { toHybridQuadratic as _toHybridQuadratic } from './to-hybrid-quadratic.js';
+import { toHybridQuadratic } from './to-hybrid-quadratic.js';
+import { eps, u } from '../../../error-analysis/error-analysis.js';
 
-// declare const globalThis: typeof global & { __debug__: __Debug__ };
 
-
-const toHybridQuadratic = _toHybridQuadratic;
-
-const min = Math.min;
-const max = Math.max;
-const abs = Math.abs;
-const eps = Number.EPSILON;
-const u = eps/2;
+const { min, max, abs } = Math;
 const onemin = 1 - eps;
 const onemax = 1 + eps;
 

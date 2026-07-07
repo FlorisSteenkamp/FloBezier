@@ -2,4 +2,8 @@ import type { __Debug__ } from './intersection/bezier-bezier-intersection-fast/d
 
 declare global {
     var __debug__: __Debug__;
+
+    interface GlobalThis {
+        __debug__: __Debug__;
+    }
 }

@@ -1,7 +1,6 @@
 import { hausdorffDistanceOneSided } from "./hausdorff-distance-one-sided.js";
 
-/** @internal */
-const max = Math.max;
+const { max } = Math;
 
 
 /**
@@ -31,8 +30,8 @@ const max = Math.max;
         tolerance?: number,
         maxIterations?: number): number {
 
-    const AB = hausdorffDistanceOneSided(A,B,tolerance,maxIterations);
-    const BA = hausdorffDistanceOneSided(B,A,tolerance,maxIterations);
+    const AB = hausdorffDistanceOneSided(A, B, tolerance, maxIterations);
+    const BA = hausdorffDistanceOneSided(B, A, tolerance, maxIterations);
 
     return max(AB, BA);
 }

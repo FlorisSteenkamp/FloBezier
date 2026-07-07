@@ -1,15 +1,9 @@
 import type { __Debug__, IterationExtras } from './debug.js';
 import type { Iteration } from './iteration.js';
-import { checkIntersectionInRanges as _checkIntersectionInRanges } from './check-intersection-in-ranges.js';
-import { bezierBezierIntersection as _bezierBezierIntersection } from '../bezier-bezier-intersection/bezier-bezier-intersection.js';
+import { checkIntersectionInRanges } from './check-intersection-in-ranges.js';
+import { bezierBezierIntersection } from '../bezier-bezier-intersection/bezier-bezier-intersection.js';
 
-
-const checkIntersectionInRanges = _checkIntersectionInRanges;
-const bezierBezierIntersection = _bezierBezierIntersection;
-
-const min = Math.min;
-const max = Math.max;
-const abs = Math.abs;
+const { min, max, abs } = Math;
 
 
 /** 

@@ -1,15 +1,12 @@
 import { getImplicitForm1ExactPb } from "../../../../implicit-form/exact/get-implicit-form1-exact.js";
 import { toPowerBasis1Exact, toPowerBasis3Exact } from "../../../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
 import { cubicToQuadratic } from "../../../../transformation/degree-or-type/cubic-to-quadratic.js";
-
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-import { expansionProduct, fastExpansionSum, scaleExpansion2, eSign as _eSign } from "big-float-ts";
+import { expansionProduct, fastExpansionSum, scaleExpansion2, eSign, eCompress } from "big-float-ts";
 import { getCoeffsBez1Bez2Exact } from "./get-coeffs-bez1-bez2-exact.js";
 
 const sce = scaleExpansion2;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
-const eSign = _eSign;
 
 
 /**
@@ -82,7 +79,7 @@ function getCoeffsBez1Bez3Exact(
 
     const r = [v3, v2, v1, v0];
 
-    return r;
+    return r.map(eCompress);
 }
 
 

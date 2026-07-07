@@ -2,7 +2,6 @@ import { γγ } from "../../../../error-analysis/error-analysis.js";
 import { getImplicitForm2DdWithRunningError } from "../../../../implicit-form/double-double/get-implicit-form2-dd-with-running-error.js";
 import { toPowerBasis1DdWithRunningError } from "../../../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js";
 import { twoProduct, ddMultBy2, ddMultDouble2, ddMultDd, ddAddDd } from "double-double";
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const tp = twoProduct;
 const qm2 = ddMultBy2;
 const qmd = ddMultDouble2;
@@ -158,7 +157,7 @@ function getCoeffsBez2Bez1Dd(ps1, ps2) {
     const v0_ = pm_ + v_ + abs($v0);
     return {
         coeffs: [v2, v1, v0],
-        errBound: [γγ3 * v2_, γγ3 * v1_, γγ3 * v0_]
+        errBound: [v2_, v1_, v0_] // still to be multiplied by `γγ3`
     };
 }
 export { getCoeffsBez2Bez1Dd };

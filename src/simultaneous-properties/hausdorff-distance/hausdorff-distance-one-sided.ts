@@ -85,9 +85,9 @@ function hausdorffDistanceOneSided(
     tolerance = tolerance || l/1000_000;
 
     // an array of intervals
-    const [eL,eR] = calcHErrorBound(A,0,1);
-    const d0 = closestPointOnBezier(B,A[0]).d;
-    const d1 = closestPointOnBezier(B,A[A.length-1]).d;
+    const [eL,eR] = calcHErrorBound(A, 0, 1);
+    const d0 = closestPointOnBezier(B, A[0]).d;
+    const d1 = closestPointOnBezier(B, A[A.length-1]).d;
     const initialInterval: HausdorffInterval = {
         tS: 0, tE: 1,
         hL: d0, hR: d1, hEL: eL, hER: eR

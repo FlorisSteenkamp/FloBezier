@@ -1,40 +1,39 @@
-// types only, import as `import type { ... } ...`
 
 /** linear bezier curve implicit form coefficients */
 type ImplicitForm1Coeffs<T> = {
-    vₓ   : T; vᵧ   : T;
-    v    : T;
+    vₓ: T; vᵧ: T;
+    v : T;
 }
 
 
 /** quadratic bezier curve implicit form coefficients */
 type ImplicitForm2Coeffs<T> = ImplicitForm1Coeffs<T> & {
-    vₓₓ  : T; vₓᵧ  : T; vᵧᵧ  : T;
+    vₓₓ: T; vₓᵧ: T; vᵧᵧ: T;
 }
 
 
 /** cubic bezier curve implicit form coefficients */
 type ImplicitForm3Coeffs<T> = ImplicitForm2Coeffs<T> & {
-    vₓₓₓ : T; vₓₓᵧ : T; vₓᵧᵧ : T; vᵧᵧᵧ : T;
+    vₓₓₓ: T; vₓₓᵧ: T; vₓᵧᵧ: T; vᵧᵧᵧ: T;
 }
 
 
 /** linear bezier curve implicit form coefficient errors */
 type ImplicitForm1CoeffErrors = {
-    vₓ_   : number; vᵧ_   : number;
-    v_    : number;
+    vₓ_: number; vᵧ_: number;
+    v_: number;
 }
 
 
 /** quadratic bezier curve implicit form coefficients */
 type ImplicitForm2CoeffErrors = ImplicitForm1CoeffErrors & {
-    vₓₓ_  : number; vₓᵧ_  : number; vᵧᵧ_  : number;
+    vₓₓ_: number; vₓᵧ_: number; vᵧᵧ_: number;
 }
 
 
 /** cubic bezier curve implicit form coefficients */
 type ImplicitForm3CoeffErrors = ImplicitForm2CoeffErrors & {
-    vₓₓₓ_ : number; vₓₓᵧ_ : number; vₓᵧᵧ_ : number; vᵧᵧᵧ_ : number;
+    vₓₓₓ_: number; vₓₓᵧ_: number; vₓᵧᵧ_: number; vᵧᵧᵧ_: number;
 }
 
 

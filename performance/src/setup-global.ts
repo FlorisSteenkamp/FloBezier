@@ -1,8 +1,8 @@
 import { __Debug__ } from "../../src/intersection/bezier-bezier-intersection-fast/debug";
 
 
-(globalThis as any as { __debug__: Partial<__Debug__> | undefined}).__debug__ = 
-    { already: false, uid: 0, maxItersCount: 0 };
+globalThis.__debug__ = 
+    { already: false, uid: 0, maxItersCount: 0, tree: undefined, currentIter: undefined } as any;
 
 const DUMMY = 1;
 

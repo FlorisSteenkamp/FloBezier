@@ -1,16 +1,12 @@
 import { γγ } from '../../error-analysis/error-analysis.js';
 import { getImplicitForm1DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form1-dd-with-running-error.js";
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 import { ddAddDd, ddMultDd } from "double-double";
 import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd } from 'big-float-ts';
 import { getImplicitForm1Exact } from '../../implicit-form/exact/get-implicit-form1-exact.js';
 const qaq = ddAddDd;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
-const sign = eSign;
-const estimate = eEstimate;
 const qmq = ddMultDd;
-const etodd = eToDd;
 const abs = Math.abs;
 const γγ3 = γγ(3);
 /**
@@ -44,8 +40,8 @@ function isPointOnBezierExtension1(ps, p) {
         // h (say height) is the the result of evaluating the implicit equation; if
         // it is 0 we are on the curve, else we're not.
         // const h = vₓ*x + vᵧ*y + v;
-        const xd = etodd(xe);
-        const yd = etodd(ye);
+        const xd = eToDd(xe);
+        const yd = eToDd(ye);
         const _x = abs(x);
         const _y = abs(y);
         const _vₓ = abs(vₓ[1]);
@@ -69,7 +65,7 @@ function isPointOnBezierExtension1(ps, p) {
         const h = qaq(q7, v);
         const h_ = q7_ + v_ + abs(h[1]);
         // if the error is not too high too discern h away from zero
-        if (γγ3 * h_ < abs(estimate(h))) {
+        if (γγ3 * h_ < abs(eEstimate(h))) {
             return false; // <-- prefilter applied
         }
     }
@@ -84,7 +80,7 @@ function isPointOnBezierExtension1(ps, p) {
         const vᵧy = epr(ye, vᵧ);
         // const h = vₓ*x + vᵧ*y + v;
         const hh = fes(fes(vₓx, vᵧy), v);
-        return sign(hh) === 0; // <= calculation was exact
+        return eSign(hh) === 0; // <= calculation was exact
     }
 }
 export { isPointOnBezierExtension1 };

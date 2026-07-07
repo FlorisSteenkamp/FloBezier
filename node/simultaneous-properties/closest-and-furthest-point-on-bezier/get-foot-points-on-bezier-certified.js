@@ -1,3 +1,4 @@
+import { roots } from "flo-poly";
 import { getFootpointPoly3Dd } from "./get-coeffs/double-double/get-footpoint-poly-3-dd.js";
 import { getFootpointPoly2Dd } from "./get-coeffs/double-double/get-footpoint-poly-2-dd.js";
 import { getFootpointPoly1Dd } from "./get-coeffs/double-double/get-footpoint-poly-1-dd.js";
@@ -7,7 +8,6 @@ import { getFootpointPoly1Exact } from "./get-coeffs/exact/get-footpoint-poly-1-
 import { getClosestOnBezier1FromPointErrorCounters } from "./get-coeffs/get-closest-on-bezier-from-point-error-counters.js";
 import { getClosestOnBezier2FromPointErrorCounters } from "./get-coeffs/get-closest-on-bezier-from-point-error-counters.js";
 import { getClosestOnBezier3FromPointErrorCounters } from "./get-coeffs/get-closest-on-bezier-from-point-error-counters.js";
-import { allRootsCertified } from "flo-poly";
 import { γγ } from '../../error-analysis/error-analysis.js';
 const γγ6 = γγ(6);
 /**
@@ -35,13 +35,19 @@ function getFootPointsOnBezierCertified(ps, p, lb = 0, ub = 1) {
     const order = ps.length - 1;
     let ris;
     if (order === 3) {
-        ris = allRootsCertified(getFootpointPoly3Dd(ps, p), lb, ub, getClosestOnBezier3FromPointErrorCounters(ps, p).map(e => 10 * γγ6 * e), () => getFootpointPoly3Exact(ps, p));
+        ris = roots(getFootpointPoly3Dd(ps, p), lb, ub, 
+        // getClosestOnBezier3FromPointErrorCounters(ps, p).map(e => 10*γγ6*e), 
+        getClosestOnBezier3FromPointErrorCounters(ps, p).map(e => 10 * 2 * e), () => getFootpointPoly3Exact(ps, p));
     }
     else if (order === 2) {
-        ris = allRootsCertified(getFootpointPoly2Dd(ps, p), lb, ub, getClosestOnBezier2FromPointErrorCounters(ps, p).map(e => 8 * γγ6 * e), () => getFootpointPoly2Exact(ps, p));
+        ris = roots(getFootpointPoly2Dd(ps, p), lb, ub, 
+        // getClosestOnBezier2FromPointErrorCounters(ps, p).map(e => 8*γγ6*e), 
+        getClosestOnBezier2FromPointErrorCounters(ps, p).map(e => 8 * 2 * e), () => getFootpointPoly2Exact(ps, p));
     }
     else if (order === 1) {
-        ris = allRootsCertified(getFootpointPoly1Dd(ps, p), lb, ub, getClosestOnBezier1FromPointErrorCounters(ps, p).map(e => 6 * γγ6 * e), () => getFootpointPoly1Exact(ps, p));
+        ris = roots(getFootpointPoly1Dd(ps, p), lb, ub, 
+        // getClosestOnBezier1FromPointErrorCounters(ps, p).map(e => 6*γγ6*e), 
+        getClosestOnBezier1FromPointErrorCounters(ps, p).map(e => 6 * 2 * e), () => getFootpointPoly1Exact(ps, p));
     }
     else if (order === 0) {
         return [];

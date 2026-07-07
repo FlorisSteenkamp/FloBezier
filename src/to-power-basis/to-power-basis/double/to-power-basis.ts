@@ -91,10 +91,10 @@ function toPowerBasis0(ps: number[][]): number[][] {
 }
 
 
-export { 
-    toPowerBasis, 
-    toPowerBasis3, 
-    toPowerBasis2, 
-    toPowerBasis1, 
-    toPowerBasis0 
+export {
+    toPowerBasis,
+    toPowerBasis3,
+    toPowerBasis2,
+    toPowerBasis1,
+    toPowerBasis0
 }

@@ -3,8 +3,6 @@ import { getImplicitForm2ErrorCounters } from "../../implicit-form/get-error-cou
 import { getImplicitForm2DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form2-dd-with-running-error.js";
 import { getImplicitForm2Exact } from "../../implicit-form/exact/get-implicit-form2-exact.js";
 import { γ, γγ } from '../../error-analysis/error-analysis.js';
-
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 import { ddMultDd, ddAddDd } from "double-double";
 import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd } from 'big-float-ts';
 import { ImplicitFormExact2 } from "../../implicit-form/implicit-form-types.js";
@@ -13,9 +11,7 @@ const qmq = ddMultDd;
 const qaq = ddAddDd;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
-const sign = eSign;
-const estimate = eEstimate;
-const etodd = eToDd;
+
 
 const abs = Math.abs;
 const γ1 = γ(1);
@@ -129,8 +125,8 @@ const γγ3 = γγ(3);
         // const h =
         //   vₓₓ*x*x + vₓᵧ*x*y + vᵧᵧ*y*y + vₓ*x + vᵧ*y + v;
 
-        const xd = etodd(xe);
-        const yd = etodd(ye);
+        const xd = eToDd(xe);
+        const yd = eToDd(ye);
 
         const _x = abs(x);
         const _y = abs(y);
@@ -180,7 +176,7 @@ const γγ3 = γγ(3);
         const h_ = q8_ + v_ + abs(h[1]);
 
         // if the error is not too high too discern h away from zero
-        if (γγ3*h_ < abs(estimate(h))) {
+        if (γγ3*h_ < abs(eEstimate(h))) {
             return false; // <-- prefilter applied
         }
     }
@@ -224,7 +220,7 @@ const γγ3 = γγ(3);
             )
         );
 
-        return sign(h) === 0;  // <= calculation was exact
+        return eSign(h) === 0;  // <= calculation was exact
     }
 }
 

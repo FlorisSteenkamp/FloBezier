@@ -1,9 +1,6 @@
-import { evalDeCasteljauError as evalDeCasteljauError_ } from "../eval-de-casteljau-error.js";
-import { evalDeCasteljauDd as evalDeCasteljauDd_ } from "./eval-de-casteljau-dd.js";
+import { evalDeCasteljauError } from "../eval-de-casteljau-error.js";
+import { evalDeCasteljauDd } from "./eval-de-casteljau-dd.js";
 import { γγ } from '../../../error-analysis/error-analysis.js';
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const evalDeCasteljauDd = evalDeCasteljauDd_;
-const evalDeCasteljauError = evalDeCasteljauError_;
 const γγ3 = γγ(3);
 /**
  * Returns the resulting point (in double-double precision) of evaluating the

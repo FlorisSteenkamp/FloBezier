@@ -1,13 +1,8 @@
 import type { ImplicitFormExact1, ImplicitFormExact2 } from '../implicit-form-types.js';
 import { toPowerBasis2Exact } from '../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js';
 import { getImplicitForm1ExactPb } from './get-implicit-form1-exact.js';
+import { expansionProduct, scaleExpansion2, eDiff, eNegativeOf, eMultBy2, eSign, eCompress } from "big-float-ts";
 
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-import { 
-    expansionProduct, scaleExpansion2, 
-    eDiff, eNegativeOf, eMultBy2, eSign, 
-} from "big-float-ts";
-import { eSign as _eSign } from 'big-float-ts';
 
 const sce = scaleExpansion2;
 const em2 = eMultBy2;
@@ -83,34 +78,34 @@ function getImplicitForm2Exact(
 
     // b2**2*x**2
     // -b2**2 *x**2
-    const vₓₓ = eno(b2b2);
+    const vₓₓ = eCompress(eno(b2b2));
 
     // -2*a2*b2*x*y
     // 2*a2*b2 *x*y
-    const vₓᵧ = em2(a2b2);
+    const vₓᵧ = eCompress(em2(a2b2));
 
     // a2**2*y**2
     // -a2**2 *y**2 
-    const vᵧᵧ = eno(a2a2);
+    const vᵧᵧ = eCompress(eno(a2a2));
 
     // -2*a0*b2**2 + a1*b1*b2 + 2*a2*b0*b2 - a2*b1**2
     // (b1*q1 + -2*b2*q2) *x
     //const vₓ = b1*q1 - 2*b2*q2;
     const w1 = epr(b1,q1);
     const w2 = em2(epr(b2,q2));
-    const vₓ = edif(w1,w2);
+    const vₓ = eCompress(edif(w1,w2));
 
     // 2*a0*a2*b2 - a1**2*b2 + a1*a2*b1 - 2*a2**2*b0
     // (-a1*q1 + 2*a2*q2) *y
     const w3 = em2(epr(a2,q2));
     const w4 = epr(a1,q1);
-    const vᵧ = edif(w3,w4);
+    const vᵧ = eCompress(edif(w3,w4));
 
     // a0**2*b2**2 - a0*a1*b1*b2 - 2*a0*a2*b0*b2 + a0*a2*b1**2 + a1**2*b0*b2 - a1*a2*b0*b1 + a2**2*b0**2
     // q1*q3 + -q2**2
     const w5 = epr(q1,q3);
     const w6 = epr(q2,q2);
-    const v = edif(w5,w6);
+    const v = eCompress(edif(w5,w6));
 
     //console.log({ vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v })
 

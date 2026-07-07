@@ -1,4 +1,4 @@
-import { allRootsCertifiedSimplified } from 'flo-poly';
+import { roots } from 'flo-poly';
 import { toPowerBasis_1stDerivative } from '../../to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.js'
 import { XBounds } from "./bounds.js";
 import { getIntervalBox } from './get-interval-box/get-interval-box.js';
@@ -32,7 +32,7 @@ import { getIntervalBox } from './get-interval-box/get-interval-box.js';
 
     const [dx,] = toPowerBasis_1stDerivative(ps);
 
-    const rootsX = allRootsCertifiedSimplified(dx,0,1);
+    const rootsX = roots(dx,0,1) || [];
         
     // Test points
     for (let i=0; i<rootsX.length; i++) {

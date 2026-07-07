@@ -3,8 +3,6 @@ import { toPowerBasis_1stDerivativeExact } from "../to-power-basis/to-power-basi
 import { toPowerBasis_2ndDerivativeExact } from "../to-power-basis/to-power-basis-2nd-derivative/exact/to-power-basis-2nd-derivative-exact.js";
 import { toPowerBasis_3rdDerivativeExact } from "../to-power-basis/to-power-basis-3rd-derivative/exact/to-power-basis-3rd-derivative-exact.js";
 
-
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const em2 = eMultBy2;
 const em4 = (v: number[]) => eMultBy2(eMultBy2(v));
 const emd = eMultDouble1;

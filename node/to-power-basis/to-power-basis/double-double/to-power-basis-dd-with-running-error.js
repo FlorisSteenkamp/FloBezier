@@ -1,5 +1,4 @@
 import { twoDiff, ddMultDouble2, ddAddDd, ddAddDouble } from 'double-double';
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const td = twoDiff; // error -> 0
 const qmd = ddMultDouble2; // error -> 3*u²
 const qaq = ddAddDd;

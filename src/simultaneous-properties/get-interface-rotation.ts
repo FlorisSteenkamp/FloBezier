@@ -1,12 +1,11 @@
 import { twoProduct } from "double-double";
-import { ddAddDd as ddAddDd_ } from "double-double";
-import { ddDiffDd as ddDiffDd_ } from "double-double";
-
-const tp = twoProduct;
-const ddAddDd = ddAddDd_;
-const ddDiffDd = ddDiffDd_;
+import { ddAddDd } from "double-double";
+import { ddDiffDd } from "double-double";
 
 const { atan2 } = Math;
+
+
+const tp = twoProduct;
 
 
 /**

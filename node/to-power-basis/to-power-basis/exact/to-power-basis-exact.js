@@ -1,10 +1,8 @@
-import { twoDiff, scaleExpansion2, growExpansion, twoSum, eAdd as _eAdd } from 'big-float-ts';
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
+import { twoDiff, scaleExpansion2, growExpansion, twoSum, eAdd, eCompress } from 'big-float-ts';
 const td = twoDiff;
 const ts = twoSum;
 const sce = scaleExpansion2;
 const ge = growExpansion;
-const eAdd = _eAdd;
 /**
  * Returns the *exact* power basis representation of a bezier curve of order
  * cubic or less.
@@ -38,7 +36,8 @@ function toPowerBasisExact(ps) {
 /** @internal */
 function toPowerBasis3Exact(ps) {
     const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
-    return [[
+    return [
+        [
             // (x3 - x0) + 3*(x1 - x2)
             eAdd(td(x3, x0), sce(3, td(x1, x2))),
             // OR
@@ -50,19 +49,22 @@ function toPowerBasis3Exact(ps) {
             sce(3, td(x1, x0)),
             // x0
             [x0]
-        ], [
+        ].map(eCompress),
+        [
             //ge(ge(sce(3, td(y1, y2)), y3), -y0),
             eAdd(td(y3, y0), sce(3, td(y1, y2))),
             //sce(3, ge(td(y2, 2*y1), y0)),
             sce(3, ge(ts(y2, y0), -2 * y1)),
             sce(3, td(y1, y0)),
             [y0]
-        ]];
+        ].map(eCompress)
+    ];
 }
 /** @internal */
 function toPowerBasis2Exact(ps) {
     const [[x0, y0], [x1, y1], [x2, y2]] = ps;
-    return [[
+    return [
+        [
             // x2 - 2*x1 + x0
             ge(ts(x2, x0), -2 * x1),
             // 2*(x1 - x0)
@@ -73,7 +75,8 @@ function toPowerBasis2Exact(ps) {
             ge(ts(y2, y0), -2 * y1),
             td(2 * y1, 2 * y0),
             [y0]
-        ]];
+        ]
+    ];
 }
 /** @internal */
 function toPowerBasis1Exact(ps) {

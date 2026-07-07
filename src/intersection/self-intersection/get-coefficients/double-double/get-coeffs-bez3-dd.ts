@@ -3,7 +3,6 @@ import { γγ } from "../../../../error-analysis/error-analysis.js";
 import { ddMultDd, ddAddDd, ddDiffDd } from "double-double";
 import { toPowerBasis3DdWithRunningError } from "../../../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js";
 
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
 const qmq = ddMultDd;
 const qaq = ddAddDd;
 const qdq = ddDiffDd;

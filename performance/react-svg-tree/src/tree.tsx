@@ -75,7 +75,11 @@ function $Tree<T>(props: TreeProps<T>) {
             svgElements.push(
                 createChildConnections(minX, treeGraph, node, childNodes),
             );
-            svgElements.push(createdNode);
+            svgElements.push(
+                <React.Fragment key={getNodeKey(node)}>
+                    {createdNode}
+                </React.Fragment>
+            );
         }
 
         return { width, height, svgElements };

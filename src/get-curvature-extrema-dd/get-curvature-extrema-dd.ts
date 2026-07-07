@@ -1,4 +1,4 @@
-import { ddDifferentiate, allRootsCertified, eHorner } from "flo-poly";
+import { ddDifferentiate, eHorner, roots } from "flo-poly";
 import { eMult, eSign } from 'big-float-ts';
 import { getAbsCurvatureExtremaPolysDd } from "./get-abs-curvature-extrema-polys-dd.js";
 import { isCollinear } from "../global-properties/classification/is-collinear.js";
@@ -48,10 +48,10 @@ function getCurvatureExtremaDd(ps: number[][]): Extrema {
 
     if (ps.length === 3) {
         const poly = getCurvatureExtremaQuadraticPolyDd(ps);
-        const maxima = allRootsCertified(poly, 0, 1);
+        const maxima = roots(poly, 0, 1)?.map(r => r.t) || [];
         return {
             minima: [], 
-            maxima: maxima.map(r => (r.tS + r.tE)/2),
+            maxima,
             inflections: []
         };
     }
@@ -61,7 +61,7 @@ function getCurvatureExtremaDd(ps: number[][]): Extrema {
     const p1 = polys.inflectionPoly;
     const p2 = polys.otherExtremaPoly;
 
-    const ts = allRootsCertified(p2, 0, 1);
+    const ts = roots(p2, 0, 1)?.map(r => r.t) || [];
 
     // get second derivative (using product rule) to see if it is a local 
     // minimum or maximum, i.e. diff(p1*p2) = p1'*p2 + p1*p2' = dp1*p2 + p1*dp2
@@ -72,7 +72,7 @@ function getCurvatureExtremaDd(ps: number[][]): Extrema {
     const maxima: number[] = [];
 
     for (let i=0; i<ts.length; i++) {
-        const t = (ts[i].tS + ts[i].tE)/2;
+        const t = ts[i];
         
         const dp2_ = eHorner(dp2, t);
         const p1_ = eHorner(p1, t);
@@ -86,8 +86,7 @@ function getCurvatureExtremaDd(ps: number[][]): Extrema {
         }
     }
 
-    const inflections = allRootsCertified(p1, 0, 1)
-        .map(r => (r.tS + r.tE)/2);
+    const inflections = roots(p1, 0, 1)?.map(r => r.t) || [];
 
     return { minima, maxima, inflections };
 }

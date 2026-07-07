@@ -1,10 +1,8 @@
 import { γγ } from "../../../../error-analysis/error-analysis.js";
-import { twoProduct, ddAddDd, ddMultDouble2, ddMultDd } from "double-double";
+import { ddAddDd, ddMultDouble2, ddMultDd } from "double-double";
 import { getImplicitForm1DdWithRunningError } from "../../../../implicit-form/double-double/get-implicit-form1-dd-with-running-error.js";
 import { toPowerBasis3DdWithRunningError } from "../../../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js";
 
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-const tp  = twoProduct;
 const qaq = ddAddDd;
 const qmd = ddMultDouble2;
 const qmq = ddMultDd;
@@ -87,7 +85,7 @@ function getCoeffsBez1Bez3Dd(ps1: number[][], ps2: number[][]) {
 
     return {
         coeffs:   [v3, v2, v1, v0],
-        errBound: [γγ3*v3_, γγ3*v2_, γγ3*v1_, γγ3*v0_]
+        errBound: [v3_, v2_, v1_, v0_]  // still to be multiplied by `γγ3`
     };
 }
 

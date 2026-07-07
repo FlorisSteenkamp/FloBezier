@@ -1,4 +1,4 @@
-import { allRootsCertified, eHorner, eDifferentiate } from "flo-poly";
+import { roots, eHorner, eDifferentiate } from "flo-poly";
 import { eDiff, eMult, eSign } from 'big-float-ts';
 import { getAbsCurvatureExtremaPolysE } from "./get-abs-curvature-extrema-polys-e.js";
 import { isCollinear } from "../global-properties/classification/is-collinear.js";
@@ -7,6 +7,7 @@ import { cubicToQuadratic } from "../transformation/degree-or-type/cubic-to-quad
 import { getCurvatureExtremaQuadraticPolyE } from './get-curvature-extrema-quadratic-poly-e.js';
 import { getCurvatureExtremaQuadraticPolyDd } from "../get-curvature-extrema-dd/get-curvature-extrema-quadratic-poly-dd.js";
 import { getAbsCurvatureExtremaPolysDd } from "../get-curvature-extrema-dd/get-abs-curvature-extrema-polys-dd.js";
+import { γγ3 } from "../error-analysis/error-analysis.js";
 const { abs } = Math;
 /**
  * Returns the parameter `t` values (in `[0,1]`) of local minimum / maximum
@@ -34,16 +35,15 @@ function getCurvatureExtremaE(ps) {
     if (ps.length === 3) {
         const polyDd = getCurvatureExtremaQuadraticPolyDd(ps);
         const polyE = getCurvatureExtremaQuadraticPolyE(ps);
-        const polyErr = polyE.map((c, i) => {
+        const poly_ = polyE.map((c, i) => {
             const cDd = polyDd[i];
             const d = eDiff(c, cDd);
-            return abs(d[d.length - 1]);
+            return abs(d[d.length - 1]) / γγ3;
         });
-        // const maxima = allRoots(poly, 0, 1);
-        const maxima = allRootsCertified(polyDd, 0, 1, polyErr, () => polyE);
+        const maxima = roots(polyDd, 0, 1, poly_, () => polyE);
         return {
             minima: [],
-            maxima: maxima.map(r => (r.tS + r.tE) / 2),
+            maxima: maxima.map(r => r.t),
             inflections: []
         };
     }
@@ -56,15 +56,15 @@ function getCurvatureExtremaE(ps) {
     const polyErr1 = p1.map((c, i) => {
         const cDd = p1Dd[i];
         const d = eDiff(c, cDd);
-        return abs(d[d.length - 1]);
+        return abs(d[d.length - 1]) / γγ3;
     });
     const polyErr2 = p2.map((c, i) => {
         const cDd = p2Dd[i];
         const d = eDiff(c, cDd);
-        return abs(d[d.length - 1]);
+        return abs(d[d.length - 1]) / γγ3;
     });
     // if (p2Dd.length || polyErr1)
-    const ts = allRootsCertified(p2Dd, 0, 1, polyErr2, () => p2);
+    const ts = roots(p2Dd, 0, 1, polyErr2, () => p2);
     // get second derivative (using product rule) to see if it is a local 
     // minimum or maximum, i.e. diff(p1*p2) = p1'*p2 + p1*p2' = dp1*p2 + p1*dp2
     // = p1*dp2 (since dp1*p2 === 0)
@@ -72,7 +72,7 @@ function getCurvatureExtremaE(ps) {
     const minima = [];
     const maxima = [];
     for (let i = 0; i < ts.length; i++) {
-        const t = (ts[i].tS + ts[i].tE) / 2;
+        const { t } = ts[i];
         const dp2_ = eHorner(dp2, t);
         const p1_ = eHorner(p1, t);
         const secondDerivative = eMult(p1_, dp2_);
@@ -83,8 +83,7 @@ function getCurvatureExtremaE(ps) {
             maxima.push(t);
         }
     }
-    const inflections = allRootsCertified(p1Dd, 0, 1, polyErr1, () => p1)
-        .map(r => (r.tS + r.tE) / 2);
+    const inflections = roots(p1Dd, 0, 1, polyErr1, () => p1).map(r => r.t);
     return { minima, maxima, inflections };
 }
 export { getCurvatureExtremaE };

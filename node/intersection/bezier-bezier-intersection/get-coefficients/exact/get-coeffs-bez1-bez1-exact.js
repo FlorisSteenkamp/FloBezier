@@ -1,7 +1,6 @@
 import { getImplicitForm1ExactPb } from "../../../../implicit-form/exact/get-implicit-form1-exact.js";
 import { toPowerBasis1Exact } from "../../../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-import { expansionProduct, fastExpansionSum, scaleExpansion2 } from "big-float-ts";
+import { expansionProduct, fastExpansionSum, scaleExpansion2, eCompress } from "big-float-ts";
 const sce = scaleExpansion2;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
@@ -51,7 +50,7 @@ function getCoeffsBez1Bez1Exact(ps1, ps2) {
     const p5 = fes(p3, p4);
     const v0 = fes(p5, v);
     const r = [v1, v0];
-    return r;
+    return r.map(eCompress);
 }
 export { getCoeffsBez1Bez1Exact };
 //# sourceMappingURL=get-coeffs-bez1-bez1-exact.js.map

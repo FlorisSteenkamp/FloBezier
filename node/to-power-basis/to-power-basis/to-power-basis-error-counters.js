@@ -155,4 +155,5 @@ function toPowerBasis3ErrorCounters(ps) {
     ];
 }
 export { toPowerBasisErrorCounters, toPowerBasis1ErrorCounters, toPowerBasis2ErrorCounters, toPowerBasis3ErrorCounters };
+// Quokka tests
 //# sourceMappingURL=to-power-basis-error-counters.js.map

@@ -1,9 +1,6 @@
-import { fromTo3 as fromTo3_ } from './from-to/from-to-3.js';
-import { fromTo2 as fromTo2_ } from './from-to/from-to-2.js';
-import { fromTo1 as fromTo1_ } from './from-to/from-to-1.js';
-const fromTo3 = fromTo3_;
-const fromTo2 = fromTo2_;
-const fromTo1 = fromTo1_;
+import { fromTo3 } from './from-to/from-to-3.js';
+import { fromTo2 } from './from-to/from-to-2.js';
+import { fromTo1 } from './from-to/from-to-1.js';
 /**
  * Returns a bezier curve that starts and ends at the given `t` parameters.
  *

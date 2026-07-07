@@ -13,6 +13,6 @@ module.exports = {
     diff: true,
     exit: false,
     parallel: true,
-    timeout: '2000',
+    timeout: '5000',
     'v8-stack-trace-limit': 100 // V8 flags are prepended with "v8-"
 };

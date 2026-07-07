@@ -1,5 +1,4 @@
-import { assert, expect } from 'chai';
-import { describe } from 'mocha';
+import { describe, expect, it } from '@jest/globals';
 import { intersectBoxes } from '../../src/index.js';
 
 
@@ -30,12 +29,12 @@ describe('intersectBoxes', function() {
     }
 
     it('it should correctly intersect two boxes for some boxes', 
-	function() {
-        expect(intersectBoxes(pointBox11, pointBox11)).to.eql(pointBox11);
-        expect(intersectBoxes(pointBox22, pointBox22)).to.eql(pointBox22);
-        expect(intersectBoxes(someBoxes[0],someBoxes[1])).to.eql(someBoxes[1]);
-        expect(intersectBoxes(someBoxes[0],someBoxes[2])).to.eql(undefined);
-        expect(intersectBoxes(...boxPairs.cornersTouch1)).to.eql([[-1,-1],[-1,-1]]);
-        expect(intersectBoxes(...boxPairs.sidesTouch1)).to.eql([[-0.3,-2],[-0.3,1]]);
+    function() {
+        expect(intersectBoxes(pointBox11, pointBox11)).toEqual(pointBox11);
+        expect(intersectBoxes(pointBox22, pointBox22)).toEqual(pointBox22);
+        expect(intersectBoxes(someBoxes[0],someBoxes[1])).toEqual(someBoxes[1]);
+        expect(intersectBoxes(someBoxes[0],someBoxes[2])).toEqual(undefined);
+        expect(intersectBoxes(...boxPairs.cornersTouch1)).toEqual([[-1,-1],[-1,-1]]);
+        expect(intersectBoxes(...boxPairs.sidesTouch1)).toEqual([[-0.3,-2],[-0.3,1]]);
     });
 });

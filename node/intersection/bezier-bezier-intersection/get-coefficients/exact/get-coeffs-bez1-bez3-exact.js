@@ -1,13 +1,11 @@
 import { getImplicitForm1ExactPb } from "../../../../implicit-form/exact/get-implicit-form1-exact.js";
 import { toPowerBasis1Exact, toPowerBasis3Exact } from "../../../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
 import { cubicToQuadratic } from "../../../../transformation/degree-or-type/cubic-to-quadratic.js";
-// We *have* to do the below to improve performance with bundlers❗ The assignee is a getter❗ The assigned is a pure function❗
-import { expansionProduct, fastExpansionSum, scaleExpansion2, eSign as _eSign } from "big-float-ts";
+import { expansionProduct, fastExpansionSum, scaleExpansion2, eSign, eCompress } from "big-float-ts";
 import { getCoeffsBez1Bez2Exact } from "./get-coeffs-bez1-bez2-exact.js";
 const sce = scaleExpansion2;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
-const eSign = _eSign;
 /**
  * Returns an error-free polynomial in 1 variable
  * whose roots are the parameter values of the intersection points of an order
@@ -66,7 +64,7 @@ function getCoeffsBez1Bez3Exact(ps1, ps2) {
     const p9 = fes(p7, p8);
     const v0 = fes(p9, v);
     const r = [v3, v2, v1, v0];
-    return r;
+    return r.map(eCompress);
 }
 export { getCoeffsBez1Bez3Exact };
 //# sourceMappingURL=get-coeffs-bez1-bez3-exact.js.map

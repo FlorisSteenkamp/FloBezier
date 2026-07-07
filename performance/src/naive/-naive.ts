@@ -140,8 +140,8 @@ function getOtherTs2(
                 const x: X = { 
                     p: getPFromBox(box), t1, t2,
                     box, kind: 1,
-                    ri1: { tS: t1, tE: t1, multiplicity: 1 }, 
-                    ri2: { tS: t2, tE: t2, multiplicity: 1 }
+                    ri1: { t: t1, tS: t1, tE: t1, multiplicity: 1 }, 
+                    ri2: { t: t2, tS: t2, tE: t2, multiplicity: 1 }
                 };
                 xs.push(x);
             }

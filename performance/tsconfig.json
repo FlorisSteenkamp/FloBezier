@@ -1,17 +1,22 @@
 {
     "compilerOptions": {
-        "charset": "utf8",
         "strict": true,
-        "module": "es2020",
-        "target": "es2020",
+        "module": "esnext",
+        "target": "esnext",
         "declaration": false,
         "noEmitOnError": true,
         "sourceMap": false,
-        "moduleResolution": "node",
-        "jsx": "react"
+        "rootDir": "..",
+        "moduleResolution": "bundler",
+        "jsx": "react-jsx",
+        "types": ["react", "react-dom", "node"]
     },
     "include": [
-        "src/test-bezier-intersection.ts"
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "../src/**/*.ts",
+        "../src/**/*.tsx",
+        "../src/**/*.d.ts"
     ],
     "exclude": [
         "node_modules",

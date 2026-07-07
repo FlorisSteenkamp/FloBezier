@@ -1,13 +1,13 @@
 import { eAdd, eCompress } from 'big-float-ts';
-import { expect, assert, use } from 'chai';
-import { describe } from 'mocha';
+
+import { describe, expect, it } from '@jest/globals';
 import { squares } from 'squares-rng';
 import { closestPointOnBezier, cubicToQuadratic, evaluateExact, isPointOnBezierExtension } from '../../../src/index.js';
-import { nearly } from '../../helpers/chai-extend-nearly.js';
+
 import { getRandomBezier } from '../../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../../helpers/random-rotate-and-translate.js';
 
-use(nearly);
+
 
 const eps = Number.EPSILON;
 
@@ -32,112 +32,111 @@ function getPointExactlyOnCurve(order: 0|1|2|3, seed: number) {
 
 
 describe('isPointOnBezierExtension', function() {
-	it('it should correctly check if some given points are exactly on some given bezier curves',
-	function() {
-		for (let order=0; order<=3; order++) {
-			for (let seed=0; seed<25; seed++) {
-				const { ps, p, t } = getPointExactlyOnCurve(order as 0|1|2|3, seed);
-				const p1 = p.map(c => [c]);
-				// add a small amount to x coordinate
-				const p2 = [
-					eAdd(p1[0], [eps**2]),
-					p1[1]
-				];
+    it('it should correctly check if some given points are exactly on some given bezier curves',
+    function() {
+        for (let order=0; order<=3; order++) {
+            for (let seed=0; seed<25; seed++) {
+                const { ps, p, t } = getPointExactlyOnCurve(order as 0|1|2|3, seed);
+                const p1 = p.map(c => [c]);
+                // add a small amount to x coordinate
+                const p2 = [
+                    eAdd(p1[0], [eps**2]),
+                    p1[1]
+                ];
 
-			
-				expect(isPointOnBezierExtension(ps,p1)).to.be.true;
-				expect(isPointOnBezierExtension(ps,p2)).to.be.false;
-				
+            
+                expect(isPointOnBezierExtension(ps,p1)).toEqual(true);
+                expect(isPointOnBezierExtension(ps,p2)).toEqual(false);
+                
 
-				const ps_ = randomRotateAndTranslate(0)(ps);
-				const p_ = randomRotateAndTranslate(0)([p])[0];
-				const p1_ = p_.map(c => [c]);
-				const r_ = isPointOnBezierExtension(ps_,p1_);
+                const ps_ = randomRotateAndTranslate(0)(ps);
+                const p_ = randomRotateAndTranslate(0)([p])[0];
+                const p1_ = p_.map(c => [c]);
+                const r_ = isPointOnBezierExtension(ps_,p1_);
 
-				// just to test the test
-				const $p1_ = p1_.map(c => c[0]);
-				const $p1t_ = closestPointOnBezier(ps_,$p1_).p;
-				// @ts-ignore - otherwise TypeScript gives an error on nearly
-				expect($p1_).to.be.nearly(2**12,$p1t_);
+                // just to test the test
+                const $p1_ = p1_.map(c => c[0]);
+                const $p1t_ = closestPointOnBezier(ps_,$p1_).p;
+                expect($p1_).toBeNearly(2**12,$p1t_);
 
-				// the point is almost but not quite on the curve - it is 
-				// actually possible that the point may be exactly on the
-				// curve by accident
-				expect(order > 0 && r_).to.be.false;  
-			}
-		}
+                // the point is almost but not quite on the curve - it is 
+                // actually possible that the point may be exactly on the
+                // curve by accident
+                expect(order > 0 && r_).toEqual(false);  
+            }
+        }
 
-		// some edge cases
-		{
-			const ps = [[1,1],[1,1]];
-			const p = [[1],[1]];
-			expect(isPointOnBezierExtension(ps,p)).to.be.true;
-		}
+        // some edge cases
+        {
+            const ps = [[1,1],[1,1]];
+            const p = [[1],[1]];
+            expect(isPointOnBezierExtension(ps,p)).toEqual(true);
+        }
 
-		{
-			const ps = [[1,1],[1,1],[1,1]];
-			const p = [[1],[1]];
-			expect(isPointOnBezierExtension(ps,p)).to.be.true;
-		}
+        {
+            const ps = [[1,1],[1,1],[1,1]];
+            const p = [[1],[1]];
+            expect(isPointOnBezierExtension(ps,p)).toEqual(true);
+        }
 
-		{
-			const ps = [[1,2],[3,4],[4,3],[2,1]];
-			const p = [[3],[3]];
-			expect(isPointOnBezierExtension(ps,p)).to.be.true;
-		}
+        {
+            const ps = [[1,2],[3,4],[4,3],[2,1]];
+            const p = [[3],[3]];
+            expect(isPointOnBezierExtension(ps,p)).toEqual(true);
+        }
 
-		{
-			const ps = [[0,0],[1.5,1.5],[3,0]];
-			const p = [[1.5],[0.7500000000001]];
-			expect(isPointOnBezierExtension(ps,p)).to.be.false;
-		}
+        {
+            const ps = [[0,0],[1.5,1.5],[3,0]];
+            const p = [[1.5],[0.7500000000001]];
+            expect(isPointOnBezierExtension(ps,p)).toEqual(false);
+        }
 
-		{
-			const ps = [[0,0],[1.5,1.5],[3,3]];
-			const p = [[1.5],[1.501]];
-			expect(isPointOnBezierExtension(ps,p)).to.be.false;
-		}
+        {
+            const ps = [[0,0],[1.5,1.5],[3,3]];
+            const p = [[1.5],[1.501]];
+            expect(isPointOnBezierExtension(ps,p)).toEqual(false);
+        }
 
-		{
-			const ps = [[0,0],[1.5,1.5],[3,3]];
-			const p = [[2],[2]];
-			expect(isPointOnBezierExtension(ps,p)).to.be.true;
-		}
+        {
+            const ps = [[0,0],[1.5,1.5],[3,3]];
+            const p = [[2],[2]];
+            expect(isPointOnBezierExtension(ps,p)).toEqual(true);
+        }
 
-		{
-			const ps = [[1,2],[3,4],[4,3],[2,1]];
-			const p = [[3],[3.01]];
-			expect(isPointOnBezierExtension(ps,p)).to.be.false;
-		}
+        {
+            const ps = [[1,2],[3,4],[4,3],[2,1]];
+            const p = [[3],[3.01]];
+            expect(isPointOnBezierExtension(ps,p)).toEqual(false);
+        }
 
-		{
-			const ps = [[1,1],[1,1],[1,1],[1,1]];
-			const p = [[1],[1]];
-			expect(isPointOnBezierExtension(ps,p)).to.be.true;
-		}
+        {
+            const ps = [[1,1],[1,1],[1,1],[1,1]];
+            const p = [[1],[1]];
+            expect(isPointOnBezierExtension(ps,p)).toEqual(true);
+        }
 
-		{
-			const ps = [[1,1],[2,2],[3,3],[4,4]];
-			const p = [[1.2],[1.2]];
-			expect(isPointOnBezierExtension(ps,p)).to.be.true;
-		}
+        {
+            const ps = [[1,1],[2,2],[3,3],[4,4]];
+            const p = [[1.2],[1.2]];
+            expect(isPointOnBezierExtension(ps,p)).toEqual(true);
+        }
 
-		{
-			const ps = [[1,1],[2,2],[3,3],[4,4],[5,6]];
-			const p = [[1.2],[1.2]];
-			expect(() => isPointOnBezierExtension(ps,p)).to.throw();
-		}
+        {
+            const ps = [[1,1],[2,2],[3,3],[4,4],[5,6]];
+            const p = [[1.2],[1.2]];
+            expect(() => isPointOnBezierExtension(ps,p)).toThrow();
+        }
 
-		{
-			const ps = cubicToQuadratic([[1,0],[2,1],[3,1],[4,0]])!;  //=> 1,0,2.5,1.5,4,0 
-			const p = [[2.5],[0.75]];
-			expect(isPointOnBezierExtension(ps,p)).to.be.true;
-		}
+        {
+            const ps = cubicToQuadratic([[1,0],[2,1],[3,1],[4,0]])!;  //=> 1,0,2.5,1.5,4,0 
+            const p = [[2.5],[0.75]];
+            expect(isPointOnBezierExtension(ps,p)).toEqual(true);
+        }
 
-		{
-			const ps = cubicToQuadratic([[1,0],[2,1],[3,1.00000000000001],[4,0]])!;
-			const p = [[2.5],[0.75]];
-			expect(isPointOnBezierExtension(ps,p)).to.be.false;
-		}
-	});
+        {
+            const ps = cubicToQuadratic([[1,0],[2,1],[3,1.00000000000001],[4,0]])!;
+            const p = [[2.5],[0.75]];
+            expect(isPointOnBezierExtension(ps,p)).toEqual(false);
+        }
+    });
 });
