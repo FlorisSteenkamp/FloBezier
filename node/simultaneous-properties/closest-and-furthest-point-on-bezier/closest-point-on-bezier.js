@@ -42,7 +42,7 @@ function closestPointOnBezier(ps, p, inclEndpoints = true) {
     else {
         throw new Error('The given bezier curve must be of order <= 3.');
     }
-    const ts = roots(poly, 0, 1).map(r => r.t);
+    const ts = roots(poly, 0, 1)?.map(r => r.t) || [];
     if (inclEndpoints) {
         ts.push(0);
         ts.push(1);

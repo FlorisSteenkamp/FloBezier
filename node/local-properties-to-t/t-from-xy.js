@@ -80,10 +80,10 @@ function tFromXY3(ps, p) {
         return pExactY;
     };
     // max 3 roots
-    const xrs = roots(polyDdX, 0, 1, polyX_, getPExactX, true);
+    const xrs = roots(polyDdX, 0, 1, polyX_, getPExactX);
     // const xrsExp = xrs!.map(xr => refineK1(xr, getPExactX()));
     // max 3 roots
-    const yrs = roots(polyDdY, 0, 1, polyY_, getPExactY, true);
+    const yrs = roots(polyDdY, 0, 1, polyY_, getPExactY);
     if (xrs === undefined) {
         // the `x` value of the point is on the curve for all `t` values
         // the curve must be a 'line' (can also be degenerate quadratic, etc.)
@@ -154,9 +154,9 @@ function tFromXY2(ps, p) {
         return pExactY;
     };
     // max 2 roots
-    const xrs = roots(polyDdX, 0, 1, polyX_, getPExactX, true);
+    const xrs = roots(polyDdX, 0, 1, polyX_, getPExactX);
     // max 2 roots
-    const yrs = roots(polyDdY, 0, 1, polyY_, getPExactY, true);
+    const yrs = roots(polyDdY, 0, 1, polyY_, getPExactY);
     if (xrs === undefined) {
         // the `x` value of the point is on the curve for all `t` values
         // the curve must be a 'line'

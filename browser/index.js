@@ -12751,7 +12751,7 @@ function getCoeffsBezBez(ps1, ps2) {
  */
 function bezierBezierIntersectionBoundless(ps1, ps2) {
     const { coeffs, errBound, getPExact } = getCoeffsBezBez(ps1, ps2);
-    return roots(coeffs, 0, 1, errBound, getPExact, true);
+    return roots(coeffs, 0, 1, errBound, getPExact);
 }
 
 
@@ -13990,10 +13990,10 @@ function tFromXY3(ps, p) {
         return pExactY;
     };
     // max 3 roots
-    const xrs = roots(polyDdX, 0, 1, polyX_, getPExactX, true);
+    const xrs = roots(polyDdX, 0, 1, polyX_, getPExactX);
     // const xrsExp = xrs!.map(xr => refineK1(xr, getPExactX()));
     // max 3 roots
-    const yrs = roots(polyDdY, 0, 1, polyY_, getPExactY, true);
+    const yrs = roots(polyDdY, 0, 1, polyY_, getPExactY);
     if (xrs === undefined) {
         // the `x` value of the point is on the curve for all `t` values
         // the curve must be a 'line' (can also be degenerate quadratic, etc.)
@@ -14064,9 +14064,9 @@ function tFromXY2(ps, p) {
         return pExactY;
     };
     // max 2 roots
-    const xrs = roots(polyDdX, 0, 1, polyX_, getPExactX, true);
+    const xrs = roots(polyDdX, 0, 1, polyX_, getPExactX);
     // max 2 roots
-    const yrs = roots(polyDdY, 0, 1, polyY_, getPExactY, true);
+    const yrs = roots(polyDdY, 0, 1, polyY_, getPExactY);
     if (xrs === undefined) {
         // the `x` value of the point is on the curve for all `t` values
         // the curve must be a 'line'
@@ -16731,7 +16731,7 @@ function closestPointOnBezier(ps, p, inclEndpoints = true) {
     else {
         throw new Error('The given bezier curve must be of order <= 3.');
     }
-    const ts = roots(poly, 0, 1).map(r => r.t);
+    const ts = roots(poly, 0, 1)?.map(r => r.t) || [];
     if (inclEndpoints) {
         ts.push(0);
         ts.push(1);
@@ -16795,7 +16795,7 @@ function furthestPointOnBezier(ps, p) {
     else {
         throw new Error('The given bezier curve must be of order <= 3.');
     }
-    const ts = roots(poly, 0, 1).map(r => r.t);
+    const ts = roots(poly, 0, 1)?.map(r => r.t) || [];
     ts.push(0);
     ts.push(1);
     // Get point with minimum distance
@@ -17097,8 +17097,7 @@ function calcHErrorBound(A, tS, tE) {
 
 ;// ./src/simultaneous-properties/hausdorff-distance/hausdorff-distance.ts
 
-/** @internal */
-const hausdorff_distance_max = Math.max;
+const { max: hausdorff_distance_max } = Math;
 /**
  * Calculates and returns the (two-sided) Hausdorff distance between the bezier
  * curves `A` and `B` as `[min,max]` where `min` is the minimum
@@ -18392,7 +18391,7 @@ function getInflections(ps) {
     const a = bx * cy - by * cx;
     const b = ax * cy - ay * cx;
     const c = ax * by - ay * bx;
-    return roots([a, b, c], 0, 1).map(r => r.t);
+    return roots([a, b, c], 0, 1)?.map(r => r.t) || [];
 }
 
 
@@ -21503,7 +21502,7 @@ function getFootPointsOnBezierPolysCertified(ps, p) {
         };
     }
     else {
-        throw new Error('The given bezier curve must be of order <= 3');
+        throw new Error('The given bezier curve must be of order 1, 2 or 3');
     }
 }
 
@@ -21540,7 +21539,7 @@ const { sqrt: closest_point_on_bezier_certified_sqrt } = Math;
  */
 function closestPointOnBezierCertified(ps, p, lb = 0, ub = 1) {
     const { polyDd, polyE, getPolyExact } = getFootPointsOnBezierPolysCertified(ps, p);
-    const ris = roots(polyDd, lb, ub, polyE, getPolyExact);
+    const ris = roots(polyDd, lb, ub, polyE, getPolyExact) || [];
     ris.push({ t: lb, tS: lb, tE: lb, multiplicity: 1 });
     ris.push({ t: ub, tS: ub, tE: ub, multiplicity: 1 });
     const infos = ris.map((ri) => {
@@ -21614,17 +21613,17 @@ function getFootPointsOnBezierCertified(ps, p, lb = 0, ub = 1) {
     if (order === 3) {
         ris = roots(getFootpointPoly3Dd(ps, p), lb, ub, 
         // getClosestOnBezier3FromPointErrorCounters(ps, p).map(e => 10*γγ6*e), 
-        getClosestOnBezier3FromPointErrorCounters(ps, p).map(e => 10 * 2 * e), () => getFootpointPoly3Exact(ps, p));
+        getClosestOnBezier3FromPointErrorCounters(ps, p).map(e => 10 * 2 * e), () => getFootpointPoly3Exact(ps, p)) || [];
     }
     else if (order === 2) {
         ris = roots(getFootpointPoly2Dd(ps, p), lb, ub, 
         // getClosestOnBezier2FromPointErrorCounters(ps, p).map(e => 8*γγ6*e), 
-        getClosestOnBezier2FromPointErrorCounters(ps, p).map(e => 8 * 2 * e), () => getFootpointPoly2Exact(ps, p));
+        getClosestOnBezier2FromPointErrorCounters(ps, p).map(e => 8 * 2 * e), () => getFootpointPoly2Exact(ps, p)) || [];
     }
     else if (order === 1) {
         ris = roots(getFootpointPoly1Dd(ps, p), lb, ub, 
         // getClosestOnBezier1FromPointErrorCounters(ps, p).map(e => 6*γγ6*e), 
-        getClosestOnBezier1FromPointErrorCounters(ps, p).map(e => 6 * 2 * e), () => getFootpointPoly1Exact(ps, p));
+        getClosestOnBezier1FromPointErrorCounters(ps, p).map(e => 6 * 2 * e), () => getFootpointPoly1Exact(ps, p)) || [];
     }
     else if (order === 0) {
         return [];
@@ -21895,7 +21894,7 @@ function getCurvatureExtrema(ps) {
     }
     if (ps.length === 3) {
         const poly = getCurvatureExtremaQuadraticPoly(ps);
-        const maxima = roots(poly, 0, 1).map(r => r.t);
+        const maxima = roots(poly, 0, 1)?.map(r => r.t) || [];
         return {
             minima: [],
             maxima,
@@ -21905,7 +21904,7 @@ function getCurvatureExtrema(ps) {
     const polys = getAbsCurvatureExtremaPolys(ps);
     const p1 = polys.inflectionPoly;
     const p2 = polys.otherExtremaPoly;
-    const ts = roots(p2, 0, 1).map(mid);
+    const ts = roots(p2, 0, 1)?.map(r => r.t) || [];
     // get second derivative (using product rule) to see if it is a local 
     // minimum or maximum, i.e. diff(p1*p2) = p1'*p2 + p1*p2' = dp1*p2 + p1*dp2
     // = p1*dp2 (since dp1*p2 === 0)
@@ -21924,7 +21923,7 @@ function getCurvatureExtrema(ps) {
             maxima.push(t);
         }
     }
-    const inflections = roots(p1, 0, 1).map(mid);
+    const inflections = roots(p1, 0, 1)?.map(r => r.t) || [];
     return { minima, maxima, inflections };
 }
 
@@ -22189,17 +22188,17 @@ function getCurvatureExtremaDd(ps) {
     }
     if (ps.length === 3) {
         const poly = getCurvatureExtremaQuadraticPolyDd(ps);
-        const maxima = roots(poly, 0, 1);
+        const maxima = roots(poly, 0, 1)?.map(r => r.t) || [];
         return {
             minima: [],
-            maxima: maxima.map(r => r.t),
+            maxima,
             inflections: []
         };
     }
     const polys = getAbsCurvatureExtremaPolysDd(ps);
     const p1 = polys.inflectionPoly;
     const p2 = polys.otherExtremaPoly;
-    const ts = roots(p2, 0, 1);
+    const ts = roots(p2, 0, 1)?.map(r => r.t) || [];
     // get second derivative (using product rule) to see if it is a local 
     // minimum or maximum, i.e. diff(p1*p2) = p1'*p2 + p1*p2' = dp1*p2 + p1*dp2
     // = p1*dp2 (since dp1*p2 === 0)
@@ -22207,7 +22206,7 @@ function getCurvatureExtremaDd(ps) {
     const minima = [];
     const maxima = [];
     for (let i = 0; i < ts.length; i++) {
-        const { t } = ts[i];
+        const t = ts[i];
         const dp2_ = eHorner(dp2, t);
         const p1_ = eHorner(p1, t);
         const secondDerivative = expansionProduct(p1_, dp2_);
@@ -22218,7 +22217,7 @@ function getCurvatureExtremaDd(ps) {
             maxima.push(t);
         }
     }
-    const inflections = roots(p1, 0, 1).map(r => r.t);
+    const inflections = roots(p1, 0, 1)?.map(r => r.t) || [];
     return { minima, maxima, inflections };
 }
 
@@ -22494,10 +22493,10 @@ function getCurvatureExtremaE(ps) {
             const d = eDiff(c, cDd);
             return get_curvature_extrema_e_abs(d[d.length - 1]) / γγ3;
         });
-        const maxima = roots(polyDd, 0, 1, poly_, () => polyE);
+        const maxima = roots(polyDd, 0, 1, poly_, () => polyE)?.map(r => r.t) || [];
         return {
             minima: [],
-            maxima: maxima.map(r => r.t),
+            maxima,
             inflections: []
         };
     }
@@ -22518,7 +22517,7 @@ function getCurvatureExtremaE(ps) {
         return get_curvature_extrema_e_abs(d[d.length - 1]) / γγ3;
     });
     // if (p2Dd.length || polyErr1)
-    const ts = roots(p2Dd, 0, 1, polyErr2, () => p2);
+    const ts = roots(p2Dd, 0, 1, polyErr2, () => p2)?.map(r => r.t) || [];
     // get second derivative (using product rule) to see if it is a local 
     // minimum or maximum, i.e. diff(p1*p2) = p1'*p2 + p1*p2' = dp1*p2 + p1*dp2
     // = p1*dp2 (since dp1*p2 === 0)
@@ -22526,7 +22525,7 @@ function getCurvatureExtremaE(ps) {
     const minima = [];
     const maxima = [];
     for (let i = 0; i < ts.length; i++) {
-        const { t } = ts[i];
+        const t = ts[i];
         const dp2_ = eHorner(dp2, t);
         const p1_ = eHorner(p1, t);
         const secondDerivative = expansionProduct(p1_, dp2_);
@@ -22537,7 +22536,7 @@ function getCurvatureExtremaE(ps) {
             maxima.push(t);
         }
     }
-    const inflections = roots(p1Dd, 0, 1, polyErr1, () => p1).map(r => r.t);
+    const inflections = roots(p1Dd, 0, 1, polyErr1, () => p1)?.map(r => r.t) || [];
     return { minima, maxima, inflections };
 }
 
@@ -22670,8 +22669,8 @@ function isMonotone(xs) {
 function getBounds(ps) {
     // Roots of derivative
     const dxy = toPowerBasis_1stDerivative(ps);
-    const rootsX = roots(dxy[0], 0, 1).map(r => r.t);
-    const rootsY = roots(dxy[1], 0, 1).map(r => r.t);
+    const rootsX = roots(dxy[0], 0, 1)?.map(r => r.t) || [];
+    const rootsY = roots(dxy[1], 0, 1)?.map(r => r.t) || [];
     // Endpoints
     rootsX.push(0, 1);
     rootsY.push(0, 1);
@@ -22758,7 +22757,7 @@ function getXBoundsTight(ps) {
         return { minX, maxX };
     }
     const [dx,] = toPowerBasis_1stDerivative(ps);
-    const rootsX = roots(dx, 0, 1);
+    const rootsX = roots(dx, 0, 1) || [];
     // Test points
     for (let i = 0; i < rootsX.length; i++) {
         const r = rootsX[i];
@@ -22804,7 +22803,7 @@ function getYBoundsTight(ps) {
         return { minY, maxY };
     }
     const [, dy] = toPowerBasis_1stDerivative(ps);
-    const rootsY = roots(dy, 0, 1);
+    const rootsY = roots(dy, 0, 1) || [];
     // Test points
     for (let i = 0; i < rootsY.length; i++) {
         const r = rootsY[i];
@@ -23405,9 +23404,6 @@ function getCoeffsLinearErrorCounters(circle, ps) {
 
 
 
-
-/** @internal */
-const circle_bezier_intersection_6 = γγ(6);
 /**
  * Returns the intersection between a circle and linear, quadratic or cubic bezier
  * curve.
@@ -23453,8 +23449,10 @@ function circleBezierIntersection(circle, ps) {
     }
     // const polyE = _polyE.map(e => γγ6*e);
     const polyE = _polyE.map(e => 2 * e);
-    const ris = (roots(poly, 0, 1, polyE, () => getCoeffsExact(circle, ps), true) ||
-        [{ t: 0.5, tS: 0.5, tE: 0.5, multiplicity: 1 }]);
+    const ris = roots(poly, 0, 1, polyE, () => getCoeffsExact(circle, ps)) ||
+        // `undefined` means the zero polynomial, i.e. infinitely many roots.
+        // Use the midpoint only to represent that degenerate case.
+        [{ t: 0.5, tS: 0.5, tE: 0.5, multiplicity: 1 }];
     return ris.map(ri => {
         const box = getIntervalBox(ps, [ri.tS, ri.tE]);
         return { p: getPFromBox(box), box, t: ri.t, ri };

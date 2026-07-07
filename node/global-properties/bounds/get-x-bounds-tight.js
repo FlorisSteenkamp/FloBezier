@@ -26,7 +26,7 @@ function getXBoundsTight(ps) {
         return { minX, maxX };
     }
     const [dx,] = toPowerBasis_1stDerivative(ps);
-    const rootsX = roots(dx, 0, 1);
+    const rootsX = roots(dx, 0, 1) || [];
     // Test points
     for (let i = 0; i < rootsX.length; i++) {
         const r = rootsX[i];

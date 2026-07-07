@@ -26,7 +26,7 @@ function getYBoundsTight(ps) {
         return { minY, maxY };
     }
     const [, dy] = toPowerBasis_1stDerivative(ps);
-    const rootsY = roots(dy, 0, 1);
+    const rootsY = roots(dy, 0, 1) || [];
     // Test points
     for (let i = 0; i < rootsY.length; i++) {
         const r = rootsY[i];

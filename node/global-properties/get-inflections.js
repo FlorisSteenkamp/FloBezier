@@ -29,7 +29,7 @@ function getInflections(ps) {
     const a = bx * cy - by * cx;
     const b = ax * cy - ay * cx;
     const c = ax * by - ay * bx;
-    return roots([a, b, c], 0, 1).map(r => r.t);
+    return roots([a, b, c], 0, 1)?.map(r => r.t) || [];
 }
 export { getInflections };
 //# sourceMappingURL=get-inflections.js.map

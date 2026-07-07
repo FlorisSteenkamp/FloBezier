@@ -1,4 +1,4 @@
-import { roots, differentiate, Horner, mid } from "flo-poly";
+import { roots, differentiate, Horner } from "flo-poly";
 import { getAbsCurvatureExtremaPolys } from "./get-abs-curvature-extrema-polys.js";
 import { isCollinear } from "../global-properties/classification/is-collinear.js";
 import { isCubicReallyQuad } from "../global-properties/classification/is-cubic-really-quad.js";
@@ -28,7 +28,7 @@ function getCurvatureExtrema(ps) {
     }
     if (ps.length === 3) {
         const poly = getCurvatureExtremaQuadraticPoly(ps);
-        const maxima = roots(poly, 0, 1).map(r => r.t);
+        const maxima = roots(poly, 0, 1)?.map(r => r.t) || [];
         return {
             minima: [],
             maxima,
@@ -38,7 +38,7 @@ function getCurvatureExtrema(ps) {
     const polys = getAbsCurvatureExtremaPolys(ps);
     const p1 = polys.inflectionPoly;
     const p2 = polys.otherExtremaPoly;
-    const ts = roots(p2, 0, 1).map(mid);
+    const ts = roots(p2, 0, 1)?.map(r => r.t) || [];
     // get second derivative (using product rule) to see if it is a local 
     // minimum or maximum, i.e. diff(p1*p2) = p1'*p2 + p1*p2' = dp1*p2 + p1*dp2
     // = p1*dp2 (since dp1*p2 === 0)
@@ -57,7 +57,7 @@ function getCurvatureExtrema(ps) {
             maxima.push(t);
         }
     }
-    const inflections = roots(p1, 0, 1).map(mid);
+    const inflections = roots(p1, 0, 1)?.map(r => r.t) || [];
     return { minima, maxima, inflections };
 }
 export { getCurvatureExtrema };

@@ -40,10 +40,10 @@ function getCurvatureExtremaE(ps) {
             const d = eDiff(c, cDd);
             return abs(d[d.length - 1]) / γγ3;
         });
-        const maxima = roots(polyDd, 0, 1, poly_, () => polyE);
+        const maxima = roots(polyDd, 0, 1, poly_, () => polyE)?.map(r => r.t) || [];
         return {
             minima: [],
-            maxima: maxima.map(r => r.t),
+            maxima,
             inflections: []
         };
     }
@@ -64,7 +64,7 @@ function getCurvatureExtremaE(ps) {
         return abs(d[d.length - 1]) / γγ3;
     });
     // if (p2Dd.length || polyErr1)
-    const ts = roots(p2Dd, 0, 1, polyErr2, () => p2);
+    const ts = roots(p2Dd, 0, 1, polyErr2, () => p2)?.map(r => r.t) || [];
     // get second derivative (using product rule) to see if it is a local 
     // minimum or maximum, i.e. diff(p1*p2) = p1'*p2 + p1*p2' = dp1*p2 + p1*dp2
     // = p1*dp2 (since dp1*p2 === 0)
@@ -72,7 +72,7 @@ function getCurvatureExtremaE(ps) {
     const minima = [];
     const maxima = [];
     for (let i = 0; i < ts.length; i++) {
-        const { t } = ts[i];
+        const t = ts[i];
         const dp2_ = eHorner(dp2, t);
         const p1_ = eHorner(p1, t);
         const secondDerivative = eMult(p1_, dp2_);
@@ -83,7 +83,7 @@ function getCurvatureExtremaE(ps) {
             maxima.push(t);
         }
     }
-    const inflections = roots(p1Dd, 0, 1, polyErr1, () => p1).map(r => r.t);
+    const inflections = roots(p1Dd, 0, 1, polyErr1, () => p1)?.map(r => r.t) || [];
     return { minima, maxima, inflections };
 }
 export { getCurvatureExtremaE };

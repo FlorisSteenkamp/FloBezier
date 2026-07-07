@@ -29,7 +29,7 @@ const { sqrt } = Math;
  */
 function closestPointOnBezierCertified(ps, p, lb = 0, ub = 1) {
     const { polyDd, polyE, getPolyExact } = getFootPointsOnBezierPolysCertified(ps, p);
-    const ris = roots(polyDd, lb, ub, polyE, getPolyExact);
+    const ris = roots(polyDd, lb, ub, polyE, getPolyExact) || [];
     ris.push({ t: lb, tS: lb, tE: lb, multiplicity: 1 });
     ris.push({ t: ub, tS: ub, tE: ub, multiplicity: 1 });
     const infos = ris.map((ri) => {

@@ -64,7 +64,7 @@ function getFootPointsOnBezierPolysCertified(ps, p) {
         };
     }
     else {
-        throw new Error('The given bezier curve must be of order <= 3');
+        throw new Error('The given bezier curve must be of order 1, 2 or 3');
     }
 }
 export { getFootPointsOnBezierPolysCertified };

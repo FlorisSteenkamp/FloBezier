@@ -40,7 +40,7 @@ function furthestPointOnBezier(ps, p) {
     else {
         throw new Error('The given bezier curve must be of order <= 3.');
     }
-    const ts = roots(poly, 0, 1).map(r => r.t);
+    const ts = roots(poly, 0, 1)?.map(r => r.t) || [];
     ts.push(0);
     ts.push(1);
     // Get point with minimum distance

@@ -19,8 +19,8 @@ import { evalDeCasteljau } from "../../local-properties-at-t/evaluate/double/eva
 function getBounds(ps) {
     // Roots of derivative
     const dxy = toPowerBasis_1stDerivative(ps);
-    const rootsX = roots(dxy[0], 0, 1).map(r => r.t);
-    const rootsY = roots(dxy[1], 0, 1).map(r => r.t);
+    const rootsX = roots(dxy[0], 0, 1)?.map(r => r.t) || [];
+    const rootsY = roots(dxy[1], 0, 1)?.map(r => r.t) || [];
     // Endpoints
     rootsX.push(0, 1);
     rootsY.push(0, 1);

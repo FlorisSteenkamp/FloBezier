@@ -1,6 +1,5 @@
 import { hausdorffDistanceOneSided } from "./hausdorff-distance-one-sided.js";
-/** @internal */
-const max = Math.max;
+const { max } = Math;
 /**
  * Calculates and returns the (two-sided) Hausdorff distance between the bezier
  * curves `A` and `B` as `[min,max]` where `min` is the minimum
