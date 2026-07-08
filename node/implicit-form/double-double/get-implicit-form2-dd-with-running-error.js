@@ -27,6 +27,9 @@ const abs = Math.abs;
  * @doc mdx
  */
 function getImplicitForm2DdWithRunningError(ps) {
+    //--------------------------------------------------------------------------
+    // See: error-analysis-double-double.txt
+    //--------------------------------------------------------------------------
     // The implicit form is given by:
     // vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0
     const { coeffs: [[a2, a1, [, a0]], [b2, b1, [, b0]]], errorBound: [[a2_], [b2_]] } = toPowerBasis2DdWithRunningError(ps);
@@ -69,13 +72,13 @@ function getImplicitForm2DdWithRunningError(ps) {
     const $q3 = $a1b0 - $a0b1;
     const q1 = qdq(a2b1, a1b2);
     const _q1 = abs($q1);
-    const q1_ = a2b1_ + a1b2_ + abs($q1);
+    const q1_ = a2b1_ + a1b2_ + _q1;
     const q2 = qdq(a2b0, a0b2);
     const _q2 = abs($q2);
-    const q2_ = a2b0_ + a0b2_ + abs($q2);
+    const q2_ = a2b0_ + a0b2_ + _q2;
     const q3 = qdq(a1b0, a0b1);
     const _q3 = abs($q3);
-    const q3_ = a1b0_ + a0b1_ + abs($q3);
+    const q3_ = a1b0_ + a0b1_ + _q3;
     // -a1*q1*y - a2**2*y**2 + 2*a2*b2*x*y + 2*a2*q2*y + b1*q1*x - b2**2*x**2 - 2*b2*q2*x + q1*q3 - q2**2
     // -------------
     // b2**2 *x**2
@@ -88,7 +91,7 @@ function getImplicitForm2DdWithRunningError(ps) {
     // 2*a2*b2 *x*y
     // -------------
     const vₓᵧ = qm2(a2b2);
-    const vₓᵧ_ = a2b2_;
+    const vₓᵧ_ = 2 * a2b2_;
     // -------------
     // a2**2 *y**2 
     // -a2**2 *y**2 

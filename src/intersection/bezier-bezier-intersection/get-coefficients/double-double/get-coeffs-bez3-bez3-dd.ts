@@ -1,6 +1,5 @@
 import { twoProduct, ddMultBy2, ddMultDouble2, ddMultDd, ddAddDd } from "double-double";
 import { getImplicitForm3DdWithRunningError } from "../../../../implicit-form/double-double/get-implicit-form3-dd-with-running-error.js";
-import { γγ } from "../../../../error-analysis/error-analysis.js";
 import { toPowerBasis3DdWithRunningError } from '../../../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js';
 
 const tp  = twoProduct;
@@ -9,8 +8,7 @@ const qmd = ddMultDouble2;
 const qmq = ddMultDd;
 const qaq = ddAddDd;
 
-const abs = Math.abs;
-const γγ3 = γγ(3);
+const { abs } = Math;
 
 
 /**
@@ -1072,11 +1070,11 @@ function getCoeffsBez3Bez3Dd(
     const la_ = d2_*_d0d0 + 2*abs($la);
     const $lb = $l3 + $l4;
     const lb = qaq(l3,l4);
-    const _lb = l3_ + l4_ + abs($lb);
+    const _lb = abs($lb);
     const lb_ = l3_ + l4_ + _lb;
     const $lc = $l5 + $l6;
     const lc = qaq(l5,l6);
-    const _lc = l5_ + l6_ + abs($lc);
+    const _lc = abs($lc);
     const lc_ = l5_ + l6_ + _lc;
     const $ld = $l7 + $l8;
     const ld = qaq(l7,l8);

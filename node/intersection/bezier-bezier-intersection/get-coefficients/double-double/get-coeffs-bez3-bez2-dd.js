@@ -1,5 +1,4 @@
 import { twoProduct, ddMultBy2, ddMultDouble2, ddMultDd, ddAddDd } from "double-double";
-import { γγ } from "../../../../error-analysis/error-analysis.js";
 import { getImplicitForm3DdWithRunningError } from "../../../../implicit-form/double-double/get-implicit-form3-dd-with-running-error.js";
 import { toPowerBasis2DdWithRunningError } from "../../../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js";
 const tp = twoProduct;
@@ -7,8 +6,7 @@ const qm2 = ddMultBy2;
 const qmd = ddMultDouble2;
 const qmq = ddMultDd;
 const qaq = ddAddDd;
-const abs = Math.abs;
-const γγ3 = γγ(3);
+const { abs } = Math;
 /**
  * Returns a polynomial in 1 variable (including coefficientwise error bound)
  * whose roots are the parameter values of the intersection points of an order

@@ -33,6 +33,10 @@ function getImplicitForm1DdWithRunningError(
             errorBound: { v_: number; };
         } {
 
+    //--------------------------------------------------------------------------
+    // See: error-analysis-double-double.txt
+    //--------------------------------------------------------------------------
+
     // The implicit form is given by:
     // vₓx + vᵧy + v = 0
 

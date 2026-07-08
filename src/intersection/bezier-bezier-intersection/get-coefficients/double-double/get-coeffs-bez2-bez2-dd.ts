@@ -1,5 +1,4 @@
 import { twoProduct, ddMultBy2, ddMultDouble2, ddMultDd, ddAddDd } from "double-double";
-import { γγ } from "../../../../error-analysis/error-analysis.js";
 import { getImplicitForm2DdWithRunningError } from "../../../../implicit-form/double-double/get-implicit-form2-dd-with-running-error.js";
 import { toPowerBasis2DdWithRunningError } from "../../../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js";
 
@@ -9,8 +8,7 @@ const qmd = ddMultDouble2;
 const qmq = ddMultDd;
 const qaq = ddAddDd;
 
-const abs = Math.abs;
-const γγ3 = γγ(3);
+const { abs } = Math;
 
 
 /**

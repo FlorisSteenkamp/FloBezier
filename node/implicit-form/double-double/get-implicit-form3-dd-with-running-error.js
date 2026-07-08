@@ -1,6 +1,6 @@
 import { ddNegativeOf, ddMultBy2, ddMultDouble2, ddMultDd, ddDiffDd, ddAddDd, ddDivBy2 } from 'double-double';
 import { toPowerBasis3DdWithRunningError } from '../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js';
-const abs = Math.abs;
+const { abs } = Math;
 const qno = ddNegativeOf; // error -> 0
 const qm2 = ddMultBy2; // error -> 0 
 const qd2 = ddDivBy2; // error -> 0 
@@ -31,75 +31,7 @@ const qaq = ddAddDd; // error -> 3*γ²
 function getImplicitForm3DdWithRunningError(ps) {
     // Takes about 15 micro-seconds on a 3rd gen i7 and Chrome 79.
     //--------------------------------------------------------------------------
-    // `var` -> a variable
-    // `$var` -> the double precision approximation to `var`
-    // `_var` -> the absolute value of $var (a prefix underscore on a variable means absolute value)
-    // `var_` -> the error in var (a postfix underscore means error bound but should still be multiplied by 3*γ²)
-    // `_var_` -> means both absolute value and absolute error bound
-    // recall: `a*b`, where both `a` and `b` have errors |a| and |b| we get for the
-    //   * error bound of (a*b) === a_|b| + |a|b_ + |a*b|   (when either of a and b is double)
-    //   * error bound of (a*b) === a_|b| + |a|b_ + 2|a*b|  (when both a and b is double-double)
-    //   * error bound of (a+b) === a_ + b_ + |a+b|         (when a and/or b is double or double-double)
-    // * the returned errors need to be multiplied by 3γ² to get the true error
-    // * can use either `$var` or `var[var.length-1]` (the approx value) in error calculations
-    //   due to multiplication by 3*γ² and not 3*u²
-    //--------------------------------------------------------------------------
-    // examples:
-    // ----------------
-    // let qmd === ddMultDouble2, etc.
-    //
-    // ---------------
-    // 1. double-double X by double
-    // ---------------
-    // qmd(a,b);  // both `a` and `b` is error-free
-    // use: error bound of (a*b) === a_|b| + |a|b_ + |a*b| (by definition)
-    //                           === 0|b| + |a|0 + |a*b|
-    //                           === |a*b|
-    //
-    // ---------------
-    // 2a. double-double +/- double-double
-    // ---------------
-    // qdq(a,b);  // error in a === |a|, thus call the error _a_, same with b
-    // use: error bound of (a+b) === a_ + b_ + |a+b| (by definition)
-    //                           === _a_ + _b_ + |a+b|
-    //
-    // ---------------
-    // 2b. double-double +/- double-double
-    // ---------------
-    // qaq(a,b);  // error in a === 2|a|, thus the error is 2*_a, same with b
-    // use: error bound of (a+b) === a_ + b_ + |a+b| (by definition)
-    //                           === 2*_a + 2*_b + |a+b|
-    //                           === 2*(_a + _b) + |a+b| OR
-    //                           === a_ + b_ + |a+b|
-    //
-    // ---------------
-    // 3a. double-double X double-double
-    // ---------------
-    // qmq(a,b);  // both `a` and `b` error-free
-    // use: error bound of (a*b) === a_|b| + |a|b_ + |a*b| (by definition)
-    //                           === 0|b| + |a|0 + 2|a*b|
-    //                           === 2|a*b| 
-    //
-    // ---------------
-    // 3b. double-double X double-double
-    // ---------------
-    // qmq(a,b);  // both `a` and `b` not error-free
-    // use: error bound of (a*b) === a_|b| + |a|b_ + 2|a*b| (by definition)
-    //
-    // ---------------
-    // 3b. double-double X double-double
-    // ---------------
-    // qmq(a,b);  // both `a` not error-free and `b` error-free
-    // use: error bound of (a*b) === a_|b| + |a|b_ + 2|a*b| (by definition)
-    //                           === a_|b| + 2|a*b| 
-    //
-    // ---------------
-    // 4a. double-double +/- double
-    // ---------------
-    // qad(a,b);  // both `a` and `b` error-free
-    // use: error bound of (a+b) === a_ + b_ + |a+b| (by definition)
-    //                           === 0 + 0 + |a+b|
-    //                           === |a+b| 
+    // See: error-analysis-double-double.txt
     //--------------------------------------------------------------------------
     const { coeffs: [[a3, a2, a1, [, a0]], [b3, b2, b1, [, b0]]], errorBound: [[a3_, a2_, a1_], [b3_, b2_, b1_]] // a0, b0 - error free
      } = toPowerBasis3DdWithRunningError(ps);
@@ -234,6 +166,7 @@ function getImplicitForm3DdWithRunningError(ps) {
     const q2q2 = qmq(q2, q2);
     const tq2q4 = qmq(tq2, q4);
     const q3q4 = qmq(q3, q4);
+    const _q3q4 = abs(q3q4[1]);
     const q3q5 = qmq(q3, q5);
     const q3q6 = qmq(q3, q6);
     const q1q1_ = q1_ * _q1 + _q1 * q1_ + 2 * abs(q1q1[1]);
@@ -242,9 +175,9 @@ function getImplicitForm3DdWithRunningError(ps) {
     const q1q5_ = q1_ * _q5 + _q1 * q5_ + 2 * abs(q1q5[1]);
     const q2q2_ = q2_ * _q2 + _q2 * q2_ + 2 * abs(q2q2[1]);
     const tq2q4_ = tq2_ * _q4 + _tq2 * q4_ + 2 * abs(tq2q4[1]);
-    const q3q4_ = q3_ * _q4 + _q3 * q4_ + 2 * abs(q3q4[1]);
+    const q3q4_ = q3_ * _q4 + _q3 * q4_ + 2 * _q3q4;
     const q3q5_ = q3_ * _q5 + _q3 * q5_ + 2 * abs(q3q5[1]);
-    const q3q6_ = q3_ * _q6 + _q3 * q6_ + 2 * abs(q3q4[1]);
+    const q3q6_ = q3_ * _q6 + _q3 * q6_ + 2 * abs(q3q6[1]);
     const vₓₓₓ = qmq(qno(b3), b3b3);
     const vₓₓₓ_ = b3_ * _b3b3 + _b3 * b3b3_ + 2 * abs(vₓₓₓ[1]);
     const _z1 = 3 * _a3;
@@ -331,7 +264,8 @@ function getImplicitForm3DdWithRunningError(ps) {
     // const s3 = q1q3 - q2q2 + q3q5;
     //-------------------------------
     const s3 = qaq(wl, q3q5);
-    const _s3 = abs(s3[1]);
+    const $s3 = s3[1];
+    const _s3 = abs($s3);
     const s3_ = wl_ + q3q5_ + _s3;
     const wm = qmq(b3, s1);
     const wm_ = b3_ * _s1 + _b3 * s1_ + 2 * abs(wm[1]);
@@ -361,14 +295,21 @@ function getImplicitForm3DdWithRunningError(ps) {
     const vᵧ_ = wo_ + wp_ + abs(vᵧ[1]);
     // the commented part above is re
     const v3 = qdq(tq2q4, q1q1);
+    const _v3 = abs(v3[1]);
+    const v3_ = tq2q4_ + q1q1_ + _v3;
     const v1 = qdq(v3, q1q5);
     const _v1 = abs(v1[1]);
+    const v1_ = v3_ + q1q5_ + _v1;
     const v4 = qmq(s3, q6);
+    const _v4 = abs(v4[1]);
+    const v4_ = _s3 * _q6 + s3_ * _q6 + _v4;
     const v5 = qmq(q3q4, q4);
+    const _v5 = abs(v5[1]);
+    const v5_ = _q3q4 * q4_ + q3q4_ * _q4 + _v5;
     const v2 = qdq(v4, v5);
-    const v2_ = s3_ * abs(q6[1]) + 2 * abs(v4[1]) + q3q4_ * abs(q4[1]) + 2 * abs(v5[1]) + abs(v2[1]);
+    const v2_ = v4_ + v5_ + abs(v2[1]);
     const v6 = qmq(q1, v1);
-    const v6_ = q1_ * _v1 + _q1 * tq2q4_ + q1q1_ + abs(v3[1]) + q1q5_ + _v1 + 2 * abs(v6[1]);
+    const v6_ = q1_ * _v1 + _q1 * v1_ + abs(v6[1]);
     // -------------------------------------------------------------------------
     //-------------------------------------------------------
     // const v = q1*(tq2q4 - q1q1 - q1q5) + s3*q6 - q3q4*q4;

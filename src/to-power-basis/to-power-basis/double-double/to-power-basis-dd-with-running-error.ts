@@ -99,7 +99,6 @@ function toPowerBasis3DdWithRunningError(
     const xx1 = qmd(3,xg);
     const xx1_ = abs(3*(x1 - x0));
 
-
     // ----------------------------
     // yy3 = y3 + 3*(y1 - y2) - y0
     // ----------------------------

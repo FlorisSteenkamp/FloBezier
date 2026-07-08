@@ -1,8 +1,8 @@
 import { RootInterval } from "flo-poly";
 /**
  * Returns the intersection between any of two linear, quadratic or cubic bezier
- * curves without limiting the `t` parameter value of either curve
- * in [0,1], i.e. `t ∈ [-∞,+∞]`.
+ * curves without limiting the `t` parameter value of either curve,
+ * i.e. `t ∈ [-∞,+∞]`.
  *
  * * if the two curves have an infinite number of intersections `undefined` is returned
  * * the second bezier curve's parameter `t` values are returned *ordered* by `t` value

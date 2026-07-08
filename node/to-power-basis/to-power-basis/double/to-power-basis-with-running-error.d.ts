@@ -3,7 +3,7 @@
  * less including a coefficient-wise absolute error bound.
  *
  * * intermediate calculations are done in double precision
- * * the error bound need to be multiplied by `γ(1) === u/(1-u)`
+ * * the error bound still need to be multiplied by `γ(1) === u/(1-u)`
  * where `u = Number.EPSILON/2` before use
  * * returns the resulting power basis x and y coordinate polynomials from
  * highest power to lowest, e.g. if `x(t) = at^2 + bt + c`

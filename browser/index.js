@@ -1687,13 +1687,13 @@ function isCubicReallyLine(ps) {
 
 
 ;// ./src/to-power-basis/to-power-basis/double/to-power-basis-with-running-error.ts
-const to_power_basis_with_running_error_abs = Math.abs;
+const { abs: to_power_basis_with_running_error_abs } = Math;
 /**
  * Returns the power basis representation of a bezier curve of order cubic or
  * less including a coefficient-wise absolute error bound.
  *
  * * intermediate calculations are done in double precision
- * * the error bound need to be multiplied by `γ(1) === u/(1-u)`
+ * * the error bound still need to be multiplied by `γ(1) === u/(1-u)`
  * where `u = Number.EPSILON/2` before use
  * * returns the resulting power basis x and y coordinate polynomials from
  * highest power to lowest, e.g. if `x(t) = at^2 + bt + c`
@@ -1723,9 +1723,9 @@ function toPowerBasisWithRunningError(ps) {
 /** @internal */
 function toPowerBasis3WithRunningError(ps) {
     const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
-    // ----------------------------
+    //-------------------------------
     // xx3 = (x3 - x0) + 3*(x1 - x2)
-    // ----------------------------
+    //-------------------------------
     const xa = x3 - x0;
     const _xa_ = to_power_basis_with_running_error_abs(xa);
     const xb = x1 - x2;
@@ -1734,25 +1734,25 @@ function toPowerBasis3WithRunningError(ps) {
     const xc_ = 6 * _xb_; // === 3*_xb_ + 3*abs(xc)
     const xx3 = xa + xc;
     const xx3_ = _xa_ + xc_ + to_power_basis_with_running_error_abs(xx3);
-    // ----------------------------
+    //----------------------------
     // xx2 = 3*((x2 + x0) - 2*x1)
-    // ----------------------------
+    //----------------------------
     const xd = x2 + x0;
     const _xd_ = to_power_basis_with_running_error_abs(xd);
     const xe = xd - 2 * x1;
     const _xe_ = _xd_ + to_power_basis_with_running_error_abs(xe);
     const xx2 = 3 * xe;
     const xx2_ = 6 * _xe_; // 3*_xe_ + abs(xx2)
-    // ----------------------------
+    //-------------------
     // xx1 = 3*(x1 - x0)
-    // ----------------------------
+    //-------------------
     const xg = x1 - x0;
     const _xg_ = to_power_basis_with_running_error_abs(xg);
     const xx1 = 3 * xg;
     const xx1_ = 6 * _xg_; // 3*_xg_ + abs(3*xg)
-    // ------------------------------
+    //-------------------------------
     // yy3 = (y3 - y0) + 3*(y1 - y2)
-    // ------------------------------
+    //-------------------------------
     const ya = y3 - y0;
     const _ya_ = to_power_basis_with_running_error_abs(ya);
     const yb = y1 - y2;
@@ -1761,18 +1761,18 @@ function toPowerBasis3WithRunningError(ps) {
     const yc_ = 6 * _yb_; // === 3*_yb_ + 3*abs(yc)
     const yy3 = ya + yc;
     const yy3_ = _ya_ + yc_ + to_power_basis_with_running_error_abs(yy3);
-    // ----------------------------
+    //----------------------------
     // yy2 = 3*((y2 + y0) - 2*y1)
-    // ----------------------------
+    //----------------------------
     const yd = y2 + y0;
     const _yd_ = to_power_basis_with_running_error_abs(yd);
     const ye = yd - 2 * y1;
     const _ye_ = _yd_ + to_power_basis_with_running_error_abs(ye);
     const yy2 = 3 * ye;
     const yy2_ = 6 * _ye_; // 3*_ye_ + abs(yy2)
-    // ----------------------------
+    //-------------------
     // yy1 = 3*(y1 - y0)
-    // ----------------------------
+    //-------------------
     const yg = y1 - y0;
     const _yg_ = to_power_basis_with_running_error_abs(yg);
     const yy1 = 3 * yg;
@@ -1785,28 +1785,28 @@ function toPowerBasis3WithRunningError(ps) {
 /** @internal */
 function toPowerBasis2WithRunningError(ps) {
     const [[x0, y0], [x1, y1], [x2, y2]] = ps;
-    // ---------------------
+    //------------------------
     // xx2 = (x2 + x0) - 2*x1
-    // ---------------------
+    //------------------------
     const xa = x2 + x0;
     const _xa_ = to_power_basis_with_running_error_abs(xa);
     const xx2 = xa - 2 * x1;
     const xx2_ = _xa_ + to_power_basis_with_running_error_abs(xx2);
-    // ---------------------
+    //-------------------
     // xx1 = 2*(x1 - x0)
-    // ---------------------
+    //-------------------
     const xx1 = 2 * (x1 - x0);
     const xx1_ = to_power_basis_with_running_error_abs(xx1);
-    // ---------------------
+    //------------------------
     // yy2 = (y2 + y0) - 2*y1
-    // ---------------------
+    //------------------------
     const ya = y2 + y0;
     const _ya_ = to_power_basis_with_running_error_abs(ya);
     const yy2 = ya - 2 * y1;
     const yy2_ = _ya_ + to_power_basis_with_running_error_abs(yy2);
-    // ---------------------
+    //-------------------
     // yy1 = 2*(y1 - y0)
-    // ---------------------
+    //-------------------
     const yy1 = 2 * (y1 - y0);
     const yy1_ = to_power_basis_with_running_error_abs(yy1);
     return {
@@ -6743,6 +6743,9 @@ const get_implicit_form1_dd_with_running_error_abs = Math.abs;
  * @doc mdx
  */
 function getImplicitForm1DdWithRunningError(ps) {
+    //--------------------------------------------------------------------------
+    // See: error-analysis-double-double.txt
+    //--------------------------------------------------------------------------
     // The implicit form is given by:
     // vₓx + vᵧy + v = 0
     const [[a1, [, a0]], [b1, [, b0]]] = toPowerBasis1DdWithRunningError(ps);
@@ -6766,12 +6769,10 @@ function getImplicitForm1DdWithRunningError(ps) {
 
 
 
-
+const { abs: get_coeffs_bez1_bez1_dd_abs } = Math;
 const get_coeffs_bez1_bez1_dd_qaq = ddAddDd;
 const get_coeffs_bez1_bez1_dd_qmd = ddMultDouble2;
 const get_coeffs_bez1_bez1_dd_qmq = ddMultDd;
-const get_coeffs_bez1_bez1_dd_abs = Math.abs;
-const get_coeffs_bez1_bez1_dd_3 = γγ(3);
 /**
  * Returns a polynomial in 1 variable (including coefficientwise error bound)
  * whose roots are the parameter values of the intersection points of two
@@ -6827,7 +6828,6 @@ function getCoeffsBez1Bez1Dd(ps1, ps2) {
     const p4 = get_coeffs_bez1_bez1_dd_qmd(d0, vᵧ);
     const _p4_ = get_coeffs_bez1_bez1_dd_abs($p4);
     const $p5 = $p3 + $p4;
-    //const _p5 = abs($p5);
     const p5 = get_coeffs_bez1_bez1_dd_qaq(p3, p4);
     const p5_ = _p3_ + _p4_ + get_coeffs_bez1_bez1_dd_abs($p5);
     const v0 = get_coeffs_bez1_bez1_dd_qaq(p5, v);
@@ -6892,6 +6892,9 @@ const get_implicit_form2_dd_with_running_error_abs = Math.abs;
  * @doc mdx
  */
 function getImplicitForm2DdWithRunningError(ps) {
+    //--------------------------------------------------------------------------
+    // See: error-analysis-double-double.txt
+    //--------------------------------------------------------------------------
     // The implicit form is given by:
     // vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0
     const { coeffs: [[a2, a1, [, a0]], [b2, b1, [, b0]]], errorBound: [[a2_], [b2_]] } = toPowerBasis2DdWithRunningError(ps);
@@ -6934,13 +6937,13 @@ function getImplicitForm2DdWithRunningError(ps) {
     const $q3 = $a1b0 - $a0b1;
     const q1 = get_implicit_form2_dd_with_running_error_qdq(a2b1, a1b2);
     const _q1 = get_implicit_form2_dd_with_running_error_abs($q1);
-    const q1_ = a2b1_ + a1b2_ + get_implicit_form2_dd_with_running_error_abs($q1);
+    const q1_ = a2b1_ + a1b2_ + _q1;
     const q2 = get_implicit_form2_dd_with_running_error_qdq(a2b0, a0b2);
     const _q2 = get_implicit_form2_dd_with_running_error_abs($q2);
-    const q2_ = a2b0_ + a0b2_ + get_implicit_form2_dd_with_running_error_abs($q2);
+    const q2_ = a2b0_ + a0b2_ + _q2;
     const q3 = get_implicit_form2_dd_with_running_error_qdq(a1b0, a0b1);
     const _q3 = get_implicit_form2_dd_with_running_error_abs($q3);
-    const q3_ = a1b0_ + a0b1_ + get_implicit_form2_dd_with_running_error_abs($q3);
+    const q3_ = a1b0_ + a0b1_ + _q3;
     // -a1*q1*y - a2**2*y**2 + 2*a2*b2*x*y + 2*a2*q2*y + b1*q1*x - b2**2*x**2 - 2*b2*q2*x + q1*q3 - q2**2
     // -------------
     // b2**2 *x**2
@@ -6953,7 +6956,7 @@ function getImplicitForm2DdWithRunningError(ps) {
     // 2*a2*b2 *x*y
     // -------------
     const vₓᵧ = qm2(a2b2);
-    const vₓᵧ_ = a2b2_;
+    const vₓᵧ_ = 2 * a2b2_;
     // -------------
     // a2**2 *y**2 
     // -a2**2 *y**2 
@@ -7011,14 +7014,12 @@ function getImplicitForm2DdWithRunningError(ps) {
 
 
 
-
 const get_coeffs_bez2_bez1_dd_tp = two_product_twoProduct;
 const get_coeffs_bez2_bez1_dd_qm2 = ddMultBy2;
 const get_coeffs_bez2_bez1_dd_qmd = ddMultDouble2;
 const get_coeffs_bez2_bez1_dd_qmq = ddMultDd;
 const get_coeffs_bez2_bez1_dd_qaq = ddAddDd;
-const get_coeffs_bez2_bez1_dd_abs = Math.abs;
-const get_coeffs_bez2_bez1_dd_3 = γγ(3);
+const { abs: get_coeffs_bez2_bez1_dd_abs } = Math;
 /**
  * Returns a polynomial in 1 variable (including coefficientwise error bound)
  * whose roots are the parameter values of the intersection points of an order
@@ -7185,7 +7186,7 @@ function ddDivBy2(f) {
 ;// ./src/implicit-form/double-double/get-implicit-form3-dd-with-running-error.ts
 
 
-const get_implicit_form3_dd_with_running_error_abs = Math.abs;
+const { abs: get_implicit_form3_dd_with_running_error_abs } = Math;
 const get_implicit_form3_dd_with_running_error_qno = ddNegativeOf; // error -> 0
 const get_implicit_form3_dd_with_running_error_qm2 = ddMultBy2; // error -> 0 
 const qd2 = ddDivBy2; // error -> 0 
@@ -7216,75 +7217,7 @@ const get_implicit_form3_dd_with_running_error_qaq = ddAddDd; // error -> 3*γ²
 function getImplicitForm3DdWithRunningError(ps) {
     // Takes about 15 micro-seconds on a 3rd gen i7 and Chrome 79.
     //--------------------------------------------------------------------------
-    // `var` -> a variable
-    // `$var` -> the double precision approximation to `var`
-    // `_var` -> the absolute value of $var (a prefix underscore on a variable means absolute value)
-    // `var_` -> the error in var (a postfix underscore means error bound but should still be multiplied by 3*γ²)
-    // `_var_` -> means both absolute value and absolute error bound
-    // recall: `a*b`, where both `a` and `b` have errors |a| and |b| we get for the
-    //   * error bound of (a*b) === a_|b| + |a|b_ + |a*b|   (when either of a and b is double)
-    //   * error bound of (a*b) === a_|b| + |a|b_ + 2|a*b|  (when both a and b is double-double)
-    //   * error bound of (a+b) === a_ + b_ + |a+b|         (when a and/or b is double or double-double)
-    // * the returned errors need to be multiplied by 3γ² to get the true error
-    // * can use either `$var` or `var[var.length-1]` (the approx value) in error calculations
-    //   due to multiplication by 3*γ² and not 3*u²
-    //--------------------------------------------------------------------------
-    // examples:
-    // ----------------
-    // let qmd === ddMultDouble2, etc.
-    //
-    // ---------------
-    // 1. double-double X by double
-    // ---------------
-    // qmd(a,b);  // both `a` and `b` is error-free
-    // use: error bound of (a*b) === a_|b| + |a|b_ + |a*b| (by definition)
-    //                           === 0|b| + |a|0 + |a*b|
-    //                           === |a*b|
-    //
-    // ---------------
-    // 2a. double-double +/- double-double
-    // ---------------
-    // qdq(a,b);  // error in a === |a|, thus call the error _a_, same with b
-    // use: error bound of (a+b) === a_ + b_ + |a+b| (by definition)
-    //                           === _a_ + _b_ + |a+b|
-    //
-    // ---------------
-    // 2b. double-double +/- double-double
-    // ---------------
-    // qaq(a,b);  // error in a === 2|a|, thus the error is 2*_a, same with b
-    // use: error bound of (a+b) === a_ + b_ + |a+b| (by definition)
-    //                           === 2*_a + 2*_b + |a+b|
-    //                           === 2*(_a + _b) + |a+b| OR
-    //                           === a_ + b_ + |a+b|
-    //
-    // ---------------
-    // 3a. double-double X double-double
-    // ---------------
-    // qmq(a,b);  // both `a` and `b` error-free
-    // use: error bound of (a*b) === a_|b| + |a|b_ + |a*b| (by definition)
-    //                           === 0|b| + |a|0 + 2|a*b|
-    //                           === 2|a*b| 
-    //
-    // ---------------
-    // 3b. double-double X double-double
-    // ---------------
-    // qmq(a,b);  // both `a` and `b` not error-free
-    // use: error bound of (a*b) === a_|b| + |a|b_ + 2|a*b| (by definition)
-    //
-    // ---------------
-    // 3b. double-double X double-double
-    // ---------------
-    // qmq(a,b);  // both `a` not error-free and `b` error-free
-    // use: error bound of (a*b) === a_|b| + |a|b_ + 2|a*b| (by definition)
-    //                           === a_|b| + 2|a*b| 
-    //
-    // ---------------
-    // 4a. double-double +/- double
-    // ---------------
-    // qad(a,b);  // both `a` and `b` error-free
-    // use: error bound of (a+b) === a_ + b_ + |a+b| (by definition)
-    //                           === 0 + 0 + |a+b|
-    //                           === |a+b| 
+    // See: error-analysis-double-double.txt
     //--------------------------------------------------------------------------
     const { coeffs: [[a3, a2, a1, [, a0]], [b3, b2, b1, [, b0]]], errorBound: [[a3_, a2_, a1_], [b3_, b2_, b1_]] // a0, b0 - error free
      } = toPowerBasis3DdWithRunningError(ps);
@@ -7419,6 +7352,7 @@ function getImplicitForm3DdWithRunningError(ps) {
     const q2q2 = get_implicit_form3_dd_with_running_error_qmq(q2, q2);
     const tq2q4 = get_implicit_form3_dd_with_running_error_qmq(tq2, q4);
     const q3q4 = get_implicit_form3_dd_with_running_error_qmq(q3, q4);
+    const _q3q4 = get_implicit_form3_dd_with_running_error_abs(q3q4[1]);
     const q3q5 = get_implicit_form3_dd_with_running_error_qmq(q3, q5);
     const q3q6 = get_implicit_form3_dd_with_running_error_qmq(q3, q6);
     const q1q1_ = q1_ * _q1 + _q1 * q1_ + 2 * get_implicit_form3_dd_with_running_error_abs(q1q1[1]);
@@ -7427,9 +7361,9 @@ function getImplicitForm3DdWithRunningError(ps) {
     const q1q5_ = q1_ * _q5 + _q1 * q5_ + 2 * get_implicit_form3_dd_with_running_error_abs(q1q5[1]);
     const q2q2_ = q2_ * _q2 + _q2 * q2_ + 2 * get_implicit_form3_dd_with_running_error_abs(q2q2[1]);
     const tq2q4_ = tq2_ * _q4 + _tq2 * q4_ + 2 * get_implicit_form3_dd_with_running_error_abs(tq2q4[1]);
-    const q3q4_ = q3_ * _q4 + _q3 * q4_ + 2 * get_implicit_form3_dd_with_running_error_abs(q3q4[1]);
+    const q3q4_ = q3_ * _q4 + _q3 * q4_ + 2 * _q3q4;
     const q3q5_ = q3_ * _q5 + _q3 * q5_ + 2 * get_implicit_form3_dd_with_running_error_abs(q3q5[1]);
-    const q3q6_ = q3_ * _q6 + _q3 * q6_ + 2 * get_implicit_form3_dd_with_running_error_abs(q3q4[1]);
+    const q3q6_ = q3_ * _q6 + _q3 * q6_ + 2 * get_implicit_form3_dd_with_running_error_abs(q3q6[1]);
     const vₓₓₓ = get_implicit_form3_dd_with_running_error_qmq(get_implicit_form3_dd_with_running_error_qno(b3), b3b3);
     const vₓₓₓ_ = b3_ * _b3b3 + _b3 * b3b3_ + 2 * get_implicit_form3_dd_with_running_error_abs(vₓₓₓ[1]);
     const _z1 = 3 * _a3;
@@ -7516,7 +7450,8 @@ function getImplicitForm3DdWithRunningError(ps) {
     // const s3 = q1q3 - q2q2 + q3q5;
     //-------------------------------
     const s3 = get_implicit_form3_dd_with_running_error_qaq(wl, q3q5);
-    const _s3 = get_implicit_form3_dd_with_running_error_abs(s3[1]);
+    const $s3 = s3[1];
+    const _s3 = get_implicit_form3_dd_with_running_error_abs($s3);
     const s3_ = wl_ + q3q5_ + _s3;
     const wm = get_implicit_form3_dd_with_running_error_qmq(b3, s1);
     const wm_ = b3_ * _s1 + _b3 * s1_ + 2 * get_implicit_form3_dd_with_running_error_abs(wm[1]);
@@ -7546,14 +7481,21 @@ function getImplicitForm3DdWithRunningError(ps) {
     const vᵧ_ = wo_ + wp_ + get_implicit_form3_dd_with_running_error_abs(vᵧ[1]);
     // the commented part above is re
     const v3 = get_implicit_form3_dd_with_running_error_qdq(tq2q4, q1q1);
+    const _v3 = get_implicit_form3_dd_with_running_error_abs(v3[1]);
+    const v3_ = tq2q4_ + q1q1_ + _v3;
     const v1 = get_implicit_form3_dd_with_running_error_qdq(v3, q1q5);
     const _v1 = get_implicit_form3_dd_with_running_error_abs(v1[1]);
+    const v1_ = v3_ + q1q5_ + _v1;
     const v4 = get_implicit_form3_dd_with_running_error_qmq(s3, q6);
+    const _v4 = get_implicit_form3_dd_with_running_error_abs(v4[1]);
+    const v4_ = _s3 * _q6 + s3_ * _q6 + _v4;
     const v5 = get_implicit_form3_dd_with_running_error_qmq(q3q4, q4);
+    const _v5 = get_implicit_form3_dd_with_running_error_abs(v5[1]);
+    const v5_ = _q3q4 * q4_ + q3q4_ * _q4 + _v5;
     const v2 = get_implicit_form3_dd_with_running_error_qdq(v4, v5);
-    const v2_ = s3_ * get_implicit_form3_dd_with_running_error_abs(q6[1]) + 2 * get_implicit_form3_dd_with_running_error_abs(v4[1]) + q3q4_ * get_implicit_form3_dd_with_running_error_abs(q4[1]) + 2 * get_implicit_form3_dd_with_running_error_abs(v5[1]) + get_implicit_form3_dd_with_running_error_abs(v2[1]);
+    const v2_ = v4_ + v5_ + get_implicit_form3_dd_with_running_error_abs(v2[1]);
     const v6 = get_implicit_form3_dd_with_running_error_qmq(q1, v1);
-    const v6_ = q1_ * _v1 + _q1 * tq2q4_ + q1q1_ + get_implicit_form3_dd_with_running_error_abs(v3[1]) + q1q5_ + _v1 + 2 * get_implicit_form3_dd_with_running_error_abs(v6[1]);
+    const v6_ = q1_ * _v1 + _q1 * v1_ + get_implicit_form3_dd_with_running_error_abs(v6[1]);
     // -------------------------------------------------------------------------
     //-------------------------------------------------------
     // const v = q1*(tq2q4 - q1q1 - q1q5) + s3*q6 - q3q4*q4;
@@ -7571,14 +7513,12 @@ function getImplicitForm3DdWithRunningError(ps) {
 
 
 
-
 const get_coeffs_bez3_bez1_dd_tp = two_product_twoProduct;
 const get_coeffs_bez3_bez1_dd_qm2 = ddMultBy2;
 const get_coeffs_bez3_bez1_dd_qmd = ddMultDouble2;
 const get_coeffs_bez3_bez1_dd_qmq = ddMultDd;
 const get_coeffs_bez3_bez1_dd_qaq = ddAddDd;
-const get_coeffs_bez3_bez1_dd_abs = Math.abs;
-const get_coeffs_bez3_bez1_dd_3 = γγ(3);
+const { abs: get_coeffs_bez3_bez1_dd_abs } = Math;
 /**
  * Returns a polynomial in 1 variable (including coefficientwise error bound)
  * whose roots are the parameter values of the intersection points of an order
@@ -7896,12 +7836,10 @@ function getCoeffsBez3Bez1Dd(ps1, ps2) {
 
 
 
-
 const get_coeffs_bez1_bez2_dd_qaq = ddAddDd;
 const get_coeffs_bez1_bez2_dd_qmd = ddMultDouble2;
 const get_coeffs_bez1_bez2_dd_qmq = ddMultDd;
-const get_coeffs_bez1_bez2_dd_abs = Math.abs;
-const get_coeffs_bez1_bez2_dd_3 = γγ(3);
+const { abs: get_coeffs_bez1_bez2_dd_abs } = Math;
 /**
  * Returns a polynomial in 1 variable (including coefficientwise error bound)
  * whose roots are the parameter values of the intersection points of an order
@@ -7930,7 +7868,6 @@ function getCoeffsBez1Bez2Dd(ps1, ps2) {
     const $v = v[1];
     const _vₓ = get_coeffs_bez1_bez2_dd_abs($vₓ);
     const _vᵧ = get_coeffs_bez1_bez2_dd_abs($vᵧ);
-    const _v = get_coeffs_bez1_bez2_dd_abs($v);
     const $c1 = c1[1];
     const $c2 = c2[1];
     const $d1 = d1[1];
@@ -7984,14 +7921,12 @@ function getCoeffsBez1Bez2Dd(ps1, ps2) {
 
 
 
-
 const get_coeffs_bez2_bez2_dd_tp = two_product_twoProduct;
 const get_coeffs_bez2_bez2_dd_qm2 = ddMultBy2;
 const get_coeffs_bez2_bez2_dd_qmd = ddMultDouble2;
 const get_coeffs_bez2_bez2_dd_qmq = ddMultDd;
 const get_coeffs_bez2_bez2_dd_qaq = ddAddDd;
-const get_coeffs_bez2_bez2_dd_abs = Math.abs;
-const get_coeffs_bez2_bez2_dd_3 = γγ(3);
+const { abs: get_coeffs_bez2_bez2_dd_abs } = Math;
 /**
  * Returns a polynomial in 1 variable (including coefficientwise error bound)
  * whose roots are the parameter values of the intersection points of 2 order
@@ -8287,14 +8222,12 @@ function getCoeffsBez2Bez2Dd(ps1, ps2) {
 
 
 
-
 const get_coeffs_bez3_bez2_dd_tp = two_product_twoProduct;
 const get_coeffs_bez3_bez2_dd_qm2 = ddMultBy2;
 const get_coeffs_bez3_bez2_dd_qmd = ddMultDouble2;
 const get_coeffs_bez3_bez2_dd_qmq = ddMultDd;
 const get_coeffs_bez3_bez2_dd_qaq = ddAddDd;
-const get_coeffs_bez3_bez2_dd_abs = Math.abs;
-const get_coeffs_bez3_bez2_dd_3 = γγ(3);
+const { abs: get_coeffs_bez3_bez2_dd_abs } = Math;
 /**
  * Returns a polynomial in 1 variable (including coefficientwise error bound)
  * whose roots are the parameter values of the intersection points of an order
@@ -9021,12 +8954,10 @@ function getCoeffsBez3Bez2Dd(ps1, ps2) {
 
 
 
-
 const get_coeffs_bez1_bez3_dd_qaq = ddAddDd;
 const get_coeffs_bez1_bez3_dd_qmd = ddMultDouble2;
 const get_coeffs_bez1_bez3_dd_qmq = ddMultDd;
-const get_coeffs_bez1_bez3_dd_abs = Math.abs;
-const get_coeffs_bez1_bez3_dd_3 = γγ(3);
+const { abs: get_coeffs_bez1_bez3_dd_abs } = Math;
 /**
  * Returns a polynomial in 1 variable (including coefficientwise error bound)
  * whose roots are the parameter values of the intersection points of an order
@@ -9098,14 +9029,12 @@ function getCoeffsBez1Bez3Dd(ps1, ps2) {
 
 
 
-
 const get_coeffs_bez2_bez3_dd_tp = two_product_twoProduct;
 const get_coeffs_bez2_bez3_dd_qm2 = ddMultBy2;
 const get_coeffs_bez2_bez3_dd_qmd = ddMultDouble2;
 const get_coeffs_bez2_bez3_dd_qmq = ddMultDd;
 const get_coeffs_bez2_bez3_dd_qaq = ddAddDd;
-const get_coeffs_bez2_bez3_dd_abs = Math.abs;
-const get_coeffs_bez2_bez3_dd_3 = γγ(3);
+const { abs: get_coeffs_bez2_bez3_dd_abs } = Math;
 /**
  * Returns a polynomial in 1 variable (including coefficientwise error bound)
  * whose roots are the parameter values of the intersection points of an order
@@ -9538,14 +9467,12 @@ function getCoeffsBez2Bez3Dd(ps1, ps2) {
 
 
 
-
 const get_coeffs_bez3_bez3_dd_tp = two_product_twoProduct;
 const get_coeffs_bez3_bez3_dd_qm2 = ddMultBy2;
 const get_coeffs_bez3_bez3_dd_qmd = ddMultDouble2;
 const get_coeffs_bez3_bez3_dd_qmq = ddMultDd;
 const get_coeffs_bez3_bez3_dd_qaq = ddAddDd;
-const get_coeffs_bez3_bez3_dd_abs = Math.abs;
-const get_coeffs_bez3_bez3_dd_3 = γγ(3);
+const { abs: get_coeffs_bez3_bez3_dd_abs } = Math;
 /**
  * Returns a polynomial in 1 variable (including coefficientwise error bound)
  * whose roots are the parameter values of the intersection points of 2 order
@@ -10568,11 +10495,11 @@ function getCoeffsBez3Bez3Dd(ps1, ps2) {
     const la_ = d2_ * _d0d0 + 2 * get_coeffs_bez3_bez3_dd_abs($la);
     const $lb = $l3 + $l4;
     const lb = get_coeffs_bez3_bez3_dd_qaq(l3, l4);
-    const _lb = l3_ + l4_ + get_coeffs_bez3_bez3_dd_abs($lb);
+    const _lb = get_coeffs_bez3_bez3_dd_abs($lb);
     const lb_ = l3_ + l4_ + _lb;
     const $lc = $l5 + $l6;
     const lc = get_coeffs_bez3_bez3_dd_qaq(l5, l6);
-    const _lc = l5_ + l6_ + get_coeffs_bez3_bez3_dd_abs($lc);
+    const _lc = get_coeffs_bez3_bez3_dd_abs($lc);
     const lc_ = l5_ + l6_ + _lc;
     const $ld = $l7 + $l8;
     const ld = get_coeffs_bez3_bez3_dd_qaq(l7, l8);
@@ -12312,11 +12239,11 @@ function getCoeffsBez3Bez3Exact(ps1, ps2) {
     const d2d2 = get_coeffs_bez3_bez3_exact_epr(d2, d2);
     const d2d3 = get_coeffs_bez3_bez3_exact_epr(d2, d3);
     const d1d3 = get_coeffs_bez3_bez3_exact_epr(d1, d3);
-    //const v9 =  
-    //    (c3*c3c3)*vₓₓₓ + 
-    //    (c3*d3d3)*vₓᵧᵧ + 
-    //    (d3*c3c3)*vₓₓᵧ + 
-    //    (d3*d3d3)*vᵧᵧᵧ;  
+    // const v9 =  
+    //     (c3*c3c3)*vₓₓₓ + 
+    //     (c3*d3d3)*vₓᵧᵧ + 
+    //     (d3*c3c3)*vₓₓᵧ + 
+    //     (d3*d3d3)*vᵧᵧᵧ;  
     const g1 = get_coeffs_bez3_bez3_exact_epr(c3, c3c3); // c3*c3c3
     const g2 = get_coeffs_bez3_bez3_exact_epr(c3, d3d3); // c3*d3d3
     const g3 = get_coeffs_bez3_bez3_exact_epr(d3, c3c3); // d3*c3c3
@@ -12328,13 +12255,13 @@ function getCoeffsBez3Bez3Exact(ps1, ps2) {
     const g9 = get_coeffs_bez3_bez3_exact_fes(g5, g6); // g5 + g6
     const ga = get_coeffs_bez3_bez3_exact_fes(g7, g8); // g7 + g8
     const v9 = get_coeffs_bez3_bez3_exact_fes(g9, ga); // g9 + ga
-    //const v8 =  
-    //    2*c2*c3d3*vₓₓᵧ + 
-    //    2*c3*d2d3*vₓᵧᵧ + 
-    //      c2*d3d3*vₓᵧᵧ + 
-    //      d2*c3c3*vₓₓᵧ + 
-    //    3*c2*c3c3*vₓₓₓ + 
-    //    3*d2*d3d3*vᵧᵧᵧ;  
+    // const v8 =  
+    //     2*c2*c3d3*vₓₓᵧ + 
+    //     2*c3*d2d3*vₓᵧᵧ + 
+    //       c2*d3d3*vₓᵧᵧ + 
+    //       d2*c3c3*vₓₓᵧ + 
+    //     3*c2*c3c3*vₓₓₓ + 
+    //     3*d2*d3d3*vᵧᵧᵧ;  
     const w1 = get_coeffs_bez3_bez3_exact_fes(get_coeffs_bez3_bez3_exact_em2(c2d3), c3d2);
     const w2 = get_coeffs_bez3_bez3_exact_fes(get_coeffs_bez3_bez3_exact_em2(c3d2), c2d3);
     const w3 = get_coeffs_bez3_bez3_exact_epr(c3, w1);
@@ -12348,11 +12275,11 @@ function getCoeffsBez3Bez3Exact(ps1, ps2) {
     const u4 = get_coeffs_bez3_bez3_exact_fes(u2, u3);
     const u5 = get_coeffs_bez3_bez3_exact_sce(3, get_coeffs_bez3_bez3_exact_fes(w7, u1));
     const v8 = get_coeffs_bez3_bez3_exact_fes(u4, u5);
-    //const v7 =  
-    //    vₓₓᵧ*(2*(c1*c3d3 + c2*c3d2) + (d1*c3c3 + d3*c2c2)) +
-    //    vₓᵧᵧ*(2*(c2*d2d3 + c3*d1d3) + (c1*d3d3 + d2*c3d2)) +
-    //    vₓₓₓ*3*c3*(c1c3 + c2c2) +
-    //    vᵧᵧᵧ*3*d3*(d1d3 + d2d2);
+    // const v7 =  
+    //     vₓₓᵧ*(2*(c1*c3d3 + c2*c3d2) + (d1*c3c3 + d3*c2c2)) +
+    //     vₓᵧᵧ*(2*(c2*d2d3 + c3*d1d3) + (c1*d3d3 + d2*c3d2)) +
+    //     vₓₓₓ*3*c3*(c1c3 + c2c2) +
+    //     vᵧᵧᵧ*3*d3*(d1d3 + d2d2);
     const o1 = get_coeffs_bez3_bez3_exact_epr(c1, c3d3);
     const o2 = get_coeffs_bez3_bez3_exact_epr(d1, c3c3);
     const o3 = get_coeffs_bez3_bez3_exact_epr(c2, d2d3);
@@ -12378,14 +12305,14 @@ function getCoeffsBez3Bez3Exact(ps1, ps2) {
     const wm = get_coeffs_bez3_bez3_exact_fes(wg, wh);
     const wn = get_coeffs_bez3_bez3_exact_sce(3, get_coeffs_bez3_bez3_exact_fes(wk, wl));
     const v7 = get_coeffs_bez3_bez3_exact_fes(wm, wn);
-    //const v6 =
-    //    vₓₓᵧ*(d2*c2c2 + 2*c1*(c2d3 + c3d2) + c3*(2*c0d3 + 2*c2d1 + c3d0)) +
-    //    vₓᵧᵧ*(c2*d2d2 + 2*d1*(c2d3 + c3d2) + d3*(2*c1d2 + 2*c3d0 + c0d3)) +
-    //    vₓₓₓ*(c2*c2c2 + 3*c3*(2*c1c2 + c0c3)) +
-    //    vᵧᵧᵧ*(d2*d2d2 + 3*d3*(2*d1d2 + d0d3)) +
-    //    vₓₓ *c3c3 +
-    //    vᵧᵧ *d3d3 +
-    //    vₓᵧ *c3d3;
+    // const v6 =
+    //     vₓₓᵧ*(d2*c2c2 + 2*c1*(c2d3 + c3d2) + c3*(2*c0d3 + 2*c2d1 + c3d0)) +
+    //     vₓᵧᵧ*(c2*d2d2 + 2*d1*(c2d3 + c3d2) + d3*(2*c1d2 + 2*c3d0 + c0d3)) +
+    //     vₓₓₓ*(c2*c2c2 + 3*c3*(2*c1c2 + c0c3)) +
+    //     vᵧᵧᵧ*(d2*d2d2 + 3*d3*(2*d1d2 + d0d3)) +
+    //     vₓₓ *c3c3 +
+    //     vᵧᵧ *d3d3 +
+    //     vₓᵧ *c3d3;
     const wo = get_coeffs_bez3_bez3_exact_fes(c2d3, c3d2);
     const zc = get_coeffs_bez3_bez3_exact_epr(d2, c2c2);
     const zd = get_coeffs_bez3_bez3_exact_em2(get_coeffs_bez3_bez3_exact_epr(c1, wo));
@@ -12422,15 +12349,15 @@ function getCoeffsBez3Bez3Exact(ps1, ps2) {
     const za = get_coeffs_bez3_bez3_exact_fes(z6, z7);
     const zb = get_coeffs_bez3_bez3_exact_fes(z8, z9);
     const v6 = get_coeffs_bez3_bez3_exact_fes(za, zb);
-    //const r4 = c2d2 + c3d1;
-    //const r5 = c1d3 + c2d2;
-    //const v5 =
-    //    vₓₓᵧ*(2*(c0*wo + c1*r4) + d3*c1c1 + c2*(2*c3d0 + c2d1)) +
-    //    vₓᵧᵧ*(2*(d0*wo + d1*r5) + c3*d1d1 + d2*(2*c0d3 + c1d2)) +
-    //    3*(vₓₓₓ*(2*c0*c2c3 + c1*wc) + 
-    //       vᵧᵧᵧ*(2*d0*d2d3 + d1*wd)) +
-    //    vₓᵧ*wo +
-    //    2*(vₓₓ*c2c3 + vᵧᵧ*d2d3);
+    // const r4 = c2d2 + c3d1;
+    // const r5 = c1d3 + c2d2;
+    // const v5 =
+    //     vₓₓᵧ*(2*(c0*wo + c1*r4) + d3*c1c1 + c2*(2*c3d0 + c2d1)) +
+    //     vₓᵧᵧ*(2*(d0*wo + d1*r5) + c3*d1d1 + d2*(2*c0d3 + c1d2)) +
+    //     3*(vₓₓₓ*(2*c0*c2c3 + c1*wc) + 
+    //        vᵧᵧᵧ*(2*d0*d2d3 + d1*wd)) +
+    //     vₓᵧ*wo +
+    //     2*(vₓₓ*c2c3 + vᵧᵧ*d2d3);
     const r4 = get_coeffs_bez3_bez3_exact_fes(c2d2, c3d1);
     const r5 = get_coeffs_bez3_bez3_exact_fes(c1d3, c2d2);
     const k1 = get_coeffs_bez3_bez3_exact_sce(c0, wo);
@@ -12468,17 +12395,17 @@ function getCoeffsBez3Bez3Exact(ps1, ps2) {
     const kx = get_coeffs_bez3_bez3_exact_fes(ku, kv);
     const ky = get_coeffs_bez3_bez3_exact_fes(kw, kp);
     const v5 = get_coeffs_bez3_bez3_exact_fes(kx, ky);
-    //const r1 = c1d3 + r4;
-    //const r2 = 2*c1c3 + c2c2;
-    //const r3 = 2*d1d3 + d2d2;
-    //const v4 =
-    //    vₓₓᵧ*(2*c0*r1 + d0*r2 + c1*(c1d2 + 2*c2d1)) +
-    //    vₓᵧᵧ*(2*d0*r1 + c0*r3 + d1*(c2d1 + 2*c1d2)) +
-    //    vₓₓₓ*3*(c0*r2 + c2*c1c1) +
-    //    vᵧᵧᵧ*3*(d0*r3 + d2*d1d1) +
-    //    vₓᵧ*r1 +
-    //    vₓₓ*r2 +
-    //    vᵧᵧ*r3;
+    // const r1 = c1d3 + r4;
+    // const r2 = 2*c1c3 + c2c2;
+    // const r3 = 2*d1d3 + d2d2;
+    // const v4 =
+    //     vₓₓᵧ*(2*c0*r1 + d0*r2 + c1*(c1d2 + 2*c2d1)) +
+    //     vₓᵧᵧ*(2*d0*r1 + c0*r3 + d1*(c2d1 + 2*c1d2)) +
+    //     vₓₓₓ*3*(c0*r2 + c2*c1c1) +
+    //     vᵧᵧᵧ*3*(d0*r3 + d2*d1d1) +
+    //     vₓᵧ*r1 +
+    //     vₓₓ*r2 +
+    //     vᵧᵧ*r3;
     const r1 = get_coeffs_bez3_bez3_exact_fes(c1d3, r4);
     const r2 = get_coeffs_bez3_bez3_exact_fes(get_coeffs_bez3_bez3_exact_em2(c1c3), c2c2);
     const r3 = get_coeffs_bez3_bez3_exact_fes(get_coeffs_bez3_bez3_exact_em2(d1d3), d2d2);
@@ -12513,18 +12440,18 @@ function getCoeffsBez3Bez3Exact(ps1, ps2) {
     const su = get_coeffs_bez3_bez3_exact_epr(vᵧᵧ, r3);
     const sr = get_coeffs_bez3_bez3_exact_fes(sq, su);
     const v4 = get_coeffs_bez3_bez3_exact_fes(sp, sr);
-    //const r6 = c1d2 + c2d1;
-    //const r7 = c3d0 + c0d3;
-    //const r8 = c1c2 + c0c3;
-    //const r9 = d1d2 + d0d3;
-    //const v3 =
-    //    vₓₓᵧ*(c0*(2*r6 + c3d0 + r7) + c1*(2*c2d0 + c1d1)) +
-    //    vₓᵧᵧ*(d0*(2*r6 + c0d3 + r7) + d1*(2*c0d2 + c1d1)) +
-    //    vₓₓₓ*(3*c0*(r8 + c1c2) + c1*c1c1) + 
-    //    vᵧᵧᵧ*(3*d0*(r9 + d1d2) + d1*d1d1) +
-    //    vₓᵧ*(r7 + r6) +
-    //    2*(vₓₓ*r8 + vᵧᵧ*r9) +
-    //    vₓ*c3 + vᵧ*d3;
+    // const r6 = c1d2 + c2d1;
+    // const r7 = c3d0 + c0d3;
+    // const r8 = c1c2 + c0c3;
+    // const r9 = d1d2 + d0d3;
+    // const v3 =
+    //     vₓₓᵧ*(c0*(2*r6 + c3d0 + r7) + c1*(2*c2d0 + c1d1)) +
+    //     vₓᵧᵧ*(d0*(2*r6 + c0d3 + r7) + d1*(2*c0d2 + c1d1)) +
+    //     vₓₓₓ*(3*c0*(r8 + c1c2) + c1*c1c1) + 
+    //     vᵧᵧᵧ*(3*d0*(r9 + d1d2) + d1*d1d1) +
+    //     vₓᵧ*(r7 + r6) +
+    //     2*(vₓₓ*r8 + vᵧᵧ*r9) +
+    //     vₓ*c3 + vᵧ*d3;
     const r6 = get_coeffs_bez3_bez3_exact_fes(c1d2, c2d1);
     const r7 = get_coeffs_bez3_bez3_exact_fes(c3d0, c0d3);
     const r8 = get_coeffs_bez3_bez3_exact_fes(c1c2, c0c3);
@@ -12567,17 +12494,17 @@ function getCoeffsBez3Bez3Exact(ps1, ps2) {
     const n1 = get_coeffs_bez3_bez3_exact_fes(mw, mx);
     const n2 = get_coeffs_bez3_bez3_exact_fes(my, mz);
     const v3 = get_coeffs_bez3_bez3_exact_fes(n1, n2);
-    //const ra = c1d1 + c2d0;
-    //const rb = c1d1 + c0d2;
-    //const v2 =
-    //    vₓₓᵧ*(c0*(2*ra + c0d2) + d0*c1c1) +
-    //    vₓᵧᵧ*(d0*(2*rb + c2d0) + c0*d1d1) +
-    //    3*vₓₓₓ*(c0*c1c1 + c2*c0c0) + 
-    //    3*vᵧᵧᵧ*(d0*d1d1 + d2*d0d0) +
-    //    vₓᵧ*(ra + c0d2) +
-    //    vₓₓ*(2*c0c2 + c1c1) + 
-    //    vᵧᵧ*(2*d0d2 + d1d1) +
-    //    c2*vₓ + d2*vᵧ;
+    // const ra = c1d1 + c2d0;
+    // const rb = c1d1 + c0d2;
+    // const v2 =
+    //     vₓₓᵧ*(c0*(2*ra + c0d2) + d0*c1c1) +
+    //     vₓᵧᵧ*(d0*(2*rb + c2d0) + c0*d1d1) +
+    //     3*vₓₓₓ*(c0*c1c1 + c2*c0c0) + 
+    //     3*vᵧᵧᵧ*(d0*d1d1 + d2*d0d0) +
+    //     vₓᵧ*(ra + c0d2) +
+    //     vₓₓ*(2*c0c2 + c1c1) + 
+    //     vᵧᵧ*(2*d0d2 + d1d1) +
+    //     c2*vₓ + d2*vᵧ;
     const ra = get_coeffs_bez3_bez3_exact_fes(c1d1, c2d0);
     const rb = get_coeffs_bez3_bez3_exact_fes(c1d1, c0d2);
     const l1 = get_coeffs_bez3_bez3_exact_fes(get_coeffs_bez3_bez3_exact_em2(ra), c0d2);
@@ -12614,14 +12541,14 @@ function getCoeffsBez3Bez3Exact(ps1, ps2) {
     const lw = get_coeffs_bez3_bez3_exact_fes(lt, lu);
     const lx = get_coeffs_bez3_bez3_exact_fes(lv, ls);
     const v2 = get_coeffs_bez3_bez3_exact_fes(lw, lx);
-    //const rc = c1d0 + c0d1;
-    //const v1 =
-    //    vₓₓᵧ*c0*(rc + c1d0) +
-    //    vₓᵧᵧ*d0*(rc + c0d1) +
-    //    3*(c1*c0c0*vₓₓₓ + d1*d0d0*vᵧᵧᵧ) +
-    //    vₓᵧ*rc +
-    //    2*(c0c1*vₓₓ + d0d1*vᵧᵧ) +
-    //    c1*vₓ + d1*vᵧ ;
+    // const rc = c1d0 + c0d1;
+    // const v1 =
+    //     vₓₓᵧ*c0*(rc + c1d0) +
+    //     vₓᵧᵧ*d0*(rc + c0d1) +
+    //     3*(c1*c0c0*vₓₓₓ + d1*d0d0*vᵧᵧᵧ) +
+    //     vₓᵧ*rc +
+    //     2*(c0c1*vₓₓ + d0d1*vᵧᵧ) +
+    //     c1*vₓ + d1*vᵧ ;
     const rc = get_coeffs_bez3_bez3_exact_fes(c1d0, c0d1);
     const rd = get_coeffs_bez3_bez3_exact_sce(c0, vₓₓᵧ);
     const re = get_coeffs_bez3_bez3_exact_sce(d0, vₓᵧᵧ);
@@ -12646,7 +12573,13 @@ function getCoeffsBez3Bez3Exact(ps1, ps2) {
     const rv = get_coeffs_bez3_bez3_exact_fes(rs, rt);
     const rw = get_coeffs_bez3_bez3_exact_fes(ru, rp);
     const v1 = get_coeffs_bez3_bez3_exact_fes(rv, rw);
-    // v0
+    // const v0 =
+    //     c0c0*(c0*vₓₓₓ + d0*vₓₓᵧ + vₓₓ) +
+    //     d0d0*(c0*vₓᵧᵧ + d0*vᵧᵧᵧ + vᵧᵧ) +
+    //     c0d0*vₓᵧ +
+    //     c0*vₓ +
+    //     d0*vᵧ +
+    //     v;
     const t1 = get_coeffs_bez3_bez3_exact_sce(c0, vₓₓₓ);
     const t2 = get_coeffs_bez3_bez3_exact_sce(d0, vₓₓᵧ);
     const p4 = get_coeffs_bez3_bez3_exact_fes(t1, t2);
@@ -12736,7 +12669,8 @@ function getCoeffsBezBez(ps1, ps2) {
  * in [0,1], i.e. `t ∈ [-∞,+∞]`.
  *
  * * if the two curves have an infinite number of intersections `undefined` is returned
- * * the second bezier curve's parameter `t` values are returned *ordered* by `t` value
+ *
+ * * the **second** bezier curve's parameter `t` values are returned *ordered* by `t` value
  *
  * * **precondition:** the bezier curves must be of lowest possible
  * representable order, i.e. cubics are really cubics, etc. (else
@@ -12744,8 +12678,7 @@ function getCoeffsBezBez(ps1, ps2) {
  *
  * @param ps1 an order 1,2 or 3 bezier curve given as an array of its control
  * points, e.g. `[[1,2],[3,4],[5,7],[0,0]]`
- * @param ps2 an order 1,2 or 3 bezier curve given as an array of its control
- * points, e.g. `[[1,2],[3,4],[5,7],[0,0]]`
+ * @param ps2 another bezier curve
  *
  * @internal but still exported for backwards compatibility
  */
@@ -23976,8 +23909,8 @@ function to_string_toString(ps) {
 
 /**
  * Returns the intersection between any of two linear, quadratic or cubic bezier
- * curves without limiting the `t` parameter value of either curve
- * in [0,1], i.e. `t ∈ [-∞,+∞]`.
+ * curves without limiting the `t` parameter value of either curve,
+ * i.e. `t ∈ [-∞,+∞]`.
  *
  * * if the two curves have an infinite number of intersections `undefined` is returned
  * * the second bezier curve's parameter `t` values are returned *ordered* by `t` value
@@ -24804,6 +24737,428 @@ function calcQuadOffsetCurveXPoint(ps, D) {
 // const ps90 = ps.map(rotate90Degrees);
 // calcQuadOffsetCurveXPoint(ps90, -20);//?
 
+;// ./src/specialized/get-medial-points/get-medial-point-coeffs-bez2.ts
+/**
+ * Returns polynomial coefficients for ray parameter values `t`, bezier
+ * parameter values `s` and medial points for points `q(t)` and b(s) (an order
+ * 2 bezier curve) that satisfy the medial condition with respect to `p` and `ps`:
+ *
+ * Let `p` be a fixed point in the plane.
+ * Let `v` be a direction vector defining the ray `q(t) = p + t⋅v`.
+ * Let `ps` be a quadratic bezier curve.
+ *
+ * * `q(t)` is equidistant from `p` and the nearest point on `ps`
+ * * that common distance is locally minimal among such candidates
+ *
+ * In other words, this function returns candidate ray parameters for the
+ * sought medial point(s). Selecting physically valid solutions (if needed)
+ * is done by the caller or by a later stage of this routine.
+ *
+ * @param p base point
+ * @param v ray direction from `p`
+ * @param ps quadratic bezier control points, i.e. an order 2 bezier curve
+ * given as an array of control points, e.g. `[[0,0],[1,1],[2,1]]`
+ */
+function getMedialPointCoeffsBez2(p, v, ps) {
+    // -----------------------------------------------------
+    // See get-medial-points.md for implementation details.
+    // -----------------------------------------------------
+    const [px, py] = p;
+    const [vx, vy] = v;
+    const [[x0, y0], [x1, y1], [x2, y2]] = ps;
+    // Quadratic bezier in power basis: b(s) = a⋅s² + b⋅s + c
+    const ax = x0 - 2 * x1 + x2;
+    const ay = y0 - 2 * y1 + y2;
+    const bx = -2 * x0 + 2 * x1;
+    const by = -2 * y0 + 2 * y1;
+    const cx = x0;
+    const cy = y0;
+    // u(s) = p - b(s) = u2⋅s² + u1⋅s + u0
+    const u2x = -ax;
+    const u2y = -ay;
+    const u1x = -bx;
+    const u1y = -by;
+    const u0x = px - cx;
+    const u0y = py - cy;
+    // b'(s) = w(s) = w1⋅s + w0
+    const w1x = 2 * ax;
+    const w1y = 2 * ay;
+    const w0x = bx;
+    const w0y = by;
+    // -----------------------------------------------------
+    // E1(s,t): (u(s) + t⋅v) ⋅ b'(s) = 0
+    // => C(s)⋅t + D(s) = 0
+    const c1 = vx * w1x + vy * w1y;
+    const c0 = vx * w0x + vy * w0y;
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    const d3 = u2x * w1x + u2y * w1y;
+    const d2 = u2x * w0x + u2y * w0y + u1x * w1x + u1y * w1y;
+    const d1 = u1x * w0x + u1y * w0y + u0x * w1x + u0y * w1y;
+    const d0 = u0x * w0x + u0y * w0y;
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    // E2(s,t): |t⋅v|² - |u(s) + t⋅v|² = 0
+    //         => 2⋅(v⋅u(s))⋅t + |u(s)|² = 0
+    //         => A(s)⋅t + B(s) = 0
+    const a2 = 2 * (vx * u2x + vy * u2y);
+    const a1 = 2 * (vx * u1x + vy * u1y);
+    const a0 = 2 * (vx * u0x + vy * u0y);
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    const b4 = u2x * u2x + u2y * u2y;
+    const b3 = 2 * (u2x * u1x + u2y * u1y);
+    const b2 = 2 * (u2x * u0x + u2y * u0y) + (u1x * u1x + u1y * u1y);
+    const b1 = 2 * (u1x * u0x + u1y * u0y);
+    const b0 = u0x * u0x + u0y * u0y;
+    // -----------------------------------------------------
+    // const A = [a2, a1, a0];          // degree 2 in s
+    // const B = [b4, b3, b2, b1, b0];  // degree 4 in s
+    // const C = [c1, c0];              // degree 1 in s
+    // const D = [d3, d2, d1, d0];      // degree 3 in s
+    // Eliminate t from:
+    //   A(s)⋅t + B(s) = 0
+    //   C(s)⋅t + D(s) = 0
+    // by taking A(s)⋅D(s) - B(s)⋅C(s) = 0 (degree ≤ 5 in s)
+    // Explicit expansion of AD = multiply(A, D), descending in s.
+    // const AD = [
+    //     a2*d3,
+    //     a2*d2 + a1*d3,
+    //     a2*d1 + a1*d2 + a0*d3,
+    //     a2*d0 + a1*d1 + a0*d2,
+    //     a1*d0 + a0*d1,
+    //     a0*d0
+    // ];
+    const AD5 = a2 * d3;
+    const AD4 = a2 * d2 + a1 * d3;
+    const AD3 = a2 * d1 + a1 * d2 + a0 * d3;
+    const AD2 = a2 * d0 + a1 * d1 + a0 * d2;
+    const AD1 = a1 * d0 + a0 * d1;
+    const AD0 = a0 * d0;
+    // Explicit expansion of BC = multiply(B, C), descending in s.
+    // const BC = [
+    //     b4*c1,
+    //     b4*c0 + b3*c1,
+    //     b3*c0 + b2*c1,
+    //     b2*c0 + b1*c1,
+    //     b1*c0 + b0*c1,
+    //     b0*c0
+    // ];
+    const BC5 = b4 * c1;
+    const BC4 = b4 * c0 + b3 * c1;
+    const BC3 = b3 * c0 + b2 * c1;
+    const BC2 = b2 * c0 + b1 * c1;
+    const BC1 = b1 * c0 + b0 * c1;
+    const BC0 = b0 * c0;
+    // const H = [
+    //     AD5 - BC5,
+    //     AD4 - BC4,
+    //     AD3 - BC3,
+    //     AD2 - BC2,
+    //     AD1 - BC1,
+    //     AD0 - BC0
+    // ];
+    const H5 = AD5 - BC5;
+    const H4 = AD4 - BC4;
+    const H3 = AD3 - BC3;
+    const H2 = AD2 - BC2;
+    const H1 = AD1 - BC1;
+    const H0 = AD0 - BC0;
+    return {
+        A: [a2, a1, a0],
+        B: [b4, b3, b2, b1, b0],
+        C: [c1, c0],
+        D: [d3, d2, d1, d0],
+        H: [H5, H4, H3, H2, H1, H0]
+    };
+}
+
+
+;// ./src/specialized/get-medial-points/get-medial-point-coeffs-bez1.ts
+/**
+ * Returns polynomial coefficients for ray parameter values `t`, bezier
+ * parameter values `s` and medial points for points `q(t)` and b(s) (an order
+ * 1 bezier curve) that satisfy the medial condition with respect to `p` and `ps`:
+ *
+ * Let `p` be a fixed point in the plane.
+ * Let `v` be a direction vector defining the ray `q(t) = p + t⋅v`.
+ * Let `ps` be an order 1 bezier curve (a line segment).
+ *
+ * * `q(t)` is equidistant from `p` and the nearest point on `ps`
+ * * that common distance is locally minimal among such candidates
+ *
+ * In other words, this function returns candidate ray parameters for the
+ * sought medial point(s). Selecting physically valid solutions (if needed)
+ * is done by the caller or by a later stage of this routine.
+ *
+ * @param p base point
+ * @param v ray direction from `p`
+ * @param ps order 1 bezier control points, i.e. a line segment
+ * given as an array of control points, e.g. `[[0,0],[2,1]]`
+ */
+function getMedialPointCoeffsBez1(p, v, ps) {
+    // -----------------------------------------------------
+    // See get-medial-points.md for implementation details.
+    // -----------------------------------------------------
+    const [px, py] = p;
+    const [vx, vy] = v;
+    const [[x0, y0], [x1, y1]] = ps;
+    // Linear bezier in power basis: b(s) = b*s + c
+    const bx = -x0 + x1;
+    const by = -y0 + y1;
+    const cx = x0;
+    const cy = y0;
+    // u(s) = p - b(s) = u1*s + u0
+    const u1x = -bx;
+    const u1y = -by;
+    const u0x = px - cx;
+    const u0y = py - cy;
+    // b'(s) = w(s) = w0
+    const w0x = bx;
+    const w0y = by;
+    // -----------------------------------------------------
+    // E1(s,t): (u(s) + t⋅v) ⋅ b'(s) = 0
+    // => C(s)⋅t + D(s) = 0
+    const c0 = vx * w0x + vy * w0y;
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    const d1 = u1x * w0x + u1y * w0y;
+    const d0 = u0x * w0x + u0y * w0y;
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    // E2(s,t): |t⋅v|² - |u(s) + t⋅v|² = 0
+    //         => 2⋅(v⋅u(s))⋅t + |u(s)|² = 0
+    //         => A(s)⋅t + B(s) = 0
+    const a1 = 2 * (vx * u1x + vy * u1y);
+    const a0 = 2 * (vx * u0x + vy * u0y);
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    const b2 = u1x * u1x + u1y * u1y;
+    const b1 = 2 * (u1x * u0x + u1y * u0y);
+    const b0 = u0x * u0x + u0y * u0y;
+    // -----------------------------------------------------
+    // const A = [a1, a0];      // degree 1 in s
+    // const B = [b2, b1, b0];  // degree 2 in s
+    // const C = [c0];          // degree 0 in s
+    // const D = [d1, d0];      // degree 1 in s
+    // Eliminate t from:
+    //   A(s)⋅t + B(s) = 0
+    //   C(s)⋅t + D(s) = 0
+    // by taking A(s)⋅D(s) - B(s)⋅C(s) = 0 (degree ≤ 2 in s)
+    const AD2 = a1 * d1;
+    const AD1 = a1 * d0 + a0 * d1;
+    const AD0 = a0 * d0;
+    const BC2 = b2 * c0;
+    const BC1 = b1 * c0;
+    const BC0 = b0 * c0;
+    const H2 = AD2 - BC2;
+    const H1 = AD1 - BC1;
+    const H0 = AD0 - BC0;
+    return {
+        A: [a1, a0],
+        B: [b2, b1, b0],
+        C: [c0],
+        D: [d1, d0],
+        H: [H2, H1, H0]
+    };
+}
+
+
+;// ./src/specialized/get-medial-points/get-medial-point-coeffs-bez3.ts
+/**
+ * Returns polynomial coefficients for ray parameter values `t`, bezier
+ * parameter values `s` and medial points for points `q(t)` and b(s) (an order
+ * 3 bezier curve) that satisfy the medial condition with respect to `p` and `ps`:
+ *
+ * Let `p` be a fixed point in the plane.
+ * Let `v` be a direction vector defining the ray `q(t) = p + t⋅v`.
+ * Let `ps` be a cubic bezier curve.
+ *
+ * * `q(t)` is equidistant from `p` and the nearest point on `ps`
+ * * that common distance is locally minimal among such candidates
+ *
+ * In other words, this function returns candidate ray parameters for the
+ * sought medial point(s). Selecting physically valid solutions (if needed)
+ * is done by the caller or by a later stage of this routine.
+ *
+ * @param p base point
+ * @param v ray direction from `p`
+ * @param ps cubic bezier control points, i.e. an order 3 bezier curve
+ * given as an array of control points, e.g. `[[0,0],[1,1],[2,1],[3,0]]`
+ */
+function getMedialPointCoeffsBez3(p, v, ps) {
+    // -----------------------------------------------------
+    // See get-medial-points.md for implementation details.
+    // -----------------------------------------------------
+    const [px, py] = p;
+    const [vx, vy] = v;
+    const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
+    // Cubic bezier in power basis: b(s) = a*s^3 + b*s^2 + c*s + d
+    const ax = -x0 + 3 * x1 - 3 * x2 + x3;
+    const ay = -y0 + 3 * y1 - 3 * y2 + y3;
+    const bx = 3 * x0 - 6 * x1 + 3 * x2;
+    const by = 3 * y0 - 6 * y1 + 3 * y2;
+    const cx = -3 * x0 + 3 * x1;
+    const cy = -3 * y0 + 3 * y1;
+    const dx = x0;
+    const dy = y0;
+    // u(s) = p - b(s) = u3*s^3 + u2*s^2 + u1*s + u0
+    const u3x = -ax;
+    const u3y = -ay;
+    const u2x = -bx;
+    const u2y = -by;
+    const u1x = -cx;
+    const u1y = -cy;
+    const u0x = px - dx;
+    const u0y = py - dy;
+    // b'(s) = w(s) = w2*s^2 + w1*s + w0
+    const w2x = 3 * ax;
+    const w2y = 3 * ay;
+    const w1x = 2 * bx;
+    const w1y = 2 * by;
+    const w0x = cx;
+    const w0y = cy;
+    // -----------------------------------------------------
+    // E1(s,t): (u(s) + t*v) * b'(s) = 0
+    // => C(s)*t + D(s) = 0
+    const c2 = vx * w2x + vy * w2y;
+    const c1 = vx * w1x + vy * w1y;
+    const c0 = vx * w0x + vy * w0y;
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    const d5 = u3x * w2x + u3y * w2y;
+    const d4 = u3x * w1x + u3y * w1y + u2x * w2x + u2y * w2y;
+    const d3 = u3x * w0x + u3y * w0y + u2x * w1x + u2y * w1y + u1x * w2x + u1y * w2y;
+    const d2 = u2x * w0x + u2y * w0y + u1x * w1x + u1y * w1y + u0x * w2x + u0y * w2y;
+    const d1 = u1x * w0x + u1y * w0y + u0x * w1x + u0y * w1y;
+    const d0 = u0x * w0x + u0y * w0y;
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    // E2(s,t): |t*v|^2 - |u(s) + t*v|^2 = 0
+    //         => 2*(v*u(s))*t + |u(s)|^2 = 0
+    //         => A(s)*t + B(s) = 0
+    const a3 = 2 * (vx * u3x + vy * u3y);
+    const a2 = 2 * (vx * u2x + vy * u2y);
+    const a1 = 2 * (vx * u1x + vy * u1y);
+    const a0 = 2 * (vx * u0x + vy * u0y);
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    const b6 = u3x * u3x + u3y * u3y;
+    const b5 = 2 * (u3x * u2x + u3y * u2y);
+    const b4 = 2 * (u3x * u1x + u3y * u1y) + (u2x * u2x + u2y * u2y);
+    const b3 = 2 * (u3x * u0x + u3y * u0y) + 2 * (u2x * u1x + u2y * u1y);
+    const b2 = 2 * (u2x * u0x + u2y * u0y) + (u1x * u1x + u1y * u1y);
+    const b1 = 2 * (u1x * u0x + u1y * u0y);
+    const b0 = u0x * u0x + u0y * u0y;
+    // -----------------------------------------------------
+    // const A = [a3, a2, a1, a0];                  // degree 3 in s
+    // const B = [b6, b5, b4, b3, b2, b1, b0];      // degree 6 in s
+    // const C = [c2, c1, c0];                      // degree 2 in s
+    // const D = [d5, d4, d3, d2, d1, d0];          // degree 5 in s
+    // Eliminate t from:
+    //   A(s)*t + B(s) = 0
+    //   C(s)*t + D(s) = 0
+    // by taking A(s)*D(s) - B(s)*C(s) = 0 (degree <= 8 in s)
+    const AD8 = a3 * d5;
+    const AD7 = a3 * d4 + a2 * d5;
+    const AD6 = a3 * d3 + a2 * d4 + a1 * d5;
+    const AD5 = a3 * d2 + a2 * d3 + a1 * d4 + a0 * d5;
+    const AD4 = a3 * d1 + a2 * d2 + a1 * d3 + a0 * d4;
+    const AD3 = a3 * d0 + a2 * d1 + a1 * d2 + a0 * d3;
+    const AD2 = a2 * d0 + a1 * d1 + a0 * d2;
+    const AD1 = a1 * d0 + a0 * d1;
+    const AD0 = a0 * d0;
+    const BC8 = b6 * c2;
+    const BC7 = b6 * c1 + b5 * c2;
+    const BC6 = b6 * c0 + b5 * c1 + b4 * c2;
+    const BC5 = b5 * c0 + b4 * c1 + b3 * c2;
+    const BC4 = b4 * c0 + b3 * c1 + b2 * c2;
+    const BC3 = b3 * c0 + b2 * c1 + b1 * c2;
+    const BC2 = b2 * c0 + b1 * c1 + b0 * c2;
+    const BC1 = b1 * c0 + b0 * c1;
+    const BC0 = b0 * c0;
+    const H8 = AD8 - BC8;
+    const H7 = AD7 - BC7;
+    const H6 = AD6 - BC6;
+    const H5 = AD5 - BC5;
+    const H4 = AD4 - BC4;
+    const H3 = AD3 - BC3;
+    const H2 = AD2 - BC2;
+    const H1 = AD1 - BC1;
+    const H0 = AD0 - BC0;
+    return {
+        A: [a3, a2, a1, a0],
+        B: [b6, b5, b4, b3, b2, b1, b0],
+        C: [c2, c1, c0],
+        D: [d5, d4, d3, d2, d1, d0],
+        H: [H8, H7, H6, H5, H4, H3, H2, H1, H0]
+    };
+}
+
+
+;// ./src/specialized/get-medial-points/get-medial-points.ts
+
+
+
+
+const getMedialPointCoeffss = [
+    ,
+    ,
+    getMedialPointCoeffsBez1,
+    getMedialPointCoeffsBez2,
+    getMedialPointCoeffsBez3
+];
+/**
+ * Returns candidate ray parameter values `t`, bezier parameter values `s` and
+ * medial points for points `q(t)` and b(s) that satisfy the medial condition with
+ * respect to `p` and `ps`:
+ *
+ * Let `p` be a fixed point in the plane.
+ * Let `v` be a direction vector defining the ray `q(t) = p + t⋅v`.
+ * Let `ps` be a quadratic bezier curve.
+ *
+ * * `q(t)` is equidistant from `p` and the nearest point on `ps`
+ * * that common distance is locally minimal among such candidates
+ *
+ * In other words, this function returns candidate ray parameters for the
+ * sought medial point(s). Selecting physically valid solutions (if needed)
+ * is done by the caller or by a later stage of this routine.
+ *
+ * @param p base point
+ * @param v ray direction from `p`
+ * @param ps quadratic bezier control points, i.e. an order 2 bezier curve
+ * given as an array of control points, e.g. `[[0,0],[1,1],[2,1]]`
+ */
+function getMedialPoints(p, v, ps) {
+    // -----------------------------------------------------
+    // See get-medial-points.md for implementation details.
+    // -----------------------------------------------------
+    const len = ps.length;
+    if (len <= 1) {
+        throw new Error(`Bezier curve must be of order 1, 2 or 3. Found: ${len - 1}`);
+    }
+    const { A, B, C, D, H } = getMedialPointCoeffss[len - 1](p, v, ps);
+    /** the possible parameter values of the bezier curve */
+    const ss = (roots(H, 0, 1) || []).map(r => r.t); //?
+    /** the possible parameter values of the ray */
+    const ts = [];
+    /** the possible points on the ray */
+    const qs = [];
+    for (const s of ss) {
+        const As = Horner(A, s);
+        const Bs = Horner(B, s);
+        // const Cs = Horner(C, s);
+        // const Ds = Horner(D, s);
+        const t = -Bs / As;
+        // const t = -Ds / Cs;  // alternative
+        ts.push(t);
+        const q = [p[0] + t * v[0], p[1] + t * v[1]];
+        qs.push(q);
+    }
+    return { ts, ss, qs };
+}
+
+
 ;// ./src/index.ts
 
 
@@ -24953,4 +25308,8 @@ function calcQuadOffsetCurveXPoint(ps, D) {
 
 
 
-export { areBoxesIntersecting, area_area as area, bezierBezierIntersection, bezierBezierIntersectionBoundless, bezierBezierIntersectionBoundlessBoth, bezierBezierIntersectionFast, bezierPieceToBezier, bezierSelfIntersection, calcQuadOffsetCurveXPoint, circleBezierIntersection, classification, classifications, classify, clone, closestPointOnBezier, closestPointOnBezierCertified, closestPointsBetweenBeziers, controlPointLinesLength, cubicFromAnglesAndSpeeds, cubicThroughPointGiven013, cubicToAnglesAndSpeeds, cubicToHybridQuadratic, cubicToQuadratic, curvature, curviness, ddCurvature, eCurvature, equal, evalDeCasteljau, evalDeCasteljauDd, evalDeCasteljauError, evalDeCasteljauWithErr, evalDeCasteljauWithErrDd, evaluate, evaluate2ndDerivative, evaluate2ndDerivativeAt0, evaluate2ndDerivativeAt0Exact, evaluate2ndDerivativeAt1, evaluate2ndDerivativeAt1Exact, evaluate2ndDerivativeExact, evaluateExact, evaluateImplicit1, evaluateImplicit2, evaluateImplicit3, fitQuadsToCubic, fitQuadsToCubicHausdorff, fromPowerBasis, fromTo, fromToInclErrorBound, furthestPointOnBezier, generateArcFromQuads, generateCuspAtHalf3, generateQuarterCircle, generateSelfIntersecting, getAbsAreaBetween, getBendingEnergy, getBoundingBox, getBoundingBoxTight, getBoundingHull, getBounds, getCoeffsBezBez, getControlPointBox, getCubicSpeeds, getCurvatureExtrema, getCurvatureExtremaDd, getCurvatureExtremaE, getEndpointIntersections, getFootPointsOnBezierCertified, getFootPointsOnBezierPolysCertified, getFootpointPoly, getFootpointPolyDd, getFootpointPolyExact, getHodograph, getImplicitForm1, getImplicitForm1Dd, getImplicitForm1DdWithRunningError, getImplicitForm1ErrorCounters, getImplicitForm1Exact, getImplicitForm2, getImplicitForm2Dd, getImplicitForm2DdWithRunningError, getImplicitForm2ErrorCounters, getImplicitForm2Exact, getImplicitForm3, getImplicitForm3Dd, getImplicitForm3DdWithRunningError, getImplicitForm3ErrorCounters, getImplicitForm3Exact, getInflections, getInterfaceRotation, getIntervalBox, getIntervalBoxDd, getTAtLength, getXBoundsTight, getYBoundsTight, hausdorffDistance, hausdorffDistanceOneSided, intersectBoxes, isBezierPieceZeroLength, isCollinear, isCubicReallyLine, isCubicReallyQuad, isHorizontal, isPointOnBezierExtension, isQuadObtuse, isQuadReallyLine, isReallyPoint, isSelfOverlapping, isVertical, length_length as length, lineToCubic, lineToQuadratic, maxAbsCoordinate, normal, normal2, quadraticToCubic, quadraticToPolyline, reduceOrderIfPossible, reverse, setCubicSpeeds, splitByCurvature, splitByCurvatureAndLength, splitByLength, tFromXY, tangent, tangentAt0, tangentAt0Exact, tangentAt1, tangentAt1Exact, tangentExact, toCubic, toPowerBasis, toPowerBasis0Exact, toPowerBasis1DdWithRunningError, toPowerBasis1Exact, toPowerBasis2DdWithRunningError, toPowerBasis2Exact, toPowerBasis3DdWithRunningError, toPowerBasis3Exact, toPowerBasisDd, toPowerBasisDdWithRunningError, toPowerBasisErrorCounters, toPowerBasisExact, toPowerBasisWithRunningError, toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeDd, toPowerBasis_1stDerivativeErrorCounters, toPowerBasis_1stDerivativeExact, toPowerBasis_2ndDerivative, toPowerBasis_2ndDerivativeDd, toPowerBasis_2ndDerivativeExact, toPowerBasis_3rdDerivative, toPowerBasis_3rdDerivativeDd, toPowerBasis_3rdDerivativeExact, to_string_toString as toString, totalAbsoluteCurvature, totalCurvature, totalLength, γ, γγ, κ };
+
+
+
+
+export { areBoxesIntersecting, area_area as area, bezierBezierIntersection, bezierBezierIntersectionBoundless, bezierBezierIntersectionBoundlessBoth, bezierBezierIntersectionFast, bezierPieceToBezier, bezierSelfIntersection, calcQuadOffsetCurveXPoint, circleBezierIntersection, classification, classifications, classify, clone, closestPointOnBezier, closestPointOnBezierCertified, closestPointsBetweenBeziers, controlPointLinesLength, cubicFromAnglesAndSpeeds, cubicThroughPointGiven013, cubicToAnglesAndSpeeds, cubicToHybridQuadratic, cubicToQuadratic, curvature, curviness, ddCurvature, eCurvature, equal, evalDeCasteljau, evalDeCasteljauDd, evalDeCasteljauError, evalDeCasteljauWithErr, evalDeCasteljauWithErrDd, evaluate, evaluate2ndDerivative, evaluate2ndDerivativeAt0, evaluate2ndDerivativeAt0Exact, evaluate2ndDerivativeAt1, evaluate2ndDerivativeAt1Exact, evaluate2ndDerivativeExact, evaluateExact, evaluateImplicit1, evaluateImplicit2, evaluateImplicit3, fitQuadsToCubic, fitQuadsToCubicHausdorff, fromPowerBasis, fromTo, fromToInclErrorBound, furthestPointOnBezier, generateArcFromQuads, generateCuspAtHalf3, generateQuarterCircle, generateSelfIntersecting, getAbsAreaBetween, getBendingEnergy, getBoundingBox, getBoundingBoxTight, getBoundingHull, getBounds, getCoeffsBezBez, getControlPointBox, getCubicSpeeds, getCurvatureExtrema, getCurvatureExtremaDd, getCurvatureExtremaE, getEndpointIntersections, getFootPointsOnBezierCertified, getFootPointsOnBezierPolysCertified, getFootpointPoly, getFootpointPolyDd, getFootpointPolyExact, getHodograph, getImplicitForm1, getImplicitForm1Dd, getImplicitForm1DdWithRunningError, getImplicitForm1ErrorCounters, getImplicitForm1Exact, getImplicitForm2, getImplicitForm2Dd, getImplicitForm2DdWithRunningError, getImplicitForm2ErrorCounters, getImplicitForm2Exact, getImplicitForm3, getImplicitForm3Dd, getImplicitForm3DdWithRunningError, getImplicitForm3ErrorCounters, getImplicitForm3Exact, getInflections, getInterfaceRotation, getIntervalBox, getIntervalBoxDd, getMedialPointCoeffsBez1, getMedialPointCoeffsBez2, getMedialPointCoeffsBez3, getMedialPoints, getTAtLength, getXBoundsTight, getYBoundsTight, hausdorffDistance, hausdorffDistanceOneSided, intersectBoxes, isBezierPieceZeroLength, isCollinear, isCubicReallyLine, isCubicReallyQuad, isHorizontal, isPointOnBezierExtension, isQuadObtuse, isQuadReallyLine, isReallyPoint, isSelfOverlapping, isVertical, length_length as length, lineToCubic, lineToQuadratic, maxAbsCoordinate, normal, normal2, quadraticToCubic, quadraticToPolyline, reduceOrderIfPossible, reverse, setCubicSpeeds, splitByCurvature, splitByCurvatureAndLength, splitByLength, tFromXY, tangent, tangentAt0, tangentAt0Exact, tangentAt1, tangentAt1Exact, tangentExact, toCubic, toPowerBasis, toPowerBasis0Exact, toPowerBasis1DdWithRunningError, toPowerBasis1Exact, toPowerBasis2DdWithRunningError, toPowerBasis2Exact, toPowerBasis3DdWithRunningError, toPowerBasis3Exact, toPowerBasisDd, toPowerBasisDdWithRunningError, toPowerBasisErrorCounters, toPowerBasisExact, toPowerBasisWithRunningError, toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeDd, toPowerBasis_1stDerivativeErrorCounters, toPowerBasis_1stDerivativeExact, toPowerBasis_2ndDerivative, toPowerBasis_2ndDerivativeDd, toPowerBasis_2ndDerivativeExact, toPowerBasis_3rdDerivative, toPowerBasis_3rdDerivativeDd, toPowerBasis_3rdDerivativeExact, to_string_toString as toString, totalAbsoluteCurvature, totalCurvature, totalLength, γ, γγ, κ };

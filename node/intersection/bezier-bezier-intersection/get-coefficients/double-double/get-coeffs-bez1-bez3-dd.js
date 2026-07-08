@@ -1,12 +1,10 @@
-import { γγ } from "../../../../error-analysis/error-analysis.js";
 import { ddAddDd, ddMultDouble2, ddMultDd } from "double-double";
 import { getImplicitForm1DdWithRunningError } from "../../../../implicit-form/double-double/get-implicit-form1-dd-with-running-error.js";
 import { toPowerBasis3DdWithRunningError } from "../../../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js";
 const qaq = ddAddDd;
 const qmd = ddMultDouble2;
 const qmq = ddMultDd;
-const abs = Math.abs;
-const γγ3 = γγ(3);
+const { abs } = Math;
 /**
  * Returns a polynomial in 1 variable (including coefficientwise error bound)
  * whose roots are the parameter values of the intersection points of an order

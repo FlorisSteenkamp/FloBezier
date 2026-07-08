@@ -74,7 +74,7 @@ function getCoeffsBez3Bez3Exact(
     const c1d2 = epr(c1,d2);
     const c1d3 = epr(c1,d3);
     const c2d1 = epr(c2,d1);
-    const c2c2 = epr(c2,c2);    
+    const c2c2 = epr(c2,c2);
     const c2c3 = epr(c2,c3);
     const c2d0 = sce(d0,c2);
     const c2d2 = epr(c2,d2);
@@ -84,7 +84,6 @@ function getCoeffsBez3Bez3Exact(
     const c3d1 = epr(c3,d1);
     const c3d2 = epr(c3,d2);
     const c3d3 = epr(c3,d3);
-
     const d0d0 = tp(d0,d0);
     const d0d1 = sce(d0,d1);
     const d0d2 = sce(d0,d2);
@@ -97,11 +96,11 @@ function getCoeffsBez3Bez3Exact(
     const d1d3 = epr(d1,d3);
 
 
-    //const v9 =  
-    //    (c3*c3c3)*vₓₓₓ + 
-    //    (c3*d3d3)*vₓᵧᵧ + 
-    //    (d3*c3c3)*vₓₓᵧ + 
-    //    (d3*d3d3)*vᵧᵧᵧ;  
+    // const v9 =  
+    //     (c3*c3c3)*vₓₓₓ + 
+    //     (c3*d3d3)*vₓᵧᵧ + 
+    //     (d3*c3c3)*vₓₓᵧ + 
+    //     (d3*d3d3)*vᵧᵧᵧ;  
     const g1 = epr(c3,c3c3);  // c3*c3c3
     const g2 = epr(c3,d3d3);  // c3*d3d3
     const g3 = epr(d3,c3c3);  // d3*c3c3
@@ -114,13 +113,13 @@ function getCoeffsBez3Bez3Exact(
     const ga = fes(g7,g8);    // g7 + g8
     const v9 = fes(g9,ga);    // g9 + ga
 
-    //const v8 =  
-    //    2*c2*c3d3*vₓₓᵧ + 
-    //    2*c3*d2d3*vₓᵧᵧ + 
-    //      c2*d3d3*vₓᵧᵧ + 
-    //      d2*c3c3*vₓₓᵧ + 
-    //    3*c2*c3c3*vₓₓₓ + 
-    //    3*d2*d3d3*vᵧᵧᵧ;  
+    // const v8 =  
+    //     2*c2*c3d3*vₓₓᵧ + 
+    //     2*c3*d2d3*vₓᵧᵧ + 
+    //       c2*d3d3*vₓᵧᵧ + 
+    //       d2*c3c3*vₓₓᵧ + 
+    //     3*c2*c3c3*vₓₓₓ + 
+    //     3*d2*d3d3*vᵧᵧᵧ;  
     const w1 = fes(em2(c2d3),c3d2);
     const w2 = fes(em2(c3d2),c2d3);
     const w3 = epr(c3,w1);
@@ -136,11 +135,11 @@ function getCoeffsBez3Bez3Exact(
     const v8 = fes(u4,u5);
 
 
-    //const v7 =  
-    //    vₓₓᵧ*(2*(c1*c3d3 + c2*c3d2) + (d1*c3c3 + d3*c2c2)) +
-    //    vₓᵧᵧ*(2*(c2*d2d3 + c3*d1d3) + (c1*d3d3 + d2*c3d2)) +
-    //    vₓₓₓ*3*c3*(c1c3 + c2c2) +
-    //    vᵧᵧᵧ*3*d3*(d1d3 + d2d2);
+    // const v7 =  
+    //     vₓₓᵧ*(2*(c1*c3d3 + c2*c3d2) + (d1*c3c3 + d3*c2c2)) +
+    //     vₓᵧᵧ*(2*(c2*d2d3 + c3*d1d3) + (c1*d3d3 + d2*c3d2)) +
+    //     vₓₓₓ*3*c3*(c1c3 + c2c2) +
+    //     vᵧᵧᵧ*3*d3*(d1d3 + d2d2);
     const o1 = epr(c1,c3d3);
     const o2 = epr(d1,c3c3);
     const o3 = epr(c2,d2d3);
@@ -168,14 +167,14 @@ function getCoeffsBez3Bez3Exact(
     const v7 = fes(wm,wn);
 
 
-    //const v6 =
-    //    vₓₓᵧ*(d2*c2c2 + 2*c1*(c2d3 + c3d2) + c3*(2*c0d3 + 2*c2d1 + c3d0)) +
-    //    vₓᵧᵧ*(c2*d2d2 + 2*d1*(c2d3 + c3d2) + d3*(2*c1d2 + 2*c3d0 + c0d3)) +
-    //    vₓₓₓ*(c2*c2c2 + 3*c3*(2*c1c2 + c0c3)) +
-    //    vᵧᵧᵧ*(d2*d2d2 + 3*d3*(2*d1d2 + d0d3)) +
-    //    vₓₓ *c3c3 +
-    //    vᵧᵧ *d3d3 +
-    //    vₓᵧ *c3d3;
+    // const v6 =
+    //     vₓₓᵧ*(d2*c2c2 + 2*c1*(c2d3 + c3d2) + c3*(2*c0d3 + 2*c2d1 + c3d0)) +
+    //     vₓᵧᵧ*(c2*d2d2 + 2*d1*(c2d3 + c3d2) + d3*(2*c1d2 + 2*c3d0 + c0d3)) +
+    //     vₓₓₓ*(c2*c2c2 + 3*c3*(2*c1c2 + c0c3)) +
+    //     vᵧᵧᵧ*(d2*d2d2 + 3*d3*(2*d1d2 + d0d3)) +
+    //     vₓₓ *c3c3 +
+    //     vᵧᵧ *d3d3 +
+    //     vₓᵧ *c3d3;
     const wo = fes(c2d3,c3d2);
     const zc = epr(d2,c2c2);
     const zd = em2(epr(c1,wo));
@@ -214,15 +213,15 @@ function getCoeffsBez3Bez3Exact(
     const v6 = fes(za,zb);
 
 
-    //const r4 = c2d2 + c3d1;
-    //const r5 = c1d3 + c2d2;
-    //const v5 =
-    //    vₓₓᵧ*(2*(c0*wo + c1*r4) + d3*c1c1 + c2*(2*c3d0 + c2d1)) +
-    //    vₓᵧᵧ*(2*(d0*wo + d1*r5) + c3*d1d1 + d2*(2*c0d3 + c1d2)) +
-    //    3*(vₓₓₓ*(2*c0*c2c3 + c1*wc) + 
-    //       vᵧᵧᵧ*(2*d0*d2d3 + d1*wd)) +
-    //    vₓᵧ*wo +
-    //    2*(vₓₓ*c2c3 + vᵧᵧ*d2d3);
+    // const r4 = c2d2 + c3d1;
+    // const r5 = c1d3 + c2d2;
+    // const v5 =
+    //     vₓₓᵧ*(2*(c0*wo + c1*r4) + d3*c1c1 + c2*(2*c3d0 + c2d1)) +
+    //     vₓᵧᵧ*(2*(d0*wo + d1*r5) + c3*d1d1 + d2*(2*c0d3 + c1d2)) +
+    //     3*(vₓₓₓ*(2*c0*c2c3 + c1*wc) + 
+    //        vᵧᵧᵧ*(2*d0*d2d3 + d1*wd)) +
+    //     vₓᵧ*wo +
+    //     2*(vₓₓ*c2c3 + vᵧᵧ*d2d3);
     const r4 = fes(c2d2,c3d1);
     const r5 = fes(c1d3,c2d2);
     const k1 = sce(c0,wo);
@@ -262,17 +261,17 @@ function getCoeffsBez3Bez3Exact(
     const v5 = fes(kx,ky);
     
     
-    //const r1 = c1d3 + r4;
-    //const r2 = 2*c1c3 + c2c2;
-    //const r3 = 2*d1d3 + d2d2;
-    //const v4 =
-    //    vₓₓᵧ*(2*c0*r1 + d0*r2 + c1*(c1d2 + 2*c2d1)) +
-    //    vₓᵧᵧ*(2*d0*r1 + c0*r3 + d1*(c2d1 + 2*c1d2)) +
-    //    vₓₓₓ*3*(c0*r2 + c2*c1c1) +
-    //    vᵧᵧᵧ*3*(d0*r3 + d2*d1d1) +
-    //    vₓᵧ*r1 +
-    //    vₓₓ*r2 +
-    //    vᵧᵧ*r3;
+    // const r1 = c1d3 + r4;
+    // const r2 = 2*c1c3 + c2c2;
+    // const r3 = 2*d1d3 + d2d2;
+    // const v4 =
+    //     vₓₓᵧ*(2*c0*r1 + d0*r2 + c1*(c1d2 + 2*c2d1)) +
+    //     vₓᵧᵧ*(2*d0*r1 + c0*r3 + d1*(c2d1 + 2*c1d2)) +
+    //     vₓₓₓ*3*(c0*r2 + c2*c1c1) +
+    //     vᵧᵧᵧ*3*(d0*r3 + d2*d1d1) +
+    //     vₓᵧ*r1 +
+    //     vₓₓ*r2 +
+    //     vᵧᵧ*r3;
     const r1 = fes(c1d3,r4);
     const r2 = fes(em2(c1c3),c2c2);
     const r3 = fes(em2(d1d3),d2d2);
@@ -309,18 +308,18 @@ function getCoeffsBez3Bez3Exact(
     const v4 = fes(sp,sr);
 
 
-    //const r6 = c1d2 + c2d1;
-    //const r7 = c3d0 + c0d3;
-    //const r8 = c1c2 + c0c3;
-    //const r9 = d1d2 + d0d3;
-    //const v3 =
-    //    vₓₓᵧ*(c0*(2*r6 + c3d0 + r7) + c1*(2*c2d0 + c1d1)) +
-    //    vₓᵧᵧ*(d0*(2*r6 + c0d3 + r7) + d1*(2*c0d2 + c1d1)) +
-    //    vₓₓₓ*(3*c0*(r8 + c1c2) + c1*c1c1) + 
-    //    vᵧᵧᵧ*(3*d0*(r9 + d1d2) + d1*d1d1) +
-    //    vₓᵧ*(r7 + r6) +
-    //    2*(vₓₓ*r8 + vᵧᵧ*r9) +
-    //    vₓ*c3 + vᵧ*d3;
+    // const r6 = c1d2 + c2d1;
+    // const r7 = c3d0 + c0d3;
+    // const r8 = c1c2 + c0c3;
+    // const r9 = d1d2 + d0d3;
+    // const v3 =
+    //     vₓₓᵧ*(c0*(2*r6 + c3d0 + r7) + c1*(2*c2d0 + c1d1)) +
+    //     vₓᵧᵧ*(d0*(2*r6 + c0d3 + r7) + d1*(2*c0d2 + c1d1)) +
+    //     vₓₓₓ*(3*c0*(r8 + c1c2) + c1*c1c1) + 
+    //     vᵧᵧᵧ*(3*d0*(r9 + d1d2) + d1*d1d1) +
+    //     vₓᵧ*(r7 + r6) +
+    //     2*(vₓₓ*r8 + vᵧᵧ*r9) +
+    //     vₓ*c3 + vᵧ*d3;
   
     const r6 = fes(c1d2,c2d1);
     const r7 = fes(c3d0,c0d3);
@@ -366,17 +365,17 @@ function getCoeffsBez3Bez3Exact(
     const v3 = fes(n1,n2);
 
 
-    //const ra = c1d1 + c2d0;
-    //const rb = c1d1 + c0d2;
-    //const v2 =
-    //    vₓₓᵧ*(c0*(2*ra + c0d2) + d0*c1c1) +
-    //    vₓᵧᵧ*(d0*(2*rb + c2d0) + c0*d1d1) +
-    //    3*vₓₓₓ*(c0*c1c1 + c2*c0c0) + 
-    //    3*vᵧᵧᵧ*(d0*d1d1 + d2*d0d0) +
-    //    vₓᵧ*(ra + c0d2) +
-    //    vₓₓ*(2*c0c2 + c1c1) + 
-    //    vᵧᵧ*(2*d0d2 + d1d1) +
-    //    c2*vₓ + d2*vᵧ;
+    // const ra = c1d1 + c2d0;
+    // const rb = c1d1 + c0d2;
+    // const v2 =
+    //     vₓₓᵧ*(c0*(2*ra + c0d2) + d0*c1c1) +
+    //     vₓᵧᵧ*(d0*(2*rb + c2d0) + c0*d1d1) +
+    //     3*vₓₓₓ*(c0*c1c1 + c2*c0c0) + 
+    //     3*vᵧᵧᵧ*(d0*d1d1 + d2*d0d0) +
+    //     vₓᵧ*(ra + c0d2) +
+    //     vₓₓ*(2*c0c2 + c1c1) + 
+    //     vᵧᵧ*(2*d0d2 + d1d1) +
+    //     c2*vₓ + d2*vᵧ;
     const ra = fes(c1d1,c2d0);
     const rb = fes(c1d1,c0d2);
     const l1 = fes(em2(ra),c0d2);
@@ -390,13 +389,9 @@ function getCoeffsBez3Bez3Exact(
     const l9 = sce(d0,d1d1);
     const la = epr(d2,d0d0);
     const lb = fes(l3,l4);
-    
     const lc = fes(l5,l6);
-    
     const ld = fes(l7,l8);
-    
     const le = fes(l9,la);
-    
     const lf = epr(vₓₓₓ,ld);
     const lg = epr(vᵧᵧᵧ,le);
     const lh = sce(3,fes(lf,lg));
@@ -419,19 +414,17 @@ function getCoeffsBez3Bez3Exact(
     const v2 = fes(lw,lx);
 
 
-    //const rc = c1d0 + c0d1;
-    //const v1 =
-    //    vₓₓᵧ*c0*(rc + c1d0) +
-    //    vₓᵧᵧ*d0*(rc + c0d1) +
-    //    3*(c1*c0c0*vₓₓₓ + d1*d0d0*vᵧᵧᵧ) +
-    //    vₓᵧ*rc +
-    //    2*(c0c1*vₓₓ + d0d1*vᵧᵧ) +
-    //    c1*vₓ + d1*vᵧ ;
+    // const rc = c1d0 + c0d1;
+    // const v1 =
+    //     vₓₓᵧ*c0*(rc + c1d0) +
+    //     vₓᵧᵧ*d0*(rc + c0d1) +
+    //     3*(c1*c0c0*vₓₓₓ + d1*d0d0*vᵧᵧᵧ) +
+    //     vₓᵧ*rc +
+    //     2*(c0c1*vₓₓ + d0d1*vᵧᵧ) +
+    //     c1*vₓ + d1*vᵧ ;
     const rc = fes(c1d0,c0d1);
     const rd = sce(c0,vₓₓᵧ);
-    
     const re = sce(d0,vₓᵧᵧ);
-    
     const rf = fes(rc,c1d0);
     const rg = fes(rc,c0d1);
     const rx = epr(c1,c0c0);
@@ -455,7 +448,13 @@ function getCoeffsBez3Bez3Exact(
     const v1 = fes(rv,rw);
 
 
-    // v0
+    // const v0 =
+    //     c0c0*(c0*vₓₓₓ + d0*vₓₓᵧ + vₓₓ) +
+    //     d0d0*(c0*vₓᵧᵧ + d0*vᵧᵧᵧ + vᵧᵧ) +
+    //     c0d0*vₓᵧ +
+    //     c0*vₓ +
+    //     d0*vᵧ +
+    //     v;
     const t1 = sce(c0,vₓₓₓ);
     const t2 = sce(d0,vₓₓᵧ);
     const p4 = fes(t1,t2);

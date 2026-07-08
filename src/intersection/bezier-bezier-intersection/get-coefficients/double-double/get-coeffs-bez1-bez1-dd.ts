@@ -1,14 +1,12 @@
 import { ddAddDd, ddMultDouble2, ddMultDd } from "double-double";
-import { γγ } from "../../../../error-analysis/error-analysis.js";
 import { getImplicitForm1DdWithRunningError } from "../../../../implicit-form/double-double/get-implicit-form1-dd-with-running-error.js";
 import { toPowerBasis1DdWithRunningError } from "../../../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js";
+
+const { abs } = Math;
 
 const qaq = ddAddDd;
 const qmd = ddMultDouble2;
 const qmq = ddMultDd;
-
-const abs = Math.abs;
-const γγ3 = γγ(3);
 
 
 /**
@@ -76,7 +74,6 @@ function getCoeffsBez1Bez1Dd(
     const p4 = qmd(d0,vᵧ);
     const _p4_ = abs($p4);
     const $p5 = $p3+$p4;
-    //const _p5 = abs($p5);
     const p5 = qaq(p3,p4);
     const p5_ = _p3_ + _p4_ + abs($p5);
 

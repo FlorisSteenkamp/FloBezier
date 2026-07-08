@@ -25,6 +25,9 @@ const abs = Math.abs;
  * @doc mdx
  */
 function getImplicitForm1DdWithRunningError(ps) {
+    //--------------------------------------------------------------------------
+    // See: error-analysis-double-double.txt
+    //--------------------------------------------------------------------------
     // The implicit form is given by:
     // vₓx + vᵧy + v = 0
     const [[a1, [, a0]], [b1, [, b0]]] = toPowerBasis1DdWithRunningError(ps);

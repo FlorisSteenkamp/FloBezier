@@ -151,3 +151,7 @@ export { closestPointsBetweenBeziers } from './simultaneous-properties/closest-d
 export { maxAbsCoordinate } from './error-analysis/max-abs-coordinate.js';
 export { generateArcFromQuads } from './create/generate-arc-from-quads.js';
 export { calcQuadOffsetCurveXPoint } from './offset/calc-quad-offset-x-point.js';
+export { getMedialPoints } from './specialized/get-medial-points/get-medial-points.js';
+export { getMedialPointCoeffsBez1 } from './specialized/get-medial-points/get-medial-point-coeffs-bez1.js';
+export { getMedialPointCoeffsBez2 } from './specialized/get-medial-points/get-medial-point-coeffs-bez2.js';
+export { getMedialPointCoeffsBez3 } from './specialized/get-medial-points/get-medial-point-coeffs-bez3.js';

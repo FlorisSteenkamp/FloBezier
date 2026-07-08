@@ -1,5 +1,5 @@
 
-const abs = Math.abs;
+const { abs } = Math;
 
 
 /**
@@ -7,7 +7,7 @@ const abs = Math.abs;
  * less including a coefficient-wise absolute error bound.
  * 
  * * intermediate calculations are done in double precision
- * * the error bound need to be multiplied by `γ(1) === u/(1-u)` 
+ * * the error bound still need to be multiplied by `γ(1) === u/(1-u)` 
  * where `u = Number.EPSILON/2` before use
  * * returns the resulting power basis x and y coordinate polynomials from 
  * highest power to lowest, e.g. if `x(t) = at^2 + bt + c` 
@@ -49,9 +49,9 @@ function toPowerBasis3WithRunningError(
 
     const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
     
-    // ----------------------------
+    //-------------------------------
     // xx3 = (x3 - x0) + 3*(x1 - x2)
-    // ----------------------------
+    //-------------------------------
     const xa = x3 - x0;
     const _xa_ = abs(xa);
     const xb = x1 - x2;
@@ -61,9 +61,9 @@ function toPowerBasis3WithRunningError(
     const xx3 = xa + xc;
     const xx3_ = _xa_ + xc_ + abs(xx3);
     
-    // ----------------------------
+    //----------------------------
     // xx2 = 3*((x2 + x0) - 2*x1)
-    // ----------------------------
+    //----------------------------
     const xd = x2 + x0;
     const _xd_ = abs(xd);
     const xe = xd - 2*x1;
@@ -71,18 +71,18 @@ function toPowerBasis3WithRunningError(
     const xx2 = 3*xe;
     const xx2_ = 6*_xe_;  // 3*_xe_ + abs(xx2)
 
-    // ----------------------------
+    //-------------------
     // xx1 = 3*(x1 - x0)
-    // ----------------------------
+    //-------------------
     const xg = x1 - x0;
     const _xg_ = abs(xg);
     const xx1 = 3*xg;
     const xx1_ = 6*_xg_;  // 3*_xg_ + abs(3*xg)
 
 
-    // ------------------------------
+    //-------------------------------
     // yy3 = (y3 - y0) + 3*(y1 - y2)
-    // ------------------------------
+    //-------------------------------
     const ya = y3 - y0;
     const _ya_ = abs(ya);
     const yb = y1 - y2;
@@ -92,9 +92,9 @@ function toPowerBasis3WithRunningError(
     const yy3 = ya + yc;
     const yy3_ = _ya_ + yc_ + abs(yy3);
     
-    // ----------------------------
+    //----------------------------
     // yy2 = 3*((y2 + y0) - 2*y1)
-    // ----------------------------
+    //----------------------------
     const yd = y2 + y0;
     const _yd_ = abs(yd);
     const ye = yd - 2*y1;
@@ -102,9 +102,9 @@ function toPowerBasis3WithRunningError(
     const yy2 = 3*ye;
     const yy2_ = 6*_ye_;  // 3*_ye_ + abs(yy2)
 
-    // ----------------------------
+    //-------------------
     // yy1 = 3*(y1 - y0)
-    // ----------------------------
+    //-------------------
     const yg = y1 - y0;
     const _yg_ = abs(yg);
     const yy1 = 3*yg;
@@ -127,31 +127,31 @@ function toPowerBasis2WithRunningError(
 
     const [[x0,y0], [x1,y1], [x2,y2]] = ps;
 
-    // ---------------------
+    //------------------------
     // xx2 = (x2 + x0) - 2*x1
-    // ---------------------
+    //------------------------
     const xa = x2 + x0;
     const _xa_ = abs(xa);
     const xx2 = xa - 2*x1;
     const xx2_ = _xa_ + abs(xx2);
 
-    // ---------------------
+    //-------------------
     // xx1 = 2*(x1 - x0)
-    // ---------------------
+    //-------------------
     const xx1 = 2*(x1 - x0);
     const xx1_ = abs(xx1);
 
-    // ---------------------
+    //------------------------
     // yy2 = (y2 + y0) - 2*y1
-    // ---------------------
+    //------------------------
     const ya = y2 + y0;
     const _ya_ = abs(ya);
     const yy2 = ya - 2*y1;
     const yy2_ = _ya_ + abs(yy2);
 
-    // ---------------------
+    //-------------------
     // yy1 = 2*(y1 - y0)
-    // ---------------------
+    //-------------------
     const yy1 = 2*(y1 - y0);
     const yy1_ = abs(yy1);
 

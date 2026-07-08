@@ -36,7 +36,9 @@ function toPowerBasis(ps: number[][]): number[][] {
 
 
 /** @internal */
-function toPowerBasis3(ps: number[][]): number[][] {
+function toPowerBasis3(
+        ps: number[][]): number[][] {
+
     const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
 
     return [[
@@ -54,7 +56,9 @@ function toPowerBasis3(ps: number[][]): number[][] {
 
 
 /** @internal */
-function toPowerBasis2(ps: number[][]): number[][] {
+function toPowerBasis2(
+        ps: number[][]): number[][] {
+
     const [[x0,y0], [x1,y1], [x2,y2]] = ps;
     
     return [[
@@ -70,7 +74,9 @@ function toPowerBasis2(ps: number[][]): number[][] {
 
 
 /** @internal */
-function toPowerBasis1(ps: number[][]): number[][] {
+function toPowerBasis1(
+        ps: number[][]): number[][] {
+
     const [[x0,y0], [x1,y1]] = ps;
     
     return [[

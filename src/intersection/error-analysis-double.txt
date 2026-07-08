@@ -1,0 +1,16 @@
+
+--------------------------------------------------------------------------
+When working only in double precision:
+--------------------------------------------------------------------------
+`var` -> a variable
+`_var` -> the absolute value of var (a prefix underscore on a variable means absolute value)
+`var_` -> the error in var (a postfix underscore means error bound but should still be multiplied by `γ(1)`)
+`_var_` -> means both absolute value and absolute error bound
+
+* recall: `a*b`, where both `a` and `b` have errors `a_` and `b_` we get for the
+  - error bound of `(a*b)   === |a|b_ + a_|b| + |a*b|`  (double precision multiplication)
+    (of course, if `a` is a power of 2 then error bound of `(a*b)` becomes `a*b_`) (same goes for `b`)
+  - error bound of (a + b) === a_ + b_ + |a + b|        (double precision addition)
+  - error bound of (a - b) === a_ + b_ + |a - b|        (double precision subtraction)
+* the returned errors need to be multiplied by `γ(1)` to get the true error
+--------------------------------------------------------------------------

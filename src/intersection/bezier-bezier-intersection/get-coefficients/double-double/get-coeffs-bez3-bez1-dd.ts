@@ -1,5 +1,4 @@
 import { twoProduct, ddMultBy2, ddMultDouble2, ddMultDd, ddAddDd } from "double-double";
-import { γγ } from "../../../../error-analysis/error-analysis.js";
 import { toPowerBasis1DdWithRunningError } from "../../../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js";
 import { getImplicitForm3DdWithRunningError } from "../../../../implicit-form/double-double/get-implicit-form3-dd-with-running-error.js";
 
@@ -9,8 +8,7 @@ const qmd = ddMultDouble2;
 const qmq = ddMultDd;
 const qaq = ddAddDd;
 
-const abs = Math.abs;
-const γγ3 = γγ(3);
+const { abs } = Math;
 
 
 /**
@@ -91,7 +89,7 @@ function getCoeffsBez3Bez1Dd(ps1: number[][], ps2: number[][]) {
     
     const _c0c0 = abs($c0c0);
     const _c0c1 = abs($c0c1);
-    const _c0d0 = abs($c0d0);    
+    const _c0d0 = abs($c0d0);
     const _c0d1 = abs($c0d1);
     const _c1c1 = abs($c1c1);
     const _c1d0 = abs($c1d0);
@@ -99,7 +97,6 @@ function getCoeffsBez3Bez1Dd(ps1: number[][], ps2: number[][]) {
     const _d0d0 = abs($d0d0);
     const _d0d1 = abs($d0d1);
     const _d1d1 = abs($d1d1);
-   
 
     const $z1 = c0*$vₓₓₓ;
     const z1 = qmd(c0,vₓₓₓ);
