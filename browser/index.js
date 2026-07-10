@@ -19639,7 +19639,7 @@ function toPowerBasis3_1stDerivativeErrorCounters(ps) {
 }
 
 
-;// ./src/local-properties-at-t/normal/normal.ts
+;// ./src/local-properties-at-t/normal/double/normal.ts
 
 
 /**
@@ -19664,7 +19664,7 @@ function normal(ps, t) {
 }
 
 
-;// ./src/local-properties-at-t/normal/normal2.ts
+;// ./src/local-properties-at-t/normal/double/normal2.ts
 
 
 
@@ -19736,6 +19736,247 @@ function normal2(ps, t) {
         }
     }
     return [0, 0]; // All points coincident - no normal possible
+}
+
+
+;// ./src/local-properties-at-t/tangent/double-double/dd-tangent-at-0.ts
+
+const dd_tangent_at_0_qmd = ddMultDouble2;
+const dd_tangent_at_0_td = two_diff_twoDiff;
+/**
+ * Returns the tangent vector (in double-double precision not necessarily of
+ * unit length) of an order 0,1,2 or 3 bezier curve at `t === 0`, i.e.
+ * returns the result, `[x,y]`, of evaluating the derivative of a linear,
+ * quadratic or cubic bezier curve's power basis at `t === 0`.
+ *
+ * * *exact* result for order <= 2 bezier curves
+ *
+ * @param ps An order 1,2 or 3 bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ *
+ * @doc
+ */
+function ddTangentAt0(ps) {
+    if (ps.length === 4) {
+        const [[x0, y0], [x1, y1]] = ps;
+        return [
+            dd_tangent_at_0_qmd(3, dd_tangent_at_0_td(x1, x0)),
+            dd_tangent_at_0_qmd(3, dd_tangent_at_0_td(y1, y0))
+        ];
+    }
+    if (ps.length === 3) {
+        const [[x0, y0], [x1, y1]] = ps;
+        return [
+            dd_tangent_at_0_td(2 * x1, 2 * x0),
+            dd_tangent_at_0_td(2 * y1, 2 * y0),
+        ];
+    }
+    if (ps.length === 2) {
+        const [[x0, y0], [x1, y1]] = ps;
+        return [
+            dd_tangent_at_0_td(x1, x0),
+            dd_tangent_at_0_td(y1, y0),
+        ];
+    }
+    if (ps.length === 1) {
+        return [[0, 0], [0, 0]];
+    }
+    throw new Error('The given bezier curve must be of order <= 3.');
+}
+
+
+;// ./src/local-properties-at-t/normal/double-double/dd-normal-at-0.ts
+
+/**
+ * Returns the normal vector (in double-double precision not necessarily of
+ * unit length) of an order 0,1,2 or 3 bezier curve at `t === 0`, i.e.
+ * returns the result, `[x,y]`, of evaluating the derivative of a linear,
+ * quadratic or cubic bezier curve's power basis at `t === 0`.
+ *
+ * * *exact* result for order <= 2 bezier curves
+ *
+ * @param ps An order 1,2 or 3 bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ *
+ * @doc
+ */
+function ddNormalAt0(ps) {
+    const [X, Y] = ddTangentAt0(ps);
+    return [
+        [-Y[0], -Y[1]],
+        X
+    ];
+}
+
+
+;// ./src/local-properties-at-t/tangent/double-double/dd-tangent-at-1.ts
+
+const dd_tangent_at_1_qmd = ddMultDouble2;
+const dd_tangent_at_1_td = two_diff_twoDiff;
+/**
+ * Returns the tangent vector (not necessarily of unit length) of an
+ * order 0,1,2 or 3 bezier curve at `t === 1`, i.e.
+ * Returns the result, `[x,y]`, of evaluating the derivative of a linear,
+ * quadratic or cubic bezier curve's power basis at `t === 1`.
+ *
+ * * *exact* result for order <= 2 bezier curves
+ *
+ * @param ps An order 1,2 or 3 bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ *
+ * @doc
+ */
+function ddTangentAt1(ps) {
+    if (ps.length === 4) {
+        const [x2, y2] = ps[2];
+        const [x3, y3] = ps[3];
+        return [
+            dd_tangent_at_1_qmd(3, dd_tangent_at_1_td(x3, x2)),
+            dd_tangent_at_1_qmd(3, dd_tangent_at_1_td(y3, y2)),
+        ];
+    }
+    if (ps.length === 3) {
+        const [x1, y1] = ps[1];
+        const [x2, y2] = ps[2];
+        return [
+            dd_tangent_at_1_td(2 * x2, 2 * x1),
+            dd_tangent_at_1_td(2 * y2, 2 * y1),
+        ];
+    }
+    if (ps.length === 2) {
+        const [[x0, y0], [x1, y1]] = ps;
+        return [
+            dd_tangent_at_1_td(x1, x0),
+            dd_tangent_at_1_td(y1, y0),
+        ];
+    }
+    if (ps.length === 1) {
+        return [[0, 0], [0, 0]];
+    }
+    throw new Error('The given bezier curve must be of order <= 3.');
+}
+
+
+;// ./src/local-properties-at-t/normal/double-double/dd-normal-at-1.ts
+
+/**
+ * Returns the normal vector (in double-double precision not necessarily of
+ * unit length) of an order 0,1,2 or 3 bezier curve at `t === 1`, i.e.
+ * Returns the result, `[x,y]`, of evaluating the derivative of a linear,
+ * quadratic or cubic bezier curve's power basis at `t === 1`.
+ *
+ * * *exact* result for order <= 2 bezier curves
+ *
+ * @param ps An order 1,2 or 3 bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ *
+ * @doc
+ */
+function ddNormalAt1(ps) {
+    const [X, Y] = ddTangentAt1(ps);
+    return [
+        [-Y[0], -Y[1]],
+        X
+    ];
+}
+
+
+;// ./node_modules/flo-poly/node/evaluate/double-double/dd-horner.js
+
+/**
+ * Returns the result of evaluating a univariate polynomial using Horner's
+ * method with intermediate calculations done in double-double precision and
+ * the result returned in double-double precision.
+ *
+ * @param p a polynomial with coefficients given densely as an array of
+ * double-double numbers from highest to lowest power, e.g. `[[0,5],[0,-3],[0,0]]
+ * represents the polynomial `5x^2 - 3x`
+ * @param x the value at which to evaluate the polynomial
+ *
+ * @doc
+ */
+function ddHorner(p, x) {
+    let q = [0, 0];
+    for (let i = 0; i < p.length; i++) {
+        // q = p[i] + x*q;
+        q = ddAddDd(p[i], ddMultDouble2(x, q));
+    }
+    return q;
+}
+
+//# sourceMappingURL=dd-horner.js.map
+;// ./src/local-properties-at-t/normal/double-double/dd-normal.ts
+
+
+/**
+ * * Returns a normal vector (not necessarily of unit length) of a bezier curve
+ * at a specific given parameter value `t` by simply taking the `tangent` at
+ * that point and rotating it by 90 degrees.
+ *
+ * @param ps a linear, quadratic or cubic bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param t the `t` parameter
+ *
+ * @doc mdx
+ */
+function ddNormal(ps, t) {
+    const [dX, dY] = toPowerBasis_1stDerivativeDd(ps);
+    const Y = ddHorner(dY, t);
+    return [
+        [-Y[0], -Y[1]],
+        ddHorner(dX, t)
+    ];
+}
+
+
+;// ./src/local-properties-at-t/tangent/exact/tangent-exact.ts
+
+
+/**
+ * Returns the *exact* tangent vector (not necessarily of unit length) of an
+ * order 0,1,2 or 3 bezier curve at a specific parameter `t`, i.e.
+ * returns the `[x,y]` value of the once differentiated (with respect to `t`)
+ * bezier curve's power basis when evaluated at `t`.
+ *
+ * * Alias: `tangentExact`
+ *
+ * @param ps a linear, quadratic or cubic bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param t the t parameter
+ *
+ * @doc
+ */
+const eTangent = tangentExact;
+/**
+ * Returns the *exact* tangent vector (not necessarily of unit length) of an
+ * order 0,1,2 or 3 bezier curve at a specific parameter `t`, i.e.
+ * returns the `[x,y]` value of the once differentiated (with respect to `t`)
+ * bezier curve's power basis when evaluated at `t`.
+ *
+ * * Alias: `eTangent`
+ *
+ * @param ps a linear, quadratic or cubic bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param t the t parameter
+ *
+ * @doc
+ */
+function tangentExact(ps, t) {
+    const [dX, dY] = toPowerBasis_1stDerivativeExact(ps);
+    return [eHorner(dX, t), eHorner(dY, t)];
+}
+
+
+;// ./src/local-properties-at-t/normal/expansion/e-normal.ts
+
+
+/**
+ * Returns the *exact* normal vector (not necessarily of unit length) of an
+ * order 0,1,2 or 3 bezier curve at a specific parameter `t`, i.e.
+ * returns the `[x,y]` value of the once differentiated (with respect to `t`)
+ * bezier curve's power basis when evaluated at `t`.
+ *
+ * @param ps a linear, quadratic or cubic bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param t the t parameter
+ *
+ * @doc
+ */
+function eNormal(ps, t) {
+    const [X, Y] = eTangent(ps, t);
+    return [eNegativeOf(Y), X];
 }
 
 
@@ -19881,30 +20122,6 @@ function radiusOfCurvature(ps, t) {
 const κ = curvature;
 
 
-;// ./node_modules/flo-poly/node/evaluate/double-double/dd-horner.js
-
-/**
- * Returns the result of evaluating a univariate polynomial using Horner's
- * method with intermediate calculations done in double-double precision and
- * the result returned in double-double precision.
- *
- * @param p a polynomial with coefficients given densely as an array of
- * double-double numbers from highest to lowest power, e.g. `[[0,5],[0,-3],[0,0]]
- * represents the polynomial `5x^2 - 3x`
- * @param x the value at which to evaluate the polynomial
- *
- * @doc
- */
-function ddHorner(p, x) {
-    let q = [0, 0];
-    for (let i = 0; i < p.length; i++) {
-        // q = p[i] + x*q;
-        q = ddAddDd(p[i], ddMultDouble2(x, q));
-    }
-    return q;
-}
-
-//# sourceMappingURL=dd-horner.js.map
 ;// ./src/local-properties-at-t/curvature/dd-curvature.ts
 
 
@@ -23537,98 +23754,6 @@ function tangent(ps, t) {
 }
 
 
-;// ./src/local-properties-at-t/tangent/double-double/dd-tangent-at-0.ts
-
-const dd_tangent_at_0_qmd = ddMultDouble2;
-const dd_tangent_at_0_td = two_diff_twoDiff;
-/**
- * Returns the tangent vector (in double-double precision not necessarily of
- * unit length) of an order 0,1,2 or 3 bezier curve at `t === 0`, i.e.
- * returns the result, `[x,y]`, of evaluating the derivative of a linear,
- * quadratic or cubic bezier curve's power basis at `t === 0`.
- *
- * * *exact* result for order <= 2 bezier curves
- *
- * @param ps An order 1,2 or 3 bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
- *
- * @doc
- */
-function ddTangentAt0(ps) {
-    if (ps.length === 4) {
-        const [[x0, y0], [x1, y1]] = ps;
-        return [
-            dd_tangent_at_0_qmd(3, dd_tangent_at_0_td(x1, x0)),
-            dd_tangent_at_0_qmd(3, dd_tangent_at_0_td(y1, y0))
-        ];
-    }
-    if (ps.length === 3) {
-        const [[x0, y0], [x1, y1]] = ps;
-        return [
-            dd_tangent_at_0_td(2 * x1, 2 * x0),
-            dd_tangent_at_0_td(2 * y1, 2 * y0),
-        ];
-    }
-    if (ps.length === 2) {
-        const [[x0, y0], [x1, y1]] = ps;
-        return [
-            dd_tangent_at_0_td(x1, x0),
-            dd_tangent_at_0_td(y1, y0),
-        ];
-    }
-    if (ps.length === 1) {
-        return [[0, 0], [0, 0]];
-    }
-    throw new Error('The given bezier curve must be of order <= 3.');
-}
-
-
-;// ./src/local-properties-at-t/tangent/double-double/dd-tangent-at-1.ts
-
-const dd_tangent_at_1_qmd = ddMultDouble2;
-const dd_tangent_at_1_td = two_diff_twoDiff;
-/**
- * Returns the tangent vector (not necessarily of unit length) of an
- * order 0,1,2 or 3 bezier curve at `t === 1`, i.e.
- * Returns the result, `[x,y]`, of evaluating the derivative of a linear,
- * quadratic or cubic bezier curve's power basis at `t === 1`.
- *
- * * *exact* result for order <= 2 bezier curves
- *
- * @param ps An order 1,2 or 3 bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
- *
- * @doc
- */
-function ddTangentAt1(ps) {
-    if (ps.length === 4) {
-        const [x2, y2] = ps[2];
-        const [x3, y3] = ps[3];
-        return [
-            dd_tangent_at_1_qmd(3, dd_tangent_at_1_td(x3, x2)),
-            dd_tangent_at_1_qmd(3, dd_tangent_at_1_td(y3, y2)),
-        ];
-    }
-    if (ps.length === 3) {
-        const [x1, y1] = ps[1];
-        const [x2, y2] = ps[2];
-        return [
-            dd_tangent_at_1_td(2 * x2, 2 * x1),
-            dd_tangent_at_1_td(2 * y2, 2 * y1),
-        ];
-    }
-    if (ps.length === 2) {
-        const [[x0, y0], [x1, y1]] = ps;
-        return [
-            dd_tangent_at_1_td(x1, x0),
-            dd_tangent_at_1_td(y1, y0),
-        ];
-    }
-    if (ps.length === 1) {
-        return [[0, 0], [0, 0]];
-    }
-    throw new Error('The given bezier curve must be of order <= 3.');
-}
-
-
 ;// ./src/local-properties-at-t/tangent/double-double/dd-tangent.ts
 
 
@@ -23650,42 +23775,6 @@ function ddTangent(ps, t) {
         ddHorner(dX, t),
         ddHorner(dY, t)
     ];
-}
-
-
-;// ./src/local-properties-at-t/tangent/exact/tangent-exact.ts
-
-
-/**
- * Returns the *exact* tangent vector (not necessarily of unit length) of an
- * order 0,1,2 or 3 bezier curve at a specific parameter `t`, i.e.
- * returns the `[x,y]` value of the once differentiated (with respect to `t`)
- * bezier curve's power basis when evaluated at `t`.
- *
- * * Alias: `tangentExact`
- *
- * @param ps a linear, quadratic or cubic bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
- * @param t the t parameter
- *
- * @doc
- */
-const eTangent = tangentExact;
-/**
- * Returns the *exact* tangent vector (not necessarily of unit length) of an
- * order 0,1,2 or 3 bezier curve at a specific parameter `t`, i.e.
- * returns the `[x,y]` value of the once differentiated (with respect to `t`)
- * bezier curve's power basis when evaluated at `t`.
- *
- * * Alias: `eTangent`
- *
- * @param ps a linear, quadratic or cubic bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
- * @param t the t parameter
- *
- * @doc
- */
-function tangentExact(ps, t) {
-    const [dX, dY] = toPowerBasis_1stDerivativeExact(ps);
-    return [eHorner(dX, t), eHorner(dY, t)];
 }
 
 
@@ -25513,4 +25602,8 @@ function getMedialPoints(p, v, ps) {
 
 
 
-export { areBoxesIntersecting, area_area as area, bezierBezierIntersection, bezierBezierIntersectionBoundless, bezierBezierIntersectionBoundlessBoth, bezierBezierIntersectionFast, bezierPieceToBezier, bezierSelfIntersection, calcQuadOffsetCurveXPoint, circleBezierIntersection, classification, classifications, classify, clone, closestPointOnBezier, closestPointOnBezierCertified, closestPointsBetweenBeziers, controlPointLinesLength, cubicFromAnglesAndSpeeds, cubicThroughPointGiven013, cubicToAnglesAndSpeeds, cubicToHybridQuadratic, cubicToQuadratic, curvature, curvatureND, curviness, ddCurvature, ddCurvatureND, ddRadiusOfCurvature, ddTangent, ddTangentAt0, ddTangentAt1, eCurvature, eTangent, eTangentAt0, eTangentAt1, equal, evalDeCasteljau, evalDeCasteljauDd, evalDeCasteljauError, evalDeCasteljauWithErr, evalDeCasteljauWithErrDd, evaluate, evaluate2ndDerivative, evaluate2ndDerivativeAt0, evaluate2ndDerivativeAt0Exact, evaluate2ndDerivativeAt1, evaluate2ndDerivativeAt1Exact, evaluate2ndDerivativeExact, evaluateExact, evaluateImplicit1, evaluateImplicit2, evaluateImplicit3, fitQuadsToCubic, fitQuadsToCubicHausdorff, fromPowerBasis, fromTo, fromToInclErrorBound, furthestPointOnBezier, generateArcFromQuads, generateCuspAtHalf3, generateQuarterCircle, generateSelfIntersecting, getAbsAreaBetween, getBendingEnergy, getBoundingBox, getBoundingBoxTight, getBoundingHull, getBounds, getCoeffsBezBez, getControlPointBox, getCubicSpeeds, getCurvatureExtrema, getCurvatureExtremaDd, getCurvatureExtremaE, getEndpointIntersections, getFootPointsOnBezierCertified, getFootPointsOnBezierPolysCertified, getFootpointPoly, getFootpointPolyDd, getFootpointPolyExact, getHodograph, getImplicitForm1, getImplicitForm1Dd, getImplicitForm1DdWithRunningError, getImplicitForm1ErrorCounters, getImplicitForm1Exact, getImplicitForm2, getImplicitForm2Dd, getImplicitForm2DdWithRunningError, getImplicitForm2ErrorCounters, getImplicitForm2Exact, getImplicitForm3, getImplicitForm3Dd, getImplicitForm3DdWithRunningError, getImplicitForm3ErrorCounters, getImplicitForm3Exact, getInflections, getInterfaceRotation, getIntervalBox, getIntervalBoxDd, getMedialPointCoeffsBez1, getMedialPointCoeffsBez2, getMedialPointCoeffsBez3, getMedialPoints, getTAtLength, getXBoundsTight, getYBoundsTight, hausdorffDistance, hausdorffDistanceOneSided, intersectBoxes, isBezierPieceZeroLength, isCollinear, isCubicReallyLine, isCubicReallyQuad, isHorizontal, isPointOnBezierExtension, isQuadObtuse, isQuadReallyLine, isReallyPoint, isSelfOverlapping, isVertical, length_length as length, lineToCubic, lineToQuadratic, maxAbsCoordinate, normal, normal2, quadraticToCubic, quadraticToPolyline, radiusOfCurvature, reduceOrderIfPossible, reverse, setCubicSpeeds, splitByCurvature, splitByCurvatureAndLength, splitByLength, tFromXY, tangent, tangentAt0, tangentAt0Exact, tangentAt1, tangentAt1Exact, tangentExact, toCubic, toPowerBasis, toPowerBasis0Exact, toPowerBasis1DdWithRunningError, toPowerBasis1Exact, toPowerBasis2DdWithRunningError, toPowerBasis2Exact, toPowerBasis3DdWithRunningError, toPowerBasis3Exact, toPowerBasisDd, toPowerBasisDdWithRunningError, toPowerBasisErrorCounters, toPowerBasisExact, toPowerBasisWithRunningError, toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeDd, toPowerBasis_1stDerivativeErrorCounters, toPowerBasis_1stDerivativeExact, toPowerBasis_2ndDerivative, toPowerBasis_2ndDerivativeDd, toPowerBasis_2ndDerivativeExact, toPowerBasis_3rdDerivative, toPowerBasis_3rdDerivativeDd, toPowerBasis_3rdDerivativeExact, to_string_toString as toString, totalAbsoluteCurvature, totalCurvature, totalLength, γ, γγ, κ };
+
+
+
+
+export { areBoxesIntersecting, area_area as area, bezierBezierIntersection, bezierBezierIntersectionBoundless, bezierBezierIntersectionBoundlessBoth, bezierBezierIntersectionFast, bezierPieceToBezier, bezierSelfIntersection, calcQuadOffsetCurveXPoint, circleBezierIntersection, classification, classifications, classify, clone, closestPointOnBezier, closestPointOnBezierCertified, closestPointsBetweenBeziers, controlPointLinesLength, cubicFromAnglesAndSpeeds, cubicThroughPointGiven013, cubicToAnglesAndSpeeds, cubicToHybridQuadratic, cubicToQuadratic, curvature, curvatureND, curviness, ddCurvature, ddCurvatureND, ddNormal, ddNormalAt0, ddNormalAt1, ddRadiusOfCurvature, ddTangent, ddTangentAt0, ddTangentAt1, eCurvature, eNormal, eTangent, eTangentAt0, eTangentAt1, equal, evalDeCasteljau, evalDeCasteljauDd, evalDeCasteljauError, evalDeCasteljauWithErr, evalDeCasteljauWithErrDd, evaluate, evaluate2ndDerivative, evaluate2ndDerivativeAt0, evaluate2ndDerivativeAt0Exact, evaluate2ndDerivativeAt1, evaluate2ndDerivativeAt1Exact, evaluate2ndDerivativeExact, evaluateExact, evaluateImplicit1, evaluateImplicit2, evaluateImplicit3, fitQuadsToCubic, fitQuadsToCubicHausdorff, fromPowerBasis, fromTo, fromToInclErrorBound, furthestPointOnBezier, generateArcFromQuads, generateCuspAtHalf3, generateQuarterCircle, generateSelfIntersecting, getAbsAreaBetween, getBendingEnergy, getBoundingBox, getBoundingBoxTight, getBoundingHull, getBounds, getCoeffsBezBez, getControlPointBox, getCubicSpeeds, getCurvatureExtrema, getCurvatureExtremaDd, getCurvatureExtremaE, getEndpointIntersections, getFootPointsOnBezierCertified, getFootPointsOnBezierPolysCertified, getFootpointPoly, getFootpointPolyDd, getFootpointPolyExact, getHodograph, getImplicitForm1, getImplicitForm1Dd, getImplicitForm1DdWithRunningError, getImplicitForm1ErrorCounters, getImplicitForm1Exact, getImplicitForm2, getImplicitForm2Dd, getImplicitForm2DdWithRunningError, getImplicitForm2ErrorCounters, getImplicitForm2Exact, getImplicitForm3, getImplicitForm3Dd, getImplicitForm3DdWithRunningError, getImplicitForm3ErrorCounters, getImplicitForm3Exact, getInflections, getInterfaceRotation, getIntervalBox, getIntervalBoxDd, getMedialPointCoeffsBez1, getMedialPointCoeffsBez2, getMedialPointCoeffsBez3, getMedialPoints, getTAtLength, getXBoundsTight, getYBoundsTight, hausdorffDistance, hausdorffDistanceOneSided, intersectBoxes, isBezierPieceZeroLength, isCollinear, isCubicReallyLine, isCubicReallyQuad, isHorizontal, isPointOnBezierExtension, isQuadObtuse, isQuadReallyLine, isReallyPoint, isSelfOverlapping, isVertical, length_length as length, lineToCubic, lineToQuadratic, maxAbsCoordinate, normal, normal2, quadraticToCubic, quadraticToPolyline, radiusOfCurvature, reduceOrderIfPossible, reverse, setCubicSpeeds, splitByCurvature, splitByCurvatureAndLength, splitByLength, tFromXY, tangent, tangentAt0, tangentAt0Exact, tangentAt1, tangentAt1Exact, tangentExact, toCubic, toPowerBasis, toPowerBasis0Exact, toPowerBasis1DdWithRunningError, toPowerBasis1Exact, toPowerBasis2DdWithRunningError, toPowerBasis2Exact, toPowerBasis3DdWithRunningError, toPowerBasis3Exact, toPowerBasisDd, toPowerBasisDdWithRunningError, toPowerBasisErrorCounters, toPowerBasisExact, toPowerBasisWithRunningError, toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeDd, toPowerBasis_1stDerivativeErrorCounters, toPowerBasis_1stDerivativeExact, toPowerBasis_2ndDerivative, toPowerBasis_2ndDerivativeDd, toPowerBasis_2ndDerivativeExact, toPowerBasis_3rdDerivative, toPowerBasis_3rdDerivativeDd, toPowerBasis_3rdDerivativeExact, to_string_toString as toString, totalAbsoluteCurvature, totalCurvature, totalLength, γ, γγ, κ };

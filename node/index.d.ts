@@ -78,8 +78,12 @@ export { toPowerBasisWithRunningError } from './to-power-basis/to-power-basis/do
 export { toPowerBasisDdWithRunningError, toPowerBasis1DdWithRunningError, toPowerBasis2DdWithRunningError, toPowerBasis3DdWithRunningError } from './to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js';
 export { toPowerBasisErrorCounters } from './to-power-basis/to-power-basis/to-power-basis-error-counters.js';
 export { toPowerBasis_1stDerivativeErrorCounters } from './to-power-basis/to-power-basis-1st-derivative/to-power-basis-1st-derivative-error-counters.js';
-export { normal } from './local-properties-at-t/normal/normal.js';
-export { normal2 } from './local-properties-at-t/normal/normal2.js';
+export { normal } from './local-properties-at-t/normal/double/normal.js';
+export { normal2 } from './local-properties-at-t/normal/double/normal2.js';
+export { ddNormalAt0 } from './local-properties-at-t/normal/double-double/dd-normal-at-0.js';
+export { ddNormalAt1 } from './local-properties-at-t/normal/double-double/dd-normal-at-1.js';
+export { ddNormal } from './local-properties-at-t/normal/double-double/dd-normal.js';
+export { eNormal } from './local-properties-at-t/normal/expansion/e-normal.js';
 export { bezierBezierIntersection } from './intersection/bezier-bezier-intersection/bezier-bezier-intersection.js';
 export { toCubic } from './transformation/degree-or-type/to-cubic.js';
 export { κ, curvature, radiusOfCurvature, curvatureND } from './local-properties-at-t/curvature/curvature.js';

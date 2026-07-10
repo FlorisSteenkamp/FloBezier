@@ -1,7 +1,7 @@
 import { brent } from 'flo-poly';
 import { getCurvatureExtrema } from '../get-curvature-extrema/get-curvature-extrema.js';
 import { getQuadOffsetCurveFunctions } from './get-quad-offset-curve-functions.js';
-import { normal } from '../local-properties-at-t/normal/normal.js';
+import { normal } from '../local-properties-at-t/normal/double/normal.js';
 const { sign, abs } = Math;
 const { EPSILON: eps } = Number;
 /**
