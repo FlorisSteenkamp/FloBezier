@@ -1,4 +1,11 @@
 /**
+ * Returns the numerator and denominator of curvature `[N,D]`, i.e. `κ = N/D`
+ *
+ * @param ps
+ * @param t
+ */
+declare function curvatureND(ps: number[][], t: number): [number, number];
+/**
  * Returns the curvature `κ` of the given linear, quadratic or cubic bezier
  * curve at a specific given parameter value `t`.
  *
@@ -10,6 +17,13 @@
  * @doc mdx
  */
 declare function curvature(ps: number[][], t: number): number;
+/**
+ * Returns the radius of curvature.
+ *
+ * @param ps
+ * @param t
+ */
+declare function radiusOfCurvature(ps: number[][], t: number): number;
 /**
  * Alias for [[κ]].
  *
@@ -24,4 +38,4 @@ declare function curvature(ps: number[][], t: number): number;
  * @doc
  */
 declare const κ: typeof curvature;
-export { κ, curvature };
+export { κ, curvature, radiusOfCurvature, curvatureND };

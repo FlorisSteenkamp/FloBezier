@@ -7,8 +7,6 @@ import { getFootpointPoly1Exact } from "./get-coeffs/exact/get-footpoint-poly-1-
 import { getClosestOnBezier1FromPointErrorCounters } from "./get-coeffs/get-closest-on-bezier-from-point-error-counters.js";
 import { getClosestOnBezier2FromPointErrorCounters } from "./get-coeffs/get-closest-on-bezier-from-point-error-counters.js";
 import { getClosestOnBezier3FromPointErrorCounters } from "./get-coeffs/get-closest-on-bezier-from-point-error-counters.js";
-import { γγ } from '../../error-analysis/error-analysis.js';
-const γγ6 = γγ(6);
 /**
  * Returns the footpoint(s) (and parameter `t` value(s)) on the
  * given bezier curve to the given point (with `t ∈ [0,1]`).

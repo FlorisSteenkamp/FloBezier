@@ -1,9 +1,7 @@
 import { eAdd, eCompress, eDiff, eMult } from 'big-float-ts';
 import { eHorner } from 'flo-poly';
-import { toPowerBasis_1stDerivativeDd } from '../to-power-basis/to-power-basis-1st-derivative/double-double/to-power-basis-1st-derivative-dd.js';
-import { toPowerBasis_1stDerivativeExact } from '../to-power-basis/to-power-basis-1st-derivative/exact/to-power-basis-1st-derivative-exact.js';
-import { toPowerBasis_2ndDerivativeDd } from '../to-power-basis/to-power-basis-2nd-derivative/double-double/to-power-basis-2nd-derivative-dd.js';
-import { toPowerBasis_2ndDerivativeExact } from '../to-power-basis/to-power-basis-2nd-derivative/exact/to-power-basis-2nd-derivative-exact.js';
+import { toPowerBasis_1stDerivativeExact } from '../../to-power-basis/to-power-basis-1st-derivative/exact/to-power-basis-1st-derivative-exact.js';
+import { toPowerBasis_2ndDerivativeExact } from '../../to-power-basis/to-power-basis-2nd-derivative/exact/to-power-basis-2nd-derivative-exact.js';
 
 
 /**

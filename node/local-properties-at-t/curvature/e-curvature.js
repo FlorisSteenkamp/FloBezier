@@ -1,7 +1,7 @@
 import { eAdd, eCompress, eDiff, eMult } from 'big-float-ts';
 import { eHorner } from 'flo-poly';
-import { toPowerBasis_1stDerivativeExact } from '../to-power-basis/to-power-basis-1st-derivative/exact/to-power-basis-1st-derivative-exact.js';
-import { toPowerBasis_2ndDerivativeExact } from '../to-power-basis/to-power-basis-2nd-derivative/exact/to-power-basis-2nd-derivative-exact.js';
+import { toPowerBasis_1stDerivativeExact } from '../../to-power-basis/to-power-basis-1st-derivative/exact/to-power-basis-1st-derivative-exact.js';
+import { toPowerBasis_2ndDerivativeExact } from '../../to-power-basis/to-power-basis-2nd-derivative/exact/to-power-basis-2nd-derivative-exact.js';
 /**
  * Returns the curvature `κ` of the given linear, quadratic or cubic bezier
  * curve at a specific given parameter value `t`.
