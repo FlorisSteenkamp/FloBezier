@@ -159,6 +159,7 @@ export { maxAbsCoordinate } from './error-analysis/max-abs-coordinate.js';
 export { generateArcFromQuads } from './create/generate-arc-from-quads.js';
 export { calcQuadOffsetCurveXPoint } from './offset/calc-quad-offset-x-point.js';
 export { getMedialPoints } from './get-medial-points/get-medial-points.js';
+export { getMedialPointCoeffs } from './get-medial-points/get-medial-point-coeffs.js';
 export { getMedialPointCoeffsBez0 } from './get-medial-points/get-medial-point-coeffs-bez0.js';
 export { getMedialPointCoeffsBez1 } from './get-medial-points/get-medial-point-coeffs-bez1.js';
 export { getMedialPointCoeffsBez2 } from './get-medial-points/get-medial-point-coeffs-bez2.js';
