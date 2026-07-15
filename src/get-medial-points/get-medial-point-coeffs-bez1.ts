@@ -27,7 +27,6 @@ function getMedialPointCoeffsBez1(
     // -----------------------------------------------------
     // See get-medial-points.md for implementation details.
     // -----------------------------------------------------
-
     const [px, py] = p;
     const [vx, vy] = v;
     const [[x0, y0], [x1, y1]] = ps;

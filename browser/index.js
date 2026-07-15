@@ -25024,7 +25024,7 @@ function calcQuadOffsetCurveXPoint(ps, D) {
 // const ps90 = ps.map(rotate90Degrees);
 // calcQuadOffsetCurveXPoint(ps90, -20);//?
 
-;// ./src/specialized/get-medial-points/get-medial-point-coeffs-bez2.ts
+;// ./src/get-medial-points/get-medial-point-coeffs-bez2.ts
 /**
  * Returns polynomial coefficients for ray parameter values `t`, bezier
  * parameter values `s` and medial points for points `q(t)` and b(s) (an order
@@ -25161,7 +25161,7 @@ function getMedialPointCoeffsBez2(p, v, ps) {
 }
 
 
-;// ./src/specialized/get-medial-points/get-medial-point-coeffs-bez1.ts
+;// ./src/get-medial-points/get-medial-point-coeffs-bez1.ts
 /**
  * Returns polynomial coefficients for ray parameter values `t`, bezier
  * parameter values `s` and medial points for points `q(t)` and b(s) (an order
@@ -25251,7 +25251,7 @@ function getMedialPointCoeffsBez1(p, v, ps) {
 }
 
 
-;// ./src/specialized/get-medial-points/get-medial-point-coeffs-bez3.ts
+;// ./src/get-medial-points/get-medial-point-coeffs-bez3.ts
 /**
  * Returns polynomial coefficients for ray parameter values `t`, bezier
  * parameter values `s` and medial points for points `q(t)` and b(s) (an order
@@ -25383,7 +25383,7 @@ function getMedialPointCoeffsBez3(p, v, ps) {
 }
 
 
-;// ./src/specialized/get-medial-points/get-medial-points.ts
+;// ./src/get-medial-points/get-medial-points.ts
 
 
 
@@ -25402,7 +25402,7 @@ const getMedialPointCoeffss = [
  *
  * Let `p` be a fixed point in the plane.
  * Let `v` be a direction vector defining the ray `q(t) = p + t⋅v`.
- * Let `ps` be a quadratic bezier curve.
+ * Let `ps` be a bezier curve.
  *
  * * `q(t)` is equidistant from `p` and the nearest point on `ps`
  * * that common distance is locally minimal among such candidates
@@ -25413,8 +25413,7 @@ const getMedialPointCoeffss = [
  *
  * @param p base point
  * @param v ray direction from `p`
- * @param ps quadratic bezier control points, i.e. an order 2 bezier curve
- * given as an array of control points, e.g. `[[0,0],[1,1],[2,1]]`
+ * @param ps bezier curve given as an array of control points, e.g. `[[0,0],[1,1],[2,1]]`
  */
 function getMedialPoints(p, v, ps) {
     // -----------------------------------------------------
@@ -25443,6 +25442,56 @@ function getMedialPoints(p, v, ps) {
         qs.push(q);
     }
     return { ts, ss, qs };
+}
+
+
+;// ./src/get-medial-points/get-medial-point-coeffs-bez0.ts
+/**
+ * Returns polynomial coefficients for ray parameter values `t`, bezier
+ * parameter values `s` and medial points for points `q(t)` and b(s) (an order
+ * 0 bezier curve) that satisfy the medial condition with respect to `p` and `ps`:
+ *
+ * Let `p` be a fixed point in the plane.
+ * Let `v` be a direction vector defining the ray `q(t) = p + t⋅v`.
+ * Let `ps` be an order 0 bezier curve (a single point).
+ *
+ * * `q(t)` is equidistant from `p` and the nearest point on `ps`
+ * * that common distance is locally minimal among such candidates
+ *
+ * In other words, this function returns candidate ray parameters for the
+ * sought medial point(s). Selecting physically valid solutions (if needed)
+ * is done by the caller or by a later stage of this routine.
+ *
+ * @param p base point
+ * @param v ray direction from `p`
+ * @param ps order 0 bezier control point
+ * given as an array of control points, e.g. `[[1,2]]`
+ */
+function getMedialPointCoeffsBez0(p, v, ps) {
+    // -----------------------------------------------------
+    // See get-medial-points.md for implementation details.
+    // -----------------------------------------------------
+    const [px, py] = p;
+    const [vx, vy] = v;
+    const [[x0, y0]] = ps;
+    // Constant bezier in power basis: b(s) = c
+    // u(s) = p - b(s) = u0
+    const u0x = px - x0;
+    const u0y = py - y0;
+    // E2(s,t): |t⋅v|² - |u(s) + t⋅v|² = 0
+    //         => 2⋅(v⋅u(s))⋅t + |u(s)|² = 0
+    //         => A(s)⋅t + B(s) = 0
+    const a0 = 2 * (vx * u0x + vy * u0y);
+    const b0 = u0x * u0x + u0y * u0y;
+    // const A = [a0];  // degree 0 in s
+    // const B = [b0];  // degree 0 in s
+    return {
+        A: [a0],
+        B: [b0],
+        // C: [],  // the zero, i.e. -1 degree polynomial
+        // D: [],  // ...
+        // H: []   // ...
+    };
 }
 
 
@@ -25606,4 +25655,5 @@ function getMedialPoints(p, v, ps) {
 
 
 
-export { areBoxesIntersecting, area_area as area, bezierBezierIntersection, bezierBezierIntersectionBoundless, bezierBezierIntersectionBoundlessBoth, bezierBezierIntersectionFast, bezierPieceToBezier, bezierSelfIntersection, calcQuadOffsetCurveXPoint, circleBezierIntersection, classification, classifications, classify, clone, closestPointOnBezier, closestPointOnBezierCertified, closestPointsBetweenBeziers, controlPointLinesLength, cubicFromAnglesAndSpeeds, cubicThroughPointGiven013, cubicToAnglesAndSpeeds, cubicToHybridQuadratic, cubicToQuadratic, curvature, curvatureND, curviness, ddCurvature, ddCurvatureND, ddNormal, ddNormalAt0, ddNormalAt1, ddRadiusOfCurvature, ddTangent, ddTangentAt0, ddTangentAt1, eCurvature, eNormal, eTangent, eTangentAt0, eTangentAt1, equal, evalDeCasteljau, evalDeCasteljauDd, evalDeCasteljauError, evalDeCasteljauWithErr, evalDeCasteljauWithErrDd, evaluate, evaluate2ndDerivative, evaluate2ndDerivativeAt0, evaluate2ndDerivativeAt0Exact, evaluate2ndDerivativeAt1, evaluate2ndDerivativeAt1Exact, evaluate2ndDerivativeExact, evaluateExact, evaluateImplicit1, evaluateImplicit2, evaluateImplicit3, fitQuadsToCubic, fitQuadsToCubicHausdorff, fromPowerBasis, fromTo, fromToInclErrorBound, furthestPointOnBezier, generateArcFromQuads, generateCuspAtHalf3, generateQuarterCircle, generateSelfIntersecting, getAbsAreaBetween, getBendingEnergy, getBoundingBox, getBoundingBoxTight, getBoundingHull, getBounds, getCoeffsBezBez, getControlPointBox, getCubicSpeeds, getCurvatureExtrema, getCurvatureExtremaDd, getCurvatureExtremaE, getEndpointIntersections, getFootPointsOnBezierCertified, getFootPointsOnBezierPolysCertified, getFootpointPoly, getFootpointPolyDd, getFootpointPolyExact, getHodograph, getImplicitForm1, getImplicitForm1Dd, getImplicitForm1DdWithRunningError, getImplicitForm1ErrorCounters, getImplicitForm1Exact, getImplicitForm2, getImplicitForm2Dd, getImplicitForm2DdWithRunningError, getImplicitForm2ErrorCounters, getImplicitForm2Exact, getImplicitForm3, getImplicitForm3Dd, getImplicitForm3DdWithRunningError, getImplicitForm3ErrorCounters, getImplicitForm3Exact, getInflections, getInterfaceRotation, getIntervalBox, getIntervalBoxDd, getMedialPointCoeffsBez1, getMedialPointCoeffsBez2, getMedialPointCoeffsBez3, getMedialPoints, getTAtLength, getXBoundsTight, getYBoundsTight, hausdorffDistance, hausdorffDistanceOneSided, intersectBoxes, isBezierPieceZeroLength, isCollinear, isCubicReallyLine, isCubicReallyQuad, isHorizontal, isPointOnBezierExtension, isQuadObtuse, isQuadReallyLine, isReallyPoint, isSelfOverlapping, isVertical, length_length as length, lineToCubic, lineToQuadratic, maxAbsCoordinate, normal, normal2, quadraticToCubic, quadraticToPolyline, radiusOfCurvature, reduceOrderIfPossible, reverse, setCubicSpeeds, splitByCurvature, splitByCurvatureAndLength, splitByLength, tFromXY, tangent, tangentAt0, tangentAt0Exact, tangentAt1, tangentAt1Exact, tangentExact, toCubic, toPowerBasis, toPowerBasis0Exact, toPowerBasis1DdWithRunningError, toPowerBasis1Exact, toPowerBasis2DdWithRunningError, toPowerBasis2Exact, toPowerBasis3DdWithRunningError, toPowerBasis3Exact, toPowerBasisDd, toPowerBasisDdWithRunningError, toPowerBasisErrorCounters, toPowerBasisExact, toPowerBasisWithRunningError, toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeDd, toPowerBasis_1stDerivativeErrorCounters, toPowerBasis_1stDerivativeExact, toPowerBasis_2ndDerivative, toPowerBasis_2ndDerivativeDd, toPowerBasis_2ndDerivativeExact, toPowerBasis_3rdDerivative, toPowerBasis_3rdDerivativeDd, toPowerBasis_3rdDerivativeExact, to_string_toString as toString, totalAbsoluteCurvature, totalCurvature, totalLength, γ, γγ, κ };
+
+export { areBoxesIntersecting, area_area as area, bezierBezierIntersection, bezierBezierIntersectionBoundless, bezierBezierIntersectionBoundlessBoth, bezierBezierIntersectionFast, bezierPieceToBezier, bezierSelfIntersection, calcQuadOffsetCurveXPoint, circleBezierIntersection, classification, classifications, classify, clone, closestPointOnBezier, closestPointOnBezierCertified, closestPointsBetweenBeziers, controlPointLinesLength, cubicFromAnglesAndSpeeds, cubicThroughPointGiven013, cubicToAnglesAndSpeeds, cubicToHybridQuadratic, cubicToQuadratic, curvature, curvatureND, curviness, ddCurvature, ddCurvatureND, ddNormal, ddNormalAt0, ddNormalAt1, ddRadiusOfCurvature, ddTangent, ddTangentAt0, ddTangentAt1, eCurvature, eNormal, eTangent, eTangentAt0, eTangentAt1, equal, evalDeCasteljau, evalDeCasteljauDd, evalDeCasteljauError, evalDeCasteljauWithErr, evalDeCasteljauWithErrDd, evaluate, evaluate2ndDerivative, evaluate2ndDerivativeAt0, evaluate2ndDerivativeAt0Exact, evaluate2ndDerivativeAt1, evaluate2ndDerivativeAt1Exact, evaluate2ndDerivativeExact, evaluateExact, evaluateImplicit1, evaluateImplicit2, evaluateImplicit3, fitQuadsToCubic, fitQuadsToCubicHausdorff, fromPowerBasis, fromTo, fromToInclErrorBound, furthestPointOnBezier, generateArcFromQuads, generateCuspAtHalf3, generateQuarterCircle, generateSelfIntersecting, getAbsAreaBetween, getBendingEnergy, getBoundingBox, getBoundingBoxTight, getBoundingHull, getBounds, getCoeffsBezBez, getControlPointBox, getCubicSpeeds, getCurvatureExtrema, getCurvatureExtremaDd, getCurvatureExtremaE, getEndpointIntersections, getFootPointsOnBezierCertified, getFootPointsOnBezierPolysCertified, getFootpointPoly, getFootpointPolyDd, getFootpointPolyExact, getHodograph, getImplicitForm1, getImplicitForm1Dd, getImplicitForm1DdWithRunningError, getImplicitForm1ErrorCounters, getImplicitForm1Exact, getImplicitForm2, getImplicitForm2Dd, getImplicitForm2DdWithRunningError, getImplicitForm2ErrorCounters, getImplicitForm2Exact, getImplicitForm3, getImplicitForm3Dd, getImplicitForm3DdWithRunningError, getImplicitForm3ErrorCounters, getImplicitForm3Exact, getInflections, getInterfaceRotation, getIntervalBox, getIntervalBoxDd, getMedialPointCoeffsBez0, getMedialPointCoeffsBez1, getMedialPointCoeffsBez2, getMedialPointCoeffsBez3, getMedialPoints, getTAtLength, getXBoundsTight, getYBoundsTight, hausdorffDistance, hausdorffDistanceOneSided, intersectBoxes, isBezierPieceZeroLength, isCollinear, isCubicReallyLine, isCubicReallyQuad, isHorizontal, isPointOnBezierExtension, isQuadObtuse, isQuadReallyLine, isReallyPoint, isSelfOverlapping, isVertical, length_length as length, lineToCubic, lineToQuadratic, maxAbsCoordinate, normal, normal2, quadraticToCubic, quadraticToPolyline, radiusOfCurvature, reduceOrderIfPossible, reverse, setCubicSpeeds, splitByCurvature, splitByCurvatureAndLength, splitByLength, tFromXY, tangent, tangentAt0, tangentAt0Exact, tangentAt1, tangentAt1Exact, tangentExact, toCubic, toPowerBasis, toPowerBasis0Exact, toPowerBasis1DdWithRunningError, toPowerBasis1Exact, toPowerBasis2DdWithRunningError, toPowerBasis2Exact, toPowerBasis3DdWithRunningError, toPowerBasis3Exact, toPowerBasisDd, toPowerBasisDdWithRunningError, toPowerBasisErrorCounters, toPowerBasisExact, toPowerBasisWithRunningError, toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeDd, toPowerBasis_1stDerivativeErrorCounters, toPowerBasis_1stDerivativeExact, toPowerBasis_2ndDerivative, toPowerBasis_2ndDerivativeDd, toPowerBasis_2ndDerivativeExact, toPowerBasis_3rdDerivative, toPowerBasis_3rdDerivativeDd, toPowerBasis_3rdDerivativeExact, to_string_toString as toString, totalAbsoluteCurvature, totalCurvature, totalLength, γ, γγ, κ };

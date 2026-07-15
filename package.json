@@ -38,8 +38,6 @@
     },
     "devDependencies": {
         "@jest/globals": "^30.4.1",
-        "@swc/core": "^1.15.43",
-        "@swc/jest": "^0.2.39",
         "@types/circular-dependency-plugin": "^5.0.8",
         "@types/jest": "^30.0.0",
         "@types/node": "^26.1.1",
@@ -57,7 +55,7 @@
         "ts-node": "^10.9.2",
         "typescript": "^6.0.3",
         "webpack": "^5.108.4",
-        "webpack-bundle-analyzer": "^5.3.0",
+        "webpack-bundle-analyzer": "^5.3.1",
         "webpack-cli": "^7.2.1"
     },
     "files": [

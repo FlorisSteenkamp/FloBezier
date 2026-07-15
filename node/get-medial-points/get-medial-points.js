@@ -16,7 +16,7 @@ const getMedialPointCoeffss = [
  *
  * Let `p` be a fixed point in the plane.
  * Let `v` be a direction vector defining the ray `q(t) = p + t⋅v`.
- * Let `ps` be a quadratic bezier curve.
+ * Let `ps` be a bezier curve.
  *
  * * `q(t)` is equidistant from `p` and the nearest point on `ps`
  * * that common distance is locally minimal among such candidates
@@ -27,8 +27,7 @@ const getMedialPointCoeffss = [
  *
  * @param p base point
  * @param v ray direction from `p`
- * @param ps quadratic bezier control points, i.e. an order 2 bezier curve
- * given as an array of control points, e.g. `[[0,0],[1,1],[2,1]]`
+ * @param ps bezier curve given as an array of control points, e.g. `[[0,0],[1,1],[2,1]]`
  */
 function getMedialPoints(p, v, ps) {
     // -----------------------------------------------------
