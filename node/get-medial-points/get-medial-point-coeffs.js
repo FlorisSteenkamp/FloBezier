@@ -1,7 +1,7 @@
-import { getMedialPointCoeffsBez2 } from './get-medial-point-coeffs-bez2';
-import { getMedialPointCoeffsBez1 } from './get-medial-point-coeffs-bez1';
-import { getMedialPointCoeffsBez3 } from './get-medial-point-coeffs-bez3';
-import { getMedialPointCoeffsBez0 } from './get-medial-point-coeffs-bez0';
+import { getMedialPointCoeffsBez2 } from './get-medial-point-coeffs-bez2.js';
+import { getMedialPointCoeffsBez1 } from './get-medial-point-coeffs-bez1.js';
+import { getMedialPointCoeffsBez3 } from './get-medial-point-coeffs-bez3.js';
+import { getMedialPointCoeffsBez0 } from './get-medial-point-coeffs-bez0.js';
 const getMedialPointCoeffss = [
     ,
     ,

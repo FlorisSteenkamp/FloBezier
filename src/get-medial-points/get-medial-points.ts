@@ -1,15 +1,5 @@
 import { Horner, roots } from 'flo-poly';
-import { getMedialPointCoeffsBez2 } from './get-medial-point-coeffs-bez2';
-import { getMedialPointCoeffsBez1 } from './get-medial-point-coeffs-bez1';
-import { getMedialPointCoeffsBez3 } from './get-medial-point-coeffs-bez3';
-
-
-const getMedialPointCoeffss = [
-    ,,
-    getMedialPointCoeffsBez1,
-    getMedialPointCoeffsBez2,
-    getMedialPointCoeffsBez3
-];
+import { getMedialPointCoeffs } from './get-medial-point-coeffs.js';
 
 
 /**
@@ -45,7 +35,7 @@ function getMedialPoints(
         throw new Error(`Bezier curve must be of order 1, 2 or 3. Found: ${len-1}`);
     }
 
-    const { A, B, C, D, H } = getMedialPointCoeffss[len-1]!(p,v,ps);
+    const { A, B, C, D, H } = getMedialPointCoeffs(p,v,ps);
 
     /** the possible parameter values of the bezier curve */
     const ss = (roots(H, 0, 1) || []).map(r => r.t);//?
