@@ -31,7 +31,8 @@ const getMedialPointCoeffss = [
  */
 function getMedialPointCoeffs(p, v, ps) {
     if (ps.length === 1) {
-        return { ...getMedialPointCoeffsBez0(p, v, ps), C: [], D: [], H: [] };
+        const { a0, b0 } = getMedialPointCoeffsBez0(p, v, ps[0]);
+        return { A: [a0], B: [b0], C: [], D: [], H: [] };
     }
     return getMedialPointCoeffss[ps.length](p, v, ps);
 }

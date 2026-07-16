@@ -16,13 +16,12 @@
  *
  * @param p base point
  * @param v ray direction from `p`
- * @param ps order 0 bezier control point
- * given as an array of control points, e.g. `[[1,2]]`
+ * @param ps order 0 bezier control point, e.g. `[1,2]`
  */
 function getMedialPointCoeffsBez0(
         p: number[],
         v: number[],
-        ps: number[][]) {
+        ps: number[]) {
 
     // -----------------------------------------------------
     // See get-medial-points.md for implementation details.
@@ -30,7 +29,7 @@ function getMedialPointCoeffsBez0(
 
     const [px, py] = p;
     const [vx, vy] = v;
-    const [[x0, y0]] = ps;
+    const [x0, y0] = ps;
 
     // Constant bezier in power basis: b(s) = c
     // u(s) = p - b(s) = u0
@@ -48,8 +47,10 @@ function getMedialPointCoeffsBez0(
 
 
     return {
-        A: [a0],
-        B: [b0],
+        a0,
+        b0
+        // A: [a0],
+        // B: [b0],
         // C: [],  // the zero, i.e. -1 degree polynomial
         // D: [],  // ...
         // H: []   // ...

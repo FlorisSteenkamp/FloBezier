@@ -16,11 +16,10 @@
  *
  * @param p base point
  * @param v ray direction from `p`
- * @param ps order 0 bezier control point
- * given as an array of control points, e.g. `[[1,2]]`
+ * @param ps order 0 bezier control point, e.g. `[1,2]`
  */
-declare function getMedialPointCoeffsBez0(p: number[], v: number[], ps: number[][]): {
-    A: number[];
-    B: number[];
+declare function getMedialPointCoeffsBez0(p: number[], v: number[], ps: number[]): {
+    a0: number;
+    b0: number;
 };
 export { getMedialPointCoeffsBez0 };

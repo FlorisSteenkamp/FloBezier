@@ -1,5 +1,3 @@
-import type { ObjOrArray } from "./helpers/obj-or-array.js";
-
 
 declare global {
     namespace jest {

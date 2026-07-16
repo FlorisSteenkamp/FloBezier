@@ -1,5 +1,4 @@
 import { describe, expect, it } from '@jest/globals';
-import { nearly } from './helpers/jest-extend-nearly.js';
 import { closeTo } from './helpers/close-to.js';
 import { HH } from './helpers/hausdorff-distance-naive.js';
 import { heapToStr } from './helpers/heap-to-str.js';
