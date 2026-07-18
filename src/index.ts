@@ -176,3 +176,5 @@ export { getMedialPointCoeffsBez0 } from './get-medial-points/get-medial-point-c
 export { getMedialPointCoeffsBez1 } from './get-medial-points/get-medial-point-coeffs-bez1.js';
 export { getMedialPointCoeffsBez2 } from './get-medial-points/get-medial-point-coeffs-bez2.js';
 export { getMedialPointCoeffsBez3 } from './get-medial-points/get-medial-point-coeffs-bez3.js';
+export { getMedialPointCoeffsBez2_SameCurve } from './get-medial-points/get-medial-point-coeffs-bez2-same-curve.js';
+export { getMedialPointCoeffsBez3_SameCurve } from './get-medial-points/get-medial-point-coeffs-bez3-same-curve.js';
