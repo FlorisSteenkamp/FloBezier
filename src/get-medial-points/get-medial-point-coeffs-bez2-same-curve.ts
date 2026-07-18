@@ -1,4 +1,4 @@
-import { toPowerBasis2 } from '../to-power-basis/to-power-basis/double/to-power-basis';
+import { toPowerBasis2 } from '../to-power-basis/to-power-basis/double/to-power-basis.js';
 
 
 /**

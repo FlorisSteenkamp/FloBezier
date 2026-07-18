@@ -1,4 +1,4 @@
-import { toPowerBasis3 } from "../to-power-basis/to-power-basis/double/to-power-basis";
+import { toPowerBasis3 } from "../to-power-basis/to-power-basis/double/to-power-basis.js";
 
 /**
  * Returns the polynomial coefficients for the ray parameter `t` and the
