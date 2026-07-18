@@ -8,7 +8,7 @@ const qmd = ddMultDouble2;   // error -> 3*γ²
 const qmq = ddMultDd;      // error -> 7*γ² (theoretical), 5*γ² (worst found), we use 6*γ²
 const qdq = ddDiffDd;      // error -> 3*γ²
 
-const abs = Math.abs;
+const { abs } = Math;
 
 
 /**

@@ -1,18 +1,18 @@
 /**
- * Returns polynomial coefficients for ray parameter values `t`, bezier
- * parameter values `s` and medial points for points `q(t)` and b(s) (an order
- * 2 bezier curve) that satisfy the medial condition with respect to `p` and `ps`:
+ * Returns the polynomial coefficients for the ray parameter `t` and the
+ * curve parameter `s` that encode the medial condition for `q(t) = p + t⋅v`
+ * and a quadratic bezier curve `ps`.
  *
- * Let `p` be a fixed point in the plane.
- * Let `v` be a direction vector defining the ray `q(t) = p + t⋅v`.
- * Let `ps` be a quadratic bezier curve.
- *
+ * The returned coefficients describe the equations whose common solutions
+ * satisfy:
  * * `q(t)` is equidistant from `p` and the nearest point on `ps`
  * * that common distance is locally minimal among such candidates
  *
- * In other words, this function returns candidate ray parameters for the
- * sought medial point(s). Selecting physically valid solutions (if needed)
- * is done by the caller or by a later stage of this routine.
+ * More specifically, this function returns:
+ * * `A` and `B`: the coefficients of `E2(s,t) = A(s)⋅t + B(s)`
+ * * `C` and `D`: the coefficients of `E1(s,t) = C(s)⋅t + D(s)`
+ * * `H`: the eliminated polynomial `A(s)⋅D(s) - B(s)⋅C(s)` whose roots are
+ *   candidate `s` values for medial points
  *
  * @param p base point
  * @param v ray direction from `p`

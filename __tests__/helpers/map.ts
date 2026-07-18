@@ -1,7 +1,7 @@
 import { eDiff, eEstimate } from "big-float-ts";
 import { ObjOrArray } from './obj-or-array.js';
 
-const abs = Math.abs;
+const { abs } = Math;
 
 
 /**

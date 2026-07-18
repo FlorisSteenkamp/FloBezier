@@ -1,24 +1,20 @@
 /**
- * Returns polynomial coefficients for ray parameter values `t`, bezier
- * parameter values `s` and medial points for points `q(t)` and b(s) (an order
- * 0 bezier curve) that satisfy the medial condition with respect to `p` and `ps`:
+ * Returns the coefficients `a0` and `b0` for the linear equation
+ * `a0⋅t + b0 = 0`, so the ray parameter can be recovered as `t = -b0/a0`.
+ * That parameter value makes `q(t) = p + t⋅v` equidistant from `p` and `P`.
  *
- * Let `p` be a fixed point in the plane.
- * Let `v` be a direction vector defining the ray `q(t) = p + t⋅v`.
- * Let `ps` be an order 0 bezier curve (a single point).
+ * Let `p` be a fixed point in the plane.\
+ * Let `v` be a direction vector defining the ray `q(t) = p + t⋅v`.\
+ * Let `P` be another point.\
  *
- * * `q(t)` is equidistant from `p` and the nearest point on `ps`
- * * that common distance is locally minimal among such candidates
- *
- * In other words, this function returns candidate ray parameters for the
- * sought medial point(s). Selecting physically valid solutions (if needed)
- * is done by the caller or by a later stage of this routine.
+ * In other words, this function returns the coefficients needed to solve for
+ * the ray parameter of the medial point on the ray.
  *
  * @param p base point
  * @param v ray direction from `p`
- * @param ps order 0 bezier control point, e.g. `[1,2]`
+ * @param P another "target" point, e.g. `[1,2]`
  */
-declare function getMedialPointCoeffsBez0(p: number[], v: number[], ps: number[]): {
+declare function getMedialPointCoeffsBez0(p: number[], v: number[], P: number[]): {
     a0: number;
     b0: number;
 };

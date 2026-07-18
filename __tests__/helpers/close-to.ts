@@ -1,7 +1,7 @@
 import type { ObjOrArray } from "./obj-or-array.js";
 
 const { EPSILON: eps, POSITIVE_INFINITY: inf } = Number;
-const abs = Math.abs;
+const { abs } = Math;
 
 
 /**

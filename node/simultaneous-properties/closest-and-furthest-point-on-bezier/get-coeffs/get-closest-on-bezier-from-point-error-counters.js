@@ -1,4 +1,4 @@
-const abs = Math.abs;
+const { abs } = Math;
 /**
  * Returns a representation of the error when calculating the polynomial whose
  * roots are all the `t` values on the given bezier curve such that the line

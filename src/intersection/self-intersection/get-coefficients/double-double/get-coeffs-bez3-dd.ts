@@ -1,5 +1,4 @@
-/* ignore file coverage - this file is not used currently */
-import { γγ } from "../../../../error-analysis/error-analysis.js";
+import { γγ3 } from "../../../../error-analysis/error-analysis.js";
 import { ddMultDd, ddAddDd, ddDiffDd } from "double-double";
 import { toPowerBasis3DdWithRunningError } from "../../../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js";
 
@@ -7,8 +6,7 @@ const qmq = ddMultDd;
 const qaq = ddAddDd;
 const qdq = ddDiffDd;
 
-const abs = Math.abs;
-const γγ3 = γγ(3);
+const { abs } = Math;
 
 
 /** 

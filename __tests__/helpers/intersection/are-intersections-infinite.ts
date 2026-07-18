@@ -1,5 +1,7 @@
 import { evaluateExact, isPointOnBezierExtension } from "../../../src/index.js";
 
+const { ceil } = Math;
+
 
 /**
  * Returns true if the infinte extensions of two bezier curves (by extending the
@@ -32,7 +34,7 @@ import { evaluateExact, isPointOnBezierExtension } from "../../../src/index.js";
 
 
     const len = (ps1.length-1)*(ps2.length-1) + 1;
-    const mid = Math.ceil(len/2);
+    const mid = ceil(len/2);
     for (let i=1; i<len+1; i++) {
         // Make each parametric `t`-value an integer power of two to keep the 
         // bitlength a minimum (1 in this case).

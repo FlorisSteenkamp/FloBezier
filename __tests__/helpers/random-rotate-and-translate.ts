@@ -1,6 +1,8 @@
 import { rotate, translate } from "flo-vector2d";
 import { randomOnGrid } from "./random-on-grid.js";
 
+const { sin, cos } = Math;
+
 
 function randomRotateAndTranslate(seed: number) {
     const randomOnGrid_ = randomOnGrid(1, 53);
@@ -8,8 +10,8 @@ function randomRotateAndTranslate(seed: number) {
         const angle = 10*randomOnGrid_(seed*3);
         const x = 10*randomOnGrid_((seed*3)+1);
         const y = 10*randomOnGrid_((seed*3)+2);
-        const sinθ = Math.sin(angle);
-        const cosθ = Math.cos(angle);
+        const sinθ = sin(angle);
+        const cosθ = cos(angle);
         return ps.map(p => translate([x,y])(rotate(sinθ, cosθ)(p)));    
     }
 }

@@ -3,7 +3,7 @@ const td = twoDiff; // error -> 0
 const qmd = ddMultDouble2; // error -> 3*u²
 const qaq = ddAddDd;
 const qad = ddAddDouble; // error -> 2*u²
-const abs = Math.abs;
+const { abs } = Math;
 /**
  * Returns the power basis representation of a bezier curve of order cubic or
  * less including a coefficient-wise absolute error bound that need to be multiplied

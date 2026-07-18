@@ -1,13 +1,14 @@
 import { describe, expect, it } from '@jest/globals';
-import { getRandomBezier } from '../../../helpers/get-random-bezier.js';
-import { γγ, toPowerBasisExact, toPowerBasisDdWithRunningError } from '../../../../src/index.js';
-import { allTrue, mapDouble, mapShewchukToAbsDouble, subtractShewchuk } from '../../../helpers/map.js';
 import { squares } from 'squares-rng';
+import { getRandomBezier } from '../../../helpers/get-random-bezier.js';
+import { γγ3 } from '../../../../src/error-analysis/error-analysis.js';
+import { toPowerBasisExact } from '../../../../src/to-power-basis/to-power-basis/exact/to-power-basis-exact.js';
+import { allTrue, mapDouble, mapShewchukToAbsDouble, subtractShewchuk } from '../../../helpers/map.js';
+import { toPowerBasisDdWithRunningError } from '../../../../src/to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js';
 
 
+const { abs } = Math;
 
-const abs = Math.abs;
-const γγ3 = γγ(3);
 const compareErrors = mapDouble((eActual, eBound) => abs(eActual) <= eBound!);
 const getRandomBezier_ = getRandomBezier(128, 53);
 

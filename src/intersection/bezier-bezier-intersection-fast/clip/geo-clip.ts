@@ -3,7 +3,7 @@ import { toHybridQuadratic } from './to-hybrid-quadratic.js';
 import { eps, u } from '../../../error-analysis/error-analysis.js';
 
 
-const { min, max, abs } = Math;
+const { min, max, abs, sqrt } = Math;
 const onemin = 1 - eps;
 const onemax = 1 + eps;
 
@@ -289,8 +289,8 @@ function quadraticRoots(
     // at this point `D + D_ > 0`
 
     const Dmin = D - D_ < 0 ? 0 : D - D_;
-    const DDmin = Math.sqrt(Dmin)*(onemin);
-    const DDmax = Math.sqrt(D + D_)*(onemax);
+    const DDmin = sqrt(Dmin)*(onemin);
+    const DDmax = sqrt(D + D_)*(onemax);
 
     // at this point DDMax > 0
 

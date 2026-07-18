@@ -1,5 +1,4 @@
-const min = Math.min;
-const max = Math.max;
+const { min, max } = Math;
 /**
  * Returns the intersection of 2 given axis-aligned rectangular boxes (or
  * `undefined` if they don't intersect).

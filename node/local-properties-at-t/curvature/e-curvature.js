@@ -2,6 +2,7 @@ import { eAdd, eCompress, eDiff, eMult } from 'big-float-ts';
 import { eHorner } from 'flo-poly';
 import { toPowerBasis_1stDerivativeExact } from '../../to-power-basis/to-power-basis-1st-derivative/exact/to-power-basis-1st-derivative-exact.js';
 import { toPowerBasis_2ndDerivativeExact } from '../../to-power-basis/to-power-basis-2nd-derivative/exact/to-power-basis-2nd-derivative-exact.js';
+const { sqrt } = Math;
 /**
  * Returns the curvature `κ` of the given linear, quadratic or cubic bezier
  * curve at a specific given parameter value `t`.
@@ -21,7 +22,7 @@ function eCurvature(ps, t) {
     const a = eCompress(eDiff(eMult(dx, ddy), eMult(dy, ddx)));
     const _b = eCompress(eAdd(eMult(dx, dx), eMult(dy, dy)));
     const __b = eMult(_b, eMult(_b, _b));
-    const b = Math.sqrt(__b[__b.length - 1]);
+    const b = sqrt(__b[__b.length - 1]);
     const a_ = a[a.length - 1];
     return a_ / b;
 }

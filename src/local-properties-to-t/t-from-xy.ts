@@ -2,7 +2,6 @@ import { roots, RootInterval, allRootsCertified } from 'flo-poly';
 import { toPowerBasis2Exact, toPowerBasis3Exact } from "../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
 import { toPowerBasis2DdWithRunningError, toPowerBasis3DdWithRunningError } from "../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js";
 import { twoDiff } from 'big-float-ts';
-import { γγ3 } from '../error-analysis/error-analysis.js'
 import { toPowerBasis1Dd } from '../to-power-basis/to-power-basis/double-double/to-power-basis-dd.js';
 
 const { min, max } = Math;

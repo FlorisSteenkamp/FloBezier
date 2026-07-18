@@ -1,5 +1,6 @@
-import { toPowerBasis_1stDerivative } from "../to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.js";
 import { Horner } from 'flo-poly';
+import { toPowerBasis_1stDerivative } from "../to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.js";
+const { sqrt } = Math;
 /**
  * Returns `ds` (the length differential) for a linear, quadratic or cubic
  * bezier curve.
@@ -16,7 +17,7 @@ function ds(ps) {
     return function (t) {
         const dx = Horner(dX, t);
         const dy = Horner(dY, t);
-        return Math.sqrt(dx * dx + dy * dy);
+        return sqrt(dx * dx + dy * dy);
     };
 }
 export { ds };

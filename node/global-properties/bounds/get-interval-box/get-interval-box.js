@@ -1,12 +1,10 @@
 import { evalDeCasteljau } from "../../../local-properties-at-t/evaluate/double/eval-de-casteljau.js";
 import { evalDeCasteljauError } from "../../../local-properties-at-t/evaluate/eval-de-casteljau-error.js";
-import { γ } from '../../../error-analysis/error-analysis.js';
+import { γ1, u } from '../../../error-analysis/error-analysis.js';
 import { fromTo3InclErrorBound } from "../../../transformation/split/from-to/from-to-3-incl-error-bound.js";
 import { fromTo2InclErrorBound } from "../../../transformation/split/from-to/from-to-2-incl-error-bound.js";
 import { fromTo1InclErrorBound } from "../../../transformation/split/from-to/from-to-1-incl-error-bound.js";
-const eps = Number.EPSILON;
-const u = eps / 2;
-const γ1 = γ(1);
+const { min, max } = Math;
 /**
  * Returns an axis-aligned-box that is guaranteed to engulf the entire
  * given bezier curve from t1 to t2. The returned box is given as a pair
@@ -64,10 +62,10 @@ function getIntervalBox3(ps, ts) {
     const _y1 = 9 * u * _psI[1][1];
     const _y2 = 9 * u * _psI[2][1];
     const _y3 = 9 * u * _psI[3][1];
-    const minX = Math.min(x0 - _x0, x1 - _x1, x2 - _x2, x3 - _x3);
-    const maxX = Math.max(x0 + _x0, x1 + _x1, x2 + _x2, x3 + _x3);
-    const minY = Math.min(y0 - _y0, y1 - _y1, y2 - _y2, y3 - _y3);
-    const maxY = Math.max(y0 + _y0, y1 + _y1, y2 + _y2, y3 + _y3);
+    const minX = min(x0 - _x0, x1 - _x1, x2 - _x2, x3 - _x3);
+    const maxX = max(x0 + _x0, x1 + _x1, x2 + _x2, x3 + _x3);
+    const minY = min(y0 - _y0, y1 - _y1, y2 - _y2, y3 - _y3);
+    const maxY = max(y0 + _y0, y1 + _y1, y2 + _y2, y3 + _y3);
     return [[minX, minY], [maxX, maxY]];
 }
 /**
@@ -97,10 +95,10 @@ function getIntervalBox2(ps, ts) {
     const _y0 = 5 * u * _psI[0][1];
     const _y1 = 5 * u * _psI[1][1];
     const _y2 = 5 * u * _psI[2][1];
-    const minX = Math.min(x0 - _x0, x1 - _x1, x2 - _x2);
-    const maxX = Math.max(x0 + _x0, x1 + _x1, x2 + _x2);
-    const minY = Math.min(y0 - _y0, y1 - _y1, y2 - _y2);
-    const maxY = Math.max(y0 + _y0, y1 + _y1, y2 + _y2);
+    const minX = min(x0 - _x0, x1 - _x1, x2 - _x2);
+    const maxX = max(x0 + _x0, x1 + _x1, x2 + _x2);
+    const minY = min(y0 - _y0, y1 - _y1, y2 - _y2);
+    const maxY = max(y0 + _y0, y1 + _y1, y2 + _y2);
     return [[minX, minY], [maxX, maxY]];
 }
 /**
@@ -128,10 +126,10 @@ function getIntervalBox1(ps, ts) {
     const y1 = psI[1][1];
     const _y0 = 3 * u * _psI[0][1];
     const _y1 = 3 * u * _psI[1][1];
-    const minX = Math.min(x0 - _x0, x1 - _x1);
-    const maxX = Math.max(x0 + _x0, x1 + _x1);
-    const minY = Math.min(y0 - _y0, y1 - _y1);
-    const maxY = Math.max(y0 + _y0, y1 + _y1);
+    const minX = min(x0 - _x0, x1 - _x1);
+    const maxX = max(x0 + _x0, x1 + _x1);
+    const minY = min(y0 - _y0, y1 - _y1);
+    const maxY = max(y0 + _y0, y1 + _y1);
     return [[minX, minY], [maxX, maxY]];
 }
 /**
@@ -169,5 +167,4 @@ function getIntervalBoxAtT(ps, t) {
     ];
 }
 export { getIntervalBox };
-// 416
 //# sourceMappingURL=get-interval-box.js.map

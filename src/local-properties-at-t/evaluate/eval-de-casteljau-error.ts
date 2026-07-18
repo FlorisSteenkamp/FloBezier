@@ -1,4 +1,5 @@
-const abs = Math.abs;
+
+const { abs } = Math;
 
 
 /** 

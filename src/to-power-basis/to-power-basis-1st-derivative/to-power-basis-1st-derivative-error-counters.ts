@@ -1,7 +1,7 @@
 // For double precision the error bound === γ * <counter> * `error_`
 // For double-double precision the error bound === γγ3 * <counter> * `error_`
 
-const abs = Math.abs;
+const { abs } = Math;
 
 
 /**

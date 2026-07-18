@@ -12,12 +12,9 @@ import {
     getImplicitForm1ErrorCounters, getImplicitForm2ErrorCounters, getImplicitForm3ErrorCounters,
 } from '../../src/index.js';
 import { eEstimate, eDiff } from 'big-float-ts';
-import { γ, γγ } from '../../src/error-analysis/error-analysis.js';
+import { γ1, γγ3 } from '../../src/error-analysis/error-analysis.js';
 import { eCompress } from 'big-float-ts';
 import { randomOnGrid } from '../helpers/random-on-grid.js';
-
-const γ1 = γ(1);
-const γγ3 = γγ(3);
 
 
 function getImplicitForm1Error(ps: number[][]): ImplicitFormDouble {

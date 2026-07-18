@@ -1,3 +1,4 @@
+const { abs } = Math;
 /**
  * Returns the maximum absolute value of the coordinates of the control points
  * of the given bezier curve.
@@ -11,8 +12,8 @@ function maxAbsCoordinate(ps) {
     let m = Number.NEGATIVE_INFINITY;
     for (let i = 0; i < ps.length; i++) {
         const p = ps[i];
-        const absX = Math.abs(p[0]);
-        const absY = Math.abs(p[1]);
+        const absX = abs(p[0]);
+        const absY = abs(p[1]);
         if (absX > m) {
             m = absX;
         }

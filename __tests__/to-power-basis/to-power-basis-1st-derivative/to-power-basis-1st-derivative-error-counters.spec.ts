@@ -1,15 +1,8 @@
-
 import { describe, expect, it } from '@jest/globals';
-
 import { getRandomCubic, getRandomLine, getRandomQuad } from '../../helpers/get-random-bezier.js';
-import { γ, γγ } from '../../../src/error-analysis/error-analysis.js';
+import { γ1, γγ3 } from '../../../src/error-analysis/error-analysis.js';
 import { toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeDd, toPowerBasis_1stDerivativeErrorCounters, toPowerBasis_1stDerivativeExact } from '../../../src/index.js';
 import { eDiff, eEstimate } from 'big-float-ts';
-
-
-
-const γ1 = γ(1);
-const γγ3 = γγ(3);
 
 
 describe('toPowerBasis_1stDerivativeErrorCounters', function() {

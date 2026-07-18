@@ -2,7 +2,7 @@ import { expansionProduct, eDiff, scaleExpansion2, fastExpansionSum, growExpansi
 import { ddNegativeOf, ddAddDd, ddMultBy2, ddDivDd, twoDiff, twoSum, sqrtWithErr, divWithErr, ddSqrt } from 'double-double';
 import { getCoeffsBez3WithRunningError } from "./get-coefficients/double/get-coeffs-bez3-with-running-error.js";
 import { getCoeffsBez3Exact } from "./get-coefficients/exact/get-coeffs-bez3-exact.js";
-import { γ } from "../../error-analysis/error-analysis.js";
+import { γ1, eps } from "../../error-analysis/error-analysis.js";
 const edif = eDiff;
 const epr = expansionProduct;
 const sce = scaleExpansion2;
@@ -14,10 +14,8 @@ const qm2 = ddMultBy2;
 const qdivq = ddDivDd;
 const fes = fastExpansionSum;
 const ge = growExpansion;
-const eps = Number.EPSILON;
 const eps2 = 2 * eps;
-const abs = Math.abs;
-const γ1 = γ(1);
+const { abs } = Math;
 /**
  * Returns the unique self-intersection parameter `t` values of the given
  * bezier curve if they exist, else return `[]` (see also the `inRange`

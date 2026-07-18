@@ -1,9 +1,13 @@
-import { HausdorffInterval } from "./hausdorff-interval.js";
+import type { HausdorffInterval } from "./hausdorff-interval.js";
+
+const { max } = Math;
 
 
 /** @internal */
-function getMaxHausdorff(i: HausdorffInterval) {
-    return Math.max(i.hL + i.hEL, i.hR + i.hER);
+function getMaxHausdorff(
+        i: HausdorffInterval) {
+
+    return max(i.hL + i.hEL, i.hR + i.hER);
 }
 
 

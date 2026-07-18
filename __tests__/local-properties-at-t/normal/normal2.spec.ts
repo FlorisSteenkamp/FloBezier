@@ -2,6 +2,8 @@ import { describe, expect, it } from '@jest/globals';
 import { generateCuspAtHalf3, normal, normal2, tangent, } from "../../../src/index.js";
 import { getRandomBezier } from "../../helpers/get-random-bezier.js";
 
+const { abs } = Math;
+
 
 function degenerate_bezier(ps: number[][], mutation_idx: number) {
     // The mutation index specifies which case of degenerate bezier the curve will be modified to:
@@ -63,7 +65,7 @@ describe("normal2", function () {
 
                         for (let t of ts) {
                         let norm2 = normal2(ps, t);
-                        let norm = normal(ps, Math.abs(t - 0.0001));
+                        let norm = normal(ps, abs(t - 0.0001));
 
                         // expect(norm2).toBeNearly(2 ** 2, norm);
                         }

@@ -1,6 +1,6 @@
 import { toPowerBasis3ErrorCounters } from '../../to-power-basis/to-power-basis/to-power-basis-error-counters.js';
 
-const abs = Math.abs;
+const { abs } = Math;
 
 
 /**

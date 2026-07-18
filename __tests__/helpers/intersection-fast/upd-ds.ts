@@ -1,6 +1,6 @@
 import type { X } from "../../../src/index.js";
 
-const abs = Math.abs;
+const { abs } = Math;
 
 
 /**

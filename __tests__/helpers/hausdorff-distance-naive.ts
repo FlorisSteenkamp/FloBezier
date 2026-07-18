@@ -1,6 +1,8 @@
 import { distanceBetween } from 'flo-vector2d';
 import { closestPointOnBezier, evalDeCasteljau, splitByLength } from '../../src/index.js';
 
+const { max } = Math;
+
 
 /**
  * Calculates and returns an approximation to the one-sided Hausdorff distance 
@@ -48,7 +50,7 @@ function HH(
         B: number[][],
         maxLength: number): number {
 
-    return Math.max(
+    return max(
         H(A,B,maxLength), 
         H(B,A,maxLength)
     );

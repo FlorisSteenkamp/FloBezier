@@ -1,7 +1,7 @@
 import { twoDiff, twoSum } from 'double-double';
 import { expansionProduct, eDiff, scaleExpansion2, fastExpansionSum, growExpansion } from 'big-float-ts';
 import { eSign, eCompare } from 'big-float-ts';
-import { γ } from "../../error-analysis/error-analysis.js";
+import { γ1 } from "../../error-analysis/error-analysis.js";
 import { isReallyPoint } from "./is-really-point.js";
 import { isQuadReallyLine } from "./is-quad-really-line.js";
 import { isCubicReallyQuad } from "./is-cubic-really-quad.js";
@@ -18,8 +18,7 @@ const ts = twoSum;
 const fes = fastExpansionSum;
 const ge = growExpansion;
 
-const abs = Math.abs;
-const γ1 = γ(1);
+const { abs } = Math;
 
 
 /** 

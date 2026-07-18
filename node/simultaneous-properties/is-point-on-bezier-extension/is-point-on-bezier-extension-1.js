@@ -1,4 +1,4 @@
-import { γγ } from '../../error-analysis/error-analysis.js';
+import { γγ3 } from '../../error-analysis/error-analysis.js';
 import { getImplicitForm1DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form1-dd-with-running-error.js";
 import { ddAddDd, ddMultDd } from "double-double";
 import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd } from 'big-float-ts';
@@ -7,8 +7,7 @@ const qaq = ddAddDd;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
 const qmq = ddMultDd;
-const abs = Math.abs;
-const γγ3 = γγ(3);
+const { abs } = Math;
 /**
  * Returns `true` if the given point is on the given line where
  * the parameter `t` is allowed to extend to ±infinity, i.e. `t` is an

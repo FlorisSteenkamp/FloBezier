@@ -1,7 +1,6 @@
 import { evalDeCasteljauError } from "../eval-de-casteljau-error.js";
 import { evalDeCasteljauDd } from "./eval-de-casteljau-dd.js";
-import { γγ } from '../../../error-analysis/error-analysis.js';
-const γγ3 = γγ(3);
+import { γγ3 } from '../../../error-analysis/error-analysis.js';
 /**
  * Returns the resulting point (in double-double precision) of evaluating the
  * given bezier curve at the given parameter `t` (including a coordinate-wise

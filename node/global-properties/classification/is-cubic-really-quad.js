@@ -1,8 +1,8 @@
 import { twoProduct, eDiff, fastExpansionSum, eSign } from "big-float-ts";
+import { u } from "../../error-analysis/error-analysis.js";
 const tp = twoProduct;
 const fes = fastExpansionSum;
-const u = Number.EPSILON / 2;
-const abs = Math.abs;
+const { abs } = Math;
 /**
  * Returns `true` if the given cubic bezier curve is really a quadratic (or
  * lower order) curve in disguise, i.e. it can be represent by a quadratic

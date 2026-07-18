@@ -2,6 +2,7 @@ import { gaussQuadrature } from "flo-gauss-quadrature";
 import { ds } from "../../local-properties-at-t/ds.js";
 import { fromTo2InclErrorBound } from "../../transformation/split/from-to/from-to-2-incl-error-bound.js";
 import { splitByCurvature } from "../../transformation/split/split-by-curvature.js";
+const { sqrt, log } = Math;
 /**
  * Returns the curve length of the given quadratic bezier curve within the
  * specified parameter interval.
@@ -72,15 +73,15 @@ function lengthBez2(interval: number[], ps: number[][]) {
     const B = 4 * (ax*bx + ay*by);
     const C = bx*bx + by*by;
 
-    const Sabc = 2*Math.sqrt(A+B+C);
-    const A_2 = Math.sqrt(A);
+    const Sabc = 2*sqrt(A+B+C);
+    const A_2 = sqrt(A);
     const A_32 = 2*A*A_2;
-    const C_2 = 2*Math.sqrt(C);
+    const C_2 = 2*sqrt(C);
     const BA = B/A_2;
 
     return (
         A_32*Sabc + A_2*B*(Sabc - C_2) +
-        (4*C*A - B*B)*Math.log((2*A_2 + BA + Sabc) / (BA + C_2))
+        (4*C*A - B*B)*log((2*A_2 + BA + Sabc) / (BA + C_2))
     ) / (4*A_32);
 }
 */

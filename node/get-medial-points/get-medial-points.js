@@ -28,7 +28,7 @@ function getMedialPoints(p, v, ps) {
     if (len <= 1) {
         throw new Error(`Bezier curve must be of order 1, 2 or 3. Found: ${len - 1}`);
     }
-    const { A, B, C, D, H } = getMedialPointCoeffs(p, v, ps);
+    const { A, B, H } = getMedialPointCoeffs(p, v, ps);
     /** the possible parameter values of the bezier curve */
     const ss = (roots(H, 0, 1) || []).map(r => r.t); //?
     /** the possible parameter values of the ray */
@@ -38,10 +38,7 @@ function getMedialPoints(p, v, ps) {
     for (const s of ss) {
         const As = Horner(A, s);
         const Bs = Horner(B, s);
-        // const Cs = Horner(C, s);
-        // const Ds = Horner(D, s);
         const t = -Bs / As;
-        // const t = -Ds / Cs;  // alternative
         ts.push(t);
         const q = [p[0] + t * v[0], p[1] + t * v[1]];
         qs.push(q);

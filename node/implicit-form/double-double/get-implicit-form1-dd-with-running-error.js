@@ -4,7 +4,7 @@ import { toPowerBasis1DdWithRunningError } from '../../to-power-basis/to-power-b
 const qdq = ddDiffDd; // error -> 3*γ²
 const qmd = ddMultDouble2;
 const eno = eNegativeOf;
-const abs = Math.abs;
+const { abs } = Math;
 /**
  * Returns a double-double precision implicit form of the given line segment
  * and a coefficientwise error bound.

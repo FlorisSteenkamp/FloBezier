@@ -33,7 +33,7 @@ const { min, max } = Math;
  * control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * @param B a bezier curve given by an ordered array of its
  * control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
- * @param tolerance optional; defaults to `Math.max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000`;
+ * @param tolerance optional; defaults to `max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000`;
  * if the calculated absolute error bound is less than this, the result is
  * returned; this is *not* a hard tolerance and the bound can be less
  * accurate in hard cases (due to the `maxIterations` parameter). Luckily

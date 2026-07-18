@@ -5,6 +5,8 @@ import { geoClip } from './clip/geo-clip.js';
 import { getDistanceToLineFunction } from "./get-distance-to-line-function.js";
 import { fromToInclErrorBound } from '../../transformation/split/from-to-incl-error-bound.js';
 
+const { sqrt, min, max } = Math;
+
 
 /** 
  * the heuristic value indicating the maximum `t` parameter span allowed after
@@ -105,8 +107,8 @@ function checkIntersectionInRanges(
     // ensure robustness (`dF1` and `dF2` are not simply numbers but also have
     // an error bound associated with them)
     const C = lenF === 4 ? 3/4 : 1/2;
-    const dMin = C * Math.min(0, dF0.dMin, dF1.dMin, dF2.dMin, dF3.dMin);
-    const dMax = C * Math.max(0, dF0.dMax, dF1.dMax, dF2.dMax, dF3.dMax);
+    const dMin = C * min(0, dF0.dMin, dF1.dMin, dF2.dMin, dF3.dMin);
+    const dMax = C * max(0, dF0.dMax, dF1.dMax, dF2.dMax, dF3.dMax);
 
     // Add fatline debug info
     if (globalThis.__debug__ !== undefined && !globalThis.__debug__.already) {
@@ -176,8 +178,8 @@ function checkIntersectionInRanges(
         const dF2_ = dQ_(Fps[2], F_ps[2]);
         const dF3_ = lenF === 4 ? dQ_(Fps[3], F_ps[3]) : { dMin: 0, dMax: 0 };
     
-        const dMin_ = Math.min(0, dF0_.dMin, dF1_.dMin, dF2_.dMin, dF3_.dMin);
-        const dMax_ = Math.max(0, dF0_.dMax, dF1_.dMax, dF2_.dMax, dF3_.dMax);
+        const dMin_ = min(0, dF0_.dMin, dF1_.dMin, dF2_.dMin, dF3_.dMin);
+        const dMax_ = max(0, dF0_.dMax, dF1_.dMax, dF2_.dMax, dF3_.dMax);
     
         // Add fatline debug info
         if (globalThis.__debug__ !== undefined && !globalThis.__debug__.already) {
@@ -192,8 +194,8 @@ function checkIntersectionInRanges(
         const tMin_ = tRange[0];
         const tMax_ = tRange[1];
     
-        tMin = Math.max(tMin, tMin_);
-        tMax = Math.min(tMax, tMax_);
+        tMin = max(tMin, tMin_);
+        tMax = min(tMax, tMax_);
 
         return true;
     }
@@ -260,7 +262,7 @@ function getFatlineDebugInfo(
     const s = yS - yE;
     const t = xE - xS;
     const u = xS*yE - xE*yS;
-    const d = Math.sqrt(s**2 + t**2);
+    const d = sqrt(s**2 + t**2);
 
     const offsetMin = toLength(vFr, dMin/d);
     const offsetMax = toLength(vFr, dMax/d);

@@ -3,9 +3,7 @@ import { curvature, generateCuspAtHalf3 } from '../../src/index.js';
 import { getRandomBezier } from '../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
 
-const abs = Math.abs;
-const sqrt = Math.sqrt;
-const 𝜋 = Math.PI;
+const { abs, sqrt, PI: 𝜋 } = Math;
 
 
 function radToDeg(rad: number): number {

@@ -1,20 +1,18 @@
+import type { ImplicitFormExact2, ImplicitFormExact3 } from "../../implicit-form/implicit-form-types.js";
 import { ddMultDd, ddAddDd } from "double-double";
 import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd } from 'big-float-ts';
 import { getImplicitForm3 } from "../../implicit-form/double/get-implicit-form3.js";
 import { getImplicitForm3ErrorCounters } from "../../implicit-form/get-error-counters/get-implicit-form3-error-counters.js";
 import { getImplicitForm3DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form3-dd-with-running-error.js";
 import { getImplicitForm3Exact } from "../../implicit-form/exact/get-implicit-form3-exact.js";
-import { γ, γγ } from '../../error-analysis/error-analysis.js';
-import { ImplicitFormExact2, ImplicitFormExact3 } from "../../implicit-form/implicit-form-types.js";
+import { γ1, γγ3 } from '../../error-analysis/error-analysis.js';
 
 const qmq = ddMultDd;
 const qaq = ddAddDd;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
 
-const abs = Math.abs;
-const γ1 = γ(1);
-const γγ3 = γγ(3);
+const { abs } = Math;
 
 
 /**

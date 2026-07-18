@@ -1,4 +1,4 @@
-const abs = Math.abs;
+const { abs } = Math;
 
 /** error free error bounds */ 
 const psErrorFree = [[0,0],[0,0]];

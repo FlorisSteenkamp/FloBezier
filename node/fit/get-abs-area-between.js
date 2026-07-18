@@ -2,6 +2,7 @@ import { mid } from "flo-poly";
 import { bezierBezierIntersection } from "../intersection/bezier-bezier-intersection/bezier-bezier-intersection.js";
 import { area } from "../global-properties/area.js";
 import { fromTo } from "../transformation/split/from-to.js";
+const { abs } = Math;
 /**
  * Returns the *absolute* area between the two given curves.
  *
@@ -25,7 +26,7 @@ function getAbsAreaBetween(ps1, ps2) {
         const piece2 = fromTo(ps2, tS2, tE2);
         tS1 = tE1;
         tS2 = tE2;
-        total += Math.abs(area(piece1) - area(piece2));
+        total += abs(area(piece1) - area(piece2));
     }
     return total;
 }

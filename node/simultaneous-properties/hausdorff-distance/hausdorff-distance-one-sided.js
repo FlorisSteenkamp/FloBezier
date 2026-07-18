@@ -9,7 +9,7 @@ import { hausdorffCompare } from './hausdorff-compare.js';
 import { Heap } from '../heap.js';
 import { fromTo } from '../../transformation/split/from-to.js';
 /** @internal */
-const max = Math.max;
+const { max } = Math;
 // We need to calculate `H(A,B)`, the two sided Hausdorff distance between
 // the bezier curves `A` and `B` which equals `max(h(A,B), h(B,A))`, where
 // `h(A,B)` is the one sided Hausdorff distance from `A` to `B`
@@ -35,7 +35,7 @@ const max = Math.max;
  * control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * @param B a bezier curve (the 'to' curve) given by an ordered array of its
  * control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
- * @param tolerance optional; defaults to `Math.max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000`;
+ * @param tolerance optional; defaults to `max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000`;
  * if the calculated absolute error bound is less than this, the result is
  * returned; this is *not* a hard tolerance and the bound can be less
  * accurate in hard cases (due to the `maxIterations` parameter). Luckily

@@ -3,7 +3,7 @@
 // we can use this for both double and double-double precision.
 // For double precision the error bound === γ * <counter> * `error_`
 // For double-double precision the error bound === γγ3 * <counter> * `error_`
-const abs = Math.abs;
+const { abs } = Math;
 /**
  * Returns a representation of the error (from which an absolute error bound
  * can be calculated) when calculating the power basis representation of a

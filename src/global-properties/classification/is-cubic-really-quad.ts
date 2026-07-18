@@ -1,11 +1,10 @@
 import { twoProduct, eDiff, fastExpansionSum, eSign } from "big-float-ts";
+import { u } from "../../error-analysis/error-analysis.js";
 
 const tp = twoProduct;
 const fes = fastExpansionSum;
 
-
-const u = Number.EPSILON / 2;
-const abs = Math.abs;
+const { abs } = Math;
 
 
 /**

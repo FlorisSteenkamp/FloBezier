@@ -1,15 +1,11 @@
-
-import { fromTo as fromToVect } from 'flo-vector2d';
 import { describe, expect, it } from '@jest/globals';
+import { fromTo as fromToVect } from 'flo-vector2d';
 import { getInterfaceRotation } from '../../src/index.js';
-
 import { getRandomCubic, getRandomQuad } from '../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
 
 
-
-const 𝜋 = Math.PI;
-const { abs } = Math;
+const { abs, PI: 𝜋 } = Math;
 
 
 function getRotationAround(ps: number[][]) {

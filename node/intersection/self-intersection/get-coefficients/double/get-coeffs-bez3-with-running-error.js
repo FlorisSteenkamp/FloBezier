@@ -1,7 +1,6 @@
-import { γ } from "../../../../error-analysis/error-analysis.js";
+import { γ1 } from "../../../../error-analysis/error-analysis.js";
 import { toPowerBasis3WithRunningError } from "../../../../to-power-basis/to-power-basis/double/to-power-basis-with-running-error.js";
-const abs = Math.abs;
-const γ1 = γ(1);
+const { abs } = Math;
 /**
  * Returns a polynomial in 1 variable (including coefficientwise error bound)
  * whose roots are the parameter values of the self-intersection points of the

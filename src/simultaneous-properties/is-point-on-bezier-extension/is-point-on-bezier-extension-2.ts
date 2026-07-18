@@ -1,21 +1,19 @@
+import type { ImplicitFormExact2 } from "../../implicit-form/implicit-form-types.js";
+import { ddMultDd, ddAddDd } from "double-double";
+import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd } from 'big-float-ts';
 import { getImplicitForm2 } from "../../implicit-form/double/get-implicit-form2.js";
 import { getImplicitForm2ErrorCounters } from "../../implicit-form/get-error-counters/get-implicit-form2-error-counters.js";
 import { getImplicitForm2DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form2-dd-with-running-error.js";
 import { getImplicitForm2Exact } from "../../implicit-form/exact/get-implicit-form2-exact.js";
-import { γ, γγ } from '../../error-analysis/error-analysis.js';
-import { ddMultDd, ddAddDd } from "double-double";
-import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd } from 'big-float-ts';
-import { ImplicitFormExact2 } from "../../implicit-form/implicit-form-types.js";
+import { γ1, γγ3 } from '../../error-analysis/error-analysis.js';
+
 
 const qmq = ddMultDd;
 const qaq = ddAddDd;
 const epr = expansionProduct;
 const fes = fastExpansionSum;
 
-
-const abs = Math.abs;
-const γ1 = γ(1);
-const γγ3 = γγ(3);
+const { abs } = Math;
 
 
 /**

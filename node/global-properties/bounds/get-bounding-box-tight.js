@@ -2,6 +2,7 @@ import { squaredDistanceBetween, translate, rotate } from "flo-vector2d";
 import { getBoundingBox } from "./get-bounding-box.js";
 import { controlPointLinesLength } from "../length/control-point-lines-length.js";
 import { evalDeCasteljau } from "../../local-properties-at-t/evaluate/double/eval-de-casteljau.js";
+const { sqrt } = Math;
 /**
  * Returns a **non-certified**, **rotated**, **tight** bounding box of the given
  * bezier curve as four ordered points of a rotated rectangle (with each given
@@ -21,12 +22,12 @@ function getBoundingBoxTight(ps) {
     const len = controlPointLinesLength(ps);
     if (squaredDistanceBetween(ps[0], ps[ps.length - 1]) * 2 ** 8 < len * len) {
         const [xE_, yE_] = evalDeCasteljau(ps, 0.5);
-        const hypotenuse = Math.sqrt((xE_ - xS) * (xE_ - xS) + (yE_ - yS) * (yE_ - yS));
+        const hypotenuse = sqrt((xE_ - xS) * (xE_ - xS) + (yE_ - yS) * (yE_ - yS));
         sinθ = (yE_ - yS) / hypotenuse;
         cosθ = (xE_ - xS) / hypotenuse;
     }
     else {
-        const hypotenuse = Math.sqrt((xE - xS) * (xE - xS) + (yE - yS) * (yE - yS));
+        const hypotenuse = sqrt((xE - xS) * (xE - xS) + (yE - yS) * (yE - yS));
         sinθ = (yE - yS) / hypotenuse;
         cosθ = (xE - xS) / hypotenuse;
     }

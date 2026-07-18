@@ -3,6 +3,8 @@ import { eEstimate } from 'big-float-ts';
 import { evaluate, evalDeCasteljau, evaluateExact } from '../../../../src/index.js';
 import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../../../helpers/get-random-bezier.js';
 
+const { abs } = Math;
+
 
 describe('evaluate / evalDeCasteljau', function() {
     it('it should evaluate some beziers correctly at some `t` values', 
@@ -27,8 +29,8 @@ describe('evaluate / evalDeCasteljau', function() {
                     // We check that evaluation using two different methods
                     // (de Casteljau and power basis evaluation) yields roughly 
                     // the same result
-                    let rX = Math.abs(pExact[0] - r2[0]);
-                    let rY = Math.abs(pExact[1] - r2[1]);
+                    let rX = abs(pExact[0] - r2[0]);
+                    let rY = abs(pExact[1] - r2[1]);
 
                     if (!(rX < Number.EPSILON * 2**5)) {
                         throw new Error(`expected ${rX} to be less than ${Number.EPSILON * 2**5}`);
@@ -64,8 +66,8 @@ describe('evaluate / evalDeCasteljau', function() {
                     // We check that evaluation using two different methods
                     // (de Casteljau and power basis evaluation) yields roughly 
                     // the same result
-                    let rX = Math.abs(r1[0] - r2[0]);
-                    let rY = Math.abs(r1[1] - r2[1]);
+                    let rX = abs(r1[0] - r2[0]);
+                    let rY = abs(r1[1] - r2[1]);
 
                     if (!(rX < Number.EPSILON * 2**5)) {
                         throw new Error(`expected ${rX} to be less than ${Number.EPSILON * 2**5}`);

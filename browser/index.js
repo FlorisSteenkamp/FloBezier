@@ -507,8 +507,6 @@ function twoProduct(a, b) {
 //# sourceMappingURL=two-product.js.map
 ;// ./node_modules/big-float-ts/node/double-expansion/fast-expansion-sum.js
 // import { eCompress } from "./e-compress.js";
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-// const compress = eCompress;
 /**
  * Returns the result of adding two expansions.
  *
@@ -670,9 +668,6 @@ function eNegativeOf(e) {
 ;// ./node_modules/big-float-ts/node/double-expansion/e-diff.js
 
 
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const negativeOf = eNegativeOf;
-const add = fastExpansionSum;
 /**
  * Returns the difference between two floating point expansions, i.e. e - f.
  *
@@ -682,8 +677,8 @@ const add = fastExpansionSum;
  * @param f another floating point expansion
  */
 function eDiff(e, f) {
-    const g = negativeOf(f);
-    return add(e, g);
+    const g = eNegativeOf(f);
+    return fastExpansionSum(e, g);
 }
 
 //# sourceMappingURL=e-diff.js.map
@@ -728,23 +723,23 @@ function twoDiff(a, b) {
 //# sourceMappingURL=two-diff.js.map
 ;// ./node_modules/big-float-ts/node/double-expansion/e-compress.js
 /**
- * Returns the result of compressing the given floating point expansion.
- *
- * * primarily for internal library use
+ * Returns the result of compressing the given Shewchuk floating point expansion.
  *
  * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
  *
- * Theorem 23 (Shewchuck): Let e = sum_(i=1)^m(e_i) be a nonoverlapping
- * expansion of m p-bit components, where m >= 3. Suppose that the components of
- * e are sorted in order of increasing magnitude, except that any of the e_i may
- * be zero. Then the following algorithm will produce a nonoverlapping expansion
+ * Theorem 23 (Shewchuk): Let `e = sum_(i=1)^m(e_i)` be a nonoverlapping
+ * expansion of m p-bit components, where m >= 3.
+ *
+ * Suppose that the components of `e` are sorted in order of increasing magnitude,
+ * except that any of the e_i may be zero.
+ *
+ * Then the following algorithm will produce a nonoverlapping expansion
  * (nonadjacent if round-to even tiebreaking is used) such that
- * h = sum_(i=1)^n(h_i) = e, where the components h_i are in order of increasing
- * magnitude. If h != 0, none of the h_i will be zero. Furthermore, the largest
- * component h_n approximates h with an error smaller than ulp(h_n).
+ * `h = sum_(i=1)^n(h_i) = e`, where the components `h_i` are in order of increasing
+ * magnitude. If `h != 0`, none of the `h_i` will be zero. Furthermore, the largest
+ * component `h_n` approximates `h` with an error smaller than `ulp(h_n)`.
  */
 function eCompress(e) {
-    //return e;
     const e_ = e.slice();
     const m = e_.length;
     if (m === 1) {
@@ -1066,20 +1061,7 @@ function twoSum(a, b) {
 
 //# sourceMappingURL=two-sum.js.map
 ;// ./node_modules/big-float-ts/node/double-expansion/scale-expansion.js
-/* unused harmony import specifier */ var scale_expansion_twoProduct;
-/* unused harmony import specifier */ var scale_expansion_twoSum;
-/* unused harmony import specifier */ var fastTwoSum;
-/* unused harmony import specifier */ var scale_expansion_eCompress;
-
-
-
-
 const scale_expansion_f = 134217729; // 2**27 + 1;
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const tp = (/* unused pure expression or super */ null && (scale_expansion_twoProduct));
-const ts = (/* unused pure expression or super */ null && (scale_expansion_twoSum));
-const fts = (/* unused pure expression or super */ null && (fastTwoSum));
-const compress = (/* unused pure expression or super */ null && (scale_expansion_eCompress));
 /**
  * Returns the result of multiplying an expansion by a double.
  *
@@ -1241,18 +1223,13 @@ function scaleExpansion2(b, e) {
 
 //# sourceMappingURL=scale-expansion.js.map
 ;// ./node_modules/big-float-ts/node/double-expansion/expansion-product.js
-/* unused harmony import specifier */ var expansion_product_eCompress;
 
 
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const multByDouble = scaleExpansion;
-const expansion_product_add = fastExpansionSum;
-const expansion_product_compress = (/* unused pure expression or super */ null && (expansion_product_eCompress));
 /**
  * Returns the product of two double floating point expansions.
  *
  * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ * * the result is not compressed, call `eCompress` on the result if required.
  *
  * As per Shewchuk in the above paper: "To find the product of two expansions
  * e and f, use SCALE-EXPANSION (with zero elimination) to form the expansions
@@ -1269,18 +1246,13 @@ const expansion_product_compress = (/* unused pure expression or super */ null &
 function expansionProduct(e, f) {
     let sum = [0];
     for (let i = 0; i < e.length; i++) {
-        sum = expansion_product_add(sum, multByDouble(f, e[i]));
+        sum = fastExpansionSum(sum, scaleExpansion(f, e[i]));
     }
-    //return compress(sum);
     return sum;
 }
 
 //# sourceMappingURL=expansion-product.js.map
 ;// ./node_modules/big-float-ts/node/double-expansion/grow-expansion.js
-/* unused harmony import specifier */ var grow_expansion_eCompress;
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const grow_expansion_compress = (/* unused pure expression or super */ null && (grow_expansion_eCompress));
 /**
  * Returns the result of adding a double to an expansion.
  *
@@ -1464,7 +1436,7 @@ function two_sum_twoSum(a, b) {
 //# sourceMappingURL=two-sum.js.map
 ;// ./src/global-properties/classification/is-quad-really-line.ts
 
-const is_quad_really_line_ts = two_sum_twoSum;
+const ts = two_sum_twoSum;
 const { abs } = Math;
 /**
  * Returns `true` if the given quadratic bezier curve is really a linear curve
@@ -1504,17 +1476,17 @@ function isQuadReallyLine(ps) {
         return false;
     }
     // unable to filter - go slow and exact
-    return (eSign(eDiff(is_quad_really_line_ts(x0, x2), [2 * x1])) === 0 &&
-        eSign(eDiff(is_quad_really_line_ts(y0, y2), [2 * y1])) === 0);
+    return (eSign(eDiff(ts(x0, x2), [2 * x1])) === 0 &&
+        eSign(eDiff(ts(y0, y2), [2 * y1])) === 0);
 }
 
 
 ;// ./src/global-properties/classification/is-cubic-really-quad.ts
 
-const is_cubic_really_quad_tp = twoProduct;
+
+const tp = twoProduct;
 const fes = fastExpansionSum;
-const is_cubic_really_quad_u = Number.EPSILON / 2;
-const is_cubic_really_quad_abs = Math.abs;
+const { abs: is_cubic_really_quad_abs } = Math;
 /**
  * Returns `true` if the given cubic bezier curve is really a quadratic (or
  * lower order) curve in disguise, i.e. it can be represent by a quadratic
@@ -1545,7 +1517,7 @@ function isCubicReallyQuad(ps) {
     const w = u2 - v2;
     const w_ = u2_ + v2_ + is_cubic_really_quad_abs(w); // the absolute error in w
     // if w cannot possibly be zero, i.e. if the error is smaller than the value
-    if (is_cubic_really_quad_abs(w) - is_cubic_really_quad_u * w_ > 0) {
+    if (is_cubic_really_quad_abs(w) - u * w_ > 0) {
         // fast filter 1 passed
         return false;
     }
@@ -1559,13 +1531,13 @@ function isCubicReallyQuad(ps) {
     const r2_ = r1_ + is_cubic_really_quad_abs(r2); // the absolute error in r2
     const s = q2 - r2;
     const s_ = q2_ + r2_ + is_cubic_really_quad_abs(s); // the absolute error in s
-    if (is_cubic_really_quad_abs(s) - is_cubic_really_quad_u * s_ > 0) {
+    if (is_cubic_really_quad_abs(s) - u * s_ > 0) {
         // fast filter 2 passed
         return false;
     }
     // unable to filter - go slow and exact
-    return (eSign(eDiff(fes([x3], is_cubic_really_quad_tp(3, x1)), fes([x0], is_cubic_really_quad_tp(3, x2)))) === 0 &&
-        eSign(eDiff(fes([y3], is_cubic_really_quad_tp(3, y1)), fes([y0], is_cubic_really_quad_tp(3, y2)))) === 0);
+    return (eSign(eDiff(fes([x3], tp(3, x1)), fes([x0], tp(3, x2)))) === 0 &&
+        eSign(eDiff(fes([y3], tp(3, y1)), fes([y0], tp(3, y2)))) === 0);
 }
 
 
@@ -1839,8 +1811,7 @@ function toPowerBasis0WithRunningError(ps) {
 ;// ./src/intersection/self-intersection/get-coefficients/double/get-coeffs-bez3-with-running-error.ts
 
 
-const get_coeffs_bez3_with_running_error_abs = Math.abs;
-const get_coeffs_bez3_with_running_error_1 = γ(1);
+const { abs: get_coeffs_bez3_with_running_error_abs } = Math;
 /**
  * Returns a polynomial in 1 variable (including coefficientwise error bound)
  * whose roots are the parameter values of the self-intersection points of the
@@ -1926,7 +1897,7 @@ function getCoeffsBez3WithRunningError(ps) {
     // Solve: u2*t**2 + u1*t + u0 = 0
     return {
         coeffs: [u2, u1, u0],
-        errBound: [u2_, u1_, u0_].map(c => get_coeffs_bez3_with_running_error_1 * c)
+        errBound: [u2_, u1_, u0_].map(c => γ1 * c)
     };
 }
 
@@ -2095,8 +2066,7 @@ const classify_td = two_diff_twoDiff;
 const classify_ts = twoSum;
 const classify_fes = fastExpansionSum;
 const classify_ge = growExpansion;
-const classify_abs = Math.abs;
-const classify_1 = γ(1);
+const { abs: classify_abs } = Math;
 // The classifications form an equivalence class, in other words *all* 
 // possible planar polynomial bezier curves (of order <= 3) are represented and 
 // all options are mutually exclusive.
@@ -2277,11 +2247,11 @@ function classifyGeneralCubic(ps) {
     // `Discr` = discriminant = b^2 - 4ac
     // calculate `Discr` and its absolute error Discr_
     const bb = b * b;
-    const bb_ = 2 * b_ * classify_abs(b) + classify_1 * bb; // the error in b**2
+    const bb_ = 2 * b_ * classify_abs(b) + γ1 * bb; // the error in b**2
     const ac4 = 4 * a * c;
-    const ac4_ = 4 * (a_ * classify_abs(c) + classify_abs(a) * c_) + classify_1 * classify_abs(ac4);
+    const ac4_ = 4 * (a_ * classify_abs(c) + classify_abs(a) * c_) + γ1 * classify_abs(ac4);
     const Discr = bb - ac4;
-    const Discr_ = bb_ + ac4_ + classify_1 * classify_abs(Discr);
+    const Discr_ = bb_ + ac4_ + γ1 * classify_abs(Discr);
     // if the discriminant is smaller than negative the error bound then
     // certainly there are no roots, i.e. no cusp and no self-intersections
     if (Discr < -Discr_) {
@@ -3023,6 +2993,7 @@ function Horner(p, x) {
 ;// ./src/local-properties-at-t/ds.ts
 
 
+const { sqrt } = Math;
 /**
  * Returns `ds` (the length differential) for a linear, quadratic or cubic
  * bezier curve.
@@ -3039,13 +3010,13 @@ function ds(ps) {
     return function (t) {
         const dx = Horner(dX, t);
         const dy = Horner(dY, t);
-        return Math.sqrt(dx * dx + dy * dy);
+        return sqrt(dx * dx + dy * dy);
     };
 }
 
 
 ;// ./src/transformation/split/from-to/from-to-2-incl-error-bound.ts
-const from_to_2_incl_error_bound_abs = Math.abs;
+const { abs: from_to_2_incl_error_bound_abs } = Math;
 /** error free error bounds */
 const psErrorFree = [[0, 0], [0, 0], [0, 0]];
 /**
@@ -3549,6 +3520,7 @@ function splitByCurvature(ps, maxCurviness = 0.4, minTSpan = 2 ** -16) {
 
 
 
+const { sqrt: length_bez2_sqrt, log } = Math;
 /**
  * Returns the curve length of the given quadratic bezier curve within the
  * specified parameter interval.
@@ -3619,22 +3591,22 @@ function lengthBez2(interval: number[], ps: number[][]) {
     const B = 4 * (ax*bx + ay*by);
     const C = bx*bx + by*by;
 
-    const Sabc = 2*Math.sqrt(A+B+C);
-    const A_2 = Math.sqrt(A);
+    const Sabc = 2*sqrt(A+B+C);
+    const A_2 = sqrt(A);
     const A_32 = 2*A*A_2;
-    const C_2 = 2*Math.sqrt(C);
+    const C_2 = 2*sqrt(C);
     const BA = B/A_2;
 
     return (
         A_32*Sabc + A_2*B*(Sabc - C_2) +
-        (4*C*A - B*B)*Math.log((2*A_2 + BA + Sabc) / (BA + C_2))
+        (4*C*A - B*B)*log((2*A_2 + BA + Sabc) / (BA + C_2))
     ) / (4*A_32);
 }
 */
 
 
 ;// ./src/transformation/split/from-to/from-to-3-incl-error-bound.ts
-const from_to_3_incl_error_bound_abs = Math.abs;
+const { abs: from_to_3_incl_error_bound_abs } = Math;
 /** error free error bounds */
 const from_to_3_incl_error_bound_psErrorFree = [[0, 0], [0, 0], [0, 0], [0, 0]];
 /**
@@ -4254,7 +4226,7 @@ function equal(ps1, ps2) {
 
 
 ;// ./src/transformation/split/from-to/from-to-1-incl-error-bound.ts
-const from_to_1_incl_error_bound_abs = Math.abs;
+const { abs: from_to_1_incl_error_bound_abs } = Math;
 /** error free error bounds */
 const from_to_1_incl_error_bound_psErrorFree = [[0, 0], [0, 0]];
 /**
@@ -6569,7 +6541,7 @@ const to_power_basis_dd_with_running_error_td = two_diff_twoDiff; // error -> 0
 const to_power_basis_dd_with_running_error_qmd = ddMultDouble2; // error -> 3*u²
 const to_power_basis_dd_with_running_error_qaq = ddAddDd;
 const qad = ddAddDouble; // error -> 2*u²
-const to_power_basis_dd_with_running_error_abs = Math.abs;
+const { abs: to_power_basis_dd_with_running_error_abs } = Math;
 /**
  * Returns the power basis representation of a bezier curve of order cubic or
  * less including a coefficient-wise absolute error bound that need to be multiplied
@@ -6722,7 +6694,7 @@ function toPowerBasis0DdWithRunningError(ps) {
 const qdq = ddDiffDd; // error -> 3*γ²
 const get_implicit_form1_dd_with_running_error_qmd = ddMultDouble2;
 const eno = eNegativeOf;
-const get_implicit_form1_dd_with_running_error_abs = Math.abs;
+const { abs: get_implicit_form1_dd_with_running_error_abs } = Math;
 /**
  * Returns a double-double precision implicit form of the given line segment
  * and a coefficientwise error bound.
@@ -6871,7 +6843,7 @@ const qm2 = ddMultBy2; // error -> 0
 const get_implicit_form2_dd_with_running_error_qmd = ddMultDouble2; // error -> 3*γ²
 const get_implicit_form2_dd_with_running_error_qmq = ddMultDd; // error -> 7*γ² (theoretical), 5*γ² (worst found), we use 6*γ²
 const get_implicit_form2_dd_with_running_error_qdq = ddDiffDd; // error -> 3*γ²
-const get_implicit_form2_dd_with_running_error_abs = Math.abs;
+const { abs: get_implicit_form2_dd_with_running_error_abs } = Math;
 /**
  * Returns a double-double precision implicit form of the given quadratic
  * bezier curve and a coefficientwise error bound.
@@ -12690,19 +12662,20 @@ function bezierBezierIntersectionBoundless(ps1, ps2) {
 
 ;// ./node_modules/big-float-ts/node/double-expansion/e-to-double-double.js
 
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const e_to_double_double_compress = eCompress;
 /**
  * Returns the result of converting a floating point expansion to a
  * double-double precision floating point number.
+ *
+ * * uses truncation to convert thus accurate to within 1 ulp on low double;
+ * (a slower summing method could reduce the max error to 1/2 ulp)
  */
 function eToDd(e) {
-    e = e_to_double_double_compress(e);
+    e = eCompress(e);
     const len = e.length;
     if (len === 2) {
         return e; // already a double-double
     }
-    else if (len === 1) {
+    else if (len <= 1) {
         return [0, e[0]]; // double-doubles have a fixed length of 2
     }
     return [e[len - 2], e[len - 1]]; // return only most significant parts
@@ -12719,8 +12692,7 @@ const is_point_on_bezier_extension_1_qaq = ddAddDd;
 const is_point_on_bezier_extension_1_epr = expansionProduct;
 const is_point_on_bezier_extension_1_fes = fastExpansionSum;
 const is_point_on_bezier_extension_1_qmq = ddMultDd;
-const is_point_on_bezier_extension_1_abs = Math.abs;
-const is_point_on_bezier_extension_1_3 = γγ(3);
+const { abs: is_point_on_bezier_extension_1_abs } = Math;
 /**
  * Returns `true` if the given point is on the given line where
  * the parameter `t` is allowed to extend to ±infinity, i.e. `t` is an
@@ -12777,7 +12749,7 @@ function isPointOnBezierExtension1(ps, p) {
         const h = is_point_on_bezier_extension_1_qaq(q7, v);
         const h_ = q7_ + v_ + is_point_on_bezier_extension_1_abs(h[1]);
         // if the error is not too high too discern h away from zero
-        if (is_point_on_bezier_extension_1_3 * h_ < is_point_on_bezier_extension_1_abs(eEstimate(h))) {
+        if (γγ3 * h_ < is_point_on_bezier_extension_1_abs(eEstimate(h))) {
             return false; // <-- prefilter applied
         }
     }
@@ -12835,7 +12807,7 @@ function getImplicitForm2(ps) {
 // we can use this for both double and double-double precision.
 // For double precision the error bound === γ * <counter> * `error_`
 // For double-double precision the error bound === γγ3 * <counter> * `error_`
-const to_power_basis_error_counters_abs = Math.abs;
+const { abs: to_power_basis_error_counters_abs } = Math;
 /**
  * Returns a representation of the error (from which an absolute error bound
  * can be calculated) when calculating the power basis representation of a
@@ -12991,7 +12963,7 @@ function toPowerBasis3ErrorCounters(ps) {
 
 ;// ./src/implicit-form/get-error-counters/get-implicit-form2-error-counters.ts
 
-const get_implicit_form2_error_counters_abs = Math.abs;
+const { abs: get_implicit_form2_error_counters_abs } = Math;
 /**
  * Returns a representation of the error (from which an absolute error bound
  * can be calculated) when calculating the implicit form of the given bezier
@@ -13086,9 +13058,7 @@ const is_point_on_bezier_extension_2_qmq = ddMultDd;
 const is_point_on_bezier_extension_2_qaq = ddAddDd;
 const is_point_on_bezier_extension_2_epr = expansionProduct;
 const is_point_on_bezier_extension_2_fes = fastExpansionSum;
-const is_point_on_bezier_extension_2_abs = Math.abs;
-const is_point_on_bezier_extension_2_1 = γ(1);
-const is_point_on_bezier_extension_2_3 = γγ(3);
+const { abs: is_point_on_bezier_extension_2_abs } = Math;
 /**
  * Returns `true` if the given point is on the given quadratic bezier curve where
  * the parameter `t` is allowed to extend to ±infinity, i.e. `t` is an element of
@@ -13150,7 +13120,7 @@ function isPointOnBezierExtension2(ps, p) {
             // <10>v
             v_;
         // if the error is not too high too discern h away from zero
-        if ((D + 12) * is_point_on_bezier_extension_2_1 * h_ < is_point_on_bezier_extension_2_abs(h)) {
+        if ((D + 12) * γ1 * h_ < is_point_on_bezier_extension_2_abs(h)) {
             return false; // <-- prefilter applied
         }
     }
@@ -13208,7 +13178,7 @@ function isPointOnBezierExtension2(ps, p) {
         const h = is_point_on_bezier_extension_2_qaq(q8, v);
         const h_ = q8_ + v_ + is_point_on_bezier_extension_2_abs(h[1]);
         // if the error is not too high too discern h away from zero
-        if (is_point_on_bezier_extension_2_3 * h_ < is_point_on_bezier_extension_2_abs(eEstimate(h))) {
+        if (γγ3 * h_ < is_point_on_bezier_extension_2_abs(eEstimate(h))) {
             return false; // <-- prefilter applied
         }
     }
@@ -13292,7 +13262,7 @@ function getImplicitForm3(ps) {
 
 ;// ./src/implicit-form/get-error-counters/get-implicit-form3-error-counters.ts
 
-const get_implicit_form3_error_counters_abs = Math.abs;
+const { abs: get_implicit_form3_error_counters_abs } = Math;
 /**
  * Returns a representation of the error (from which an absolute error bound
  * can be calculated) when calculating the implicit form of the given bezier
@@ -13441,9 +13411,7 @@ const is_point_on_bezier_extension_3_qmq = ddMultDd;
 const is_point_on_bezier_extension_3_qaq = ddAddDd;
 const is_point_on_bezier_extension_3_epr = expansionProduct;
 const is_point_on_bezier_extension_3_fes = fastExpansionSum;
-const is_point_on_bezier_extension_3_abs = Math.abs;
-const is_point_on_bezier_extension_3_1 = γ(1);
-const is_point_on_bezier_extension_3_3 = γγ(3);
+const { abs: is_point_on_bezier_extension_3_abs } = Math;
 /**
  * Returns `true` if the given point is on the given cubic bezier curve where
  * the parameter, `t`, is allowed to extend to `±∞`, i.e. if `t ∈ (-∞, +∞)`,
@@ -13531,7 +13499,7 @@ function isPointOnBezierExtension3(ps, p) {
                 // <24>
                 v_);
         // if the error is not too high too discern `h` away from zero
-        if ((D + 26) * is_point_on_bezier_extension_3_1 * h_ < is_point_on_bezier_extension_3_abs(h)) {
+        if ((D + 26) * γ1 * h_ < is_point_on_bezier_extension_3_abs(h)) {
             return false; // <-- prefilter applied
         }
     }
@@ -13626,7 +13594,7 @@ function isPointOnBezierExtension3(ps, p) {
         const h = is_point_on_bezier_extension_3_qaq(q6, q8);
         const h_ = q6_ + q8_ + is_point_on_bezier_extension_3_abs(h[1]);
         // if the error is not too high too discern h away from zero
-        if (is_point_on_bezier_extension_3_3 * h_ < is_point_on_bezier_extension_3_abs(eEstimate(h))) {
+        if (γγ3 * h_ < is_point_on_bezier_extension_3_abs(eEstimate(h))) {
             return false; // <-- prefilter applied
         }
     }
@@ -14160,7 +14128,7 @@ function evalDeCasteljau(ps, t) {
 
 
 ;// ./src/local-properties-at-t/evaluate/eval-de-casteljau-error.ts
-const eval_de_casteljau_error_abs = Math.abs;
+const { abs: eval_de_casteljau_error_abs } = Math;
 /**
  * Returns a representation of the error (from which an absolute error bound
  * can be calculated) when evaluating the given bezier curve at the parameter `t`
@@ -14312,9 +14280,7 @@ function evalDeCasteljauError(ps, t) {
 
 
 
-const get_interval_box_eps = Number.EPSILON;
-const get_interval_box_u = get_interval_box_eps / 2;
-const get_interval_box_1 = γ(1);
+const { min: get_interval_box_min, max: get_interval_box_max } = Math;
 /**
  * Returns an axis-aligned-box that is guaranteed to engulf the entire
  * given bezier curve from t1 to t2. The returned box is given as a pair
@@ -14360,22 +14326,22 @@ function getIntervalBox3(ps, ts) {
     const x1 = psI[1][0];
     const x2 = psI[2][0];
     const x3 = psI[3][0];
-    const _x0 = 9 * get_interval_box_u * _psI[0][0];
-    const _x1 = 9 * get_interval_box_u * _psI[1][0];
-    const _x2 = 9 * get_interval_box_u * _psI[2][0];
-    const _x3 = 9 * get_interval_box_u * _psI[3][0];
+    const _x0 = 9 * u * _psI[0][0];
+    const _x1 = 9 * u * _psI[1][0];
+    const _x2 = 9 * u * _psI[2][0];
+    const _x3 = 9 * u * _psI[3][0];
     const y0 = psI[0][1];
     const y1 = psI[1][1];
     const y2 = psI[2][1];
     const y3 = psI[3][1];
-    const _y0 = 9 * get_interval_box_u * _psI[0][1];
-    const _y1 = 9 * get_interval_box_u * _psI[1][1];
-    const _y2 = 9 * get_interval_box_u * _psI[2][1];
-    const _y3 = 9 * get_interval_box_u * _psI[3][1];
-    const minX = Math.min(x0 - _x0, x1 - _x1, x2 - _x2, x3 - _x3);
-    const maxX = Math.max(x0 + _x0, x1 + _x1, x2 + _x2, x3 + _x3);
-    const minY = Math.min(y0 - _y0, y1 - _y1, y2 - _y2, y3 - _y3);
-    const maxY = Math.max(y0 + _y0, y1 + _y1, y2 + _y2, y3 + _y3);
+    const _y0 = 9 * u * _psI[0][1];
+    const _y1 = 9 * u * _psI[1][1];
+    const _y2 = 9 * u * _psI[2][1];
+    const _y3 = 9 * u * _psI[3][1];
+    const minX = get_interval_box_min(x0 - _x0, x1 - _x1, x2 - _x2, x3 - _x3);
+    const maxX = get_interval_box_max(x0 + _x0, x1 + _x1, x2 + _x2, x3 + _x3);
+    const minY = get_interval_box_min(y0 - _y0, y1 - _y1, y2 - _y2, y3 - _y3);
+    const maxY = get_interval_box_max(y0 + _y0, y1 + _y1, y2 + _y2, y3 + _y3);
     return [[minX, minY], [maxX, maxY]];
 }
 /**
@@ -14396,19 +14362,19 @@ function getIntervalBox2(ps, ts) {
     const x0 = psI[0][0];
     const x1 = psI[1][0];
     const x2 = psI[2][0];
-    const _x0 = 5 * get_interval_box_u * _psI[0][0];
-    const _x1 = 5 * get_interval_box_u * _psI[1][0];
-    const _x2 = 5 * get_interval_box_u * _psI[2][0];
+    const _x0 = 5 * u * _psI[0][0];
+    const _x1 = 5 * u * _psI[1][0];
+    const _x2 = 5 * u * _psI[2][0];
     const y0 = psI[0][1];
     const y1 = psI[1][1];
     const y2 = psI[2][1];
-    const _y0 = 5 * get_interval_box_u * _psI[0][1];
-    const _y1 = 5 * get_interval_box_u * _psI[1][1];
-    const _y2 = 5 * get_interval_box_u * _psI[2][1];
-    const minX = Math.min(x0 - _x0, x1 - _x1, x2 - _x2);
-    const maxX = Math.max(x0 + _x0, x1 + _x1, x2 + _x2);
-    const minY = Math.min(y0 - _y0, y1 - _y1, y2 - _y2);
-    const maxY = Math.max(y0 + _y0, y1 + _y1, y2 + _y2);
+    const _y0 = 5 * u * _psI[0][1];
+    const _y1 = 5 * u * _psI[1][1];
+    const _y2 = 5 * u * _psI[2][1];
+    const minX = get_interval_box_min(x0 - _x0, x1 - _x1, x2 - _x2);
+    const maxX = get_interval_box_max(x0 + _x0, x1 + _x1, x2 + _x2);
+    const minY = get_interval_box_min(y0 - _y0, y1 - _y1, y2 - _y2);
+    const maxY = get_interval_box_max(y0 + _y0, y1 + _y1, y2 + _y2);
     return [[minX, minY], [maxX, maxY]];
 }
 /**
@@ -14430,16 +14396,16 @@ function getIntervalBox1(ps, ts) {
     const { ps: psI, _ps: _psI } = fromTo1InclErrorBound(ps, ts[0], ts[1]);
     const x0 = psI[0][0];
     const x1 = psI[1][0];
-    const _x0 = 3 * get_interval_box_u * _psI[0][0];
-    const _x1 = 3 * get_interval_box_u * _psI[1][0];
+    const _x0 = 3 * u * _psI[0][0];
+    const _x1 = 3 * u * _psI[1][0];
     const y0 = psI[0][1];
     const y1 = psI[1][1];
-    const _y0 = 3 * get_interval_box_u * _psI[0][1];
-    const _y1 = 3 * get_interval_box_u * _psI[1][1];
-    const minX = Math.min(x0 - _x0, x1 - _x1);
-    const maxX = Math.max(x0 + _x0, x1 + _x1);
-    const minY = Math.min(y0 - _y0, y1 - _y1);
-    const maxY = Math.max(y0 + _y0, y1 + _y1);
+    const _y0 = 3 * u * _psI[0][1];
+    const _y1 = 3 * u * _psI[1][1];
+    const minX = get_interval_box_min(x0 - _x0, x1 - _x1);
+    const maxX = get_interval_box_max(x0 + _x0, x1 + _x1);
+    const minY = get_interval_box_min(y0 - _y0, y1 - _y1);
+    const maxY = get_interval_box_max(y0 + _y0, y1 + _y1);
     return [[minX, minY], [maxX, maxY]];
 }
 /**
@@ -14460,13 +14426,13 @@ function getIntervalBoxAtT(ps, t) {
     const p = evalDeCasteljau(ps, t);
     let pE;
     if (ps.length === 4) {
-        pE = evalDeCasteljauError(ps, [0, t]).map(c_ => 8 * get_interval_box_1 * c_);
+        pE = evalDeCasteljauError(ps, [0, t]).map(c_ => 8 * γ1 * c_);
     }
     else if (ps.length === 3) {
-        pE = evalDeCasteljauError(ps, [0, t]).map(c_ => 5 * get_interval_box_1 * c_);
+        pE = evalDeCasteljauError(ps, [0, t]).map(c_ => 5 * γ1 * c_);
     }
     else if (ps.length === 2) {
-        pE = evalDeCasteljauError(ps, [0, t]).map(c_ => 2 * get_interval_box_1 * c_);
+        pE = evalDeCasteljauError(ps, [0, t]).map(c_ => 2 * γ1 * c_);
     }
     else if (ps.length === 1) {
         return [p, p];
@@ -14477,11 +14443,9 @@ function getIntervalBoxAtT(ps, t) {
     ];
 }
 
-// 416
 
 ;// ./src/boxes/intersect-boxes.ts
-const intersect_boxes_min = Math.min;
-const intersect_boxes_max = Math.max;
+const { min: intersect_boxes_min, max: intersect_boxes_max } = Math;
 /**
  * Returns the intersection of 2 given axis-aligned rectangular boxes (or
  * `undefined` if they don't intersect).
@@ -14542,8 +14506,6 @@ function eMultByNeg2(e) {
 //# sourceMappingURL=e-mult-by-neg-2.js.map
 ;// ./node_modules/big-float-ts/node/double-expansion/e-abs.js
 
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const e_abs_negativeOf = eNegativeOf;
 /**
  * Returns the absolute value of the given floating point expansion.
  *
@@ -14553,7 +14515,7 @@ const e_abs_negativeOf = eNegativeOf;
  */
 function eAbs(e) {
     if (e[e.length - 1] < 0) {
-        return e_abs_negativeOf(e);
+        return eNegativeOf(e);
     }
     return e;
 }
@@ -14720,10 +14682,8 @@ const bezier_self_intersection_qm2 = ddMultBy2;
 const qdivq = ddDivDd;
 const bezier_self_intersection_fes = fastExpansionSum;
 const bezier_self_intersection_ge = growExpansion;
-const bezier_self_intersection_eps = Number.EPSILON;
-const eps2 = 2 * bezier_self_intersection_eps;
-const bezier_self_intersection_abs = Math.abs;
-const bezier_self_intersection_1 = γ(1);
+const eps2 = 2 * eps;
+const { abs: bezier_self_intersection_abs } = Math;
 /**
  * Returns the unique self-intersection parameter `t` values of the given
  * bezier curve if they exist, else return `[]` (see also the `inRange`
@@ -14777,11 +14737,11 @@ function bezierSelfIntersection(ps, inRange = true) {
     // `Discr` = discriminant = b^2 - 4ac
     // calculate `Discr` and its absolute error Discr_
     const bb = b * b;
-    const bb_ = 2 * b_ * bezier_self_intersection_abs(b) + bezier_self_intersection_1 * bb; // the error in b**2
+    const bb_ = 2 * b_ * bezier_self_intersection_abs(b) + γ1 * bb; // the error in b**2
     const ac4 = 4 * a * c;
-    const ac4_ = 4 * (a_ * bezier_self_intersection_abs(c) + bezier_self_intersection_abs(a) * c_) + bezier_self_intersection_1 * bezier_self_intersection_abs(ac4);
+    const ac4_ = 4 * (a_ * bezier_self_intersection_abs(c) + bezier_self_intersection_abs(a) * c_) + γ1 * bezier_self_intersection_abs(ac4);
     const Discr = bb - ac4;
-    const Discr_ = bb_ + ac4_ + bezier_self_intersection_1 * bezier_self_intersection_abs(Discr);
+    const Discr_ = bb_ + ac4_ + γ1 * bezier_self_intersection_abs(Discr);
     // if the discriminant is smaller than negative the error bound then
     // certainly there are no roots, i.e. no cusp and no self-intersections
     if (Discr < -Discr_) {
@@ -14803,7 +14763,7 @@ function bezierSelfIntersection(ps, inRange = true) {
             // const r1 = (2*c) / (-b + D);
             q1 = -b + D;
         }
-        const q1_ = b_ + D_ + bezier_self_intersection_1 * bezier_self_intersection_abs(q1);
+        const q1_ = b_ + D_ + γ1 * bezier_self_intersection_abs(q1);
         const { est: r1, err: r1_ } = divWithErr(q1, 2 * a, q1_, 2 * a_);
         const { est: r2, err: r2_ } = divWithErr(2 * c, q1, 2 * c_, q1_);
         // the actual 'filter' follows
@@ -15172,9 +15132,6 @@ function reduceSignificand(a, bits) {
 
 
 
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const e_to_bitlength_sign = eSign;
-const e_to_bitlength_compress = eCompress;
 /**
  * Returns a floating point expansion accurate to the given number of bits.
  * Extraneous bits are discarded.
@@ -15183,8 +15140,8 @@ const e_to_bitlength_compress = eCompress;
  */
 // TODO - make faster
 function eToBitlength(a, l) {
-    a = e_to_bitlength_compress(a);
-    if (e_to_bitlength_sign(a) === 0) {
+    a = eCompress(a);
+    if (eSign(a) === 0) {
         return [0];
     }
     const maxMsb = msbExponent(a[a.length - 1]);
@@ -15246,12 +15203,6 @@ function expBitLength(a) {
 
 
 
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const mult = expansionProduct;
-const toBitlength = eToBitlength;
-const e_div_bitLength = expBitLength;
-const diff = eDiff;
-const estimate = eEstimate;
 /**
  * Returns the result of a/b using Goldschmidt division.
  *
@@ -15274,18 +15225,18 @@ function eDiv(N, D, expansionLength) {
     let exact = false;
     let resultBitlengthUpperBound = 0;
     if (!expansionLength) {
-        const bitlengthN = e_div_bitLength(N_);
-        const bitlengthD = e_div_bitLength(D_);
+        const bitlengthN = expBitLength(N_);
+        const bitlengthD = expBitLength(D_);
         // resultBitlengthUpperBound is only valid if the division is known
         // to be exact
         resultBitlengthUpperBound = bitlengthN - bitlengthD + 1;
         expansionLength = (resultBitlengthUpperBound / 53) + 1;
         exact = true;
     }
-    let F = [1 / estimate(D_)]; // Initial guess - out by 1/2 upls
+    let F = [1 / eEstimate(D_)]; // Initial guess - out by 1/2 upls
     let i = 1;
     while (true) {
-        N_ = mult(N_, F);
+        N_ = expansionProduct(N_, F);
         // The precision bitlength doubles on each iteration
         if (i > expansionLength) {
             // we now have roughly double the needed precision - we actually 
@@ -15295,7 +15246,7 @@ function eDiv(N, D, expansionLength) {
                 // We must throw away bits known to be zero. 
                 // Any bits > expansionLength * 53 must be thrown away as they
                 // are wrong - all other bits are exact.
-                N_ = toBitlength(N_, resultBitlengthUpperBound);
+                N_ = eToBitlength(N_, resultBitlengthUpperBound);
                 // TODO - below is just for testing - remove later
                 //if (compare(mult(D, N_), N) !== 0) {
                 //    console.log(mult(D, N_))
@@ -15306,8 +15257,8 @@ function eDiv(N, D, expansionLength) {
             // Returning only significant bits helps with sign determination later on.
             return N_.slice(N_.length - expansionLength, N_.length);
         }
-        D_ = mult(D_, F);
-        F = diff([2], D_);
+        D_ = expansionProduct(D_, F);
+        F = eDiff([2], D_);
         i *= 2;
     }
 }
@@ -15600,7 +15551,7 @@ function bigintToExpansion(b) {
 
 
 ;// ./src/intersection/get-endpoint-intersections/b-sqrt.ts
-const { round, sqrt } = Math;
+const { round, sqrt: b_sqrt_sqrt } = Math;
 /**
  * Returns the square root of a bigint.
  *
@@ -15617,7 +15568,7 @@ function bSqrt(v) {
         }
         return v;
     }
-    let x0 = BigInt(round(sqrt(Number(v))));
+    let x0 = BigInt(round(b_sqrt_sqrt(Number(v))));
     while (true) {
         const x1 = (x0 + v / x0) >> 1n;
         if (x1 === x0) {
@@ -16331,6 +16282,7 @@ function handlePointDegenerateCases(ps1, ps2) {
 
 
 
+const { abs: get_abs_area_between_abs } = Math;
 /**
  * Returns the *absolute* area between the two given curves.
  *
@@ -16354,7 +16306,7 @@ function getAbsAreaBetween(ps1, ps2) {
         const piece2 = fromTo(ps2, tS2, tE2);
         tS1 = tE1;
         tS2 = tE2;
-        total += Math.abs(area_area(piece1) - area_area(piece2));
+        total += get_abs_area_between_abs(area_area(piece1) - area_area(piece2));
     }
     return total;
 }
@@ -16748,6 +16700,7 @@ function furthestPointOnBezier(ps, p) {
 
 
 ;// ./src/error-analysis/max-abs-coordinate.ts
+const { abs: max_abs_coordinate_abs } = Math;
 /**
  * Returns the maximum absolute value of the coordinates of the control points
  * of the given bezier curve.
@@ -16761,8 +16714,8 @@ function maxAbsCoordinate(ps) {
     let m = Number.NEGATIVE_INFINITY;
     for (let i = 0; i < ps.length; i++) {
         const p = ps[i];
-        const absX = Math.abs(p[0]);
-        const absY = Math.abs(p[1]);
+        const absX = max_abs_coordinate_abs(p[0]);
+        const absY = max_abs_coordinate_abs(p[1]);
         if (absX > m) {
             m = absX;
         }
@@ -16775,9 +16728,10 @@ function maxAbsCoordinate(ps) {
 
 
 ;// ./src/simultaneous-properties/hausdorff-distance/get-max-hausdorff.ts
+const { max: get_max_hausdorff_max } = Math;
 /** @internal */
 function getMaxHausdorff(i) {
-    return Math.max(i.hL + i.hEL, i.hR + i.hER);
+    return get_max_hausdorff_max(i.hL + i.hEL, i.hR + i.hER);
 }
 
 
@@ -16889,7 +16843,7 @@ class Heap {
 
 
 /** @internal */
-const hausdorff_distance_one_sided_max = Math.max;
+const { max: hausdorff_distance_one_sided_max } = Math;
 // We need to calculate `H(A,B)`, the two sided Hausdorff distance between
 // the bezier curves `A` and `B` which equals `max(h(A,B), h(B,A))`, where
 // `h(A,B)` is the one sided Hausdorff distance from `A` to `B`
@@ -16915,7 +16869,7 @@ const hausdorff_distance_one_sided_max = Math.max;
  * control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * @param B a bezier curve (the 'to' curve) given by an ordered array of its
  * control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
- * @param tolerance optional; defaults to `Math.max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000`;
+ * @param tolerance optional; defaults to `max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000`;
  * if the calculated absolute error bound is less than this, the result is
  * returned; this is *not* a hard tolerance and the bound can be less
  * accurate in hard cases (due to the `maxIterations` parameter). Luckily
@@ -17041,7 +16995,7 @@ const { max: hausdorff_distance_max } = Math;
  *
  * @param A a bezier curve given by an ordered array of its control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * @param B a bezier curve given by an ordered array of its control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
- * @param tolerance optional; defaults to `Math.max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000`;
+ * @param tolerance optional; defaults to `max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000`;
  * if the calculated absolute error bound is less than this, the result is
  * returned; this is *not* a hard tolerance and the returned bound can be less
  * accurate in hard cases (due to the `maxIterations` parameter). Luckily
@@ -17304,7 +17258,7 @@ function toHybridQuadratic(G) {
 ;// ./src/intersection/bezier-bezier-intersection-fast/clip/geo-clip.ts
 
 
-const { min: geo_clip_min, max: geo_clip_max, abs: geo_clip_abs } = Math;
+const { min: geo_clip_min, max: geo_clip_max, abs: geo_clip_abs, sqrt: geo_clip_sqrt } = Math;
 const onemin = 1 - eps;
 const onemax = 1 + eps;
 const noClip = [0, 1];
@@ -17568,8 +17522,8 @@ function quadraticRoots(a, b, c) {
     }
     // at this point `D + D_ > 0`
     const Dmin = D - D_ < 0 ? 0 : D - D_;
-    const DDmin = Math.sqrt(Dmin) * (onemin);
-    const DDmax = Math.sqrt(D + D_) * (onemax);
+    const DDmin = geo_clip_sqrt(Dmin) * (onemin);
+    const DDmax = geo_clip_sqrt(D + D_) * (onemax);
     // at this point DDMax > 0
     // at this point `DDmax > 0` and `DDmin >= 0`
     let numerMaxAbs;
@@ -17638,11 +17592,10 @@ function quadraticRoots(a, b, c) {
 
 ;// ./src/intersection/bezier-bezier-intersection-fast/get-distance-to-line-function.ts
 
+
 const get_distance_to_line_function_tp = two_product_twoProduct;
 const get_distance_to_line_function_qdq = ddDiffDd;
-const get_distance_to_line_function_abs = Math.abs;
-const get_distance_to_line_function_eps = Number.EPSILON;
-const get_distance_to_line_function_u = get_distance_to_line_function_eps / 2;
+const { abs: get_distance_to_line_function_abs } = Math;
 /*
 function getDistanceToLineFunction(
         pS: number[],
@@ -17692,7 +17645,7 @@ function getDistanceToLineFunction(pS, pE) {
         const d = s * x + t * y + v;
         // <16>r <= <16>(<15>(<14>(<1>s*<12>x) + <14>(<1>t*<12>y)) + <1>v)
         const _d = _s * _x + _t * _y + _v;
-        const E = 16 * get_distance_to_line_function_u * _d;
+        const E = 16 * u * _d;
         return { dMin: d - E, dMax: d + E };
     };
 }
@@ -17703,6 +17656,7 @@ function getDistanceToLineFunction(pS, pE) {
 
 
 
+const { sqrt: check_intersection_in_ranges_sqrt, min: check_intersection_in_ranges_min, max: check_intersection_in_ranges_max } = Math;
 /**
  * the heuristic value indicating the maximum `t` parameter span allowed after
  * clipping before perpendicular fatline clipping or curve splitting is
@@ -17787,8 +17741,8 @@ function checkIntersectionInRanges(iter) {
     // ensure robustness (`dF1` and `dF2` are not simply numbers but also have
     // an error bound associated with them)
     const C = lenF === 4 ? 3 / 4 : 1 / 2;
-    const dMin = C * Math.min(0, dF0.dMin, dF1.dMin, dF2.dMin, dF3.dMin);
-    const dMax = C * Math.max(0, dF0.dMax, dF1.dMax, dF2.dMax, dF3.dMax);
+    const dMin = C * check_intersection_in_ranges_min(0, dF0.dMin, dF1.dMin, dF2.dMin, dF3.dMin);
+    const dMax = C * check_intersection_in_ranges_max(0, dF0.dMax, dF1.dMax, dF2.dMax, dF3.dMax);
     // Add fatline debug info
     if (globalThis.__debug__ !== undefined && !globalThis.__debug__.already) {
         globalThis.__debug__.currentIter.fatline = getFatlineDebugInfo(FS, FE, dMin, dMax);
@@ -17846,8 +17800,8 @@ function checkIntersectionInRanges(iter) {
         const dF1_ = dQ_(Fps[1], F_ps[1]);
         const dF2_ = dQ_(Fps[2], F_ps[2]);
         const dF3_ = lenF === 4 ? dQ_(Fps[3], F_ps[3]) : { dMin: 0, dMax: 0 };
-        const dMin_ = Math.min(0, dF0_.dMin, dF1_.dMin, dF2_.dMin, dF3_.dMin);
-        const dMax_ = Math.max(0, dF0_.dMax, dF1_.dMax, dF2_.dMax, dF3_.dMax);
+        const dMin_ = check_intersection_in_ranges_min(0, dF0_.dMin, dF1_.dMin, dF2_.dMin, dF3_.dMin);
+        const dMax_ = check_intersection_in_ranges_max(0, dF0_.dMax, dF1_.dMax, dF2_.dMax, dF3_.dMax);
         // Add fatline debug info
         if (globalThis.__debug__ !== undefined && !globalThis.__debug__.already) {
             globalThis.__debug__.currentIter.fatlinePerp = getFatlineDebugInfo(FS, V, dMin_, dMax_);
@@ -17858,8 +17812,8 @@ function checkIntersectionInRanges(iter) {
         }
         const tMin_ = tRange[0];
         const tMax_ = tRange[1];
-        tMin = Math.max(tMin, tMin_);
-        tMax = Math.min(tMax, tMax_);
+        tMin = check_intersection_in_ranges_max(tMin, tMin_);
+        tMax = check_intersection_in_ranges_min(tMax, tMax_);
         return true;
     }
     /**
@@ -17908,7 +17862,7 @@ function getFatlineDebugInfo(FS, FE, dMin, dMax) {
     const s = yS - yE;
     const t = xE - xS;
     const u = xS * yE - xE * yS;
-    const d = Math.sqrt(s ** 2 + t ** 2);
+    const d = check_intersection_in_ranges_sqrt(s ** 2 + t ** 2);
     const offsetMin = toLength(vFr, dMin / d);
     const offsetMax = toLength(vFr, dMax / d);
     const psMin = [translate(FS, offsetMin), translate(FE, offsetMin)];
@@ -18254,7 +18208,6 @@ function evalDeCasteljauDd(ps, t) {
 
 
 
-const eval_de_casteljau_with_err_dd_3 = γγ(3);
 /**
  * Returns the resulting point (in double-double precision) of evaluating the
  * given bezier curve at the given parameter `t` (including a coordinate-wise
@@ -18277,13 +18230,13 @@ function evalDeCasteljauWithErrDd(ps, t) {
     const p = evalDeCasteljauDd(ps, t);
     const pE = evalDeCasteljauError(ps, t);
     if (ps.length === 4) {
-        return { p, pE: pE.map(e => 2 * 9 * eval_de_casteljau_with_err_dd_3 * e) };
+        return { p, pE: pE.map(e => 2 * 9 * γγ3 * e) };
     }
     if (ps.length === 3) {
-        return { p, pE: pE.map(e => 2 * 6 * eval_de_casteljau_with_err_dd_3 * e) };
+        return { p, pE: pE.map(e => 2 * 6 * γγ3 * e) };
     }
     if (ps.length === 2) {
-        return { p, pE: pE.map(e => 2 * 3 * eval_de_casteljau_with_err_dd_3 * e) };
+        return { p, pE: pE.map(e => 2 * 3 * γγ3 * e) };
     }
     if (ps.length === 1) {
         return { p: [ps[0]], pE: [0, 0] };
@@ -19484,7 +19437,7 @@ function toPowerBasis_3rdDerivativeExact(ps) {
 ;// ./src/to-power-basis/to-power-basis-1st-derivative/to-power-basis-1st-derivative-error-counters.ts
 // For double precision the error bound === γ * <counter> * `error_`
 // For double-double precision the error bound === γγ3 * <counter> * `error_`
-const to_power_basis_1st_derivative_error_counters_abs = Math.abs;
+const { abs: to_power_basis_1st_derivative_error_counters_abs } = Math;
 /**
  * Returns a representation of the error (from which an absolute error bound
  * can be calculated) when calculating the derivative of the power basis
@@ -20177,6 +20130,7 @@ function ddRadiusOfCurvature(ps, t) {
 
 
 
+const { sqrt: e_curvature_sqrt } = Math;
 /**
  * Returns the curvature `κ` of the given linear, quadratic or cubic bezier
  * curve at a specific given parameter value `t`.
@@ -20196,7 +20150,7 @@ function eCurvature(ps, t) {
     const a = eCompress(eDiff(expansionProduct(dx, ddy), expansionProduct(dy, ddx)));
     const _b = eCompress(fastExpansionSum(expansionProduct(dx, dx), expansionProduct(dy, dy)));
     const __b = expansionProduct(_b, expansionProduct(_b, _b));
-    const b = Math.sqrt(__b[__b.length - 1]);
+    const b = e_curvature_sqrt(__b[__b.length - 1]);
     const a_ = a[a.length - 1];
     return a_ / b;
 }
@@ -20442,14 +20396,14 @@ function ddDivDdWithError(numer, denom, nE, dE) {
 
 // We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
 /** @internal */
-const dd_min_diff = ddDiffDd;
+const diff = ddDiffDd;
 /**
  * Returns the minimum of a and b.
  * @param a a double-double precision floating point number
  * @param b another double-double precision floating point number
  */
 function ddMin(a, b) {
-    const res = dd_min_diff(a, b)[1];
+    const res = diff(a, b)[1];
     return res > 0 ? b : a;
 }
 
@@ -21341,7 +21295,7 @@ function getFootpointPoly1Exact(ps, p) {
 
 
 ;// ./src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/get-closest-on-bezier-from-point-error-counters.ts
-const get_closest_on_bezier_from_point_error_counters_abs = Math.abs;
+const { abs: get_closest_on_bezier_from_point_error_counters_abs } = Math;
 /**
  * Returns a representation of the error when calculating the polynomial whose
  * roots are all the `t` values on the given bezier curve such that the line
@@ -23036,6 +22990,7 @@ function getBoundingBox(ps) {
 
 
 
+const { sqrt: get_bounding_box_tight_sqrt } = Math;
 /**
  * Returns a **non-certified**, **rotated**, **tight** bounding box of the given
  * bezier curve as four ordered points of a rotated rectangle (with each given
@@ -23055,12 +23010,12 @@ function getBoundingBoxTight(ps) {
     const len = controlPointLinesLength(ps);
     if (squaredDistanceBetween(ps[0], ps[ps.length - 1]) * 2 ** 8 < len * len) {
         const [xE_, yE_] = evalDeCasteljau(ps, 0.5);
-        const hypotenuse = Math.sqrt((xE_ - xS) * (xE_ - xS) + (yE_ - yS) * (yE_ - yS));
+        const hypotenuse = get_bounding_box_tight_sqrt((xE_ - xS) * (xE_ - xS) + (yE_ - yS) * (yE_ - yS));
         sinθ = (yE_ - yS) / hypotenuse;
         cosθ = (xE_ - xS) / hypotenuse;
     }
     else {
-        const hypotenuse = Math.sqrt((xE - xS) * (xE - xS) + (yE - yS) * (yE - yS));
+        const hypotenuse = get_bounding_box_tight_sqrt((xE - xS) * (xE - xS) + (yE - yS) * (yE - yS));
         sinθ = (yE - yS) / hypotenuse;
         cosθ = (xE - xS) / hypotenuse;
     }
@@ -23212,25 +23167,17 @@ function getCoeffsLinearDd(circle, ps) {
 
 
 ;// ./node_modules/big-float-ts/node/double-expansion/e-calculate.js
-/* unused harmony import specifier */ var e_calculate_eCompress;
 
 
 
 
 
 
-
-// We *have* to do the below❗ The assignee is a getter❗ The assigned is a pure function❗
-const e_calculate_mult = expansionProduct;
-const e_calculate_tp = twoProduct;
-const e_calculate_multByDouble = scaleExpansion;
-const e_calculate_ts = two_sum_twoSum;
-const addDouble = growExpansion;
-const e_calculate_add = fastExpansionSum;
-const e_calculate_compress = (/* unused pure expression or super */ null && (e_calculate_eCompress));
 /**
  * Return the result of summing an array of terms, each term being an array of
  * floating point expansions to be multiplied together.
+ *
+ * * the result is not compressed, call `eCompress` on the result if required.
  *
  * * The result is exact in the form of a non-overlapping floating point
  * expansion.
@@ -23250,38 +23197,37 @@ function eCalculate(terms) {
             const multiplicant = term[j];
             if (multiplicant.length == 1) {
                 if (product.length === 1) {
-                    product = e_calculate_tp(product[0], multiplicant[0]);
+                    product = twoProduct(product[0], multiplicant[0]);
                 }
                 else {
-                    product = e_calculate_multByDouble(product, multiplicant[0]);
+                    product = scaleExpansion(product, multiplicant[0]);
                 }
             }
             else if (product.length === 1) {
-                product = e_calculate_multByDouble(multiplicant, product[0]);
+                product = scaleExpansion(multiplicant, product[0]);
             }
             else {
-                product = e_calculate_mult(multiplicant, product);
+                product = expansionProduct(multiplicant, product);
             }
         }
         // add
         if (product.length === 1) {
             if (total.length === 1) {
-                total = e_calculate_ts(total[0], product[0]);
+                total = two_sum_twoSum(total[0], product[0]);
             }
             else {
-                total = addDouble(total, product[0]);
+                total = growExpansion(total, product[0]);
             }
         }
         else {
             if (total.length === 1) {
-                total = addDouble(product, total[0]);
+                total = growExpansion(product, total[0]);
             }
             else {
-                total = e_calculate_add(total, product);
+                total = fastExpansionSum(total, product);
             }
         }
     }
-    //return compress(total);
     return total;
 }
 
@@ -23444,7 +23390,7 @@ function getCoeffsLinearExact(circle, ps) {
 
 ;// ./src/intersection/circle-bezier-intersection/get-circle-bezier-intersection-error-counters.ts
 
-const get_circle_bezier_intersection_error_counters_abs = Math.abs;
+const { abs: get_circle_bezier_intersection_error_counters_abs } = Math;
 /**
  * @param circle a circle
  * @param ps a cubic bezier curve
@@ -24691,7 +24637,7 @@ const { min: closest_distance_between_beziers_min, max: closest_distance_between
  * control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * @param B a bezier curve given by an ordered array of its
  * control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
- * @param tolerance optional; defaults to `Math.max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000`;
+ * @param tolerance optional; defaults to `max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000`;
  * if the calculated absolute error bound is less than this, the result is
  * returned; this is *not* a hard tolerance and the bound can be less
  * accurate in hard cases (due to the `maxIterations` parameter). Luckily
@@ -25025,21 +24971,22 @@ function calcQuadOffsetCurveXPoint(ps, D) {
 // calcQuadOffsetCurveXPoint(ps90, -20);//?
 
 ;// ./src/get-medial-points/get-medial-point-coeffs-bez2.ts
+
 /**
- * Returns polynomial coefficients for ray parameter values `t`, bezier
- * parameter values `s` and medial points for points `q(t)` and b(s) (an order
- * 2 bezier curve) that satisfy the medial condition with respect to `p` and `ps`:
+ * Returns the polynomial coefficients for the ray parameter `t` and the
+ * curve parameter `s` that encode the medial condition for `q(t) = p + t⋅v`
+ * and a quadratic bezier curve `ps`.
  *
- * Let `p` be a fixed point in the plane.
- * Let `v` be a direction vector defining the ray `q(t) = p + t⋅v`.
- * Let `ps` be a quadratic bezier curve.
- *
+ * The returned coefficients describe the equations whose common solutions
+ * satisfy:
  * * `q(t)` is equidistant from `p` and the nearest point on `ps`
  * * that common distance is locally minimal among such candidates
  *
- * In other words, this function returns candidate ray parameters for the
- * sought medial point(s). Selecting physically valid solutions (if needed)
- * is done by the caller or by a later stage of this routine.
+ * More specifically, this function returns:
+ * * `A` and `B`: the coefficients of `E2(s,t) = A(s)⋅t + B(s)`
+ * * `C` and `D`: the coefficients of `E1(s,t) = C(s)⋅t + D(s)`
+ * * `H`: the eliminated polynomial `A(s)⋅D(s) - B(s)⋅C(s)` whose roots are
+ *   candidate `s` values for medial points
  *
  * @param p base point
  * @param v ray direction from `p`
@@ -25052,105 +24999,57 @@ function getMedialPointCoeffsBez2(p, v, ps) {
     // -----------------------------------------------------
     const [px, py] = p;
     const [vx, vy] = v;
-    const [[x0, y0], [x1, y1], [x2, y2]] = ps;
+    const [[x0, y0]] = ps;
     // Quadratic bezier in power basis: b(s) = a⋅s² + b⋅s + c
-    const ax = x0 - 2 * x1 + x2;
-    const ay = y0 - 2 * y1 + y2;
-    const bx = -2 * x0 + 2 * x1;
-    const by = -2 * y0 + 2 * y1;
-    const cx = x0;
-    const cy = y0;
+    const [[ax, bx], [ay, by]] = toPowerBasis2(ps);
     // u(s) = p - b(s) = u2⋅s² + u1⋅s + u0
-    const u2x = -ax;
-    const u2y = -ay;
-    const u1x = -bx;
-    const u1y = -by;
-    const u0x = px - cx;
-    const u0y = py - cy;
-    // b'(s) = w(s) = w1⋅s + w0
-    const w1x = 2 * ax;
-    const w1y = 2 * ay;
-    const w0x = bx;
-    const w0y = by;
+    const u0x = px - x0;
+    const u0y = py - y0;
+    // Shared dot products.
+    const c1 = 2 * (vx * ax + vy * ay);
+    const c0 = vx * bx + vy * by;
+    const vu0 = vx * u0x + vy * u0y;
+    const b4 = ax * ax + ay * ay;
+    const ab = ax * bx + ay * by;
+    const bb = bx * bx + by * by;
+    const u0a = u0x * ax + u0y * ay;
+    const d0 = u0x * bx + u0y * by;
+    const b0 = u0x * u0x + u0y * u0y;
     // -----------------------------------------------------
     // E1(s,t): (u(s) + t⋅v) ⋅ b'(s) = 0
     // => C(s)⋅t + D(s) = 0
-    const c1 = vx * w1x + vy * w1y;
-    const c0 = vx * w0x + vy * w0y;
     // -----------------------------------------------------
     // -----------------------------------------------------
-    const d3 = u2x * w1x + u2y * w1y;
-    const d2 = u2x * w0x + u2y * w0y + u1x * w1x + u1y * w1y;
-    const d1 = u1x * w0x + u1y * w0y + u0x * w1x + u0y * w1y;
-    const d0 = u0x * w0x + u0y * w0y;
+    const d3 = -2 * b4;
+    const d2 = -3 * ab;
+    const d1 = 2 * u0a - bb;
     // -----------------------------------------------------
     // -----------------------------------------------------
     // E2(s,t): |t⋅v|² - |u(s) + t⋅v|² = 0
     //         => 2⋅(v⋅u(s))⋅t + |u(s)|² = 0
     //         => A(s)⋅t + B(s) = 0
-    const a2 = 2 * (vx * u2x + vy * u2y);
-    const a1 = 2 * (vx * u1x + vy * u1y);
-    const a0 = 2 * (vx * u0x + vy * u0y);
+    const a2 = -c1;
+    const a1 = -2 * c0;
+    const a0 = 2 * vu0;
     // -----------------------------------------------------
     // -----------------------------------------------------
-    const b4 = u2x * u2x + u2y * u2y;
-    const b3 = 2 * (u2x * u1x + u2y * u1y);
-    const b2 = 2 * (u2x * u0x + u2y * u0y) + (u1x * u1x + u1y * u1y);
-    const b1 = 2 * (u1x * u0x + u1y * u0y);
-    const b0 = u0x * u0x + u0y * u0y;
+    const b3 = 2 * ab;
+    const b2 = -d1;
+    const b1 = -2 * d0;
     // -----------------------------------------------------
-    // const A = [a2, a1, a0];          // degree 2 in s
-    // const B = [b4, b3, b2, b1, b0];  // degree 4 in s
-    // const C = [c1, c0];              // degree 1 in s
-    // const D = [d3, d2, d1, d0];      // degree 3 in s
     // Eliminate t from:
     //   A(s)⋅t + B(s) = 0
     //   C(s)⋅t + D(s) = 0
     // by taking A(s)⋅D(s) - B(s)⋅C(s) = 0 (degree ≤ 5 in s)
-    // Explicit expansion of AD = multiply(A, D), descending in s.
-    // const AD = [
-    //     a2*d3,
-    //     a2*d2 + a1*d3,
-    //     a2*d1 + a1*d2 + a0*d3,
-    //     a2*d0 + a1*d1 + a0*d2,
-    //     a1*d0 + a0*d1,
-    //     a0*d0
-    // ];
-    const AD5 = a2 * d3;
-    const AD4 = a2 * d2 + a1 * d3;
-    const AD3 = a2 * d1 + a1 * d2 + a0 * d3;
-    const AD2 = a2 * d0 + a1 * d1 + a0 * d2;
-    const AD1 = a1 * d0 + a0 * d1;
-    const AD0 = a0 * d0;
-    // Explicit expansion of BC = multiply(B, C), descending in s.
-    // const BC = [
-    //     b4*c1,
-    //     b4*c0 + b3*c1,
-    //     b3*c0 + b2*c1,
-    //     b2*c0 + b1*c1,
-    //     b1*c0 + b0*c1,
-    //     b0*c0
-    // ];
-    const BC5 = b4 * c1;
-    const BC4 = b4 * c0 + b3 * c1;
-    const BC3 = b3 * c0 + b2 * c1;
-    const BC2 = b2 * c0 + b1 * c1;
-    const BC1 = b1 * c0 + b0 * c1;
-    const BC0 = b0 * c0;
-    // const H = [
-    //     AD5 - BC5,
-    //     AD4 - BC4,
-    //     AD3 - BC3,
-    //     AD2 - BC2,
-    //     AD1 - BC1,
-    //     AD0 - BC0
-    // ];
-    const H5 = AD5 - BC5;
-    const H4 = AD4 - BC4;
-    const H3 = AD3 - BC3;
-    const H2 = AD2 - BC2;
-    const H1 = AD1 - BC1;
-    const H0 = AD0 - BC0;
+    // Using:
+    //   a2 = -c1, d3 = -2*b4, d1 = -b2, b1 = -2*d0
+    // we can compute H = A⋅D - B⋅C directly.
+    const H5 = b4 * c1;
+    const H4 = ab * c1 + 3 * b4 * c0;
+    const H3 = 4 * (ab * c0 - vu0 * b4);
+    const H2 = c1 * d0 + c0 * b2 - 6 * vu0 * ab;
+    const H1 = -2 * vu0 * b2 - c1 * b0;
+    const H0 = 2 * vu0 * d0 - c0 * b0;
     return {
         A: [a2, a1, a0],
         B: [b4, b3, b2, b1, b0],
@@ -25163,23 +25062,22 @@ function getMedialPointCoeffsBez2(p, v, ps) {
 
 ;// ./src/get-medial-points/get-medial-point-coeffs-bez1.ts
 /**
- * Returns polynomial coefficients for ray parameter values `t`, bezier
- * parameter values `s` and medial points for points `q(t)` and b(s) (an order
- * 1 bezier curve) that satisfy the medial condition with respect to `p` and `ps`:
+ * Returns the polynomial coefficients used to recover ray parameter values `t`
+ * for a ray `q(t) = p + t⋅v` and an order-1 bezier curve `ps`.
  *
- * Let `p` be a fixed point in the plane.
- * Let `v` be a direction vector defining the ray `q(t) = p + t⋅v`.
- * Let `ps` be an order 1 bezier curve (a line segment).
+ * The returned polynomials encode the medial-condition equations in `s` and
+ * `t`. For any valid solution, `t` is recovered by eliminating `s` and solving
+ * the resulting ray equation, or equivalently by using the linear form
+ * `A(s)⋅t + B(s) = 0`, which gives `t = -B(s)/A(s)`.
  *
- * * `q(t)` is equidistant from `p` and the nearest point on `ps`
- * * that common distance is locally minimal among such candidates
- *
- * In other words, this function returns candidate ray parameters for the
- * sought medial point(s). Selecting physically valid solutions (if needed)
- * is done by the caller or by a later stage of this routine.
+ * More specifically, the returned values represent:
+ * * `A` and `B`: the coefficients of `E2(s,t) = A(s)⋅t + B(s)`
+ * * `C` and `D`: the coefficients of `E1(s,t) = C(s)⋅t + D(s)`
+ * * `H`: the eliminated polynomial `A(s)⋅D(s) - B(s)⋅C(s)` whose roots are
+ *   candidate `s` values for medial points
  *
  * @param p base point
- * @param v ray direction from `p`
+ * @param v ray direction vector starting from `p`
  * @param ps order 1 bezier control points, i.e. a line segment
  * given as an array of control points, e.g. `[[0,0],[2,1]]`
  */
@@ -25191,56 +25089,41 @@ function getMedialPointCoeffsBez1(p, v, ps) {
     const [vx, vy] = v;
     const [[x0, y0], [x1, y1]] = ps;
     // Linear bezier in power basis: b(s) = b*s + c
-    const bx = -x0 + x1;
-    const by = -y0 + y1;
-    const cx = x0;
-    const cy = y0;
+    // We can also use: `const [[bx,by], [cx,cy]] = toPowerBasis1(ps)`
+    const bx = x1 - x0;
+    const by = y1 - y0;
     // u(s) = p - b(s) = u1*s + u0
-    const u1x = -bx;
-    const u1y = -by;
-    const u0x = px - cx;
-    const u0y = py - cy;
+    const u0x = px - x0;
+    const u0y = py - y0;
     // b'(s) = w(s) = w0
-    const w0x = bx;
-    const w0y = by;
     // -----------------------------------------------------
     // E1(s,t): (u(s) + t⋅v) ⋅ b'(s) = 0
     // => C(s)⋅t + D(s) = 0
-    const c0 = vx * w0x + vy * w0y;
+    const c0 = vx * bx + vy * by;
     // -----------------------------------------------------
     // -----------------------------------------------------
-    const d1 = u1x * w0x + u1y * w0y;
-    const d0 = u0x * w0x + u0y * w0y;
+    const d1 = -(bx * bx + by * by);
+    const d0 = bx * u0x + by * u0y;
     // -----------------------------------------------------
     // -----------------------------------------------------
     // E2(s,t): |t⋅v|² - |u(s) + t⋅v|² = 0
     //         => 2⋅(v⋅u(s))⋅t + |u(s)|² = 0
     //         => A(s)⋅t + B(s) = 0
-    const a1 = 2 * (vx * u1x + vy * u1y);
+    const a1 = -2 * c0;
     const a0 = 2 * (vx * u0x + vy * u0y);
     // -----------------------------------------------------
     // -----------------------------------------------------
-    const b2 = u1x * u1x + u1y * u1y;
-    const b1 = 2 * (u1x * u0x + u1y * u0y);
+    const b2 = -d1;
+    const b1 = -2 * d0;
     const b0 = u0x * u0x + u0y * u0y;
     // -----------------------------------------------------
-    // const A = [a1, a0];      // degree 1 in s
-    // const B = [b2, b1, b0];  // degree 2 in s
-    // const C = [c0];          // degree 0 in s
-    // const D = [d1, d0];      // degree 1 in s
     // Eliminate t from:
     //   A(s)⋅t + B(s) = 0
     //   C(s)⋅t + D(s) = 0
     // by taking A(s)⋅D(s) - B(s)⋅C(s) = 0 (degree ≤ 2 in s)
-    const AD2 = a1 * d1;
-    const AD1 = a1 * d0 + a0 * d1;
-    const AD0 = a0 * d0;
-    const BC2 = b2 * c0;
-    const BC1 = b1 * c0;
-    const BC0 = b0 * c0;
-    const H2 = AD2 - BC2;
-    const H1 = AD1 - BC1;
-    const H0 = AD0 - BC0;
+    const H2 = b2 * c0;
+    const H1 = a0 * d1;
+    const H0 = a0 * d0 - b0 * c0;
     return {
         A: [a1, a0],
         B: [b2, b1, b0],
@@ -25252,21 +25135,22 @@ function getMedialPointCoeffsBez1(p, v, ps) {
 
 
 ;// ./src/get-medial-points/get-medial-point-coeffs-bez3.ts
+
 /**
- * Returns polynomial coefficients for ray parameter values `t`, bezier
- * parameter values `s` and medial points for points `q(t)` and b(s) (an order
- * 3 bezier curve) that satisfy the medial condition with respect to `p` and `ps`:
+ * Returns the polynomial coefficients for the ray parameter `t` and the
+ * curve parameter `s` that encode the medial condition for `q(t) = p + t⋅v`
+ * and a cubic bezier curve `ps`.
  *
- * Let `p` be a fixed point in the plane.
- * Let `v` be a direction vector defining the ray `q(t) = p + t⋅v`.
- * Let `ps` be a cubic bezier curve.
- *
+ * The returned coefficients describe the equations whose common solutions
+ * satisfy:
  * * `q(t)` is equidistant from `p` and the nearest point on `ps`
  * * that common distance is locally minimal among such candidates
  *
- * In other words, this function returns candidate ray parameters for the
- * sought medial point(s). Selecting physically valid solutions (if needed)
- * is done by the caller or by a later stage of this routine.
+ * More specifically, this function returns:
+ * * `A` and `B`: the coefficients of `E2(s,t) = A(s)⋅t + B(s)`
+ * * `C` and `D`: the coefficients of `E1(s,t) = C(s)⋅t + D(s)`
+ * * `H`: the eliminated polynomial `A(s)⋅D(s) - B(s)⋅C(s)` whose roots are
+ *   candidate `s` values for medial points
  *
  * @param p base point
  * @param v ray direction from `p`
@@ -25279,100 +25163,73 @@ function getMedialPointCoeffsBez3(p, v, ps) {
     // -----------------------------------------------------
     const [px, py] = p;
     const [vx, vy] = v;
-    const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
     // Cubic bezier in power basis: b(s) = a*s^3 + b*s^2 + c*s + d
-    const ax = -x0 + 3 * x1 - 3 * x2 + x3;
-    const ay = -y0 + 3 * y1 - 3 * y2 + y3;
-    const bx = 3 * x0 - 6 * x1 + 3 * x2;
-    const by = 3 * y0 - 6 * y1 + 3 * y2;
-    const cx = -3 * x0 + 3 * x1;
-    const cy = -3 * y0 + 3 * y1;
-    const dx = x0;
-    const dy = y0;
-    // u(s) = p - b(s) = u3*s^3 + u2*s^2 + u1*s + u0
-    const u3x = -ax;
-    const u3y = -ay;
-    const u2x = -bx;
-    const u2y = -by;
-    const u1x = -cx;
-    const u1y = -cy;
+    const [[ax, bx, cx, dx], [ay, by, cy, dy]] = toPowerBasis3(ps);
     const u0x = px - dx;
     const u0y = py - dy;
-    // b'(s) = w(s) = w2*s^2 + w1*s + w0
-    const w2x = 3 * ax;
-    const w2y = 3 * ay;
-    const w1x = 2 * bx;
-    const w1y = 2 * by;
-    const w0x = cx;
-    const w0y = cy;
+    // Reuse dot products across A, B, C, D, and H.
+    const va = vx * ax + vy * ay;
+    const vb = vx * bx + vy * by;
+    const vc = vx * cx + vy * cy;
+    const vu0 = vx * u0x + vy * u0y;
+    const b6 = ax * ax + ay * ay;
+    const ab = ax * bx + ay * by;
+    const ac = ax * cx + ay * cy;
+    const bb = bx * bx + by * by;
+    const bc = bx * cx + by * cy;
+    const cc = cx * cx + cy * cy;
+    const au0 = ax * u0x + ay * u0y;
+    const bu0 = bx * u0x + by * u0y;
+    const d0 = cx * u0x + cy * u0y;
+    const b0 = u0x * u0x + u0y * u0y;
     // -----------------------------------------------------
     // E1(s,t): (u(s) + t*v) * b'(s) = 0
     // => C(s)*t + D(s) = 0
-    const c2 = vx * w2x + vy * w2y;
-    const c1 = vx * w1x + vy * w1y;
-    const c0 = vx * w0x + vy * w0y;
+    const c2 = 3 * va;
+    const c1 = 2 * vb;
+    const c0 = vc;
     // -----------------------------------------------------
     // -----------------------------------------------------
-    const d5 = u3x * w2x + u3y * w2y;
-    const d4 = u3x * w1x + u3y * w1y + u2x * w2x + u2y * w2y;
-    const d3 = u3x * w0x + u3y * w0y + u2x * w1x + u2y * w1y + u1x * w2x + u1y * w2y;
-    const d2 = u2x * w0x + u2y * w0y + u1x * w1x + u1y * w1y + u0x * w2x + u0y * w2y;
-    const d1 = u1x * w0x + u1y * w0y + u0x * w1x + u0y * w1y;
-    const d0 = u0x * w0x + u0y * w0y;
+    const d5 = -3 * b6;
+    const d4 = -5 * ab;
+    const d3 = -4 * ac - 2 * bb;
+    const d2 = 3 * au0 - 3 * bc;
+    const d1 = 2 * bu0 - cc;
     // -----------------------------------------------------
     // -----------------------------------------------------
     // E2(s,t): |t*v|^2 - |u(s) + t*v|^2 = 0
     //         => 2*(v*u(s))*t + |u(s)|^2 = 0
     //         => A(s)*t + B(s) = 0
-    const a3 = 2 * (vx * u3x + vy * u3y);
-    const a2 = 2 * (vx * u2x + vy * u2y);
-    const a1 = 2 * (vx * u1x + vy * u1y);
-    const a0 = 2 * (vx * u0x + vy * u0y);
+    const a3 = -2 * va;
+    const a2 = -2 * vb;
+    const a1 = -2 * vc;
+    const a0 = 2 * vu0;
     // -----------------------------------------------------
     // -----------------------------------------------------
-    const b6 = u3x * u3x + u3y * u3y;
-    const b5 = 2 * (u3x * u2x + u3y * u2y);
-    const b4 = 2 * (u3x * u1x + u3y * u1y) + (u2x * u2x + u2y * u2y);
-    const b3 = 2 * (u3x * u0x + u3y * u0y) + 2 * (u2x * u1x + u2y * u1y);
-    const b2 = 2 * (u2x * u0x + u2y * u0y) + (u1x * u1x + u1y * u1y);
-    const b1 = 2 * (u1x * u0x + u1y * u0y);
-    const b0 = u0x * u0x + u0y * u0y;
+    const b5 = 2 * ab;
+    const b4 = 2 * ac + bb;
+    const b3 = 2 * bc - 2 * au0;
+    const b2 = cc - 2 * bu0;
+    const b1 = -2 * d0;
     // -----------------------------------------------------
-    // const A = [a3, a2, a1, a0];                  // degree 3 in s
-    // const B = [b6, b5, b4, b3, b2, b1, b0];      // degree 6 in s
-    // const C = [c2, c1, c0];                      // degree 2 in s
-    // const D = [d5, d4, d3, d2, d1, d0];          // degree 5 in s
     // Eliminate t from:
     //   A(s)*t + B(s) = 0
     //   C(s)*t + D(s) = 0
-    // by taking A(s)*D(s) - B(s)*C(s) = 0 (degree <= 8 in s)
-    const AD8 = a3 * d5;
-    const AD7 = a3 * d4 + a2 * d5;
-    const AD6 = a3 * d3 + a2 * d4 + a1 * d5;
-    const AD5 = a3 * d2 + a2 * d3 + a1 * d4 + a0 * d5;
-    const AD4 = a3 * d1 + a2 * d2 + a1 * d3 + a0 * d4;
-    const AD3 = a3 * d0 + a2 * d1 + a1 * d2 + a0 * d3;
-    const AD2 = a2 * d0 + a1 * d1 + a0 * d2;
-    const AD1 = a1 * d0 + a0 * d1;
-    const AD0 = a0 * d0;
-    const BC8 = b6 * c2;
-    const BC7 = b6 * c1 + b5 * c2;
-    const BC6 = b6 * c0 + b5 * c1 + b4 * c2;
-    const BC5 = b5 * c0 + b4 * c1 + b3 * c2;
-    const BC4 = b4 * c0 + b3 * c1 + b2 * c2;
-    const BC3 = b3 * c0 + b2 * c1 + b1 * c2;
-    const BC2 = b2 * c0 + b1 * c1 + b0 * c2;
-    const BC1 = b1 * c0 + b0 * c1;
-    const BC0 = b0 * c0;
-    const H8 = AD8 - BC8;
-    const H7 = AD7 - BC7;
-    const H6 = AD6 - BC6;
-    const H5 = AD5 - BC5;
-    const H4 = AD4 - BC4;
-    const H3 = AD3 - BC3;
-    const H2 = AD2 - BC2;
-    const H1 = AD1 - BC1;
-    const H0 = AD0 - BC0;
+    // by taking H(s) = A(s)*D(s) - B(s)*C(s) = 0 (degree <= 8 in s).
+    // Using:
+    //   a2 = -c1, a1 = -2*c0,
+    //   d5 = -3*b6, d4 = -(5/2)*b5, d3 = -2*b4, d2 = -(3/2)*b3,
+    //   d1 = -b2, d0 = -(1/2)*b1,
+    // we can compute H directly with fewer operations.
+    const H8 = 3 * va * b6;
+    const H7 = 4 * (va * ab + vb * b6);
+    const H6 = va * b4 + 6 * vb * ab + 5 * vc * b6;
+    const H5 = 2 * vb * b4 + 8 * vc * ab - 6 * vu0 * b6;
+    const H4 = -va * b2 + vb * b3 + 3 * vc * b4 - 10 * vu0 * ab;
+    const H3 = -2 * va * b1 + 2 * vc * b3 - 4 * vu0 * b4;
+    const H2 = vc * b2 - vb * b1 - 3 * vu0 * b3 - 3 * va * b0;
+    const H1 = -2 * vu0 * b2 - 2 * vb * b0;
+    const H0 = -vu0 * b1 - vc * b0;
     return {
         A: [a3, a2, a1, a0],
         B: [b6, b5, b4, b3, b2, b1, b0],
@@ -25385,32 +25242,28 @@ function getMedialPointCoeffsBez3(p, v, ps) {
 
 ;// ./src/get-medial-points/get-medial-point-coeffs-bez0.ts
 /**
- * Returns polynomial coefficients for ray parameter values `t`, bezier
- * parameter values `s` and medial points for points `q(t)` and b(s) (an order
- * 0 bezier curve) that satisfy the medial condition with respect to `p` and `ps`:
+ * Returns the coefficients `a0` and `b0` for the linear equation
+ * `a0⋅t + b0 = 0`, so the ray parameter can be recovered as `t = -b0/a0`.
+ * That parameter value makes `q(t) = p + t⋅v` equidistant from `p` and `P`.
  *
- * Let `p` be a fixed point in the plane.
- * Let `v` be a direction vector defining the ray `q(t) = p + t⋅v`.
- * Let `ps` be an order 0 bezier curve (a single point).
+ * Let `p` be a fixed point in the plane.\
+ * Let `v` be a direction vector defining the ray `q(t) = p + t⋅v`.\
+ * Let `P` be another point.\
  *
- * * `q(t)` is equidistant from `p` and the nearest point on `ps`
- * * that common distance is locally minimal among such candidates
- *
- * In other words, this function returns candidate ray parameters for the
- * sought medial point(s). Selecting physically valid solutions (if needed)
- * is done by the caller or by a later stage of this routine.
+ * In other words, this function returns the coefficients needed to solve for
+ * the ray parameter of the medial point on the ray.
  *
  * @param p base point
  * @param v ray direction from `p`
- * @param ps order 0 bezier control point, e.g. `[1,2]`
+ * @param P another "target" point, e.g. `[1,2]`
  */
-function getMedialPointCoeffsBez0(p, v, ps) {
+function getMedialPointCoeffsBez0(p, v, P) {
     // -----------------------------------------------------
     // See get-medial-points.md for implementation details.
     // -----------------------------------------------------
     const [px, py] = p;
     const [vx, vy] = v;
-    const [x0, y0] = ps;
+    const [x0, y0] = P;
     // Constant bezier in power basis: b(s) = c
     // u(s) = p - b(s) = u0
     const u0x = px - x0;
@@ -25420,17 +25273,7 @@ function getMedialPointCoeffsBez0(p, v, ps) {
     //         => A(s)⋅t + B(s) = 0
     const a0 = 2 * (vx * u0x + vy * u0y);
     const b0 = u0x * u0x + u0y * u0y;
-    // const A = [a0];  // degree 0 in s
-    // const B = [b0];  // degree 0 in s
-    return {
-        a0,
-        b0
-        // A: [a0],
-        // B: [b0],
-        // C: [],  // the zero, i.e. -1 degree polynomial
-        // D: [],  // ...
-        // H: []   // ...
-    };
+    return { a0, b0 };
 }
 
 
@@ -25506,7 +25349,7 @@ function getMedialPoints(p, v, ps) {
     if (len <= 1) {
         throw new Error(`Bezier curve must be of order 1, 2 or 3. Found: ${len - 1}`);
     }
-    const { A, B, C, D, H } = getMedialPointCoeffs(p, v, ps);
+    const { A, B, H } = getMedialPointCoeffs(p, v, ps);
     /** the possible parameter values of the bezier curve */
     const ss = (roots(H, 0, 1) || []).map(r => r.t); //?
     /** the possible parameter values of the ray */
@@ -25516,10 +25359,7 @@ function getMedialPoints(p, v, ps) {
     for (const s of ss) {
         const As = Horner(A, s);
         const Bs = Horner(B, s);
-        // const Cs = Horner(C, s);
-        // const Ds = Horner(D, s);
         const t = -Bs / As;
-        // const t = -Ds / Cs;  // alternative
         ts.push(t);
         const q = [p[0] + t * v[0], p[1] + t * v[1]];
         qs.push(q);

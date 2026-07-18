@@ -5,14 +5,7 @@ const qmd = ddMultDouble2;  // error -> 3*u²
 const qaq = ddAddDd;
 const qad = ddAddDouble;    // error -> 2*u²
 
-const abs = Math.abs;
-
-
-/** @internal */
-type CoeffsWithError = {
-    coeffs: number[][][];
-    errorBound: number[][];
-};
+const { abs } = Math;
 
 
 /**

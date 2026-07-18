@@ -1,9 +1,8 @@
 import { ddDiffDd, twoProduct } from "double-double";
+import { u } from "../../error-analysis/error-analysis.js";
 const tp = twoProduct;
 const qdq = ddDiffDd;
-const abs = Math.abs;
-const eps = Number.EPSILON;
-const u = eps / 2;
+const { abs } = Math;
 /*
 function getDistanceToLineFunction(
         pS: number[],

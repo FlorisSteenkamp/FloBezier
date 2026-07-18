@@ -7,7 +7,7 @@ import { createCubicThatsReallyQuad } from '../helpers/create-cubic-thats-really
 
 
 const eps = Number.EPSILON;
-const abs = Math.abs;
+const { abs, sin, cos } = Math;
 const r = (n: number) => squares(n) / 0xffff_ffff;
 
 
@@ -79,7 +79,7 @@ describe('getCurvatureExtrema', function() {
         }
         {
             // simple quadratic (rotated)
-            const rotate_ = rotate(Math.sin(0.1), Math.cos(0.1));
+            const rotate_ = rotate(sin(0.1), cos(0.1));
             const ps = [[1,10],[6,20],[11,10]].map(rotate_);
             const extrema = getCurvatureExtrema(ps);//?
             expect(extrema).toBeNearly(2**2, {
@@ -94,7 +94,7 @@ describe('getCurvatureExtrema', function() {
         }
         {
             // simple quadratic (rotated)
-            const rotate_ = rotate(Math.sin(0.1), Math.cos(0.1));
+            const rotate_ = rotate(sin(0.1), cos(0.1));
             const ps = [[1,10],[6,3],[15,7]].map(rotate_);
             const extrema = getCurvatureExtrema(ps);
             expect(extrema).toEqual({ 
@@ -105,7 +105,7 @@ describe('getCurvatureExtrema', function() {
         }
         {
             // simple quadratic (rotated & translated)
-            const rotate_ = rotate(Math.sin(0.1), Math.cos(0.1));
+            const rotate_ = rotate(sin(0.1), cos(0.1));
             const translate_ = translate([0.1,0.1]);
             const ps = [[1,10],[6,3],[15,7]].map(rotate_).map(translate_);
             const extrema = getCurvatureExtrema(ps);
@@ -130,7 +130,7 @@ describe('getCurvatureExtrema', function() {
         {
             // simple quadratic - extrema outside [0,1], 
             // i.e. t < 0
-            const rotate_ = rotate(Math.sin(0.1), Math.cos(0.1));
+            const rotate_ = rotate(sin(0.1), cos(0.1));
             const ps = [
                 [6.390987011226919, 6.420107866876444],
                 [9.948376652185129, 6.023271701181824],
@@ -166,7 +166,7 @@ describe('getCurvatureExtrema', function() {
     it('it should find the curvature extrema of some cubic bezier curves', 
     function() {
         {
-            const rotate_ = rotate(Math.sin(0.1), Math.cos(0.1));
+            const rotate_ = rotate(sin(0.1), cos(0.1));
             const translate_ = translate([3,2]);
             // simple cubic
             const ps = [
@@ -184,7 +184,7 @@ describe('getCurvatureExtrema', function() {
             });
         }
         {
-            const rotate_ = rotate(Math.sin(0.1), Math.cos(0.1));
+            const rotate_ = rotate(sin(0.1), cos(0.1));
             const translate_ = translate([3,2]);
             // simple cubic
             const ps = [
@@ -203,7 +203,7 @@ describe('getCurvatureExtrema', function() {
         }
         {
             // cubic with 5 extrema of abs curvature
-            // from [MvG](https://math.stackexchange.com/a/1956264/130809)
+            // from [MvG](https://stackexchange.com/a/1956264/130809)
             const ps = [[0,4],[5,4],[7,0],[5,3]];
             
             const extrema = getCurvatureExtrema(ps);
@@ -225,7 +225,7 @@ describe('getCurvatureExtrema', function() {
         {
             // speed test
             let timeStart = performance.now();
-            const r = Math.random;
+            const r = random;
             for (let i=0; i<500_000; i++) {
                 const ps = [[r(),r()],[r(),r()],[r(),r()],[r(),r()]]
                 const a = getCurvatureExtrema(ps);
@@ -235,7 +235,7 @@ describe('getCurvatureExtrema', function() {
         }
         */
         {
-            const rotate_ = rotate(Math.sin(0.1), Math.cos(0.1));
+            const rotate_ = rotate(sin(0.1), cos(0.1));
             const translate_ = translate([3,2]);
             // some cubic
             const ps = [
