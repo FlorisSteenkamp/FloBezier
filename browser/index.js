@@ -25368,6 +25368,226 @@ function getMedialPoints(p, v, ps) {
 }
 
 
+;// ./src/get-medial-points/get-medial-point-coeffs-bez2-same-curve.ts
+
+/**
+ * Returns polynomial coefficients for the same-curve quadratic medial-point
+ * case, where `p = b(t)` on the same quadratic bezier `ps` and `v` is normal
+ * to the curve at that parameter `t`.
+ *
+ * The returned coefficients encode:
+ * * `A`, `B`: `E2(s, τ) = (s - t)^2⋅(A(s)⋅τ + B(s))`
+//  * * `C`, `D`: `E1(s, τ) = C(s)⋅τ + D(s)`
+ * * `H`: the reduced eliminant in `s`
+ *
+ * Here `τ` is the ray parameter in `q(τ) = p + τ⋅v`.
+ * For a candidate root `s` of `H`, recover `τ` from
+ * `A(s)⋅τ + B(s) = 0`, i.e. `τ = -B(s)/A(s)` when `A(s) ≠ 0`.
+ *
+ * In this same-curve setup, the full eliminant has the form
+ * `H_full(s) = (s - t)^4*(l1*s + l0)`. This function returns only the reduced
+ * factor `H(s) = l1*s + l0` (the repeated `(s - t)^4` factor is omitted).
+ *
+ * @param t parameter on `ps` where `p = b(t)`
+ * @param v ray direction from `p`; assumed normal to `ps` at `t`
+ * @param ps order 2 bezier control points, e.g. `[[0,0],[1,1],[2,1]]`
+ */
+function getMedialPointCoeffsBez2_SameCurve(t, v, ps) {
+    // -----------------------------------------------------
+    // See get-medial-points.md for implementation details.
+    // -----------------------------------------------------
+    // Quadratic bezier in power basis: b(s) = a⋅s² + b⋅s + c
+    const [[ax, bx], [ay, by]] = toPowerBasis2(ps);
+    const [vx, vy] = v;
+    // Same-curve assumption with explicit parameter `t`:
+    // p = b(t) => u0 = p - c = t*(a*t + b).
+    const g0x = ax * t + bx;
+    const g0y = ay * t + by;
+    // Reuse core quadratic-form terms to reduce repeated multiplications.
+    const br2 = ax * ax + ay * ay;
+    const ab = ax * bx + ay * by;
+    // const bb = bx*bx + by*by;
+    const ag = ax * g0x + ay * g0y;
+    // -----------------------------------------------------
+    // E1(s,t): (u(s) + t⋅v) ⋅ b'(s) = 0
+    // => C(s)⋅t + D(s) = 0
+    const c1 = 2 * (vx * ax + vy * ay);
+    // v is normal at parameter t, so C(t) = v⋅w(t) = 0.
+    // Since C(s) = c1*s + c0, enforce c0 = -c1*t exactly.
+    // const c0 = -c1*t;
+    // const d3 = -2*br2;
+    // const d2 = -3*ab;
+    // const d1 = 2*t*ag - bb;
+    // p = b(t) => D(t) = u(t)⋅w(t) = 0.
+    // const d0 = -t*(t*(d3*t + d2) + d1);
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    // E2(s,t): |t⋅v|² - |u(s) + t⋅v|² = 0
+    //         => 2⋅(v⋅u(s))⋅t + |u(s)|² = 0
+    //         => (s - t)^2⋅(A(s)⋅t + B(s)) = 0
+    // Return only the reduced constant A(s) = ar0.
+    const ar0 = -c1;
+    // Full B(s) factorizes as: B_full(s) = (s - t)^2*B_reduced(s).
+    // Return only B_reduced(s) = br2*s^2 + br1*s + br0.
+    const br1 = 2 * ag;
+    const br0 = g0x * g0x + g0y * g0y;
+    // -----------------------------------------------------
+    // Eliminate t from:
+    //   A(s)⋅t + B(s) = 0
+    //   C(s)⋅t + D(s) = 0
+    // by taking A(s)⋅D(s) - B(s)⋅C(s) = 0 (degree ≤ 5 in s)
+    // For this same-curve quadratic case:
+    //   d3 = -2*b4, d2 = -(3/2)*b3, a2 = -c1, a1 = -2*c0.
+    // Therefore H5 and H4 reduce to:
+    //   H5 = b4*c1
+    //   H4 = 3*b4*c0 + (1/2)*b3*c1
+    const H5 = br2 * c1;
+    // In the same-curve quadratic case the full eliminant has the form
+    // H_full(s) = (s - t)^4*(l1*s + l0).
+    // Match the leading coefficients of H_full(s):
+    //   H5 = l1
+    //   H4 = l0 - 4*t*l1
+    // const l1 = H5;
+    // const l0 = H4 + 4*t*l1;
+    // Using c0 = -c1*t and b3 = 2*ab, this simplifies to l0 = c1*(br2*t + ab).
+    const l0 = c1 * (br2 * t + ab);
+    return {
+        A: [ar0],
+        B: [br2, br1, br0],
+        // C: [c1, c0],
+        // D: [d3, d2, d1, d0],
+        H: [H5, l0]
+    };
+}
+
+
+;// ./src/get-medial-points/get-medial-point-coeffs-bez3-same-curve.ts
+
+/**
+ * Returns polynomial coefficients for the same-curve cubic medial-point case,
+ * where `p = b(t)` on the same cubic bezier `ps` and `v` is normal to the
+ * curve at that parameter `t`.
+ *
+ * The returned coefficients encode:
+ * * `A`, `B`: `E2(s, τ) = (s - t)^2⋅(A(s)⋅τ + B(s))`
+ * * `C`, `D`: `E1(s, τ) = (s - t)⋅(C(s)⋅τ + D(s))`
+ * * `H`: the reduced eliminant in `s`
+ *
+ * Here `τ` is the ray parameter in `q(τ) = p + τ⋅v`.
+ * For a candidate root `s` of `H`, recover `τ` from `A(s)⋅τ + B(s) = 0`, i.e.
+ * `τ = -B(s)/A(s)` when `A(s) ≠ 0`.
+ *
+ * In this same-curve setup, the full eliminant has the form
+ * `H_full(s) = (s - t)^4*H(s)`. This function returns only the reduced factor
+ * `H(s)` (the repeated `(s - t)^4` factor is omitted).
+ *
+ * @param t parameter on `ps` where `p = b(t)`
+ * @param v ray direction from `p`; assumed normal to `ps` at `t`
+ * @param ps order 3 bezier control points, e.g. `[[0,0],[1,1],[2,1],[3,0]]`
+ */
+function getMedialPointCoeffsBez3_SameCurve(t, v, ps) {
+    // -----------------------------------------------------
+    // See get-medial-points.md for implementation details.
+    // -----------------------------------------------------
+    const [vx, vy] = v;
+    // Cubic bezier in power basis: b(s) = a*s^3 + b*s^2 + c*s + d
+    const [[ax, bx, cx], [ay, by, cy]] = toPowerBasis3(ps);
+    // Shared dot products to reduce repeated multiplications.
+    const va = vx * ax + vy * ay;
+    const vb = vx * bx + vy * by;
+    const vc = vx * cx + vy * cy;
+    const aa = ax * ax + ay * ay;
+    const ab = ax * bx + ay * by;
+    const ac = ax * cx + ay * cy;
+    const bb = bx * bx + by * by;
+    const bc = bx * cx + by * cy;
+    const cc = cx * cx + cy * cy;
+    const vu0 = t * (t * (t * va + vb) + vc);
+    const u0a = t * (t * (t * aa + ab) + ac);
+    const u0b = t * (t * (t * ab + bb) + bc);
+    // -----------------------------------------------------
+    // E1(s,t): (u(s) + t*v) * b'(s) = 0
+    // => C(s)*t + D(s) = 0
+    const c2 = 3 * va;
+    const c1 = 2 * vb;
+    // v is normal at parameter t, so C(t) = 0.
+    // const c0 = -t*(c2*t + c1);
+    // Return reduced C such that C_full(s) = (s - t)*C(s).
+    const cr0 = c1 + t * c2;
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    const d5 = -3 * aa;
+    const d4 = -5 * ab;
+    const d3 = -4 * ac - 2 * bb;
+    const d2 = -3 * bc + 3 * u0a;
+    const d1 = -cc + 2 * u0b;
+    // p = b(t) => D(t) = u(t)⋅w(t) = 0.
+    // Return reduced D such that D_full(s) = (s - t)*D(s).
+    const dr4 = d5;
+    const dr3 = d4 + t * dr4;
+    const dr2 = d3 + t * dr3;
+    const dr1 = d2 + t * dr2;
+    const dr0 = d1 + t * dr1;
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    // E2(s,t): |t*v|^2 - |u(s) + t*v|^2 = 0
+    //         => 2*(v*u(s))*t + |u(s)|^2 = 0
+    //         => A(s)*t + B(s) = 0
+    // A'(s) = -2*C(s) identically for bezier curves, hence:
+    const a3 = -2 * va;
+    const a2 = -2 * vb;
+    // const a1 = -2*vc;
+    // p = b(t) => A(t) = 0.
+    // const a0 = 2*vu0;
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    const b6 = aa;
+    const b5 = 2 * ab;
+    const b4 = 2 * ac + bb;
+    const b3 = 2 * bc - 2 * u0a;
+    const b2 = cc - 2 * u0b;
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    // Return reduced A and B such that:
+    //   A_full(s) = (s - t)^2*A(s)
+    //   B_full(s) = (s - t)^2*B(s)
+    // where A is degree 1 and B is degree 4.
+    const ar1 = a3;
+    const ar0 = a2 + 2 * t * ar1;
+    const br4 = b6;
+    const br3 = b5 + 2 * t * br4;
+    const br2 = b4 + t * (2 * br3 - t * br4);
+    const br1 = b3 + t * (2 * br2 - t * br3);
+    const br0 = b2 + t * (2 * br1 - t * br2);
+    // -----------------------------------------------------
+    // Eliminate t from:
+    //   A(s)*t + B(s) = 0
+    //   C(s)*t + D(s) = 0
+    // by taking A(s)*D(s) - B(s)*C(s) = 0 (degree <= 8 in s)
+    // H8 = a3*d5 - b6*c2 = (-2*va)*(-3*aa) - aa*(3*va) = 3*va*aa.
+    const H8 = 3 * va * aa;
+    const H7 = 4 * (va * ab + vb * aa);
+    const H6 = va * b4 + 6 * vb * ab + 5 * vc * aa;
+    const H5 = 2 * vb * b4 + 8 * vc * ab - 6 * vu0 * aa;
+    const H4 = -va * b2 + vb * b3 + 3 * vc * b4 - 10 * vu0 * ab;
+    // Reduce H_full(s) by its guaranteed (s - t)^4 factor:
+    // H_full(s) = (s - t)^4*(q4*s^4 + q3*s^3 + q2*s^2 + q1*s + q0)
+    // Match the high-order coefficients of H_full(s) explicitly.
+    const q4 = H8;
+    const q3 = H7 + 4 * t * q4;
+    const q2 = H6 + t * (4 * q3 - 6 * t * q4);
+    const q1 = H5 + t * (4 * q2 + t * (-6 * q3 + 4 * t * q4));
+    const q0 = H4 + t * (4 * q1 + t * (-6 * q2 + t * (4 * q3 - t * q4)));
+    return {
+        A: [ar1, ar0],
+        B: [br4, br3, br2, br1, br0],
+        C: [c2, cr0],
+        D: [dr4, dr3, dr2, dr1, dr0],
+        H: [q4, q3, q2, q1, q0]
+    };
+}
+
+
 ;// ./src/index.ts
 
 
@@ -25530,4 +25750,6 @@ function getMedialPoints(p, v, ps) {
 
 
 
-export { areBoxesIntersecting, area_area as area, bezierBezierIntersection, bezierBezierIntersectionBoundless, bezierBezierIntersectionBoundlessBoth, bezierBezierIntersectionFast, bezierPieceToBezier, bezierSelfIntersection, calcQuadOffsetCurveXPoint, circleBezierIntersection, classification, classifications, classify, clone, closestPointOnBezier, closestPointOnBezierCertified, closestPointsBetweenBeziers, controlPointLinesLength, cubicFromAnglesAndSpeeds, cubicThroughPointGiven013, cubicToAnglesAndSpeeds, cubicToHybridQuadratic, cubicToQuadratic, curvature, curvatureND, curviness, ddCurvature, ddCurvatureND, ddNormal, ddNormalAt0, ddNormalAt1, ddRadiusOfCurvature, ddTangent, ddTangentAt0, ddTangentAt1, eCurvature, eNormal, eTangent, eTangentAt0, eTangentAt1, equal, evalDeCasteljau, evalDeCasteljauDd, evalDeCasteljauError, evalDeCasteljauWithErr, evalDeCasteljauWithErrDd, evaluate, evaluate2ndDerivative, evaluate2ndDerivativeAt0, evaluate2ndDerivativeAt0Exact, evaluate2ndDerivativeAt1, evaluate2ndDerivativeAt1Exact, evaluate2ndDerivativeExact, evaluateExact, evaluateImplicit1, evaluateImplicit2, evaluateImplicit3, fitQuadsToCubic, fitQuadsToCubicHausdorff, fromPowerBasis, fromTo, fromToInclErrorBound, furthestPointOnBezier, generateArcFromQuads, generateCuspAtHalf3, generateQuarterCircle, generateSelfIntersecting, getAbsAreaBetween, getBendingEnergy, getBoundingBox, getBoundingBoxTight, getBoundingHull, getBounds, getCoeffsBezBez, getControlPointBox, getCubicSpeeds, getCurvatureExtrema, getCurvatureExtremaDd, getCurvatureExtremaE, getEndpointIntersections, getFootPointsOnBezierCertified, getFootPointsOnBezierPolysCertified, getFootpointPoly, getFootpointPolyDd, getFootpointPolyExact, getHodograph, getImplicitForm1, getImplicitForm1Dd, getImplicitForm1DdWithRunningError, getImplicitForm1ErrorCounters, getImplicitForm1Exact, getImplicitForm2, getImplicitForm2Dd, getImplicitForm2DdWithRunningError, getImplicitForm2ErrorCounters, getImplicitForm2Exact, getImplicitForm3, getImplicitForm3Dd, getImplicitForm3DdWithRunningError, getImplicitForm3ErrorCounters, getImplicitForm3Exact, getInflections, getInterfaceRotation, getIntervalBox, getIntervalBoxDd, getMedialPointCoeffs, getMedialPointCoeffsBez0, getMedialPointCoeffsBez1, getMedialPointCoeffsBez2, getMedialPointCoeffsBez3, getMedialPoints, getTAtLength, getXBoundsTight, getYBoundsTight, hausdorffDistance, hausdorffDistanceOneSided, intersectBoxes, isBezierPieceZeroLength, isCollinear, isCubicReallyLine, isCubicReallyQuad, isHorizontal, isPointOnBezierExtension, isQuadObtuse, isQuadReallyLine, isReallyPoint, isSelfOverlapping, isVertical, length_length as length, lineToCubic, lineToQuadratic, maxAbsCoordinate, normal, normal2, quadraticToCubic, quadraticToPolyline, radiusOfCurvature, reduceOrderIfPossible, reverse, setCubicSpeeds, splitByCurvature, splitByCurvatureAndLength, splitByLength, tFromXY, tangent, tangentAt0, tangentAt0Exact, tangentAt1, tangentAt1Exact, tangentExact, toCubic, toPowerBasis, toPowerBasis0Exact, toPowerBasis1DdWithRunningError, toPowerBasis1Exact, toPowerBasis2DdWithRunningError, toPowerBasis2Exact, toPowerBasis3DdWithRunningError, toPowerBasis3Exact, toPowerBasisDd, toPowerBasisDdWithRunningError, toPowerBasisErrorCounters, toPowerBasisExact, toPowerBasisWithRunningError, toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeDd, toPowerBasis_1stDerivativeErrorCounters, toPowerBasis_1stDerivativeExact, toPowerBasis_2ndDerivative, toPowerBasis_2ndDerivativeDd, toPowerBasis_2ndDerivativeExact, toPowerBasis_3rdDerivative, toPowerBasis_3rdDerivativeDd, toPowerBasis_3rdDerivativeExact, to_string_toString as toString, totalAbsoluteCurvature, totalCurvature, totalLength, γ, γγ, κ };
+
+
+export { areBoxesIntersecting, area_area as area, bezierBezierIntersection, bezierBezierIntersectionBoundless, bezierBezierIntersectionBoundlessBoth, bezierBezierIntersectionFast, bezierPieceToBezier, bezierSelfIntersection, calcQuadOffsetCurveXPoint, circleBezierIntersection, classification, classifications, classify, clone, closestPointOnBezier, closestPointOnBezierCertified, closestPointsBetweenBeziers, controlPointLinesLength, cubicFromAnglesAndSpeeds, cubicThroughPointGiven013, cubicToAnglesAndSpeeds, cubicToHybridQuadratic, cubicToQuadratic, curvature, curvatureND, curviness, ddCurvature, ddCurvatureND, ddNormal, ddNormalAt0, ddNormalAt1, ddRadiusOfCurvature, ddTangent, ddTangentAt0, ddTangentAt1, eCurvature, eNormal, eTangent, eTangentAt0, eTangentAt1, equal, evalDeCasteljau, evalDeCasteljauDd, evalDeCasteljauError, evalDeCasteljauWithErr, evalDeCasteljauWithErrDd, evaluate, evaluate2ndDerivative, evaluate2ndDerivativeAt0, evaluate2ndDerivativeAt0Exact, evaluate2ndDerivativeAt1, evaluate2ndDerivativeAt1Exact, evaluate2ndDerivativeExact, evaluateExact, evaluateImplicit1, evaluateImplicit2, evaluateImplicit3, fitQuadsToCubic, fitQuadsToCubicHausdorff, fromPowerBasis, fromTo, fromToInclErrorBound, furthestPointOnBezier, generateArcFromQuads, generateCuspAtHalf3, generateQuarterCircle, generateSelfIntersecting, getAbsAreaBetween, getBendingEnergy, getBoundingBox, getBoundingBoxTight, getBoundingHull, getBounds, getCoeffsBezBez, getControlPointBox, getCubicSpeeds, getCurvatureExtrema, getCurvatureExtremaDd, getCurvatureExtremaE, getEndpointIntersections, getFootPointsOnBezierCertified, getFootPointsOnBezierPolysCertified, getFootpointPoly, getFootpointPolyDd, getFootpointPolyExact, getHodograph, getImplicitForm1, getImplicitForm1Dd, getImplicitForm1DdWithRunningError, getImplicitForm1ErrorCounters, getImplicitForm1Exact, getImplicitForm2, getImplicitForm2Dd, getImplicitForm2DdWithRunningError, getImplicitForm2ErrorCounters, getImplicitForm2Exact, getImplicitForm3, getImplicitForm3Dd, getImplicitForm3DdWithRunningError, getImplicitForm3ErrorCounters, getImplicitForm3Exact, getInflections, getInterfaceRotation, getIntervalBox, getIntervalBoxDd, getMedialPointCoeffs, getMedialPointCoeffsBez0, getMedialPointCoeffsBez1, getMedialPointCoeffsBez2, getMedialPointCoeffsBez2_SameCurve, getMedialPointCoeffsBez3, getMedialPointCoeffsBez3_SameCurve, getMedialPoints, getTAtLength, getXBoundsTight, getYBoundsTight, hausdorffDistance, hausdorffDistanceOneSided, intersectBoxes, isBezierPieceZeroLength, isCollinear, isCubicReallyLine, isCubicReallyQuad, isHorizontal, isPointOnBezierExtension, isQuadObtuse, isQuadReallyLine, isReallyPoint, isSelfOverlapping, isVertical, length_length as length, lineToCubic, lineToQuadratic, maxAbsCoordinate, normal, normal2, quadraticToCubic, quadraticToPolyline, radiusOfCurvature, reduceOrderIfPossible, reverse, setCubicSpeeds, splitByCurvature, splitByCurvatureAndLength, splitByLength, tFromXY, tangent, tangentAt0, tangentAt0Exact, tangentAt1, tangentAt1Exact, tangentExact, toCubic, toPowerBasis, toPowerBasis0Exact, toPowerBasis1DdWithRunningError, toPowerBasis1Exact, toPowerBasis2DdWithRunningError, toPowerBasis2Exact, toPowerBasis3DdWithRunningError, toPowerBasis3Exact, toPowerBasisDd, toPowerBasisDdWithRunningError, toPowerBasisErrorCounters, toPowerBasisExact, toPowerBasisWithRunningError, toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeDd, toPowerBasis_1stDerivativeErrorCounters, toPowerBasis_1stDerivativeExact, toPowerBasis_2ndDerivative, toPowerBasis_2ndDerivativeDd, toPowerBasis_2ndDerivativeExact, toPowerBasis_3rdDerivative, toPowerBasis_3rdDerivativeDd, toPowerBasis_3rdDerivativeExact, to_string_toString as toString, totalAbsoluteCurvature, totalCurvature, totalLength, γ, γγ, κ };
