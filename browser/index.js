@@ -15877,7 +15877,6 @@ function add1Ulp(n) {
 
 
 
-
 /**
  * Returns the intersection range (given as 2 intersections (`X`s)) where the
  * endpoints of the two given *algebraically identical* curves
@@ -15944,12 +15943,12 @@ function getEndpointIntersections(psA, psB, orderAlreadyReduced = false) {
     return [
         {
             p: getPFromBox(boxS), kind: 5, box: boxS,
-            t1: mid(riSA), ri1: riSA,
-            t2: mid(riSB), ri2: riSB
+            t1: riSA.t, ri1: riSA,
+            t2: riSB.t, ri2: riSB
         }, {
             p: getPFromBox(boxE), kind: 5, box: boxE,
-            t1: mid(riEA), ri1: riEA,
-            t2: mid(riEB), ri2: riEB
+            t1: riEA.t, ri1: riEA,
+            t2: riEB.t, ri2: riEB
         }
     ];
 }
@@ -16059,8 +16058,8 @@ function bezierBezierIntersection(ps1, ps2) {
                 const ri2 = ris2[j];
                 const x = {
                     p: getPFromBox(box), kind: 1, box,
-                    t1: mid(ri1), ri1: ri1,
-                    t2: mid(ri2), ri2: ri2
+                    t1: ri1.t, ri1: ri1,
+                    t2: ri2.t, ri2: ri2
                 };
                 xs.push(x);
             }
@@ -16185,7 +16184,7 @@ function handleCollinearIntersections(psA, psB) {
             const kind = overlapB0 ? 4 : 5;
             return {
                 p: B0, kind, box,
-                t1: mid(ri), ri1: ri,
+                t1: ri.t, ri1: ri,
                 t2: 0, ri2: root0
             };
         }),
@@ -16194,7 +16193,7 @@ function handleCollinearIntersections(psA, psB) {
             const kind = overlapB1 ? 4 : 5;
             return {
                 p: B1, kind, box,
-                t1: mid(ri), ri1: ri,
+                t1: ri.t, ri1: ri,
                 t2: 1, ri2: root1
             };
         }),
@@ -16204,7 +16203,7 @@ function handleCollinearIntersections(psA, psB) {
             return {
                 p: A0, kind, box,
                 t1: 0, ri1: root0,
-                t2: mid(ri), ri2: ri
+                t2: ri.t, ri2: ri
             };
         }),
         ...tB_A1.map(ri => {
@@ -16213,7 +16212,7 @@ function handleCollinearIntersections(psA, psB) {
             return {
                 p: A1, kind, box,
                 t1: 1, ri1: root1,
-                t2: mid(ri), ri2: ri
+                t2: ri.t, ri2: ri
             };
         })
     ]
@@ -16269,7 +16268,7 @@ function handlePointDegenerateCases(ps1, ps2) {
         // keep TypeScript happy; at this point `tFromXY` cannot return `undefined`
         return tFromXY(ps1, p2).map(ri => ({
             p: p2, kind: 6, box,
-            t1: mid(ri), ri1: ri,
+            t1: ri.t, ri1: ri,
             t2: 0.5, ri2: { t: 0.5, tS: 0.5, tE: 0.5, multiplicity: 1 },
         }));
     }
@@ -16278,7 +16277,6 @@ function handlePointDegenerateCases(ps1, ps2) {
 
 
 ;// ./src/fit/get-abs-area-between.ts
-
 
 
 
@@ -16300,8 +16298,8 @@ function getAbsAreaBetween(ps1, ps2) {
     let total = 0;
     for (let i = 0; i < xs.length + 1; i++) {
         const x = xs[i];
-        const tE1 = x === undefined ? 1 : mid(x.ri1);
-        const tE2 = x === undefined ? 1 : mid(x.ri2);
+        const tE1 = x === undefined ? 1 : x.ri1.t;
+        const tE2 = x === undefined ? 1 : x.ri2.t;
         const piece1 = fromTo(ps1, tS1, tE1);
         const piece2 = fromTo(ps2, tS2, tE2);
         tS1 = tE1;

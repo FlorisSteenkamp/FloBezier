@@ -1,4 +1,3 @@
-import { mid } from "flo-poly";
 import { bezierBezierIntersection } from "../intersection/bezier-bezier-intersection/bezier-bezier-intersection.js";
 import { area } from "../global-properties/area.js";
 import { fromTo } from "../transformation/split/from-to.js";
@@ -27,8 +26,8 @@ function getAbsAreaBetween(
     for (let i=0; i<xs.length+1; i++) {
         const x = xs[i];
         
-        const tE1 = x === undefined ? 1 : mid(x.ri1);
-        const tE2 = x === undefined ? 1 : mid(x.ri2);
+        const tE1 = x === undefined ? 1 : x.ri1.t;
+        const tE2 = x === undefined ? 1 : x.ri2.t;
 
         const piece1 = fromTo(ps1, tS1, tE1);
         const piece2 = fromTo(ps2, tS2, tE2);

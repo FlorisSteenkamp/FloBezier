@@ -1,3 +1,4 @@
+import { createRootExact } from 'flo-poly';
 import { getPFromBox, X } from './x.js';
 import { bezierBezierIntersectionBoundless } from './bezier-bezier-intersection-boundless.js';
 import { isPointOnBezierExtension } from '../../simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension.js';
@@ -7,7 +8,6 @@ import { intersectBoxes } from '../../boxes/intersect-boxes.js';
 import { bezierSelfIntersection } from '../self-intersection/bezier-self-intersection.js';
 import { getEndpointIntersections } from '../get-endpoint-intersections/get-endpoint-intersections.js';
 import { isCollinear } from '../../global-properties/classification/is-collinear.js';
-import { createRootExact, mid } from 'flo-poly';
 import { reduceOrderIfPossible } from '../../transformation/reduce-order-if-possible.js';
 
 const eps = Number.EPSILON;
@@ -93,8 +93,8 @@ function bezierBezierIntersection(
                 const ri2 = ris2[j];
                 const x: X = { 
                     p: getPFromBox(box), kind: 1, box,
-                    t1: mid(ri1), ri1: ri1, 
-                    t2: mid(ri2), ri2: ri2
+                    t1: ri1.t, ri1: ri1, 
+                    t2: ri2.t, ri2: ri2
                 };
                 xs.push(x);
             }
@@ -247,7 +247,7 @@ function handleCollinearIntersections(
             const kind = overlapB0 ? 4 : 5;
             return {
                 p: B0, kind, box,
-                t1: mid(ri), ri1: ri,
+                t1: ri.t, ri1: ri,
                 t2: 0, ri2: root0
             };
         }),
@@ -256,7 +256,7 @@ function handleCollinearIntersections(
             const kind = overlapB1 ? 4 : 5;
             return {
                 p: B1, kind, box,
-                t1: mid(ri), ri1: ri,
+                t1: ri.t, ri1: ri,
                 t2: 1, ri2: root1
             };
         }),
@@ -266,7 +266,7 @@ function handleCollinearIntersections(
             return { 
                 p: A0, kind, box,
                 t1: 0, ri1: root0, 
-                t2: mid(ri), ri2: ri
+                t2: ri.t, ri2: ri
             }
         }),
         ...tB_A1.map<X>(ri => {
@@ -275,7 +275,7 @@ function handleCollinearIntersections(
             return { 
                 p: A1, kind, box,
                 t1: 1, ri1: root1, 
-                t2: mid(ri), ri2: ri
+                t2: ri.t, ri2: ri
             };
         })
     ]
@@ -337,7 +337,7 @@ function handlePointDegenerateCases(
         // keep TypeScript happy; at this point `tFromXY` cannot return `undefined`
         return tFromXY(ps1, p2).map(ri => ({
             p: p2, kind: 6, box,
-            t1: mid(ri), ri1: ri,
+            t1: ri.t, ri1: ri,
             t2: 0.5, ri2: { t: 0.5, tS: 0.5, tE: 0.5, multiplicity: 1 },
         }));
     }

@@ -1,4 +1,4 @@
-import { roots, differentiate, Horner, mid } from "flo-poly";
+import { roots, differentiate, Horner } from "flo-poly";
 import { getAbsCurvatureExtremaPolys } from "./get-abs-curvature-extrema-polys.js";
 import { isCollinear } from "../global-properties/classification/is-collinear.js";
 import { isCubicReallyQuad } from "../global-properties/classification/is-cubic-really-quad.js";

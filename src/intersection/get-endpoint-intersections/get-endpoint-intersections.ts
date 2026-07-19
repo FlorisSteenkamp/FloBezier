@@ -7,7 +7,6 @@ import { getIntervalBox } from "../../global-properties/bounds/get-interval-box/
 import { sub1Ulp } from "../../sub-1-ulp.js";
 import { add1Ulp } from "../../add-1-ulp.js";
 import { intersectBoxes } from "../../boxes/intersect-boxes.js";
-import { mid } from "flo-poly";
 
 
 /**
@@ -92,12 +91,12 @@ function getEndpointIntersections(
     return [
         { 
             p: getPFromBox(boxS), kind: 5, box: boxS,
-            t1: mid(riSA), ri1: riSA,
-            t2: mid(riSB), ri2: riSB
+            t1: riSA.t, ri1: riSA,
+            t2: riSB.t, ri2: riSB
         },{
             p: getPFromBox(boxE), kind: 5, box: boxE,
-            t1: mid(riEA), ri1: riEA, 
-            t2: mid(riEB), ri2: riEB
+            t1: riEA.t, ri1: riEA, 
+            t2: riEB.t, ri2: riEB
         }
     ];
 }

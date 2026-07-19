@@ -1,10 +1,12 @@
 import { describe, expect, it } from '@jest/globals';
 import { distanceBetween, scale as scaleVec, translate } from 'flo-vector2d';
-import { Horner, RootInterval, differentiate, roots, toCasStr } from 'flo-poly';
+import { Horner, RootInterval, differentiate, roots as getRoots, toCasStr } from 'flo-poly';
 import { getMedialPointCoeffsBez2_SameCurve } from '../../src/get-medial-points/get-medial-point-coeffs-bez2-same-curve.js';
 import { normal as getNormal } from '../../src/local-properties-at-t/normal/double/normal.js';
 import { getMedialPointCoeffsBez2 } from '../../src/get-medial-points/get-medial-point-coeffs-bez2.js';
 import { evalDeCasteljauDd } from '../../src/local-properties-at-t/evaluate/double-double/eval-de-casteljau-dd.js';
+import { getCurvatureExtremaDd } from '../../src/get-curvature-extrema-dd/get-curvature-extrema-dd.js';
+import { ddCurvature } from '../../src/local-properties-at-t/curvature/dd-curvature.js';
 
 const { abs } = Math;
 
@@ -12,6 +14,44 @@ const δ = 2**-38;
 
 
 describe('getMedialPointCoeffsBez2_SameCurve', function() {
+    it('', function() {
+        const ps = [[-2.1, 1.3], [0.25, 4.2], [3.8, -0.7]];
+        const { maxima } = getCurvatureExtremaDd(ps);
+        const t = maxima[0];  //=> 0.3179190751445086;
+        const normal = getNormal(ps, t);
+        const p = evalDeCasteljauDd(ps, [0,t]).map(c => c[0] + c[1]);
+
+        const pSame = getMedialPointCoeffsBez2_SameCurve(t, normal, ps);
+
+        const { A, B, H } = pSame;
+
+        const kDd = ddCurvature(ps, t);
+        const k = -(kDd[0] + kDd[1]);
+        const radius = 1/k;  //=> 1.9356125129227177
+
+        const roots = getRoots(H)!;
+        const ss = roots.map(s => s.t);
+        // ss;  //=> [0.31791907514450873]
+        expect(ss[0]).toBeNearly(8, t);
+
+        for (const s of ss) {
+            const AS = Horner(A, s);
+            const BS = Horner(B, s);
+            const t1 = -BS/AS;
+            
+            const vt = translate(p, scaleVec(normal,t1));//?
+            const P = evalDeCasteljauDd(ps, [0,s]).map(c => c[0] + c[1]);
+
+            const d1 = distanceBetween(p,vt);//?
+            const d2 = distanceBetween(vt,P);//?
+            
+            expect(radius).toBeNearly(8, d1);
+            expect(radius).toBeNearly(8, d2);
+
+            expect(d1).toBeNearly(8, d2);
+        }
+    });
+
     it('should satisfy same-curve degeneracies at the given parameter t', function() {
         const ps = [[-2.1, 1.3], [0.25, 4.2], [3.8, -0.7]];
         const t = 0.37;
@@ -49,8 +89,8 @@ describe('getMedialPointCoeffsBez2_SameCurve', function() {
         expect(dHt_).toBeLessThan(δ);
 
 
-        const ss = roots(H)!.map(s => s.t);
-        const ssGen = roots(HH)!.map(s => s.t);
+        const ss = getRoots(H)!.map(s => s.t);
+        const ssGen = getRoots(HH)!.map(s => s.t);
 
         for (const s of ss) {
             const AS = Horner(A, s);
