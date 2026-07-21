@@ -178,3 +178,4 @@ export { getMedialPointCoeffsBez2 } from './get-medial-points/get-medial-point-c
 export { getMedialPointCoeffsBez3 } from './get-medial-points/get-medial-point-coeffs-bez3.js';
 export { getMedialPointCoeffsBez2_SameCurve } from './get-medial-points/get-medial-point-coeffs-bez2-same-curve.js';
 export { getMedialPointCoeffsBez3_SameCurve } from './get-medial-points/get-medial-point-coeffs-bez3-same-curve.js';
+export { getBezierPieceLength } from './bezier-piece/get-bezier-piece-length.js';
