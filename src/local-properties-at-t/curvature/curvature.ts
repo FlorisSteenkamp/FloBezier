@@ -30,7 +30,6 @@ function curvatureND(
 }
 
 
-
 /**
  * Returns the curvature `κ` of the given linear, quadratic or cubic bezier 
  * curve at a specific given parameter value `t`. 

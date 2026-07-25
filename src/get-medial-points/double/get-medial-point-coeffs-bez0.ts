@@ -38,7 +38,6 @@ function getMedialPointCoeffsBez0(
     const a0 = 2*(vx*u0x + vy*u0y);
     const b0 = u0x*u0x + u0y*u0y;
 
-
     return { a0, b0 };
 }
 

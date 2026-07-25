@@ -120,7 +120,7 @@ function evalDeCasteljauError(
     } 
     
     if (ps.length === 3) {
-        const [[x0,y0], [x1,y1], [x2,y2]] = ps;    
+        const [[x0,y0], [x1,y1], [x2,y2]] = ps;
 
         const _x0 = abs(x0);
         const _y0 = abs(y0);
@@ -144,7 +144,7 @@ function evalDeCasteljauError(
     } 
     
     if (ps.length === 2) {
-        const [[x0, y0], [x1,y1]] = ps;    
+        const [[x0, y0], [x1,y1]] = ps;
 
         const _x0 = abs(x0);
         const _y0 = abs(y0);
