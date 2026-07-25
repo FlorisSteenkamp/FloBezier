@@ -1,9 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
 import { distanceBetween, scale as scaleVec, translate } from 'flo-vector2d';
 import { Horner, RootInterval, differentiate, roots as getRoots, toCasStr } from 'flo-poly';
-import { getMedialPointCoeffsBez2_SameCurve } from '../../src/get-medial-points/get-medial-point-coeffs-bez2-same-curve.js';
+import { getMedialPointCoeffsBez2_SameCurve } from '../../src/get-medial-points/double/get-medial-point-coeffs-bez2-same-curve.js';
 import { normal as getNormal } from '../../src/local-properties-at-t/normal/double/normal.js';
-import { getMedialPointCoeffsBez2 } from '../../src/get-medial-points/get-medial-point-coeffs-bez2.js';
+import { getMedialPointCoeffsBez2 } from '../../src/get-medial-points/double/get-medial-point-coeffs-bez2.js';
 import { evalDeCasteljauDd } from '../../src/local-properties-at-t/evaluate/double-double/eval-de-casteljau-dd.js';
 import { getCurvatureExtremaDd } from '../../src/get-curvature-extrema-dd/get-curvature-extrema-dd.js';
 import { ddCurvature } from '../../src/local-properties-at-t/curvature/dd-curvature.js';

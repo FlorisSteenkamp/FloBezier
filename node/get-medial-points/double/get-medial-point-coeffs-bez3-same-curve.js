@@ -1,4 +1,4 @@
-import { toPowerBasis3 } from '../to-power-basis/to-power-basis/double/to-power-basis.js';
+import { toPowerBasis3 } from '../../to-power-basis/to-power-basis/double/to-power-basis.js';
 /**
  * Returns polynomial coefficients for the same-curve cubic medial-point case,
  * where `p = b(t)` on the same cubic bezier `ps` and `v` is normal to the

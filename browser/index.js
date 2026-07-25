@@ -4594,45 +4594,6 @@ function getPFromBox(box) {
 }
 
 
-;// ./node_modules/flo-poly/node/basic/double/negate.js
-/**
- * Returns the negative of the given polynomial (p -> -p).
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @example
- * ```typescript
- * negate([0.1, -0.2]); //=> [-0.1, 0.2]
- * ```
- *
- * @doc
- */
-function negate(p) {
-    const p_ = new Array(p.length);
-    for (let i = 0; i < p.length; i++) {
-        p_[i] = -p[i];
-    }
-    return p_;
-}
-
-//# sourceMappingURL=negate.js.map
-;// ./node_modules/flo-poly/node/roots/root-bounds/upper-to-lower-bound.js
-/**
- * Returns a function that returns a positive lower root bound given a function
- * that returns a positive upper root bound.
- *
- * @param positiveUpperBoundFunction
- *
- * @internal
- */
-function upperToLowerBound(positiveUpperBoundFunction) {
-    return (p) => {
-        return 1 / positiveUpperBoundFunction(p.toReversed());
-    };
-}
-
-//# sourceMappingURL=upper-to-lower-bound.js.map
 ;// ./node_modules/flo-poly/node/change-variables/double/reflect-about-y-axis.js
 /**
  * Returns the result of reflecting the given polynomial about the Y-axis, i.e.
@@ -4664,7 +4625,7 @@ function reflectAboutYAxis(p) {
 }
 
 //# sourceMappingURL=reflect-about-y-axis.js.map
-;// ./node_modules/flo-poly/node/roots/root-bounds/positive-to-negative-bound.js
+;// ./node_modules/flo-poly/node/roots/root-bounds/positive-to-negative-bound-with-err.js
 
 /**
  * Returns a function that returns a negative root bound given a function that
@@ -4674,16 +4635,37 @@ function reflectAboutYAxis(p) {
  *
  * @internal
  */
-function positiveToNegativeBound(positiveBoundFunction) {
-    return (p) => {
-        return -positiveBoundFunction(reflectAboutYAxis(p));
+function positiveToNegativeBound_WithError(positiveBoundFunction) {
+    return (p, p_) => {
+        return -positiveBoundFunction(reflectAboutYAxis(p), p_);
     };
 }
 
-//# sourceMappingURL=positive-to-negative-bound.js.map
-;// ./node_modules/flo-poly/node/roots/root-bounds/root-bounds-lmq.js
+//# sourceMappingURL=positive-to-negative-bound-with-err.js.map
+;// ./node_modules/flo-poly/node/basic/double/negate.js
+/**
+ * Returns the negative of the given polynomial (p -> -p).
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ * @example
+ * ```typescript
+ * negate([0.1, -0.2]); //=> [-0.1, 0.2]
+ * ```
+ *
+ * @doc
+ */
+function negate(p) {
+    const p_ = new Array(p.length);
+    for (let i = 0; i < p.length; i++) {
+        p_[i] = -p[i];
+    }
+    return p_;
+}
 
-
+//# sourceMappingURL=negate.js.map
+;// ./node_modules/flo-poly/node/roots/root-bounds/lmq/positive-root-upper-bound-lmq.js
 
 /**
  * Returns an upper bound for the positive real roots of the given polynomial.
@@ -4739,19 +4721,105 @@ function positiveRootUpperBound_LMQ(p) {
     }
     return ub;
 }
+
+//# sourceMappingURL=positive-root-upper-bound-lmq.js.map
+;// ./node_modules/flo-poly/node/roots/root-bounds/lmq/to-poly-for-positive-root-upper-bound-lmq.js
+const { abs: to_poly_for_positive_root_upper_bound_lmq_abs } = Math;
 /**
- * Returns a positive lower bound of the real roots of the given polynomial
+ * Returns a new polynomial adjusted by coefficient-wise absolute error bounds
+ * for use with `positiveRootUpperBound_LMQ`.
  *
- * See algoritm 6 of the paper by Vigklas, Akritas and Strzeboński,
- * specifically the LocalMaxQuadratic algorithm hence LMQ.
+ * For each coefficient `c` with absolute error bound `e`, the returned
+ * coefficient is chosen from `[c - e, c + e]` as follows:
+ * * if the coefficient is guaranteed positive (`c - e > 0`), return `c - e`
+ *   (smallest guaranteed positive value)
+ * * if the coefficient is guaranteed negative (`c + e < 0`), return `c - e`
+ *   (most negative value)
+ * * if the sign is uncertain (`c - e <= 0 <= c + e`), return `0`
  *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
+ * This yields a conservative representative polynomial for many practical
+ * cases, while making sign-uncertain coefficients explicit.
+ *
+ * @param p polynomial coefficients from highest to lowest power
+ * @param p_ coefficient-wise absolute error bounds; must have same length as `p`
  *
  * @doc
  */
-const positiveRootLowerBound_LMQ = upperToLowerBound(positiveRootUpperBound_LMQ);
+function toPolyForPositiveRootUpperBound_LMQ(p, p_) {
+    if (p.length !== p_.length) {
+        throw new Error('`p` and `p_` must be of equal length.');
+    }
+    const q = new Array(p.length);
+    for (let i = 0; i < p.length; i++) {
+        const e = to_poly_for_positive_root_upper_bound_lmq_abs(p_[i]);
+        const min = p[i] - e;
+        const max = p[i] + e;
+        q[i] = min > 0
+            ? min
+            : max < 0
+                ? min
+                : 0;
+    }
+    return q;
+}
+
+//# sourceMappingURL=to-poly-for-positive-root-upper-bound-lmq.js.map
+;// ./node_modules/flo-poly/node/roots/root-bounds/lmq/positive-root-upper-bound-lmq-with-err.js
+
+
+const { abs: positive_root_upper_bound_lmq_with_err_abs } = Math;
+/**
+ * Returns an LMQ upper bound for positive real roots using a conservative
+ * polynomial representative formed from coefficient-wise absolute errors.
+ *
+ * Strict mode:
+ * if coefficient sign uncertainty implies that, for some potentially negative
+ * coefficient, there is no guaranteed positive coefficient of higher power,
+ * then no finite LMQ-style bound can be guaranteed and `Infinity` is returned.
+ *
+ * @param p polynomial coefficients from highest to lowest power
+ * @param p_ coefficient-wise absolute error bounds
+ *
+ * @doc
+ */
+function positiveRootUpperBound_LMQ_WithError(p, p_) {
+    if (p.length !== p_.length) {
+        throw new Error('`p` and `p_` must be of equal length.');
+    }
+    // Strict guard: if a potentially negative coefficient has no guaranteed
+    // positive predecessor, only sign-uncertain positive predecessors, then
+    // a finite LMQ bound cannot be guaranteed.
+    for (let m = 0; m < p.length; m++) {
+        const em = positive_root_upper_bound_lmq_with_err_abs(p_[m]);
+        const minM = p[m] - em;
+        if (minM >= 0) {
+            continue;
+        }
+        let hasGuaranteedPositive = false;
+        let hasUncertainPositive = false;
+        for (let k = 0; k < m; k++) {
+            const ek = positive_root_upper_bound_lmq_with_err_abs(p_[k]);
+            const minK = p[k] - ek;
+            const maxK = p[k] + ek;
+            if (minK > 0) {
+                hasGuaranteedPositive = true;
+                break;
+            }
+            if (maxK > 0) {
+                hasUncertainPositive = true;
+            }
+        }
+        if (!hasGuaranteedPositive && hasUncertainPositive) {
+            return Infinity;
+        }
+    }
+    return positiveRootUpperBound_LMQ(toPolyForPositiveRootUpperBound_LMQ(p, p_));
+}
+
+//# sourceMappingURL=positive-root-upper-bound-lmq-with-err.js.map
+;// ./node_modules/flo-poly/node/roots/root-bounds/lmq/negative-root-lower-bound-lmq-with-err.js
+
+
 /**
  * Returns a negative lower (further from zero) bound of the real roots of the
  * given polynomial.
@@ -4765,26 +4833,15 @@ const positiveRootLowerBound_LMQ = upperToLowerBound(positiveRootUpperBound_LMQ)
  *
  * @doc
  */
-const negativeRootLowerBound_LMQ = positiveToNegativeBound(positiveRootUpperBound_LMQ);
-/**
- * Returns a negative upper (closer to zero) bound of the real roots of the
- * given polynomial.
- *
- * See algoritm 6 of the paper by Vigklas, Akritas and Strzeboński,
- * specifically the LocalMaxQuadratic algorithm hence LMQ.
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-const negativeRootUpperBound_LMQ = upperToLowerBound(negativeRootLowerBound_LMQ);
+const negativeRootLowerBound_LMQ_WithError = positiveToNegativeBound_WithError(positiveRootUpperBound_LMQ_WithError);
 
-//# sourceMappingURL=root-bounds-lmq.js.map
+//# sourceMappingURL=negative-root-lower-bound-lmq-with-err.js.map
 ;// ./node_modules/flo-poly/node/roots/reduce-interval.js
 
-const { min, max: reduce_interval_max } = Math;
+
+
+const { min, max: reduce_interval_max, abs: reduce_interval_abs } = Math;
+const MAX_DOUBLE = 1.7976931348623157e+308;
 /**
  * Returns the result of reducing the given interval [lb,ub] to a potentially
  * smaller interval that still contains all the roots of the given polynomial.
@@ -4798,52 +4855,39 @@ const { min, max: reduce_interval_max } = Math;
  *
  * @internal
  */
-function reduceInterval(lb, ub, p) {
-    lb = reduce_interval_max(lb, negativeRootLowerBound_LMQ(p));
-    ub = min(ub, positiveRootUpperBound_LMQ(p));
-    return [lb, ub];
-}
-
-//# sourceMappingURL=reduce-interval.js.map
-;// ./node_modules/flo-poly/node/roots/remove-leading-zero-coeffs.js
-
-const { abs: remove_leading_zero_coeffs_abs } = Math;
-/**
- * **In-place** remove leading zero coefficients.
- *
- * * `p` and `getPExact()` *must* be of same length
- *
- * @internal
-*/
-function removeLeadingZeroCoeffs(pDd, pDd_, getPExact, errorMultiplier) {
-    let pExact = undefined; // lazy loaded
-    // while the leading coefficient is smaller then the error bound 
-    // i.e. possibly zero
-    while (pDd.length > 0 && remove_leading_zero_coeffs_abs(pDd[0][1]) <= errorMultiplier * pDd_[0]) {
-        pExact = pExact || getPExact();
-        // if leading coefficient really is zero
-        if (eSign(pExact[0]) === 0) {
-            // shift the leading coefficient and error out without altering the 
-            // given polynomial and error bound (shift is destructive, slice is not)
-            pDd = pDd.slice();
-            pDd.shift();
-            pDd_ = pDd_.slice();
-            pDd_.shift();
-            // also shift out the exact polynomial's leading coefficient
-            pExact.shift();
+function reduceInterval(lb, ub, p, pDd_, errorMultiplier) {
+    lb = reduce_interval_max(lb, negativeRootLowerBound_LMQ_WithError(p, pDd_.map(c => c * errorMultiplier)));
+    ub = min(ub, positiveRootUpperBound_LMQ_WithError(p, pDd_.map(c => c * errorMultiplier)));
+    const d = p.length - 1;
+    const F = 2 ** (-2 * d);
+    if (!Number.isFinite(lb)) {
+        lb = -F * MAX_DOUBLE;
+    }
+    if (!Number.isFinite(ub)) {
+        ub = F * MAX_DOUBLE;
+    }
+    while (true) {
+        const lb_ = reduce_interval_abs(Horner(p, lb));
+        const ub_ = reduce_interval_abs(Horner(p, ub));
+        if (lb_ > F * MAX_DOUBLE) {
+            lb /= 2;
+            continue;
+        }
+        if (ub_ > F * MAX_DOUBLE) {
+            ub /= 2;
             continue;
         }
         break;
     }
-    return { pDd: pDd, pDd_: pDd_, pExact };
+    return [lb, ub];
 }
 
-//# sourceMappingURL=remove-leading-zero-coeffs.js.map
+//# sourceMappingURL=reduce-interval.js.map
 ;// ./node_modules/flo-poly/node/error-analysis/gamma.js
 /** `2 * 2^-53` -> 2x the standard round-of unit `=== Number.EPSILON` */
 const gamma_eps = Number.EPSILON;
 /** `2^-53` -> the standard round-of unit `=== eps/2` */
-const gamma_u = Number.EPSILON / 2;
+const gamma_u = gamma_eps / 2;
 /** `2^-106` -> the standard round-of unit for double-double precision `=== (eps/2)**2` */
 const gamma_uu = gamma_u * gamma_u;
 /**
@@ -4900,6 +4944,44 @@ function γs(n) {
 }
 
 //# sourceMappingURL=gamma.js.map
+;// ./node_modules/flo-poly/node/roots/remove-leading-zero-coeffs.js
+
+const { abs: remove_leading_zero_coeffs_abs } = Math;
+/**
+ * **In-place** remove leading zero coefficients.
+ *
+ * * `p` and `getPExact()` *must* be of same length
+ *
+ * @internal
+*/
+function removeLeadingZeroCoeffs(pDd, pDd_, getPExact, errorMultiplier) {
+    let pExact = undefined; // lazy loaded
+    // while the leading coefficient is smaller then the error bound 
+    // i.e. possibly zero
+    // if leading coefficient is guaranteed > zero
+    if (pDd.length === 0 || remove_leading_zero_coeffs_abs(pDd[0][1]) > errorMultiplier * pDd_[0]) {
+        return { pDd, pDd_, pExact };
+    }
+    pExact = pExact || getPExact();
+    // Update `pDd` and `pDd_` with the exact polynomial's leading coefficients and error bounds
+    for (let i = 0; i < pExact.length; i++) {
+        const cExact = pExact[i];
+        const cDd = pDd[i];
+        cDd[1] = cExact[cExact.length - 1];
+        cDd[0] = cExact[cExact.length - 2] ?? 0;
+        pDd_[i] = remove_leading_zero_coeffs_abs(cDd[1]) * (gamma_3 / errorMultiplier);
+    }
+    let i = 0;
+    while (i < pDd.length && pDd[i][1] === 0) {
+        i++;
+    }
+    pDd = pDd.slice(i);
+    pDd_ = pDd_.slice(i);
+    pExact = pExact.slice(i);
+    return { pDd, pDd_, pExact };
+}
+
+//# sourceMappingURL=remove-leading-zero-coeffs.js.map
 ;// ./node_modules/flo-poly/node/change-variables/double/taylor-shift-with-inp-err.js
 const { abs: taylor_shift_with_inp_err_abs } = Math;
 /**
@@ -5399,7 +5481,7 @@ const { abs: mobius_precise_abs, sign } = Math;
  * @internal
  */
 function mobiusAndNumSignChanges(p, p_, pDd, pDd_, getPExact) {
-    return function mobiusPrecise_(a, b, A, B, failCount) {
+    return function mobiusAndNumSignChanges_(a, b, A, B, failCount) {
         //-------------------------------------------
         // Taylor shift by `a`, i.e. p(x + a)
         //-------------------------------------------
@@ -5479,7 +5561,6 @@ function ddMobiusAndNumSignChanges(pDd, pDd_, a, b, A, B, failCount, getPExact) 
     // The sign of `A` and `B` are both !== 0 and is certified since it is an
     // endpoint of the interval.
     let _s = sign(A);
-    let failed = false;
     for (let i = 0; i < q.length - 1; i++) {
         // No error in the sign of the last coefficient (important for parity of sign changes)
         let s = sign(q[i][1]);
@@ -6112,7 +6193,7 @@ function isolateRoots(p, pDd, pDd_, lb, ub, getPExact) {
     const Is = [[lb, ub, A, B, 0]];
     const Is_ = []; // Isolated root intervals will be stored here
     // let treeSize = 0;  // remove eventually
-    const mobiusPrecise_ = mobiusAndNumSignChanges(p, p_, pDd, pDd_, getPExact);
+    const mobiusAndNumSignChanges_ = mobiusAndNumSignChanges(p, p_, pDd, pDd_, getPExact);
     let errBound;
     let pDdTransposed;
     while (Is.length > 0) {
@@ -6122,7 +6203,7 @@ function isolateRoots(p, pDd, pDd_, lb, ub, getPExact) {
         //----------------------------------------------------------------------
         // Descarte's rule of signs to count the number of roots in this interval
         //----------------------------------------------------------------------
-        const varP = mobiusPrecise_(a, b, A, B, failCount);
+        const varP = mobiusAndNumSignChanges_(a, b, A, B, failCount);
         // If `varP < 0` we couldn't distinguish Mobius coefficients from `0`
         // without going to infinite precision.
         if (varP === 0) { // no roots in the open interval `(a,b)`
@@ -6258,6 +6339,7 @@ function eAdmissablePoint(pE, a, b) {
 
 
 
+const { abs: roots_abs, max: roots_max, log2: roots_log2, ceil: roots_ceil } = Math;
 /**
  * Finds and returns all ordered *certified* root intervals (bar underflow /
  * overflow) of the given polynomial (with coefficients given in double or
@@ -6409,7 +6491,6 @@ function eAdmissablePoint(pE, a, b) {
  * @doc
  */
 function roots(pDd, lb = -Infinity, ub = +Infinity, pDd_, getPExact, tryReduceInterval = false) {
-    // if (pDd === undefined) { pDd = p.map(c => [0,c]); }
     if (typeof pDd[0] === 'number') {
         pDd = pDd.map(c => [0, c]);
     }
@@ -6433,18 +6514,23 @@ function roots(pDd, lb = -Infinity, ub = +Infinity, pDd_, getPExact, tryReduceIn
     // Remove leading zero coefficients 
     //----------------------------------------------------------------------
     ({ pDd, pDd_, pExact } = removeLeadingZeroCoeffs(pDd, pDd_, getPExact_, gamma_3));
+    // Approximate `p` from `pDd`
+    const p = pDd.map(c => c[0] + c[1]);
+    if (tryReduceInterval ||
+        // !Number.isFinite(lb) || !Number.isFinite(ub) ||
+        roots_abs(lb) > 2 ** 20 || roots_abs(ub) > 2 ** 20) {
+        [lb, ub] = reduceInterval(lb, ub, p, pDd_, gamma_3);
+    }
     if (pDd.length === 0) {
         return undefined; // return `undefined` for the zero polynomial (of degree -1)
     }
     else if (pDd.length === 1) {
         return []; // return `[]` for a (a non-zero) degree 0 polynomial
     }
-    const p = pDd.map(c => c[0] + c[1]);
-    if (tryReduceInterval || lb === -Infinity || ub === Infinity) {
-        [lb, ub] = reduceInterval(lb, ub, p);
-        if (lb === ub) { // edge case
-            return [{ t: lb, tS: lb, tE: ub, multiplicity: p.length - 1 }];
-        }
+    if (lb === ub) { // edge case
+        const halfWidth = 2 * gamma_eps * roots_max(1, 2 ** roots_ceil(roots_log2(roots_max(roots_abs(lb), roots_abs(ub)))));
+        lb -= halfWidth;
+        ub += halfWidth;
     }
     return isolateRoots(p, pDd, pDd_, lb, ub, getPExact_);
 }
@@ -9466,80 +9552,10 @@ const { abs: get_coeffs_bez3_bez3_dd_abs } = Math;
  * @internal
  */
 function getCoeffsBez3Bez3Dd(ps1, ps2) {
-    //--------------------------------------------------------------------------
-    // `var` -> a variable
-    // `$var` -> the double precision approximation to `var`
-    // `_var` -> the absolute value of $var (a prefix underscore on a variable means absolute value)
-    // `var_` -> the error in var (a postfix underscore means error bound but should still be multiplied by 3*γ²)
-    // `_var_` -> means both absolute value and absolute error bound
-    // recall: `a*b`, where both `a` and `b` have errors |a| and |b| we get for the
-    //   * error bound of (a*b) === a_|b| + |a|b_ + |a*b|   (when either of a and b is double)
-    //   * error bound of (a*b) === a_|b| + |a|b_ + 2|a*b|  (when both a and b is double-double)
-    //   * error bound of (a+b) === a_ + b_ + |a+b|         (when a and/or b is double or double-double)
-    // * the returned errors need to be multiplied by 3γ² to get the true error
-    // * can use either `$var` or `var[var.length-1]` (the approx value) in error calculations
-    //   due to multiplication by 3*γ² and not 3*u²
-    //--------------------------------------------------------------------------
-    // examples: (all?)
-    // ----------------
-    // let qmd === ddMultDouble2, etc.
-    //
-    // ---------------
-    // 1. double-double X by double
-    // ---------------
-    // qmd(a,b);  // both `a` and `b` is error-free
-    // use: error bound of (a*b) === a_|b| + |a|b_ + |a*b| (by definition)
-    //                           === 0|b| + |a|0 + |a*b|
-    //                           === |a*b|
-    //
-    // ---------------
-    // 2a. double-double +/- double-double
-    // ---------------
-    // qdq(a,b);  // error in a === |a|, thus call the error _a_, same with b
-    // use: error bound of (a+b) === a_ + b_ + |a+b| (by definition)
-    //                           === _a_ + _b_ + |a+b|
-    //
-    // ---------------
-    // 2b. double-double +/- double-double
-    // ---------------
-    // qaq(a,b);  // error in a === 2|a|, thus the error is 2*_a, same with b
-    // use: error bound of (a+b) === a_ + b_ + |a+b| (by definition)
-    //                           === 2*_a + 2*_b + |a+b|
-    //                           === 2*(_a + _b) + |a+b| OR
-    //                           === a_ + b_ + |a+b|
-    //
-    // ---------------
-    // 3a. double-double X double-double
-    // ---------------
-    // qmq(a,b);  // both `a` and `b` error-free
-    // use: error bound of (a*b) === a_|b| + |a|b_ + |a*b| (by definition)
-    //                           === 0|b| + |a|0 + 2|a*b|
-    //                           === 2|a*b| 
-    //
-    // ---------------
-    // 3b. double-double X double-double
-    // ---------------
-    // qmq(a,b);  // both `a` and `b` not error-free
-    // use: error bound of (a*b) === a_|b| + |a|b_ + 2|a*b| (by definition)
-    //
-    // ---------------
-    // 3b. double-double X double-double
-    // ---------------
-    // qmq(a,b);  // both `a` not error-free and `b` error-free
-    // use: error bound of (a*b) === a_|b| + |a|b_ + 2|a*b| (by definition)
-    //                           === a_|b| + 2|a*b| 
-    //
-    // ---------------
-    // 4a. double-double +/- double
-    // ---------------
-    // qad(a,b);  // both `a` and `b` error-free
-    // use: error bound of (a+b) === a_ + b_ + |a+b| (by definition)
-    //                           === 0 + 0 + |a+b|
-    //                           === |a+b| 
-    //--------------------------------------------------------------------------
     const { coeffs: { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v }, errorBound: { vₓₓₓ_, vₓₓᵧ_, vₓᵧᵧ_, vᵧᵧᵧ_, vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ } } = getImplicitForm3DdWithRunningError(ps1);
     const { coeffs: [[c3, c2, c1, [, c0]], [d3, d2, d1, [, d0]]], errorBound: [[c3_, c2_, c1_], [d3_, d2_, d1_]] // c0 and d0 is error free
      } = toPowerBasis3DdWithRunningError(ps2);
+    // See error-bound-calc.txt
     const $vₓₓₓ = vₓₓₓ[1];
     const $vₓₓᵧ = vₓₓᵧ[1];
     const $vₓᵧᵧ = vₓᵧᵧ[1];
@@ -13731,29 +13747,17 @@ function toPowerBasisDd(ps) {
 /** @internal */
 function toPowerBasis3Dd(ps) {
     const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
-    // ----------------------------
     // xx3 = (x3 - x0) + 3*(x1 - x2)
-    // ----------------------------
     const xx3 = to_power_basis_dd_qaq(to_power_basis_dd_td(x3, x0), to_power_basis_dd_qmd(3, to_power_basis_dd_td(x1, x2)));
-    // ----------------------------
     // xx2 = 3*((x2 + x0) - 2*x1)
-    // ----------------------------
     const xx2 = to_power_basis_dd_qmd(3, to_power_basis_dd_qad(to_power_basis_dd_ts(x2, x0), -2 * x1));
-    // ----------------------------
     // xx1 = 3*(x1 - x0)
-    // ----------------------------
     const xx1 = to_power_basis_dd_qmd(3, to_power_basis_dd_td(x1, x0));
-    // ----------------------------
     // yy3 = (y3 - y0) + 3*(y1 - y2)
-    // ----------------------------
     const yy3 = to_power_basis_dd_qaq(to_power_basis_dd_td(y3, y0), to_power_basis_dd_qmd(3, to_power_basis_dd_td(y1, y2)));
-    // ----------------------------
     // yy2 = 3*((y2 + y0) - 2*y1)
-    // ----------------------------
     const yy2 = to_power_basis_dd_qmd(3, to_power_basis_dd_qad(to_power_basis_dd_ts(y2, y0), -2 * y1));
-    // ----------------------------
     // yy1 = 3*(y1 - y0)
-    // ----------------------------
     const yy1 = to_power_basis_dd_qmd(3, to_power_basis_dd_td(y1, y0));
     return [[xx3, xx2, xx1, [0, x0]], [yy3, yy2, yy1, [0, y0]]];
 }
@@ -13764,21 +13768,13 @@ function toPowerBasis3Dd(ps) {
  */
 function toPowerBasis2Dd(ps) {
     const [[x0, y0], [x1, y1], [x2, y2]] = ps;
-    // ---------------------
     // xx2 = x2 + x0 - 2*x1
-    // ---------------------
     const xx2 = to_power_basis_dd_qad(to_power_basis_dd_ts(x2, x0), -2 * x1);
-    // ---------------------
     // xx1 = 2*(x1 - x0)
-    // ---------------------
     const xx1 = to_power_basis_dd_td(2 * x1, 2 * x0); // error free
-    // ---------------------
     // yy2 = y2 + y0 - 2*y1
-    // ---------------------
     const yy2 = to_power_basis_dd_qad(to_power_basis_dd_ts(y2, y0), -2 * y1);
-    // ---------------------
     // yy1 = 2*(y1 - y0)
-    // ---------------------
     const yy1 = to_power_basis_dd_td(2 * y1, 2 * y0); // error free
     return [[xx2, xx1, [0, x0]], [yy2, yy1, [0, y0]]];
 }
@@ -21611,7 +21607,6 @@ function getFootPointsOnBezierPolysCertified(ps, p) {
     if (order === 3) {
         return {
             polyDd: getFootpointPoly3Dd(ps, p),
-            // polyE: getClosestOnBezier3FromPointErrorCounters(ps, p).map(e => 10*γγ6*e), 
             polyE: getClosestOnBezier3FromPointErrorCounters(ps, p).map(e => 10 * 2 * e),
             getPolyExact: () => getFootpointPoly3Exact(ps, p)
         };
@@ -21619,7 +21614,6 @@ function getFootPointsOnBezierPolysCertified(ps, p) {
     else if (order === 2) {
         return {
             polyDd: getFootpointPoly2Dd(ps, p),
-            // polyE: getClosestOnBezier2FromPointErrorCounters(ps, p).map(e => 8*γγ6*e), 
             polyE: getClosestOnBezier2FromPointErrorCounters(ps, p).map(e => 8 * 2 * e),
             getPolyExact: () => getFootpointPoly2Exact(ps, p)
         };
@@ -21627,7 +21621,6 @@ function getFootPointsOnBezierPolysCertified(ps, p) {
     else if (order === 1) {
         return {
             polyDd: getFootpointPoly1Dd(ps, p),
-            // polyE: getClosestOnBezier1FromPointErrorCounters(ps, p).map(e => 6*γγ6*e), 
             polyE: getClosestOnBezier1FromPointErrorCounters(ps, p).map(e => 6 * 2 * e),
             getPolyExact: () => getFootpointPoly1Exact(ps, p)
         };
@@ -24968,7 +24961,7 @@ function calcQuadOffsetCurveXPoint(ps, D) {
 // const ps90 = ps.map(rotate90Degrees);
 // calcQuadOffsetCurveXPoint(ps90, -20);//?
 
-;// ./src/get-medial-points/get-medial-point-coeffs-bez2.ts
+;// ./src/get-medial-points/double/get-medial-point-coeffs-bez2.ts
 
 /**
  * Returns the polynomial coefficients for the ray parameter `t` and the
@@ -25058,7 +25051,7 @@ function getMedialPointCoeffsBez2(p, v, ps) {
 }
 
 
-;// ./src/get-medial-points/get-medial-point-coeffs-bez1.ts
+;// ./src/get-medial-points/double/get-medial-point-coeffs-bez1.ts
 /**
  * Returns the polynomial coefficients used to recover ray parameter values `t`
  * for a ray `q(t) = p + t⋅v` and an order-1 bezier curve `ps`.
@@ -25132,7 +25125,7 @@ function getMedialPointCoeffsBez1(p, v, ps) {
 }
 
 
-;// ./src/get-medial-points/get-medial-point-coeffs-bez3.ts
+;// ./src/get-medial-points/double/get-medial-point-coeffs-bez3.ts
 
 /**
  * Returns the polynomial coefficients for the ray parameter `t` and the
@@ -25238,7 +25231,7 @@ function getMedialPointCoeffsBez3(p, v, ps) {
 }
 
 
-;// ./src/get-medial-points/get-medial-point-coeffs-bez0.ts
+;// ./src/get-medial-points/double/get-medial-point-coeffs-bez0.ts
 /**
  * Returns the coefficients `a0` and `b0` for the linear equation
  * `a0⋅t + b0 = 0`, so the ray parameter can be recovered as `t = -b0/a0`.
@@ -25275,7 +25268,7 @@ function getMedialPointCoeffsBez0(p, v, P) {
 }
 
 
-;// ./src/get-medial-points/get-medial-point-coeffs.ts
+;// ./src/get-medial-points/double/get-medial-point-coeffs.ts
 
 
 
@@ -25316,9 +25309,46 @@ function getMedialPointCoeffs(p, v, ps) {
 }
 
 
-;// ./src/get-medial-points/get-medial-points.ts
+;// ./src/get-medial-points/double/get-medial-points.ts
 
 
+const { abs: get_medial_points_abs, max: get_medial_points_max } = Math;
+/**
+ * Recovers a numerically stable ray parameter `t` from linear equations
+ * `A*t + B = 0` and (optionally) `C*t + D = 0` evaluated at a fixed `s`.
+ *
+ * If `C,D` are unavailable, this falls back to `-B/A`.
+ */
+function chooseStableT(A, B, C, D) {
+    const epsScale = get_medial_points_max(1, get_medial_points_abs(A), get_medial_points_abs(B), get_medial_points_abs(C ?? 0), get_medial_points_abs(D ?? 0));
+    const eps = Number.EPSILON * epsScale;
+    const denomAB = get_medial_points_abs(A);
+    const hasAB = denomAB > eps;
+    // If only A,B are present, preserve existing behavior.
+    if (C === undefined || D === undefined) {
+        if (hasAB) {
+            return -B / A;
+        }
+        return NaN;
+    }
+    const denomCD = get_medial_points_abs(C);
+    const hasCD = denomCD > eps;
+    if (!hasAB && !hasCD) {
+        return NaN;
+    }
+    if (hasAB && !hasCD) {
+        return -B / A;
+    }
+    if (!hasAB && hasCD) {
+        return -D / C;
+    }
+    const tAB = -B / A;
+    const tCD = -D / C;
+    // Score each candidate by how well it satisfies the *other* equation.
+    const scoreAB = get_medial_points_abs(C * tAB + D) / (get_medial_points_abs(C) + get_medial_points_abs(D) + eps);
+    const scoreCD = get_medial_points_abs(A * tCD + B) / (get_medial_points_abs(A) + get_medial_points_abs(B) + eps);
+    return scoreAB <= scoreCD ? tAB : tCD;
+}
 /**
  * Returns candidate ray parameter values `t`, bezier parameter values `s` and
  * medial points for points `q(t)` and b(s) that satisfy the medial condition with
@@ -25347,7 +25377,7 @@ function getMedialPoints(p, v, ps) {
     if (len <= 1) {
         throw new Error(`Bezier curve must be of order 1, 2 or 3. Found: ${len - 1}`);
     }
-    const { A, B, H } = getMedialPointCoeffs(p, v, ps);
+    const { A, B, C, D, H } = getMedialPointCoeffs(p, v, ps);
     /** the possible parameter values of the bezier curve */
     const ss = (roots(H, 0, 1) || []).map(r => r.t); //?
     /** the possible parameter values of the ray */
@@ -25357,7 +25387,9 @@ function getMedialPoints(p, v, ps) {
     for (const s of ss) {
         const As = Horner(A, s);
         const Bs = Horner(B, s);
-        const t = -Bs / As;
+        const Cs = C.length ? Horner(C, s) : undefined;
+        const Ds = D.length ? Horner(D, s) : undefined;
+        const t = chooseStableT(As, Bs, Cs, Ds);
         ts.push(t);
         const q = [p[0] + t * v[0], p[1] + t * v[1]];
         qs.push(q);
@@ -25366,7 +25398,7 @@ function getMedialPoints(p, v, ps) {
 }
 
 
-;// ./src/get-medial-points/get-medial-point-coeffs-bez2-same-curve.ts
+;// ./src/get-medial-points/double/get-medial-point-coeffs-bez2-same-curve.ts
 
 /**
  * Returns polynomial coefficients for the same-curve quadratic medial-point
@@ -25459,7 +25491,7 @@ function getMedialPointCoeffsBez2_SameCurve(t, v, ps) {
 }
 
 
-;// ./src/get-medial-points/get-medial-point-coeffs-bez3-same-curve.ts
+;// ./src/get-medial-points/double/get-medial-point-coeffs-bez3-same-curve.ts
 
 /**
  * Returns polynomial coefficients for the same-curve cubic medial-point case,
@@ -25576,6 +25608,903 @@ function getMedialPointCoeffsBez3_SameCurve(t, v, ps) {
     const q2 = H6 + t * (4 * q3 - 6 * t * q4);
     const q1 = H5 + t * (4 * q2 + t * (-6 * q3 + 4 * t * q4));
     const q0 = H4 + t * (4 * q1 + t * (-6 * q2 + t * (4 * q3 - t * q4)));
+    return {
+        A: [ar1, ar0],
+        B: [br4, br3, br2, br1, br0],
+        C: [c2, cr0],
+        D: [dr4, dr3, dr2, dr1, dr0],
+        H: [q4, q3, q2, q1, q0]
+    };
+}
+
+
+;// ./src/bezier-piece/get-bezier-piece-length.ts
+
+function getBezierPieceLength(bezierPiece) {
+    return length_length(bezierPiece.ts, bezierPiece.ps);
+}
+
+
+;// ./node/to-power-basis/to-power-basis/double-double/to-power-basis-dd.js
+
+const double_double_to_power_basis_dd_td = two_diff_twoDiff; // error -> 0
+const double_double_to_power_basis_dd_qmd = ddMultDouble2; // error -> 3*u²
+const double_double_to_power_basis_dd_qaq = ddAddDd;
+const double_double_to_power_basis_dd_qad = ddAddDouble; // error -> 2*u²
+const double_double_to_power_basis_dd_ts = twoSum;
+/**
+ * Returns the power basis representation of a bezier curve of order cubic or
+ * less.
+ *
+ * * intermediate calculations are done in double-double precision
+ * * returns the power basis x and y coordinate polynomials from highest power
+ * to lowest, e.g. if `x(t) = at^3 + bt^2 + ct + d`
+ * and `y(t) = et^3 + ft^2 + gt + h` then the result is returned
+ * as `[[a,b,c,d],[e,f,g,h]]`, where the `a,b,c,...` are in double-double
+ * precision
+ *
+ * @param ps an order 0,1,2 or 3 bezier curve given by an ordered array of its
+ * control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ *
+ * @doc
+ */
+function to_power_basis_dd_toPowerBasisDd(ps) {
+    if (ps.length === 4) {
+        return to_power_basis_dd_toPowerBasis3Dd(ps);
+    }
+    if (ps.length === 3) {
+        return to_power_basis_dd_toPowerBasis2Dd(ps);
+    }
+    if (ps.length === 2) {
+        return to_power_basis_dd_toPowerBasis1Dd(ps);
+    }
+    if (ps.length === 1) {
+        return to_power_basis_dd_toPowerBasis0Dd(ps);
+    }
+    throw new Error('The given bezier curve must be of order <= cubic.');
+}
+/** @internal */
+function to_power_basis_dd_toPowerBasis3Dd(ps) {
+    const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
+    // xx3 = (x3 - x0) + 3*(x1 - x2)
+    const xx3 = double_double_to_power_basis_dd_qaq(double_double_to_power_basis_dd_td(x3, x0), double_double_to_power_basis_dd_qmd(3, double_double_to_power_basis_dd_td(x1, x2)));
+    // xx2 = 3*((x2 + x0) - 2*x1)
+    const xx2 = double_double_to_power_basis_dd_qmd(3, double_double_to_power_basis_dd_qad(double_double_to_power_basis_dd_ts(x2, x0), -2 * x1));
+    // xx1 = 3*(x1 - x0)
+    const xx1 = double_double_to_power_basis_dd_qmd(3, double_double_to_power_basis_dd_td(x1, x0));
+    // yy3 = (y3 - y0) + 3*(y1 - y2)
+    const yy3 = double_double_to_power_basis_dd_qaq(double_double_to_power_basis_dd_td(y3, y0), double_double_to_power_basis_dd_qmd(3, double_double_to_power_basis_dd_td(y1, y2)));
+    // yy2 = 3*((y2 + y0) - 2*y1)
+    const yy2 = double_double_to_power_basis_dd_qmd(3, double_double_to_power_basis_dd_qad(double_double_to_power_basis_dd_ts(y2, y0), -2 * y1));
+    // yy1 = 3*(y1 - y0)
+    const yy1 = double_double_to_power_basis_dd_qmd(3, double_double_to_power_basis_dd_td(y1, y0));
+    return [[xx3, xx2, xx1, [0, x0]], [yy3, yy2, yy1, [0, y0]]];
+}
+/**
+ * Only the quadratic monomial coefficient has an error, the others are exact.
+ *
+ * @internal
+ */
+function to_power_basis_dd_toPowerBasis2Dd(ps) {
+    const [[x0, y0], [x1, y1], [x2, y2]] = ps;
+    // xx2 = x2 + x0 - 2*x1
+    const xx2 = double_double_to_power_basis_dd_qad(double_double_to_power_basis_dd_ts(x2, x0), -2 * x1);
+    // xx1 = 2*(x1 - x0)
+    const xx1 = double_double_to_power_basis_dd_td(2 * x1, 2 * x0); // error free
+    // yy2 = y2 + y0 - 2*y1
+    const yy2 = double_double_to_power_basis_dd_qad(double_double_to_power_basis_dd_ts(y2, y0), -2 * y1);
+    // yy1 = 2*(y1 - y0)
+    const yy1 = double_double_to_power_basis_dd_td(2 * y1, 2 * y0); // error free
+    return [[xx2, xx1, [0, x0]], [yy2, yy1, [0, y0]]];
+}
+/**
+ * Exact for any bitlength.
+ *
+ * @internal
+ */
+function to_power_basis_dd_toPowerBasis1Dd(ps) {
+    const [[x0, y0], [x1, y1]] = ps;
+    return [[
+            double_double_to_power_basis_dd_td(x1, x0),
+            [0, x0]
+        ], [
+            double_double_to_power_basis_dd_td(y1, y0),
+            [0, y0]
+        ]];
+}
+/**
+ * Exact for any bitlength.
+ *
+ * @internal
+ */
+function to_power_basis_dd_toPowerBasis0Dd(ps) {
+    const [[x0, y0]] = ps;
+    return [[[0, x0]], [[0, y0]]];
+}
+
+//# sourceMappingURL=to-power-basis-dd.js.map
+;// ./node_modules/double-double/node/double-mixed-double-double/dd-diff-double.js
+/**
+ * Returns the result of subtracting the second given double-precision
+ * floating point number from the first double-double precision float.
+ *
+ * * relative error bound: 3u^2 + 13u^3, i.e. fl(a-b) = (a-b)(1+ϵ),
+ * where ϵ <= 3u^2 + 13u^3, u = 0.5 * Number.EPSILON
+ * * the error bound is not sharp - the worst case that could be found by the
+ * authors were 2.25u^2
+ *
+ * ALGORITHM 6 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
+ * @param x a double-double precision floating point number
+ * @param y a double precision floating point number
+ */
+function ddDiffDouble(x, y) {
+    const xl = x[0];
+    const xh = x[1];
+    //const [sl,sh] = twoSum(xh,yh);
+    const sh = xh - y;
+    const _1 = sh - xh;
+    const sl = (xh - (sh - _1)) + (-y - _1);
+    //const [tl,th] = twoSum(xl,yl);
+    const th = xl;
+    const _2 = th - xl;
+    const tl = (xl - (th - _2)) - _2;
+    const c = sl + th;
+    //const [vl,vh] = fastTwoSum(sh,c)
+    const vh = sh + c;
+    const vl = c - (vh - sh);
+    const w = tl + vl;
+    //const [zl,zh] = fastTwoSum(vh,w)
+    const zh = vh + w;
+    const zl = w - (zh - vh);
+    return [zl, zh];
+}
+
+//# sourceMappingURL=dd-diff-double.js.map
+;// ./src/get-medial-points/double-double/dd-get-medial-point-coeffs-bez2.ts
+
+
+const dd_get_medial_point_coeffs_bez2_qmd = ddMultDouble2;
+const dd_get_medial_point_coeffs_bez2_qaq = ddAddDd;
+const dd_get_medial_point_coeffs_bez2_qmq = ddMultDd;
+const dd_get_medial_point_coeffs_bez2_qno = ddNegativeOf;
+const dd_get_medial_point_coeffs_bez2_qmn2 = ddMultByNeg2;
+const dd_get_medial_point_coeffs_bez2_qm2 = ddMultBy2;
+const qdd = ddDiffDouble;
+/**
+ * Returns the polynomial coefficients for the ray parameter `t` and the
+ * curve parameter `s` that encode the medial condition for `q(t) = p + t⋅v`
+ * and a quadratic bezier curve `ps`.
+ *
+ * The returned coefficients describe the equations whose common solutions
+ * satisfy:
+ * * `q(t)` is equidistant from `p` and the nearest point on `ps`
+ * * that common distance is locally minimal among such candidates
+ *
+ * More specifically, this function returns:
+ * * `A` and `B`: the coefficients of `E2(s,t) = A(s)⋅t + B(s)`
+ * * `C` and `D`: the coefficients of `E1(s,t) = C(s)⋅t + D(s)`
+ * * `H`: the eliminated polynomial `A(s)⋅D(s) - B(s)⋅C(s)` whose roots are
+ *   candidate `s` values for medial points
+ *
+ * @param p base point
+ * @param v ray direction from `p`
+ * @param ps quadratic bezier control points, i.e. an order 2 bezier curve
+ * given as an array of control points, e.g. `[[0,0],[1,1],[2,1]]`
+ */
+function ddGetMedialPointCoeffsBez2(p, v, ps) {
+    // -----------------------------------------------------
+    // See get-medial-points.md for implementation details.
+    // -----------------------------------------------------
+    const [px, py] = p;
+    const [vx, vy] = v;
+    const [[x0, y0]] = ps;
+    // Quadratic bezier in power basis: b(s) = a⋅s² + b⋅s + c
+    const [[ax, bx], [ay, by]] = to_power_basis_dd_toPowerBasisDd(ps);
+    // u(s) = p - b(s) = u2⋅s² + u1⋅s + u0
+    // const u0x = px - x0;
+    // const u0y = py - y0;
+    const u0x = qdd(px, x0);
+    const u0y = qdd(py, y0);
+    // Shared dot products.
+    // const c1 = 2*(vx*ax + vy*ay);
+    // const c0 = vx*bx + vy*by;
+    // const vu0 = vx*u0x + vy*u0y;
+    // const b4 = ax*ax + ay*ay;
+    // const ab = ax*bx + ay*by;
+    // const bb = bx*bx + by*by;
+    // const u0a = u0x*ax + u0y*ay;
+    // const d0 = u0x*bx + u0y*by;
+    // const b0 = u0x*u0x + u0y*u0y;
+    const c1 = dd_get_medial_point_coeffs_bez2_qm2(dd_get_medial_point_coeffs_bez2_qaq(dd_get_medial_point_coeffs_bez2_qmq(vx, ax), dd_get_medial_point_coeffs_bez2_qmq(vy, ay)));
+    const c0 = dd_get_medial_point_coeffs_bez2_qaq(dd_get_medial_point_coeffs_bez2_qmq(vx, bx), dd_get_medial_point_coeffs_bez2_qmq(vy, by));
+    const vu0 = dd_get_medial_point_coeffs_bez2_qaq(dd_get_medial_point_coeffs_bez2_qmq(vx, u0x), dd_get_medial_point_coeffs_bez2_qmq(vy, u0y));
+    const b4 = dd_get_medial_point_coeffs_bez2_qaq(dd_get_medial_point_coeffs_bez2_qmq(ax, ax), dd_get_medial_point_coeffs_bez2_qmq(ay, ay));
+    const ab = dd_get_medial_point_coeffs_bez2_qaq(dd_get_medial_point_coeffs_bez2_qmq(bx, ax), dd_get_medial_point_coeffs_bez2_qmq(by, ay));
+    const bb = dd_get_medial_point_coeffs_bez2_qaq(dd_get_medial_point_coeffs_bez2_qmq(bx, bx), dd_get_medial_point_coeffs_bez2_qmq(by, by));
+    const u0a = dd_get_medial_point_coeffs_bez2_qaq(dd_get_medial_point_coeffs_bez2_qmq(u0x, ax), dd_get_medial_point_coeffs_bez2_qmq(u0y, ay));
+    const d0 = dd_get_medial_point_coeffs_bez2_qaq(dd_get_medial_point_coeffs_bez2_qmq(bx, u0x), dd_get_medial_point_coeffs_bez2_qmq(by, u0y));
+    const b0 = dd_get_medial_point_coeffs_bez2_qaq(dd_get_medial_point_coeffs_bez2_qmq(u0x, u0x), dd_get_medial_point_coeffs_bez2_qmq(u0y, u0y));
+    // -----------------------------------------------------
+    // E1(s,t): (u(s) + t⋅v) ⋅ b'(s) = 0
+    // => C(s)⋅t + D(s) = 0
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    // const d3 = -2*b4;
+    // const d2 = -3*ab;
+    // const d1 = 2*u0a - bb;
+    const d3 = dd_get_medial_point_coeffs_bez2_qmn2(b4);
+    const d2 = dd_get_medial_point_coeffs_bez2_qmd(-3, ab);
+    const d1 = dd_get_medial_point_coeffs_bez2_qaq(dd_get_medial_point_coeffs_bez2_qm2(u0a), dd_get_medial_point_coeffs_bez2_qno(bb));
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    // E2(s,t): |t⋅v|² - |u(s) + t⋅v|² = 0
+    //         => 2⋅(v⋅u(s))⋅t + |u(s)|² = 0
+    //         => A(s)⋅t + B(s) = 0
+    // const a2 = -c1;
+    // const a1 = -2*c0;
+    // const a0 = 2*vu0;
+    const a2 = dd_get_medial_point_coeffs_bez2_qno(c1);
+    const a1 = dd_get_medial_point_coeffs_bez2_qmn2(c0);
+    const a0 = dd_get_medial_point_coeffs_bez2_qm2(vu0);
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    // const b3 = 2*ab;
+    // const b2 = -d1;
+    // const b1 = -2*d0;
+    const b3 = dd_get_medial_point_coeffs_bez2_qm2(ab);
+    const b2 = dd_get_medial_point_coeffs_bez2_qno(d1);
+    const b1 = dd_get_medial_point_coeffs_bez2_qmn2(d0);
+    // -----------------------------------------------------
+    // Eliminate t from:
+    //   A(s)⋅t + B(s) = 0
+    //   C(s)⋅t + D(s) = 0
+    // by taking A(s)⋅D(s) - B(s)⋅C(s) = 0 (degree ≤ 5 in s)
+    // Using:
+    //   a2 = -c1, d3 = -2*b4, d1 = -b2, b1 = -2*d0
+    // we can compute H = A⋅D - B⋅C directly.
+    // const H5 = b4*c1;
+    // const H4 = ab*c1 + 3*b4*c0;
+    // const H3 = 4*(ab*c0 - vu0*b4);
+    // const H2 = c1*d0 + c0*b2 - 6*vu0*ab;
+    // const H1 = -2*vu0*b2 - c1*b0;
+    // const H0 = 2*vu0*d0 - c0*b0;
+    const H5 = dd_get_medial_point_coeffs_bez2_qmq(b4, c1);
+    const H4 = dd_get_medial_point_coeffs_bez2_qaq(dd_get_medial_point_coeffs_bez2_qmq(ab, c1), dd_get_medial_point_coeffs_bez2_qmd(3, dd_get_medial_point_coeffs_bez2_qmq(b4, c0)));
+    const H3 = dd_get_medial_point_coeffs_bez2_qm2(dd_get_medial_point_coeffs_bez2_qm2(dd_get_medial_point_coeffs_bez2_qaq(dd_get_medial_point_coeffs_bez2_qmq(ab, c0), dd_get_medial_point_coeffs_bez2_qno(dd_get_medial_point_coeffs_bez2_qmq(vu0, b4)))));
+    const H2 = dd_get_medial_point_coeffs_bez2_qaq(dd_get_medial_point_coeffs_bez2_qaq(dd_get_medial_point_coeffs_bez2_qmq(c1, d0), dd_get_medial_point_coeffs_bez2_qmq(c0, b2)), dd_get_medial_point_coeffs_bez2_qno(dd_get_medial_point_coeffs_bez2_qmd(6, dd_get_medial_point_coeffs_bez2_qmq(vu0, ab))));
+    const H1 = dd_get_medial_point_coeffs_bez2_qaq(dd_get_medial_point_coeffs_bez2_qmn2(dd_get_medial_point_coeffs_bez2_qmq(vu0, b2)), dd_get_medial_point_coeffs_bez2_qno(dd_get_medial_point_coeffs_bez2_qmq(c1, b0)));
+    const H0 = dd_get_medial_point_coeffs_bez2_qaq(dd_get_medial_point_coeffs_bez2_qm2(dd_get_medial_point_coeffs_bez2_qmq(vu0, d0)), dd_get_medial_point_coeffs_bez2_qno(dd_get_medial_point_coeffs_bez2_qmq(c0, b0)));
+    return {
+        A: [a2, a1, a0],
+        B: [b4, b3, b2, b1, b0],
+        C: [c1, c0],
+        D: [d3, d2, d1, d0],
+        H: [H5, H4, H3, H2, H1, H0]
+    };
+}
+
+
+;// ./src/get-medial-points/double-double/dd-get-medial-point-coeffs-bez1.ts
+
+const dd_get_medial_point_coeffs_bez1_td = two_diff_twoDiff;
+const dd_get_medial_point_coeffs_bez1_qaq = ddAddDd;
+const dd_get_medial_point_coeffs_bez1_qmq = ddMultDd;
+const dd_get_medial_point_coeffs_bez1_qno = ddNegativeOf;
+const dd_get_medial_point_coeffs_bez1_qmn2 = ddMultByNeg2;
+const dd_get_medial_point_coeffs_bez1_qm2 = ddMultBy2;
+const dd_get_medial_point_coeffs_bez1_qdd = ddDiffDouble;
+/**
+ * Returns the polynomial coefficients used to recover ray parameter values `t`
+ * for a ray `q(t) = p + t⋅v` and an order-1 bezier curve `ps`.
+ *
+ * The returned polynomials encode the medial-condition equations in `s` and
+ * `t`. For any valid solution, `t` is recovered by eliminating `s` and solving
+ * the resulting ray equation, or equivalently by using the linear form
+ * `A(s)⋅t + B(s) = 0`, which gives `t = -B(s)/A(s)`.
+ *
+ * More specifically, the returned values represent:
+ * * `A` and `B`: the coefficients of `E2(s,t) = A(s)⋅t + B(s)`
+ * * `C` and `D`: the coefficients of `E1(s,t) = C(s)⋅t + D(s)`
+ * * `H`: the eliminated polynomial `A(s)⋅D(s) - B(s)⋅C(s)` whose roots are
+ *   candidate `s` values for medial points
+ *
+ * @param p base point
+ * @param v ray direction vector starting from `p`
+ * @param ps order 1 bezier control points, i.e. a line segment
+ * given as an array of control points, e.g. `[[0,0],[2,1]]`
+ */
+function ddGetMedialPointCoeffsBez1(p, v, ps) {
+    // -----------------------------------------------------
+    // See get-medial-points.md for implementation details.
+    // -----------------------------------------------------
+    const [px, py] = p;
+    const [vx, vy] = v;
+    const [[x0, y0], [x1, y1]] = ps;
+    // Linear bezier in power basis: b(s) = b*s + c
+    // We can also use: `const [[bx,by], [cx,cy]] = toPowerBasis1(ps)`
+    // const bx = x1 - x0;
+    // const by = y1 - y0;
+    const bx = dd_get_medial_point_coeffs_bez1_td(x1, x0);
+    const by = dd_get_medial_point_coeffs_bez1_td(y1, y0);
+    // u(s) = p - b(s) = u1*s + u0
+    // const u0x = px - x0;
+    // const u0y = py - y0;
+    const u0x = dd_get_medial_point_coeffs_bez1_qdd(px, x0);
+    const u0y = dd_get_medial_point_coeffs_bez1_qdd(py, y0);
+    // b'(s) = w(s) = w0
+    // -----------------------------------------------------
+    // E1(s,t): (u(s) + t⋅v) ⋅ b'(s) = 0
+    // => C(s)⋅t + D(s) = 0
+    // const c0 = vx*bx + vy*by;
+    const c0 = dd_get_medial_point_coeffs_bez1_qaq(dd_get_medial_point_coeffs_bez1_qmq(vx, bx), dd_get_medial_point_coeffs_bez1_qmq(vy, by));
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    // const d1 = -(bx*bx + by*by);
+    // const d0 = bx*u0x + by*u0y;
+    // const d1 = qmd(-1,qaq(qmq(bx,bx),qmq(by,by)));
+    const d1 = dd_get_medial_point_coeffs_bez1_qno(dd_get_medial_point_coeffs_bez1_qaq(dd_get_medial_point_coeffs_bez1_qmq(bx, bx), dd_get_medial_point_coeffs_bez1_qmq(by, by)));
+    const d0 = dd_get_medial_point_coeffs_bez1_qaq(dd_get_medial_point_coeffs_bez1_qmq(bx, u0x), dd_get_medial_point_coeffs_bez1_qmq(by, u0y));
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    // E2(s,t): |t⋅v|² - |u(s) + t⋅v|² = 0
+    //         => 2⋅(v⋅u(s))⋅t + |u(s)|² = 0
+    //         => A(s)⋅t + B(s) = 0
+    // const a1 = -2*c0;
+    // const a0 = 2*(vx*u0x + vy*u0y);
+    const a1 = dd_get_medial_point_coeffs_bez1_qmn2(c0);
+    const a0 = dd_get_medial_point_coeffs_bez1_qaq(dd_get_medial_point_coeffs_bez1_qmq(dd_get_medial_point_coeffs_bez1_qm2(vx), u0x), dd_get_medial_point_coeffs_bez1_qmq(dd_get_medial_point_coeffs_bez1_qm2(vy), u0y));
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    // const b2 = -d1;
+    // const b1 = -2*d0;
+    // const b0 = u0x*u0x + u0y*u0y;
+    const b2 = dd_get_medial_point_coeffs_bez1_qno(d1);
+    const b1 = dd_get_medial_point_coeffs_bez1_qmn2(d0);
+    const b0 = dd_get_medial_point_coeffs_bez1_qaq(dd_get_medial_point_coeffs_bez1_qmq(u0x, u0x), dd_get_medial_point_coeffs_bez1_qmq(u0y, u0y));
+    // -----------------------------------------------------
+    // Eliminate t from:
+    //   A(s)⋅t + B(s) = 0
+    //   C(s)⋅t + D(s) = 0
+    // by taking A(s)⋅D(s) - B(s)⋅C(s) = 0 (degree ≤ 2 in s)
+    // const H2 = b2*c0;
+    // const H1 = a0*d1;
+    // const H0 = a0*d0 - b0*c0;
+    const H2 = dd_get_medial_point_coeffs_bez1_qmq(b2, c0);
+    const H1 = dd_get_medial_point_coeffs_bez1_qmq(a0, d1);
+    const H0 = dd_get_medial_point_coeffs_bez1_qaq(dd_get_medial_point_coeffs_bez1_qmq(a0, d0), dd_get_medial_point_coeffs_bez1_qno(dd_get_medial_point_coeffs_bez1_qmq(b0, c0)));
+    return {
+        A: [a1, a0],
+        B: [b2, b1, b0],
+        C: [c0],
+        D: [d1, d0],
+        H: [H2, H1, H0]
+    };
+}
+
+
+;// ./src/get-medial-points/double-double/dd-get-medial-point-coeffs-bez3.ts
+/* unused harmony import specifier */ var dd_get_medial_point_coeffs_bez3_twoDiff;
+
+
+const dd_get_medial_point_coeffs_bez3_td = (/* unused pure expression or super */ null && (dd_get_medial_point_coeffs_bez3_twoDiff));
+const dd_get_medial_point_coeffs_bez3_qmd = ddMultDouble2;
+const dd_get_medial_point_coeffs_bez3_qaq = ddAddDd;
+const dd_get_medial_point_coeffs_bez3_qmq = ddMultDd;
+const dd_get_medial_point_coeffs_bez3_qno = ddNegativeOf;
+const dd_get_medial_point_coeffs_bez3_qmn2 = ddMultByNeg2;
+const dd_get_medial_point_coeffs_bez3_qm2 = ddMultBy2;
+const dd_get_medial_point_coeffs_bez3_qdd = ddDiffDouble;
+/**
+ * Returns the polynomial coefficients for the ray parameter `t` and the
+ * curve parameter `s` that encode the medial condition for `q(t) = p + t⋅v`
+ * and a cubic bezier curve `ps`.
+ *
+ * The returned coefficients describe the equations whose common solutions
+ * satisfy:
+ * * `q(t)` is equidistant from `p` and the nearest point on `ps`
+ * * that common distance is locally minimal among such candidates
+ *
+ * More specifically, this function returns:
+ * * `A` and `B`: the coefficients of `E2(s,t) = A(s)⋅t + B(s)`
+ * * `C` and `D`: the coefficients of `E1(s,t) = C(s)⋅t + D(s)`
+ * * `H`: the eliminated polynomial `A(s)⋅D(s) - B(s)⋅C(s)` whose roots are
+ *   candidate `s` values for medial points
+ *
+ * @param p base point
+ * @param v ray direction from `p`
+ * @param ps cubic bezier control points, i.e. an order 3 bezier curve
+ * given as an array of control points, e.g. `[[0,0],[1,1],[2,1],[3,0]]`
+ */
+function ddGetMedialPointCoeffsBez3(p, v, ps) {
+    // -----------------------------------------------------
+    // See get-medial-points.md for implementation details.
+    // -----------------------------------------------------
+    const [px, py] = p;
+    const [vx, vy] = v;
+    // Cubic bezier in power basis: b(s) = a*s^3 + b*s^2 + c*s + d
+    const [[ax, bx, cx, [, dx]], [ay, by, cy, [, dy]]] = to_power_basis_dd_toPowerBasisDd(ps);
+    // const u0x = px - dx;
+    // const u0y = py - dy;
+    const u0x = dd_get_medial_point_coeffs_bez3_qdd(px, dx);
+    const u0y = dd_get_medial_point_coeffs_bez3_qdd(py, dy);
+    // Reuse dot products across A, B, C, D, and H.
+    // const va = vx*ax + vy*ay;
+    // const vb = vx*bx + vy*by;
+    // const vc = vx*cx + vy*cy;
+    // const vu0 = vx*u0x + vy*u0y;
+    const va = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmq(vx, ax), dd_get_medial_point_coeffs_bez3_qmq(vy, ay));
+    const vb = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmq(vx, bx), dd_get_medial_point_coeffs_bez3_qmq(vy, by));
+    const vc = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmq(vx, cx), dd_get_medial_point_coeffs_bez3_qmq(vy, cy));
+    const vu0 = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmq(vx, u0x), dd_get_medial_point_coeffs_bez3_qmq(vy, u0y));
+    // const b6 = ax*ax + ay*ay;
+    // const ab = ax*bx + ay*by;
+    // const ac = ax*cx + ay*cy;
+    // const bb = bx*bx + by*by;
+    // const bc = bx*cx + by*cy;
+    // const cc = cx*cx + cy*cy;
+    const b6 = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmq(ax, ax), dd_get_medial_point_coeffs_bez3_qmq(ay, ay));
+    const ab = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmq(ax, bx), dd_get_medial_point_coeffs_bez3_qmq(ay, by));
+    const ac = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmq(ax, cx), dd_get_medial_point_coeffs_bez3_qmq(ay, cy));
+    const bb = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmq(bx, bx), dd_get_medial_point_coeffs_bez3_qmq(by, by));
+    const bc = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmq(bx, cx), dd_get_medial_point_coeffs_bez3_qmq(by, cy));
+    const cc = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmq(cx, cx), dd_get_medial_point_coeffs_bez3_qmq(cy, cy));
+    // const au0 = ax*u0x + ay*u0y;
+    // const bu0 = bx*u0x + by*u0y;
+    // const d0 = cx*u0x + cy*u0y;
+    // const b0 = u0x*u0x + u0y*u0y;
+    const au0 = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmq(ax, u0x), dd_get_medial_point_coeffs_bez3_qmq(ay, u0y));
+    const bu0 = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmq(bx, u0x), dd_get_medial_point_coeffs_bez3_qmq(by, u0y));
+    const d0 = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmq(cx, u0x), dd_get_medial_point_coeffs_bez3_qmq(cy, u0y));
+    const b0 = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmq(u0x, u0x), dd_get_medial_point_coeffs_bez3_qmq(u0y, u0y));
+    // -----------------------------------------------------
+    // E1(s,t): (u(s) + t*v) * b'(s) = 0
+    // => C(s)*t + D(s) = 0
+    // const c2 = 3*va;
+    // const c1 = 2*vb;
+    // const c0 = vc;
+    const c2 = dd_get_medial_point_coeffs_bez3_qmd(3, va);
+    const c1 = dd_get_medial_point_coeffs_bez3_qm2(vb);
+    const c0 = vc;
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    // const d5 = -3*b6;
+    // const d4 = -5*ab;
+    // const d3 = -4*ac - 2*bb;
+    // const d2 = 3*au0 - 3*bc;
+    // const d1 = 2*bu0 - cc;
+    const d5 = dd_get_medial_point_coeffs_bez3_qmd(-3, b6);
+    const d4 = dd_get_medial_point_coeffs_bez3_qmd(-5, ab);
+    const d3 = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmd(-4, ac), dd_get_medial_point_coeffs_bez3_qmn2(bb));
+    const d2 = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmd(3, au0), dd_get_medial_point_coeffs_bez3_qmd(-3, bc));
+    const d1 = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qm2(bu0), dd_get_medial_point_coeffs_bez3_qno(cc));
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    // E2(s,t): |t*v|^2 - |u(s) + t*v|^2 = 0
+    //         => 2*(v*u(s))*t + |u(s)|^2 = 0
+    //         => A(s)*t + B(s) = 0
+    // const a3 = -2*va;
+    // const a2 = -2*vb;
+    // const a1 = -2*vc;
+    // const a0 = 2*vu0;
+    const a3 = dd_get_medial_point_coeffs_bez3_qmn2(va);
+    const a2 = dd_get_medial_point_coeffs_bez3_qmn2(vb);
+    const a1 = dd_get_medial_point_coeffs_bez3_qmn2(vc);
+    const a0 = dd_get_medial_point_coeffs_bez3_qm2(vu0);
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    // const b5 = 2*ab;
+    // const b4 = 2*ac + bb;
+    // const b3 = 2*bc - 2*au0;
+    // const b2 = cc - 2*bu0;
+    // const b1 = -2*d0;
+    const b5 = dd_get_medial_point_coeffs_bez3_qm2(ab);
+    const b4 = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qm2(ac), bb);
+    const b3 = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qm2(bc), dd_get_medial_point_coeffs_bez3_qmn2(au0));
+    const b2 = dd_get_medial_point_coeffs_bez3_qaq(cc, dd_get_medial_point_coeffs_bez3_qmn2(bu0));
+    const b1 = dd_get_medial_point_coeffs_bez3_qmn2(d0);
+    // -----------------------------------------------------
+    // Eliminate t from:
+    //   A(s)*t + B(s) = 0
+    //   C(s)*t + D(s) = 0
+    // by taking H(s) = A(s)*D(s) - B(s)*C(s) = 0 (degree <= 8 in s).
+    // Using:
+    //   a2 = -c1, a1 = -2*c0,
+    //   d5 = -3*b6, d4 = -(5/2)*b5, d3 = -2*b4, d2 = -(3/2)*b3,
+    //   d1 = -b2, d0 = -(1/2)*b1,
+    // we can compute H directly with fewer operations.
+    // const H8 = 3*va*b6;
+    // const H7 = 4*(va*ab + vb*b6);
+    // const H6 = va*b4 + 6*vb*ab + 5*vc*b6;
+    // const H5 = 2*vb*b4 + 8*vc*ab - 6*vu0*b6;
+    // const H4 = -va*b2 + vb*b3 + 3*vc*b4 - 10*vu0*ab;
+    // const H3 = -2*va*b1 + 2*vc*b3 - 4*vu0*b4;
+    // const H2 = vc*b2 - vb*b1 - 3*vu0*b3 - 3*va*b0;
+    // const H1 = -2*vu0*b2 - 2*vb*b0;
+    // const H0 = -vu0*b1 - vc*b0;
+    const H8 = dd_get_medial_point_coeffs_bez3_qmd(3, dd_get_medial_point_coeffs_bez3_qmq(va, b6));
+    const H7 = dd_get_medial_point_coeffs_bez3_qm2(dd_get_medial_point_coeffs_bez3_qm2(dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmq(va, ab), dd_get_medial_point_coeffs_bez3_qmq(vb, b6))));
+    const H6 = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmq(va, b4), dd_get_medial_point_coeffs_bez3_qmd(6, dd_get_medial_point_coeffs_bez3_qmq(vb, ab))), dd_get_medial_point_coeffs_bez3_qmd(5, dd_get_medial_point_coeffs_bez3_qmq(vc, b6)));
+    const H5 = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qm2(dd_get_medial_point_coeffs_bez3_qmq(vb, b4)), dd_get_medial_point_coeffs_bez3_qmd(8, dd_get_medial_point_coeffs_bez3_qmq(vc, ab))), dd_get_medial_point_coeffs_bez3_qno(dd_get_medial_point_coeffs_bez3_qmd(6, dd_get_medial_point_coeffs_bez3_qmq(vu0, b6))));
+    const H4 = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qno(dd_get_medial_point_coeffs_bez3_qmq(va, b2)), dd_get_medial_point_coeffs_bez3_qmq(vb, b3)), dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmd(3, dd_get_medial_point_coeffs_bez3_qmq(vc, b4)), dd_get_medial_point_coeffs_bez3_qno(dd_get_medial_point_coeffs_bez3_qmd(10, dd_get_medial_point_coeffs_bez3_qmq(vu0, ab)))));
+    const H3 = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmn2(dd_get_medial_point_coeffs_bez3_qmq(va, b1)), dd_get_medial_point_coeffs_bez3_qm2(dd_get_medial_point_coeffs_bez3_qmq(vc, b3))), dd_get_medial_point_coeffs_bez3_qno(dd_get_medial_point_coeffs_bez3_qm2(dd_get_medial_point_coeffs_bez3_qm2(dd_get_medial_point_coeffs_bez3_qmq(vu0, b4)))));
+    const H2 = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmq(vc, b2), dd_get_medial_point_coeffs_bez3_qno(dd_get_medial_point_coeffs_bez3_qmq(vb, b1))), dd_get_medial_point_coeffs_bez3_qno(dd_get_medial_point_coeffs_bez3_qmd(3, dd_get_medial_point_coeffs_bez3_qmq(vu0, b3)))), dd_get_medial_point_coeffs_bez3_qno(dd_get_medial_point_coeffs_bez3_qmd(3, dd_get_medial_point_coeffs_bez3_qmq(va, b0))));
+    const H1 = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qmn2(dd_get_medial_point_coeffs_bez3_qmq(vu0, b2)), dd_get_medial_point_coeffs_bez3_qmn2(dd_get_medial_point_coeffs_bez3_qmq(vb, b0)));
+    const H0 = dd_get_medial_point_coeffs_bez3_qaq(dd_get_medial_point_coeffs_bez3_qno(dd_get_medial_point_coeffs_bez3_qmq(vu0, b1)), dd_get_medial_point_coeffs_bez3_qno(dd_get_medial_point_coeffs_bez3_qmq(vc, b0)));
+    return {
+        A: [a3, a2, a1, a0],
+        B: [b6, b5, b4, b3, b2, b1, b0],
+        C: [c2, c1, c0],
+        D: [d5, d4, d3, d2, d1, d0],
+        H: [H8, H7, H6, H5, H4, H3, H2, H1, H0]
+    };
+}
+
+
+;// ./src/get-medial-points/double-double/dd-get-medial-point-coeffs-bez0.ts
+
+const dd_get_medial_point_coeffs_bez0_qaq = ddAddDd;
+const dd_get_medial_point_coeffs_bez0_qmq = ddMultDd;
+const dd_get_medial_point_coeffs_bez0_qm2 = ddMultBy2;
+const dd_get_medial_point_coeffs_bez0_qdd = ddDiffDouble;
+/**
+ * Returns the coefficients `a0` and `b0` for the linear equation
+ * `a0⋅t + b0 = 0`, so the ray parameter can be recovered as `t = -b0/a0`.
+ * That parameter value makes `q(t) = p + t⋅v` equidistant from `p` and `P`.
+ *
+ * Let `p` be a fixed point in the plane.\
+ * Let `v` be a direction vector defining the ray `q(t) = p + t⋅v`.\
+ * Let `P` be another point.\
+ *
+ * In other words, this function returns the coefficients needed to solve for
+ * the ray parameter of the medial point on the ray.
+ *
+ * @param p base point
+ * @param v ray direction from `p`
+ * @param P another "target" point, e.g. `[1,2]`
+ */
+function ddGetMedialPointCoeffsBez0(p, v, P) {
+    // -----------------------------------------------------
+    // See get-medial-points.md for implementation details.
+    // -----------------------------------------------------
+    const [px, py] = p;
+    const [vx, vy] = v;
+    const [x0, y0] = P;
+    // Constant bezier in power basis: b(s) = c
+    // u(s) = p - b(s) = u0
+    // const u0x = px - x0;
+    // const u0y = py - y0;
+    const u0x = dd_get_medial_point_coeffs_bez0_qdd(px, x0);
+    const u0y = dd_get_medial_point_coeffs_bez0_qdd(py, y0);
+    // E2(s,t): |t⋅v|² - |u(s) + t⋅v|² = 0
+    //         => 2⋅(v⋅u(s))⋅t + |u(s)|² = 0
+    //         => A(s)⋅t + B(s) = 0
+    // const a0 = 2*(vx*u0x + vy*u0y);
+    // const b0 = u0x*u0x + u0y*u0y;
+    const a0 = dd_get_medial_point_coeffs_bez0_qaq(dd_get_medial_point_coeffs_bez0_qmq(dd_get_medial_point_coeffs_bez0_qm2(vx), u0x), dd_get_medial_point_coeffs_bez0_qmq(dd_get_medial_point_coeffs_bez0_qm2(vy), u0y));
+    const b0 = dd_get_medial_point_coeffs_bez0_qaq(dd_get_medial_point_coeffs_bez0_qmq(u0x, u0x), dd_get_medial_point_coeffs_bez0_qmq(u0y, u0y));
+    return { a0, b0 };
+}
+
+
+;// ./src/get-medial-points/double-double/dd-get-medial-point-coeffs.ts
+
+
+
+
+const dd_get_medial_point_coeffs_getMedialPointCoeffss = [
+    ,
+    ,
+    ddGetMedialPointCoeffsBez1,
+    ddGetMedialPointCoeffsBez2,
+    ddGetMedialPointCoeffsBez3
+];
+/**
+ * Returns polynomial coefficients for ray parameter values `t`, bezier
+ * parameter values `s` and medial points for points `q(t)` and b(s) (an order
+ * 0, 1, 2 or 3 bezier curve) that satisfy the medial condition with respect to `p` and `ps`:
+ *
+ * Let `p` be a fixed point in the plane.
+ * Let `v` be a direction vector defining the ray `q(t) = p + t⋅v`.
+ * Let `ps` be a cubic bezier curve.
+ *
+ * * `q(t)` is equidistant from `p` and the nearest point on `ps`
+ * * that common distance is locally minimal among such candidates
+ *
+ * In other words, this function returns candidate ray parameters for the
+ * sought medial point(s). Selecting physically valid solutions (if needed)
+ * is done by the caller or by a later stage of this routine.
+ *
+ * @param p base point
+ * @param v ray direction from `p`
+ * @param ps bezier control points, e.g. `[[0,0],[1,1],[2,1],[3,0]]`
+ */
+function ddGetMedialPointCoeffs(p, v, ps) {
+    if (ps.length === 1) {
+        const { a0, b0 } = ddGetMedialPointCoeffsBez0(p, v, ps[0]);
+        return { A: [a0], B: [b0], C: [], D: [], H: [] };
+    }
+    return dd_get_medial_point_coeffs_getMedialPointCoeffss[ps.length](p, v, ps);
+}
+
+
+;// ./src/get-medial-points/double-double/dd-get-medial-point-coeffs-bez2-same-curve.ts
+
+
+const dd_get_medial_point_coeffs_bez2_same_curve_qmd = ddMultDouble2;
+const dd_get_medial_point_coeffs_bez2_same_curve_qaq = ddAddDd;
+const dd_get_medial_point_coeffs_bez2_same_curve_qmq = ddMultDd;
+const dd_get_medial_point_coeffs_bez2_same_curve_qno = ddNegativeOf;
+const dd_get_medial_point_coeffs_bez2_same_curve_qm2 = ddMultBy2;
+/**
+ * Returns polynomial coefficients for the same-curve quadratic medial-point
+ * case, where `p = b(t)` on the same quadratic bezier `ps` and `v` is normal
+ * to the curve at that parameter `t`.
+ *
+ * The returned coefficients encode:
+ * * `A`, `B`: `E2(s, τ) = (s - t)^2⋅(A(s)⋅τ + B(s))`
+//  * * `C`, `D`: `E1(s, τ) = C(s)⋅τ + D(s)`
+ * * `H`: the reduced eliminant in `s`
+ *
+ * Here `τ` is the ray parameter in `q(τ) = p + τ⋅v`.
+ * For a candidate root `s` of `H`, recover `τ` from
+ * `A(s)⋅τ + B(s) = 0`, i.e. `τ = -B(s)/A(s)` when `A(s) ≠ 0`.
+ *
+ * In this same-curve setup, the full eliminant has the form
+ * `H_full(s) = (s - t)^4*(l1*s + l0)`. This function returns only the reduced
+ * factor `H(s) = l1*s + l0` (the repeated `(s - t)^4` factor is omitted).
+ *
+ * @param t parameter on `ps` where `p = b(t)`
+ * @param v ray direction from `p`; assumed normal to `ps` at `t`
+ * @param ps order 2 bezier control points, e.g. `[[0,0],[1,1],[2,1]]`
+ */
+function ddGetMedialPointCoeffsBez2_SameCurve(t, v, ps) {
+    // -----------------------------------------------------
+    // See get-medial-points.md for implementation details.
+    // -----------------------------------------------------
+    // Quadratic bezier in power basis: b(s) = a⋅s² + b⋅s + c
+    const [[ax, bx], [ay, by]] = to_power_basis_dd_toPowerBasisDd(ps);
+    const [vx, vy] = v;
+    // Same-curve assumption with explicit parameter `t`:
+    // p = b(t) => u0 = p - c = t*(a*t + b).
+    // const g0x = ax*t + bx;
+    // const g0y = ay*t + by;
+    const g0x = dd_get_medial_point_coeffs_bez2_same_curve_qaq(dd_get_medial_point_coeffs_bez2_same_curve_qmd(t, ax), bx);
+    const g0y = dd_get_medial_point_coeffs_bez2_same_curve_qaq(dd_get_medial_point_coeffs_bez2_same_curve_qmd(t, ay), by);
+    // Reuse core quadratic-form terms to reduce repeated multiplications.
+    // const br2 = ax*ax + ay*ay;
+    // const ab = ax*bx + ay*by;
+    // const bb = bx*bx + by*by;
+    // const ag = ax*g0x + ay*g0y;
+    const br2 = dd_get_medial_point_coeffs_bez2_same_curve_qaq(dd_get_medial_point_coeffs_bez2_same_curve_qmq(ax, ax), dd_get_medial_point_coeffs_bez2_same_curve_qmq(ay, ay));
+    const ab = dd_get_medial_point_coeffs_bez2_same_curve_qaq(dd_get_medial_point_coeffs_bez2_same_curve_qmq(ax, bx), dd_get_medial_point_coeffs_bez2_same_curve_qmq(ay, by));
+    const ag = dd_get_medial_point_coeffs_bez2_same_curve_qaq(dd_get_medial_point_coeffs_bez2_same_curve_qmq(ax, g0x), dd_get_medial_point_coeffs_bez2_same_curve_qmq(ay, g0y));
+    // -----------------------------------------------------
+    // E1(s,t): (u(s) + t⋅v) ⋅ b'(s) = 0
+    // => C(s)⋅t + D(s) = 0
+    // const c1 = 2*(vx*ax + vy*ay);
+    const c1 = dd_get_medial_point_coeffs_bez2_same_curve_qm2(dd_get_medial_point_coeffs_bez2_same_curve_qaq(dd_get_medial_point_coeffs_bez2_same_curve_qmq(vx, ax), dd_get_medial_point_coeffs_bez2_same_curve_qmq(vy, ay)));
+    // v is normal at parameter t, so C(t) = v⋅w(t) = 0.
+    // Since C(s) = c1*s + c0, enforce c0 = -c1*t exactly.
+    // const c0 = -c1*t;
+    // const d3 = -2*br2;
+    // const d2 = -3*ab;
+    // const d1 = 2*t*ag - bb;
+    // p = b(t) => D(t) = u(t)⋅w(t) = 0.
+    // const d0 = -t*(t*(d3*t + d2) + d1);
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    // E2(s,t): |t⋅v|² - |u(s) + t⋅v|² = 0
+    //         => 2⋅(v⋅u(s))⋅t + |u(s)|² = 0
+    //         => (s - t)^2⋅(A(s)⋅t + B(s)) = 0
+    // Return only the reduced constant A(s) = ar0.
+    // const ar0 = -c1;
+    const ar0 = dd_get_medial_point_coeffs_bez2_same_curve_qno(c1);
+    // Full B(s) factorizes as: B_full(s) = (s - t)^2*B_reduced(s).
+    // Return only B_reduced(s) = br2*s^2 + br1*s + br0.
+    // const br1 = 2*ag;
+    // const br0 = g0x*g0x + g0y*g0y;
+    const br1 = dd_get_medial_point_coeffs_bez2_same_curve_qm2(ag);
+    const br0 = dd_get_medial_point_coeffs_bez2_same_curve_qaq(dd_get_medial_point_coeffs_bez2_same_curve_qmq(g0x, g0x), dd_get_medial_point_coeffs_bez2_same_curve_qmq(g0y, g0y));
+    // -----------------------------------------------------
+    // Eliminate t from:
+    //   A(s)⋅t + B(s) = 0
+    //   C(s)⋅t + D(s) = 0
+    // by taking A(s)⋅D(s) - B(s)⋅C(s) = 0 (degree ≤ 5 in s)
+    // For this same-curve quadratic case:
+    //   d3 = -2*b4, d2 = -(3/2)*b3, a2 = -c1, a1 = -2*c0.
+    // Therefore H5 and H4 reduce to:
+    //   H5 = b4*c1
+    //   H4 = 3*b4*c0 + (1/2)*b3*c1
+    // const H5 = br2*c1;
+    const H5 = dd_get_medial_point_coeffs_bez2_same_curve_qmq(br2, c1);
+    // In the same-curve quadratic case the full eliminant has the form
+    // H_full(s) = (s - t)^4*(l1*s + l0).
+    // Match the leading coefficients of H_full(s):
+    //   H5 = l1
+    //   H4 = l0 - 4*t*l1
+    // const l1 = H5;
+    // const l0 = H4 + 4*t*l1;
+    // Using c0 = -c1*t and b3 = 2*ab, this simplifies to l0 = c1*(br2*t + ab).
+    // const l0 = c1*(br2*t + ab);
+    const l0 = dd_get_medial_point_coeffs_bez2_same_curve_qmq(c1, dd_get_medial_point_coeffs_bez2_same_curve_qaq(dd_get_medial_point_coeffs_bez2_same_curve_qmd(t, br2), ab));
+    return {
+        A: [ar0],
+        B: [br2, br1, br0],
+        // C: [c1, c0],
+        // D: [d3, d2, d1, d0],
+        H: [H5, l0]
+    };
+}
+
+
+;// ./src/get-medial-points/double-double/dd-get-medial-point-coeffs-bez3-same-curve.ts
+
+
+const dd_get_medial_point_coeffs_bez3_same_curve_qmd = ddMultDouble2;
+const dd_get_medial_point_coeffs_bez3_same_curve_qaq = ddAddDd;
+const dd_get_medial_point_coeffs_bez3_same_curve_qmq = ddMultDd;
+const dd_get_medial_point_coeffs_bez3_same_curve_qno = ddNegativeOf;
+const dd_get_medial_point_coeffs_bez3_same_curve_qmn2 = ddMultByNeg2;
+const dd_get_medial_point_coeffs_bez3_same_curve_qm2 = ddMultBy2;
+/**
+ * Returns polynomial coefficients for the same-curve cubic medial-point case,
+ * where `p = b(t)` on the same cubic bezier `ps` and `v` is normal to the
+ * curve at that parameter `t`.
+ *
+ * The returned coefficients encode:
+ * * `A`, `B`: `E2(s, τ) = (s - t)^2⋅(A(s)⋅τ + B(s))`
+ * * `C`, `D`: `E1(s, τ) = (s - t)⋅(C(s)⋅τ + D(s))`
+ * * `H`: the reduced eliminant in `s`
+ *
+ * Here `τ` is the ray parameter in `q(τ) = p + τ⋅v`.
+ * For a candidate root `s` of `H`, recover `τ` from `A(s)⋅τ + B(s) = 0`, i.e.
+ * `τ = -B(s)/A(s)` when `A(s) ≠ 0`.
+ *
+ * In this same-curve setup, the full eliminant has the form
+ * `H_full(s) = (s - t)^4*H(s)`. This function returns only the reduced factor
+ * `H(s)` (the repeated `(s - t)^4` factor is omitted).
+ *
+ * @param t parameter on `ps` where `p = b(t)`
+ * @param v ray direction from `p`; assumed normal to `ps` at `t`
+ * @param ps order 3 bezier control points, e.g. `[[0,0],[1,1],[2,1],[3,0]]`
+ */
+function ddGetMedialPointCoeffsBez3_SameCurve(t, v, ps) {
+    // -----------------------------------------------------
+    // See get-medial-points.md for implementation details.
+    // -----------------------------------------------------
+    const [vx, vy] = v;
+    // Cubic bezier in power basis: b(s) = a*s^3 + b*s^2 + c*s + d
+    const [[ax, bx, cx], [ay, by, cy]] = to_power_basis_dd_toPowerBasisDd(ps);
+    // Shared dot products to reduce repeated multiplications.
+    // const va = vx*ax + vy*ay;
+    // const vb = vx*bx + vy*by;
+    // const vc = vx*cx + vy*cy;
+    // const aa = ax*ax + ay*ay;
+    // const ab = ax*bx + ay*by;
+    // const ac = ax*cx + ay*cy;
+    // const bb = bx*bx + by*by;
+    // const bc = bx*cx + by*cy;
+    // const cc = cx*cx + cy*cy;
+    // const vu0 = t*(t*(t*va + vb) + vc);
+    // const u0a = t*(t*(t*aa + ab) + ac);
+    // const u0b = t*(t*(t*ab + bb) + bc);
+    const va = dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmq(vx, ax), dd_get_medial_point_coeffs_bez3_same_curve_qmq(vy, ay));
+    const vb = dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmq(vx, bx), dd_get_medial_point_coeffs_bez3_same_curve_qmq(vy, by));
+    const vc = dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmq(vx, cx), dd_get_medial_point_coeffs_bez3_same_curve_qmq(vy, cy));
+    const aa = dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmq(ax, ax), dd_get_medial_point_coeffs_bez3_same_curve_qmq(ay, ay));
+    const ab = dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmq(ax, bx), dd_get_medial_point_coeffs_bez3_same_curve_qmq(ay, by));
+    const ac = dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmq(ax, cx), dd_get_medial_point_coeffs_bez3_same_curve_qmq(ay, cy));
+    const bb = dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmq(bx, bx), dd_get_medial_point_coeffs_bez3_same_curve_qmq(by, by));
+    const bc = dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmq(bx, cx), dd_get_medial_point_coeffs_bez3_same_curve_qmq(by, cy));
+    const cc = dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmq(cx, cx), dd_get_medial_point_coeffs_bez3_same_curve_qmq(cy, cy));
+    const vu0 = dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, va), vb)), vc));
+    const u0a = dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, aa), ab)), ac));
+    const u0b = dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, ab), bb)), bc));
+    // -----------------------------------------------------
+    // E1(s,t): (u(s) + t*v) * b'(s) = 0
+    // => C(s)*t + D(s) = 0
+    // const c2 = 3*va;
+    // const c1 = 2*vb;
+    const c2 = dd_get_medial_point_coeffs_bez3_same_curve_qmd(3, va);
+    const c1 = dd_get_medial_point_coeffs_bez3_same_curve_qm2(vb);
+    // v is normal at parameter t, so C(t) = 0.
+    // const c0 = -t*(c2*t + c1);
+    // Return reduced C such that C_full(s) = (s - t)*C(s).
+    // const cr0 = c1 + t*c2;
+    const cr0 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(c1, dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, c2));
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    // const d5 = -3*aa;
+    // const d4 = -5*ab;
+    // const d3 = -4*ac - 2*bb;
+    // const d2 = -3*bc + 3*u0a;
+    // const d1 = -cc + 2*u0b;
+    const d5 = dd_get_medial_point_coeffs_bez3_same_curve_qmd(-3, aa);
+    const d4 = dd_get_medial_point_coeffs_bez3_same_curve_qmd(-5, ab);
+    const d3 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmd(-4, ac), dd_get_medial_point_coeffs_bez3_same_curve_qmn2(bb));
+    const d2 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmd(-3, bc), dd_get_medial_point_coeffs_bez3_same_curve_qmd(3, u0a));
+    const d1 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qno(cc), dd_get_medial_point_coeffs_bez3_same_curve_qm2(u0b));
+    // p = b(t) => D(t) = u(t)⋅w(t) = 0.
+    // Return reduced D such that D_full(s) = (s - t)*D(s).
+    const dr4 = d5;
+    // const dr3 = d4 + t*dr4;
+    // const dr2 = d3 + t*dr3;
+    // const dr1 = d2 + t*dr2;
+    // const dr0 = d1 + t*dr1;
+    const dr3 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(d4, dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, dr4));
+    const dr2 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(d3, dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, dr3));
+    const dr1 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(d2, dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, dr2));
+    const dr0 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(d1, dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, dr1));
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    // E2(s,t): |t*v|^2 - |u(s) + t*v|^2 = 0
+    //         => 2*(v*u(s))*t + |u(s)|^2 = 0
+    //         => A(s)*t + B(s) = 0
+    // A'(s) = -2*C(s) identically for bezier curves, hence:
+    // const a3 = -2*va;
+    // const a2 = -2*vb;
+    const a3 = dd_get_medial_point_coeffs_bez3_same_curve_qmn2(va);
+    const a2 = dd_get_medial_point_coeffs_bez3_same_curve_qmn2(vb);
+    // const a1 = -2*vc;
+    // p = b(t) => A(t) = 0.
+    // const a0 = 2*vu0;
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    const b6 = aa;
+    // const b5 = 2*ab;
+    // const b4 = 2*ac + bb;
+    // const b3 = 2*bc - 2*u0a;
+    // const b2 = cc - 2*u0b;
+    const b5 = dd_get_medial_point_coeffs_bez3_same_curve_qm2(ab);
+    const b4 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qm2(ac), bb);
+    const b3 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qm2(bc), dd_get_medial_point_coeffs_bez3_same_curve_qmn2(u0a));
+    const b2 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(cc, dd_get_medial_point_coeffs_bez3_same_curve_qmn2(u0b));
+    // -----------------------------------------------------
+    // -----------------------------------------------------
+    // Return reduced A and B such that:
+    //   A_full(s) = (s - t)^2*A(s)
+    //   B_full(s) = (s - t)^2*B(s)
+    // where A is degree 1 and B is degree 4.
+    const ar1 = a3;
+    // const ar0 = a2 + 2*t*ar1;
+    const ar0 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(a2, dd_get_medial_point_coeffs_bez3_same_curve_qm2(dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, ar1)));
+    const br4 = b6;
+    // const br3 = b5 + 2*t*br4;
+    // const br2 = b4 + t*(2*br3 - t*br4);
+    // const br1 = b3 + t*(2*br2 - t*br3);
+    // const br0 = b2 + t*(2*br1 - t*br2);
+    const br3 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(b5, dd_get_medial_point_coeffs_bez3_same_curve_qm2(dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, br4)));
+    const br2 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(b4, dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qm2(br3), dd_get_medial_point_coeffs_bez3_same_curve_qno(dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, br4)))));
+    const br1 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(b3, dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qm2(br2), dd_get_medial_point_coeffs_bez3_same_curve_qno(dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, br3)))));
+    const br0 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(b2, dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qm2(br1), dd_get_medial_point_coeffs_bez3_same_curve_qno(dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, br2)))));
+    // -----------------------------------------------------
+    // Eliminate t from:
+    //   A(s)*t + B(s) = 0
+    //   C(s)*t + D(s) = 0
+    // by taking A(s)*D(s) - B(s)*C(s) = 0 (degree <= 8 in s)
+    // H8 = a3*d5 - b6*c2 = (-2*va)*(-3*aa) - aa*(3*va) = 3*va*aa.
+    // const H8 = 3*va*aa;
+    // const H7 = 4*(va*ab + vb*aa);
+    // const H6 = va*b4 + 6*vb*ab + 5*vc*aa;
+    // const H5 = 2*vb*b4 + 8*vc*ab - 6*vu0*aa;
+    // const H4 = -va*b2 + vb*b3 + 3*vc*b4 - 10*vu0*ab;
+    const H8 = dd_get_medial_point_coeffs_bez3_same_curve_qmd(3, dd_get_medial_point_coeffs_bez3_same_curve_qmq(va, aa));
+    const H7 = dd_get_medial_point_coeffs_bez3_same_curve_qm2(dd_get_medial_point_coeffs_bez3_same_curve_qm2(dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmq(va, ab), dd_get_medial_point_coeffs_bez3_same_curve_qmq(vb, aa))));
+    const H6 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmq(va, b4), dd_get_medial_point_coeffs_bez3_same_curve_qmd(6, dd_get_medial_point_coeffs_bez3_same_curve_qmq(vb, ab))), dd_get_medial_point_coeffs_bez3_same_curve_qmd(5, dd_get_medial_point_coeffs_bez3_same_curve_qmq(vc, aa)));
+    const H5 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qm2(dd_get_medial_point_coeffs_bez3_same_curve_qmq(vb, b4)), dd_get_medial_point_coeffs_bez3_same_curve_qmd(8, dd_get_medial_point_coeffs_bez3_same_curve_qmq(vc, ab))), dd_get_medial_point_coeffs_bez3_same_curve_qno(dd_get_medial_point_coeffs_bez3_same_curve_qmd(6, dd_get_medial_point_coeffs_bez3_same_curve_qmq(vu0, aa))));
+    const H4 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qno(dd_get_medial_point_coeffs_bez3_same_curve_qmq(va, b2)), dd_get_medial_point_coeffs_bez3_same_curve_qmq(vb, b3)), dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmd(3, dd_get_medial_point_coeffs_bez3_same_curve_qmq(vc, b4)), dd_get_medial_point_coeffs_bez3_same_curve_qno(dd_get_medial_point_coeffs_bez3_same_curve_qmd(10, dd_get_medial_point_coeffs_bez3_same_curve_qmq(vu0, ab)))));
+    // Reduce H_full(s) by its guaranteed (s - t)^4 factor:
+    // H_full(s) = (s - t)^4*(q4*s^4 + q3*s^3 + q2*s^2 + q1*s + q0)
+    // Match the high-order coefficients of H_full(s) explicitly.
+    const q4 = H8;
+    // const q3 = H7 + 4*t*q4;
+    // const q2 = H6 + t*(4*q3 - 6*t*q4);
+    // const q1 = H5 + t*(4*q2 + t*(-6*q3 + 4*t*q4));
+    // const q0 = H4 + t*(4*q1 + t*(-6*q2 + t*(4*q3 - t*q4)));
+    const q3 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(H7, dd_get_medial_point_coeffs_bez3_same_curve_qm2(dd_get_medial_point_coeffs_bez3_same_curve_qm2(dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, q4))));
+    const q2 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(H6, dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qm2(dd_get_medial_point_coeffs_bez3_same_curve_qm2(q3)), dd_get_medial_point_coeffs_bez3_same_curve_qno(dd_get_medial_point_coeffs_bez3_same_curve_qmd(6, dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, q4))))));
+    const q1 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(H5, dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qm2(dd_get_medial_point_coeffs_bez3_same_curve_qm2(q2)), dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmd(-6, q3), dd_get_medial_point_coeffs_bez3_same_curve_qm2(dd_get_medial_point_coeffs_bez3_same_curve_qm2(dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, q4))))))));
+    const q0 = dd_get_medial_point_coeffs_bez3_same_curve_qaq(H4, dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qm2(dd_get_medial_point_coeffs_bez3_same_curve_qm2(q1)), dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qmd(-6, q2), dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, dd_get_medial_point_coeffs_bez3_same_curve_qaq(dd_get_medial_point_coeffs_bez3_same_curve_qm2(dd_get_medial_point_coeffs_bez3_same_curve_qm2(q3)), dd_get_medial_point_coeffs_bez3_same_curve_qno(dd_get_medial_point_coeffs_bez3_same_curve_qmd(t, q4)))))))));
     return {
         A: [ar1, ar0],
         B: [br4, br3, br2, br1, br0],
@@ -25750,4 +26679,12 @@ function getMedialPointCoeffsBez3_SameCurve(t, v, ps) {
 
 
 
-export { areBoxesIntersecting, area_area as area, bezierBezierIntersection, bezierBezierIntersectionBoundless, bezierBezierIntersectionBoundlessBoth, bezierBezierIntersectionFast, bezierPieceToBezier, bezierSelfIntersection, calcQuadOffsetCurveXPoint, circleBezierIntersection, classification, classifications, classify, clone, closestPointOnBezier, closestPointOnBezierCertified, closestPointsBetweenBeziers, controlPointLinesLength, cubicFromAnglesAndSpeeds, cubicThroughPointGiven013, cubicToAnglesAndSpeeds, cubicToHybridQuadratic, cubicToQuadratic, curvature, curvatureND, curviness, ddCurvature, ddCurvatureND, ddNormal, ddNormalAt0, ddNormalAt1, ddRadiusOfCurvature, ddTangent, ddTangentAt0, ddTangentAt1, eCurvature, eNormal, eTangent, eTangentAt0, eTangentAt1, equal, evalDeCasteljau, evalDeCasteljauDd, evalDeCasteljauError, evalDeCasteljauWithErr, evalDeCasteljauWithErrDd, evaluate, evaluate2ndDerivative, evaluate2ndDerivativeAt0, evaluate2ndDerivativeAt0Exact, evaluate2ndDerivativeAt1, evaluate2ndDerivativeAt1Exact, evaluate2ndDerivativeExact, evaluateExact, evaluateImplicit1, evaluateImplicit2, evaluateImplicit3, fitQuadsToCubic, fitQuadsToCubicHausdorff, fromPowerBasis, fromTo, fromToInclErrorBound, furthestPointOnBezier, generateArcFromQuads, generateCuspAtHalf3, generateQuarterCircle, generateSelfIntersecting, getAbsAreaBetween, getBendingEnergy, getBoundingBox, getBoundingBoxTight, getBoundingHull, getBounds, getCoeffsBezBez, getControlPointBox, getCubicSpeeds, getCurvatureExtrema, getCurvatureExtremaDd, getCurvatureExtremaE, getEndpointIntersections, getFootPointsOnBezierCertified, getFootPointsOnBezierPolysCertified, getFootpointPoly, getFootpointPolyDd, getFootpointPolyExact, getHodograph, getImplicitForm1, getImplicitForm1Dd, getImplicitForm1DdWithRunningError, getImplicitForm1ErrorCounters, getImplicitForm1Exact, getImplicitForm2, getImplicitForm2Dd, getImplicitForm2DdWithRunningError, getImplicitForm2ErrorCounters, getImplicitForm2Exact, getImplicitForm3, getImplicitForm3Dd, getImplicitForm3DdWithRunningError, getImplicitForm3ErrorCounters, getImplicitForm3Exact, getInflections, getInterfaceRotation, getIntervalBox, getIntervalBoxDd, getMedialPointCoeffs, getMedialPointCoeffsBez0, getMedialPointCoeffsBez1, getMedialPointCoeffsBez2, getMedialPointCoeffsBez2_SameCurve, getMedialPointCoeffsBez3, getMedialPointCoeffsBez3_SameCurve, getMedialPoints, getTAtLength, getXBoundsTight, getYBoundsTight, hausdorffDistance, hausdorffDistanceOneSided, intersectBoxes, isBezierPieceZeroLength, isCollinear, isCubicReallyLine, isCubicReallyQuad, isHorizontal, isPointOnBezierExtension, isQuadObtuse, isQuadReallyLine, isReallyPoint, isSelfOverlapping, isVertical, length_length as length, lineToCubic, lineToQuadratic, maxAbsCoordinate, normal, normal2, quadraticToCubic, quadraticToPolyline, radiusOfCurvature, reduceOrderIfPossible, reverse, setCubicSpeeds, splitByCurvature, splitByCurvatureAndLength, splitByLength, tFromXY, tangent, tangentAt0, tangentAt0Exact, tangentAt1, tangentAt1Exact, tangentExact, toCubic, toPowerBasis, toPowerBasis0Exact, toPowerBasis1DdWithRunningError, toPowerBasis1Exact, toPowerBasis2DdWithRunningError, toPowerBasis2Exact, toPowerBasis3DdWithRunningError, toPowerBasis3Exact, toPowerBasisDd, toPowerBasisDdWithRunningError, toPowerBasisErrorCounters, toPowerBasisExact, toPowerBasisWithRunningError, toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeDd, toPowerBasis_1stDerivativeErrorCounters, toPowerBasis_1stDerivativeExact, toPowerBasis_2ndDerivative, toPowerBasis_2ndDerivativeDd, toPowerBasis_2ndDerivativeExact, toPowerBasis_3rdDerivative, toPowerBasis_3rdDerivativeDd, toPowerBasis_3rdDerivativeExact, to_string_toString as toString, totalAbsoluteCurvature, totalCurvature, totalLength, γ, γγ, κ };
+
+
+
+
+
+
+
+
+export { areBoxesIntersecting, area_area as area, bezierBezierIntersection, bezierBezierIntersectionBoundless, bezierBezierIntersectionBoundlessBoth, bezierBezierIntersectionFast, bezierPieceToBezier, bezierSelfIntersection, calcQuadOffsetCurveXPoint, circleBezierIntersection, classification, classifications, classify, clone, closestPointOnBezier, closestPointOnBezierCertified, closestPointsBetweenBeziers, controlPointLinesLength, cubicFromAnglesAndSpeeds, cubicThroughPointGiven013, cubicToAnglesAndSpeeds, cubicToHybridQuadratic, cubicToQuadratic, curvature, curvatureND, curviness, ddCurvature, ddCurvatureND, ddGetMedialPointCoeffs, ddGetMedialPointCoeffsBez0, ddGetMedialPointCoeffsBez1, ddGetMedialPointCoeffsBez2, ddGetMedialPointCoeffsBez2_SameCurve, ddGetMedialPointCoeffsBez3, ddGetMedialPointCoeffsBez3_SameCurve, ddNormal, ddNormalAt0, ddNormalAt1, ddRadiusOfCurvature, ddTangent, ddTangentAt0, ddTangentAt1, eCurvature, eNormal, eTangent, eTangentAt0, eTangentAt1, equal, evalDeCasteljau, evalDeCasteljauDd, evalDeCasteljauError, evalDeCasteljauWithErr, evalDeCasteljauWithErrDd, evaluate, evaluate2ndDerivative, evaluate2ndDerivativeAt0, evaluate2ndDerivativeAt0Exact, evaluate2ndDerivativeAt1, evaluate2ndDerivativeAt1Exact, evaluate2ndDerivativeExact, evaluateExact, evaluateImplicit1, evaluateImplicit2, evaluateImplicit3, fitQuadsToCubic, fitQuadsToCubicHausdorff, fromPowerBasis, fromTo, fromToInclErrorBound, furthestPointOnBezier, generateArcFromQuads, generateCuspAtHalf3, generateQuarterCircle, generateSelfIntersecting, getAbsAreaBetween, getBendingEnergy, getBezierPieceLength, getBoundingBox, getBoundingBoxTight, getBoundingHull, getBounds, getCoeffsBezBez, getControlPointBox, getCubicSpeeds, getCurvatureExtrema, getCurvatureExtremaDd, getCurvatureExtremaE, getEndpointIntersections, getFootPointsOnBezierCertified, getFootPointsOnBezierPolysCertified, getFootpointPoly, getFootpointPolyDd, getFootpointPolyExact, getHodograph, getImplicitForm1, getImplicitForm1Dd, getImplicitForm1DdWithRunningError, getImplicitForm1ErrorCounters, getImplicitForm1Exact, getImplicitForm2, getImplicitForm2Dd, getImplicitForm2DdWithRunningError, getImplicitForm2ErrorCounters, getImplicitForm2Exact, getImplicitForm3, getImplicitForm3Dd, getImplicitForm3DdWithRunningError, getImplicitForm3ErrorCounters, getImplicitForm3Exact, getInflections, getInterfaceRotation, getIntervalBox, getIntervalBoxDd, getMedialPointCoeffs, getMedialPointCoeffsBez0, getMedialPointCoeffsBez1, getMedialPointCoeffsBez2, getMedialPointCoeffsBez2_SameCurve, getMedialPointCoeffsBez3, getMedialPointCoeffsBez3_SameCurve, getMedialPoints, getTAtLength, getXBoundsTight, getYBoundsTight, hausdorffDistance, hausdorffDistanceOneSided, intersectBoxes, isBezierPieceZeroLength, isCollinear, isCubicReallyLine, isCubicReallyQuad, isHorizontal, isPointOnBezierExtension, isQuadObtuse, isQuadReallyLine, isReallyPoint, isSelfOverlapping, isVertical, length_length as length, lineToCubic, lineToQuadratic, maxAbsCoordinate, normal, normal2, quadraticToCubic, quadraticToPolyline, radiusOfCurvature, reduceOrderIfPossible, reverse, setCubicSpeeds, splitByCurvature, splitByCurvatureAndLength, splitByLength, tFromXY, tangent, tangentAt0, tangentAt0Exact, tangentAt1, tangentAt1Exact, tangentExact, toCubic, toPowerBasis, toPowerBasis0Exact, toPowerBasis1DdWithRunningError, toPowerBasis1Exact, toPowerBasis2DdWithRunningError, toPowerBasis2Exact, toPowerBasis3DdWithRunningError, toPowerBasis3Exact, toPowerBasisDd, toPowerBasisDdWithRunningError, toPowerBasisErrorCounters, toPowerBasisExact, toPowerBasisWithRunningError, toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeDd, toPowerBasis_1stDerivativeErrorCounters, toPowerBasis_1stDerivativeExact, toPowerBasis_2ndDerivative, toPowerBasis_2ndDerivativeDd, toPowerBasis_2ndDerivativeExact, toPowerBasis_3rdDerivative, toPowerBasis_3rdDerivativeDd, toPowerBasis_3rdDerivativeExact, to_string_toString as toString, totalAbsoluteCurvature, totalCurvature, totalLength, γ, γγ, κ };

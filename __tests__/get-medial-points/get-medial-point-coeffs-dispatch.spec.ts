@@ -1,9 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
-import { getMedialPointCoeffs } from '../../src/get-medial-points/get-medial-point-coeffs.js';
-import { getMedialPointCoeffsBez0 } from '../../src/get-medial-points/get-medial-point-coeffs-bez0.js';
-import { getMedialPointCoeffsBez1 } from '../../src/get-medial-points/get-medial-point-coeffs-bez1.js';
-import { getMedialPointCoeffsBez2 } from '../../src/get-medial-points/get-medial-point-coeffs-bez2.js';
-import { getMedialPointCoeffsBez3 } from '../../src/get-medial-points/get-medial-point-coeffs-bez3.js';
+import { getMedialPointCoeffs } from '../../src/get-medial-points/double/get-medial-point-coeffs.js';
+import { getMedialPointCoeffsBez0 } from '../../src/get-medial-points/double/get-medial-point-coeffs-bez0.js';
+import { getMedialPointCoeffsBez1 } from '../../src/get-medial-points/double/get-medial-point-coeffs-bez1.js';
+import { getMedialPointCoeffsBez2 } from '../../src/get-medial-points/double/get-medial-point-coeffs-bez2.js';
+import { getMedialPointCoeffsBez3 } from '../../src/get-medial-points/double/get-medial-point-coeffs-bez3.js';
 
 
 describe('getMedialPointCoeffs dispatch', function() {

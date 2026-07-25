@@ -1,5 +1,5 @@
 import { test, describe, expect, it } from '@jest/globals';
-import { getMedialPoints } from '../../src/get-medial-points/get-medial-points.js';
+import { getMedialPoints } from '../../src/get-medial-points/double/get-medial-points.js';
 import { closestPointOnBezier } from '../../src/simultaneous-properties/closest-and-furthest-point-on-bezier/closest-point-on-bezier.js';
 
 const { max, hypot } = Math;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { getMedialPointCoeffsBez0 } from '../../src/get-medial-points/get-medial-point-coeffs-bez0.js';
+import { getMedialPointCoeffsBez0 } from '../../src/get-medial-points/double/get-medial-point-coeffs-bez0.js';
 import { distanceBetween, scale as scaleVec, translate } from 'flo-vector2d';
 
 

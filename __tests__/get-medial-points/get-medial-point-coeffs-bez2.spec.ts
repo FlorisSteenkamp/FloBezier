@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import { Horner, roots } from 'flo-poly';
 import { distanceBetween, scale as scaleVec, translate } from 'flo-vector2d';
-import { getMedialPointCoeffsBez2 } from '../../src/get-medial-points/get-medial-point-coeffs-bez2.js';
+import { getMedialPointCoeffsBez2 } from '../../src/get-medial-points/double/get-medial-point-coeffs-bez2.js';
 import { evalDeCasteljauDd } from '../../src/local-properties-at-t/evaluate/double-double/eval-de-casteljau-dd.js';
 
 

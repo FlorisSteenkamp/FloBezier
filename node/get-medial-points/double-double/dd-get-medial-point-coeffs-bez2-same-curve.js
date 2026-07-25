@@ -1,4 +1,10 @@
-import { toPowerBasis2 } from '../to-power-basis/to-power-basis/double/to-power-basis.js';
+import { toPowerBasisDd } from 'flo-bezier3';
+import { ddMultDouble2, ddAddDd, ddMultDd, ddNegativeOf, ddMultBy2 } from 'double-double';
+const qmd = ddMultDouble2;
+const qaq = ddAddDd;
+const qmq = ddMultDd;
+const qno = ddNegativeOf;
+const qm2 = ddMultBy2;
 /**
  * Returns polynomial coefficients for the same-curve quadratic medial-point
  * case, where `p = b(t)` on the same quadratic bezier `ps` and `v` is normal
@@ -21,26 +27,32 @@ import { toPowerBasis2 } from '../to-power-basis/to-power-basis/double/to-power-
  * @param v ray direction from `p`; assumed normal to `ps` at `t`
  * @param ps order 2 bezier control points, e.g. `[[0,0],[1,1],[2,1]]`
  */
-function getMedialPointCoeffsBez2_SameCurve(t, v, ps) {
+function ddGetMedialPointCoeffsBez2_SameCurve(t, v, ps) {
     // -----------------------------------------------------
     // See get-medial-points.md for implementation details.
     // -----------------------------------------------------
     // Quadratic bezier in power basis: b(s) = a⋅s² + b⋅s + c
-    const [[ax, bx], [ay, by]] = toPowerBasis2(ps);
+    const [[ax, bx], [ay, by]] = toPowerBasisDd(ps);
     const [vx, vy] = v;
     // Same-curve assumption with explicit parameter `t`:
     // p = b(t) => u0 = p - c = t*(a*t + b).
-    const g0x = ax * t + bx;
-    const g0y = ay * t + by;
+    // const g0x = ax*t + bx;
+    // const g0y = ay*t + by;
+    const g0x = qaq(qmd(t, ax), bx);
+    const g0y = qaq(qmd(t, ay), by);
     // Reuse core quadratic-form terms to reduce repeated multiplications.
-    const br2 = ax * ax + ay * ay;
-    const ab = ax * bx + ay * by;
+    // const br2 = ax*ax + ay*ay;
+    // const ab = ax*bx + ay*by;
     // const bb = bx*bx + by*by;
-    const ag = ax * g0x + ay * g0y;
+    // const ag = ax*g0x + ay*g0y;
+    const br2 = qaq(qmq(ax, ax), qmq(ay, ay));
+    const ab = qaq(qmq(ax, bx), qmq(ay, by));
+    const ag = qaq(qmq(ax, g0x), qmq(ay, g0y));
     // -----------------------------------------------------
     // E1(s,t): (u(s) + t⋅v) ⋅ b'(s) = 0
     // => C(s)⋅t + D(s) = 0
-    const c1 = 2 * (vx * ax + vy * ay);
+    // const c1 = 2*(vx*ax + vy*ay);
+    const c1 = qm2(qaq(qmq(vx, ax), qmq(vy, ay)));
     // v is normal at parameter t, so C(t) = v⋅w(t) = 0.
     // Since C(s) = c1*s + c0, enforce c0 = -c1*t exactly.
     // const c0 = -c1*t;
@@ -55,11 +67,14 @@ function getMedialPointCoeffsBez2_SameCurve(t, v, ps) {
     //         => 2⋅(v⋅u(s))⋅t + |u(s)|² = 0
     //         => (s - t)^2⋅(A(s)⋅t + B(s)) = 0
     // Return only the reduced constant A(s) = ar0.
-    const ar0 = -c1;
+    // const ar0 = -c1;
+    const ar0 = qno(c1);
     // Full B(s) factorizes as: B_full(s) = (s - t)^2*B_reduced(s).
     // Return only B_reduced(s) = br2*s^2 + br1*s + br0.
-    const br1 = 2 * ag;
-    const br0 = g0x * g0x + g0y * g0y;
+    // const br1 = 2*ag;
+    // const br0 = g0x*g0x + g0y*g0y;
+    const br1 = qm2(ag);
+    const br0 = qaq(qmq(g0x, g0x), qmq(g0y, g0y));
     // -----------------------------------------------------
     // Eliminate t from:
     //   A(s)⋅t + B(s) = 0
@@ -70,7 +85,8 @@ function getMedialPointCoeffsBez2_SameCurve(t, v, ps) {
     // Therefore H5 and H4 reduce to:
     //   H5 = b4*c1
     //   H4 = 3*b4*c0 + (1/2)*b3*c1
-    const H5 = br2 * c1;
+    // const H5 = br2*c1;
+    const H5 = qmq(br2, c1);
     // In the same-curve quadratic case the full eliminant has the form
     // H_full(s) = (s - t)^4*(l1*s + l0).
     // Match the leading coefficients of H_full(s):
@@ -79,7 +95,8 @@ function getMedialPointCoeffsBez2_SameCurve(t, v, ps) {
     // const l1 = H5;
     // const l0 = H4 + 4*t*l1;
     // Using c0 = -c1*t and b3 = 2*ab, this simplifies to l0 = c1*(br2*t + ab).
-    const l0 = c1 * (br2 * t + ab);
+    // const l0 = c1*(br2*t + ab);
+    const l0 = qmq(c1, qaq(qmd(t, br2), ab));
     return {
         A: [ar0],
         B: [br2, br1, br0],
@@ -88,5 +105,5 @@ function getMedialPointCoeffsBez2_SameCurve(t, v, ps) {
         H: [H5, l0]
     };
 }
-export { getMedialPointCoeffsBez2_SameCurve };
-//# sourceMappingURL=get-medial-point-coeffs-bez2-same-curve.js.map
+export { ddGetMedialPointCoeffsBez2_SameCurve };
+//# sourceMappingURL=dd-get-medial-point-coeffs-bez2-same-curve.js.map

@@ -1,4 +1,4 @@
-import { toPowerBasis2 } from "../to-power-basis/to-power-basis/double/to-power-basis.js";
+import { toPowerBasis2 } from "../../to-power-basis/to-power-basis/double/to-power-basis.js";
 /**
  * Returns the polynomial coefficients for the ray parameter `t` and the
  * curve parameter `s` that encode the medial condition for `q(t) = p + t⋅v`

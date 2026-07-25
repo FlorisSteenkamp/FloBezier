@@ -28,80 +28,10 @@ const { abs } = Math;
  * @internal
  */
 function getCoeffsBez3Bez3Dd(ps1, ps2) {
-    //--------------------------------------------------------------------------
-    // `var` -> a variable
-    // `$var` -> the double precision approximation to `var`
-    // `_var` -> the absolute value of $var (a prefix underscore on a variable means absolute value)
-    // `var_` -> the error in var (a postfix underscore means error bound but should still be multiplied by 3*γ²)
-    // `_var_` -> means both absolute value and absolute error bound
-    // recall: `a*b`, where both `a` and `b` have errors |a| and |b| we get for the
-    //   * error bound of (a*b) === a_|b| + |a|b_ + |a*b|   (when either of a and b is double)
-    //   * error bound of (a*b) === a_|b| + |a|b_ + 2|a*b|  (when both a and b is double-double)
-    //   * error bound of (a+b) === a_ + b_ + |a+b|         (when a and/or b is double or double-double)
-    // * the returned errors need to be multiplied by 3γ² to get the true error
-    // * can use either `$var` or `var[var.length-1]` (the approx value) in error calculations
-    //   due to multiplication by 3*γ² and not 3*u²
-    //--------------------------------------------------------------------------
-    // examples: (all?)
-    // ----------------
-    // let qmd === ddMultDouble2, etc.
-    //
-    // ---------------
-    // 1. double-double X by double
-    // ---------------
-    // qmd(a,b);  // both `a` and `b` is error-free
-    // use: error bound of (a*b) === a_|b| + |a|b_ + |a*b| (by definition)
-    //                           === 0|b| + |a|0 + |a*b|
-    //                           === |a*b|
-    //
-    // ---------------
-    // 2a. double-double +/- double-double
-    // ---------------
-    // qdq(a,b);  // error in a === |a|, thus call the error _a_, same with b
-    // use: error bound of (a+b) === a_ + b_ + |a+b| (by definition)
-    //                           === _a_ + _b_ + |a+b|
-    //
-    // ---------------
-    // 2b. double-double +/- double-double
-    // ---------------
-    // qaq(a,b);  // error in a === 2|a|, thus the error is 2*_a, same with b
-    // use: error bound of (a+b) === a_ + b_ + |a+b| (by definition)
-    //                           === 2*_a + 2*_b + |a+b|
-    //                           === 2*(_a + _b) + |a+b| OR
-    //                           === a_ + b_ + |a+b|
-    //
-    // ---------------
-    // 3a. double-double X double-double
-    // ---------------
-    // qmq(a,b);  // both `a` and `b` error-free
-    // use: error bound of (a*b) === a_|b| + |a|b_ + |a*b| (by definition)
-    //                           === 0|b| + |a|0 + 2|a*b|
-    //                           === 2|a*b| 
-    //
-    // ---------------
-    // 3b. double-double X double-double
-    // ---------------
-    // qmq(a,b);  // both `a` and `b` not error-free
-    // use: error bound of (a*b) === a_|b| + |a|b_ + 2|a*b| (by definition)
-    //
-    // ---------------
-    // 3b. double-double X double-double
-    // ---------------
-    // qmq(a,b);  // both `a` not error-free and `b` error-free
-    // use: error bound of (a*b) === a_|b| + |a|b_ + 2|a*b| (by definition)
-    //                           === a_|b| + 2|a*b| 
-    //
-    // ---------------
-    // 4a. double-double +/- double
-    // ---------------
-    // qad(a,b);  // both `a` and `b` error-free
-    // use: error bound of (a+b) === a_ + b_ + |a+b| (by definition)
-    //                           === 0 + 0 + |a+b|
-    //                           === |a+b| 
-    //--------------------------------------------------------------------------
     const { coeffs: { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v }, errorBound: { vₓₓₓ_, vₓₓᵧ_, vₓᵧᵧ_, vᵧᵧᵧ_, vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ } } = getImplicitForm3DdWithRunningError(ps1);
     const { coeffs: [[c3, c2, c1, [, c0]], [d3, d2, d1, [, d0]]], errorBound: [[c3_, c2_, c1_], [d3_, d2_, d1_]] // c0 and d0 is error free
      } = toPowerBasis3DdWithRunningError(ps2);
+    // See error-bound-calc.txt
     const $vₓₓₓ = vₓₓₓ[1];
     const $vₓₓᵧ = vₓₓᵧ[1];
     const $vₓᵧᵧ = vₓᵧᵧ[1];

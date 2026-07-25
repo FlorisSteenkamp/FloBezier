@@ -1,5 +1,42 @@
 import { Horner, roots } from 'flo-poly';
 import { getMedialPointCoeffs } from './get-medial-point-coeffs.js';
+const { abs, max } = Math;
+/**
+ * Recovers a numerically stable ray parameter `t` from linear equations
+ * `A*t + B = 0` and (optionally) `C*t + D = 0` evaluated at a fixed `s`.
+ *
+ * If `C,D` are unavailable, this falls back to `-B/A`.
+ */
+function chooseStableT(A, B, C, D) {
+    const epsScale = max(1, abs(A), abs(B), abs(C ?? 0), abs(D ?? 0));
+    const eps = Number.EPSILON * epsScale;
+    const denomAB = abs(A);
+    const hasAB = denomAB > eps;
+    // If only A,B are present, preserve existing behavior.
+    if (C === undefined || D === undefined) {
+        if (hasAB) {
+            return -B / A;
+        }
+        return NaN;
+    }
+    const denomCD = abs(C);
+    const hasCD = denomCD > eps;
+    if (!hasAB && !hasCD) {
+        return NaN;
+    }
+    if (hasAB && !hasCD) {
+        return -B / A;
+    }
+    if (!hasAB && hasCD) {
+        return -D / C;
+    }
+    const tAB = -B / A;
+    const tCD = -D / C;
+    // Score each candidate by how well it satisfies the *other* equation.
+    const scoreAB = abs(C * tAB + D) / (abs(C) + abs(D) + eps);
+    const scoreCD = abs(A * tCD + B) / (abs(A) + abs(B) + eps);
+    return scoreAB <= scoreCD ? tAB : tCD;
+}
 /**
  * Returns candidate ray parameter values `t`, bezier parameter values `s` and
  * medial points for points `q(t)` and b(s) that satisfy the medial condition with
@@ -28,7 +65,7 @@ function getMedialPoints(p, v, ps) {
     if (len <= 1) {
         throw new Error(`Bezier curve must be of order 1, 2 or 3. Found: ${len - 1}`);
     }
-    const { A, B, H } = getMedialPointCoeffs(p, v, ps);
+    const { A, B, C, D, H } = getMedialPointCoeffs(p, v, ps);
     /** the possible parameter values of the bezier curve */
     const ss = (roots(H, 0, 1) || []).map(r => r.t); //?
     /** the possible parameter values of the ray */
@@ -38,7 +75,9 @@ function getMedialPoints(p, v, ps) {
     for (const s of ss) {
         const As = Horner(A, s);
         const Bs = Horner(B, s);
-        const t = -Bs / As;
+        const Cs = C.length ? Horner(C, s) : undefined;
+        const Ds = D.length ? Horner(D, s) : undefined;
+        const t = chooseStableT(As, Bs, Cs, Ds);
         ts.push(t);
         const q = [p[0] + t * v[0], p[1] + t * v[1]];
         qs.push(q);
