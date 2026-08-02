@@ -1,4 +1,7 @@
+declare const ddGetImplicitForm3: typeof getImplicitForm3Dd;
 /**
+ * * use `ddGetImplicitForm3` instead (it is the same function but with a better name)
+ *
  * Returns a double-double precision implicit form of the given cubic bezier
  * curve.
  *
@@ -26,4 +29,4 @@ declare function getImplicitForm3Dd(ps: number[][]): {
     vᵧ: number[];
     v: number[];
 };
-export { getImplicitForm3Dd };
+export { ddGetImplicitForm3, getImplicitForm3Dd };

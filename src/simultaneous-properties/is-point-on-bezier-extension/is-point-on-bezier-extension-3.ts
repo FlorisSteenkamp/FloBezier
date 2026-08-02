@@ -4,7 +4,7 @@ import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd } from 'big
 import { getImplicitForm3 } from "../../implicit-form/double/get-implicit-form3.js";
 import { getImplicitForm3ErrorCounters } from "../../implicit-form/get-error-counters/get-implicit-form3-error-counters.js";
 import { getImplicitForm3DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form3-dd-with-running-error.js";
-import { getImplicitForm3Exact } from "../../implicit-form/exact/get-implicit-form3-exact.js";
+import { getImplicitForm3Exact } from "../../implicit-form/expansion/e-get-implicit-form3.js";
 import { γ1, γγ3 } from '../../error-analysis/error-analysis.js';
 
 const qmq = ddMultDd;

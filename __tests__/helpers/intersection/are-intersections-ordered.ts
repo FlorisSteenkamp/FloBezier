@@ -4,7 +4,7 @@ import type { X } from "../../../src/index.js";
 
 
 function areIntersectionsOrdered(xs: X[]): boolean {
-    let current = Number.NEGATIVE_INFINITY;
+    let current = -Infinity;
     const tSs = xs.map(x => x.ri1.tS);
     for (let t of tSs) {
         if (t < current) {

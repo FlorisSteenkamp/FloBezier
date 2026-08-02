@@ -1,6 +1,6 @@
+import { eps } from "../../src/error-analysis/error-analysis.js";
 import type { ObjOrArray } from "./obj-or-array.js";
 
-const { EPSILON: eps, POSITIVE_INFINITY: inf } = Number;
 const { abs } = Math;
 
 
@@ -22,7 +22,7 @@ function closeTo(ulpsOrEps: number | number[]) {
         if (typeof expected === 'number') {
             if (typeof actual !== 'number') { return false; }
             const actual_ = actual as number;
-            if (expected === inf) { return actual_ === inf; }
+            if (expected === Infinity) { return actual_ === Infinity; }
             const error = abs((isUlps ? expected : 1)*(ulpsOrEps as number)*eps);
             
             return (

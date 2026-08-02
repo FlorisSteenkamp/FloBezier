@@ -1,6 +1,6 @@
 import type { ImplicitFormExact3 } from "../../../../implicit-form/implicit-form-types.js";
 import { twoProduct, expansionProduct, fastExpansionSum, scaleExpansion2, eMultBy2, eSign, eCompress } from "big-float-ts";
-import { getImplicitForm3ExactPb } from "../../../../implicit-form/exact/get-implicit-form3-exact.js";
+import { getImplicitForm3ExactPb } from "../../../../implicit-form/expansion/e-get-implicit-form3.js";
 import { toPowerBasis2Exact, toPowerBasis3Exact } from "../../../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
 import { getCoeffsBez2Bez2Exact } from "./get-coeffs-bez2-bez2-exact.js";
 import { cubicToQuadratic } from "../../../../transformation/degree-or-type/cubic-to-quadratic.js";

@@ -4,7 +4,7 @@ import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd } from 'big
 import { getImplicitForm2 } from "../../implicit-form/double/get-implicit-form2.js";
 import { getImplicitForm2ErrorCounters } from "../../implicit-form/get-error-counters/get-implicit-form2-error-counters.js";
 import { getImplicitForm2DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form2-dd-with-running-error.js";
-import { getImplicitForm2Exact } from "../../implicit-form/exact/get-implicit-form2-exact.js";
+import { getImplicitForm2Exact } from "../../implicit-form/expansion/e-get-implicit-form2.js";
 import { γ1, γγ3 } from '../../error-analysis/error-analysis.js';
 
 

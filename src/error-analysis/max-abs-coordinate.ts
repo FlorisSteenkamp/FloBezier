@@ -12,7 +12,7 @@ const { abs } = Math;
  * @doc
  */
 function maxAbsCoordinate(ps: number[][]) {
-    let m = Number.NEGATIVE_INFINITY;
+    let m = -Infinity;
     for (let i=0; i<ps.length; i++) {
         const p = ps[i];
         const absX = abs(p[0]);

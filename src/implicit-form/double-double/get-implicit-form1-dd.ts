@@ -6,7 +6,12 @@ const qmd = ddMultDouble2;
 const qno = ddNegativeOf;
 
 
+const ddGetImplicitForm1 = getImplicitForm1Dd;
+
+
 /**
+ * * use `ddGetImplicitForm1` instead (it is the same function but with a better name)
+ * 
  * Returns a double-double precision implicit form of the given 
  * linear bezier curve.
  * 
@@ -40,4 +45,4 @@ function getImplicitForm1Dd(
 }
 
 
-export { getImplicitForm1Dd }
+export { ddGetImplicitForm1, getImplicitForm1Dd }

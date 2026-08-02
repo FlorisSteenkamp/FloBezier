@@ -20,13 +20,13 @@ function getBendingEnergy(ps, maxCurviness = 1.125, gaussOrder = 4) {
     const c = classify(ps);
     if (c.collinear) {
         if (isSelfOverlapping(ps)) {
-            return Number.POSITIVE_INFINITY;
+            return Infinity;
         }
         return 0;
     }
     if (c.realOrder === 3) {
         if (c.nodeType === 'cusp') {
-            return Number.POSITIVE_INFINITY;
+            return Infinity;
         }
         // it is a well behaved 'acnode', 'crunode' or 'explicit'
         return getBendingEnergyByGauss(κi3, ps, maxCurviness, gaussOrder);

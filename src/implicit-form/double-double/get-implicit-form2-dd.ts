@@ -9,7 +9,12 @@ const qmq = ddMultDd;      // error -> 7*γ² (theoretical), 5*γ² (worst found
 const qdq = ddDiffDd;      // error -> 3*γ²
 
 
+const ddGetImplicitForm2 = getImplicitForm2Dd;
+
+
 /**
+ * * use `ddGetImplicitForm2` instead (it is the same function but with a better name)
+ * 
  * Returns a double-double precision implicit form of the given quadratic 
  * bezier curve and a coefficientwise error bound.
  * 
@@ -83,4 +88,4 @@ function getImplicitForm2Dd(
 }
 
 
-export { getImplicitForm2Dd }
+export { ddGetImplicitForm2, getImplicitForm2Dd }

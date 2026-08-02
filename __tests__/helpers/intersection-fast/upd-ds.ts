@@ -15,7 +15,7 @@ function updDs(
 
     for (let j=0; j<ts.length; j++) {
         const tP = ts[j];
-        let closest = Number.POSITIVE_INFINITY;
+        let closest = Infinity;
         for (let k=0; k<xs.length; k++) {
             const x = xs[k];
             const ri = x.ri1;

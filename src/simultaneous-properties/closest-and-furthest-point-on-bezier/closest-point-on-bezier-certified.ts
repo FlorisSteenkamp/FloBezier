@@ -58,7 +58,7 @@ function closestPointOnBezierCertified(
     });
 
     /** the minimum max interval value */
-    let minMax = Number.POSITIVE_INFINITY;
+    let minMax = Infinity;
     for (let i=0; i<infos.length; i++) {
         const diMax = infos[i].dSquaredI[1];
         if (diMax < minMax) {

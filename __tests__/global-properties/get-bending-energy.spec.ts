@@ -18,14 +18,14 @@ describe('getBendingEnergy', function() {
             const ps = generateCuspAtHalf3([9,3], [3,6], [-6,-6]);
             // classify(ps).nodeType; //? cusp
             const E = getBendingEnergy(ps);
-            expect(E).toEqual(Number.POSITIVE_INFINITY);
+            expect(E).toEqual(Infinity);
         }
 
         {
             const ps = [[1,1], [2,2], [3,3], [-6,-6]];
             // isSelfOverlapping(ps); // true
             const E = getBendingEnergy(ps);
-            expect(E).toEqual(Number.POSITIVE_INFINITY);
+            expect(E).toEqual(Infinity);
         }
 
         {
@@ -45,7 +45,7 @@ describe('getBendingEnergy', function() {
             const ps = [[1,1], [-2,-2], [3,3]];
             // isSelfOverlapping(ps); // true
             const E = getBendingEnergy(ps);
-            expect(E).toEqual(Number.POSITIVE_INFINITY);
+            expect(E).toEqual(Infinity);
         }
 
         {

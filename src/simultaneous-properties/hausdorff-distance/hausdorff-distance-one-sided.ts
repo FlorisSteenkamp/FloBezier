@@ -96,8 +96,8 @@ function hausdorffDistanceOneSided(
     heap.insert(initialInterval);
 
     let j = 0;
-    let bestHUpper = Number.POSITIVE_INFINITY;
-    let bestHLower = Number.NEGATIVE_INFINITY;
+    let bestHUpper = Infinity;
+    let bestHLower = -Infinity;
     while (true) {
         const interval = heap.heap[0];  // peek max
         const { tS, tE, hL, hR } = interval;

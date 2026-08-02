@@ -51,9 +51,9 @@ describe('correctly calculate and use Stewart Error Counters', function() {
                 const V_COUNT = 10;  // number of values to use in demonstration
                 const N = 100;  // Number of loops
 
-                let minErr = Number.POSITIVE_INFINITY;
-                let maxErr = Number.NEGATIVE_INFINITY;
-                let minRelErr = Number.POSITIVE_INFINITY;
+                let minErr = Infinity;
+                let maxErr = -Infinity;
+                let minRelErr = Infinity;
                 let totErr = 0;
                 const EE = 5;  // initial error counter on each value
                 for (let i=0; i<N; i++) {
@@ -118,9 +118,9 @@ describe('correctly calculate and use Stewart Error Counters', function() {
                 const V_COUNT = 10;  // number of values to use in demonstration
                 const N = 100;  // Number of loops
 
-                let minErr = Number.POSITIVE_INFINITY;
-                let maxErr = Number.NEGATIVE_INFINITY;
-                let minRelErr = Number.POSITIVE_INFINITY;
+                let minErr = Infinity;
+                let maxErr = -Infinity;
+                let minRelErr = Infinity;
                 let totErr = 0;
                 const EE = 5;  // initial error counter on each value
                 for (let i=0; i<N; i++) {
@@ -198,9 +198,9 @@ describe('correctly calculate and use Stewart Error Counters', function() {
                 const V_COUNT = 10;  // number of values to use in demonstration
                 const N = 100;  // Number of loops
 
-                let minErr = Number.POSITIVE_INFINITY;
-                let maxErr = Number.NEGATIVE_INFINITY;
-                let minRelErr = Number.POSITIVE_INFINITY;
+                let minErr = Infinity;
+                let maxErr = -Infinity;
+                let minRelErr = Infinity;
                 let totErr = 0;
                 const EE = 5;  // initial error counter on each value
                 for (let i=0; i<N; i++) {
@@ -268,9 +268,9 @@ describe('correctly calculate and use Stewart Error Counters', function() {
             const V_COUNT = 10;  // number of values to use in demonstration
             const N = 100;  // Number of loops
 
-            let minErr = Number.POSITIVE_INFINITY;
-            let maxErr = Number.NEGATIVE_INFINITY;
-            let minRelErr = Number.POSITIVE_INFINITY;
+            let minErr = Infinity;
+            let maxErr = -Infinity;
+            let minRelErr = Infinity;
             let totErr = 0;
             const EE = 5;  // initial error counter on each value
             for (let i=0; i<N; i++) {

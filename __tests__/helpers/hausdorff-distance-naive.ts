@@ -22,7 +22,7 @@ const { max } = Math;
 
     let ts = splitByLength(A, maxLength);
     let candidates = [];
-    let maxD = Number.NEGATIVE_INFINITY;
+    let maxD = -Infinity;
     for (let i=0; i<ts.length; i++) {
         const t = ts[i];
         const p = evalDeCasteljau(A, t);

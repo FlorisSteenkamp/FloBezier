@@ -1,15 +1,19 @@
-import { ddDiffDd, ddMultDouble2 } from 'double-double';
-import { eNegativeOf } from 'big-float-ts';
+import { ddDiffDd, ddMultDouble2, ddNegativeOf } from 'double-double';
 import { toPowerBasis1DdWithRunningError } from '../../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js';
 
 const qdq = ddDiffDd;       // error -> 3*γ²
 const qmd = ddMultDouble2;
-const eno = eNegativeOf;
+const ddn = ddNegativeOf;
 
 const { abs } = Math;
 
 
+const ddGetImplicitForm1_WithRunningError = getImplicitForm1DdWithRunningError;
+
+
 /**
+ * * use `ddGetImplicitForm1_WithRunningError` instead (it is the same function but with a better name)
+ * 
  * Returns a double-double precision implicit form of the given line segment 
  * and a coefficientwise error bound.
  * 
@@ -43,7 +47,7 @@ function getImplicitForm1DdWithRunningError(
 
     const [[a1,[,a0]], [b1,[,b0]]] = toPowerBasis1DdWithRunningError(ps);
 
-    const vₓ = eno(b1);  // exact
+    const vₓ = ddn(b1);  // exact
     const vᵧ = a1;       // exact
 
     //const v = a1*b0 - a0*b1;
@@ -61,4 +65,4 @@ function getImplicitForm1DdWithRunningError(
 }
 
 
-export { getImplicitForm1DdWithRunningError }
+export { ddGetImplicitForm1_WithRunningError, getImplicitForm1DdWithRunningError }

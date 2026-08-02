@@ -1,4 +1,4 @@
-import { getImplicitForm1ExactPb } from "../../../../implicit-form/exact/get-implicit-form1-exact.js";
+import { getImplicitForm1ExactPb } from "../../../../implicit-form/expansion/e-get-implicit-form1.js";
 import { toPowerBasis1Exact } from "../../../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
 import { expansionProduct, fastExpansionSum, scaleExpansion2, eCompress } from "big-float-ts";
 

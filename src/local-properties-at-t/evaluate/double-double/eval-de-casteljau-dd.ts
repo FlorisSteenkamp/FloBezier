@@ -35,7 +35,7 @@ function evalDeCasteljauDd(
     }
 
     if (ps.length === 4) {
-        const [[x0, y0], [x1,y1], [x2,y2], [x3, y3]] = ps;    
+        const [[x0, y0], [x1,y1], [x2,y2], [x3, y3]] = ps;
         
         const a01 = qad(qmq(td(x1, x0),t), x0);
         const a11 = qad(qmq(td(x2, x1),t), x1);
@@ -55,7 +55,7 @@ function evalDeCasteljauDd(
     } 
     
     if (ps.length === 3) {
-        const [[x0,y0], [x1,y1], [x2,y2]] = ps;    
+        const [[x0,y0], [x1,y1], [x2,y2]] = ps;
 
         const a01 = qaq([0,x0],qmq(td(x1, x0),t));
         const a11 = qaq([0,x1],qmq(td(x2, x1),t));
@@ -69,7 +69,7 @@ function evalDeCasteljauDd(
     } 
     
     if (ps.length === 2) {
-        const [[x0,y0], [x1,y1]] = ps;    
+        const [[x0,y0], [x1,y1]] = ps;
 
         const x = qad(qmq(td(x1, x0),t), x0);
         const y = qad(qmq(td(y1, y0),t), y0);
@@ -82,8 +82,7 @@ function evalDeCasteljauDd(
 
         return [[0,x], [0,y]];
     }
-    
-    
+
     throw new Error('The given bezier curve must be of order <= 3.');
 }
 

@@ -1,4 +1,7 @@
+declare const ddGetImplicitForm1: typeof getImplicitForm1Dd;
 /**
+ * * use `ddGetImplicitForm1` instead (it is the same function but with a better name)
+ *
  * Returns a double-double precision implicit form of the given
  * linear bezier curve.
  *
@@ -19,4 +22,4 @@ declare function getImplicitForm1Dd(ps: number[][]): {
     vᵧ: number[];
     v: number[];
 };
-export { getImplicitForm1Dd };
+export { ddGetImplicitForm1, getImplicitForm1Dd };

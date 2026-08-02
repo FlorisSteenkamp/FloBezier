@@ -8,17 +8,14 @@ import { toGrid } from './helpers/to-grid.js';
 import { allTrue, subtractShewchuk } from './helpers/map.js';
 
 
-const { POSITIVE_INFINITY: inf } = Number;
-
-
 describe('helpers', function() {
     it('should make sure the test helpers work as intended',
     function() {
         {
-            expect(inf).toBeNearly(2**4, inf);
+            expect(Infinity).toBeNearly(2**4, Infinity);
         }
         {
-            expect(inf).toBeNearly([2**4], inf);
+            expect(Infinity).toBeNearly([2**4], Infinity);
         }
         {
             const e = 2;

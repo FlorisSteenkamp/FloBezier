@@ -29,14 +29,14 @@ function getBendingEnergy(
 
     if (c.collinear) {
         if (isSelfOverlapping(ps)) {
-            return Number.POSITIVE_INFINITY;
+            return Infinity;
         }
         return 0;
     }
 
     if (c.realOrder === 3) {
         if (c.nodeType === 'cusp') {
-            return Number.POSITIVE_INFINITY;
+            return Infinity;
         }
 
         // it is a well behaved 'acnode', 'crunode' or 'explicit'

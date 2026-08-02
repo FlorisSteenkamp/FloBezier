@@ -11,7 +11,12 @@ const qdq = ddDiffDd;      // error -> 3*γ²
 const qaq = ddAddDd;       // error -> 3*γ²
 
 
+const ddGetImplicitForm3 = getImplicitForm3Dd;
+
+
 /**
+ * * use `ddGetImplicitForm3` instead (it is the same function but with a better name)
+ * 
  * Returns a double-double precision implicit form of the given cubic bezier 
  * curve.
  * 
@@ -136,4 +141,4 @@ function getImplicitForm3Dd(
 }
 
 
-export { getImplicitForm3Dd }
+export { ddGetImplicitForm3, getImplicitForm3Dd }

@@ -48,7 +48,7 @@ function closestPointOnBezier(ps, p, inclEndpoints = true) {
         ts.push(1);
     }
     // Get point with minimum distance
-    let minDSquared = Number.POSITIVE_INFINITY;
+    let minDSquared = Infinity;
     let minP = undefined;
     for (const t of ts) {
         const p_ = evalDeCasteljau(ps, t);

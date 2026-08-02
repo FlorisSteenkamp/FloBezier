@@ -1,4 +1,7 @@
+declare const ddGetImplicitForm1_WithRunningError: typeof getImplicitForm1DdWithRunningError;
 /**
+ * * use `ddGetImplicitForm1_WithRunningError` instead (it is the same function but with a better name)
+ *
  * Returns a double-double precision implicit form of the given line segment
  * and a coefficientwise error bound.
  *
@@ -27,4 +30,4 @@ declare function getImplicitForm1DdWithRunningError(ps: number[][]): {
         v_: number;
     };
 };
-export { getImplicitForm1DdWithRunningError };
+export { ddGetImplicitForm1_WithRunningError, getImplicitForm1DdWithRunningError };

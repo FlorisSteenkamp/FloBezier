@@ -126,7 +126,7 @@ describe('sub1Ulp', function() {
         // negative max value
         {
             const n = -1.7976931348623157e+308;
-            const r = Number.NEGATIVE_INFINITY;
+            const r = -Infinity;
             expect(sub1Ulp(n)).toEqual(r);
         }
 

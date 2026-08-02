@@ -2,7 +2,7 @@ import { γγ3 } from '../../error-analysis/error-analysis.js';
 import { getImplicitForm1DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form1-dd-with-running-error.js";
 import { ddAddDd, ddMultDd } from "double-double";
 import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd } from 'big-float-ts';
-import { getImplicitForm1Exact } from '../../implicit-form/exact/get-implicit-form1-exact.js';
+import { getImplicitForm1Exact } from '../../implicit-form/expansion/e-get-implicit-form1.js';
 const qaq = ddAddDd;
 const epr = expansionProduct;
 const fes = fastExpansionSum;

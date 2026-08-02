@@ -117,8 +117,8 @@ function closestPointsBetweenBeziers(
     heap.insert(initialInterval);
 
     let j = 0;
-    let bestUpperD = Number.POSITIVE_INFINITY;
-    let bestLowerD = Number.NEGATIVE_INFINITY;
+    let bestUpperD = Infinity;
+    let bestLowerD = -Infinity;
     let bestUpper: PointsWithDistance;
     while (true) {
         // const interval = heap.heap[0];  // peek max

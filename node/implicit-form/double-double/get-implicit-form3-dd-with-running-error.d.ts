@@ -1,4 +1,7 @@
+declare const ddGetImplicitForm3_WithRunningError: typeof getImplicitForm3DdWithRunningError;
 /**
+ * * use `ddGetImplicitForm3_WithRunningError` instead (it is the same function but with a better name)
+ *
  * Returns a double-double precision implicit form of the given cubic
  * bezier curve curve and a coefficientwise error bound.
  *
@@ -43,4 +46,4 @@ declare function getImplicitForm3DdWithRunningError(ps: number[][]): {
         v_: number;
     };
 };
-export { getImplicitForm3DdWithRunningError };
+export { ddGetImplicitForm3_WithRunningError, getImplicitForm3DdWithRunningError };

@@ -49,7 +49,7 @@ function furthestPointOnBezier(
     ts.push(1); 
 
     // Get point with minimum distance
-    let maxDSquared = Number.NEGATIVE_INFINITY;
+    let maxDSquared = -Infinity;
     let maxP: { p: number[], t: number, d: number } | undefined = undefined;
     for (const t of ts) {
         const p_ = evalDeCasteljau(ps,t);

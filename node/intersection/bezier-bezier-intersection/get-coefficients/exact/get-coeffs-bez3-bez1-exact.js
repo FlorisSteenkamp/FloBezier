@@ -2,7 +2,7 @@ import { twoProduct, expansionProduct, fastExpansionSum, scaleExpansion2, eMultB
 import { toPowerBasis1Exact, toPowerBasis3Exact } from "../../../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
 import { getCoeffsBez2Bez1Exact } from "./get-coeffs-bez2-bez1-exact.js";
 import { cubicToQuadratic } from "../../../../transformation/degree-or-type/cubic-to-quadratic.js";
-import { getImplicitForm3ExactPb } from "../../../../implicit-form/exact/get-implicit-form3-exact.js";
+import { getImplicitForm3ExactPb } from "../../../../implicit-form/expansion/e-get-implicit-form3.js";
 const tp = twoProduct; // error -> 0
 const sce = scaleExpansion2;
 const epr = expansionProduct;

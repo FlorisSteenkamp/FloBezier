@@ -8,7 +8,10 @@ const qmd = ddMultDouble2; // error -> 3*γ²
 const qmq = ddMultDd; // error -> 5*γ² (worst found), 7*γ² (theoretical), we use 6*γ²
 const qdq = ddDiffDd; // error -> 3*γ²
 const qaq = ddAddDd; // error -> 3*γ²
+const ddGetImplicitForm3 = getImplicitForm3Dd;
 /**
+ * * use `ddGetImplicitForm3` instead (it is the same function but with a better name)
+ *
  * Returns a double-double precision implicit form of the given cubic bezier
  * curve.
  *
@@ -83,5 +86,5 @@ function getImplicitForm3Dd(ps) {
     const v = qaq(qmq(q1, qdq(qdq(tq2q4, q1q1), q1q5)), qdq(qmq(s3, q6), qmq(q3q4, q4)));
     return { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v };
 }
-export { getImplicitForm3Dd };
+export { ddGetImplicitForm3, getImplicitForm3Dd };
 //# sourceMappingURL=get-implicit-form3-dd.js.map

@@ -24,10 +24,10 @@ function getBounds(ps) {
     // Endpoints
     rootsX.push(0, 1);
     rootsY.push(0, 1);
-    let minX = Number.POSITIVE_INFINITY;
-    let maxX = Number.NEGATIVE_INFINITY;
-    let minY = Number.POSITIVE_INFINITY;
-    let maxY = Number.NEGATIVE_INFINITY;
+    let minX = Infinity;
+    let maxX = -Infinity;
+    let minY = Infinity;
+    let maxY = -Infinity;
     let tMinX;
     let tMaxX;
     let tMinY;

@@ -11,7 +11,12 @@ const qdq = ddDiffDd;      // error -> 3*γ²
 const { abs } = Math;
 
 
+const ddGetImplicitForm2_WithRunningError = getImplicitForm2DdWithRunningError;
+
+
 /**
+ * * use `ddGetImplicitForm2_WithRunningError` instead (it is the same function but with a better name)
+ * 
  * Returns a double-double precision implicit form of the given quadratic 
  * bezier curve and a coefficientwise error bound.
  * 
@@ -183,4 +188,4 @@ function getImplicitForm2DdWithRunningError(
 }
 
 
-export { getImplicitForm2DdWithRunningError }
+export { ddGetImplicitForm2_WithRunningError, getImplicitForm2DdWithRunningError }

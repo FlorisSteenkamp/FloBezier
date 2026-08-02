@@ -1,4 +1,7 @@
+declare const ddGetImplicitForm2: typeof getImplicitForm2Dd;
 /**
+ * * use `ddGetImplicitForm2` instead (it is the same function but with a better name)
+ *
  * Returns a double-double precision implicit form of the given quadratic
  * bezier curve and a coefficientwise error bound.
  *
@@ -22,4 +25,4 @@ declare function getImplicitForm2Dd(ps: number[][]): {
     vᵧ: number[];
     v: number[];
 };
-export { getImplicitForm2Dd };
+export { ddGetImplicitForm2, getImplicitForm2Dd };

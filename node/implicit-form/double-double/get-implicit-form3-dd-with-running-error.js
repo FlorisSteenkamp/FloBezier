@@ -9,7 +9,10 @@ const qmd = ddMultDouble2; // error -> 3*γ²
 const qmq = ddMultDd; // error -> 5*γ² (worst found), 7*γ² (theoretical), we use 6*γ²
 const qdq = ddDiffDd; // error -> 3*γ²
 const qaq = ddAddDd; // error -> 3*γ²
+const ddGetImplicitForm3_WithRunningError = getImplicitForm3DdWithRunningError;
 /**
+ * * use `ddGetImplicitForm3_WithRunningError` instead (it is the same function but with a better name)
+ *
  * Returns a double-double precision implicit form of the given cubic
  * bezier curve curve and a coefficientwise error bound.
  *
@@ -321,5 +324,5 @@ function getImplicitForm3DdWithRunningError(ps) {
         errorBound: { vₓₓₓ_, vₓₓᵧ_, vₓᵧᵧ_, vᵧᵧᵧ_, vₓₓ_, vₓᵧ_, vᵧᵧ_, vₓ_, vᵧ_, v_ }
     };
 }
-export { getImplicitForm3DdWithRunningError };
+export { ddGetImplicitForm3_WithRunningError, getImplicitForm3DdWithRunningError };
 //# sourceMappingURL=get-implicit-form3-dd-with-running-error.js.map

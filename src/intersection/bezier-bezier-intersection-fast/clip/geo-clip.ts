@@ -123,8 +123,8 @@ function geoClip(
     //--------------------------------------------------------------------------
 
     
-    let tMin = Number.POSITIVE_INFINITY;
-    let tMax = Number.NEGATIVE_INFINITY;
+    let tMin = Infinity;
+    let tMax = -Infinity;
 
     /** *lower* Bernstein *lower* fatline roots */
     const rootsMinBMinF = quadraticRoots(a, b, c1);
@@ -182,8 +182,8 @@ function geoClip(
         tMax = 1;
     }
 
-    if (tMin === Number.POSITIVE_INFINITY) {
-        // will have here also: `tMax === Number.NEGATIVE_INFINITY`
+    if (tMin === Infinity) {
+        // will have here also: `tMax === -Infinity`
         return undefined;
     }
 

@@ -9,7 +9,7 @@ import { fromTo3 } from '../../../src/transformation/split/from-to/from-to-3.js'
 import { eEstimate } from 'big-float-ts';
 
 
-const { EPSILON: eps, POSITIVE_INFINITY: inf } = Number;
+const { EPSILON: eps } = Number;
 
 
 describe('bezierBezierIntersection', function() {

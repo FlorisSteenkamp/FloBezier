@@ -123,7 +123,7 @@ function checkTsAreAccurate(
     const tAs = getUlpRange(tA,numToAddInBackAndFront);
     const tBs = getUlpRange(tB,numToAddInBackAndFront);
 
-    let best = Number.POSITIVE_INFINITY;
+    let best = Infinity;
     let bestI: number | undefined = undefined;
     let bestJ: number | undefined = undefined;
     for (let i=0; i<2*numToAddInBackAndFront + 1; i++) {

@@ -119,7 +119,7 @@ describe('add1Ulp', function() {
         // max value
         {
             const n = 1.7976931348623157e+308;
-            const r = Number.POSITIVE_INFINITY;
+            const r = Infinity;
             expect(add1Ulp(n)).toEqual(r);
         }
 

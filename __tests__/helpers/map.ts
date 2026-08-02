@@ -95,24 +95,6 @@ function mapArr<T,U>(
 }
 
 
-/*
-function mapObj<T,U>(
-        f: (t1: T, t2?: T) => U,
-        obj1: { [key:string]: T },
-        obj2?: { [key:string]: T }): { [k in keyof typeof obj1]: U } {
-
-    const o = {};
-    for (let k in obj1) {
-        const v1 = obj1[k];
-        const v2 = obj2 ? obj2[k] : undefined;
-        o[k] = f(v1,v2);
-    }
-
-    return o;
-}
-*/
-
-
 const mapShewchuk = map<number[]>(isNumberArray);
 const mapDouble = map<number>(isNumber);
 
