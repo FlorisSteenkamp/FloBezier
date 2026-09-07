@@ -17,17 +17,23 @@ For example, finding the intersection between a quadratic and cubic bezier curve
 should be simple:
 
 ```typescript
+import { bezierBezierIntersection, evaluate } from 'flo-bezier3';
+
 // some cubic bezier curve given by an array of its control points
 const cubic1 = [[6.4, 4.8], [15, 5], [1, 4], [10, 4]];
 // another cubic bezier curve
 const cubic2 = [[9.4, 0.4], [9.3, 10.3], [8.1, 0.1], [7.53125, 5.5]];
-const xs = bezierBezierIntersectionFast(cubic1, cubic2); //=> [[0.054810011880009446, 0.9516779285879586], ...
+const xs = bezierBezierIntersection(cubic1, cubic2);
 // xs.length === 9 (nine points of intersection)
 
+// each intersection is an object carrying the point of intersection `p` as well as
+// the parameter values `t1` and `t2` on the first and second curve respectively
+const x = xs[0];  //=> { p: [7.617926141015112, 4.822433357454532], t1: 0.054810011880009515, t2: 0.9516779285879587, ... }
+
 // Evaluating the 1st curve at the first intersection gives the point of intersection
-const p1 = evaluate(cubic1,xs[0][0]);  //=> [7.617926141015109,  4.822433357454532]
+const p1 = evaluate(cubic1, x.t1);  //=> [7.61792614101511,  4.822433357454532]
 // ... or alternatively evaluating the 2nd curve at the first intersection
-const p2 = evaluate(cubic2,xs[0][1]);  //=> [7.6179261410151105, 4.822433357454532]
+const p2 = evaluate(cubic2, x.t2);  //=> [7.6179261410151105, 4.8224333574545355]
 ```
 
 In general, the functions in this library are limited to points, lines, quadratic bezier
