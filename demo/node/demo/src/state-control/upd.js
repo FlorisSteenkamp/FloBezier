@@ -26,7 +26,9 @@ function _upd(state, setState) {
      * Updates state and *does not* trigger react render
      */
     const upd$ = _upd(false);
-    return { upd, upd$ };
+    /** Re-renders react from current state without writing to localstorage */
+    const render = () => setState(state.appState);
+    return { upd, upd$, render };
 }
 function toLocalStorage(appState) {
     // omit transient (lazy loaded, etc) properties from state

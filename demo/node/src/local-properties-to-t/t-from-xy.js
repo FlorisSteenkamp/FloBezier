@@ -1,0 +1,256 @@
+import { roots } from 'flo-poly';
+import { toPowerBasis2Exact, toPowerBasis3Exact } from "../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
+import { toPowerBasis2DdWithRunningError, toPowerBasis3DdWithRunningError } from "../to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js";
+import { twoDiff } from 'big-float-ts';
+import { toPowerBasis1Dd } from '../to-power-basis/to-power-basis/double-double/to-power-basis-dd.js';
+const { min, max } = Math;
+/**
+ * Performs certified inversion, i.e. returns the `t` parameter value
+ * interval(s) for the given `x` and `y` coordinates on the specified bezier
+ * curve.
+ *
+ * * Only `t` values in `[0,1]` are returned.
+ *
+ * * see also [[closestPointOnBezier]] and [[closestPointOnBezierCertified]]
+ *
+ * **precondition**: `p` must be *exactly* on the curve for the result to be
+ * certified
+ *
+ * * **certified** here means no `t` value can be missed but (in rare cases)
+ * an extra 1 or 2 `t`s could be returned (e.g. for self-overlapping curves
+ * and when the point is exactly on the point of self-intersection of the curve)
+ *
+ * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param p a point, e.g. `[1,2]`
+ */
+function tFromXY(ps, p) {
+    if (ps.length === 4) {
+        return tFromXY3(ps, p);
+    }
+    if (ps.length === 3) {
+        return tFromXY2(ps, p);
+    }
+    if (ps.length === 2) {
+        return tFromXY1(ps, p);
+    }
+    if (ps.length === 1) {
+        const p1 = ps[0];
+        if (p1[0] === p[0] && p1[1] === p[1]) {
+            return [{ t: 0.5, tS: 0.5, tE: 0.5, multiplicity: 1 }];
+        }
+        return [];
+    }
+    throw new Error('The given bezier curve must be of order <= 3.');
+}
+/** @internal */
+function tFromXY3(ps, p) {
+    const x = p[0];
+    const y = p[1];
+    // get power basis representation in double-double precision including error
+    // bound
+    const { coeffs: [_polyDdX, _polyDdY], errorBound: [polyX_, polyY_] } = toPowerBasis3DdWithRunningError(ps);
+    // pop the constant term off `x(t)`
+    const txDd = _polyDdX.pop()[1];
+    // subtract the x coordinate of the point
+    const polyDdX = [..._polyDdX, twoDiff(txDd, x)];
+    // pop the constant term off `y(t)`
+    const tyDd = _polyDdY.pop()[1];
+    // subtract the y coordinate of the point
+    const polyDdY = [..._polyDdY, twoDiff(tyDd, y)];
+    let pExactXY = undefined;
+    const getPExactX = () => {
+        if (pExactXY === undefined) {
+            pExactXY = toPowerBasis3Exact(ps);
+        }
+        const _pExactX = pExactXY[0].slice(); // x coordinate
+        // pop the constant term off `x(t)`
+        const tx = _pExactX.pop();
+        const pExactX = [..._pExactX, twoDiff(tx[0], x)];
+        return pExactX;
+    };
+    const getPExactY = () => {
+        if (pExactXY === undefined) {
+            pExactXY = toPowerBasis3Exact(ps);
+        }
+        const _pExactY = pExactXY[1].slice(); // y coordinate
+        // pop the constant term off `y(t)`
+        const ty = _pExactY.pop();
+        const pExactY = [..._pExactY, twoDiff(ty[0], y)];
+        return pExactY;
+    };
+    // max 3 roots
+    const xrs = roots(polyDdX, 0, 1, polyX_, getPExactX);
+    // const xrsExp = xrs!.map(xr => refineK1(xr, getPExactX()));
+    // max 3 roots
+    const yrs = roots(polyDdY, 0, 1, polyY_, getPExactY);
+    if (xrs === undefined) {
+        // the `x` value of the point is on the curve for all `t` values
+        // the curve must be a 'line' (can also be degenerate quadratic, etc.)
+        if (yrs === undefined) {
+            // the `y` value of the point is on the curve for all `t` values
+            // the curve must be a point
+            return [{ t: 0.5, tS: 0.5, tE: 0.5, multiplicity: 1 }];
+        }
+        return yrs; //.map(r => [r.tS, r.tE]);
+    }
+    if (yrs === undefined) {
+        // the `y` value of the point is on the curve for all `t` values
+        // the curve must be a 'line' (can also be degenerate quadratic, etc.)        
+        return xrs;
+    }
+    // check for `t` value overlap 
+    // - there can be 0 or 1 overlap (the usual case), 2 overlaps (at point of 
+    // self-intersection), 3 overlaps (for self-overlapping curve (that looks 
+    // like a line))
+    // at this point `xrs !== undefined` and `yrs !== undefined`
+    const ris = [];
+    for (let i = 0; i < xrs.length; i++) {
+        const xr = xrs[i];
+        for (let j = 0; j < yrs.length; j++) {
+            const yr = yrs[j];
+            const r = combineRoots(xr, yr);
+            if (r !== undefined) {
+                ris.push(r);
+            }
+        }
+    }
+    return ris;
+}
+/** @internal */
+function tFromXY2(ps, p) {
+    const x = p[0];
+    const y = p[1];
+    // get power basis representation in double-double precision including error
+    // bound
+    const { coeffs: [_polyDdX, _polyDdY], errorBound: [polyX_, polyY_] } = toPowerBasis2DdWithRunningError(ps);
+    // pop the constant term off `x(t)`
+    const txDd = _polyDdX.pop()[1];
+    // subtract the x coordinate of the point
+    const polyDdX = [..._polyDdX, twoDiff(txDd, x)];
+    // pop the constant term off `y(t)`
+    const tyDd = _polyDdY.pop()[1];
+    // subtract the y coordinate of the point
+    const polyDdY = [..._polyDdY, twoDiff(tyDd, y)];
+    let pExactXY = undefined;
+    const getPExactX = () => {
+        if (pExactXY === undefined) {
+            pExactXY = toPowerBasis2Exact(ps);
+        }
+        const _pExactX = pExactXY[0]; // x coordinate
+        // pop the constant term off `x(t)`
+        const tx = _pExactX.pop()[0];
+        const pExactX = [..._pExactX, twoDiff(tx, x)];
+        return pExactX;
+    };
+    const getPExactY = () => {
+        if (pExactXY === undefined) {
+            pExactXY = toPowerBasis2Exact(ps);
+        }
+        const _pExactY = pExactXY[1]; // y coordinate
+        // pop the constant term off `y(t)`
+        const ty = _pExactY.pop()[0];
+        const pExactY = [..._pExactY, twoDiff(ty, y)];
+        return pExactY;
+    };
+    // max 2 roots
+    const xrs = roots(polyDdX, 0, 1, polyX_, getPExactX);
+    // max 2 roots
+    const yrs = roots(polyDdY, 0, 1, polyY_, getPExactY);
+    if (xrs === undefined) {
+        // the `x` value of the point is on the curve for all `t` values
+        // the curve must be a 'line'
+        if (yrs === undefined) {
+            // the `y` value of the point is on the curve for all `t` values
+            // the curve must be a point
+            return [{ t: 0.5, tS: 0.5, tE: 0.5, multiplicity: 1 }];
+        }
+        return yrs;
+    }
+    if (yrs === undefined) {
+        // the `y` value of the point is on the curve for all `t` values
+        // the curve must be a 'line'
+        return xrs;
+    }
+    // check for `t` value overlap 
+    // - there can be 0 or 1 overlap (the usual case), 2 overlaps (for 
+    // self-overlapping curve (that looks like a line))
+    // at this point `xrs !== undefined` and `yrs !== undefined`
+    const ris = [];
+    for (let i = 0; i < xrs.length; i++) {
+        const xr = xrs[i];
+        for (let j = 0; j < yrs.length; j++) {
+            const yr = yrs[j];
+            const r = combineRoots(xr, yr);
+            if (r !== undefined) {
+                ris.push(r);
+            }
+        }
+    }
+    return ris;
+}
+/** @internal */
+function tFromXY1(ps, p) {
+    const x = p[0];
+    const y = p[1];
+    // get power basis representation in double-double precision including error
+    // bound
+    const [_polyDdX, _polyDdY] = toPowerBasis1Dd(ps);
+    // pop the constant term off `x(t)`
+    const txDd = _polyDdX.pop()[1];
+    // subtract the x coordinate of the point
+    const polyExactX = [..._polyDdX, twoDiff(txDd, x)];
+    // pop the constant term off `y(t)`
+    const tyDd = _polyDdY.pop()[1];
+    // subtract the y coordinate of the point
+    const polyExactY = [..._polyDdY, twoDiff(tyDd, y)];
+    // max 1 roots
+    const xrs = roots(polyExactX, 0, 1);
+    // max 1 roots
+    const yrs = roots(polyExactY, 0, 1);
+    if (xrs === undefined) {
+        // the `x` value of the point is on the curve for all `t` values
+        // the curve must be a vertical line
+        if (yrs === undefined) {
+            // the `y` value of the point is on the curve for all `t` values
+            // the curve must be a point
+            return [{ t: 0.5, tS: 0.5, tE: 0.5, multiplicity: 1 }];
+        }
+        return yrs;
+    }
+    if (yrs === undefined) {
+        // the `y` value of the point is on the curve for all `t` values
+        // the curve must be horizontal line
+        return xrs; //.map(r => ({ tS: r.tS, tE: r.tE, multiplicity: 1 }));
+    }
+    // check for `t` value overlap 
+    // - there can be 0 or 1 overlap (the usual case), 2 overlaps (for 
+    // self-overlapping curve (that looks like a line))
+    // at this point `xrs !== undefined` and `yrs !== undefined`
+    if (xrs.length === 0 || yrs.length === 0) {
+        return [];
+    }
+    // at this point `xrs.length === 1` and `yrs.length === 1`
+    const r = combineRoots(xrs[0], yrs[0]);
+    if (r === undefined) {
+        return [];
+    }
+    return [r];
+}
+/** @internal */
+function combineRoots(r, s) {
+    // case 1
+    if (r.tS <= s.tS) {
+        if (r.tE < s.tS) {
+            return undefined; // no overlap
+        }
+        return { t: s.t, tS: s.tS, tE: max(r.tE, s.tE), multiplicity: min(r.multiplicity, s.multiplicity) };
+    }
+    // case 2 - r.tS > s.tS
+    if (s.tE < r.tS) {
+        return undefined; // no overlap
+    }
+    return { t: r.tS, tS: r.tS, tE: max(r.tE, s.tE), multiplicity: min(r.multiplicity, s.multiplicity) };
+}
+export { tFromXY };
+//# sourceMappingURL=t-from-xy.js.map

@@ -1,11 +1,20 @@
 function createEmptyGeneratedSvgs() {
     return {
         bezier: [],
+        controlPoints: [],
+        controlLines: [],
+        quadraticToPolyline: [],
+        polyQuads: [],
+        inflections: [],
+        curvatureMaxima: [],
+        curvature: [],
+        normal: [],
+        tangent: [],
+        hausdorff: [],
         looseBoundingBox: [],
         tightBoundingBox: [],
         boundingHull: [],
         intersection: [],
-        inflections: [],
         x: []
     };
 }

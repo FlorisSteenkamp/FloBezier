@@ -1,0 +1,27 @@
+const { abs } = Math;
+/**
+ * Returns the maximum absolute value of the coordinates of the control points
+ * of the given bezier curve.
+ *
+ * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ *
+ * @doc
+ */
+function maxAbsCoordinate(ps) {
+    let m = -Infinity;
+    for (let i = 0; i < ps.length; i++) {
+        const p = ps[i];
+        const absX = abs(p[0]);
+        const absY = abs(p[1]);
+        if (absX > m) {
+            m = absX;
+        }
+        if (absY > m) {
+            m = absY;
+        }
+    }
+    return m;
+}
+export { maxAbsCoordinate };
+//# sourceMappingURL=max-abs-coordinate.js.map

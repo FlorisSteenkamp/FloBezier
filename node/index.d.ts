@@ -175,7 +175,7 @@ export { cubicFromAnglesAndSpeeds } from './angles-and-speeds/bezier-by-angles-a
 export { cubicToAnglesAndSpeeds } from './angles-and-speeds/bezier-by-angles-and-speeds/cubic-to-angles-and-speeds.js';
 export { getCubicSpeeds } from './angles-and-speeds/bezier-by-angles-and-speeds/get-cubic-speeds.js';
 export { setCubicSpeeds } from './angles-and-speeds/bezier-by-angles-and-speeds/set-cubic-speeds.js';
-export { closestPointsBetweenBeziers } from './simultaneous-properties/closest-distance-between-beziers/closest-distance-between-beziers.js';
+export { closestPointsBetweenBeziers } from './simultaneous-properties/closest-distance-between-beziers/closest-points-between-beziers.js';
 export { maxAbsCoordinate } from './error-analysis/max-abs-coordinate.js';
 export { generateArcFromQuads } from './create/generate-arc-from-quads.js';
 export { calcQuadOffsetCurveXPoint } from './offset/calc-quad-offset-x-point.js';

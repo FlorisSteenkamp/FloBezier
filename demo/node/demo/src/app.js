@@ -8,9 +8,9 @@ import { createRoot } from 'react-dom/client';
 function App() {
     const [appState, setAppState] = useState(getInitialState);
     const [state] = useState(() => ({ appState }));
-    const [{ upd, upd$ }] = useState(() => _upd(state, setAppState));
+    const [{ upd, upd$, render }] = useState(() => _upd(state, setAppState));
     const [stateControl] = useState(() => ({
-        state, upd, upd$, transientState: defaultTransientState,
+        state, upd, upd$, render, transientState: defaultTransientState,
     }));
     const { pageState } = appState;
     return (React.createElement("main", null,

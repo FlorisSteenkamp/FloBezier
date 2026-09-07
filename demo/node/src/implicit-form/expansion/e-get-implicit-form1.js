@@ -1,0 +1,48 @@
+import { toPowerBasis1Exact } from "../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
+import { scaleExpansion2, eDiff, eNegativeOf, eCompress } from "big-float-ts";
+import { eSign } from 'big-float-ts';
+const sce = scaleExpansion2;
+const eno = eNegativeOf;
+const eGetImplicitForm1 = getImplicitForm1Exact;
+/**
+ * use `eGetImplicitForm1` instead (it is identical but with a new name)
+ *
+ * Returns the *exact* implicit form of the given linear bezier curve (a line
+ * segment) or `undefined` if the line degenerates to a point.
+ *
+ * * returned coefficients are subscripted to match their monomial's variables,
+ * e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
+ * * returned coefficients are given *exactly* as [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) expansions
+ * * the implicit form is given by: `vₓx + vᵧy + v = 0`
+ * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
+ *
+ * @param ps
+ *
+ * @doc mdx
+ */
+function getImplicitForm1Exact(ps) {
+    return getImplicitForm1ExactPb(toPowerBasis1Exact(ps));
+}
+/**
+ * The power basis version of [[getImplicitForm1Exact]].
+ *
+ * @param pspb the power basis representation of a linear bezier curve that
+ * can be found via [[toPowerBasis1Exact]]
+ *
+ * @internal
+ */
+function getImplicitForm1ExactPb(pspb) {
+    const [[a1, [a0]], [b1, [b0]]] = pspb;
+    if (eSign(a1) === 0 && eSign(b1) === 0) {
+        // the input bezier curve is in fact not linear but has order < 1
+        // it is a point and no implicit form is possible
+        return undefined;
+    }
+    const vₓ = eno(b1);
+    const vᵧ = a1;
+    //const v = a1*b0 - a0*b1;
+    const v = eCompress(eDiff(sce(a0, b1), sce(b0, a1)));
+    return { vₓ, vᵧ, v };
+}
+export { eGetImplicitForm1, getImplicitForm1Exact, getImplicitForm1ExactPb };
+//# sourceMappingURL=e-get-implicit-form1.js.map
