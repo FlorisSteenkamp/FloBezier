@@ -24544,6 +24544,106 @@ function generateArcFromQuads(c, p1, p2) {
 }
 
 
+;// ./src/create/generate-arc-from-cubics.ts
+
+
+
+
+const { sqrt: generate_arc_from_cubics_sqrt, atan2: generate_arc_from_cubics_atan2, PI: generate_arc_from_cubics_, sin: generate_arc_from_cubics_sin, cos: generate_arc_from_cubics_cos } = Math;
+// the control point offset that best approximates a quarter circle with a cubic
+// bezier curve, see: https://spencermortensen.com/articles/bezier-circle/
+const c = 0.5519150244935105707435627;
+/**
+ * Cubic bezier curves that are an approximation of the unit circle starting
+ * from the x-axis (each curve approximates a quarter circle).
+ *
+ * @doc mdx
+ */
+const generate_arc_from_cubics_circle = [
+    [[1, 0], [1, c], [c, 1], [0, 1]],
+    [[0, 1], [-c, 1], [-1, c], [-1, 0]],
+    [[-1, 0], [-1, -c], [-c, -1], [0, -1]],
+    [[0, -1], [c, -1], [1, -c], [1, 0]]
+];
+/**
+ * Returns an arc approximation using unit quarter circle cubic bezier
+ * curves. The result is returned as an array of cubic bezier curves.
+ *
+ * * if the last returned arc is approximately smaller than 2**-40 of a quarter
+ * circle it is not added to the returned value
+ * * if the last returned arc is approximately (1 - 2**-40) of a quarter
+ * circle a full quarter circle is added to the returned value
+ *
+ * @param c arc circle center
+ * @param p1 arc goes from this point
+ * @param p2 to a point on a line from c to this point (since the problem is over-specified)
+ * (if `p1` and `p2` lies on a line through c a full circle is generated using
+ * 4 cubic bezier curves)
+ *
+ * @doc mdx
+ */
+function generateArcFromCubics(c, p1, p2) {
+    const c0 = c[0];
+    const c1 = c[1];
+    const p10 = p1[0];
+    const p11 = p1[1];
+    const p20 = p2[0];
+    const p21 = p2[1];
+    if (p10 === c0 && p11 === c1) {
+        return [];
+    }
+    // move to origin
+    const p1_ = [p10 - c0, p11 - c1];
+    const p2_ = [p20 - c0, p21 - c1];
+    const θ = (getInterfaceRotation(p1_, p2_) + 2 * generate_arc_from_cubics_) % (2 * generate_arc_from_cubics_);
+    const φ = generate_arc_from_cubics_atan2(p1_[1], p1_[0]);
+    const sinφ = generate_arc_from_cubics_sin(φ);
+    const cosφ = generate_arc_from_cubics_cos(φ);
+    const rad = generate_arc_from_cubics_sqrt(lengthSquared(p1_));
+    const rot = rotate(sinφ, cosφ);
+    const trans = translate(c);
+    let Φ = 0;
+    let i = 0;
+    let pss = [];
+    while (Φ < θ) {
+        Φ += generate_arc_from_cubics_ / 2;
+        const ps = generate_arc_from_cubics_circle[i];
+        pss.push(ps);
+        i++;
+    }
+    const ps_ = pss[pss.length - 1];
+    const ray = toLength(rotate(-sinφ, cosφ, p2_), 2);
+    const r = bezierBezierIntersection([[0, 0], ray], ps_);
+    if (r.length === 0) { // just missed
+        const _pss = pss.map(ps => ps.map(p => trans(rot(scale(p, rad)))));
+        _pss[0][0][0] = p1[0];
+        _pss[0][0][1] = p1[1];
+        return _pss;
+    }
+    let t = r[0].t2;
+    if (t < 2 ** -40) { // last piece is too small
+        pss.pop();
+        if (pss.length === 0) {
+            return [];
+        }
+        const _pss = pss.map(ps => ps.map(p => trans(rot(scale(p, rad)))));
+        _pss[0][0][0] = p1[0];
+        _pss[0][0][1] = p1[1];
+        return _pss;
+    }
+    if (t > 1 - 2 ** -40) {
+        t = 1;
+    }
+    const _ps_ = fromTo(ps_, 0, t);
+    pss.pop();
+    pss.push(_ps_);
+    const _pss = pss.map(ps => ps.map(p => trans(rot(scale(p, rad)))));
+    _pss[0][0][0] = p1[0];
+    _pss[0][0][1] = p1[1];
+    return _pss;
+}
+
+
 ;// ./src/offset/get-quad-offset-curve-functions.ts
 
 const { sqrt: get_quad_offset_curve_functions_sqrt } = Math;
@@ -27407,4 +27507,5 @@ function split_by_deviation_from_straight_line_cubic_getMaxD(ps) {
 
 
 
-export { areBoxesIntersecting, area_area as area, bezierBezierIntersection, bezierBezierIntersectionBoundless, bezierBezierIntersectionBoundlessBoth, bezierPieceToBezier, bezierSelfIntersection, calcQuadOffsetCurveXPoint, circleBezierIntersection, classification, classifications, classify, clone, closestPointOnBezier, closestPointOnBezierCertified, closestPointsBetweenBeziers, controlPointLinesLength, cubicFromAnglesAndSpeeds, cubicThroughPointGiven013, cubicToAnglesAndSpeeds, cubicToHybridQuadratic, cubicToQuadratic, curvature, curvatureND, curviness, ddCurvature, ddCurvatureND, ddGetCoeffsXFromY, ddGetCoeffsXFromY_WithRunningErr, ddGetCoeffsYFromX, ddGetCoeffsYFromX_WithRunningErr, ddGetImplicitForm1_WithRunningError, ddGetImplicitForm2_WithRunningError, ddGetImplicitForm3_WithRunningError, ddGetMedialPointCoeffs, ddGetMedialPointCoeffsBez0, ddGetMedialPointCoeffsBez1, ddGetMedialPointCoeffsBez2, ddGetMedialPointCoeffsBez2_SameCurve, ddGetMedialPointCoeffsBez3, ddGetMedialPointCoeffsBez3_SameCurve, ddNormal, ddNormalAt0, ddNormalAt1, ddRadiusOfCurvature, ddTangent, ddTangentAt0, ddTangentAt1, eCurvature, eGetCoeffsXFromY, eGetCoeffsYFromX, eGetImplicitForm1, eGetImplicitForm2, eGetImplicitForm3, eNormal, eTangent, eTangentAt0, eTangentAt1, elevateDegree, equal, evalDeCasteljau, evalDeCasteljauDd, evalDeCasteljauError, evalDeCasteljauWithErr, evalDeCasteljauWithErrDd, evaluate, evaluate1stDerivative, evaluate1stDerivativeExact, evaluate2ndDerivative, evaluate2ndDerivativeAt0, evaluate2ndDerivativeAt0Exact, evaluate2ndDerivativeAt1, evaluate2ndDerivativeAt1Exact, evaluate2ndDerivativeExact, evaluateExact, evaluateImplicit1, evaluateImplicit2, evaluateImplicit3, fitQuadsToCubic, fitQuadsToCubicHausdorff, flipAbout, flipHorizontally, flipVertically, fromPowerBasis, fromTo, fromToInclErrorBound, furthestPointOnBezier, generateArcFromQuads, generateCuspAtHalf3, generateQuarterCircle, generateSelfIntersecting, getAbsAreaBetween, getBendingEnergy, getBezierPieceLength, getBoundingBox, getBoundingBoxTight, getBoundingHull, getBounds, getCoeffsBezBez, getCoeffsXFromY, getCoeffsXFromY_WithRunningErr, getCoeffsYFromX, getCoeffsYFromX_WithRunningErr, getControlPointBox, getCubicSpeeds, getCurvatureExtrema, getCurvatureExtremaDd, getCurvatureExtremaE, getEndpointIntersections, getFootPointsOnBezierCertified, getFootPointsOnBezierPolysCertified, getFootpointPoly, getFootpointPolyDd, getFootpointPolyExact, getHodograph, getImplicitForm1, getImplicitForm1Dd, getImplicitForm1DdWithRunningError, getImplicitForm1ErrorCounters, getImplicitForm1Exact, getImplicitForm2, getImplicitForm2Dd, getImplicitForm2DdWithRunningError, getImplicitForm2ErrorCounters, getImplicitForm2Exact, getImplicitForm3, getImplicitForm3Dd, getImplicitForm3DdWithRunningError, getImplicitForm3ErrorCounters, getImplicitForm3Exact, getInflections, getInterfaceRotation, getIntervalBox, getIntervalBoxDd, getMedialPointCoeffs, getMedialPointCoeffsBez0, getMedialPointCoeffsBez1, getMedialPointCoeffsBez2, getMedialPointCoeffsBez2_SameCurve, getMedialPointCoeffsBez3, getMedialPointCoeffsBez3_SameCurve, getMedialPoints, getTAtLength, getXBoundsTight, getYBoundsTight, hausdorffDistance, hausdorffDistanceExtra, hausdorffDistanceOneSided, hausdorffDistanceOneSidedExtra, intersectBoxes, isBezierPieceZeroLength, isCollinear, isCubicReallyLine, isCubicReallyQuad, isHorizontal, isPointOnBezierExtension, isQuadObtuse, isQuadReallyLine, isReallyPoint, isSelfOverlapping, isVertical, length_length as length, lineToCubic, lineToQuadratic, maxAbsCoordinate, normal, normal2, quadraticToCubic, quadraticToPolyline, radiusOfCurvature, reduceOrderIfPossible, reverse, rotate_rotate as rotate, rotate90, rotate90About, rotateAbout, rotateNeg90, rotateNeg90About, scale_scale as scale, setCubicSpeeds, splitByCurvature, splitByCurvatureAndLength, splitByDeviationFromStraighLine_Cubic, splitByDeviationFromStraighLine_Quad, splitByLength, tFromXY, tangent, tangentAt0, tangentAt0Exact, tangentAt1, tangentAt1Exact, tangentExact, toCubic, toPowerBasis, toPowerBasis0Exact, toPowerBasis1DdWithRunningError, toPowerBasis1Exact, toPowerBasis2DdWithRunningError, toPowerBasis2Exact, toPowerBasis3DdWithRunningError, toPowerBasis3Exact, toPowerBasisDd, toPowerBasisDdWithRunningError, toPowerBasisErrorCounters, toPowerBasisExact, toPowerBasisWithRunningError, toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeDd, toPowerBasis_1stDerivativeErrorCounters, toPowerBasis_1stDerivativeExact, toPowerBasis_2ndDerivative, toPowerBasis_2ndDerivativeDd, toPowerBasis_2ndDerivativeExact, toPowerBasis_3rdDerivative, toPowerBasis_3rdDerivativeDd, toPowerBasis_3rdDerivativeExact, to_string_toString as toString, totalAbsoluteCurvature, totalCurvature, totalLength, transform, translate_translate as translate, unitNormal, unitTangent, γ, γγ, κ };
+
+export { areBoxesIntersecting, area_area as area, bezierBezierIntersection, bezierBezierIntersectionBoundless, bezierBezierIntersectionBoundlessBoth, bezierPieceToBezier, bezierSelfIntersection, calcQuadOffsetCurveXPoint, circleBezierIntersection, classification, classifications, classify, clone, closestPointOnBezier, closestPointOnBezierCertified, closestPointsBetweenBeziers, controlPointLinesLength, cubicFromAnglesAndSpeeds, cubicThroughPointGiven013, cubicToAnglesAndSpeeds, cubicToHybridQuadratic, cubicToQuadratic, curvature, curvatureND, curviness, ddCurvature, ddCurvatureND, ddGetCoeffsXFromY, ddGetCoeffsXFromY_WithRunningErr, ddGetCoeffsYFromX, ddGetCoeffsYFromX_WithRunningErr, ddGetImplicitForm1_WithRunningError, ddGetImplicitForm2_WithRunningError, ddGetImplicitForm3_WithRunningError, ddGetMedialPointCoeffs, ddGetMedialPointCoeffsBez0, ddGetMedialPointCoeffsBez1, ddGetMedialPointCoeffsBez2, ddGetMedialPointCoeffsBez2_SameCurve, ddGetMedialPointCoeffsBez3, ddGetMedialPointCoeffsBez3_SameCurve, ddNormal, ddNormalAt0, ddNormalAt1, ddRadiusOfCurvature, ddTangent, ddTangentAt0, ddTangentAt1, eCurvature, eGetCoeffsXFromY, eGetCoeffsYFromX, eGetImplicitForm1, eGetImplicitForm2, eGetImplicitForm3, eNormal, eTangent, eTangentAt0, eTangentAt1, elevateDegree, equal, evalDeCasteljau, evalDeCasteljauDd, evalDeCasteljauError, evalDeCasteljauWithErr, evalDeCasteljauWithErrDd, evaluate, evaluate1stDerivative, evaluate1stDerivativeExact, evaluate2ndDerivative, evaluate2ndDerivativeAt0, evaluate2ndDerivativeAt0Exact, evaluate2ndDerivativeAt1, evaluate2ndDerivativeAt1Exact, evaluate2ndDerivativeExact, evaluateExact, evaluateImplicit1, evaluateImplicit2, evaluateImplicit3, fitQuadsToCubic, fitQuadsToCubicHausdorff, flipAbout, flipHorizontally, flipVertically, fromPowerBasis, fromTo, fromToInclErrorBound, furthestPointOnBezier, generateArcFromCubics, generateArcFromQuads, generateCuspAtHalf3, generateQuarterCircle, generateSelfIntersecting, getAbsAreaBetween, getBendingEnergy, getBezierPieceLength, getBoundingBox, getBoundingBoxTight, getBoundingHull, getBounds, getCoeffsBezBez, getCoeffsXFromY, getCoeffsXFromY_WithRunningErr, getCoeffsYFromX, getCoeffsYFromX_WithRunningErr, getControlPointBox, getCubicSpeeds, getCurvatureExtrema, getCurvatureExtremaDd, getCurvatureExtremaE, getEndpointIntersections, getFootPointsOnBezierCertified, getFootPointsOnBezierPolysCertified, getFootpointPoly, getFootpointPolyDd, getFootpointPolyExact, getHodograph, getImplicitForm1, getImplicitForm1Dd, getImplicitForm1DdWithRunningError, getImplicitForm1ErrorCounters, getImplicitForm1Exact, getImplicitForm2, getImplicitForm2Dd, getImplicitForm2DdWithRunningError, getImplicitForm2ErrorCounters, getImplicitForm2Exact, getImplicitForm3, getImplicitForm3Dd, getImplicitForm3DdWithRunningError, getImplicitForm3ErrorCounters, getImplicitForm3Exact, getInflections, getInterfaceRotation, getIntervalBox, getIntervalBoxDd, getMedialPointCoeffs, getMedialPointCoeffsBez0, getMedialPointCoeffsBez1, getMedialPointCoeffsBez2, getMedialPointCoeffsBez2_SameCurve, getMedialPointCoeffsBez3, getMedialPointCoeffsBez3_SameCurve, getMedialPoints, getTAtLength, getXBoundsTight, getYBoundsTight, hausdorffDistance, hausdorffDistanceExtra, hausdorffDistanceOneSided, hausdorffDistanceOneSidedExtra, intersectBoxes, isBezierPieceZeroLength, isCollinear, isCubicReallyLine, isCubicReallyQuad, isHorizontal, isPointOnBezierExtension, isQuadObtuse, isQuadReallyLine, isReallyPoint, isSelfOverlapping, isVertical, length_length as length, lineToCubic, lineToQuadratic, maxAbsCoordinate, normal, normal2, quadraticToCubic, quadraticToPolyline, radiusOfCurvature, reduceOrderIfPossible, reverse, rotate_rotate as rotate, rotate90, rotate90About, rotateAbout, rotateNeg90, rotateNeg90About, scale_scale as scale, setCubicSpeeds, splitByCurvature, splitByCurvatureAndLength, splitByDeviationFromStraighLine_Cubic, splitByDeviationFromStraighLine_Quad, splitByLength, tFromXY, tangent, tangentAt0, tangentAt0Exact, tangentAt1, tangentAt1Exact, tangentExact, toCubic, toPowerBasis, toPowerBasis0Exact, toPowerBasis1DdWithRunningError, toPowerBasis1Exact, toPowerBasis2DdWithRunningError, toPowerBasis2Exact, toPowerBasis3DdWithRunningError, toPowerBasis3Exact, toPowerBasisDd, toPowerBasisDdWithRunningError, toPowerBasisErrorCounters, toPowerBasisExact, toPowerBasisWithRunningError, toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeDd, toPowerBasis_1stDerivativeErrorCounters, toPowerBasis_1stDerivativeExact, toPowerBasis_2ndDerivative, toPowerBasis_2ndDerivativeDd, toPowerBasis_2ndDerivativeExact, toPowerBasis_3rdDerivative, toPowerBasis_3rdDerivativeDd, toPowerBasis_3rdDerivativeExact, to_string_toString as toString, totalAbsoluteCurvature, totalCurvature, totalLength, transform, translate_translate as translate, unitNormal, unitTangent, γ, γγ, κ };
