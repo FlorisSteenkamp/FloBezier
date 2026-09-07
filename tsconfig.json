@@ -10,9 +10,6 @@
         "outDir": "./node",
         "moduleResolution": "bundler"
     },
-    "files": [
-        "src/globals.d.ts"
-    ],
     "include": [
         "src/index.ts"
     ],

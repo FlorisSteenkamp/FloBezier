@@ -1,7 +1,14 @@
 import { eCompress, eEstimate } from 'big-float-ts';
 import { describe, expect, it } from '@jest/globals';
 import { squares } from 'squares-rng';
-import { bezierBezierIntersectionFast, bezierSelfIntersection, classify, evaluate, evaluateExact, generateSelfIntersecting, isPointOnBezierExtension, tFromXY } from '../../src/index.js';
+import { bezierBezierIntersectionFast } from '../bezier-bezier-intersection-fast/bezier-bezier-intersection-fast.js';
+import { bezierSelfIntersection } from '../../src/intersection/self-intersection/bezier-self-intersection.js';
+import { classify } from '../../src/global-properties/classification/classify.js';
+import { evaluate } from '../../src/local-properties-at-t/evaluate/double/evaluate.js';
+import { evaluateExact } from '../../src/local-properties-at-t/evaluate/exact/evaluate-exact.js';
+import { generateSelfIntersecting } from '../../src/create/generate-self-intersecting.js';
+import { isPointOnBezierExtension } from '../../src/simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension.js';
+import { tFromXY } from '../../src/local-properties-to-t/t-from-xy.js';
 import { getRandomBezier } from '../helpers/get-random-bezier.js';
 
 
@@ -36,10 +43,10 @@ describe('tFromXY', function() {
 
             const cubic1 = [[6.4, 4.8], [15, 5], [1, 4], [10, 4]];
             const cubic2 = [[9.4, 0.4], [9.3, 10.3], [8.1, 0.1], [7.53125, 5.5]];
-            const xs = bezierBezierIntersectionFast(cubic1, cubic2); //=> [[0.054810011880009446, 0.9516779285879586], ...
-            // xs.length === 9
-            const p1 = evaluate(cubic1,xs[0][0]);//?
-            const p2 = evaluate(cubic2,xs[0][1]);//?
+            // const xs = bezierBezierIntersectionFast(cubic1, cubic2); //=> [[0.054810011880009446, 0.9516779285879586], ...
+            // // xs.length === 9
+            // const p1 = evaluate(cubic1,xs[0][0]);//?
+            // const p2 = evaluate(cubic2,xs[0][1]);//?
             // p === [7.617926141015109, 4.822433357454532]
 
             for (let order=1;order<=3;order++) {

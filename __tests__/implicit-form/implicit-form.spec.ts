@@ -4,13 +4,21 @@
 
 
 import { describe, expect, it } from '@jest/globals';
-import { 
-    getImplicitForm1, getImplicitForm2,  getImplicitForm3,
-    getImplicitForm1DdWithRunningError, getImplicitForm2DdWithRunningError, getImplicitForm3DdWithRunningError,
-    getImplicitForm1Dd, getImplicitForm2Dd, getImplicitForm3Dd,
-    getImplicitForm1Exact, getImplicitForm2Exact, getImplicitForm3Exact,
-    getImplicitForm1ErrorCounters, getImplicitForm2ErrorCounters, getImplicitForm3ErrorCounters,
-} from '../../src/index.js';
+import { getImplicitForm1 } from '../../src/implicit-form/double/get-implicit-form1.js';
+import { getImplicitForm2 } from '../../src/implicit-form/double/get-implicit-form2.js';
+import { getImplicitForm3 } from '../../src/implicit-form/double/get-implicit-form3.js';
+import { getImplicitForm1DdWithRunningError } from '../../src/implicit-form/double-double/get-implicit-form1-dd-with-running-error.js';
+import { getImplicitForm2DdWithRunningError } from '../../src/implicit-form/double-double/get-implicit-form2-dd-with-running-error.js';
+import { getImplicitForm3DdWithRunningError } from '../../src/implicit-form/double-double/get-implicit-form3-dd-with-running-error.js';
+import { getImplicitForm1Dd } from '../../src/implicit-form/double-double/get-implicit-form1-dd.js';
+import { getImplicitForm2Dd } from '../../src/implicit-form/double-double/get-implicit-form2-dd.js';
+import { getImplicitForm3Dd } from '../../src/implicit-form/double-double/get-implicit-form3-dd.js';
+import { getImplicitForm1Exact } from '../../src/implicit-form/expansion/e-get-implicit-form1.js';
+import { getImplicitForm2Exact } from '../../src/implicit-form/expansion/e-get-implicit-form2.js';
+import { getImplicitForm3Exact } from '../../src/implicit-form/expansion/e-get-implicit-form3.js';
+import { getImplicitForm1ErrorCounters } from '../../src/implicit-form/get-error-counters/get-implicit-form1-error-counters.js';
+import { getImplicitForm2ErrorCounters } from '../../src/implicit-form/get-error-counters/get-implicit-form2-error-counters.js';
+import { getImplicitForm3ErrorCounters } from '../../src/implicit-form/get-error-counters/get-implicit-form3-error-counters.js';
 import { eEstimate, eDiff } from 'big-float-ts';
 import { γ1, γγ3 } from '../../src/error-analysis/error-analysis.js';
 import { eCompress } from 'big-float-ts';

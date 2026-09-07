@@ -52,6 +52,7 @@ function ddGetCoeffsYFromX(ps, x) {
         const p3 = qaq(i, v);
         return [p0, p1, p2, p3];
     }
+    throw new Error(`Invalid number of control points: ${ps.length}. Must be 2, 3, or 4.`);
 }
 export { ddGetCoeffsYFromX };
 //# sourceMappingURL=dd-get-coeffs-y-from-x.js.map

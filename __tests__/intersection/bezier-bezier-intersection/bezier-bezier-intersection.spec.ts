@@ -1,8 +1,9 @@
 
 import { describe, expect, it } from '@jest/globals';
-import { bezierBezierIntersection, evaluateExact } from '../../../src/index.js';
+import { bezierBezierIntersection } from '../../../src/intersection/bezier-bezier-intersection/bezier-bezier-intersection.js';
+import { evaluateExact } from '../../../src/local-properties-at-t/evaluate/exact/evaluate-exact.js';
 import { getPss } from '../../helpers/intersection/get-pss.js';
-import type { X } from "../../../src/index.js";
+import type { X } from '../../../src/intersection/bezier-bezier-intersection/x.js';
 import { eAdd, eDiff, eEstimate, eMult } from 'big-float-ts';
 import { add1Ulp } from '../../../src/add-1-ulp.js';
 import { sub1Ulp } from '../../../src/sub-1-ulp.js';

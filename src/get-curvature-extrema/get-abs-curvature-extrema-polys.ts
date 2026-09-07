@@ -69,8 +69,8 @@ function getAbsCurvatureExtremaPolys(
 
     const dy0_dy1 = dy0*dy1;
     const dy0_dy2 = dy0*dy2;
-    const dy1_dy1 = dy1*dy1;    
-    const dy1_dy2 = dy1*dy2;    
+    const dy1_dy1 = dy1*dy1;
+    const dy1_dy2 = dy1*dy2;
     const dy2_dy2 = dy2*dy2;
 
     const ss = dddx*dy0 - dddy*dx0;

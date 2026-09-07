@@ -1,6 +1,6 @@
 
 import { describe, expect, it } from '@jest/globals';
-import { reverse } from '../../src/index.js';
+import { reverse } from '../../src/transformation/reverse.js';
 import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
 

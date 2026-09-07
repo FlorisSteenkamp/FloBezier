@@ -1,6 +1,6 @@
 // ignore file coverage
 
-import type { X } from "../../../src/index.js";
+import type { X } from '../../../src/intersection/bezier-bezier-intersection/x.js';
 
 
 function areIntersectionsOrdered(xs: X[]): boolean {

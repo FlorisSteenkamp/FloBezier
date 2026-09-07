@@ -1,9 +1,7 @@
 
 import { describe, expect, it } from '@jest/globals';
-import { 
-    evalDeCasteljauWithErrDd,
-    evaluateExact
-} from '../../../../src/index.js';
+import { evalDeCasteljauWithErrDd } from '../../../../src/local-properties-at-t/evaluate/double-double/eval-de-casteljau-with-err-dd.js';
+import { evaluateExact } from '../../../../src/local-properties-at-t/evaluate/exact/evaluate-exact.js';
 import { eEstimate } from 'big-float-ts';
 import { manhattanDistanceBetween } from 'flo-vector2d';
 

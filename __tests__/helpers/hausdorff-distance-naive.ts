@@ -1,5 +1,7 @@
 import { distanceBetween } from 'flo-vector2d';
-import { closestPointOnBezier, evalDeCasteljau, splitByLength } from '../../src/index.js';
+import { closestPointOnBezier } from '../../src/simultaneous-properties/closest-and-furthest-point-on-bezier/closest-point-on-bezier.js';
+import { evalDeCasteljau } from '../../src/local-properties-at-t/evaluate/double/eval-de-casteljau.js';
+import { splitByLength } from '../../src/transformation/split/split-by-length.js';
 
 const { max } = Math;
 

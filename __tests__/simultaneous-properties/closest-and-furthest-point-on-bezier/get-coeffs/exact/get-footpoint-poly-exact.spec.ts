@@ -2,10 +2,8 @@ import { describe, expect, it } from '@jest/globals';
 import { getFootpointPoly1Exact } from '../../../../../src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/exact/get-footpoint-poly-1-exact.js';
 import { getFootpointPoly2Exact } from '../../../../../src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/exact/get-footpoint-poly-2-exact.js';
 import { getFootpointPoly3Exact } from '../../../../../src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/exact/get-footpoint-poly-3-exact.js';
-import { getFootpointPolyExact } from '../../../../../src/index.js';
+import { getFootpointPolyExact } from '../../../../../src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/exact/get-footpoint-poly-exact.js';
 import { getRandomBezier, getRandomPoint } from '../../../../helpers/get-random-bezier.js';
-
-
 
 
 const getRandomBezier_ = getRandomBezier(200, 37);

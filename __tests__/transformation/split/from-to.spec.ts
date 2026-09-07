@@ -1,11 +1,6 @@
-
-
 import { describe, expect, it } from '@jest/globals';
-
 import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../../helpers/get-random-bezier.js';
-import { fromTo } from '../../../src/index.js';
-
-
+import { fromTo } from '../../../src/transformation/split/from-to.js';
 
 
 describe('fromTo', function() {

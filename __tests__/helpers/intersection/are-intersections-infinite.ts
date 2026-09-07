@@ -1,4 +1,5 @@
-import { evaluateExact, isPointOnBezierExtension } from "../../../src/index.js";
+import { evaluateExact } from '../../../src/local-properties-at-t/evaluate/exact/evaluate-exact.js';
+import { isPointOnBezierExtension } from '../../../src/simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension.js';
 
 const { ceil } = Math;
 

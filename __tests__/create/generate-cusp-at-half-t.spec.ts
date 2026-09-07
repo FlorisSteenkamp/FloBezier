@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { generateCuspAtHalf3 } from '../../src/index.js';
+import { generateCuspAtHalf3 } from '../../src/create/generate-cusp-at-half-t.js';
 
 
 describe('generateCuspAtHalf3', function() {

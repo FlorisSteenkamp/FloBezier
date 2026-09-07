@@ -50,12 +50,7 @@ function getCurvatureExtrema(ps) {
         const dp2_ = Horner(dp2, t);
         const p1_ = Horner(p1, t);
         const secondDerivative = p1_ * dp2_;
-        if (secondDerivative >= 0) {
-            minima.push(t);
-        }
-        else {
-            maxima.push(t);
-        }
+        (secondDerivative >= 0 ? minima : maxima).push(t);
     }
     const inflections = roots(p1, 0, 1)?.map(r => r.t) || [];
     return { minima, maxima, inflections };

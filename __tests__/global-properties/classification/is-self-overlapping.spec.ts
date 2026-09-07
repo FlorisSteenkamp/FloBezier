@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { isSelfOverlapping } from '../../../src/index.js';
+import { isSelfOverlapping } from '../../../src/global-properties/classification/is-self-overlapping.js';
 import { getRandomCubic } from '../../helpers/get-random-bezier.js';
 
 

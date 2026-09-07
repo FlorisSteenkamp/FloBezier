@@ -1,6 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { eEstimate } from 'big-float-ts';
-import { bezierBezierIntersectionFast, circleBezierIntersection, evaluateExact } from '../../src/index.js';
+import { circleBezierIntersection } from '../../src/intersection/circle-bezier-intersection/circle-bezier-intersection.js';
 
 
 describe('circleBezierIntersection', function() {

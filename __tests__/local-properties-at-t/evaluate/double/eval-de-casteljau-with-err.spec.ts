@@ -1,10 +1,8 @@
 
 import { describe, expect, it } from '@jest/globals';
-import { 
-    evalDeCasteljauError,
-    evalDeCasteljauWithErr,
-    evaluateExact
-} from '../../../../src/index.js';
+import { evalDeCasteljauError } from '../../../../src/local-properties-at-t/evaluate/eval-de-casteljau-error.js';
+import { evalDeCasteljauWithErr } from '../../../../src/local-properties-at-t/evaluate/double/eval-de-casteljau-with-err.js';
+import { evaluateExact } from '../../../../src/local-properties-at-t/evaluate/exact/evaluate-exact.js';
 import { eEstimate } from 'big-float-ts';
 import { manhattanDistanceBetween } from 'flo-vector2d';
 

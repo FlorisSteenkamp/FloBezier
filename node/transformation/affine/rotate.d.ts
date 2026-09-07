@@ -1,0 +1,12 @@
+/**
+ * Returns the given bezier curve rotated anti-clockwise about the origin by the
+ * given angle (in radians).
+ *
+ * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param θ the rotation angle in radians (anti-clockwise)
+ *
+ * @doc mdx
+ */
+declare function rotate(ps: number[][], θ: number): number[][];
+export { rotate };

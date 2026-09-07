@@ -2,7 +2,8 @@ import { describe, expect, it } from '@jest/globals';
 import type { Extrema } from '../../src/get-curvature-extrema/get-curvature-extrema.js';
 import { squares } from 'squares-rng';
 import { rotate, translate } from 'flo-vector2d';
-import { getCurvatureExtrema, curvature } from '../../src/index.js';
+import { getCurvatureExtrema } from '../../src/get-curvature-extrema/get-curvature-extrema.js';
+import { curvature } from '../../src/local-properties-at-t/curvature/curvature.js';
 import { createCubicThatsReallyQuad } from '../helpers/create-cubic-thats-really-quad.js';
 
 

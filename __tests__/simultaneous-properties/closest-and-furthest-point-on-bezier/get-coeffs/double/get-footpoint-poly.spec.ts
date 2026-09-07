@@ -1,10 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
-import { getFootpointPoly } from '../../../../../src/index.js';
+import { getFootpointPoly } from '../../../../../src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly.js';
 import { getFootpointPoly1 } from '../../../../../src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly-1.js';
 import { getFootpointPoly2 } from '../../../../../src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly-2.js';
 import { getFootpointPoly3 } from '../../../../../src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly-3.js';
 import { getRandomBezier, getRandomPoint } from '../../../../helpers/get-random-bezier.js';
-
 
 
 const getRandomBezier_ = getRandomBezier(200, 37);

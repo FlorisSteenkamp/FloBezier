@@ -1,10 +1,9 @@
-
 import { describe, expect, it } from '@jest/globals';
-import { cubicToQuadratic, lineToCubic, quadraticToCubic, toCubic } from '../../../src/index.js';
-
+import { cubicToQuadratic } from '../../../src/transformation/degree-or-type/cubic-to-quadratic.js';
+import { lineToCubic } from '../../../src/transformation/degree-or-type/line-to-cubic.js';
+import { quadraticToCubic } from '../../../src/transformation/degree-or-type/quadratic-to-cubic.js';
+import { toCubic } from '../../../src/transformation/degree-or-type/to-cubic.js';
 import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../../helpers/get-random-bezier.js';
-
-
 
 
 describe('toCubic', function() {

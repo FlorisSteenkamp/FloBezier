@@ -1,10 +1,8 @@
-
 import { distanceBetween } from 'flo-vector2d';
 import { describe, expect, it } from '@jest/globals';
-import { furthestPointOnBezier, evalDeCasteljau } from '../../../src/index.js';
-
+import { furthestPointOnBezier } from '../../../src/simultaneous-properties/closest-and-furthest-point-on-bezier/furthest-point-on-bezier.js';
+import { evalDeCasteljau } from '../../../src/local-properties-at-t/evaluate/double/eval-de-casteljau.js';
 import { getRandomBezier, getRandomPoint } from '../../helpers/get-random-bezier.js';
-
 
 
 const getRandomBezier_ = getRandomBezier(200, 37);

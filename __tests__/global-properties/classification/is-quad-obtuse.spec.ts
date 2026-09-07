@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { isQuadObtuse } from '../../../src/index.js';
+import { isQuadObtuse } from '../../../src/global-properties/classification/is-quad-obtuse.js';
 import { getRandomQuad } from '../../helpers/get-random-bezier.js';
 
 

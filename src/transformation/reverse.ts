@@ -1,4 +1,7 @@
 /**
+ * * this function deprecated due to being the same as JavaScript's
+ *   new Array.toReversed() function.
+ * 
  * Returns the given points (e.g. bezier curve) in reverse order.
  * 
  * Implementation details: 
@@ -9,7 +12,7 @@
  * @param ps a bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * 
- * @doc
+ * @deprecated
  */
 function reverse(ps: number[][]) {
     return ps.slice().reverse();

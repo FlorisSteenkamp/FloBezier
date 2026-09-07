@@ -1,11 +1,12 @@
-
 import { describe, expect, it } from '@jest/globals';
-
 import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../../helpers/random-rotate-and-translate.js';
-import { curviness, fromTo, generateCuspAtHalf3, getCurvatureExtrema, length, splitByCurvature } from '../../../src/index.js';
-
-
+import { curviness } from '../../../src/global-properties/curviness.js';
+import { fromTo } from '../../../src/transformation/split/from-to.js';
+import { generateCuspAtHalf3 } from '../../../src/create/generate-cusp-at-half-t.js';
+import { getCurvatureExtrema } from '../../../src/get-curvature-extrema/get-curvature-extrema.js';
+import { length } from '../../../src/global-properties/length/length.js';
+import { splitByCurvature } from '../../../src/transformation/split/split-by-curvature.js';
 
 
 describe('splitByCurvature', function() {

@@ -1,15 +1,14 @@
-import { eAdd, eCompress } from 'big-float-ts';
-
 import { describe, expect, it } from '@jest/globals';
+import { eAdd, eCompress } from 'big-float-ts';
+import { eps } from 'flo-poly';
 import { squares } from 'squares-rng';
-import { closestPointOnBezier, cubicToQuadratic, evaluateExact, isPointOnBezierExtension } from '../../../src/index.js';
-
+import { closestPointOnBezier } from '../../../src/simultaneous-properties/closest-and-furthest-point-on-bezier/closest-point-on-bezier.js';
+import { cubicToQuadratic } from '../../../src/transformation/degree-or-type/cubic-to-quadratic.js';
+import { evaluateExact } from '../../../src/local-properties-at-t/evaluate/exact/evaluate-exact.js';
+import { isPointOnBezierExtension } from '../../../src/simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension.js';
 import { getRandomBezier } from '../../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../../helpers/random-rotate-and-translate.js';
 
-
-
-const eps = Number.EPSILON;
 
 
 // get a random bezier curve with low number of significand bits to make it

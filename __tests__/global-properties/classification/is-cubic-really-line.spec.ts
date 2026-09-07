@@ -1,5 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
-import { evalDeCasteljau, isCollinear, isCubicReallyLine, toCubic } from '../../../src/index.js';
+import { evalDeCasteljau } from '../../../src/local-properties-at-t/evaluate/double/eval-de-casteljau.js';
+import { isCollinear } from '../../../src/global-properties/classification/is-collinear.js';
+import { isCubicReallyLine } from '../../../src/global-properties/classification/is-cubic-really-line.js';
+import { toCubic } from '../../../src/transformation/degree-or-type/to-cubic.js';
 import { getRandomBezier } from '../../helpers/get-random-bezier.js';
 
 const eps = Number.EPSILON;

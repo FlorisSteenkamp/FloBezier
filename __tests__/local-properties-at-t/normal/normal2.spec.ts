@@ -1,5 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
-import { generateCuspAtHalf3, normal, normal2, tangent, } from "../../../src/index.js";
+import { generateCuspAtHalf3 } from '../../../src/create/generate-cusp-at-half-t.js';
+import { normal } from '../../../src/local-properties-at-t/normal/double/normal.js';
+import { normal2 } from '../../../src/local-properties-at-t/normal/double/normal2.js';
+import { tangent } from '../../../src/local-properties-at-t/tangent/double/tangent.js';
 import { getRandomBezier } from "../../helpers/get-random-bezier.js";
 
 const { abs } = Math;

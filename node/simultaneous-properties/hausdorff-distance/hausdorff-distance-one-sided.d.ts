@@ -2,6 +2,8 @@
  * Calculates and returns an accurate approximation to the one-sided Hausdorff
  * distance from the bezier curve `A` to the bezier curve `B`.
  *
+ * * to also obtain the parameter values and points at which the distance is
+ * achieved, use `hausdorffDistanceOneSidedExtra`
  * * partially based off [Computing the Hausdorff distance between two sets of parametric curves](https://www.semanticscholar.org/paper/COMPUTING-THE-HAUSDORFF-DISTANCE-BETWEEN-TWO-SETS-Kim-McLean/d2bd6529c4b118e389e1db209d8f1bf7467f9016)
  *
  * @param A a bezier curve (the 'from' curve) given by an ordered array of its

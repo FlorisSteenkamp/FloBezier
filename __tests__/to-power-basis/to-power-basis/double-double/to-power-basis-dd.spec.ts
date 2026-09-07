@@ -1,6 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../../../helpers/get-random-bezier.js';
-import { toPowerBasis, toPowerBasisDd } from '../../../../src/index.js';
+import { toPowerBasis } from '../../../../src/to-power-basis/to-power-basis/double/to-power-basis.js';
+import { toPowerBasisDd } from '../../../../src/to-power-basis/to-power-basis/double-double/to-power-basis-dd.js';
 import { eEstimate } from 'big-float-ts';
 
 

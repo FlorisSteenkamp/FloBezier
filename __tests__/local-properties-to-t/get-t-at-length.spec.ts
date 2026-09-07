@@ -1,5 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
-import { getTAtLength, length } from '../../src/index.js';
+import { getTAtLength } from '../../src/local-properties-to-t/get-t-at-length.js';
+import { length } from '../../src/global-properties/length/length.js';
 import { getRandomCubic, getRandomLine, getRandomQuad } from '../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
 

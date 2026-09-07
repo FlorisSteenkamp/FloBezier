@@ -50,6 +50,7 @@ function getCurvatureExtrema(
     if (ps.length === 3) {
         const poly = getCurvatureExtremaQuadraticPoly(ps);
         const maxima = roots(poly, 0, 1)?.map(r => r.t) || [];
+
         return {
             minima: [], 
             maxima, 
@@ -80,11 +81,7 @@ function getCurvatureExtrema(
         
         const secondDerivative = p1_*dp2_;
 
-        if (secondDerivative >= 0) {
-            minima.push(t);
-        } else {
-            maxima.push(t);
-        }
+        (secondDerivative >= 0 ? minima : maxima).push(t);
     }
 
     const inflections = roots(p1, 0, 1)?.map(r => r.t) || [];

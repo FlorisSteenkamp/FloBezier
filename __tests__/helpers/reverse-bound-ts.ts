@@ -1,4 +1,4 @@
-import type { XBounds, YBounds } from "../../src/index.js";
+import type { XBounds, YBounds } from '../../src/global-properties/bounds/bounds.js';
 
 
 function reverseXBoundTs(xBounds: XBounds): XBounds {

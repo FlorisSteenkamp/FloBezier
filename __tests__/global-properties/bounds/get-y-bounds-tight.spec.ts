@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { getYBoundsTight } from '../../../src/index.js';
+import { getYBoundsTight } from '../../../src/global-properties/bounds/get-y-bounds-tight.js';
 import { getRandomCubic, getRandomLine, getRandomQuad } from '../../helpers/get-random-bezier.js';
 import { reverseYBoundTs } from '../../helpers/reverse-bound-ts.js';
 

@@ -1,5 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
-import { bezierSelfIntersection, generateSelfIntersecting } from '../../src/index.js';
+import { bezierSelfIntersection } from '../../src/intersection/self-intersection/bezier-self-intersection.js';
+import { generateSelfIntersecting } from '../../src/create/generate-self-intersecting.js';
 
 
 describe('generateSelfIntersecting', function() {

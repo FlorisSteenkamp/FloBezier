@@ -1,7 +1,5 @@
-
 import { describe, expect, it } from '@jest/globals';
-import { equal } from '../../src/index.js';
-
+import { equal } from '../../src/simultaneous-properties/equal.js';
 import { getRandomBezier } from '../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
 

@@ -1,6 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
 import { ddAddDouble } from 'double-double';
-import { getIntervalBox, getIntervalBoxDd, toPowerBasisExact } from '../../../../src/index.js';
+import { getIntervalBox } from '../../../../src/global-properties/bounds/get-interval-box/get-interval-box.js';
+import { getIntervalBoxDd } from '../../../../src/global-properties/bounds/get-interval-box/get-interval-box-dd.js';
+import { toPowerBasisExact } from '../../../../src/to-power-basis/to-power-basis/exact/to-power-basis-exact.js';
 import { eCompress, eDiff, eEstimate, eSign } from 'big-float-ts';
 import { eeHorner } from 'flo-poly';
 

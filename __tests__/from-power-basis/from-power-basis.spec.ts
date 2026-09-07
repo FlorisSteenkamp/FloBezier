@@ -1,5 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
-import { fromPowerBasis, toPowerBasis } from '../../src/index.js';
+import { fromPowerBasis } from '../../src/from-power-basis/from-power-basis.js';
+import { toPowerBasis } from '../../src/to-power-basis/to-power-basis/double/to-power-basis.js';
 
 
 /**

@@ -1,7 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
 import { getRandomCubic } from '../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
-import { fitQuadsToCubic, generateCuspAtHalf3, toString } from "../../src/index.js";
+import { fitQuadsToCubic } from '../../src/fit/fit-quads-to-cubic.js';
+import { generateCuspAtHalf3 } from '../../src/create/generate-cusp-at-half-t.js';
+import { toString } from '../../src/transformation/to-string.js';
 
 
 describe('fitQuadsToCubic', function() {

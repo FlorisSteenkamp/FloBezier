@@ -1,10 +1,6 @@
-
 import { describe, expect, it } from '@jest/globals';
-import { lineToQuadratic } from '../../../src/index.js';
-
+import { lineToQuadratic } from '../../../src/transformation/degree-or-type/line-to-quadratic.js';
 import { getRandomLine } from '../../helpers/get-random-bezier.js';
-
-
 
 
 describe('lineToQuadratic', function() {

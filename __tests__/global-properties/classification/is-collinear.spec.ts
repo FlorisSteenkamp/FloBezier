@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { isCollinear, isHorizontal, isVertical } from '../../../src/index.js';
+import { isCollinear, isHorizontal, isVertical } from '../../../src/global-properties/classification/is-collinear.js';
 import { getRandomBezier, getRandomLine } from '../../helpers/get-random-bezier.js';
 
 const eps = Number.EPSILON;

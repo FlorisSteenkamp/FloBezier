@@ -1,5 +1,8 @@
 // gnore file coverage
-import { bezierBezierIntersection, cubicToQuadratic, evalDeCasteljau, fromPowerBasis } from '../../../src/index.js';
+import { bezierBezierIntersection } from '../../../src/intersection/bezier-bezier-intersection/bezier-bezier-intersection.js';
+import { cubicToQuadratic } from '../../../src/transformation/degree-or-type/cubic-to-quadratic.js';
+import { evalDeCasteljau } from '../../../src/local-properties-at-t/evaluate/double/eval-de-casteljau.js';
+import { fromPowerBasis } from '../../../src/from-power-basis/from-power-basis.js';
 import { getPssWithInfiniteXs } from './get-pss-with-infinite-xs.js';
 
 

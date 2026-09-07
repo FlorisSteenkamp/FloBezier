@@ -1,5 +1,11 @@
 import { describe, expect, it } from '@jest/globals';
-import { evalDeCasteljau, evaluateImplicit1, evaluateImplicit2, evaluateImplicit3, getImplicitForm1, getImplicitForm2, getImplicitForm3 } from '../../../../src/index.js';
+import { evalDeCasteljau } from '../../../../src/local-properties-at-t/evaluate/double/eval-de-casteljau.js';
+import { evaluateImplicit1 } from '../../../../src/implicit-form/evaluate/double/evaluate-implicit1.js';
+import { evaluateImplicit2 } from '../../../../src/implicit-form/evaluate/double/evaluate-implicit2.js';
+import { evaluateImplicit3 } from '../../../../src/implicit-form/evaluate/double/evaluate-implicit3.js';
+import { getImplicitForm1 } from '../../../../src/implicit-form/double/get-implicit-form1.js';
+import { getImplicitForm2 } from '../../../../src/implicit-form/double/get-implicit-form2.js';
+import { getImplicitForm3 } from '../../../../src/implicit-form/double/get-implicit-form3.js';
 import { getRandomCubic, getRandomLine, getRandomQuad } from '../../../helpers/get-random-bezier.js';
 
 

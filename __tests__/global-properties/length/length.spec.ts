@@ -1,7 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
 import { distanceBetween } from 'flo-vector2d';
 import { getRandomBezier } from '../../helpers/get-random-bezier.js';
-import { evalDeCasteljau, length, totalLength } from '../../../src/index.js';
+import { evalDeCasteljau } from '../../../src/local-properties-at-t/evaluate/double/eval-de-casteljau.js';
+import { length } from '../../../src/global-properties/length/length.js';
+import { totalLength } from '../../../src/global-properties/length/total-length.js';
 
 
 function approxLengthByLineSegs(

@@ -1,14 +1,14 @@
+# FloBezier
+
 Bug reports, pull requests and ⭐⭐⭐⭐⭐s are welcome and appreciated!
 
 ## Overview
 
-[![npm][1]][2] [![install size][3]][4] [![downloads][5]][2]
+[![npm][1]][2] [![downloads][3]][2]
 
 [1]: https://img.shields.io/npm/v/flo-bezier3 "FloBezier, npm badge"
 [2]: https://www.npmjs.com/package/flo-bezier3 "FloBezier, npm link"
-[3]: https://packagephobia.now.sh/badge?p=flo-bezier3 "FloBezier size, badge"
-[4]: https://packagephobia.now.sh/result?p=flo-bezier3 "FloBezier size, link"
-[5]: https://badgen.now.sh/npm/dm/flo-bezier3 "FloBezier downloads, badge"
+[3]: https://img.shields.io/npm/dm/flo-bezier3 "FloBezier downloads, badge"
 
 The focus is to provide a portable, practical, easy-to-use, robust and fast bezier curve
 library with zero vendor lock-in.
@@ -22,7 +22,7 @@ const cubic1 = [[6.4, 4.8], [15, 5], [1, 4], [10, 4]];
 // another cubic bezier curve
 const cubic2 = [[9.4, 0.4], [9.3, 10.3], [8.1, 0.1], [7.53125, 5.5]];
 const xs = bezierBezierIntersectionFast(cubic1, cubic2); //=> [[0.054810011880009446, 0.9516779285879586], ...
-// xs.length === 9 (nine points of intersections)
+// xs.length === 9 (nine points of intersection)
 
 // Evaluating the 1st curve at the first intersection gives the point of intersection
 const p1 = evaluate(cubic1,xs[0][0]);  //=> [7.617926141015109,  4.822433357454532]
@@ -46,21 +46,24 @@ only in theory but also in practice.
 use every function with confidence and peace of mind.
 
 * **Freestanding** For maximum interoperability, each function is entirely independent (e.g.
-not a method of a class) and takes simple paramters (e.g. a point is just
+not a method of a class) and takes simple parameters (e.g. a point is just
 an array of numbers and a bezier curve is simply represented as an array of points).
 
-* **Accurate** High <a href="https://en.wikipedia.org/wiki/Condition_number)">condition numbers </a>
+* **Accurate** High [condition numbers](https://en.wikipedia.org/wiki/Condition_number)
 are completely mitigated where necessary without a hit to performance. For example,
-bezier curve intersection is <i>guaranteed</i> accurate to 
-within <code>4*Number.EPSILON</code> in the returned paramter values.
+bezier curve intersection is _guaranteed_ accurate to
+within `4*Number.EPSILON` in the returned parameter values.
 
-* **Pure** Every function is <a href="https://en.wikipedia.org/wiki/Pure_function">pure </a>.
+* **Pure** Every function is [pure](https://en.wikipedia.org/wiki/Pure_function).
 The same input to the same function gives the same results - every time. No need
 to clog your short term memory by worrying about state of any kind.
 
 
 ## [Documentation](https://florissteenkamp.github.io/FloBezier)
 For in-depth interactive documentation please [read the docs!](https://florissteenkamp.github.io/FloBezier).
+
+## [Demo](https://florissteenkamp.github.io/FloBezier/demo/)
+Try FloBezier live in your browser with the [interactive demo](https://florissteenkamp.github.io/FloBezier/demo/).
 
 ## Installation
 
@@ -143,7 +146,7 @@ Follow this [guide](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3
 
 The MIT License (MIT)
 
-Copyright © 2023 Floris Steenkamp
+Copyright © 2026 Floris Steenkamp
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

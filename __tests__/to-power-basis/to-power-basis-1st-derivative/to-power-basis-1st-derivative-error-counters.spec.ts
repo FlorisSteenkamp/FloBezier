@@ -1,7 +1,10 @@
 import { describe, expect, it } from '@jest/globals';
 import { getRandomCubic, getRandomLine, getRandomQuad } from '../../helpers/get-random-bezier.js';
 import { γ1, γγ3 } from '../../../src/error-analysis/error-analysis.js';
-import { toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeDd, toPowerBasis_1stDerivativeErrorCounters, toPowerBasis_1stDerivativeExact } from '../../../src/index.js';
+import { toPowerBasis_1stDerivative } from '../../../src/to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.js';
+import { toPowerBasis_1stDerivativeDd } from '../../../src/to-power-basis/to-power-basis-1st-derivative/double-double/to-power-basis-1st-derivative-dd.js';
+import { toPowerBasis_1stDerivativeErrorCounters } from '../../../src/to-power-basis/to-power-basis-1st-derivative/to-power-basis-1st-derivative-error-counters.js';
+import { toPowerBasis_1stDerivativeExact } from '../../../src/to-power-basis/to-power-basis-1st-derivative/exact/to-power-basis-1st-derivative-exact.js';
 import { eDiff, eEstimate } from 'big-float-ts';
 
 

@@ -1,0 +1,1 @@
+{"version":3,"file":"scale.js","sourceRoot":"","sources":["../../../src/transformation/affine/scale.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,IAAI,QAAQ,EAAE,MAAM,cAAc,CAAC;AAGjD;;;;;;;;;;;;GAYG;AACH,SAAS,KAAK,CACN,EAAc,EACd,CAAS;IAEb,OAAO,EAAE,CAAC,GAAG,CAAC,CAAC,CAAC,EAAE,CAAC,QAAQ,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,CAAC;AACvC,CAAC;AAGD,OAAO,EAAE,KAAK,EAAE,CAAA"}

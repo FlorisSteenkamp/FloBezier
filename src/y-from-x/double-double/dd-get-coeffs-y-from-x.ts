@@ -15,7 +15,7 @@ const qaq = ddAddDd;
  */
 function ddGetCoeffsYFromX(
         ps: number[][],
-        x: number) {
+        x: number): number[][] {
 
     if (ps.length === 2) {
         const { vₓ, vᵧ, v } = getImplicitForm1Dd(ps);
@@ -73,6 +73,8 @@ function ddGetCoeffsYFromX(
 
         return [p0, p1, p2, p3];
     }
+
+    throw new Error(`Invalid number of control points: ${ps.length}. Must be 2, 3, or 4.`);
 }
 
 

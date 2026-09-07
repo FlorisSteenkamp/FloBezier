@@ -1,9 +1,13 @@
 import { describe, expect, it } from '@jest/globals';
 import { eCompress, eEstimate } from 'big-float-ts';
-import { 
-    evaluate2ndDerivative, tangent, evaluate2ndDerivativeExact, tangentExact, 
-    evaluate2ndDerivativeAt0Exact, evaluate2ndDerivativeAt1Exact, tangentAt0Exact, tangentAt1Exact
-} from '../../../../src/index.js';
+import { evaluate2ndDerivative } from '../../../../src/local-properties-at-t/evaluate-2nd-derivative/double/evaluate-2nd-derivative.js';
+import { tangent } from '../../../../src/local-properties-at-t/tangent/double/tangent.js';
+import { evaluate2ndDerivativeExact } from '../../../../src/local-properties-at-t/evaluate-2nd-derivative/exact/evaluate-2nd-derivative-exact.js';
+import { tangentExact } from '../../../../src/local-properties-at-t/tangent/exact/tangent-exact.js';
+import { evaluate2ndDerivativeAt0Exact } from '../../../../src/local-properties-at-t/evaluate-2nd-derivative/exact/evaluate-2nd-derivative-at-0-exact.js';
+import { evaluate2ndDerivativeAt1Exact } from '../../../../src/local-properties-at-t/evaluate-2nd-derivative/exact/evaluate-2nd-derivative-at-1-exact.js';
+import { tangentAt0Exact } from '../../../../src/local-properties-at-t/tangent/exact/tangent-at-0-exact.js';
+import { tangentAt1Exact } from '../../../../src/local-properties-at-t/tangent/exact/tangent-at-1-exact.js';
 import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../../../helpers/get-random-bezier.js';
 
 

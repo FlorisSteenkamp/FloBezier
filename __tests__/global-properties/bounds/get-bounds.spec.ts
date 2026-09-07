@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { getBounds } from '../../../src/index.js';
+import { getBounds } from '../../../src/global-properties/bounds/get-bounds.js';
 import { getRandomCubic, getRandomLine, getRandomQuad } from '../../helpers/get-random-bezier.js';
 
 

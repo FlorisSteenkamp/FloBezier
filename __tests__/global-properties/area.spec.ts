@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { area } from '../../src/index.js';
+import { area } from '../../src/global-properties/area.js';
 import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
 
 

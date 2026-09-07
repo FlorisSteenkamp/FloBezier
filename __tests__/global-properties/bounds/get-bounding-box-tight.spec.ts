@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { getBoundingBoxTight } from '../../../src/index.js';
+import { getBoundingBoxTight } from '../../../src/global-properties/bounds/get-bounding-box-tight.js';
 import { getRandomLine, getRandomQuad, getRandomCubic } from '../../helpers/get-random-bezier.js';
 
 

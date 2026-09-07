@@ -1,6 +1,8 @@
 
 import { describe, expect, it } from '@jest/globals';
-import { classify, generateCuspAtHalf3, tangent } from '../../../src/index.js';
+import { classify } from '../../../src/global-properties/classification/classify.js';
+import { generateCuspAtHalf3 } from '../../../src/create/generate-cusp-at-half-t.js';
+import { tangent } from '../../../src/local-properties-at-t/tangent/double/tangent.js';
 
 import { getRandomCubic, getRandomLine, getRandomQuad } from '../../helpers/get-random-bezier.js';
 

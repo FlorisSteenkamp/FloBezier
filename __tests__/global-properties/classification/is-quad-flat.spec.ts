@@ -1,5 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
-import { hausdorffDistance, isQuadObtuse } from '../../../src/index.js';
+import { hausdorffDistance } from '../../../src/simultaneous-properties/hausdorff-distance/hausdorff-distance.js';
+import { isQuadObtuse } from '../../../src/global-properties/classification/is-quad-obtuse.js';
 import { isQuadFlat } from '../../../src/global-properties/classification/is-quad-flat.js';
 
 

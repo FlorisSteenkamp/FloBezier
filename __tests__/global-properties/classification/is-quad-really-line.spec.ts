@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 import { getRandomQuad } from '../../helpers/get-random-bezier.js';
-import { isQuadReallyLine } from '../../../src/index.js';
+import { isQuadReallyLine } from '../../../src/global-properties/classification/is-quad-really-line.js';
 
 
 describe('isQuadReallyLine', function() {

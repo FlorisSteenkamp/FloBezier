@@ -4,5 +4,5 @@
  *
  * @param ps
  */
-declare function ddGetCoeffsYFromX(ps: number[][], x: number): number[][] | undefined;
+declare function ddGetCoeffsYFromX(ps: number[][], x: number): number[][];
 export { ddGetCoeffsYFromX };

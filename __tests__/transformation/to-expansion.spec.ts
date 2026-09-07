@@ -1,11 +1,7 @@
-
 import { describe, expect, it } from '@jest/globals';
-
 import { getRandomBezier, getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
 import { toExpansion } from '../../src/transformation/to-expansion.js';
-
-
 
 
 describe('toExpansion', function() {

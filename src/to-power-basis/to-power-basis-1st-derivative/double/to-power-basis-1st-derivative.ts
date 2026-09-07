@@ -40,8 +40,8 @@ function toPowerBasis3_1stDerivative(ps: number[][]): number[][] {
     const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
 
     return [[
-        3*((x3 - x0) + 3*(x1 - x2)),
-        6*((x2 + x0) - 2*x1),
+        3*((x3 - x0) + 3*(x1 - x2)),  // max === 24*max(c); max 5 bit-length increase
+        6*((x2 + x0) - 2*x1),         // max === 24*max(c); max 5 bit-length increase
         3*(x1 - x0)
     ], [
         3*((y3 - y0) + 3*(y1 - y2)),

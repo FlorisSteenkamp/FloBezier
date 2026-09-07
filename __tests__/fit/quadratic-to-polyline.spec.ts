@@ -1,15 +1,20 @@
 import { describe, expect, it } from '@jest/globals';
-import { quadraticToPolyline } from '../../src/index.js';
+import { quadraticToPolyline } from '../../src/fit/quadratic-to-polyline.js';
 import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
+import { evalDeCasteljau } from '../../src/local-properties-at-t/evaluate/double/eval-de-casteljau.js';
+import { splitByDeviationFromStraighLine_Quad } from '../../src/transformation/split/split-by-deviation-from-straigh-line-quad.js';
 
 
 describe('quadToPolyline', function() {
     it('it should approximate some quadratic bezier curves with polylines',
     function() {
         {
+            
+        }
+        {
             // let ps = getRandomQuad(0);
             const ps = [[0,0],[1,1],[2,0]];
-            const r = quadraticToPolyline(ps, 0.01);
+            const r = quadraticToPolyline(ps, 0.01);//?
             expect(r).toBeNearly(2**8, [
                 [0, 0],
                 [0.25, 0.21875],
@@ -24,6 +29,7 @@ describe('quadToPolyline', function() {
 
             const ps_ = randomRotateAndTranslate(0)(ps);
             const r_ = quadraticToPolyline(ps_, 0.01);
+
             expect(r_).toBeNearly(2**8, [
                 [-8.476317583419448, -1.0164969667975465],
                 [-8.638609461980927, -1.306346770407945],

@@ -42,9 +42,9 @@ function toPowerBasis3(
     const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
 
     return [[
-        (x3 - x0) + 3*(x1 - x2),
-        3*((x2 + x0) - 2*x1),
-        3*(x1 - x0),
+        (x3 - x0) + 3*(x1 - x2),  // max 3 bit-length increase
+        3*((x2 + x0) - 2*x1),     // max 4 bit-length increase
+        3*(x1 - x0),              // max 3 bit-length increase
         x0
     ], [
         (y3 - y0) + 3*(y1 - y2),
@@ -81,10 +81,10 @@ function toPowerBasis1(
     
     return [[
         x1 - x0,
-        x0,
+        x0
     ], [
         y1 - y0,
-        y0,
+        y0
     ]];
 }
 

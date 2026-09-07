@@ -1,0 +1,6 @@
+{
+    // Discoverable by VS Code's TS Server so test files use the spec project
+    // (which includes jest-extensions.d.ts) instead of an inferred project.
+    // This is what makes the custom `toBeNearly` matcher type reliably resolve.
+    "extends": "../tsconfig.spec.json"
+}

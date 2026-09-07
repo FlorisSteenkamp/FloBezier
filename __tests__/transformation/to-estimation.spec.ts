@@ -1,10 +1,7 @@
 import { scaleExpansion } from 'big-float-ts';
-
 import { describe, expect, it } from '@jest/globals';
-
 import { getRandomBezier, getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../helpers/get-random-bezier.js';
 import { toEstimation } from '../../src/transformation/to-estimation.js';
-
 
 
 describe('toEstimation', function() {

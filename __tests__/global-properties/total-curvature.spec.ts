@@ -1,16 +1,18 @@
 import { describe, expect, it } from '@jest/globals';
 import { gaussQuadrature } from 'flo-gauss-quadrature';
-import { 
-    evaluate2ndDerivative, getInterfaceRotation, splitByCurvature, tangent, 
-    totalAbsoluteCurvature, totalCurvature, generateSelfIntersecting, fromToInclErrorBound, toString, 
-    generateCuspAtHalf3
-} from '../../src/index.js';
 import { getRandomBezier, getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../helpers/get-random-bezier.js';
 import { closeTo } from '../helpers/close-to.js';
 import { radToDeg } from '../helpers/rad-to-deg.js';
 import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
-
-
+import { generateCuspAtHalf3 } from '../../src/create/generate-cusp-at-half-t.js';
+import { generateSelfIntersecting } from '../../src/create/generate-self-intersecting.js';
+import { totalAbsoluteCurvature } from '../../src/global-properties/total-absolute-curvature.js';
+import { totalCurvature } from '../../src/global-properties/total-curvature.js';
+import { splitByCurvature } from '../../src/transformation/split/split-by-curvature.js';
+import { fromToInclErrorBound } from '../../src/transformation/split/from-to-incl-error-bound.js';
+import { tangent } from '../../src/local-properties-at-t/tangent/double/tangent.js';
+import { evaluate2ndDerivative } from '../../src/local-properties-at-t/evaluate-2nd-derivative/double/evaluate-2nd-derivative.js';
+import { getInterfaceRotation } from '../../src/simultaneous-properties/get-interface-rotation.js';
 
 
 const { abs, PI: 𝜋 } = Math;

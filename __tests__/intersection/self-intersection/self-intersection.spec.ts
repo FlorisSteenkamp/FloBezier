@@ -1,5 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
-import { bezierSelfIntersection, generateCuspAtHalf3 } from '../../../src/index.js';
+import { bezierSelfIntersection } from '../../../src/intersection/self-intersection/bezier-self-intersection.js';
+import { generateCuspAtHalf3 } from '../../../src/create/generate-cusp-at-half-t.js';
 
 
 describe('bezierSelfIntersection', function() {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { getControlPointBox } from '../../../src/index.js';
+import { getControlPointBox } from '../../../src/global-properties/bounds/get-control-point-box.js';
 import { getRandomCubic } from '../../helpers/get-random-bezier.js';
 
 

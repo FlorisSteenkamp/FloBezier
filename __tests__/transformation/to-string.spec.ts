@@ -1,10 +1,6 @@
-
 import { describe, expect, it } from '@jest/globals';
-import { toString } from '../../src/index.js';
-
+import { toString } from '../../src/transformation/to-string.js';
 import { getRandomBezier, getRandomCubic } from '../helpers/get-random-bezier.js';
-
-
 
 
 describe('toString', function() {

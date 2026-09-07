@@ -1,10 +1,10 @@
 import { describe, expect, it } from '@jest/globals';
 import { eEstimate } from "big-float-ts";
-import { 
-    bezierSelfIntersection, evaluateExact, generateSelfIntersecting, 
-    isPointOnBezierExtension
-} from "../../../src/index.js";
-import type { X } from "../../../src/index.js";
+import { bezierSelfIntersection } from '../../../src/intersection/self-intersection/bezier-self-intersection.js';
+import { evaluateExact } from '../../../src/local-properties-at-t/evaluate/exact/evaluate-exact.js';
+import { generateSelfIntersecting } from '../../../src/create/generate-self-intersecting.js';
+import { isPointOnBezierExtension } from '../../../src/simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension.js';
+import type { X } from '../../../src/intersection/bezier-bezier-intersection/x.js';
 import { fromTo3 } from "../../../src/transformation/split/from-to/from-to-3.js";
 import { areIntersectionsInfinte } from "../../helpers/intersection/are-intersections-infinite.js";
 import { fromTo2 } from "../../../src/transformation/split/from-to/from-to-2.js";

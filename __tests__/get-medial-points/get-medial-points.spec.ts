@@ -60,13 +60,13 @@ test('`getMedialPoint`', function() {
 
         const maxEquidistanceErr = max(...rows.map(row => row.equidistanceErr));
 
-        console.log({
-            experiment: name,
-            input: { p, v, ps },
-            ts,
-            ss,
-            qs,
-            maxEquidistanceErr
-        });
+        // console.log({
+        //     experiment: name,
+        //     input: { p, v, ps },
+        //     ts,
+        //     ss,
+        //     qs,
+        //     maxEquidistanceErr
+        // });
     }
 });

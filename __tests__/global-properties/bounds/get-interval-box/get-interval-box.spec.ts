@@ -1,6 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import { eAdd, eDiff, eSign } from 'big-float-ts';
-import { evaluateExact, getIntervalBox } from '../../../../src/index.js';
+import { evaluateExact } from '../../../../src/local-properties-at-t/evaluate/exact/evaluate-exact.js';
+import { getIntervalBox } from '../../../../src/global-properties/bounds/get-interval-box/get-interval-box.js';
 
 const eps = Number.EPSILON;
 

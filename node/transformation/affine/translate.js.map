@@ -1,0 +1,1 @@
+{"version":3,"file":"translate.js","sourceRoot":"","sources":["../../../src/transformation/affine/translate.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,SAAS,IAAI,YAAY,EAAE,MAAM,cAAc,CAAC;AAGzD;;;;;;;;;;GAUG;AACH,SAAS,SAAS,CAAC,EAAc,EAAE,CAAW;IAC1C,MAAM,WAAW,GAAG,YAAY,CAAC,CAAC,CAAC,CAAC;IAEpC,OAAO,EAAE,CAAC,GAAG,CAAC,WAAW,CAAC,CAAC;AAC/B,CAAC;AAGD,OAAO,EAAE,SAAS,EAAE,CAAA"}

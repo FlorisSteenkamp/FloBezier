@@ -1,7 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
 import { distanceBetween } from 'flo-vector2d';
 import { getRandomBezier } from '../../helpers/get-random-bezier.js';
-import { length, totalLength, controlPointLinesLength } from '../../../src/index.js';
+import { length } from '../../../src/global-properties/length/length.js';
+import { totalLength } from '../../../src/global-properties/length/total-length.js';
+import { controlPointLinesLength } from '../../../src/global-properties/length/control-point-lines-length.js';
 
 const { sqrt } = Math;
 

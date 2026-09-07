@@ -6,8 +6,8 @@ import { toPowerBasisExact } from '../../../../src/to-power-basis/to-power-basis
 import { allTrue, mapDouble, mapShewchukToAbsDouble, subtractShewchuk } from '../../../helpers/map.js';
 import { toPowerBasisDdWithRunningError } from '../../../../src/to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js';
 
-
 const { abs } = Math;
+
 
 const compareErrors = mapDouble((eActual, eBound) => abs(eActual) <= eBound!);
 const getRandomBezier_ = getRandomBezier(128, 53);

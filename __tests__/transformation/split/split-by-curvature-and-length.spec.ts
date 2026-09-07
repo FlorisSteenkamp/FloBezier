@@ -1,7 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
 import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../../helpers/random-rotate-and-translate.js';
-import { fromTo, generateCuspAtHalf3, splitByCurvatureAndLength } from '../../../src/index.js';
+import { fromTo } from '../../../src/transformation/split/from-to.js';
+import { generateCuspAtHalf3 } from '../../../src/create/generate-cusp-at-half-t.js';
+import { splitByCurvatureAndLength } from '../../../src/transformation/split/split-by-curvature-and-length.js';
 
 
 describe('splitByCurvatureAndLength', function() {

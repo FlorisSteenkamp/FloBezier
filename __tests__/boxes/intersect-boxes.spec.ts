@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { intersectBoxes } from '../../src/index.js';
+import { intersectBoxes } from '../../src/boxes/intersect-boxes.js';
 
 
 describe('intersectBoxes', function() {

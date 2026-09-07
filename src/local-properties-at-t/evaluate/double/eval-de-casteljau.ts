@@ -24,7 +24,7 @@ function evalDeCasteljau(
     }
 
     if (ps.length === 4) {
-        const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;    
+        const [[x0,y0], [x1,y1], [x2,y2], [x3,y3]] = ps;
 
         const a01 = x0 + (x1 - x0)*t;
         const a11 = x1 + (x2 - x1)*t;
@@ -44,7 +44,7 @@ function evalDeCasteljau(
     } 
     
     if (ps.length === 3) {
-        const [[x0,y0], [x1,y1], [x2,y2]] = ps;    
+        const [[x0,y0], [x1,y1], [x2,y2]] = ps;
 
         const a01 = x0 + (x1 - x0)*t;
         const a11 = x1 + (x2 - x1)*t;
@@ -58,7 +58,7 @@ function evalDeCasteljau(
     } 
     
     if (ps.length === 2) {
-        const [[x0,y0], [x1,y1]] = ps;    
+        const [[x0,y0], [x1,y1]] = ps;
 
         const x = x0 + (x1 - x0)*t;
         const y = y0 + (y1 - y0)*t;
@@ -67,7 +67,7 @@ function evalDeCasteljau(
     }
 
     if (ps.length === 1) {
-        return ps[0];    
+        return ps[0];
     }
 
     throw new Error('The given bezier curve must be of order <= 3.');

@@ -1,11 +1,15 @@
 import { describe, expect, it } from '@jest/globals';
-import { 
-    evalDeCasteljau, evaluate2ndDerivative, tangent, 
-    evaluate2ndDerivativeAt0, evaluate2ndDerivativeAt1, 
-    tangentAt0, tangentAt1, 
-    evaluate2ndDerivativeAt0Exact, evaluate2ndDerivativeAt1Exact, 
-    tangentAt0Exact, tangentAt1Exact
-} from '../../../../src/index.js';
+import { evalDeCasteljau } from '../../../../src/local-properties-at-t/evaluate/double/eval-de-casteljau.js';
+import { evaluate2ndDerivative } from '../../../../src/local-properties-at-t/evaluate-2nd-derivative/double/evaluate-2nd-derivative.js';
+import { tangent } from '../../../../src/local-properties-at-t/tangent/double/tangent.js';
+import { evaluate2ndDerivativeAt0 } from '../../../../src/local-properties-at-t/evaluate-2nd-derivative/double/evaluate-2nd-derivative-at-0.js';
+import { evaluate2ndDerivativeAt1 } from '../../../../src/local-properties-at-t/evaluate-2nd-derivative/double/evaluate-2nd-derivative-at-1.js';
+import { tangentAt0 } from '../../../../src/local-properties-at-t/tangent/double/tangent-at-0.js';
+import { tangentAt1 } from '../../../../src/local-properties-at-t/tangent/double/tangent-at-1.js';
+import { evaluate2ndDerivativeAt0Exact } from '../../../../src/local-properties-at-t/evaluate-2nd-derivative/exact/evaluate-2nd-derivative-at-0-exact.js';
+import { evaluate2ndDerivativeAt1Exact } from '../../../../src/local-properties-at-t/evaluate-2nd-derivative/exact/evaluate-2nd-derivative-at-1-exact.js';
+import { tangentAt0Exact } from '../../../../src/local-properties-at-t/tangent/exact/tangent-at-0-exact.js';
+import { tangentAt1Exact } from '../../../../src/local-properties-at-t/tangent/exact/tangent-at-1-exact.js';
 import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../../../helpers/get-random-bezier.js';
 
 

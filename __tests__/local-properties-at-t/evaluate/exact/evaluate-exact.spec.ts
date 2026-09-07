@@ -1,6 +1,8 @@
 import { eCompress, eEstimate } from 'big-float-ts';
 import { describe, expect, it } from '@jest/globals';
-import { evaluate, evalDeCasteljau, evaluateExact } from '../../../../src/index.js';
+import { evaluate } from '../../../../src/local-properties-at-t/evaluate/double/evaluate.js';
+import { evalDeCasteljau } from '../../../../src/local-properties-at-t/evaluate/double/eval-de-casteljau.js';
+import { evaluateExact } from '../../../../src/local-properties-at-t/evaluate/exact/evaluate-exact.js';
 import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../../../helpers/get-random-bezier.js';
 
 

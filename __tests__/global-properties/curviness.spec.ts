@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { curviness } from '../../src/index.js';
+import { curviness } from '../../src/global-properties/curviness.js';
 
 
 // TOD -> Afffected (and possibly more dependents):

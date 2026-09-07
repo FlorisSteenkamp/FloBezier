@@ -1,11 +1,6 @@
-
-
 import { describe, expect, it } from '@jest/globals';
-
 import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../../helpers/get-random-bezier.js';
-import { fromToInclErrorBound } from '../../../src/index.js';
-
-
+import { fromToInclErrorBound } from '../../../src/transformation/split/from-to-incl-error-bound.js';
 
 
 describe('fromToInclErrorBound', function() {

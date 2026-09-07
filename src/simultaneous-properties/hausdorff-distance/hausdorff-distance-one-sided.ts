@@ -1,18 +1,5 @@
-import { distanceBetween } from 'flo-vector2d';
-import { controlPointLinesLength } from '../../global-properties/length/control-point-lines-length.js';
-import { evalDeCasteljau } from '../../local-properties-at-t/evaluate/double/eval-de-casteljau.js';
-import { closestPointOnBezier } from '../closest-and-furthest-point-on-bezier/closest-point-on-bezier.js';
-import { furthestPointOnBezier } from '../closest-and-furthest-point-on-bezier/furthest-point-on-bezier.js';
-import { maxAbsCoordinate } from '../../error-analysis/max-abs-coordinate.js';
-import { HausdorffInterval } from './hausdorff-interval.js';
-import { getMaxHausdorff } from './get-max-hausdorff.js';
-import { hausdorffCompare } from './hausdorff-compare.js';
-import { Heap } from '../heap.js';
-import { fromTo } from '../../transformation/split/from-to.js';
+import { hausdorffDistanceOneSidedExtra } from "./hausdorff-distance-one-sided-extra.js";
 
-
-/** @internal */
-const { max } = Math;
 
 // We need to calculate `H(A,B)`, the two sided Hausdorff distance between
 // the bezier curves `A` and `B` which equals `max(h(A,B), h(B,A))`, where
@@ -40,6 +27,8 @@ const { max } = Math;
  * Calculates and returns an accurate approximation to the one-sided Hausdorff 
  * distance from the bezier curve `A` to the bezier curve `B`.
  * 
+ * * to also obtain the parameter values and points at which the distance is
+ * achieved, use `hausdorffDistanceOneSidedExtra`
  * * partially based off [Computing the Hausdorff distance between two sets of parametric curves](https://www.semanticscholar.org/paper/COMPUTING-THE-HAUSDORFF-DISTANCE-BETWEEN-TWO-SETS-Kim-McLean/d2bd6529c4b118e389e1db209d8f1bf7467f9016)
  * 
  * @param A a bezier curve (the 'from' curve) given by an ordered array of its
@@ -63,132 +52,8 @@ function hausdorffDistanceOneSided(
         tolerance?: number,
         maxIterations = 50): number {
 
-    if (A.length === 1) {
-        return closestPointOnBezier(B,A[0]).d;
-    }
-
-    if (B.length === 1) {
-        return furthestPointOnBezier(A,B[0]).d;
-    }
-
-    if (A.length === 2 && B.length === 2) {
-        // Seperately handle the simple case of two lines
-
-        // Find minimum distance from endpoints of A to B:
-        const EA0 = closestPointOnBezier(B,A[0]).d;
-        const EA1 = closestPointOnBezier(B,A[A.length-1]).d;
-
-        return EA0 > EA1 ? EA0 : EA1;
-    }
-
-    const l = max(maxAbsCoordinate(A),maxAbsCoordinate(B));
-    tolerance = tolerance || l/1000_000;
-
-    // an array of intervals
-    const [eL,eR] = calcHErrorBound(A, 0, 1);
-    const d0 = closestPointOnBezier(B, A[0]).d;
-    const d1 = closestPointOnBezier(B, A[A.length-1]).d;
-    const initialInterval: HausdorffInterval = {
-        tS: 0, tE: 1,
-        hL: d0, hR: d1, hEL: eL, hER: eR
-    }
-    const heap = new Heap(hausdorffCompare);
-    heap.insert(initialInterval);
-
-    let j = 0;
-    let bestHUpper = Infinity;
-    let bestHLower = -Infinity;
-    while (true) {
-        const interval = heap.heap[0];  // peek max
-        const { tS, tE, hL, hR } = interval;
-
-        const tM = (tS + tE)/2;
-        const [ELL,ELR] = calcHErrorBound(A,tS,tM);
-        const [ERL,ERR] = calcHErrorBound(A,tM,tE);
-
-        //---- get hM ---------------------------
-        const pM = evalDeCasteljau(A, tM);
-        const pB = closestPointOnBezier(B, pM).p;
-        const hM = distanceBetween(pM, pB);
-        //---------------------------------------
-
-        const h = max(hL, hM, hR);
-        if (h > bestHLower) { 
-            bestHLower = h;
-        }
-
-        bestHUpper = getMaxHausdorff(interval);
-        if (bestHUpper - bestHLower < tolerance) {
-            // The lower bound is by far the best approximation for difficult cases (see the paper).
-            return bestHLower;
-        }
-
-        if (j++ > maxIterations) {
-            // The lower bound is by far the best approximation for difficult cases (see the paper).
-            return bestHLower;
-        }
-
-        const iL = { tS, tE: tM, hL, hR: hM, hEL: ELL, hER: ELR };
-        const iR = { tS: tM, tE, hL: hM, hR, hEL: ERL, hER: ERR };
-        heap.swapMinOrMax(iL);
-        heap.insert(iR);
-    }
-}
-
-
-// Let: ωf(σ) = sup{ |f(t) − f(t′)| : t, t′ ∈ [a,b] with |t − t′| ≤ σ }
-//
-// |h(S,B) − h(A,B)| ≤ ωf(δS/2)
-// where: δS = max_(1≤i≤M+1)[ (ti − ti−1) ] is the maximum distance between 
-// two consecutive parameter values
-/**
- * @internal
- */
-function calcHErrorBound(
-        A: number[][],
-        tS: number,
-        tE: number) {
-
-    // To calculate an upper bound for ωf(δS/2) we can either check the max 
-    // absolute tangent values on curve segments or use the control point 
-    // lengths as an upper bound.
-
-    const tM = (tE + tS) / 2;  // since the formula says `δS/2` so divide by 2
-    const psL = fromTo(A, tS, tM);
-    const psR = fromTo(A, tM, tE);
-    const eL = controlPointLinesLength(psL);
-    const eR = controlPointLinesLength(psR);
-
-    return [eL,eR];
+    return hausdorffDistanceOneSidedExtra(A, B, tolerance, maxIterations).d;
 }
 
 
 export { hausdorffDistanceOneSided }
-
-
-// Quokka tests
-
-// const ls = [
-//     [[0,0],[1,1]],
-//     [[1,1],[2,1]],
-//     [[2,1],[3,2]],
-//     [[3,2],[4,1]],
-//     [[4,1],[5,0]]
-// ];
-// const b = [[0,0],[1,1],[4,1],[5,0]];
-// ls.map(l => hausdorffDistanceOneSided(l,b));//?
-// ls.map(l => hausdorffDistanceOneSided(b,l));//?
-
-// const q = [[0,0],[1,1],[2,0]];
-// const ts = Array.from({length: 4}, (_,i) => i/4);
-// ts.push(1);
-// const cs: number[][][] = [];
-
-// for (let i=0; i<ts.length - 1; i++) {
-//     const t1 = ts[i];//?
-//     const t2 = ts[1+i];//?
-//     const c = fromTo(q, t1, t2);
-//     cs.push(c);
-// }
-
-// hausdorffDistanceOneSided(cs[3], q);//?

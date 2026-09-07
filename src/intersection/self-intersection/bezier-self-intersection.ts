@@ -116,7 +116,7 @@ function bezierSelfIntersection(
 
         const { est: D, err: D_ } = sqrtWithErr(Discr, Discr_);
 
-        let q1: number;        
+        let q1: number;
         if (b >= 0) {
             // const r1 = (-b - D) / 2*a;
             // const r2 = (2*c) / (-b - D);
@@ -128,7 +128,7 @@ function bezierSelfIntersection(
         }
         const q1_ = b_ + D_ + γ1*abs(q1);
         const { est: r1, err: r1_ } = divWithErr(q1,2*a,q1_,2*a_);
-        const { est: r2, err: r2_ } = divWithErr(2*c,q1,2*c_,q1_);        
+        const { est: r2, err: r2_ } = divWithErr(2*c,q1,2*c_,q1_);
 
 
         // the actual 'filter' follows

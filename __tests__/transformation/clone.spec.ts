@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { clone } from '../../src/index.js';
+import { clone } from '../../src/transformation/clone.js';
 import { getRandomBezier, getRandomCubic } from '../helpers/get-random-bezier.js';
 
 

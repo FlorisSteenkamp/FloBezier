@@ -1,9 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
-import { 
-    bezierBezierIntersectionFast, bezierBezierIntersection, 
-    generateSelfIntersecting, evaluateExact
-} from '../../../src/index.js';
-
+import { bezierBezierIntersectionFast } from '../../bezier-bezier-intersection-fast/bezier-bezier-intersection-fast.js';
+import { bezierBezierIntersection } from '../../../src/intersection/bezier-bezier-intersection/bezier-bezier-intersection.js';
+import { generateSelfIntersecting } from '../../../src/create/generate-self-intersecting.js';
+import { evaluateExact } from '../../../src/local-properties-at-t/evaluate/exact/evaluate-exact.js';
 import { fromTo3 } from '../../../src/transformation/split/from-to/from-to-3.js';
 import { eEstimate } from 'big-float-ts';
 

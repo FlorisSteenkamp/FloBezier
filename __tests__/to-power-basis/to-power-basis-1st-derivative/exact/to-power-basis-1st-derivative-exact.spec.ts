@@ -1,9 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
 import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../../../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../../../helpers/random-rotate-and-translate.js';
-import { toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeExact } from '../../../../src/index.js';
+import { toPowerBasis_1stDerivative } from '../../../../src/to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.js';
+import { toPowerBasis_1stDerivativeExact } from '../../../../src/to-power-basis/to-power-basis-1st-derivative/exact/to-power-basis-1st-derivative-exact.js';
 import { eEstimate } from 'big-float-ts';
-
 
 
 describe('toPowerBasis_1stDerivativeExact', function() {

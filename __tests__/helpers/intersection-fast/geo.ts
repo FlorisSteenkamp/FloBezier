@@ -1,8 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
-import type { X } from '../../../src/index.js';
+import type { X } from '../../../src/intersection/bezier-bezier-intersection/x.js';
 import { updDs } from './upd-ds.js';
 import { checkResults } from './check-results.js';
-import { bezierBezierIntersectionFast } from '../../../src/index.js';
+import { bezierBezierIntersectionFast } from '../../bezier-bezier-intersection-fast/bezier-bezier-intersection-fast.js';
 
 
 /**

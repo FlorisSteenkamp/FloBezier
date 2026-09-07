@@ -1,0 +1,67 @@
+import { roots } from "flo-poly";
+import { toPowerBasis_1stDerivative } from "../../to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.js";
+import { evalDeCasteljau } from "../../local-properties-at-t/evaluate/double/eval-de-casteljau.js";
+/**
+ * Returns an axis-aligned bounding box together with the `t` values where the
+ * bounds on the bezier are reached in the form:
+ * ```
+ * {
+ *      ts: [[tMinX, tMinY], [tMaxX, tMaxY]];
+ *      box: [[minX,  minY], [maxX,  maxY ]];
+ * }
+ * ```
+ *
+ * @param ps an order 1,2 or 3 bezier curve given as an array of its control
+ * points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ *
+ * @doc mdx
+ */
+function getBounds(ps) {
+    // Roots of derivative
+    const dxy = toPowerBasis_1stDerivative(ps);
+    const rootsX = roots(dxy[0], 0, 1)?.map(r => r.t) || [];
+    const rootsY = roots(dxy[1], 0, 1)?.map(r => r.t) || [];
+    // Endpoints
+    rootsX.push(0, 1);
+    rootsY.push(0, 1);
+    let minX = Infinity;
+    let maxX = -Infinity;
+    let minY = Infinity;
+    let maxY = -Infinity;
+    let tMinX;
+    let tMaxX;
+    let tMinY;
+    let tMaxY;
+    // Test points
+    for (let i = 0; i < rootsX.length; i++) {
+        const t = rootsX[i];
+        const [x,] = evalDeCasteljau(ps, t);
+        if (x < minX) {
+            minX = x;
+            tMinX = t;
+        }
+        if (x > maxX) {
+            maxX = x;
+            tMaxX = t;
+        }
+    }
+    for (let i = 0; i < rootsY.length; i++) {
+        const t = rootsY[i];
+        const [, y] = evalDeCasteljau(ps, t);
+        if (y < minY) {
+            minY = y;
+            tMinY = t;
+        }
+        if (y > maxY) {
+            maxY = y;
+            tMaxY = t;
+        }
+    }
+    // `tMinX`, ... is guaranteed defined below - TS was (understandably) 
+    // unable to follow the logic.
+    const ts = [[tMinX, tMinY], [tMaxX, tMaxY]];
+    const box = [[minX, minY], [maxX, maxY]];
+    return { ts, box };
+}
+export { getBounds };
+//# sourceMappingURL=get-bounds.js.map

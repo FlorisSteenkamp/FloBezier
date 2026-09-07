@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { cubicThroughPointGiven013 } from '../../src/index.js';
+import { cubicThroughPointGiven013 } from '../../src/create/cubic-through-point-given013.js';
 
 
 describe('cubicThroughPointGiven013', function() {

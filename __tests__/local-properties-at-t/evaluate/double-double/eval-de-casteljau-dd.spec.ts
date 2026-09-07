@@ -1,6 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import { eDiff, eEstimate } from 'big-float-ts';
-import { evalDeCasteljauDd, evaluateExact } from '../../../../src/index.js';
+import { evalDeCasteljauDd } from '../../../../src/local-properties-at-t/evaluate/double-double/eval-de-casteljau-dd.js';
+import { evaluateExact } from '../../../../src/local-properties-at-t/evaluate/exact/evaluate-exact.js';
 
 const eps = Number.EPSILON;
 

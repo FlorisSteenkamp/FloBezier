@@ -1,9 +1,12 @@
 import { distanceBetween } from 'flo-vector2d';
 import { describe, expect, it } from '@jest/globals';
-import { closestPointOnBezier, closestPointOnBezierCertified, evalDeCasteljau, fromPowerBasis, fromTo } from '../../../src/index.js';
+import { closestPointOnBezier } from '../../../src/simultaneous-properties/closest-and-furthest-point-on-bezier/closest-point-on-bezier.js';
+import { closestPointOnBezierCertified } from '../../../src/simultaneous-properties/closest-and-furthest-point-on-bezier/closest-point-on-bezier-certified.js';
+import { evalDeCasteljau } from '../../../src/local-properties-at-t/evaluate/double/eval-de-casteljau.js';
+import { fromPowerBasis } from '../../../src/from-power-basis/from-power-basis.js';
+import { fromTo } from '../../../src/transformation/split/from-to.js';
 import { getRandomBezier, getRandomPoint } from '../../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../../helpers/random-rotate-and-translate.js';
-
 
 
 const eps = Number.EPSILON;

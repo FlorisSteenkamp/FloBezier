@@ -1,11 +1,10 @@
-
 import { describe, expect, it } from '@jest/globals';
-
 import { getRandomCubic } from '../../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../../helpers/random-rotate-and-translate.js';
-import { area, toCubic, cubicToQuadratic } from '../../../src/index.js';
+import { area } from '../../../src/global-properties/area.js';
+import { toCubic } from '../../../src/transformation/degree-or-type/to-cubic.js';
+import { cubicToQuadratic } from '../../../src/transformation/degree-or-type/cubic-to-quadratic.js';
 import { getAbsAreaBetween } from '../../../src/fit/get-abs-area-between.js';
-
 
 
 describe('cubicToQuadratic', function() {

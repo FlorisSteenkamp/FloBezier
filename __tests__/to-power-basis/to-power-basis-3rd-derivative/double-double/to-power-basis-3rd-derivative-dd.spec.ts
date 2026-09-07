@@ -1,6 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../../../helpers/get-random-bezier.js';
-import { toPowerBasis_3rdDerivative, toPowerBasis_3rdDerivativeDd } from '../../../../src/index.js';
+import { toPowerBasis_3rdDerivative } from '../../../../src/to-power-basis/to-power-basis-3rd-derivative/double/to-power-basis-3rd-derivative.js';
+import { toPowerBasis_3rdDerivativeDd } from '../../../../src/to-power-basis/to-power-basis-3rd-derivative/double-double/to-power-basis-3rd-derivative-dd.js';
 import { eEstimate } from 'big-float-ts';
 
 

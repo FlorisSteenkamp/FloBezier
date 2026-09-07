@@ -1,5 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
-import { curvature, generateCuspAtHalf3 } from '../../src/index.js';
+import { curvature } from '../../src/local-properties-at-t/curvature/curvature.js';
+import { generateCuspAtHalf3 } from '../../src/create/generate-cusp-at-half-t.js';
 import { getRandomBezier } from '../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
 

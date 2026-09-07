@@ -1,5 +1,6 @@
 import { squares } from "squares-rng";
-import { toCubic, isCubicReallyQuad } from "../../src/index.js";
+import { toCubic } from '../../src/transformation/degree-or-type/to-cubic.js';
+import { isCubicReallyQuad } from '../../src/global-properties/classification/is-cubic-really-quad.js';
 import { randomOnGrid } from "./random-on-grid.js";
 
 

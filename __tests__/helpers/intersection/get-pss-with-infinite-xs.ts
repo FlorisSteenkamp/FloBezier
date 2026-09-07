@@ -1,4 +1,4 @@
-import { fromToInclErrorBound } from '../../../src/index.js';
+import { fromToInclErrorBound } from '../../../src/transformation/split/from-to-incl-error-bound.js';
 import { areIntersectionsInfinte } from './are-intersections-infinite.js';
 import { randomOnGrid } from '../random-on-grid.js';
 

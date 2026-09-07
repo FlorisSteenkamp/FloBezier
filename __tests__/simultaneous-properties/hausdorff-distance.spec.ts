@@ -1,23 +1,24 @@
-
 import { distanceBetween, toUnitVector, translate } from 'flo-vector2d';
 import { describe, expect, it } from '@jest/globals';
 import { squares } from 'squares-rng';
 import { maxAbsCoordinate } from '../../src/error-analysis/max-abs-coordinate.js';
-import { 
-    closestPointOnBezier, controlPointLinesLength, curvature, evalDeCasteljau, 
-    fromPowerBasis, fromToInclErrorBound, generateQuarterCircle, hausdorffDistance, 
-    hausdorffDistanceOneSided, lineToQuadratic, normal, toCubic, toString 
-} from '../../src/index.js';
+import { closestPointOnBezier } from '../../src/simultaneous-properties/closest-and-furthest-point-on-bezier/closest-point-on-bezier.js';
+import { controlPointLinesLength } from '../../src/global-properties/length/control-point-lines-length.js';
+import { curvature } from '../../src/local-properties-at-t/curvature/curvature.js';
+import { evalDeCasteljau } from '../../src/local-properties-at-t/evaluate/double/eval-de-casteljau.js';
+import { fromPowerBasis } from '../../src/from-power-basis/from-power-basis.js';
+import { fromToInclErrorBound } from '../../src/transformation/split/from-to-incl-error-bound.js';
+import { generateQuarterCircle } from '../../src/create/generate-quarter-circle.js';
+import { hausdorffDistance } from '../../src/simultaneous-properties/hausdorff-distance/hausdorff-distance.js';
+import { hausdorffDistanceOneSided } from '../../src/simultaneous-properties/hausdorff-distance/hausdorff-distance-one-sided.js';
+import { lineToQuadratic } from '../../src/transformation/degree-or-type/line-to-quadratic.js';
+import { normal } from '../../src/local-properties-at-t/normal/double/normal.js';
+import { toCubic } from '../../src/transformation/degree-or-type/to-cubic.js';
+import { toString } from '../../src/transformation/to-string.js';
 import { Heap } from '../../src/simultaneous-properties/heap.js';
-// import { hausdorffDistanceOneSided_ } from '../../src/simultaneous-properties/hausdorff-distance/hausdorff-distance.js';
-
 import { getRandomCubic, getRandomLine, getRandomQuad } from '../helpers/get-random-bezier.js';
 import { H, HH } from '../helpers/hausdorff-distance-naive.js';
 import { heapToStr } from '../helpers/heap-to-str.js';
-// import { HHkm, Hkm } from '../helpers/hausdorff-distance-km.js';
-
-
-
 
 const { sqrt, max } = Math;
 

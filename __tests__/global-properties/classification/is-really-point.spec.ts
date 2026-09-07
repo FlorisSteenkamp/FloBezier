@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { isReallyPoint } from '../../../src/index.js';
+import { isReallyPoint } from '../../../src/global-properties/classification/is-really-point.js';
 
 
 describe('isReallyPoint', function() {

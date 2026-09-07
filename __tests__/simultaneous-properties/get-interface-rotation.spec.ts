@@ -1,9 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
 import { fromTo as fromToVect } from 'flo-vector2d';
-import { getInterfaceRotation } from '../../src/index.js';
+import { getInterfaceRotation } from '../../src/simultaneous-properties/get-interface-rotation.js';
 import { getRandomCubic, getRandomQuad } from '../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
-
 
 const { abs, PI: 𝜋 } = Math;
 

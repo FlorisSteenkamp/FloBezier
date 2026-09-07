@@ -1,5 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
-import { classification, classifications, classify, cubicToQuadratic, fromPowerBasis, toPowerBasis, toCubic } from '../../../src/index.js';
+import { classification, classifications, classify } from '../../../src/global-properties/classification/classify.js';
+import { cubicToQuadratic } from '../../../src/transformation/degree-or-type/cubic-to-quadratic.js';
+import { fromPowerBasis } from '../../../src/from-power-basis/from-power-basis.js';
+import { toPowerBasis } from '../../../src/to-power-basis/to-power-basis/double/to-power-basis.js';
+import { toCubic } from '../../../src/transformation/degree-or-type/to-cubic.js';
 
 // The classifications form an equivalence class, in other words *all* 
 // possible planar polynomial bezier curves (of order <= 3) are represented and 

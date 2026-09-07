@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { isCubicReallyQuad } from '../../../src/index.js';
+import { isCubicReallyQuad } from '../../../src/global-properties/classification/is-cubic-really-quad.js';
 import { getRandomCubic } from '../../helpers/get-random-bezier.js';
 
 

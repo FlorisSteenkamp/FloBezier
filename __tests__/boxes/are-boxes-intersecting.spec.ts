@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { areBoxesIntersecting } from '../../src/index.js';
+import { areBoxesIntersecting } from '../../src/boxes/are-boxes-intersecting.js';
 
 
 describe('areBoxesIntersecting', function() {

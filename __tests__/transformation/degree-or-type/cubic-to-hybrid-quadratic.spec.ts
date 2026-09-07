@@ -1,9 +1,7 @@
-
 import { describe, expect, it } from '@jest/globals';
-
 import { getRandomCubic } from '../../helpers/get-random-bezier.js';
-import { evalDeCasteljau, cubicToHybridQuadratic } from '../../../src/index.js';
-
+import { evalDeCasteljau } from '../../../src/local-properties-at-t/evaluate/double/eval-de-casteljau.js';
+import { cubicToHybridQuadratic } from '../../../src/transformation/degree-or-type/cubic-to-hybrid-quadratic.js';
 
 
 describe('cubicToHybridQuadratic', function() {

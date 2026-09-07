@@ -1,11 +1,8 @@
-
 import { describe, expect, it } from '@jest/globals';
-import { getHodograph } from '../../src/index.js';
-
+import { getHodograph } from '../../src/transformation/get-hodograph.js';
 import { getRandomBezier, getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
 import { randomTranslate } from '../helpers/random-translate.js';
-
 
 
 describe('getHodograph', function() {

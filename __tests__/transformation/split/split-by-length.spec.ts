@@ -3,7 +3,7 @@ import { describe, expect, it } from '@jest/globals';
 
 import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../../helpers/get-random-bezier.js';
 import { randomRotateAndTranslate } from '../../helpers/random-rotate-and-translate.js';
-import { splitByLength } from '../../../src/index.js';
+import { splitByLength } from '../../../src/transformation/split/split-by-length.js';
 
 
 

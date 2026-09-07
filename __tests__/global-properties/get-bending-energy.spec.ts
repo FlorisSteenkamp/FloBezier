@@ -1,5 +1,10 @@
 import { describe, expect, it } from '@jest/globals';
-import { area, classify, generateCuspAtHalf3, isCubicReallyQuad, isSelfOverlapping, quadraticToCubic } from '../../src/index.js';
+import { area } from '../../src/global-properties/area.js';
+import { classify } from '../../src/global-properties/classification/classify.js';
+import { generateCuspAtHalf3 } from '../../src/create/generate-cusp-at-half-t.js';
+import { isCubicReallyQuad } from '../../src/global-properties/classification/is-cubic-really-quad.js';
+import { isSelfOverlapping } from '../../src/global-properties/classification/is-self-overlapping.js';
+import { quadraticToCubic } from '../../src/transformation/degree-or-type/quadratic-to-cubic.js';
 import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
 import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../helpers/get-random-bezier.js';
 import { getBendingEnergy } from '../../src/global-properties/get-bending-energy.js';

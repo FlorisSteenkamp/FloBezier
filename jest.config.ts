@@ -21,6 +21,9 @@ const config: Config = {
     collectCoverage: false,
     // coverageProvider: 'v8',
     testTimeout: 15000,
+    // Only print the final summary (and any failing-test details); hides the
+    // interactive "RUNS" spinner and per-file "PASS" lines from the default reporter.
+    reporters: ['summary'],
     transform: {
         "^.+\\.(t|j)sx?$": "@swc/jest"
     },

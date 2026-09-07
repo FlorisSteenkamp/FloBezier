@@ -4,6 +4,8 @@
  * guaranteed and `max` is the maximum guaranteed Hausdorff distance. The `min`
  * value will be a *much* more accurate result in general.
  *
+ * * to also obtain the parameter values and points at which the distance is
+ * achieved, use `hausdorffDistanceExtra`
  * * partially based off [Computing the Hausdorff distance between two sets of parametric curves](https://www.semanticscholar.org/paper/COMPUTING-THE-HAUSDORFF-DISTANCE-BETWEEN-TWO-SETS-Kim-McLean/d2bd6529c4b118e389e1db209d8f1bf7467f9016)
  *
  * @param A a bezier curve given by an ordered array of its control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`

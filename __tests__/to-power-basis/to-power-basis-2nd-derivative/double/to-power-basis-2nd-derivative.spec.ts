@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 import { getRandomCubic, getRandomLine, getRandomPoint, getRandomQuad } from '../../../helpers/get-random-bezier.js';
-import { toPowerBasis_2ndDerivative } from '../../../../src/index.js';
+import { toPowerBasis_2ndDerivative } from '../../../../src/to-power-basis/to-power-basis-2nd-derivative/double/to-power-basis-2nd-derivative.js';
 
 
 describe('toPowerBasis_2ndDerivative', function() {

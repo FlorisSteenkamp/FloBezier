@@ -1,6 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
-import { bezierBezierIntersection, cubicToQuadratic, evaluateExact, generateSelfIntersecting } from '../../../src/index.js';
-import type { X } from '../../../src/index.js';
+import { bezierBezierIntersection } from '../../../src/intersection/bezier-bezier-intersection/bezier-bezier-intersection.js';
+import { cubicToQuadratic } from '../../../src/transformation/degree-or-type/cubic-to-quadratic.js';
+import { evaluateExact } from '../../../src/local-properties-at-t/evaluate/exact/evaluate-exact.js';
+import { generateSelfIntersecting } from '../../../src/create/generate-self-intersecting.js';
+import type { X } from '../../../src/intersection/bezier-bezier-intersection/x.js';
 import { getPssWithInfiniteXs } from '../../helpers/intersection/get-pss-with-infinite-xs.js';
 import { swapIntersections } from '../../helpers/intersection/swap-intersections.js';
 import { areIntersectionsOrdered } from '../../helpers/intersection/are-intersections-ordered.js';

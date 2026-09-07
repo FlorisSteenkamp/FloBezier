@@ -1,5 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
-import { getXBoundsTight, XBounds } from '../../../src/index.js';
+import { getXBoundsTight } from '../../../src/global-properties/bounds/get-x-bounds-tight.js';
+import type { XBounds } from '../../../src/global-properties/bounds/bounds.js';
 import { getRandomCubic, getRandomLine, getRandomQuad } from '../../helpers/get-random-bezier.js';
 import { reverseXBoundTs } from '../../helpers/reverse-bound-ts.js';
 import { ObjOrArray } from '../../helpers/obj-or-array.js';
