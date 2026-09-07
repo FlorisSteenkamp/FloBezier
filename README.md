@@ -17,7 +17,7 @@ For example, finding the intersection between a quadratic and cubic bezier curve
 should be simple:
 
 ```typescript
-import { bezierBezierIntersection, evaluate } from 'flo-bezier3';
+import { bezierBezierIntersection, evalDeCasteljau } from 'flo-bezier3';
 
 // some cubic bezier curve given by an array of its control points
 const cubic1 = [[6.4, 4.8], [15, 5], [1, 4], [10, 4]];
@@ -31,9 +31,9 @@ const xs = bezierBezierIntersection(cubic1, cubic2);
 const x = xs[0];  //=> { p: [7.617926141015112, 4.822433357454532], t1: 0.054810011880009515, t2: 0.9516779285879587, ... }
 
 // Evaluating the 1st curve at the first intersection gives the point of intersection
-const p1 = evaluate(cubic1, x.t1);  //=> [7.61792614101511,  4.822433357454532]
+const p1 = evalDeCasteljau(cubic1, x.t1);  //=> [7.6179261410151105, 4.822433357454532]
 // ... or alternatively evaluating the 2nd curve at the first intersection
-const p2 = evaluate(cubic2, x.t2);  //=> [7.6179261410151105, 4.8224333574545355]
+const p2 = evalDeCasteljau(cubic2, x.t2);  //=> [7.6179261410151105, 4.822433357454532]
 ```
 
 In general, the functions in this library are limited to points, lines, quadratic bezier
