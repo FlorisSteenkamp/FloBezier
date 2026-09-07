@@ -17,6 +17,14 @@ interface PageState {
     readonly selectedControlPointIdx: number | undefined;
     /** When `true`, the side panel refreshes live while dragging. */
     readonly liveUpdate: boolean;
+    /**
+     * Pending "add special" flow, if any. For arcs, `clicks` accumulates the
+     * picked center/start/end points until all three are provided.
+     */
+    readonly addSpecial?: {
+        kind: 'arcFromQuads' | 'arcFromCubics';
+        clicks: number[][];
+    } | undefined;
 }
 
 

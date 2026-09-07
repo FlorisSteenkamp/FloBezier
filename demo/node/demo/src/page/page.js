@@ -1,6 +1,6 @@
 import * as React from 'react';
 // import type { ClickFor } from '../state/click-for.js';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { toViewBoxStr } from './viewbox/viewbox.js';
 import { ButtonGroup } from '../components/simple-button-group.js';
 import { SimpleButton } from '../components/simple-button.js';
@@ -16,6 +16,7 @@ import { fitViewbox } from './viewbox/fit-viewbox.js';
 import { onZoomOutClicked } from './events/on-zoom-out-clicked.js';
 import { onZoomInClicked } from './events/on-zoom-in-clicked.js';
 import { onAddBezierClicked } from './events/on-add-bezier-clicked.js';
+import { onAddSpecialClicked } from './events/on-add-special-clicked.js';
 import { onClearBeziersClicked } from './events/on-clear-beziers-clicked.js';
 import { onDeleteSelectedBezier } from './events/on-delete-selected-bezier.js';
 function Page(props) {
@@ -73,6 +74,7 @@ function Page(props) {
     //     if (clickFor === 'spacer') { return; }
     //     upd(pageState, { clickFor });
     // }
+    const [specialOpen, setSpecialOpen] = useState(false);
     const {} = pageState.deduced;
     return (React.createElement(React.Fragment, null,
         React.createElement(Header, null),
@@ -113,7 +115,23 @@ function Page(props) {
                             React.createElement(SimpleButton, { onClick: () => onAddBezierClicked(stateControl, refSvg, 1), style: { borderRadius: '4px 0 0 4px' } }, "line"),
                             React.createElement(SimpleButton, { onClick: () => onAddBezierClicked(stateControl, refSvg, 2), style: { borderRadius: 0, borderLeft: 'none' } }, "quadratic"),
                             React.createElement(SimpleButton, { onClick: () => onAddBezierClicked(stateControl, refSvg, 3), style: { borderRadius: '0 4px 4px 0', borderLeft: 'none' } }, "cubic"))),
-                    React.createElement(SimpleButton, { onClick: () => { } }, "add special"),
+                    React.createElement("div", { style: { position: 'relative', display: 'inline-block' } },
+                        React.createElement(SimpleButton, { onClick: () => setSpecialOpen(o => !o) },
+                            "add special",
+                            pageState.addSpecial ? '… (click center, start, end)' : ''),
+                        specialOpen &&
+                            React.createElement("div", { style: {
+                                    position: 'absolute', top: '100%', left: '50%',
+                                    transform: 'translateX(-50%)', marginTop: '4px',
+                                    display: 'flex', flexDirection: 'column', minWidth: '150px',
+                                    background: 'white', border: '1px solid #91be91',
+                                    borderRadius: '4px', boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+                                    zIndex: 20, overflow: 'hidden'
+                                } }, [['cusp', 'cusp'], ['arcFromQuads', 'arc from quads'], ['arcFromCubics', 'arc from cubics']]
+                                .map(([kind, label]) => (React.createElement("button", { key: kind, type: "button", onClick: () => { setSpecialOpen(false); onAddSpecialClicked(stateControl, refSvg, kind); }, style: {
+                                    padding: '8px 12px', background: 'white', border: 'none',
+                                    textAlign: 'left', cursor: 'pointer', font: 'inherit'
+                                } }, label))))),
                     React.createElement(SimpleButton, { onClick: () => onClearBeziersClicked(stateControl, refSvg) }, "clear"))),
             React.createElement("span", { id: "x-coord", ref: refX, style: { userSelect: 'none', position: 'fixed', bottom: '13px', left: '380px', zIndex: 1 } }),
             React.createElement("span", { id: "y-coord", ref: refY, style: { userSelect: 'none', position: 'fixed', bottom: '13px', left: '450px', zIndex: 1 } }),

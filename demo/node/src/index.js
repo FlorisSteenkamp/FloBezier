@@ -170,6 +170,7 @@ export { setCubicSpeeds } from './angles-and-speeds/bezier-by-angles-and-speeds/
 export { closestPointsBetweenBeziers } from './simultaneous-properties/closest-distance-between-beziers/closest-points-between-beziers.js';
 export { maxAbsCoordinate } from './error-analysis/max-abs-coordinate.js';
 export { generateArcFromQuads } from './create/generate-arc-from-quads.js';
+export { generateArcFromCubics } from './create/generate-arc-from-cubics.js';
 export { calcQuadOffsetCurveXPoint } from './offset/calc-quad-offset-x-point.js';
 export { getMedialPoints } from './get-medial-points/double/get-medial-points.js';
 export { getMedialPointCoeffs } from './get-medial-points/double/get-medial-point-coeffs.js';

@@ -23,6 +23,8 @@ interface TransientState {
     hoveredControlPoint?: [number, number];
     mouseXY?: number[];
     $svgs: { [T in keyof ToDraw]: SVGElement[][] };
+    /** Circle markers showing the picked points of a pending "add special" arc flow. */
+    arcClickMarkers?: SVGCircleElement[];
 }
 
 
