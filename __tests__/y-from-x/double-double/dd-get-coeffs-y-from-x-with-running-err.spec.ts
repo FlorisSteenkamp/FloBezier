@@ -3,7 +3,7 @@ import { getRandomBezier } from '../../helpers/get-random-bezier.js';
 import { randomOnGrid } from '../../helpers/random-on-grid.js';
 import { allTrue, mapDouble, mapShewchukToAbsDouble, subtractShewchuk } from '../../helpers/map.js';
 import { γγ3 } from '../../../src/error-analysis/error-analysis.js';
-import { eGetCoeffsYFromX } from '../../../src/y-from-x/expansion/get-coeffs-y-from-x.js';
+import { eGetCoeffsYFromX } from '../../../src/y-from-x/expansion/e-get-coeffs-y-from-x.js';
 import { ddGetCoeffsYFromX_WithRunningErr } from '../../../src/y-from-x/double-double/dd-get-coeffs-y-from-x-with-running-err.js';
 
 const { abs } = Math;

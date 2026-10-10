@@ -40,12 +40,12 @@ function getCurvatureExtremaQuadraticPolyE(
 
     const n = eae(
         ede(
-            emd(x0,(ede(wx,[0,-x1]))),
-            emd(x1,(ede(x21,[0,-x1])))
+            emd(x0,(ede(wx,[x1]))),
+            emd(x1,(ede(x21,[x1])))
         ),
         ede(
-            emd(y0,(ede(wy,[0,-y1]))),
-            emd(y1,(ede(y21,[0,-y1])))
+            emd(y0,(ede(wy,[y1]))),
+            emd(y1,(ede(y21,[y1])))
         )
     );
 
