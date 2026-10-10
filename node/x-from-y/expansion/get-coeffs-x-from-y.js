@@ -1,4 +1,4 @@
-import { eGetCoeffsYFromX } from "../../y-from-x/expansion/get-coeffs-y-from-x.js";
+import { eGetCoeffsYFromX } from "../../y-from-x/expansion/e-get-coeffs-y-from-x.js";
 /**
  * Returns a polynomial whose roots are the `x` coordinates given the `y`
  * coordinate of the given bezier curve.

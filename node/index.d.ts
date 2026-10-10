@@ -200,7 +200,7 @@ export { getCoeffsYFromX } from './y-from-x/double/get-coeffs-y-from-x.js';
 export { getCoeffsYFromX_WithRunningErr } from './y-from-x/double/get-coeffs-y-from-x-with-running-err.js';
 export { ddGetCoeffsYFromX } from './y-from-x/double-double/dd-get-coeffs-y-from-x.js';
 export { ddGetCoeffsYFromX_WithRunningErr } from './y-from-x/double-double/dd-get-coeffs-y-from-x-with-running-err.js';
-export { eGetCoeffsYFromX } from './y-from-x/expansion/get-coeffs-y-from-x.js';
+export { eGetCoeffsYFromX } from './y-from-x/expansion/e-get-coeffs-y-from-x.js';
 export { getCoeffsXFromY } from './x-from-y/double/get-coeffs-x-from-y.js';
 export { getCoeffsXFromY_WithRunningErr } from './x-from-y/double/get-coeffs-x-from-y-with-running-err.js';
 export { ddGetCoeffsXFromY } from './x-from-y/double-double/dd-get-coeffs-x-from-y.js';

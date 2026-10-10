@@ -11,5 +11,5 @@
  * @param ps an order 1, 2 or 3 bezier curve
  * @param y the `y` coordinate
  */
-declare function eGetCoeffsXFromY(ps: number[][], y: number): number[][] | undefined;
+declare function eGetCoeffsXFromY(ps: number[][], y: number): number[][];
 export { eGetCoeffsXFromY };

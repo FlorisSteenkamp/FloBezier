@@ -10,8 +10,9 @@
  * @param c arc circle center
  * @param p1 arc goes from this point
  * @param p2 to a point on a line from c to this point (since the problem is over-specified)
- * (if `p1` and `p2` lies on a line through c a full circle is generated using
- * 4 cubic bezier curves)
+ * (if `p2` lies on the ray from `c` through `p1` (or `p2` equals `c`) a full
+ * circle is generated using 4 cubic bezier curves; if `p2` lies on the
+ * opposite ray a half circle is generated)
  *
  * @doc mdx
  */

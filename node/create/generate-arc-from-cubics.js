@@ -30,8 +30,9 @@ const circle = [
  * @param c arc circle center
  * @param p1 arc goes from this point
  * @param p2 to a point on a line from c to this point (since the problem is over-specified)
- * (if `p1` and `p2` lies on a line through c a full circle is generated using
- * 4 cubic bezier curves)
+ * (if `p2` lies on the ray from `c` through `p1` (or `p2` equals `c`) a full
+ * circle is generated using 4 cubic bezier curves; if `p2` lies on the
+ * opposite ray a half circle is generated)
  *
  * @doc mdx
  */
@@ -55,6 +56,24 @@ function generateArcFromCubics(c, p1, p2) {
     const rad = sqrt(lengthSquared(p1_));
     const rot = rotate(sinφ, cosφ);
     const trans = translate(c);
+    /** transforms the unit circle pieces to the actual arc */
+    const toArc = (pss) => {
+        const _pss = pss.map(ps => ps.map(p => trans(rot(scale(p, rad)))));
+        // snap the start point to `p1` exactly
+        _pss[0][0][0] = p1[0];
+        _pss[0][0][1] = p1[1];
+        return _pss;
+    };
+    if (θ === 0) {
+        // `p2` lies on the ray from `c` through `p1` (or `p2 === c`) - generate
+        // a full circle
+        const _pss = toArc(circle);
+        // snap the end point to `p1` exactly as well since the circle is closed
+        const last = _pss[_pss.length - 1];
+        last[last.length - 1][0] = p1[0];
+        last[last.length - 1][1] = p1[1];
+        return _pss;
+    }
     let Φ = 0;
     let i = 0;
     let pss = [];
@@ -68,10 +87,7 @@ function generateArcFromCubics(c, p1, p2) {
     const ray = toLength(rotate(-sinφ, cosφ, p2_), 2);
     const r = bezierBezierIntersection([[0, 0], ray], ps_);
     if (r.length === 0) { // just missed
-        const _pss = pss.map(ps => ps.map(p => trans(rot(scale(p, rad)))));
-        _pss[0][0][0] = p1[0];
-        _pss[0][0][1] = p1[1];
-        return _pss;
+        return toArc(pss);
     }
     let t = r[0].t2;
     if (t < 2 ** -40) { // last piece is too small
@@ -79,10 +95,7 @@ function generateArcFromCubics(c, p1, p2) {
         if (pss.length === 0) {
             return [];
         }
-        const _pss = pss.map(ps => ps.map(p => trans(rot(scale(p, rad)))));
-        _pss[0][0][0] = p1[0];
-        _pss[0][0][1] = p1[1];
-        return _pss;
+        return toArc(pss);
     }
     if (t > 1 - 2 ** -40) {
         t = 1;
@@ -90,10 +103,7 @@ function generateArcFromCubics(c, p1, p2) {
     const _ps_ = fromTo(ps_, 0, t);
     pss.pop();
     pss.push(_ps_);
-    const _pss = pss.map(ps => ps.map(p => trans(rot(scale(p, rad)))));
-    _pss[0][0][0] = p1[0];
-    _pss[0][0][1] = p1[1];
-    return _pss;
+    return toArc(pss);
 }
 export { generateArcFromCubics };
 //# sourceMappingURL=generate-arc-from-cubics.js.map

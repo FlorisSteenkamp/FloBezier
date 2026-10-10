@@ -31,16 +31,17 @@ const circle = [
  * Returns an arc approximation using unit eighth circle quadratic bezier
  * curves. The result is returned as an array of quadratic bezier curves.
  * 
- * * if the last returned arc is approximately smaller than 2**-40 of a quarter
+ * * if the last returned arc is approximately smaller than 2**-40 of an eighth
  * circle it is not added to the returned value
- * * if the last returned arc is approximately (1 - 2**-40) of a quarter
- * circle a full quarter circle is added to the returned value
+ * * if the last returned arc is approximately (1 - 2**-40) of an eighth
+ * circle a full eighth circle is added to the returned value
  * 
  * @param c arc circle center
  * @param p1 arc goes from this point
  * @param p2 to a point on a line from c to this point (since the problem is over-specified)
- * (if `p1` and `p2` lies on a line through c a full circle is generated using
- * 8 quadratic bezier curves)
+ * (if `p2` lies on the ray from `c` through `p1` (or `p2` equals `c`) a full
+ * circle is generated using 8 quadratic bezier curves; if `p2` lies on the
+ * opposite ray a half circle is generated)
  *  
  * @doc mdx
  */
@@ -71,6 +72,29 @@ function generateArcFromQuads(
     const rad = sqrt(lengthSquared(p1_));
     const rot = rotate(sinφ, cosφ);
     const trans = translate(c);
+
+    /** transforms the unit circle pieces to the actual arc */
+    const toArc = (pss: number[][][]) => {
+        const _pss = pss.map(ps => ps.map(p => trans(rot(scale(p,rad)))));
+        // snap the start point to `p1` exactly
+        _pss[0][0][0] = p1[0];
+        _pss[0][0][1] = p1[1];
+
+        return _pss;
+    }
+
+    if (θ === 0) {
+        // `p2` lies on the ray from `c` through `p1` (or `p2 === c`) - generate
+        // a full circle
+        const _pss = toArc(circle);
+        // snap the end point to `p1` exactly as well since the circle is closed
+        const last = _pss[_pss.length - 1];
+        last[last.length - 1][0] = p1[0];
+        last[last.length - 1][1] = p1[1];
+
+        return _pss;
+    }
+
     let Φ = 0; 
     let i = 0;
     let pss: number[][][] = [];
@@ -86,12 +110,7 @@ function generateArcFromQuads(
     const r = bezierBezierIntersection([[0,0],ray], ps_);
 
     if (r.length === 0) {  // just missed
-        const _pss = pss.map(ps => ps.map(p => trans(rot(scale(p,rad)))));
-
-        _pss[0][0][0] = p1[0];
-        _pss[0][0][1] = p1[1];
-
-        return _pss;
+        return toArc(pss);
     }
 
     let t = r[0].t2;
@@ -99,11 +118,7 @@ function generateArcFromQuads(
         pss.pop();
         if (pss.length === 0) { return []; }
 
-        const _pss = pss.map(ps => ps.map(p => trans(rot(scale(p,rad)))));
-        _pss[0][0][0] = p1[0];
-        _pss[0][0][1] = p1[1];
-
-        return _pss;
+        return toArc(pss);
     }
     if (t > 1 - 2**-40) {
         t = 1;
@@ -114,12 +129,7 @@ function generateArcFromQuads(
     pss.pop();
     pss.push(_ps_);
 
-
-    const _pss = pss.map(ps => ps.map(p => trans(rot(scale(p,rad)))));
-    _pss[0][0][0] = p1[0];
-    _pss[0][0][1] = p1[1];
-
-    return _pss;
+    return toArc(pss);
 }
 
 

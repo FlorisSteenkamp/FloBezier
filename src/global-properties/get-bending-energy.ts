@@ -11,19 +11,17 @@ const { sqrt } = Math;
   * Returns an accurate approximation of the bending energy of the given bezier
   * curve.
   * 
+  * @param ps an order 0, 1, 2 or 3 bezier curve given by an ordered array of
+  * its control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
   * @param maxCurviness defaults to 1.125
   * @param gaussOrder defaults to 4
-  * @param ps a cubic bezier curve given by an ordered array of its
-  * control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
-  * 
+  *
   * @doc mdx
   */
 function getBendingEnergy(
         ps: number[][],
         maxCurviness = 1.125,
         gaussOrder: 4|16|64 = 4) {
- 
-    // return getBendingEnergyByGauss(ps, maxCurviness, gaussOrder);
 
     const c = classify(ps);
 
@@ -34,16 +32,22 @@ function getBendingEnergy(
         return 0;
     }
 
-    if (c.realOrder === 3) {
-        if (c.nodeType === 'cusp') {
-            return Infinity;
-        }
+    if (c.nodeType === 'cusp') {
+        return Infinity;
+    }
 
-        // it is a well behaved 'acnode', 'crunode' or 'explicit'
+    // Note: the integrand is chosen by the number of control points and *not*
+    // by `c.realOrder` since e.g. a cubic that is really a quadratic (i.e.
+    // `realOrder === 2`) still has 4 control points (which `κi3` handles
+    // correctly but `κi2` does not).
+
+    if (ps.length === 4) {
+        // it is a well behaved 'acnode', 'crunode', 'explicit' or a cubic that
+        // is really a quadratic
         return getBendingEnergyByGauss(κi3, ps, maxCurviness, gaussOrder);
     }
 
-    if (c.realOrder === 2) {
+    if (ps.length === 3) {
         // it is a well behaved 'quadratic'
         return getBendingEnergyByGauss(κi2, ps, maxCurviness, gaussOrder);
     }
