@@ -14,8 +14,6 @@ bounds), then 31–37 (quick cleanup that also shrinks the published package).
 
 (results stay correct except in near-degenerate cases, where "certified" claims fail)
 
-80. **Double precision running error bounds omit second-order terms, so they can be 0 while the error is not.** In `src/implicit-form/double/get-implicit-form3-with-running-error.ts` (and the other double precision `...WithRunningError` functions following the same pattern) the error bound of a product `a*b` of two inexact values is taken as `a_*|b| + |a|*b_ + |ab|`, i.e. without the second-order term `a_*b_`. That is normally negligible, but when a computed value rounds to exactly 0 while its true value does not, all terms vanish. Verified: for nearly-quadratic cubics (a degree-elevated quadratic whose rounded thirds leave a tiny cubic term) the power basis coefficient `b3` is computed as `0` (exact value about `-7e-15`, with a correct, non-zero error bound) and the bounds of `vₓₓₓ`, `vₓₓᵧ`, `vₓᵧᵧ`, `vᵧᵧᵧ` all become `0` although their errors are about `1e-42` - in about 1500 coefficients over 1000 such curves. The double-double implicit forms are unaffected (they compute those coefficients far more accurately). Consumers include `getCoeffsYFromX_WithRunningErr` (and its x-from-y wrapper). Fix: add the second-order terms (`a_*b_`), or bound each product with `(|a| + a_)*(|b| + b_)`-style magnitudes.
-
 20. `src/transformation/split/from-to/from-to-2-incl-error-bound.ts:110` — `_yy1 = 0` hard-coded; should be `_t*_yB + _y1`. And line 303 uses signed `yC` instead of `_yC`. Both feed `getIntervalBox` for quadratics.
 
 21. `src/global-properties/bounds/get-interval-box/get-interval-box-dd.ts:270,294` — `_tt2*x2` uses the signed coordinate; the bound can go negative for negative coordinates.
@@ -42,7 +40,7 @@ bounds), then 31–37 (quick cleanup that also shrinks the published package).
 
 (package.json `files` includes `src`)
 
-33. `src/intersection/bezier-bezier-intersection/get-coefficients/double/` — Whole directory unreferenced; two files fully commented out, family incomplete, (item 30's error-bound bugs in `get-coeffs-bez3-bez3.ts` are now fixed). Note: `performance/src/naive/-naive.ts` still imports `get-coeffs-bez3-bez3.ts`.
+33. `src/intersection/bezier-bezier-intersection/get-coefficients/double/` — Whole directory unreferenced; two files fully commented out, family incomplete, (item 30's error-bound bugs in `get-coeffs-bez3-bez3.ts` are now fixed). Note: `performance/src/naive/-naive.ts` still imports `get-coeffs-bez3-bez3.ts`. Its error bounds also omit the 2nd order term `γ1*a_*b_` for products of two inexact values (fixed elsewhere as former item 80 - use the `_xEff = _x + γ1*x_` pattern if this directory is revived).
 
 34. `src/transformation/split/split-by-deviation-from-straigh-line.ts` — Not exported, imports lack `.js` so would fail under ESM if wired in.
 
