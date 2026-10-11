@@ -14,8 +14,6 @@ bounds), then 31–37 (quick cleanup that also shrinks the published package).
 
 (results stay correct except in near-degenerate cases, where "certified" claims fail)
 
-18. `src/intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez3-dd.ts:865,868,1055,1058,1138,1141,1211`, `.../get-coeffs-bez3-bez2-dd.ts:297,300,346,354`, `.../get-coeffs-bez2-bez2-dd.ts:225,228` — Thirteen dd×dd products add `abs(...)` instead of `2*abs(...)` per the convention in error-bound-calc.txt. Also `get-coeffs-bez3-bez2-dd.ts:426-451` swaps the `_x`/`x_` convention (conservative, but not what the comments say).
-
 19. `src/implicit-form/double-double/get-implicit-form3-dd-with-running-error.ts:372` — `_s3*_q6` should be `_s3*q6_` (the double sibling at line 314 is right). Lines 372, 376, 381 also use the single-`abs` convention for dd×dd products. The constant-term bound `v_` is under-estimated.
 
 20. `src/transformation/split/from-to/from-to-2-incl-error-bound.ts:110` — `_yy1 = 0` hard-coded; should be `_t*_yB + _y1`. And line 303 uses signed `yC` instead of `_yC`. Both feed `getIntervalBox` for quadratics.

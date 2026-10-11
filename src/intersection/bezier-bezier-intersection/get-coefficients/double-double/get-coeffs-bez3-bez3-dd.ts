@@ -268,11 +268,11 @@ function getCoeffsBez3Bez3Dd(
     //    3*c2*c3c3*vₓₓₓ + 
     //    3*d2*d3d3*vᵧᵧᵧ;  
     //-----------------------
-    const $w1 = 2*$c2d3 + $c3d2;    
+    const $w1 = 2*$c2d3 + $c3d2;
     const _w1 = abs($w1);
     const w1 = qaq(qm2(c2d3),c3d2);
     const w1_ = 2*c2d3_ + c3d2_ + _w1;
-    const $w2 = 2*$c3d2 + $c2d3;        
+    const $w2 = 2*$c3d2 + $c2d3;
     const _w2 = abs($w2);
     const w2 = qaq(qm2(c3d2),c2d3);
     const w2_ = 2*c3d2_ + c2d3_ + abs($w2);
@@ -861,10 +861,10 @@ function getCoeffsBez3Bez3Dd(
     const ma_ = d1_*_d1d1 + _d1*d1d1_ + 2*abs($ma);
     const $mb = $vₓₓ*$r8;
     const mb = qmq(vₓₓ,r8);
-    const mb_ = vₓₓ_*_r8 + _vₓₓ*r8_ + abs($mb);
+    const mb_ = vₓₓ_*_r8 + _vₓₓ*r8_ + 2*abs($mb);
     const $mc = $vᵧᵧ*$r9;
     const mc = qmq(vᵧᵧ,r9);
-    const mc_ = vᵧᵧ_*_r9 + _vᵧᵧ*r9_ + abs($mc);
+    const mc_ = vᵧᵧ_*_r9 + _vᵧᵧ*r9_ + 2*abs($mc);
     const $md = $m1 + $r7;
     const md = qaq(m1,r7);
     const md_ = m1_ + r7_ + abs($md);
@@ -1051,10 +1051,10 @@ function getCoeffsBez3Bez3Dd(
     const lp_ = vᵧᵧ_*_lk + _vᵧᵧ*lk_ + 2*abs($lp);
     const $lq = $c2*$vₓ;
     const lq = qmq(c2,vₓ);
-    const lq_ = c2_*_vₓ + _c2*vₓ_ + abs($lq);
+    const lq_ = c2_*_vₓ + _c2*vₓ_ + 2*abs($lq);
     const $lr = $d2*$vᵧ;
     const lr = qmq(d2,vᵧ);
-    const lr_ = d2_*_vᵧ + _d2*vᵧ_ + abs($lr);
+    const lr_ = d2_*_vᵧ + _d2*vᵧ_ + 2*abs($lr);
     const $ls = $lq + $lr;
     const ls = qaq(lq,lr);
     const ls_ = lq_ + lr_ + abs($ls);
@@ -1134,10 +1134,10 @@ function getCoeffsBez3Bez3Dd(
     const rm_ = rk_ + rl_ + abs($rm);
     const $rn = $c1*$vₓ;
     const rn = qmq(c1,vₓ);
-    const rn_ = c1_*_vₓ + _c1*vₓ_ + abs($rn);
+    const rn_ = c1_*_vₓ + _c1*vₓ_ + 2*abs($rn);
     const $ro = $d1*$vᵧ;
     const ro = qmq(d1,vᵧ);
-    const ro_ = d1_*_vᵧ + _d1*vᵧ_ + abs($ro);
+    const ro_ = d1_*_vᵧ + _d1*vᵧ_ + 2*abs($ro);
     const $rp = $rn + $ro;
     const rp = qaq(rn,ro);
     const rp_ = rn_ + ro_ + abs($rp);
@@ -1207,7 +1207,7 @@ function getCoeffsBez3Bez3Dd(
     const p6_ = pc_ + pd_ + abs($p6);
     const $pe = $c0d0*$vₓᵧ;
     const pe = qmq(c0d0,vₓᵧ);
-    const pe_ = _c0d0*vₓᵧ_ + abs($pe);
+    const pe_ = _c0d0*vₓᵧ_ + 2*abs($pe);
     const $p9 = $p6 + $pe;
     const p9 = qaq(p6,pe);
     const p9_ = p6_ + pe_ + abs($p9);
