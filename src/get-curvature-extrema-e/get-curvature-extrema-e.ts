@@ -1,3 +1,4 @@
+import type { Extrema } from "../get-curvature-extrema/extrema.js";
 import { roots, eHorner, eDifferentiate } from "flo-poly";
 import { eDiff, eMult, eSign } from 'big-float-ts';
 import { getAbsCurvatureExtremaPolysE } from "./get-abs-curvature-extrema-polys-e.js";
@@ -10,20 +11,6 @@ import { getAbsCurvatureExtremaPolysDd } from "../get-curvature-extrema-dd/get-a
 import { γγ3 } from "../error-analysis/error-analysis.js";
 
 const { abs } = Math;
-
-/** 
- * Curve extrema
- * 
- * @doc
- */
-interface Extrema {
-    /** list of paramter t values where minima occur */
-    minima: number[],
-    /** list of paramter t values where maxima occur */
-    maxima: number[],
-    /** list of paramter t values where inflection points occur */
-    inflections: number[]
-}
 
 
 /**
@@ -124,4 +111,4 @@ function getCurvatureExtremaE(ps: number[][]): Extrema {
 }
 
 
-export { getCurvatureExtremaE, Extrema }
+export { getCurvatureExtremaE }

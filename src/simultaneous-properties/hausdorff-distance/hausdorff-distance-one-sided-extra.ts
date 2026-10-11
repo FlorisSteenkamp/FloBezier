@@ -21,15 +21,15 @@ const { max } = Math;
  */
 interface HausdorffDistanceOneSidedExtra {
     /** the (approximate) one-sided Hausdorff distance `h(A,B)` */
-    d: number;
+    readonly d: number;
     /** the parameter on `A` where the supremum is (approximately) achieved */
-    tA: number;
+    readonly tA: number;
     /** the point on `A` at parameter `tA` */
-    pA: number[];
+    readonly pA: number[];
     /** the parameter on `B` of the closest point on `B` to `pA` */
-    tB: number;
+    readonly tB: number;
     /** the closest point on `B` to `pA` */
-    pB: number[];
+    readonly pB: number[];
 }
 
 
@@ -108,8 +108,6 @@ function hausdorffDistanceOneSidedExtra(
         const { tS, tE, hL, hR } = interval;
 
         const tM = (tS + tE) / 2;
-        const [ELL, ELR] = calcHErrorBound(A, tS, tM);
-        const [ERL, ERR] = calcHErrorBound(A, tM, tE);
 
         //---- get hM ---------------------------
         const pM = evalDeCasteljau(A, tM);
@@ -136,6 +134,13 @@ function hausdorffDistanceOneSidedExtra(
             // The lower bound is by far the best approximation for difficult cases (see the paper).
             break;
         }
+
+        // Note: the error bounds are only needed if we continue (hence they
+        // are calculated only after the termination checks above) and are
+        // (on purpose) calculated by splitting the *original* curve `A` (and
+        // not the current piece) so as not to accumulate round-off.
+        const [ELL, ELR] = calcHErrorBound(A, tS, tM);
+        const [ERL, ERR] = calcHErrorBound(A, tM, tE);
 
         const iL = { tS, tE: tM, hL, hR: hM, hEL: ELL, hER: ELR };
         const iR = { tS: tM, tE, hL: hM, hR, hEL: ERL, hER: ERR };

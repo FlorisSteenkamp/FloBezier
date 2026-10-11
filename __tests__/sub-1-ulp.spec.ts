@@ -33,11 +33,33 @@ describe('sub1Ulp', function() {
             expect(sub1Ulp(n)).toEqual(r);
         }
 
-        // zero
+        // zero (standard nextUp/nextDown semantics - not returned unaltered)
         {
             const n = 0;
-            const r = 0;
-            expect(sub1Ulp(n)).toEqual(r);
+            const r = -5e-324;
+            expect(Object.is(sub1Ulp(n), r)).toBe(true);
+        }
+        // negative zero
+        {
+            const n = -0;
+            const r = -5e-324;
+            expect(Object.is(sub1Ulp(n), r)).toBe(true);
+        }
+        // infinity
+        {
+            const n = Infinity;
+            const r = 1.7976931348623157e+308;
+            expect(Object.is(sub1Ulp(n), r)).toBe(true);
+        }
+        // negative infinity
+        {
+            const n = -Infinity;
+            const r = -Infinity;
+            expect(Object.is(sub1Ulp(n), r)).toBe(true);
+        }
+        // NaN
+        {
+            expect(sub1Ulp(NaN)).toBeNaN();
         }
 
         // edge case on positive power transition (positive number)
@@ -133,87 +155,87 @@ describe('sub1Ulp', function() {
 
         //-----------------------
         // Subnormals - positive
-        // Note: subnormals should be returned unaltered
+        // Note: standard nextUp/nextDown semantics apply, i.e. the
+        // neighbouring subnormal is returned
         //-----------------------
 
         // smallest normal (positive)
         {
             const n = 2.2250738585072014e-308;
             const r = 2.225073858507201e-308;
-            expect(sub1Ulp(n)).toEqual(r);
+            expect(Object.is(sub1Ulp(n), r)).toBe(true);
         }
         // max subnormal (positive)
         {
             const n = 2.225073858507201e-308;
-            const r = 2.225073858507201e-308;
-            expect(sub1Ulp(n)).toEqual(r);
+            const r = 2.2250738585072004e-308;
+            expect(Object.is(sub1Ulp(n), r)).toBe(true);
         }
         // 2nd largest subnormal (positive)
         {
             const n = 2.2250738585072004e-308;
-            const r = 2.2250738585072004e-308;
-            expect(sub1Ulp(n)).toEqual(r);
+            const r = 2.2250738585072e-308;
+            expect(Object.is(sub1Ulp(n), r)).toBe(true);
         }
         // some randomish subnormal (positive)
         {
             const n = 1.2250738585072005e-308;
-            const r = 1.2250738585072005e-308;
-            expect(sub1Ulp(n)).toEqual(r);
+            const r = 1.2250738585072e-308;
+            expect(Object.is(sub1Ulp(n), r)).toBe(true);
         }
         // min value (positive)
         {
             const n = 5e-324;
-            const r = 5e-324;
-            expect(sub1Ulp(n)).toEqual(r);
+            const r = 0;
+            expect(Object.is(sub1Ulp(n), r)).toBe(true);
         }
         // 2nd smallest value (positive)
         {
             const n = 1e-323;
-            const r = 1e-323;
-            expect(sub1Ulp(n)).toEqual(r);
+            const r = 5e-324;
+            expect(Object.is(sub1Ulp(n), r)).toBe(true);
         }
 
 
         //-----------------------
         // Subnormals - negative
-        // Note: subnormals should be returned unaltered
         //-----------------------
 
         // smallest normal (negative)
         {
             const n = -2.2250738585072014e-308;
             const r = -2.225073858507202e-308;
-            expect(sub1Ulp(n)).toEqual(r);
+            expect(Object.is(sub1Ulp(n), r)).toBe(true);
         }
         // max subnormal (negative)
         {
             const n = -2.225073858507201e-308;
-            const r = -2.225073858507201e-308;
-            expect(sub1Ulp(n)).toEqual(r);
+            const r = -2.2250738585072014e-308;
+            expect(Object.is(sub1Ulp(n), r)).toBe(true);
         }
         // 2nd largest subnormal (negative)
         {
             const n = -2.2250738585072004e-308;
-            const r = -2.2250738585072004e-308;
-            expect(sub1Ulp(n)).toEqual(r);
+            const r = -2.225073858507201e-308;
+            expect(Object.is(sub1Ulp(n), r)).toBe(true);
         }
         // some randomish subnormal (negative)
         {
             const n = -1.2250738585072005e-308;
-            const r = -1.2250738585072005e-308;
-            expect(sub1Ulp(n)).toEqual(r);
+            const r = -1.225073858507201e-308;
+            expect(Object.is(sub1Ulp(n), r)).toBe(true);
         }
         // min value (negative)
         {
             const n = -5e-324;
-            const r = -5e-324;
-            expect(sub1Ulp(n)).toEqual(r);
+            const r = -1e-323;
+            expect(Object.is(sub1Ulp(n), r)).toBe(true);
         }
         // 2nd smallest value (negative)
         {
             const n = -1e-323;
-            const r = -1e-323;
-            expect(sub1Ulp(n)).toEqual(r);
+            const r = -1.5e-323;
+            expect(Object.is(sub1Ulp(n), r)).toBe(true);
         }
     });
 });

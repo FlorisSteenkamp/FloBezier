@@ -1,6 +1,5 @@
 import { brent } from 'flo-poly';
 import { getCurvatureExtrema } from '../get-curvature-extrema/get-curvature-extrema.js';
-import { toPowerBasis } from '../to-power-basis/to-power-basis/double/to-power-basis.js';
 import { getQuadOffsetCurveFunctions } from './get-quad-offset-curve-functions.js';
 import { normal } from '../local-properties-at-t/normal/double/normal.js';
 
@@ -9,24 +8,34 @@ const { EPSILON: eps} = Number;
 
 
 /**
- * Calculates and returns the point (as the `t` value) of intersection of the
- * offset curves of a quadratic bezier curve (if any).
- * 
- * * returns `undefined` if no such point exist
- * * offset is in normal direction of curve as `t` goes from `0` to `1`
+ * Calculates and returns the parameter values `[tS, tE]` (with `tS < tE`) at
+ * which the offset curve of the given *quadratic* bezier curve intersects
+ * itself (if at all), i.e. the offset curve point at `tS` coincides with the
+ * offset curve point at `tE`.
+ *
+ * * returns `undefined` if no such self-intersection exists (e.g. if `|D|` is
+ * smaller than the minimum radius of curvature of the curve) or if the
+ * self-intersection is not within the (slightly extended) parameter range
+ * `[-0.125, 1.125]`
+ * * offset is in the normal direction of the curve as `t` goes from `0` to `1`
  * * offset can be negative
- * 
+ * * an error is thrown if the given curve is not quadratic
+ *
  * * see [this Desmos graph (zoom out)](https://www.desmos.com/calculator/eynkl9vzwb)
-  * 
- * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ *
+ * @param ps a quadratic bezier curve given as an ordered array of its
+ * control points, e.g. `[[0,0],[1,1],[2,0]]`
  * @param D distance of offset curve (can be negative)
- * 
+ *
  * @doc mdx
  */
 function calcQuadOffsetCurveXPoint(
         ps: number[][],
-        D: number) {
+        D: number): number[] | undefined {
+
+    if (ps.length !== 3) {
+        throw new Error('The given bezier curve must be quadratic (order 2).');
+    }
 
     const m = getCurvatureExtrema(ps).maxima?.[0];
 
@@ -75,30 +84,25 @@ function calcQuadOffsetCurveXPoint(
     }
 
     const F = 2**16*eps;
-    const C = F*m;  // assume some "large" error for now - improve precision later for guaranteed error bounds 
+    const C = F*m;  // assume some "large" error for now - improve precision later for guaranteed error bounds
     const _m = m - C;
     const m_ = m + C;
 
-    // if (_m < F || m_ > 1 - F) {
-    //     // intersection is very close to endpoint
-    //     return undefined;
-    // }
+    const lb = -0.125;
+    const ub = 1.125;
 
-    const rS = brent(XY, -0.125, _m);
-    const rE = brent(XY, m_, 1.125);
+    // `brent` requires the root to be bracketed, i.e. a sign change over the
+    // interval - if there is none there is no self-intersection (at least not
+    // within the extended parameter range).
+    if (sign(XY(lb)) === sign(XY(_m)) || sign(XY(m_)) === sign(XY(ub))) {
+        return undefined;
+    }
+
+    const rS = brent(XY, lb, _m);
+    const rE = brent(XY, m_, ub);
 
     return [rS,rE];
 }
 
 
 export { calcQuadOffsetCurveXPoint }
-
-
-// Quokka tests
-// import { rotate90Degrees } from 'flo-vector2d';
-
-// const ps = [[-175,200],[-160,125],[-120,200]];
-// calcQuadOffsetCurveXPoint(ps, -20);//?
-// const ps90 = ps.map(rotate90Degrees);
-// calcQuadOffsetCurveXPoint(ps90, -20);//?
-

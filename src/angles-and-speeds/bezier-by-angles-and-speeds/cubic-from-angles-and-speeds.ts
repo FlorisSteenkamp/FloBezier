@@ -1,6 +1,6 @@
 import { rotate, translate } from "flo-vector2d";
 import { fromPowerBasis } from "../../from-power-basis/from-power-basis.js";
-import { AnglesAndSpeeds } from "./angles-and-speeds.js";
+import { AnglesAndSpeeds } from "../angles-and-speeds.js";
 
 
 const { cos, sin } = Math;

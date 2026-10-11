@@ -4,15 +4,15 @@
  */
 interface HausdorffDistanceOneSidedExtra {
     /** the (approximate) one-sided Hausdorff distance `h(A,B)` */
-    d: number;
+    readonly d: number;
     /** the parameter on `A` where the supremum is (approximately) achieved */
-    tA: number;
+    readonly tA: number;
     /** the point on `A` at parameter `tA` */
-    pA: number[];
+    readonly pA: number[];
     /** the parameter on `B` of the closest point on `B` to `pA` */
-    tB: number;
+    readonly tB: number;
     /** the closest point on `B` to `pA` */
-    pB: number[];
+    readonly pB: number[];
 }
 /**
  * Calculates and returns an accurate approximation to the one-sided Hausdorff

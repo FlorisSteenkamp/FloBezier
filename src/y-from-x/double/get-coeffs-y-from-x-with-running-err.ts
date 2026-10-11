@@ -9,11 +9,19 @@ const { abs } = Math;
  * Returns a polynomial whose roots are the `y` coordinates given the `x`
  * coordinate of the given bezier curve.
  * 
- * @param ps 
+ * * the coefficient-wise error bound returned still needs to be scaled by
+ * `γ1 === u/(1 - u)` to get the actual error bound
+ * * an error is thrown if the given curve is not of order 1, 2 or 3
+ * 
+ * @param ps an order 1, 2 or 3 bezier curve given as an ordered array of its
+ * control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param x the `x` coordinate
+ * 
+ * @doc
  */
 function getCoeffsYFromX_WithRunningErr(
         ps: number[][],
-        x: number) {
+        x: number): { coeffs: number[]; errorBound: number[]; } {
 
     const _x = abs(x);
 
@@ -143,6 +151,8 @@ function getCoeffsYFromX_WithRunningErr(
             errorBound: [p0_, p1_, p2_, p3_]
         };
     }
+
+    throw new Error('The given bezier curve must be of order 1, 2 or 3.');
 }
 
 

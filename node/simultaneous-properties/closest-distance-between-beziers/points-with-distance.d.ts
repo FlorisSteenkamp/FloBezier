@@ -1,13 +1,16 @@
-/** @internal */
+/**
+ * A pair of closest points (one on each of two bezier curves) and the
+ * distance between them, see [[closestPointsBetweenBeziers]].
+ */
 interface PointsWithDistance {
-    pA: {
+    readonly pA: {
         p: number[];
         t: number;
     };
-    pB: {
+    readonly pB: {
         p: number[];
         t: number;
     };
-    d: number;
+    readonly d: number;
 }
-export { PointsWithDistance };
+export type { PointsWithDistance };

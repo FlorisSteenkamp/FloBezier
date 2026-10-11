@@ -66,4 +66,31 @@ describe('getTAtLength', function() {
             expect(sReal).toBeNearly(2**10,s)
         }
     });
+
+    it('it should handle order 0 curves and out-of-range lengths',
+    function() {
+        {
+            // a point - previously a meaningless value was returned
+            expect(getTAtLength([[1,2]], 0)).toEqual(0);
+            expect(getTAtLength([[1,2]], 1)).toEqual(0);
+        }
+        {
+            // negative length - clipped to `t === 0`
+            const ps = getRandomCubic(0);
+            expect(getTAtLength(ps, -1)).toEqual(0);
+        }
+        {
+            // length larger than the curve length up to `t === 1.125` - 
+            // clipped to `t === 1.125`
+            const ps = getRandomCubic(0);
+            const s = length([0,1.125], ps)*(1 + 2**-30);
+            expect(getTAtLength(ps, s)).toEqual(1.125);
+        }
+        {
+            // the full length should give `t === 1`
+            const ps = getRandomCubic(0);
+            const s = length([0,1], ps);
+            expect(getTAtLength(ps, s)).toBeNearly(2**10, 1);
+        }
+    });
 });

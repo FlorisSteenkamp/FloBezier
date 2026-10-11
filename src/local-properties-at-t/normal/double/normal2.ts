@@ -9,6 +9,10 @@ import { fromTo as fromToBezier } from "../../../transformation/split/from-to.js
  * that point and rotating it by 90 degrees.
  *
  * * uses double precision calculations internally
+ * * unlike [[normal]], if the tangent vanishes at `t` (e.g. at a cusp or
+ * where control points coincide) a normal is still returned (based on the
+ * direction the curve leaves the point in; or arrives at the point in if
+ * `t === 1`); only if all control points coincide is `[0,0]` returned
  *
  * @param ps a linear, quadratic or cubic bezier curve given by its ordered
  * control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
@@ -24,66 +28,80 @@ function normal2(ps: number[][], t: number): number[] {
         return n;
     }
 
+    // Degenerate cases - the tangent vanishes at `t`
+
+    const v = getDirection(ps, t);
+
+    return [-v[1], v[0]]; // tangent === [v[0], v[1]]
+}
+
+
+/**
+ * Returns the direction the given curve leaves the point at `t` in (or arrives
+ * in if `t === 1`) given that the tangent vanishes at `t`; returns `[0,0]` if
+ * all control points coincide.
+ *
+ * @internal
+ */
+function getDirection(ps: number[][], t: number): number[] {
     if (ps.length === 4) {
-        // Degenerate cases
+        const [p0, p1, p2, p3] = ps;
 
-        const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
+        if (t === 0) {
+            // Points 0 and 1 (necessarily) coincide; use the first point that
+            // does not coincide with point 0 (if any) for the direction.
+            if (!pointsCoincide(p0, p2)) { return fromToVec(p0, p2); }
+            if (!pointsCoincide(p0, p3)) { return fromToVec(p0, p3); }
 
-        if (x0 === x1 && y0 === y1) {
-            // Points 0 and 1 coincide
-            if (x1 !== x2 || y1 !== y2) {
-                // Point 2 does not coincide
-                const v = fromToVec(ps[0], ps[2]);
-                return [-v[1], v[0]]; // tangent === [v[0], v[1]]
-            }
-
-            // Point 2 also coincides. Now, only return a normal if point 3 does not coincide.
-            if (x2 !== x3 || y2 !== y3) {
-                // Point 3 does not coincide
-                const v = fromToVec(ps[0], ps[3]);
-                return [-v[1], v[0]]; // tangent === [v[0], v[1]]
-            }
-
-            // All four points coincide. No normal possible.
-            return [0, 0];
+            return [0, 0];  // All four points coincide. No normal possible.
         }
 
-        if (x2 === x3 && y2 === y3) {
-            // Point 3 and 2 coincide
-            if (x2 !== x1 || y2 !== y1) {
-                // Point 1 does not coincide
-                const v = fromToVec(ps[1], ps[3]);
-                return [-v[1], v[0]]; // tangent === [v[0], v[1]]
-            }
+        if (t === 1) {
+            // Points 2 and 3 (necessarily) coincide; use the last point that
+            // does not coincide with point 3 (if any) for the direction.
+            if (!pointsCoincide(p1, p3)) { return fromToVec(p1, p3); }
+            if (!pointsCoincide(p0, p3)) { return fromToVec(p0, p3); }
 
-            // Point 1 also coincides. Now, only return a normal if point 0 does not coincide.
-            if (x1 !== x0 || y1 !== y0) {
-                // Point 0 does not coincide.
-                const v = fromToVec(ps[0], ps[3]);
-                return [-v[1], v[0]]; // tangent === [v[0], v[1]]
-            }
-
-            // Case that all four points coincide is already handled before.
+            return [0, 0];  // All four points coincide. No normal possible.
         }
 
-        // An interior cusp is the only remaining cause of the degenerate normal
-        // Split curve at the cusp
+        // An interior cusp is the only remaining cause of the degenerate
+        // normal. Split the curve at the cusp and use the direction from the
+        // cusp to the 3rd control point of the right piece (the 2nd control
+        // point coincides with the cusp since the tangent vanishes there).
         const ps_ = fromToBezier(ps, t, 1);
-        const v = fromToVec(ps_[0], ps_[2]);
 
-        return [-v[1], v[0]]; // tangent === [v[0], v[1]]
+        return fromToVec(ps_[0], ps_[2]);
     }
 
     if (ps.length === 3) {
-        const [[x0, y0], [x1, y1], [x2, y2]] = ps;
-            if (x0 !== x2 || y0 !== y2) {
-            // Points 0 and 1, or points 1 and 2 coincide, but not all three
-            const v = fromToVec(ps[0], ps[2]);
-            return [-v[1], v[0]]; // tangent === [v[0], v[1]]
+        const [p0, , p2] = ps;
+
+        if (t === 0 || t === 1) {
+            // Points 0 and 1 coincide (if `t === 0`) or points 1 and 2
+            // coincide (if `t === 1`) - the direction is from point 0 to
+            // point 2 in both cases (and `[0,0]` if all three coincide)
+            return fromToVec(p0, p2);
         }
+
+        // An interior cusp is the only remaining cause of the degenerate
+        // normal (the control polygon 'folds back' on itself, e.g.
+        // `[[0,0],[1,0],[0,0]]`). Split the curve at the cusp and use the
+        // direction from the cusp to the last control point of the right
+        // piece (its 2nd control point coincides with the cusp).
+        const ps_ = fromToBezier(ps, t, 1);
+
+        return fromToVec(ps_[0], ps_[2]);
     }
 
-    return [0, 0]; // All points coincident - no normal possible
+    return [0, 0];
 }
+
+
+/** @internal */
+function pointsCoincide(p: number[], q: number[]): boolean {
+    return p[0] === q[0] && p[1] === q[1];
+}
+
 
 export { normal2 };

@@ -4,6 +4,8 @@ export type { X } from './intersection/bezier-bezier-intersection/x.js';
 export type { Extrema } from './get-curvature-extrema/get-curvature-extrema.js';
 export type { ClassificationType, Classification, NodeType } from './global-properties/classification/classify.js';
 export type { AnglesAndSpeeds } from './angles-and-speeds/angles-and-speeds.js';
+export type { PointsWithDistance } from './simultaneous-properties/closest-distance-between-beziers/points-with-distance.js';
+export type { FootAndEndpointInfo } from './simultaneous-properties/closest-and-furthest-point-on-bezier/foot-and-endpoint-info.js';
 export { totalCurvature } from './global-properties/total-curvature.js';
 export { bezierPieceToBezier } from './bezier-piece/bezier-piece-to-bezier.js';
 export { isBezierPieceZeroLength } from './bezier-piece/is-bezier-piece-zero-length.js';
@@ -208,3 +210,6 @@ export { ddGetCoeffsXFromY_WithRunningErr } from './x-from-y/double-double/dd-ge
 export { eGetCoeffsXFromY } from './x-from-y/expansion/get-coeffs-x-from-y.js';
 export { splitByDeviationFromStraighLine_Cubic } from './transformation/split/split-by-deviation-from-straight-line-cubic.js';
 export { splitByDeviationFromStraighLine_Quad } from './transformation/split/split-by-deviation-from-straigh-line-quad.js';
+export { getImplicitForm1WithRunningError } from './implicit-form/double/get-implicit-form1-with-running-error.js';
+export { getImplicitForm2WithRunningError } from './implicit-form/double/get-implicit-form2-with-running-error.js';
+export { getImplicitForm3WithRunningError } from './implicit-form/double/get-implicit-form3-with-running-error.js';

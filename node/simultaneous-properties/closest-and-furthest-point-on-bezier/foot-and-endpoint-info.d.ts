@@ -7,4 +7,4 @@ type FootAndEndpointInfo = {
     ri: RootInterval;
     dSquaredI: number[];
 };
-export { FootAndEndpointInfo };
+export type { FootAndEndpointInfo };

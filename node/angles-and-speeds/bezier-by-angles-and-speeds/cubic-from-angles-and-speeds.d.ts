@@ -1,4 +1,4 @@
-import { AnglesAndSpeeds } from "./angles-and-speeds.js";
+import { AnglesAndSpeeds } from "../angles-and-speeds.js";
 /**
  * Returns a cubic bezier curve (given by its control points) with the given
  * angles-and-speeds parameters.

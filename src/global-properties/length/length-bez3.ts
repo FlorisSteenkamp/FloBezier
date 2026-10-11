@@ -1,35 +1,59 @@
-import { gaussQuadrature } from "flo-gauss-quadrature";
 import { ds } from "../../local-properties-at-t/ds.js";
-import { splitByCurvature } from "../../transformation/split/split-by-curvature.js";
-import { fromTo3InclErrorBound } from "../../transformation/split/from-to/from-to-3-incl-error-bound.js";
+import { getSpeedStationaryPoints } from "./speed-stationary-points.js";
+import { integrateBetweenBreakpoints } from "./integrate-adaptive.js";
 
 
 /**
- * Returns the curve length of the given cubic bezier curve within the 
- * specified parameter interval.
- * 
- * @param interval the paramter interval over which the length is 
- * to be calculated (often `[0,1]`)
- * @param ps a cubic bezier curve given by an ordered array of its control
- * points, e.g. `[[0,0],[1,1],[2,1],[3,3]]`
- * @param maxCurviness optional maximum 'curviness' (defined as the total angle
- * change between consecutive line segments between the curve control points)
- * before subdivision occurs; defaults to 0.4 radians
- * @param gaussOrder the optional order of the Gaussian Quadrature performed 
- * between curve segments; defaults to 16; can be 4,16 or 64
+ * The default relative error tolerance used when calculating curve lengths.
+ *
+ * * note that the error estimate used internally is conservative so that the
+ * actual error is typically much smaller than this
+ *
+ * @internal
+ */
+const defaultLengthTolerance = 2**-44;
+
+/** 
+ * The minimum relative error tolerance for calculating curve lengths - lower
+ * tolerances are clamped to this value since the Gauss-Kronrod error estimate
+ * has a floor of `50*eps` (relative) and lower tolerances would thus never be
+ * met (resulting in extremely slow calculations for no gain in accuracy).
  * 
  * @internal
  */
- function lengthBez3(
-         interval: number[], 
-        ps: number[][],
-        maxCurviness = 0.4,
-        gaussOrder: 4|16|64 = 16): number {
+const minLengthTolerance = 2**-45;
 
-    const tS = interval[0];
-    const tE = interval[1];
+
+/**
+ * Returns the curve length of the given cubic bezier curve within the
+ * specified parameter interval.
+ *
+ * * the speed (i.e. `|B'(t)|`) is integrated using adaptive Gauss-Kronrod
+ * quadrature (with tanh-sinh quadrature as a fallback near cusps) after first
+ * splitting the interval at the points where the speed is stationary (so that
+ * (near) cusps always lie at sub-interval endpoints where the quadrature can
+ * handle them)
+ *
+ * @param interval the paramter interval over which the length is
+ * to be calculated (often `[0,1]`)
+ * @param ps a cubic bezier curve given by an ordered array of its control
+ * points, e.g. `[[0,0],[1,1],[2,1],[3,3]]`
+ * @param tolerance optional; defaults to `2**-44`; the (approximate) relative
+ * error tolerance (the actual error is typically much smaller); values below
+ * `2**-45` are clamped to `2**-45`
+ *
+ * @internal
+ */
+ function lengthBez3(
+        interval: number[],
+        ps: number[][],
+        tolerance = defaultLengthTolerance): number {
+
+    let tS = interval[0];
+    let tE = interval[1];
 
     if (tS === tE) { return 0; }
+    if (tS > tE) { [tS,tE] = [tE,tS]; }
 
     const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = ps;
     // Keep line below to ensure zero length curve returns zero!
@@ -39,19 +63,12 @@ import { fromTo3InclErrorBound } from "../../transformation/split/from-to/from-t
         return 0;
     }
 
-    const ps_ = fromTo3InclErrorBound(ps,tS,tE).ps;
-    const ts = splitByCurvature(ps_, maxCurviness);
+    const ts = [tS, ...getSpeedStationaryPoints(ps, tS, tE), tE];
 
-    let total = 0;
-    for (let i=0; i<ts.length-1; i++) {
-        const tS = ts[i];
-        const tE = ts[i+1];
+    if (tolerance < minLengthTolerance) { tolerance = minLengthTolerance; }
 
-        total += gaussQuadrature(ds(ps_), [tS,tE], gaussOrder);
-    }
-
-    return total;
+    return integrateBetweenBreakpoints(ds(ps), ts, tolerance);
 }
 
 
-export { lengthBez3 }
+export { lengthBez3, defaultLengthTolerance }

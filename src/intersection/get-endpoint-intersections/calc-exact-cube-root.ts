@@ -1,7 +1,6 @@
 import { bGcdInt, scaleFloatssToBigintss } from "flo-poly";
 import { bigintToExpansion } from './bigint-to-expansion.js';
 import { bCbrt } from './b-cbrt.js';
-import { bAbs } from './b-abs.js';
 import { sumBigints } from './sum-bigints.js';
 
 

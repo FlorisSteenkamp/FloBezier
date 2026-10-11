@@ -76,13 +76,72 @@ describe("normal2", function () {
                 }
             }
 
-            // {
-            //   const ps = [[0, 0], [3, 0]];
-            //   const t = 0.5;
-            //   let r = normal(ps, t);
-            //   // for lines there should still be a normal defined
-            //   expect(r).toEqual([-0, 3]);
-            // }
+            // a non-degenerate case must agree with `normal`
+            {
+                const ps = [[0,0],[1,1],[2,1],[3,0]];
+                expect(normal2(ps, 0.3)).toEqual(normal(ps, 0.3));
+            }
+
+            // Below only the *direction* of the returned normal is checked
+            // (its magnitude is not specified)
+            const dir = (v: number[]) => {
+                const l = Math.hypot(v[0], v[1]);
+                return l === 0 ? [0,0] : [v[0]/l, v[1]/l];
+            }
+
+            // quadratic that goes 'there and back' - the tangent vanishes 
+            // at `t === 0.5` where the curve turns back towards `P0`
+            {
+                const ps = [[0,0],[1,0],[0,0]];
+                expect(normal(ps, 0.5)).toEqual([-0,0]);  // tangent vanishes
+                expect(dir(normal2(ps, 0.5))).toBeNearly(2**2, [0,-1]);
+            }
+
+            // quadratic whose control polygon folds back (but `P0 !== P2`) -
+            // after the cusp (at `t === 0.6`) the curve moves in the -x 
+            // direction
+            {
+                const ps = [[0,0],[3,0],[1,0]];
+                expect(normal(ps, 0.6)).toEqual([-0,0]);  // tangent vanishes
+                expect(dir(normal2(ps, 0.6))).toBeNearly(2**2, [0,-1]);
+            }
+
+            // quadratic with coincident endpoint control points
+            {
+                expect(dir(normal2([[0,0],[0,0],[2,1]], 0))).toBeNearly(2**2, dir([-1,2]));
+                expect(dir(normal2([[0,0],[2,1],[2,1]], 1))).toBeNearly(2**2, dir([-1,2]));
+                expect(normal2([[1,1],[1,1],[1,1]], 0.5)).toEqual([-0,0]);
+            }
+
+            // cubic with `P0 === P1` *and* an interior cusp at `t === 0.5`
+            // (`x(t) = 3t² - 4t³`) - at the cusp the curve leaves in the -x
+            // direction (previously the `t === 0` direction was returned)
+            {
+                const ps = [[0,0],[0,0],[1,0],[-1,0]];
+                expect(dir(normal2(ps, 0))).toBeNearly(2**2, [0,1]);
+                expect(normal(ps, 0.5)).toEqual([-0,0]);  // tangent vanishes
+                expect(dir(normal2(ps, 0.5))).toBeNearly(2**2, [0,-1]);
+            }
+
+            // cubics with coincident endpoint control points
+            {
+                expect(dir(normal2([[0,0],[0,0],[0,0],[1,0]], 0))).toBeNearly(2**2, [0,1]);
+                expect(dir(normal2([[0,0],[1,0],[1,0],[1,0]], 1))).toBeNearly(2**2, [0,1]);
+                expect(normal2([[1,1],[1,1],[1,1],[1,1]], 0.5)).toEqual([-0,0]);
+            }
+
+            // cubic cusp generated at `t === 0.5`
+            {
+                const ps = generateCuspAtHalf3([0,0], [6,2], [3,0]);
+                expect(normal(ps, 0.5)).toBeNearly(2**4, [-0,0]);  // tangent vanishes
+                // the tangent just after the cusp gives the direction (to 
+                // within the small angle the curve turns through in `2**-20`)
+                const tanAfter = tangent(ps, 0.5 + 2**-20);
+                const expected = dir([-tanAfter[1], tanAfter[0]]);
+                const actual = dir(normal2(ps, 0.5));
+                expect(abs(actual[0] - expected[0])).toBeLessThan(1e-5);
+                expect(abs(actual[1] - expected[1])).toBeLessThan(1e-5);
+            }
 
             // {
             //   const ps = generateCuspAtHalf3([0, 0], [6, 2], [3, 0]);

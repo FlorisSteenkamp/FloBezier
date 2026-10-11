@@ -1,4 +1,4 @@
-import { fromTo3InclErrorBound } from "../transformation/split/from-to/from-to-3-incl-error-bound.js";
+import { fromTo3 } from "../transformation/split/from-to/from-to-3.js";
 import { getInflections } from "./get-inflections.js";
 import { totalCurvature } from './total-curvature.js';
 const { abs } = Math;
@@ -23,7 +23,7 @@ function totalAbsoluteCurvature(ps, interval = [0, 1]) {
         if (tS === tE) {
             return 0;
         }
-        const ps_ = fromTo3InclErrorBound(ps, tS, tE).ps;
+        const ps_ = fromTo3(ps, tS, tE);
         const ts = [0, ...getInflections(ps_), 1];
         let total = 0;
         for (let i = 0; i < ts.length - 1; i++) {

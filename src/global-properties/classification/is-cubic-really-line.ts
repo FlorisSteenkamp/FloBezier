@@ -1,5 +1,6 @@
 import { eSign, eDiff, scaleExpansion, twoSum } from 'big-float-ts';
 import { isCollinear } from "./is-collinear.js";
+import { isCubicReallyQuad } from "./is-cubic-really-quad.js";
 
 
 const sce = scaleExpansion;
@@ -21,11 +22,15 @@ const esign = eSign;
  * @doc mdx
  */
 function isCubicReallyLine(ps: number[][]) {
-    // note: if cubic is really a quad then
+    if (!isCollinear(ps)) { return false; }
+
+    // The test below (that the hybrid quadratic is really a line) is only
+    // valid if the cubic is really a quadratic, i.e. if
     // x3 + 3*(x1 - x2) === x0 && 
     // y3 + 3*(y1 - y2) === y0
-
-    if (!isCollinear(ps)) { return false; }
+    // so check that first (collinearity alone does not imply it, e.g.
+    // `[[0,0],[0,0],[3,0],[3,0]]` is collinear but `x(t) = 9t² - 6t³`).
+    if (!isCubicReallyQuad(ps)) { return false; }
 
     const [p0,p1,p2,p3] = ps;
     const [x0,y0] = p0;

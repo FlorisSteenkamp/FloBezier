@@ -1,13 +1,13 @@
 
 /** @internal */
 interface HausdorffInterval {
-    tS: number;
-    tE: number;
-    hL: number;   // Hausdorff distance left
-    hR: number;   // Hausdorff distance right
-    hEL: number;  // Hausdorff error left
-    hER: number;  // Hausdorff error right
+    readonly tS: number;
+    readonly tE: number;
+    readonly hL: number;   // Hausdorff distance left
+    readonly hR: number;   // Hausdorff distance right
+    readonly hEL: number;  // Hausdorff error left
+    readonly hER: number;  // Hausdorff error right
 }
 
 
-export { HausdorffInterval }
+export type { HausdorffInterval }

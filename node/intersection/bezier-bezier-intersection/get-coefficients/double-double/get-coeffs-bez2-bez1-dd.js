@@ -78,13 +78,13 @@ function getCoeffsBez2Bez1Dd(ps1, ps2) {
     // a1**2*vₓₓ + a1*b1*vₓᵧ + b1**2*vᵧᵧ
     const $p1 = $c1c1 * $vₓₓ;
     const p1 = qmq(c1c1, vₓₓ);
-    const p1_ = c1c1_ * _vₓₓ * _c1c1 * vₓₓ_ + 2 * abs($p1);
+    const p1_ = c1c1_ * _vₓₓ + _c1c1 * vₓₓ_ + 2 * abs($p1);
     const $p2 = $d1d1 * $vᵧᵧ;
     const p2 = qmq(d1d1, vᵧᵧ);
-    const p2_ = d1d1_ * _vᵧᵧ * _d1d1 * vᵧᵧ_ + 2 * abs($p2);
+    const p2_ = d1d1_ * _vᵧᵧ + _d1d1 * vᵧᵧ_ + 2 * abs($p2);
     const $p3 = $c1d1 * $vₓᵧ;
     const p3 = qmq(c1d1, vₓᵧ);
-    const p3_ = c1d1_ * _vₓᵧ * _c1d1 * vₓᵧ_ + 2 * abs($p3);
+    const p3_ = c1d1_ * _vₓᵧ + _c1d1 * vₓᵧ_ + 2 * abs($p3);
     const $p4 = $p1 + $p2;
     const p4 = qaq(p1, p2);
     const p4_ = p1_ + p2_ + abs($p4);

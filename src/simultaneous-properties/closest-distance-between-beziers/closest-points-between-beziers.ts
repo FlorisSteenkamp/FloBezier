@@ -138,8 +138,6 @@ function closestPointsBetweenBeziers(
         const { tS, tE, dL, dR, pL, pR } = interval;
 
         const tM = (tS + tE)/2;
-        const [eLL,eLR] = calcHErrorBound(A,tS,tM);
-        const [eRL,eRR] = calcHErrorBound(A,tM,tE);
 
         //---- get dM ---------------------------
         const pM = evalDeCasteljau(A, tM);
@@ -174,6 +172,13 @@ function closestPointsBetweenBeziers(
             // The upper bound is by far the best approximation for difficult cases (see the paper).
             return [bestUpper!];
         }
+
+        // Note: the error bounds are only needed if we continue (hence they
+        // are calculated only after the termination checks above) and are
+        // (on purpose) calculated by splitting the *original* curve `A` (and
+        // not the current piece) so as not to accumulate round-off.
+        const [eLL,eLR] = calcHErrorBound(A,tS,tM);
+        const [eRL,eRR] = calcHErrorBound(A,tM,tE);
 
         const iL: DistanceInterval = { tS: tS, tE: tM, dL: dL, dR: dM, eL: eLL, eR: eLR, pL: pL, pR: pM };
         const iR: DistanceInterval = { tS: tM, tE: tE, dL: dM, dR: dR, eL: eRL, eR: eRR, pL: pM, pR: pR };

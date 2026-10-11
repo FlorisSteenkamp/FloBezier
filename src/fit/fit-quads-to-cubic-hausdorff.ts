@@ -1,5 +1,5 @@
 import { classify } from "../global-properties/classification/classify.js";
-import { fromTo3InclErrorBound } from "../transformation/split/from-to/from-to-3-incl-error-bound.js";
+import { fromTo3 } from "../transformation/split/from-to/from-to-3.js";
 import { cubicToQuadratic } from "../transformation/degree-or-type/cubic-to-quadratic.js";
 import { bezierSelfIntersection } from '../intersection/self-intersection/bezier-self-intersection.js';
 import { hausdorffDistance } from '../simultaneous-properties/hausdorff-distance/hausdorff-distance.js';
@@ -82,7 +82,7 @@ function fitQuadsToCubicHausdorff(
 
         const [tS,tE] = ts;
         /** the piece of the cubic bezier to approximate */
-        const psCubic = fromTo3InclErrorBound(ps, tS, tE).ps;
+        const psCubic = fromTo3(ps, tS, tE);
         const psQuad = cubicToQuadratic(psCubic);
         if (psQuad === undefined || 
             hausdorffDistance(psQuad, psCubic) > tolerance) {

@@ -33,8 +33,8 @@ describe('length', function() {
             for (let i=0; i<count; i++) {
                 const ps = getRandomBezier_(order as 0|1|2|3)(i);
 
-                const l1 = length([0,0.3], ps, 1.01, 64);
-                const l2 = length([0.3,1], ps, 1.01, 64);
+                const l1 = length([0,0.3], ps);
+                const l2 = length([0.3,1], ps);
                 const l = l1 + l2;
 
                 const tl = totalLength(ps);

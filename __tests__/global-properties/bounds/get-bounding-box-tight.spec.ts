@@ -50,4 +50,24 @@ describe('getBoundingBoxTight', function() {
             ]);
         }
     });
+
+    it('it should handle degenerate beziers (e.g. all control points coincident)', 
+    function() {
+        {
+            // all control points coincide - previously threw
+            const ps = [[1,1],[1,1],[1,1],[1,1]];
+            expect(getBoundingBoxTight(ps)).toEqual([[1,1],[1,1],[1,1],[1,1]]);
+        }
+        {
+            const ps = [[5,5],[5,5]];
+            expect(getBoundingBoxTight(ps)).toEqual([[5,5],[5,5],[5,5],[5,5]]);
+        }
+        {
+            // the curve returns to its start point at `t === 0.5` - 
+            // previously gave `NaN`s
+            const ps = [[0,0],[1,0],[-1,0],[0,0]];
+            const box = getBoundingBoxTight(ps);
+            expect(box.every(p => p.every(c => !isNaN(c)))).toBe(true);
+        }
+    });
 });

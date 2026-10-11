@@ -1,19 +1,30 @@
 /**
  * Returns the curve length (for a linear, quadratic or cubic bezier curve) in
- * the specified interval calculated using Gaussian Quadrature *with* adaptive
- * subdivision for improved accuracy.
+ * the specified interval.
+ *
+ * * lines and quadratic bezier curves are calculated using (numerically
+ * stable) closed form expressions
+ * * cubic bezier curves are calculated using adaptive Gauss-Kronrod quadrature
+ * (with tanh-sinh quadrature as a fallback near cusps) after first splitting
+ * the interval at the points where the speed is stationary (so that (near)
+ * cusps always lie at sub-interval endpoints where the quadrature can handle
+ * them)
+ * * **accuracy:** typically within a few ulps (relative) of the true length;
+ * one exception is a tiny interval straddling a (near) cusp of a cubic in
+ * which case the *relative* error is limited by the cancellation in
+ * evaluating the derivative in double precision near the cusp (the *absolute*
+ * error is still tiny relative to the total curve length though)
  *
  * @param interval the paramter interval over which the length is
  * to be calculated (typically `[0,1]`)
  * @param ps an order 0,1,2 or 3 bezier curve given as an array of its control
  * points, e.g. `[[1,2],[3,4],[5,6],[7,8]]`
- * @param maxCurviness optional maximum 'curviness' (defined as the total angle
- * change between consecutive line segments between the curve control points)
- * before subdivision occurs; defaults to 0.4 radians
- * @param gaussOrder the optional order of the Gaussian Quadrature performed
- * between curve segments; defaults to 16; can be 4,16 or 64
+ * @param tolerance optional; defaults to `2**-44`; the (approximate) relative
+ * error tolerance (only relevant for cubic bezier curves); note that the error
+ * estimate used internally is conservative so that the actual error is
+ * typically much smaller; values below `2**-45` are clamped to `2**-45`
  *
  * @doc mdx
  */
-declare function length(interval: number[], ps: number[][], maxCurviness?: number, gaussOrder?: 4 | 16 | 64): number;
+declare function length(interval: number[], ps: number[][], tolerance?: number): number;
 export { length };

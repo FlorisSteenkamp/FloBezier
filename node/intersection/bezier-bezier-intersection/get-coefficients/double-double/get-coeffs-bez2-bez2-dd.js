@@ -180,7 +180,6 @@ function getCoeffsBez2Bez2Dd(ps1, ps2) {
     const pb = qaq(qm2(d0d2), d1d1);
     const pb_ = 2 * _d0d2_ + d1d1_ + abs($pb);
     const $pc = $c0d2 + $c1d1;
-    const _pc = abs($pc);
     const pc = qaq(c0d2, c1d1);
     const pc_ = _c0d2_ + c1d1_ + abs($pc);
     const $pd = $pc + $c2d0;

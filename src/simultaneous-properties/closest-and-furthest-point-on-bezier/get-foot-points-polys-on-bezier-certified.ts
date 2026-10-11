@@ -10,28 +10,29 @@ import { getClosestOnBezier3FromPointErrorCounters } from "./get-coeffs/get-clos
 
 
 /**
- * Returns the footpoint(s) (and parameter `t` value(s)) on the
- * given bezier curve to the given point (with `t ∈ [0,1]`).
- * 
- * * guaranteed accurate to within `4*Number.EPSILON` in the returned `t` 
- * value(s)
- * * the returned point(s) are objects with the following properties:
- *     * `p`: the best estimate point on the bezier curve (calculated from the root interval `ri`)
- *     * `t`: the best estimate `t` parameter value (calculated from the root interval `ri`)
- *     * `d`: the best estimate closest distance from the point to the bezier curve (calculated from the root interval `ri`)
- *     * `ri`: a root interval guaranteed to contain the actual `t` value
- *     * `box`: a small box guaranteed to contain the relevant point on the bezier curve
- *     * `dSquaredI`: a small squared distance interval guaranteed to contain the actual distance squared
- *        between the point and the bezier curve
- * 
+ * Returns the polynomial (in `t`) whose roots are the parameter `t` values of
+ * the foot point(s) on the given bezier curve to the given point, i.e. the
+ * points on the curve where the line to the given point is perpendicular to
+ * the curve.
+ *
+ * The result is returned in the form expected by `flo-poly`'s `roots`
+ * function, i.e. as an object with the following properties:
+ *     * `polyDd`: the polynomial's coefficients in double-double precision
+ *     * `polyE`: a coefficient-wise absolute error bound of `polyDd`
+ *     * `getPolyExact`: a function returning the polynomial's coefficients
+ *       exactly (as Shewchuk expansions) - only called if needed
+ *
+ * * an order 0 curve (a point) has no foot points so the non-zero constant
+ * polynomial `1` is returned
+ *
  * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param p a point, e.g. `[1,2]`
- * 
+ *
  * @doc
  */
 function getFootPointsOnBezierPolysCertified(
-        ps: number[][], 
+        ps: number[][],
         p: number[]): {
             polyDd: number[][];
             polyE: number[];
@@ -42,30 +43,30 @@ function getFootPointsOnBezierPolysCertified(
 
     if (order === 3) {
         return {
-            polyDd: getFootpointPoly3Dd(ps, p), 
-            polyE: getClosestOnBezier3FromPointErrorCounters(ps, p).map(e => 10*2*e), 
+            polyDd: getFootpointPoly3Dd(ps, p),
+            polyE: getClosestOnBezier3FromPointErrorCounters(ps, p).map(e => 10*2*e),
             getPolyExact: () => getFootpointPoly3Exact(ps, p)
         }
     } else if (order === 2) {
         return {
-            polyDd: getFootpointPoly2Dd(ps, p), 
-            polyE: getClosestOnBezier2FromPointErrorCounters(ps, p).map(e => 8*2*e), 
+            polyDd: getFootpointPoly2Dd(ps, p),
+            polyE: getClosestOnBezier2FromPointErrorCounters(ps, p).map(e => 8*2*e),
             getPolyExact: () => getFootpointPoly2Exact(ps, p)
         }
     } else if (order === 1) {
         return {
-            polyDd: getFootpointPoly1Dd(ps, p), 
-            polyE: getClosestOnBezier1FromPointErrorCounters(ps, p).map(e => 6*2*e), 
+            polyDd: getFootpointPoly1Dd(ps, p),
+            polyE: getClosestOnBezier1FromPointErrorCounters(ps, p).map(e => 6*2*e),
             getPolyExact: () => getFootpointPoly1Exact(ps, p)
         }
     } else if (order === 0) {
         return {
-            polyDd: [[0,1]], 
-            polyE: [0], 
+            polyDd: [[0,1]],
+            polyE: [0],
             getPolyExact: () => [[1]]
         }
     } else {
-        throw new Error('The given bezier curve must be of order 1, 2 or 3');
+        throw new Error('The given bezier curve must be of order <= 3');
     }
 }
 

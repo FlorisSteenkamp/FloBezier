@@ -13,5 +13,5 @@
 declare function ddGetCoeffsXFromY_WithRunningErr(ps: number[][], y: number): {
     coeffs: number[][];
     errorBound: number[];
-} | undefined;
+};
 export { ddGetCoeffsXFromY_WithRunningErr };

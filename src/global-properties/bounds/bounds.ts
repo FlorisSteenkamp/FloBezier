@@ -4,9 +4,9 @@
  */
 interface Bound {
     /** a certified (max `4*eps` for `t ∈ [0,1]`) `t` range containing the bound */
-    ts: number[];
+    readonly ts: number[];
     /** a certified `box` containing the bound */
-    box: number[][];
+    readonly box: number[][];
 }
 
 
@@ -14,8 +14,8 @@ interface Bound {
  * x-coordinate bounds used in specifying bounding boxes of bezier curves.
  */
 interface XBounds {
-    minX: Bound;
-    maxX: Bound; 
+    readonly minX: Bound;
+    readonly maxX: Bound; 
 }
 
 

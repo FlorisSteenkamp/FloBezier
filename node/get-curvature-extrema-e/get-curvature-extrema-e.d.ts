@@ -1,16 +1,4 @@
-/**
- * Curve extrema
- *
- * @doc
- */
-interface Extrema {
-    /** list of paramter t values where minima occur */
-    minima: number[];
-    /** list of paramter t values where maxima occur */
-    maxima: number[];
-    /** list of paramter t values where inflection points occur */
-    inflections: number[];
-}
+import type { Extrema } from "../get-curvature-extrema/extrema.js";
 /**
  * Returns the parameter `t` values (in `[0,1]`) of local minimum / maximum
  * absolute curvature for the given bezier curve.
@@ -27,4 +15,4 @@ interface Extrema {
  * @doc mdx
  */
 declare function getCurvatureExtremaE(ps: number[][]): Extrema;
-export { getCurvatureExtremaE, Extrema };
+export { getCurvatureExtremaE };

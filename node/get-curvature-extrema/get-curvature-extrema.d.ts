@@ -1,16 +1,4 @@
-/**
- * Curve extrema
- *
- * @doc
- */
-interface Extrema {
-    /** list of paramter t values where minima occur */
-    readonly minima: number[];
-    /** list of paramter t values where maxima occur */
-    readonly maxima: number[];
-    /** list of paramter t values where inflection points occur */
-    readonly inflections: number[];
-}
+import type { Extrema } from './extrema.js';
 /**
  * Returns the parameter `t` values (in `[0,1]`) of local minimum / maximum
  * absolute curvature for the given bezier curve as well as inflection points.

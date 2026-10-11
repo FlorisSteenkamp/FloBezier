@@ -6,20 +6,20 @@
  */
  interface AnglesAndSpeeds {
     /** initial tangent angle in radians (angle at t === 0) */
-    α: number;
+    readonly α: number;
     /** terminal tangent angle in radians (angle at t === 1) */
-    β: number;
+    readonly β: number;
     /** inital speed (speed at t === 0) */
-    s0: number;
+    readonly s0: number;
     /** terminal speed (speed at t === 1) */
-    s1: number;
+    readonly s1: number;
     /** the distance between the curve endpoints (cannot be 0) */
-    L: number;
+    readonly L: number;
     /** the global curve rotation */
-    rot: number;
+    readonly rot: number;
     /** the global curve position offset (point at at t === 0) */
-    p: number[];
+    readonly p: number[];
 }
 
 
-export { AnglesAndSpeeds }
+export type { AnglesAndSpeeds }

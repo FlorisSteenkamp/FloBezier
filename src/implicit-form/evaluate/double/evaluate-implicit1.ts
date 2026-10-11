@@ -1,4 +1,3 @@
-import { ImplicitForm1Coeffs } from "../../implicit-form-types.js";
 
 
 /**

@@ -200,4 +200,7 @@ export { ddGetCoeffsXFromY_WithRunningErr } from './x-from-y/double-double/dd-ge
 export { eGetCoeffsXFromY } from './x-from-y/expansion/get-coeffs-x-from-y.js';
 export { splitByDeviationFromStraighLine_Cubic } from './transformation/split/split-by-deviation-from-straight-line-cubic.js';
 export { splitByDeviationFromStraighLine_Quad } from './transformation/split/split-by-deviation-from-straigh-line-quad.js';
+export { getImplicitForm1WithRunningError } from './implicit-form/double/get-implicit-form1-with-running-error.js';
+export { getImplicitForm2WithRunningError } from './implicit-form/double/get-implicit-form2-with-running-error.js';
+export { getImplicitForm3WithRunningError } from './implicit-form/double/get-implicit-form3-with-running-error.js';
 //# sourceMappingURL=index.js.map

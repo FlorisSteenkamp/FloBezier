@@ -51,7 +51,6 @@ function getCoeffsBez3Bez3Dd(ps1, ps2) {
     const _vᵧᵧ = abs($vᵧᵧ);
     const _vₓ = abs($vₓ);
     const _vᵧ = abs($vᵧ);
-    const _v = abs($v);
     const $c1 = c1[1];
     const $c2 = c2[1];
     const $c3 = c3[1];

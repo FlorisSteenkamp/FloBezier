@@ -5,21 +5,7 @@ import { isCollinear } from "../global-properties/classification/is-collinear.js
 import { isCubicReallyQuad } from "../global-properties/classification/is-cubic-really-quad.js";
 import { cubicToQuadratic } from "../transformation/degree-or-type/cubic-to-quadratic.js";
 import { getCurvatureExtremaQuadraticPolyDd } from './get-curvature-extrema-quadratic-poly-dd.js';
-
-
-/** 
- * Curve extrema
- * 
- * @doc
- */
-interface Extrema {
-    /** list of paramter t values where minima occur */
-    minima: number[],
-    /** list of paramter t values where maxima occur */
-    maxima: number[],
-    /** list of paramter t values where inflection points occur */
-    inflections: number[]
-}
+import type { Extrema } from "../get-curvature-extrema/extrema.js";
 
 
 /**
@@ -92,4 +78,4 @@ function getCurvatureExtremaDd(ps: number[][]): Extrema {
 }
 
 
-export { getCurvatureExtremaDd, Extrema }
+export { getCurvatureExtremaDd }

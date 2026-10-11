@@ -55,7 +55,8 @@ describe('evalDeCasteljauWithErrDd', function() {
             const ps = [[1/3,1/3]];
             const t = 1;
             let r = evalDeCasteljauWithErrDd(ps, [0,t]);
-            expect(r).toEqual({ p: [[1/3,1/3]], pE: [0,0] });
+            // a point - the result is still returned in double-double precision
+            expect(r).toEqual({ p: [[0,1/3],[0,1/3]], pE: [0,0] });
         }
 
         {

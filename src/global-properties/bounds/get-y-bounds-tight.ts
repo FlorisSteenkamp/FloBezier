@@ -41,7 +41,7 @@ import { getIntervalBox } from './get-interval-box/get-interval-box.js';
         if (box[0][1] < minY.box[0][1]) { 
             minY = { ts, box } 
         }
-        if (box[1][1] > maxY.box[0][1]) { 
+        if (box[1][1] > maxY.box[1][1]) { 
             maxY = { ts, box } 
         }
     }

@@ -1,5 +1,5 @@
 import { classify } from "../global-properties/classification/classify.js";
-import { fromTo3InclErrorBound } from "../transformation/split/from-to/from-to-3-incl-error-bound.js";
+import { fromTo3 } from "../transformation/split/from-to/from-to-3.js";
 import { cubicToQuadratic } from "../transformation/degree-or-type/cubic-to-quadratic.js";
 import { getAbsAreaBetween } from './get-abs-area-between.js';
 import { bezierSelfIntersection } from '../intersection/self-intersection/bezier-self-intersection.js';
@@ -70,7 +70,7 @@ function fitQuadsToCubic(ps, tolerance) {
         const ts = stack.pop();
         const [tS, tE] = ts;
         /** the piece of the cubic bezier to approximate */
-        const psCubic = fromTo3InclErrorBound(ps, tS, tE).ps;
+        const psCubic = fromTo3(ps, tS, tE);
         const psQuad = cubicToQuadratic(psCubic);
         const spanRatio = tE - tS;
         if (psQuad === undefined ||

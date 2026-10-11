@@ -6,12 +6,12 @@
 type NodeType = 'crunode' | 'acnode' | 'cusp' | 'explicit';
 interface ClassificationType {
     /** the order based on the number of control points */
-    order: 0 | 1 | 2 | 3;
+    readonly order: 0 | 1 | 2 | 3;
     /** the real order when considering degenerate cases */
-    realOrder: 0 | 1 | 2 | 3;
+    readonly realOrder: 0 | 1 | 2 | 3;
     /** `true` if *all* points are collinear, false otherwise */
-    collinear: boolean;
-    nodeType: NodeType | 'n/a';
+    readonly collinear: boolean;
+    readonly nodeType: NodeType | 'n/a';
 }
 declare const point: {
     readonly order: 0;
@@ -263,4 +263,5 @@ declare const classification: {
  * @doc mdx
  */
 declare function classify(ps: number[][]): Classification;
-export { ClassificationType, Classification, NodeType, classify, classifications, classification };
+export type { ClassificationType, Classification, NodeType };
+export { classify, classifications, classification };

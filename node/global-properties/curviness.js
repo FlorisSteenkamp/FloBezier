@@ -28,7 +28,7 @@ function curviness(ps) {
     const vs = [];
     for (let i = 0; i < ps.length - 1; i++) {
         const v = [ps[i + 1][0] - ps[i][0], ps[i + 1][1] - ps[i][1]];
-        if ((v[0] !== 0 || v[1]) !== 0) {
+        if (v[0] !== 0 || v[1] !== 0) {
             vs.push(v);
         }
     }

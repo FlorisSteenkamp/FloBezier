@@ -1,10 +1,10 @@
 /** @internal */
 interface HausdorffInterval {
-    tS: number;
-    tE: number;
-    hL: number;
-    hR: number;
-    hEL: number;
-    hER: number;
+    readonly tS: number;
+    readonly tE: number;
+    readonly hL: number;
+    readonly hR: number;
+    readonly hEL: number;
+    readonly hER: number;
 }
-export { HausdorffInterval };
+export type { HausdorffInterval };

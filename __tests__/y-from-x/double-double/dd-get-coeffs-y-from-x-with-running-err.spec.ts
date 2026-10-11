@@ -59,11 +59,11 @@ describe('ddGetCoeffsYFromX_WithRunningErr', function() {
             console.log(`ddGetCoeffsYFromX_WithRunningErr: average error/bound: ${sumRatio/count}, max error/bound: ${maxRatio}, average absolute error: ${sumAbsError/count}`);
         }
 
-        // a point (order 0) has no y-from-x polynomial
+        // a point (order 0) has no y-from-x polynomial - an error is thrown
         {
             const p = [1,1];
             const ps = [p];
-            expect(ddGetCoeffsYFromX_WithRunningErr(ps, 0)).toBeUndefined();
+            expect(() => ddGetCoeffsYFromX_WithRunningErr(ps, 0)).toThrow();
         }
     });
 });

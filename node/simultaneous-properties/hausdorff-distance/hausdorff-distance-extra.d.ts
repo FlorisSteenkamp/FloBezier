@@ -5,17 +5,17 @@
  */
 interface HausdorffDistanceExtra {
     /** the (approximate) two-sided Hausdorff distance `H(A,B)` */
-    d: number;
+    readonly d: number;
     /** which one-sided distance achieved the maximum: `'ab'` = `h(A,B)`, `'ba'` = `h(B,A)` */
-    side: 'ab' | 'ba';
+    readonly side: 'ab' | 'ba';
     /** the parameter on curve `A` at the furthest-apart location */
-    tA: number;
+    readonly tA: number;
     /** the point on curve `A` */
-    pA: number[];
+    readonly pA: number[];
     /** the parameter on curve `B` at the furthest-apart location */
-    tB: number;
+    readonly tB: number;
     /** the point on curve `B` */
-    pB: number[];
+    readonly pB: number[];
 }
 /**
  * Calculates and returns the (two-sided) Hausdorff distance between the bezier

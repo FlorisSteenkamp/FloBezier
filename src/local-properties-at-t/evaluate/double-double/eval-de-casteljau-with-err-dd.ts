@@ -41,7 +41,7 @@ function evalDeCasteljauWithErrDd(
     } 
     
     if (ps.length === 1) {
-        return { p: [ps[0]], pE: [0,0] };
+        return { p, pE: [0,0] };
     }
 
     throw new Error('The given bezier curve must be of order <= 3.');

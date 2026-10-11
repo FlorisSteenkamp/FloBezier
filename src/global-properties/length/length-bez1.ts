@@ -1,5 +1,7 @@
 import { distanceBetween } from "flo-vector2d";
 
+const { abs } = Math;
+
 
 /**
  * Returns the curve length of the given line within the specified parameter
@@ -18,12 +20,10 @@ import { distanceBetween } from "flo-vector2d";
 
     const [t1,t2] = interval;
 
-    const [[x0, y0], [x1, y1]] = ps;
-
-    const p1 = [x0 + t1*(x1 - x0), y0 + t1*(y1 - y0)];
-    const p2 = [x0 + t2*(x1 - x0), y0 + t2*(y1 - y0)];
-
-    return distanceBetween(p1,p2);
+    // Note: do *not* calculate the two endpoints of the interval and then the
+    // distance between them since that results in catastrophic cancellation
+    // for short intervals - the speed is constant so simply scale the length.
+    return abs(t2 - t1)*distanceBetween(ps[0], ps[1]);
 }
 
 

@@ -16,20 +16,32 @@ const { sqrt } = Math;
 function getBoundingBoxTight(ps) {
     const [xS, yS] = ps[0];
     const [xE, yE] = ps[ps.length - 1];
-    let sinθ;
-    let cosθ;
+    let dx;
+    let dy;
     // take care of the case the endpoints are close together
     const len = controlPointLinesLength(ps);
     if (squaredDistanceBetween(ps[0], ps[ps.length - 1]) * 2 ** 8 < len * len) {
         const [xE_, yE_] = evalDeCasteljau(ps, 0.5);
-        const hypotenuse = sqrt((xE_ - xS) * (xE_ - xS) + (yE_ - yS) * (yE_ - yS));
-        sinθ = (yE_ - yS) / hypotenuse;
-        cosθ = (xE_ - xS) / hypotenuse;
+        dx = xE_ - xS;
+        dy = yE_ - yS;
     }
     else {
-        const hypotenuse = sqrt((xE - xS) * (xE - xS) + (yE - yS) * (yE - yS));
-        sinθ = (yE - yS) / hypotenuse;
-        cosθ = (xE - xS) / hypotenuse;
+        dx = xE - xS;
+        dy = yE - yS;
+    }
+    let sinθ;
+    let cosθ;
+    const hypotenuse = sqrt(dx * dx + dy * dy);
+    if (hypotenuse === 0) {
+        // degenerate case, e.g. all control points coincide (or the curve 
+        // returns to its start point at `t === 0.5`) - there is no direction
+        // to rotate to so just use an axis-aligned box
+        sinθ = 0;
+        cosθ = 1;
+    }
+    else {
+        sinθ = dy / hypotenuse;
+        cosθ = dx / hypotenuse;
     }
     const box = getNormalizedBoundingBox(ps, sinθ, cosθ);
     const [[p0x, p0y], [p1x, p1y]] = box;

@@ -1,24 +1,10 @@
+import type { Extrema } from './extrema.js';
 import { roots, differentiate, Horner } from "flo-poly";
 import { getAbsCurvatureExtremaPolys } from "./get-abs-curvature-extrema-polys.js";
 import { isCollinear } from "../global-properties/classification/is-collinear.js";
 import { isCubicReallyQuad } from "../global-properties/classification/is-cubic-really-quad.js";
 import { cubicToQuadratic } from "../transformation/degree-or-type/cubic-to-quadratic.js";
 import { getCurvatureExtremaQuadraticPoly } from './get-curvature-extrema-quadratic-poly.js';
-
-
-/** 
- * Curve extrema
- * 
- * @doc
- */
-interface Extrema {
-    /** list of paramter t values where minima occur */
-    readonly minima: number[],
-    /** list of paramter t values where maxima occur */
-    readonly maxima: number[],
-    /** list of paramter t values where inflection points occur */
-    readonly inflections: number[]
-}
 
 
 /**

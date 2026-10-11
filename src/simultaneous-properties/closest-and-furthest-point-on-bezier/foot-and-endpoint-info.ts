@@ -11,4 +11,4 @@ type FootAndEndpointInfo = {
 }
 
 
-export { FootAndEndpointInfo }
+export type { FootAndEndpointInfo }
