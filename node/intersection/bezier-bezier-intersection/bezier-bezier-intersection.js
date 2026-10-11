@@ -142,8 +142,11 @@ function handleInfiniteIntersections(ps1, ps2) {
  * @internal
  */
 function getCoincidingSelfIntersections(ps1, ps2) {
-    const ts1 = bezierSelfIntersection(ps1, false);
-    const ts2 = bezierSelfIntersection(ps2, false);
+    // Note: a cusp is returned as the degenerate pair `[t,t]` by
+    // `bezierSelfIntersection` so remove duplicates (else 4 identical
+    // intersections would be returned for overlapping cuspidal curves)
+    const ts1 = [...new Set(bezierSelfIntersection(ps1, false))];
+    const ts2 = [...new Set(bezierSelfIntersection(ps2, false))];
     const len1 = ts1.length;
     const len2 = ts2.length;
     if (len1 < 1 || len2 < 1) {

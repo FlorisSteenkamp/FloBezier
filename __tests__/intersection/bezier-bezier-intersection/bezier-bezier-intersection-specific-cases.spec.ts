@@ -10,6 +10,8 @@ import { areIntersectionsOrdered } from '../../helpers/intersection/are-intersec
 
 import { fromTo3 } from '../../../src/transformation/split/from-to/from-to-3.js';
 import { eEstimate } from 'big-float-ts';
+import { generateCuspAtHalf3 } from '../../../src/create/generate-cusp-at-half-t.js';
+import { reverse } from '../../../src/transformation/reverse.js';
 
 
 const { EPSILON: eps } = Number;
@@ -388,6 +390,28 @@ describe('bezierBezierIntersection', function() {
         ]);
 
         // testXs(psA,psB);
+    });
+
+    it('it should return the cusp of two overlapping cuspidal cubics only once',
+    function() {
+        // previously the cusp (returned as the degenerate self-intersection 
+        // `[t,t]`) was returned 4 times
+        const ps = generateCuspAtHalf3([0,0],[6,2],[3,0]);
+        for (const ps2 of [ps, reverse(ps)]) {
+            const xs = bezierBezierIntersection(ps, ps2);
+            const cusps = xs.filter(x => x.kind === 1);
+            expect(cusps.length).toEqual(1);
+            expect(cusps[0].t1).toEqual(0.5);
+            expect(cusps[0].t2).toEqual(0.5);
+            expect(xs.length).toEqual(3);  // the two endpoints and the cusp
+        }
+
+        // a loop (crunode) still gives all 4 parameter pairs
+        {
+            const ps = [[0,0],[3,3],[-1,3],[2,0]];
+            const xs = bezierBezierIntersection(ps, reverse(ps));
+            expect(xs.filter(x => x.kind === 1).length).toEqual(4);
+        }
     });
 });
 

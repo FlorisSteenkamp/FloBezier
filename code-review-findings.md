@@ -10,10 +10,6 @@ bounds), then 31–37 (quick cleanup that also shrinks the published package).
 
 ## Bugs
 
-### Wrong results or crashes
-
-15. `src/intersection/bezier-bezier-intersection/bezier-bezier-intersection.ts:180-193` — For two overlapping cuspidal cubics, the duplicated `[t,t]` pair from `bezierSelfIntersection` yields four identical `X` entries.
-
 ### Error bounds that are not actually bounds
 
 (results stay correct except in near-degenerate cases, where "certified" claims fail)

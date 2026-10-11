@@ -164,8 +164,11 @@ function getCoincidingSelfIntersections(
         ps1: number[][], 
         ps2: number[][]): X[] {
 
-    const ts1 = bezierSelfIntersection(ps1, false);
-    const ts2 = bezierSelfIntersection(ps2, false);
+    // Note: a cusp is returned as the degenerate pair `[t,t]` by
+    // `bezierSelfIntersection` so remove duplicates (else 4 identical
+    // intersections would be returned for overlapping cuspidal curves)
+    const ts1 = [...new Set(bezierSelfIntersection(ps1, false))];
+    const ts2 = [...new Set(bezierSelfIntersection(ps2, false))];
 
     const len1 = ts1.length;
     const len2 = ts2.length;
