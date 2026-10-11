@@ -16,7 +16,7 @@ const getMedialPointCoeffss = [
  *
  * Let `p` be a fixed point in the plane.
  * Let `v` be a direction vector defining the ray `q(t) = p + t⋅v`.
- * Let `ps` be a cubic bezier curve.
+ * Let `ps` be an order 0, 1, 2 or 3 bezier curve.
  *
  * * `q(t)` is equidistant from `p` and the nearest point on `ps`
  * * that common distance is locally minimal among such candidates
@@ -30,6 +30,9 @@ const getMedialPointCoeffss = [
  * @param ps bezier control points, e.g. `[[0,0],[1,1],[2,1],[3,0]]`
  */
 function getMedialPointCoeffs(p, v, ps) {
+    if (ps.length < 1 || ps.length > 4) {
+        throw new Error(`The bezier curve must be of order 0, 1, 2 or 3. Found: ${ps.length - 1}`);
+    }
     if (ps.length === 1) {
         const { a0, b0 } = getMedialPointCoeffsBez0(p, v, ps[0]);
         return { A: [a0], B: [b0], C: [], D: [], H: [] };

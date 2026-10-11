@@ -124,3 +124,151 @@ describe('quadratic interval error bounds and boxes', function() {
         }
     });
 });
+
+
+describe('interval boxes at a single t value', function() {
+    it('should contain the (exact) point on the bezier curve at the given t value',
+    function() {
+        // a case where the old (too small) error counter for lines (`2` instead
+        // of `3`) caused the exact point to lie outside the box
+        {
+            const ps = [[-912.958703372562,37.48675391669437],[1539.897321795571,-933.9854908544563]];
+            const t = 0.3426260638495196;
+            const box = getIntervalBox(ps, [t, t]);
+            const p = evaluateExact(ps, t);
+            for (let k=0; k<2; k++) {
+                expect(eCompare(p[k], [box[0][k]])).toBeGreaterThanOrEqual(0);
+                expect(eCompare(p[k], [box[1][k]])).toBeLessThanOrEqual(0);
+            }
+        }
+
+        let s = 26;
+        const rnd = () => { s = (s*1103515245 + 12345) % 2147483648; return s/2147483648; };
+        const r = (a: number, b: number) => a + (b - a)*rnd();
+        const pt = (k = 100) => [r(-k, k), r(-k, k)];
+        const curveClasses: [string, (n: number) => number[][]][] = [
+            ['random', n => Array.from({ length: n }, () => pt())],
+            ['all negative', n => Array.from({ length: n }, () => [r(-100,-1), r(-100,-1)])],
+            ['large offset', n => { const o = pt(1e6); return Array.from({ length: n }, () => { const p = pt(1); return [p[0]+o[0], p[1]+o[1]]; }); }],
+            ['grid', n => Array.from({ length: n }, () => [round(r(-128,128)*256)/256, round(r(-128,128)*256)/256])],
+            ['tiny', n => Array.from({ length: n }, () => pt(1e-3))],
+        ];
+
+        for (const n of [2,3,4]) {
+            for (const [cname, mk] of curveClasses) {
+                for (let i=0; i<300; i++) {
+                    const ps = mk(n);
+                    const t = rnd();
+                    const box = getIntervalBox(ps, [t, t]);
+                    const boxDd = getIntervalBoxDd(ps, [[0, t], [0, t]]);
+                    const p = evaluateExact(ps, t);
+                    for (let k=0; k<2; k++) {
+                        const inside =
+                            eCompare(p[k], [box[0][k]]) >= 0 && eCompare(p[k], [box[1][k]]) <= 0;
+                        const insideDd =
+                            eCompare(p[k], boxDd[0][k]) >= 0 && eCompare(p[k], boxDd[1][k]) <= 0;
+                        if (!inside || !insideDd) {
+                            throw new Error(`order ${n-1}, ${cname}: the exact point at t = ${t} is not inside the ${!inside ? 'double' : 'double-double'} interval box; ps: ${JSON.stringify(ps)}`);
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+
+
+/** 
+ * the exact control points (as expansions) of the bezier curve `ps` 
+ * restricted to `[a,b]` (given as expansions), calculated via blossoming
+ */
+function exactSub(ps: number[][], a: number[], b: number[]): number[][][] {
+    const n = ps.length - 1;
+    const res: number[][][] = [];
+    for (let i=0; i<=n; i++) {
+        let P = ps.map(p => p.map(c => [c]));
+        for (const t of [...Array(n - i).fill(a), ...Array(i).fill(b)]) {
+            const oMt = eDiff([1], t);
+            const Q: number[][][] = [];
+            for (let j=0; j<P.length-1; j++) {
+                Q.push([0,1].map(k => eAdd(eMult(oMt, P[j][k]), eMult(t, P[j+1][k]))));
+            }
+            P = Q;
+        }
+        res.push(P[0]);
+    }
+    return res;
+}
+
+
+describe('double-double interval boxes', function() {
+    it('should contain the exact control points of the bezier curve restricted to the (double-double) interval',
+    function() {
+        // a case where the error bound of the cubic used `|qx0|` instead of 
+        // the magnitude of its terms (that can be much larger due to 
+        // cancellation) so that the exact endpoint was not inside the box
+        {
+            const ps = [[203680.539520112,-57746.04190695355],[-344086.7503643314,332716.0882815506],[262097.59032967733,231750.7227091072],[277808.1161644185,-200791.10591200172]];
+            const t1 = [-2.2687387735140954e-17,0.43412649631500244];
+            const t2 = [-2.2310843022790357e-17,0.43412649631500244];
+            const box = getIntervalBoxDd(ps, [t1, t2]);
+            const pE = exactSub(ps, t2, t2)[0];
+            for (let k=0; k<2; k++) {
+                expect(eCompare(pE[k], box[0][k])).toBeGreaterThanOrEqual(0);
+                expect(eCompare(pE[k], box[1][k])).toBeLessThanOrEqual(0);
+            }
+        }
+
+        let s = 290;
+        const rnd = () => { s = (s*1103515245 + 12345) % 2147483648; return s/2147483648; };
+        const r = (a: number, b: number) => a + (b - a)*rnd();
+        const pt = (k = 100) => [r(-k, k), r(-k, k)];
+        /** a random double-double in `[0,1]` */
+        const dd = (t: number) => {
+            const lo = t*2**-54*r(-1,1);
+            const hi = t + lo;
+            return [lo - (hi - t), hi];
+        };
+        const curveClasses: [string, (n: number) => number[][]][] = [
+            ['random', n => Array.from({ length: n }, () => pt())],
+            ['all negative', n => Array.from({ length: n }, () => [r(-100,-1), r(-100,-1)])],
+            ['large offset', n => { const o = pt(1e6); return Array.from({ length: n }, () => { const p = pt(1); return [p[0]+o[0], p[1]+o[1]]; }); }],
+            ['grid', n => Array.from({ length: n }, () => [round(r(-128,128)*256)/256, round(r(-128,128)*256)/256])],
+        ];
+        const intervals: [string, () => number[][]][] = [
+            ['wide', () => { const a = rnd(), b = rnd(); return [dd(min(a,b)), dd(max(a,b))]; }],
+            ['tiny (double-double only)', () => { const a = dd(rnd()); return [a, [a[0] + abs(a[1])*2**-60*r(0.1,1), a[1]]]; }],
+            ['tS = 0', () => [[0,0], dd(rnd())]],
+        ];
+
+        for (const n of [2,3,4]) {
+            for (const [cname, mkC] of curveClasses) {
+                for (const [iname, mkI] of intervals) {
+                    for (let i=0; i<40; i++) {
+                        const ps = mkC(n);
+                        const [t1, t2] = mkI();
+                        if (!(eCompare(t1, t2) < 0)) { continue; }
+                        const box = getIntervalBoxDd(ps, [t1, t2]);
+                        const cps = exactSub(ps, t1, t2);
+                        for (let k=0; k<2; k++) {
+                            let scale = 0;
+                            for (const p of cps) {
+                                if (eCompare(p[k], box[0][k]) < 0 || eCompare(p[k], box[1][k]) > 0) {
+                                    throw new Error(`order ${n-1}, ${cname}, ${iname}: an exact control point is not inside the double-double interval box; ps: ${JSON.stringify(ps)}, t1: ${JSON.stringify(t1)}, t2: ${JSON.stringify(t2)}`);
+                                }
+                                scale = max(scale, abs(eEstimate(p[k])), ...ps.map(p => abs(p[k])));
+                            }
+                            // the box should be tight, i.e. within a modest 
+                            // multiple of `u²` (relative) of the exact control 
+                            // points (previously the box of lines was 
+                            // scaled with `u` instead of `u²`)
+                            const lo = min(...cps.map(p => eEstimate(eDiff(p[k], box[0][k]))));
+                            const hi = min(...cps.map(p => eEstimate(eDiff(box[1][k], p[k]))));
+                            expect(max(lo, hi)).toBeLessThan(scale*2**-106*2**12);
+                        }
+                    }
+                }
+            }
+        }
+    });
+});

@@ -7,6 +7,7 @@ import { fromTo } from '../../transformation/split/from-to.js';
 import { controlPointLinesLength } from '../../global-properties/length/control-point-lines-length.js';
 import { evalDeCasteljau } from '../../local-properties-at-t/evaluate/double/eval-de-casteljau.js';
 import { closestPointOnBezier } from '../closest-and-furthest-point-on-bezier/closest-point-on-bezier.js';
+import { bezierBezierIntersection } from '../../intersection/bezier-bezier-intersection/bezier-bezier-intersection.js';
 /** @internal */
 const { min, max } = Math;
 // We need to calculate `dMin(A,B)`, the minimum distance between
@@ -55,6 +56,16 @@ function closestPointsBetweenBeziers(A, B, tolerance, maxIterations = 50) {
     }
     if (A.length === 2 && B.length === 2) {
         // Seperately handle the simple case of two lines
+        // If the lines intersect the minimum distance is zero at the
+        // intersection point(s) (which may be interior to both lines).
+        const xs = bezierBezierIntersection(A, B);
+        if (xs.length > 0) {
+            return xs.map(x => ({
+                pA: { p: x.p, t: x.t1 },
+                pB: { p: x.p, t: x.t2 },
+                d: 0
+            }));
+        }
         // Find minimum distance from endpoints of A to B:
         const EA0 = closestPointOnBezier(B, A[0]);
         const EA1 = closestPointOnBezier(B, A[1]);
@@ -99,8 +110,6 @@ function closestPointsBetweenBeziers(A, B, tolerance, maxIterations = 50) {
         const interval = heap.heap[0]; // peek min
         const { tS, tE, dL, dR, pL, pR } = interval;
         const tM = (tS + tE) / 2;
-        const [eLL, eLR] = calcHErrorBound(A, tS, tM);
-        const [eRL, eRR] = calcHErrorBound(A, tM, tE);
         //---- get dM ---------------------------
         const pM = evalDeCasteljau(A, tM);
         const pB = closestPointOnBezier(B, pM);
@@ -110,14 +119,16 @@ function closestPointsBetweenBeziers(A, B, tolerance, maxIterations = 50) {
         const d = min(dL, dM, dR);
         if (d < bestUpperD) {
             bestUpperD = d;
+            // Note: `pB` is the closest point on `B` to `pM` only; for the
+            // left/right endpoints the closest point must be recalculated.
             if (dL <= dM && dL <= dR) {
-                bestUpper = { pA: { p: pL, t: tS }, pB, d };
+                bestUpper = { pA: { p: pL, t: tS }, pB: closestPointOnBezier(B, pL), d };
             }
             else if (dM <= dL && dM <= dR) {
                 bestUpper = { pA: { p: pM, t: tM }, pB, d };
             }
             else if (dR <= dL && dR <= dM) {
-                bestUpper = { pA: { p: pR, t: tE }, pB, d };
+                bestUpper = { pA: { p: pR, t: tE }, pB: closestPointOnBezier(B, pR), d };
             }
         }
         // bestHUpper = getMaxDistance(interval);
@@ -130,6 +141,12 @@ function closestPointsBetweenBeziers(A, B, tolerance, maxIterations = 50) {
             // The upper bound is by far the best approximation for difficult cases (see the paper).
             return [bestUpper];
         }
+        // Note: the error bounds are only needed if we continue (hence they
+        // are calculated only after the termination checks above) and are
+        // (on purpose) calculated by splitting the *original* curve `A` (and
+        // not the current piece) so as not to accumulate round-off.
+        const [eLL, eLR] = calcHErrorBound(A, tS, tM);
+        const [eRL, eRR] = calcHErrorBound(A, tM, tE);
         const iL = { tS: tS, tE: tM, dL: dL, dR: dM, eL: eLL, eR: eLR, pL: pL, pR: pM };
         const iR = { tS: tM, tE: tE, dL: dM, dR: dR, eL: eRL, eR: eRR, pL: pM, pR: pR };
         heap.swapMinOrMax(iL);

@@ -254,21 +254,24 @@ function splitAtBoth3(ps, tS, tE) {
     const _x0 = abs(x0);
     const _x1 = abs(x1);
     const _x2 = abs(x2);
+    const _x3 = abs(x3);
     const _xA = _x0 + _x1;
     const _xB = _x2 + _x1;
     const _xD = _xA + _xB;
     const _tSxA = _tS * _xA;
     const _tExA = _tE * _xA;
-    const _xC3xB = abs(xC) + 3 * _xB;
+    // (`xC` is a `<1>` quantity so it is bounded by the exact `|x3| + |x0|`)
+    const _xC3xB = (_x3 + _x0) + 3 * _xB;
     const _y0 = abs(y0);
     const _y1 = abs(y1);
     const _y2 = abs(y2);
+    const _y3 = abs(y3);
     const _yA = _y0 + _y1;
     const _yB = _y2 + _y1;
     const _yD = _yA + _yB;
     const _tSyA = _tS * _yA;
     const _tEyA = _tE * _yA;
-    const _yC3yB = abs(yC) + 3 * _yB;
+    const _yC3yB = (_y3 + _y0) + 3 * _yB;
     // <8>xx0 = <8>(<6>(<2>tttS*<3>xC3xB) + <7>(<6>(<1>(3*tS)*(<4>(<3>(tS*<2>xD) - <1>xA))) + x0));
     const _xx0 = _tttS * _xC3xB + (3 * _tS * (_tS * _xD + _xA) + _x0);
     // <7>xx1 = <7>(<6>(<1>tStE*<5>(<4>(tS*<3>xC3xB) + <2>(2*xD))) + <6>(<5>(<4>(<1>ttS*<2>xD) + x0) - <3>(<2>tExA + <2>(2*tSxA))));

@@ -1,5 +1,5 @@
 import { evalDeCasteljau } from '../local-properties-at-t/evaluate/double/eval-de-casteljau.js';
-import { splitByDeviationFromStraighLine_Quad } from '../transformation/split/split-by-deviation-from-straigh-line-quad.js';
+import { splitByDeviationFromStraightLine_Quad } from '../transformation/split/split-by-deviation-from-straight-line-quad.js';
 const { abs, max } = Math;
 /**
  * Transforms the given quadratic bezier curve into a polyline approximation to
@@ -19,7 +19,7 @@ function quadraticToPolyline(ps, tolerance) {
         const maxCoordinate = max(abs(x0), abs(y0), abs(x1), abs(y1), abs(x2), abs(y2));
         tolerance = maxCoordinate * 2 ** -10;
     }
-    const ts = splitByDeviationFromStraighLine_Quad(ps, tolerance);
+    const ts = splitByDeviationFromStraightLine_Quad(ps, tolerance);
     return ts.map(t => evalDeCasteljau(ps, t));
 }
 export { quadraticToPolyline };

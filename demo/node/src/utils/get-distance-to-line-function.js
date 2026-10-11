@@ -27,19 +27,4 @@ function getDistanceToLineFunction(pS, pE) {
     };
 }
 export { getDistanceToLineFunction };
-// Quokka tests
-{
-    const pS = [6, 2];
-    const pE = [6, 2];
-    const p = [10, 1];
-    const f = getDistanceToLineFunction(pS, pE);
-    f(p); //?
-}
-// {
-//     const p0 = [0,0];
-//     const p1 = [6,1];
-//     const p2 = [10,1];
-//     const f = getDistanceToLineFunction(p0,p2);
-//     f(p1);//?
-// }
 //# sourceMappingURL=get-distance-to-line-function.js.map

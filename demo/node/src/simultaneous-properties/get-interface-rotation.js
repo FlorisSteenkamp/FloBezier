@@ -11,8 +11,8 @@ const tp = twoProduct;
  *
  * It can also be imagined that the 2nd vector starts where the 1st one ends.
  *
- * Intermediate calculations are done in double precision in a numerically
- * stable manner.
+ * Intermediate calculations are done in double-double precision (only the
+ * final result is rounded to double precision) in a numerically stable manner.
  *
  * @param a the first 2d vector given as `[x,y]` where `x` and `y` are the
  * coordinates, e.g. `[2,3]`

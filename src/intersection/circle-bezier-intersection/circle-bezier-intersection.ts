@@ -38,25 +38,33 @@ function circleBezierIntersection(
 
     let poly: number[][];
     let _polyE: number[];
+    /** the Stewart error counters of the coefficients (see the error counter functions) */
+    let counters: number[];
     let getCoeffsExact: (circle: { center: number[]; radius: number; }, ps: number[][]) => number[][];
     if (ps.length === 4) {
         poly = getCoeffsCubicDd(circle, ps);
         _polyE = getCoeffsCubicErrorCounters(circle, ps);
+        counters = [8,8,9,9,8,5,5];
         getCoeffsExact = getCoeffsCubicExact;
     } else if (ps.length === 3) {
         poly = getCoeffsQuadraticDd(circle, ps);
         _polyE = getCoeffsQuadraticErrorCounters(circle, ps);
+        counters = [6,5,6,4,4];
         getCoeffsExact = getCoeffsQuadraticExact;
     } else if (ps.length === 2) {
         poly = getCoeffsLinearDd(circle, ps);
         _polyE = getCoeffsLinearErrorCounters(circle, ps);
+        counters = [4,4,4];
         getCoeffsExact = getCoeffsLinearExact;
     } else {
         throw new Error('The given bezier curve must be of order 1, 2 or 3.');
     }
 
-    // const polyE = _polyE.map(e => γγ6*e);
-    const polyE = _polyE.map(e => 2*e);
+    // The error bound of each coefficient is `γγ3*<counter>*e` (see the error
+    // counter functions) with an additional factor of 2 since double-double 
+    // multiplication is about twice as inaccurate as the other double-double
+    // operations accounted for by the counters (`roots` multiplies by `γγ3`)
+    const polyE = _polyE.map((e,i) => 2*counters[i]*e);
 
     const ris = roots(poly, 0, 1, polyE, () => getCoeffsExact(circle, ps)) ||
         // `undefined` means the zero polynomial, i.e. infinitely many roots.

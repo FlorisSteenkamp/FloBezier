@@ -9,21 +9,22 @@
     "dependencies": {
         "flo-draw": "2.0.5",
         "ramda": "^0.32.0",
-        "react": "^19.2.8",
-        "react-dom": "^19.2.8"
+        "react": "^19.3.0",
+        "react-dom": "^19.3.0"
     },
     "devDependencies": {
         "@types/ramda": "^0.32.0",
-        "@types/react": "^19.2.18",
-        "@types/react-dom": "^19.2.7",
-        "concurrently": "^10.0.5",
-        "webpack": "^5.110.3",
+        "@types/react": "^19.3.0",
+        "@types/react-dom": "^19.3.0",
+        "concurrently": "^10.0.6",
+        "typescript": "^7.0.2",
+        "webpack": "^5.111.1",
         "webpack-cli": "^7.2.3",
         "live-server": "^1.2.2"
     },
     "scripts": {
         "build": "tsc",
-        "build:web": "webpack --mode production",
-        "dev": "concurrently \"webpack -w\" \"live-server --host=127.0.0.1 --port=5501 --open=/index.html --watch=.noreload \""
+        "build:web": "tsc && webpack --mode production",
+        "dev": "tsc && concurrently \"tsc -w --preserveWatchOutput\" \"webpack -w\" \"live-server --host=127.0.0.1 --port=5501 --open=/index.html --watch=.noreload \""
     }
 }

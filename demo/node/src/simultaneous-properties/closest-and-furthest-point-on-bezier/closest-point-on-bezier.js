@@ -5,26 +5,6 @@ import { getFootpointPoly1 } from "./get-coeffs/double/get-footpoint-poly-1.js";
 import { distanceBetween, squaredDistanceBetween } from "flo-vector2d";
 import { evalDeCasteljau } from "../../local-properties-at-t/evaluate/double/eval-de-casteljau.js";
 const { sqrt } = Math;
-/**
- * Returns the closest point(s) (and parameter `t` value(s)) on the given
- * bezier curve to the given point (with `t ∈ [0,1]`).
- *
- * * intermediate calculations are done in double precision
- * * in some cases there can be more than one closest point, e.g. on the axis
- * of symmetry of a parabola (in which case only one of the points are returned)
- * * if `inclEndpoints` is `false` then `undefined` will be returned in case
- * there is no closest point not on an endpoint
- * * the returned point(s) are objects with the following properties:
- *     * `p`: the closest point on the bezier curve
- *     * `t`: the parameter value of the point on the bezier curve
- *     * `d`: the closest distance between the point and the bezier curve
- *
- * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
- * @param p a point, e.g. `[1,2]`
- *
- * @doc mdx
- */
 function closestPointOnBezier(ps, p, inclEndpoints = true) {
     let poly;
     if (ps.length === 4) {
@@ -58,7 +38,8 @@ function closestPointOnBezier(ps, p, inclEndpoints = true) {
             minP = { p: p_, t, d: sqrt(dSquared) };
         }
     }
-    // keep TypeScript happy; `minP` cannot be `undefined` here
+    // `minP` can only be `undefined` if `inclEndpoints === false` and there is
+    // no interior foot point (as documented)
     return minP;
 }
 export { closestPointOnBezier };

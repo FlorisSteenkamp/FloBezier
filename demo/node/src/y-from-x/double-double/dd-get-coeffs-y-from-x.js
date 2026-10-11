@@ -8,7 +8,14 @@ const qaq = ddAddDd;
  * Returns a polynomial whose roots are the `y` coordinates given the `x`
  * coordinate of the given bezier curve.
  *
- * @param ps
+ * * the coefficients are returned in double-double precision
+ * * an error is thrown if the given curve is not of order 1, 2 or 3
+ *
+ * @param ps an order 1, 2 or 3 bezier curve given as an ordered array of its
+ * control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param x the `x` coordinate
+ *
+ * @doc
  */
 function ddGetCoeffsYFromX(ps, x) {
     if (ps.length === 2) {
@@ -52,7 +59,7 @@ function ddGetCoeffsYFromX(ps, x) {
         const p3 = qaq(i, v);
         return [p0, p1, p2, p3];
     }
-    throw new Error(`Invalid number of control points: ${ps.length}. Must be 2, 3, or 4.`);
+    throw new Error('The given bezier curve must be of order 1, 2 or 3.');
 }
 export { ddGetCoeffsYFromX };
 //# sourceMappingURL=dd-get-coeffs-y-from-x.js.map

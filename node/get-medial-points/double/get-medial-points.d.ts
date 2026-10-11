@@ -14,9 +14,19 @@
  * sought medial point(s). Selecting physically valid solutions (if needed)
  * is done by the caller or by a later stage of this routine.
  *
+ * * if `ps` is a point (an order 0 bezier curve), the single candidate is the
+ * intersection of the ray with the perpendicular bisector of `p` and the
+ * point, i.e. `t = -|p - P|² / (2v⋅(p - P))`; its bezier parameter value is
+ * returned as `0` (since all parameter values give the same point)
+ * * candidates are not filtered, e.g. `t` can be negative (the medial point
+ * lies behind `p`) or `NaN` (no solution, e.g. the ray is parallel to the
+ * perpendicular bisector, or the solution is degenerate, e.g. `p` coincides
+ * with the point)
+ *
  * @param p base point
  * @param v ray direction from `p`
- * @param ps bezier curve given as an array of control points, e.g. `[[0,0],[1,1],[2,1]]`
+ * @param ps an order 0, 1, 2 or 3 bezier curve given as an array of control
+ * points, e.g. `[[0,0],[1,1],[2,1]]`
  */
 declare function getMedialPoints(p: number[], v: number[], ps: number[][]): {
     ts: number[];

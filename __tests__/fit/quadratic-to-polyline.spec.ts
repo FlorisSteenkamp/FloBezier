@@ -2,7 +2,7 @@ import { describe, expect, it } from '@jest/globals';
 import { quadraticToPolyline } from '../../src/fit/quadratic-to-polyline.js';
 import { randomRotateAndTranslate } from '../helpers/random-rotate-and-translate.js';
 import { evalDeCasteljau } from '../../src/local-properties-at-t/evaluate/double/eval-de-casteljau.js';
-import { splitByDeviationFromStraighLine_Quad } from '../../src/transformation/split/split-by-deviation-from-straigh-line-quad.js';
+import { splitByDeviationFromStraightLine_Quad } from '../../src/transformation/split/split-by-deviation-from-straight-line-quad.js';
 
 
 describe('quadToPolyline', function() {

@@ -180,7 +180,6 @@ function getCoeffsBez2Bez2Dd(ps1, ps2) {
     const pb = qaq(qm2(d0d2), d1d1);
     const pb_ = 2 * _d0d2_ + d1d1_ + abs($pb);
     const $pc = $c0d2 + $c1d1;
-    const _pc = abs($pc);
     const pc = qaq(c0d2, c1d1);
     const pc_ = _c0d2_ + c1d1_ + abs($pc);
     const $pd = $pc + $c2d0;
@@ -198,10 +197,10 @@ function getCoeffsBez2Bez2Dd(ps1, ps2) {
     const pg_ = pd_ * _vₓᵧ + _pd * vₓᵧ_ + 2 * abs($pg);
     const $ph = $c2 * $vₓ;
     const ph = qmq(c2, vₓ);
-    const ph_ = c2_ * _vₓ + _c2 * vₓ_ + abs($ph);
+    const ph_ = c2_ * _vₓ + _c2 * vₓ_ + 2 * abs($ph);
     const $pi = $d2 * $vᵧ;
     const pi = qmq(d2, vᵧ);
-    const pi_ = d2_ * _vᵧ + _d2 * vᵧ_ + abs($pi);
+    const pi_ = d2_ * _vᵧ + _d2 * vᵧ_ + 2 * abs($pi);
     const $pj = $pe + $pf;
     const pj = qaq(pe, pf);
     const pj_ = pe_ + pf_ + abs($pj);

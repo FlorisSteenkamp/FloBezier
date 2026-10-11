@@ -1,5 +1,5 @@
 import { classify } from "../global-properties/classification/classify.js";
-import { fromTo3InclErrorBound } from "../transformation/split/from-to/from-to-3-incl-error-bound.js";
+import { fromTo3 } from "../transformation/split/from-to/from-to-3.js";
 import { cubicToQuadratic } from "../transformation/degree-or-type/cubic-to-quadratic.js";
 import { bezierSelfIntersection } from '../intersection/self-intersection/bezier-self-intersection.js';
 import { hausdorffDistance } from '../simultaneous-properties/hausdorff-distance/hausdorff-distance.js';
@@ -9,8 +9,7 @@ import { hausdorffDistance } from '../simultaneous-properties/hausdorff-distance
  * (of quadratic order or less).
  *
  * * the start and end point of each approximating curve lies on the cubic
- * curve and the the tangents of each approximating curve coincide with that of
- * the cubic at each such point
+ * curve (the tangents at those points are, in general, *not* preserved)
  *
  * @param ps a cubic bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
@@ -32,9 +31,9 @@ function fitQuadsToCubicHausdorff(ps, tolerance) {
     }
     if (realOrder === 2) {
         // already a quadratic in disguise
-        // It is not possible that `toQuadraticFromCubic(ps)` be undefined here
-        // since the `real order` is exactly 2 and the control points are *not*
-        // collinear.
+        // `cubicToQuadratic(ps)` cannot be `undefined` here since tangents need
+        // not be preserved (it can only be `undefined` if `preserveTangents` 
+        // is `true`).
         return [cubicToQuadratic(ps)];
     }
     const stack = [];
@@ -70,7 +69,7 @@ function fitQuadsToCubicHausdorff(ps, tolerance) {
         const ts = stack.pop();
         const [tS, tE] = ts;
         /** the piece of the cubic bezier to approximate */
-        const psCubic = fromTo3InclErrorBound(ps, tS, tE).ps;
+        const psCubic = fromTo3(ps, tS, tE);
         const psQuad = cubicToQuadratic(psCubic);
         if (psQuad === undefined ||
             hausdorffDistance(psQuad, psCubic) > tolerance) {

@@ -139,3 +139,22 @@ describe('isPointOnBezierExtension', function() {
         }
     });
 });
+
+
+describe('isPointOnBezierExtension for degenerate curves (all control points coincident)', function() {
+    it('should compare the point exactly, also if given as uncompressed expansions', function() {
+        for (const n of [1,2,3,4]) {
+            const ps = Array.from({ length: n }, () => [1.5,-2]);
+
+            // the point as doubles
+            expect(isPointOnBezierExtension(ps, [[1.5],[-2]])).toEqual(true);
+            // the same point as uncompressed expansions (previously `false` for
+            // orders 1, 2 and 3)
+            expect(isPointOnBezierExtension(ps, [[0,1.5],[0,-2]])).toEqual(true);
+            expect(isPointOnBezierExtension(ps, [[0,0,1.5],[-2]])).toEqual(true);
+            // different points
+            expect(isPointOnBezierExtension(ps, [[2**-60,1.5],[0,-2]])).toEqual(false);
+            expect(isPointOnBezierExtension(ps, [[0,1.5],[-2.5]])).toEqual(false);
+        }
+    });
+});

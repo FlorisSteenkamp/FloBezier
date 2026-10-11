@@ -7,29 +7,12 @@ module.exports = (env, argv) => {
     const isProd = argv && argv.mode === 'production';
     return {
     mode: isProd ? 'production' : 'development',
-    entry: './src/app.tsx',
+    // bundle the output compiled by `tsc` (i.e. run `tsc` first)
+    entry: './node/demo/src/app.js',
     devtool: isProd ? false : 'eval-source-map',
     resolve: {
-        extensions: [
-            '.js', '.mjs', '.cjs', 
-            '.jsx', '.cjsx', '.mjsx',
-            '.tsx', '.ts', '.d.ts'
-        ],
-        extensionAlias: {
-            ".js": [".js", ".ts", ".tsx"],
-            ".cjs": [".cjs", ".cts"],
-            ".mjs": [".mjs", ".mts"]
-        },
-        alias: {}
-    },
-    module: {
-        rules: [{
-            test: /\.tsx?$/,
-            loader: 'ts-loader',
-            options: { silent: true },
-            exclude: /node_modules/,
-            sideEffects: false
-        }]
+        // some imports omit the `.js` extension
+        extensions: ['.js']
     },
     stats: {
         // Don't display anything, then add back colors, ...

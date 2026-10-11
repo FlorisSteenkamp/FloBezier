@@ -4,7 +4,7 @@ const qno = ddNegativeOf; // error -> 0
 const qm2 = ddMultBy2; // error -> 0 
 //const qmd2 = qMultDouble1;  // error -> 1.5*γ²
 const qmd = ddMultDouble2; // error -> 3*γ²
-const qmq = ddMultDd; // error -> 7*γ² (theoretical), 5*γ² (worst found), we use 6*γ²
+const qmq = ddMultDd; // error -> 5*γ² (proven, Muller & Rideau 2022, see https://doi.org/10.1145/3484514), 4.985*γ² (worst found), we use 6*γ²
 const qdq = ddDiffDd; // error -> 3*γ²
 const { abs } = Math;
 const ddGetImplicitForm2_WithRunningError = getImplicitForm2DdWithRunningError;
@@ -111,7 +111,8 @@ function getImplicitForm2DdWithRunningError(ps) {
     const w1_ = _b1 * q1_ + 2 * abs($w1);
     const $w2 = 2 * $q2 * $b2;
     const w2 = qm2(qmq(b2, q2));
-    const w2_ = 2 * (b2_ * _q2 + _b2 * q2_ + 2 * abs($w2));
+    // (`$w2` already includes the factor 2 so `2*abs($w2)` is `2*2|b2*q2|`)
+    const w2_ = 2 * (b2_ * _q2 + _b2 * q2_) + 2 * abs($w2);
     const $vₓ = $w1 - $w2;
     const vₓ = qdq(w1, w2);
     const vₓ_ = w1_ + w2_ + abs($vₓ);

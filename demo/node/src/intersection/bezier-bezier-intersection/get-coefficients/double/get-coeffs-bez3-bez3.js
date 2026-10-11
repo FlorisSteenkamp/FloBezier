@@ -10,10 +10,10 @@ const { abs } = Math;
  * (see [Bézout's theorem](https://en.wikipedia.org/wiki/B%C3%A9zout%27s_theorem))
  *
  * The returned polynomial coefficients are given densely as an array of
- * double-double precision floating point numbers from highest to lowest power,
- * e.g. `[[0,5],[0,-3],[0,0]]` represents the polynomial `5x^2 - 3x`.
+ * double precision floating point numbers from highest to lowest power,
+ * e.g. `[5,-3,0]` represents the polynomial `5x^2 - 3x`.
  *
- * * intermediate calculations are done in double-double precision
+ * * intermediate calculations are done in double precision
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  *
  * @param ps1
@@ -194,17 +194,17 @@ function getCoeffsBez3Bez3(ps1, ps2) {
     const _w6 = abs(w6);
     const w6_ = d2_ * _d3d3 + _d2 * d3d3_ + _w6;
     const w7 = vₓₓₓ * w5;
-    const w7_ = w5_ * _vₓₓₓ + _vₓₓₓ * w5_ + abs(w7);
+    const w7_ = vₓₓₓ_ * _w5 + _vₓₓₓ * w5_ + abs(w7);
     const u1 = vᵧᵧᵧ * w6;
-    const u1_ = w6_ * _vᵧᵧᵧ + _vᵧᵧᵧ * w6_ + abs(u1);
+    const u1_ = vᵧᵧᵧ_ * _w6 + _vᵧᵧᵧ * w6_ + abs(u1);
     const u2 = vₓₓᵧ * w3;
-    const u2_ = w3_ * _vₓₓᵧ + _vₓₓᵧ * w3_ + abs(u2);
+    const u2_ = vₓₓᵧ_ * _w3 + _vₓₓᵧ * w3_ + abs(u2);
     const u3 = vₓᵧᵧ * w4;
-    const u3_ = w4_ * _vₓᵧᵧ + _vₓᵧᵧ * w4_ + abs(u3);
+    const u3_ = vₓᵧᵧ_ * _w4 + _vₓᵧᵧ * w4_ + abs(u3);
     const u4 = u2 + u3;
     const u4_ = u2_ + u3_ + abs(u4);
     const u5 = 3 * (w7 + u1);
-    const u5_ = 3 * (w7_ + u1_) + abs(u5);
+    const u5_ = 3 * (w7_ + u1_ + abs(w7 + u1)) + abs(u5);
     const v8 = u4 + u5;
     const v8_ = u4_ + u5_ + abs(v8);
     //-----------------------
@@ -267,7 +267,7 @@ function getCoeffsBez3Bez3(ps1, ps2) {
     const wm = wg + wh;
     const wm_ = wg_ + wh_ + abs(wm);
     const wn = 3 * (wk + wl);
-    const wn_ = 3 * (wk_ + wl_) + abs(wn);
+    const wn_ = 3 * (wk_ + wl_ + abs(wk + wl)) + abs(wn);
     const v7 = wm + wn;
     const v7_ = wm_ + wn_ + abs(v7);
     //const v6 =
@@ -449,7 +449,7 @@ function getCoeffsBez3Bez3(ps1, ps2) {
     const ku = kq + kr;
     const ku_ = kq_ + kr_ + abs(ku);
     const kv = 3 * (ks + kt);
-    const kv_ = 3 * (ks_ + kt_) + abs(kv);
+    const kv_ = 3 * (ks_ + kt_ + abs(ks + kt)) + abs(kv);
     const kw = vₓᵧ * wo;
     const kw_ = vₓᵧ_ * _wo + _vₓᵧ * wo_ + abs(kw);
     const kx = ku + kv;
@@ -584,11 +584,13 @@ function getCoeffsBez3Bez3(ps1, ps2) {
     const m6 = r9 + d1d2;
     const m6_ = r9_ + d1d2_ + abs(m6);
     const q3 = 3 * c0;
+    const _q3 = abs(q3); // also the error bound of `q3` (since `c0` is exact)
     const m7 = q3 * m5;
-    const m7_ = abs(q3) * m5_ + abs(m7);
+    const m7_ = _q3 * m5_ + _q3 * abs(m5) + abs(m7);
     const q4 = 3 * d0;
+    const _q4 = abs(q4); // also the error bound of `q4` (since `d0` is exact)
     const m8 = q4 * m6;
-    const m8_ = abs(q4) * m6_ + abs(m8);
+    const m8_ = _q4 * m6_ + _q4 * abs(m6) + abs(m8);
     const m9 = c1 * c1c1;
     const m9_ = c1_ * _c1c1 + _c1 * c1c1_ + abs(m9);
     const ma = d1 * d1d1;
@@ -706,7 +708,7 @@ function getCoeffsBez3Bez3(ps1, ps2) {
     const lg = vᵧᵧᵧ * le;
     const lg_ = vᵧᵧᵧ_ * _le + _vᵧᵧᵧ * le_ + abs(lg);
     const lh = 3 * (lf + lg);
-    const lh_ = 3 * (lf_ + lg_) + abs(lh);
+    const lh_ = 3 * (lf_ + lg_ + abs(lf + lg)) + abs(lh);
     const li = ra + c0d2;
     const _li = abs(li);
     const li_ = ra_ + c0d2_ + _li;
@@ -798,7 +800,7 @@ function getCoeffsBez3Bez3(ps1, ps2) {
     const rs = rq + rr;
     const rs_ = rq_ + rr_ + abs(rs);
     const rt = 3 * (rh + ri);
-    const rt_ = 3 * (rh_ + ri_) + abs(rt);
+    const rt_ = 3 * (rh_ + ri_ + abs(rh + ri)) + abs(rt);
     const ru = rj + 2 * rm;
     const ru_ = rj_ + 2 * rm_ + abs(ru);
     const rv = rs + rt;
@@ -850,7 +852,7 @@ function getCoeffsBez3Bez3(ps1, ps2) {
     const v0_ = pb_ + v_ + abs(v0);
     return {
         coeffs: [v9, v8, v7, v6, v5, v4, v3, v2, v1, v0],
-        errBound: [v9_, v8_, v7_, v6_, v5_, v4_, v3_, v2_, v1_, v0_] // still to be multiplied by `γγ3`
+        errBound: [v9_, v8_, v7_, v6_, v5_, v4_, v3_, v2_, v1_, v0_] // still to be multiplied by `γ1`
     };
 }
 export { getCoeffsBez3Bez3 };

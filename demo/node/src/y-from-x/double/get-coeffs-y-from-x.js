@@ -5,7 +5,13 @@ import { getImplicitForm3 } from "../../implicit-form/double/get-implicit-form3.
  * Returns a polynomial whose roots are the `y` coordinates given the `x`
  * coordinate of the given bezier curve.
  *
- * @param ps
+ * * an error is thrown if the given curve is not of order 1, 2 or 3
+ *
+ * @param ps an order 1, 2 or 3 bezier curve given as an ordered array of its
+ * control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param x the `x` coordinate
+ *
+ * @doc
  */
 function getCoeffsYFromX(ps, x) {
     if (ps.length === 2) {
@@ -29,6 +35,7 @@ function getCoeffsYFromX(ps, x) {
         const p3 = ((vₓₓₓ * x + vₓₓ) * x + vₓ) * x + v;
         return [p0, p1, p2, p3];
     }
+    throw new Error('The given bezier curve must be of order 1, 2 or 3.');
 }
 export { getCoeffsYFromX };
 //# sourceMappingURL=get-coeffs-y-from-x.js.map

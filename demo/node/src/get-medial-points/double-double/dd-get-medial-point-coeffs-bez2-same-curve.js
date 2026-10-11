@@ -1,4 +1,4 @@
-import { toPowerBasisDd } from 'flo-bezier3';
+import { toPowerBasisDd } from '../../to-power-basis/to-power-basis/double-double/to-power-basis-dd.js';
 import { ddMultDouble2, ddAddDd, ddMultDd, ddNegativeOf, ddMultBy2 } from 'double-double';
 const qmd = ddMultDouble2;
 const qaq = ddAddDd;
@@ -12,7 +12,7 @@ const qm2 = ddMultBy2;
  *
  * The returned coefficients encode:
  * * `A`, `B`: `E2(s, τ) = (s - t)^2⋅(A(s)⋅τ + B(s))`
-//  * * `C`, `D`: `E1(s, τ) = C(s)⋅τ + D(s)`
+ * * (`C`, `D`, i.e. `E1(s, τ) = C(s)⋅τ + D(s)`, are not returned in this case)
  * * `H`: the reduced eliminant in `s`
  *
  * Here `τ` is the ray parameter in `q(τ) = p + τ⋅v`.

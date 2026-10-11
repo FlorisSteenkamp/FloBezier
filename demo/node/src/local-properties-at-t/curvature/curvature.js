@@ -2,23 +2,13 @@ import { Horner } from 'flo-poly';
 import { toPowerBasis_1stDerivative } from "../../to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.js";
 import { toPowerBasis_2ndDerivative } from "../../to-power-basis/to-power-basis-2nd-derivative/double/to-power-basis-2nd-derivative.js";
 const { sqrt } = Math;
-/**
- * Returns the curvature `κ` of the given linear, quadratic or cubic bezier
- * curve at a specific given parameter value `t`.
- *
- * * returns `Number.NaN` at a cusp - this can be tested for with `Number.isNaN`
- *
- * @param ps an order 1,2 or 3 bezier curve, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
- * @param t the parameter value where the curvature should be evaluated
- *
- * @doc mdx
- */
 function curvature(ps, t) {
-    const [N, D] = curvatureND(ps, t);
-    return N / D;
+    const ND = curvatureNDOf(ps);
+    const f = (t) => { const [N, D] = ND(t); return N / D; };
+    return t === undefined ? f : f(t);
 }
 /**
- * Alias for [[κ]].
+ * Alias for [[curvature]].
  *
  * Returns the curvature `κ` of the given linear, quadratic or cubic bezier
  * curve at a specific given parameter value `t`.
@@ -31,32 +21,34 @@ function curvature(ps, t) {
  * @doc
  */
 const κ = curvature;
-/**
- * Returns the radius of curvature.
- *
- * @param ps
- * @param t
- */
 function radiusOfCurvature(ps, t) {
-    const [N, D] = curvatureND(ps, t);
-    return D / N;
+    const ND = curvatureNDOf(ps);
+    const f = (t) => { const [N, D] = ND(t); return D / N; };
+    return t === undefined ? f : f(t);
+}
+function curvatureND(ps, t) {
+    const f = curvatureNDOf(ps);
+    return t === undefined ? f : f(t);
 }
 /**
- * Returns the numerator and denominator of curvature `[N,D]`, i.e. `κ = N/D`
+ * Returns a function of `t` that returns the numerator and denominator of the
+ * curvature `[N,D]` of the given bezier curve (the power basis conversion is
+ * done once up front).
  *
- * @param ps
- * @param t
+ * @internal
  */
-function curvatureND(ps, t) {
+function curvatureNDOf(ps) {
     const [dX, dY] = toPowerBasis_1stDerivative(ps);
     const [ddX, ddY] = toPowerBasis_2ndDerivative(ps);
-    const dx = Horner(dX, t);
-    const dy = Horner(dY, t);
-    const ddx = Horner(ddX, t);
-    const ddy = Horner(ddY, t);
-    const a = dx * ddy - dy * ddx;
-    const b = sqrt((dx * dx + dy * dy) ** 3);
-    return [a, b];
+    return (t) => {
+        const dx = Horner(dX, t);
+        const dy = Horner(dY, t);
+        const ddx = Horner(ddX, t);
+        const ddy = Horner(ddY, t);
+        const a = dx * ddy - dy * ddx;
+        const b = sqrt((dx * dx + dy * dy) ** 3);
+        return [a, b];
+    };
 }
 export { κ, curvature, radiusOfCurvature, curvatureND };
 //# sourceMappingURL=curvature.js.map

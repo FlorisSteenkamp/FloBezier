@@ -90,8 +90,8 @@ describe('interval box', function() {
 
             const box2 = getIntervalBox(ps, [tS,tS]);
             expect(box2).toBeNearly(2**2, [
-                [2.292592592592581, -0.6703703703703757],
-                [2.2925925925926034,-0.6703703703703651]
+                [2.29259259259258, -0.6703703703703764],
+                [2.2925925925926047, -0.6703703703703644]
             ]);
             expect(isPointInBoxE(pS, box2)).toEqual(true);
         }

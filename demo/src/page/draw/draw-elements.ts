@@ -3,7 +3,7 @@ import { getBoundingBox } from '../../../../src/global-properties/bounds/get-bou
 import { getBoundingHull } from '../../../../src/global-properties/bounds/get-bounding-hull.js';
 import { getInflections } from '../../../../src/global-properties/get-inflections.js';
 import { getCurvatureExtrema } from '../../../../src/get-curvature-extrema/get-curvature-extrema.js';
-import { splitByDeviationFromStraighLine } from '../../../../src/transformation/split/split-by-deviation-from-straigh-line.js';
+import { splitByDeviationFromStraightLine } from '../../../../src/transformation/split/split-by-deviation-from-straight-line.js';
 import { fitQuadsToCubic } from '../../../../src/fit/fit-quads-to-cubic.js';
 import { tangent } from '../../../../src/local-properties-at-t/tangent/double/tangent.js';
 import { normal } from '../../../../src/local-properties-at-t/normal/double/normal.js';
@@ -67,7 +67,7 @@ function drawElements(
     toDraws.boundingHull && $svgs.boundingHull.push(...hulls.filter((h): h is number[][] => !!h).map(hull => drawFs.polygon(g, hull, 'lightgray thin10 nofill')));
 
     toDraws.quadraticToPolyline && $svgs.quadraticToPolyline.push(
-        ...beziers.map(ps => splitByDeviationFromStraighLine(ps, controlPointRadius(viewbox))
+        ...beziers.map(ps => splitByDeviationFromStraightLine(ps, controlPointRadius(viewbox))
         .map(t => drawFs.circle(
             g, { center: evalDeCasteljau(ps, t), radius: controlPointRadius(viewbox) * 0.5 },
             'yellow thin0'

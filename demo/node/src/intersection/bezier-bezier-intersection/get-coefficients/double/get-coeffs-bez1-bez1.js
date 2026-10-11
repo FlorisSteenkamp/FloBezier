@@ -24,7 +24,7 @@ function getCoeffsBez1Bez1(ps1, ps2) {
     //--------------------------------------------------------------------------
     // See: error-analysis-double.txt
     //--------------------------------------------------------------------------
-    const { coeffs: { vₓ, vᵧ, v }, // all these are double-doubles
+    const { coeffs: { vₓ, vᵧ, v }, // all these are doubles
     errorBound: { vₓ_, vᵧ_, v_ } } = getImplicitForm1WithRunningError(ps1);
     const { coeffs: [[c1, c0], [d1, d0]], errorBound: [[c1_], [d1_]], // `c0` and `d0` are exact
      } = toPowerBasis1WithRunningError(ps2);

@@ -1,6 +1,6 @@
 import type { ImplicitFormExact2, ImplicitFormExact3 } from "../../implicit-form/implicit-form-types.js";
 import { ddMultDd, ddAddDd } from "double-double";
-import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd } from 'big-float-ts';
+import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd, eCompare } from 'big-float-ts';
 import { getImplicitForm3 } from "../../implicit-form/double/get-implicit-form3.js";
 import { getImplicitForm3ErrorCounters } from "../../implicit-form/get-error-counters/get-implicit-form3-error-counters.js";
 import { getImplicitForm3DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form3-dd-with-running-error.js";
@@ -253,7 +253,8 @@ const { abs } = Math;
 
         if (implictForm === undefined) {
             // all ps are the same point
-            return isDouble && x === ps[0][0] && y === ps[0][1];
+            // (compare exactly since the coordinates may be uncompressed expansions)
+            return eCompare(xe, [ps[0][0]]) === 0 && eCompare(ye, [ps[0][1]]) === 0;
         }
 
         if (!implictForm.hasOwnProperty('vₓₓₓ')) {

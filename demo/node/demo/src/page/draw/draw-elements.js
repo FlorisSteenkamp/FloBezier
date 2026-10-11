@@ -3,7 +3,7 @@ import { getBoundingBox } from '../../../../src/global-properties/bounds/get-bou
 import { getBoundingHull } from '../../../../src/global-properties/bounds/get-bounding-hull.js';
 import { getInflections } from '../../../../src/global-properties/get-inflections.js';
 import { getCurvatureExtrema } from '../../../../src/get-curvature-extrema/get-curvature-extrema.js';
-import { splitByDeviationFromStraighLine } from '../../../../src/transformation/split/split-by-deviation-from-straigh-line.js';
+import { splitByDeviationFromStraightLine } from '../../../../src/transformation/split/split-by-deviation-from-straight-line.js';
 import { fitQuadsToCubic } from '../../../../src/fit/fit-quads-to-cubic.js';
 import { tangent } from '../../../../src/local-properties-at-t/tangent/double/tangent.js';
 import { normal } from '../../../../src/local-properties-at-t/normal/double/normal.js';
@@ -53,7 +53,7 @@ function drawElements(stateControl, ref, toDraws) {
     toDraws.looseBoundingBox && $svgs.looseBoundingBox.push(...looseBoundingBoxes.map(box => drawFs.rect(g, box, 'lightgray thin10 nofill')));
     toDraws.tightBoundingBox && $svgs.tightBoundingBox.push(...tightBoundingBoxes.map(poly => drawFs.polygon(g, poly, 'lightgray thin10 nofill')));
     toDraws.boundingHull && $svgs.boundingHull.push(...hulls.filter((h) => !!h).map(hull => drawFs.polygon(g, hull, 'lightgray thin10 nofill')));
-    toDraws.quadraticToPolyline && $svgs.quadraticToPolyline.push(...beziers.map(ps => splitByDeviationFromStraighLine(ps, controlPointRadius(viewbox))
+    toDraws.quadraticToPolyline && $svgs.quadraticToPolyline.push(...beziers.map(ps => splitByDeviationFromStraightLine(ps, controlPointRadius(viewbox))
         .map(t => drawFs.circle(g, { center: evalDeCasteljau(ps, t), radius: controlPointRadius(viewbox) * 0.5 }, 'yellow thin0')[0])));
     toDraws.polyQuads && $svgs.polyQuads.push(...beziers.filter(ps => ps.length === 4)
         .map(ps => fitQuadsToCubic(ps, controlPointRadius(viewbox) / 10)

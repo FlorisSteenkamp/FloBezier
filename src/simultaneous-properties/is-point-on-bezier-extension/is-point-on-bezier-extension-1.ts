@@ -1,7 +1,7 @@
 import { γγ3 } from '../../error-analysis/error-analysis.js';
 import { getImplicitForm1DdWithRunningError } from "../../implicit-form/double-double/get-implicit-form1-dd-with-running-error.js";
 import { ddAddDd, ddMultDd } from "double-double";
-import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd } from 'big-float-ts';
+import { expansionProduct, fastExpansionSum, eSign, eEstimate, eToDd, eCompare } from 'big-float-ts';
 import { getImplicitForm1Exact } from '../../implicit-form/expansion/e-get-implicit-form1.js';
 
 const qaq = ddAddDd;
@@ -97,7 +97,8 @@ const { abs } = Math;
 
         if (implictForm === undefined) {
             // both ps are the same point
-            return isDouble && x === ps[0][0] && y === ps[0][1];
+            // (compare exactly since the coordinates may be uncompressed expansions)
+            return eCompare(xe, [ps[0][0]]) === 0 && eCompare(ye, [ps[0][1]]) === 0;
         }
 
         const { vₓ, vᵧ, v } = implictForm;

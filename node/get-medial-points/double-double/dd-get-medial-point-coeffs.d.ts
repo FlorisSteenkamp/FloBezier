@@ -5,7 +5,7 @@
  *
  * Let `p` be a fixed point in the plane.
  * Let `v` be a direction vector defining the ray `q(t) = p + t⋅v`.
- * Let `ps` be a cubic bezier curve.
+ * Let `ps` be an order 0, 1, 2 or 3 bezier curve.
  *
  * * `q(t)` is equidistant from `p` and the nearest point on `ps`
  * * that common distance is locally minimal among such candidates

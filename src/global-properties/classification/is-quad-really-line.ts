@@ -1,4 +1,5 @@
 import { eDiff, eSign, twoSum } from "big-float-ts";
+import { γ1 } from "../../error-analysis/error-analysis.js";
 
 const ts = twoSum;
 
@@ -27,24 +28,23 @@ function isQuadReallyLine(ps: number[][]) {
     // Calculate an approximation of the above with error bounds and use it as
     // a fast filter.
     const q = x0 + x2;
-    const _q_ = abs(q);  // the absolute error bound in q (after multipliciation by `u`)
+    const _q_ = abs(q);  // the absolute error bound in q (before multiplication by `γ1`)
     const w = q - 2*x1;
-    const w_ = _q_ + abs(w);  // the absolute error bound in w
+    const w_ = _q_ + abs(w);  // the absolute error bound in w (before multiplication by `γ1`)
 
     // if w cannot possibly be zero, i.e. if the error is smaller than the value
-    if (abs(w) - w_ > 0) {
+    if (abs(w) - γ1*w_ > 0) {
         // fast filter passed
         return false;
     }
 
     const r = y0 + y2;
-    const _r_ = abs(r);  // the absolute error bound in r (after multipliciation by `u`)
+    const _r_ = abs(r);  // the absolute error bound in r (before multiplication by `γ1`)
     const z = r - 2*y1;
-    const z_ = _r_ + abs(z);  // the absolute error bound in w
-    
+    const z_ = _r_ + abs(z);  // the absolute error bound in z (before multiplication by `γ1`)
 
     // if the error is smaller than the value
-    if (abs(z) - z_ > 0) {
+    if (abs(z) - γ1*z_ > 0) {
         // fast filter passed
         return false;
     }

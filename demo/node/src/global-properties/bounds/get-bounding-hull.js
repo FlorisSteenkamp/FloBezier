@@ -12,7 +12,7 @@ import { grahamScan } from 'flo-graham-scan';
  * @param includeAllBoundaryPoints set this to `true` to if all boundary points
  * should be returned, even redundant ones; defaults to `false`
  *
- * @dox mdx
+ * @doc mdx
  */
 const getBoundingHull = grahamScan;
 export { getBoundingHull };

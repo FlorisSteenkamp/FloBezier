@@ -191,11 +191,11 @@ function getIntervalBoxAtT(
     const p = evalDeCasteljau(ps, t);
     let pE: number[];
     if (ps.length === 4) {
-        pE = evalDeCasteljauError(ps, [0,t]).map(c_ => 8*γ1*c_)
+        pE = evalDeCasteljauError(ps, [0,t]).map(c_ => 9*γ1*c_)
     } else if (ps.length === 3) {
-        pE = evalDeCasteljauError(ps, [0,t]).map(c_ => 5*γ1*c_)
+        pE = evalDeCasteljauError(ps, [0,t]).map(c_ => 6*γ1*c_)
     } else if (ps.length === 2) {
-        pE = evalDeCasteljauError(ps, [0,t]).map(c_ => 2*γ1*c_)
+        pE = evalDeCasteljauError(ps, [0,t]).map(c_ => 3*γ1*c_)
     } else if (ps.length === 1) {
         return [p,p];
     }

@@ -3,7 +3,7 @@ const { abs } = Math;
 /**
  * Returns a representation of the error (from which an absolute error bound
  * can be calculated) when calculating the implicit form of the given bezier
- * curve (using [[getImplicitForm1]] or [[getImplicitForm1Dd]]).
+ * curve (using [[getImplicitForm3]] or [[getImplicitForm3Dd]]).
  *
  * * returned coefficients are subscripted to match their monomial's variables,
  * e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`

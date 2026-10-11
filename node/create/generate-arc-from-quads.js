@@ -1,8 +1,5 @@
-import { lengthSquared, rotate, scale, translate, toLength } from "flo-vector2d";
-import { bezierBezierIntersection } from "../intersection/bezier-bezier-intersection/bezier-bezier-intersection.js";
-import { fromTo } from "../transformation/split/from-to.js";
-import { getInterfaceRotation } from "../simultaneous-properties/get-interface-rotation.js";
-const { sqrt, atan2, PI: π, tan, SQRT1_2: s2, sin, cos } = Math;
+import { generateArc } from "./generate-arc.js";
+const { PI: π, tan, SQRT1_2: s2 } = Math;
 const C = tan(π / 8);
 /**
  * Quadratic beziers curve that are an approximation of the unit
@@ -39,73 +36,7 @@ const circle = [
  * @doc mdx
  */
 function generateArcFromQuads(c, p1, p2) {
-    const c0 = c[0];
-    const c1 = c[1];
-    const p10 = p1[0];
-    const p11 = p1[1];
-    const p20 = p2[0];
-    const p21 = p2[1];
-    if (p10 === c0 && p11 === c1) {
-        return [];
-    }
-    // move to origin
-    const p1_ = [p10 - c0, p11 - c1];
-    const p2_ = [p20 - c0, p21 - c1];
-    const θ = (getInterfaceRotation(p1_, p2_) + 2 * π) % (2 * π);
-    const φ = atan2(p1_[1], p1_[0]);
-    const sinφ = sin(φ);
-    const cosφ = cos(φ);
-    const rad = sqrt(lengthSquared(p1_));
-    const rot = rotate(sinφ, cosφ);
-    const trans = translate(c);
-    /** transforms the unit circle pieces to the actual arc */
-    const toArc = (pss) => {
-        const _pss = pss.map(ps => ps.map(p => trans(rot(scale(p, rad)))));
-        // snap the start point to `p1` exactly
-        _pss[0][0][0] = p1[0];
-        _pss[0][0][1] = p1[1];
-        return _pss;
-    };
-    if (θ === 0) {
-        // `p2` lies on the ray from `c` through `p1` (or `p2 === c`) - generate
-        // a full circle
-        const _pss = toArc(circle);
-        // snap the end point to `p1` exactly as well since the circle is closed
-        const last = _pss[_pss.length - 1];
-        last[last.length - 1][0] = p1[0];
-        last[last.length - 1][1] = p1[1];
-        return _pss;
-    }
-    let Φ = 0;
-    let i = 0;
-    let pss = [];
-    while (Φ < θ) {
-        Φ += π / 4;
-        const ps = circle[i];
-        pss.push(ps);
-        i++;
-    }
-    const ps_ = pss[pss.length - 1];
-    const ray = toLength(rotate(-sinφ, cosφ, p2_), 2);
-    const r = bezierBezierIntersection([[0, 0], ray], ps_);
-    if (r.length === 0) { // just missed
-        return toArc(pss);
-    }
-    let t = r[0].t2;
-    if (t < 2 ** -40) { // last piece is too small
-        pss.pop();
-        if (pss.length === 0) {
-            return [];
-        }
-        return toArc(pss);
-    }
-    if (t > 1 - 2 ** -40) {
-        t = 1;
-    }
-    const _ps_ = fromTo(ps_, 0, t);
-    pss.pop();
-    pss.push(_ps_);
-    return toArc(pss);
+    return generateArc(circle, π / 4, c, p1, p2);
 }
 export { generateArcFromQuads };
 //# sourceMappingURL=generate-arc-from-quads.js.map

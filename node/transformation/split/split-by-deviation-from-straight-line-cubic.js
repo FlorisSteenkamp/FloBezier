@@ -20,7 +20,7 @@ const { abs, max } = Math;
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param maxD the maximum allowed deviation of each piece from a straight line
  */
-function splitByDeviationFromStraighLine_Cubic(ps, maxD) {
+function splitByDeviationFromStraightLine_Cubic(ps, maxD) {
     const tsS = [0];
     const tsE = [1];
     while (true) {
@@ -52,5 +52,5 @@ function getMaxD(ps) {
     const C = d1 * d2 <= 0 ? 4 / 9 : 3 / 4;
     return C * max(abs(d1), abs(d2));
 }
-export { splitByDeviationFromStraighLine_Cubic };
+export { splitByDeviationFromStraightLine_Cubic };
 //# sourceMappingURL=split-by-deviation-from-straight-line-cubic.js.map

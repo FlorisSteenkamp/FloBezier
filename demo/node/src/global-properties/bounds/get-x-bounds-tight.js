@@ -35,7 +35,7 @@ function getXBoundsTight(ps) {
         if (box[0][0] < minX.box[0][0]) {
             minX = { ts, box };
         }
-        if (box[1][0] > maxX.box[0][0]) {
+        if (box[1][0] > maxX.box[1][0]) {
             maxX = { ts, box };
         }
     }

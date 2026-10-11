@@ -16,5 +16,5 @@
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param maxD the maximum allowed deviation of each piece from a straight line
  */
-declare function splitByDeviationFromStraighLine_Cubic(ps: number[][], maxD: number): number[];
-export { splitByDeviationFromStraighLine_Cubic };
+declare function splitByDeviationFromStraightLine_Cubic(ps: number[][], maxD: number): number[];
+export { splitByDeviationFromStraightLine_Cubic };

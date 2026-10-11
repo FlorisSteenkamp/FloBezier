@@ -42,7 +42,7 @@ function toPowerBasis3WithRunningError(ps) {
     const xb = x1 - x2;
     const _xb_ = abs(xb);
     const xc = 3 * xb;
-    const xc_ = 6 * _xb_; // === 3*_xb_ + 3*abs(xc)
+    const xc_ = 6 * _xb_; // === 3*_xb_ + abs(xc) (since abs(xc) === 3*_xb_ up to rounding)
     const xx3 = xa + xc;
     const xx3_ = _xa_ + xc_ + abs(xx3);
     //----------------------------
@@ -69,7 +69,7 @@ function toPowerBasis3WithRunningError(ps) {
     const yb = y1 - y2;
     const _yb_ = abs(yb);
     const yc = 3 * yb;
-    const yc_ = 6 * _yb_; // === 3*_yb_ + 3*abs(yc)
+    const yc_ = 6 * _yb_; // === 3*_yb_ + abs(yc) (since abs(yc) === 3*_yb_ up to rounding)
     const yy3 = ya + yc;
     const yy3_ = _ya_ + yc_ + abs(yy3);
     //----------------------------

@@ -20,7 +20,7 @@ const { abs } = Math;
  * @internal
  */
 function getCoeffsBez3WithRunningError(ps) {
-    const { coeffs: [[a3, a2, a1], [b3, b2, b1]], errorBound: [[a3_, a2_], [b3_, b2_]] } = toPowerBasis3WithRunningError(ps);
+    const { coeffs: [[a3, a2, a1], [b3, b2, b1]], errorBound: [[a3_, a2_, a1_], [b3_, b2_, b1_]] } = toPowerBasis3WithRunningError(ps);
     const _a3 = abs(a3);
     const _a2 = abs(a2);
     const _a1 = abs(a1);
@@ -43,12 +43,18 @@ function getCoeffsBez3WithRunningError(ps) {
     const _a1b3 = abs(a1b3);
     const _a2b1 = abs(a2b1);
     const _a1b2 = abs(a1b2);
-    const a2b3_ = a2_ * _b3 + _a2 * b3_ + _a2b3;
-    const a3b2_ = a3_ * _b2 + _a3 * b2_ + _a3b2;
-    const a3b1_ = a3_ * _b1 + _a3b1;
-    const a1b3_ = _a1 * b3_ + _a1b3;
-    const a2b1_ = a2_ * _b1 + _a2b1;
-    const a1b2_ = _a1 * b2_ + _a1b2;
+    // 'effective' magnitudes (incl. the 2nd order error term), i.e.
+    // `_xEff = |x| + γ1*x_` so that `x_*_yEff + _x*y_` bounds the error of `x*y`
+    // including the (usually negligible) 2nd order term `γ1*x_*y_`
+    const _b3Eff = _b3 + γ1 * b3_;
+    const _b2Eff = _b2 + γ1 * b2_;
+    const _b1Eff = _b1 + γ1 * b1_;
+    const a2b3_ = a2_ * _b3Eff + _a2 * b3_ + _a2b3;
+    const a3b2_ = a3_ * _b2Eff + _a3 * b2_ + _a3b2;
+    const a3b1_ = a3_ * _b1Eff + _a3 * b1_ + _a3b1;
+    const a1b3_ = a1_ * _b3Eff + _a1 * b3_ + _a1b3;
+    const a2b1_ = a2_ * _b1Eff + _a2 * b1_ + _a2b1;
+    const a1b2_ = a1_ * _b2Eff + _a1 * b2_ + _a1b2;
     const f4 = a2b3 - a3b2;
     const _f4 = abs(f4);
     const f4_ = a2b3_ + a3b2_ + _f4;
@@ -61,14 +67,16 @@ function getCoeffsBez3WithRunningError(ps) {
     //const u2 = -2*a2*a3*b2*b3 + a2*a2*b3*b3 + a3*a3*b2*b2
     //const u2 = a2b3*(-2*a3b2 + a2b3) + a3b2*a3b2
     //const u2 = (a2b3 - a3b2)*(a2b3 - a3b2)
+    const _f4Eff = _f4 + γ1 * f4_;
     const u2 = f4 * f4;
-    const u2_ = 2 * f4_ * _f4 + abs(u2);
+    const u2_ = f4_ * _f4Eff + _f4 * f4_ + abs(u2);
     //const u1 = -a1*a3*b2*b3 - a2*a3*b1*b3 + a1*a2*b3*b3 + b1*b2*a3*a3
     //const u1 = a1*b3*-a3*b2 + a1*b3*a2*b3 + a3*b1*-a2*b3 + a3*b1*a3*b2
     //const u1 = a1b3*(a2b3 - a3b2) - a3b1*(a2b3 - a3b2)
     //const u1 = a1b3*f4 - a3b1*f4 = f4*(a1b3 - a3b1);
     const u1 = f4 * f5;
-    const u1_ = f4_ * _f5 + _f4 * f5_ + abs(u1);
+    const _f5Eff = _f5 + γ1 * f5_;
+    const u1_ = f4_ * _f5Eff + _f4 * f5_ + abs(u1);
     //const u0 = -a1*a2*b2*b3 - a2*a3*b1*b2 - 2*a1*a3*b1*b3 + a1*a1*b3*b3 + a3*a3*b1*b1 + a1*a3*b2*b2 + b1*b3*a2*a2
     //const u0 = 
     //       a2b3*(a2b1 - a1b2) - a3b2*(a2b1 - a1b2) +
@@ -78,9 +86,9 @@ function getCoeffsBez3WithRunningError(ps) {
     //       (a1b3 - a3b1)*(a1b3 - a3b1);
     //const u0 = f6*f4 + f5*f5;
     const g7 = f6 * f4;
-    const g7_ = f6_ * _f4 + _f6 * f4_ + abs(g7);
+    const g7_ = f6_ * _f4Eff + _f6 * f4_ + abs(g7);
     const g9 = f5 * f5;
-    const g9_ = 2 * _f5 * f5_ + abs(g9);
+    const g9_ = f5_ * _f5Eff + _f5 * f5_ + abs(g9);
     const u0 = g7 + g9;
     const u0_ = g7_ + g9_ + abs(u0);
     // Solve: u2*t**2 + u1*t + u0 = 0

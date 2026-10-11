@@ -29,8 +29,15 @@ class Heap {
             i = parentIdx;
         }
     }
+    /**
+     * Removes and returns the top element of the heap or returns `undefined`
+     * if the heap is empty (like `Array.prototype.pop`).
+     */
     popMax() {
         const heap = this.heap;
+        if (heap.length === 0) {
+            return undefined;
+        }
         const maxT = heap[0];
         heap[0] = heap[heap.length - 1];
         heap.length--;

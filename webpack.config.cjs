@@ -7,29 +7,8 @@ const path = require('path');
 const config_Basic = {
     mode: 'production',
     // mode: 'development',
-    entry: './src/index.ts',
-    resolve: {
-        extensions: [
-            '.js', '.mjs', '.cjs', 
-            '.jsx', '.cjsx', '.mjsx',
-            '.tsx', '.ts', '.d.ts'
-        ],
-        extensionAlias: {
-            ".js": [".js", ".ts"],
-            ".cjs": [".cjs", ".cts"],
-            ".mjs": [".mjs", ".mts"]
-        },
-        alias: {}
-    },
-    module: {
-        rules: [{
-            test: /\.tsx?$/,
-            loader: 'ts-loader',
-            options: { silent: true },
-            exclude: /node_modules/,
-            sideEffects: false
-        }]
-    },
+    // bundle the output compiled by `tsc` (i.e. run `npm run build-node` first)
+    entry: './node/index.js',
     stats: {
         all: false,
         colors: true,

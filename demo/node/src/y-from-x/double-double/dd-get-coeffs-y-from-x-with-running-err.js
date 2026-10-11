@@ -9,7 +9,16 @@ const { abs } = Math;
  * Returns a polynomial whose roots are the `y` coordinates given the `x`
  * coordinate of the given bezier curve.
  *
- * @param ps
+ * * the coefficients are returned in double-double precision
+ * * the coefficient-wise error bound returned still needs to be scaled by
+ * `γγ3 === 3*u*u/(1 - 3*u*u)` to get the actual error bound
+ * * an error is thrown if the given curve is not of order 1, 2 or 3
+ *
+ * @param ps an order 1, 2 or 3 bezier curve given as an ordered array of its
+ * control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param x the `x` coordinate
+ *
+ * @doc
  */
 function ddGetCoeffsYFromX_WithRunningErr(ps, x) {
     const _x = abs(x);
@@ -120,6 +129,7 @@ function ddGetCoeffsYFromX_WithRunningErr(ps, x) {
             errorBound: [p0_, p1_, p2_, p3_]
         };
     }
+    throw new Error('The given bezier curve must be of order 1, 2 or 3.');
 }
 export { ddGetCoeffsYFromX_WithRunningErr };
 //# sourceMappingURL=dd-get-coeffs-y-from-x-with-running-err.js.map

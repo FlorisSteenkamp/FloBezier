@@ -4,7 +4,7 @@ import { fromTo1InclErrorBound } from './from-to/from-to-1-incl-error-bound.js';
 /**
  * Returns a bezier curve, `ps`, that starts and ends at the given `t` parameters
  * (starting at `tS` and ending at `tE`) including a matching coordinate-wise
- * error bound, `_ps`, that needs to be multiplied by `3u`, `5u` or `8u` (for
+ * error bound, `_ps`, that needs to be multiplied by `3u`, `5u` or `9u` (for
  * lines, quadratic or cubic bezier curves respectively) before use,
  * where `u === Number.EPSILON/2`.
  *

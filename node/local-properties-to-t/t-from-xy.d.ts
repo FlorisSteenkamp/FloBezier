@@ -20,4 +20,11 @@ import { RootInterval } from 'flo-poly';
  * @param p a point, e.g. `[1,2]`
  */
 declare function tFromXY(ps: number[][], p: number[]): RootInterval[];
-export { tFromXY };
+/**
+ * Returns the intersection of the two given root intervals (the sought `t`
+ * value must lie in both) or `undefined` if they don't overlap.
+ *
+ * @internal
+ */
+declare function combineRoots(r: RootInterval, s: RootInterval): RootInterval | undefined;
+export { tFromXY, combineRoots };

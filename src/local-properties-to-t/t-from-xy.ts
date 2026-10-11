@@ -185,7 +185,7 @@ function tFromXY2(
 
     const getPExactX = (): number[][] => { 
         if (pExactXY === undefined) { pExactXY = toPowerBasis2Exact(ps); }
-        const _pExactX = pExactXY[0];  // x coordinate
+        const _pExactX = pExactXY[0].slice();  // x coordinate (copied since it is cached)
         // pop the constant term off `x(t)`
         const tx = _pExactX.pop()![0];
         const pExactX = [..._pExactX, twoDiff(tx, x)] as number[][];
@@ -195,7 +195,7 @@ function tFromXY2(
 
     const getPExactY = (): number[][] => {
         if (pExactXY === undefined) { pExactXY = toPowerBasis2Exact(ps); }
-        const _pExactY = pExactXY[1];  // y coordinate
+        const _pExactY = pExactXY[1].slice();  // y coordinate (copied since it is cached)
         // pop the constant term off `y(t)`
         const ty = _pExactY.pop()![0];
         const pExactY = [..._pExactY, twoDiff(ty, y)] as number[][];
@@ -318,25 +318,27 @@ function tFromXY1(
 }
 
 
-/** @internal */
+/**
+ * Returns the intersection of the two given root intervals (the sought `t` 
+ * value must lie in both) or `undefined` if they don't overlap.
+ * 
+ * @internal
+ */
 function combineRoots(
         r: RootInterval, s: RootInterval): RootInterval | undefined {
 
-    // case 1
-    if (r.tS <= s.tS) {
-        if (r.tE < s.tS) {
-            return undefined;  // no overlap
-        }
-        return { t: s.t, tS: s.tS, tE: max(r.tE, s.tE), multiplicity: min(r.multiplicity, s.multiplicity) };
-    }
+    const tS = max(r.tS, s.tS);
+    const tE = min(r.tE, s.tE);
 
-    // case 2 - r.tS > s.tS
-    if (s.tE < r.tS) {
+    if (tE < tS) {
         return undefined;  // no overlap
     }
 
-    return { t: r.tS, tS: r.tS, tE: max(r.tE, s.tE), multiplicity: min(r.multiplicity, s.multiplicity) };
+    // the best estimate: the midpoint of the intersection
+    const t = tS + (tE - tS)/2;
+
+    return { t, tS, tE, multiplicity: min(r.multiplicity, s.multiplicity) };
 }
 
 
-export { tFromXY }
+export { tFromXY, combineRoots }

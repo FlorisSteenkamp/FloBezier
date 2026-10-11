@@ -198,8 +198,9 @@ export { getCoeffsXFromY_WithRunningErr } from './x-from-y/double/get-coeffs-x-f
 export { ddGetCoeffsXFromY } from './x-from-y/double-double/dd-get-coeffs-x-from-y.js';
 export { ddGetCoeffsXFromY_WithRunningErr } from './x-from-y/double-double/dd-get-coeffs-x-from-y-with-running-err.js';
 export { eGetCoeffsXFromY } from './x-from-y/expansion/get-coeffs-x-from-y.js';
-export { splitByDeviationFromStraighLine_Cubic } from './transformation/split/split-by-deviation-from-straight-line-cubic.js';
-export { splitByDeviationFromStraighLine_Quad } from './transformation/split/split-by-deviation-from-straigh-line-quad.js';
+export { splitByDeviationFromStraightLine } from './transformation/split/split-by-deviation-from-straight-line.js';
+export { splitByDeviationFromStraightLine_Cubic } from './transformation/split/split-by-deviation-from-straight-line-cubic.js';
+export { splitByDeviationFromStraightLine_Quad } from './transformation/split/split-by-deviation-from-straight-line-quad.js';
 export { getImplicitForm1WithRunningError } from './implicit-form/double/get-implicit-form1-with-running-error.js';
 export { getImplicitForm2WithRunningError } from './implicit-form/double/get-implicit-form2-with-running-error.js';
 export { getImplicitForm3WithRunningError } from './implicit-form/double/get-implicit-form3-with-running-error.js';

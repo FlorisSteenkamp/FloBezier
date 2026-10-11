@@ -1,7 +1,7 @@
 import { ddDiffDd, ddDivDdWithError, ddAddDouble, ddMultDd, ddMultDouble2, ddAddDd, ddMultBy2, ddMin, ddMax, } from "double-double";
 import { evalDeCasteljauDd } from '../../../local-properties-at-t/evaluate/double-double/eval-de-casteljau-dd.js';
 import { evalDeCasteljauError } from '../../../local-properties-at-t/evaluate/eval-de-casteljau-error.js';
-import { γγ3, u, uu } from '../../../error-analysis/error-analysis.js';
+import { γγ3, uu } from '../../../error-analysis/error-analysis.js';
 const { abs } = Math;
 const qOne = [0, 1];
 const qdq = ddDiffDd;
@@ -101,6 +101,9 @@ function getIntervalBox3Dd([[x0, y0], [x1, y1], [x2, y2], [x3, y3]], [t1, t2]) {
     //   <k>a + <l>b = <max(k,l) + 1>(a + b)
     //   <k>a<l>b = <k + l + 1>ab
     //   fl(a) === <1>a
+    // each counter represents an error of `γγ3` (≈ 3u², the error bound of a 
+    // double-double addition); a double-double multiplication (`qmq`, ≤ 5u²)
+    // counts as 2 
     let _x0 = abs(x0);
     let _y0 = abs(y0);
     let _x1 = abs(x1);
@@ -116,25 +119,26 @@ function getIntervalBox3Dd([[x0, y0], [x1, y1], [x2, y2], [x3, y3]], [t1, t2]) {
     const qx1 = qaq(qmq(q7, t2), qmq(qx0, s2));
     const qx2 = qaq(qaq(qmq(q8, tt2), qmq(qx0, ss2)), qmq(qm2(q7), ts2));
     const qx3 = qaq(qaq(qmd(x3, ttt2), qmq(qx0, sss2)), qmd(3, qaq(qmq(q8, tts2), qmq(q7, tss2))));
-    const _qx0 = abs(qx0[1]);
     //---- error / abs value calculation
     const _q8 = _x3 * _t1 + _x2 * _s1; // <= <3>
     // q8: <3>(<1>(x3*t1) + <2>(x2*<1>s1))
     const _q7 = _x3 * _tt1 + 2 * _x2 * _ts1 + _x1 * _ss1; // <= <6> 
     // q7: <6>(<5>(<3>(x3*<2>tt1) + <4>(2*x2*<3>ts1)) + <5>(x1*<4>ss1));
+    // (note: `_x0` is the *magnitude* of the terms of `qx0`, not `|qx0|`, since
+    // the latter can be much smaller due to cancellation)
     _x0 = (_x3 * _ttt1 + _x0 * _sss1) + 3 * (_x2 * _tts1 + _x1 * _tss1); // <= <11>
     // x0: <11>(<9>(x3*<4>ttt1 + x0*<7>sss1) + <10>(3*<9>(<8>(<6>(x2*<5>tts1) + <7>(x1*<6>tss1)))));
-    _x1 = _q7 * _t2 + _qx0 * _s2; // <= <15>
+    _x1 = _q7 * _t2 + _x0 * _s2; // <= <15>
     // x1: <15>(<7>(<6>q7*t2) + <14>(<11>x0*<1>s2));
-    _x2 = _q8 * _tt2 + _qx0 * _ss2 + 2 * _q7 * _ts2; // <= <20>
+    _x2 = _q8 * _tt2 + _x0 * _ss2 + 2 * _q7 * _ts2; // <= <20>
     // x2: <20>(<19>(<18>(<3>q8*<2>tt2) + <17>(<11>x0*<4>ss2)) + <11>(2*<6>q7*<3>ts2));
-    _x3 = _x3 * _ttt2 + _qx0 * _sss2 + 3 * (_q8 * _tts2 + _q7 * _tss2); // <= <22>
+    _x3 = _x3 * _ttt2 + _x0 * _sss2 + 3 * (_q8 * _tts2 + _q7 * _tss2); // <= <22>
     // x3: <22>(<21>(<5>(x3*<4>ttt2) + <20>(<11>x0*<7>sss2)) + <16>(3*<15>(<10>(<3>q8*<5>tts2) + <14>(<6>q7*<6>tss2)))));
     // max errors: 
-    _x0 = 11 * uu * _x0;
-    _x1 = 15 * uu * _x1;
-    _x2 = 20 * uu * _x2;
-    _x3 = 22 * uu * _x3;
+    _x0 = 11 * γγ3 * _x0;
+    _x1 = 15 * γγ3 * _x1;
+    _x2 = 20 * γγ3 * _x2;
+    _x3 = 22 * γγ3 * _x3;
     //---- y - calculation
     const r8 = qaq(qmd(y3, t1), qmd(y2, s1));
     const r7 = qaq(qaq(qmd(y3, tt1), qmd(2 * y2, ts1)), qmd(y1, ss1));
@@ -142,19 +146,18 @@ function getIntervalBox3Dd([[x0, y0], [x1, y1], [x2, y2], [x3, y3]], [t1, t2]) {
     const qy1 = qaq(qmq(r7, t2), qmq(qy0, s2));
     const qy2 = qaq(qaq(qmq(r8, tt2), qmq(qy0, ss2)), qmq(qm2(r7), ts2));
     const qy3 = qaq(qaq(qmd(y3, ttt2), qmq(qy0, sss2)), qmd(3, qaq(qmq(r8, tts2), qmq(r7, tss2))));
-    const _qy0 = abs(qy0[1]);
     //---- error / abs value calculation
     const _r8 = _y3 * _t1 + _y2 * _s1; // <= <3>
     const _r7 = _y3 * _tt1 + 2 * _y2 * _ts1 + _y1 * _ss1; // <= <6> 
     _y0 = (_y3 * _ttt1 + _y0 * _sss1) + 3 * (_y2 * _tts1 + _y1 * _tss1); // <= <11>
-    _y1 = _r7 * _t2 + _qy0 * _s2; // <= <15>
-    _y2 = _r8 * _tt2 + _qy0 * _ss2 + 2 * _r7 * _ts2; // <= <20>
-    _y3 = _y3 * _ttt2 + _qy0 * _sss2 + 3 * (_r8 * _tts2 + _r7 * _tss2); // <= <22>
+    _y1 = _r7 * _t2 + _y0 * _s2; // <= <15>
+    _y2 = _r8 * _tt2 + _y0 * _ss2 + 2 * _r7 * _ts2; // <= <20>
+    _y3 = _y3 * _ttt2 + _y0 * _sss2 + 3 * (_r8 * _tts2 + _r7 * _tss2); // <= <22>
     // max errors: 
-    _y0 = 11 * uu * _y0;
-    _y1 = 15 * uu * _y1;
-    _y2 = 20 * uu * _y2;
-    _y3 = 22 * uu * _y3;
+    _y0 = 11 * γγ3 * _y0;
+    _y1 = 15 * γγ3 * _y1;
+    _y2 = 20 * γγ3 * _y2;
+    _y3 = 22 * γγ3 * _y3;
     const minX = qMin(qMin(qad(qx0, -_x0), qad(qx1, -_x1)), qMin(qad(qx2, -_x2), qad(qx3, -_x3)));
     const maxX = qMax(qMax(qad(qx0, +_x0), qad(qx1, +_x1)), qMax(qad(qx2, +_x2), qad(qx3, +_x3)));
     const minY = qMin(qMin(qad(qy0, -_y0), qad(qy1, -_y1)), qMin(qad(qy2, -_y2), qad(qy3, -_y3)));
@@ -204,6 +207,9 @@ function getIntervalBox2Dd([[x0, y0], [x1, y1], [x2, y2]], [t1, t2]) {
     //   <k>a + <l>b = <max(k,l) + 1>(a + b)
     //   <k>a<l>b = <k + l + 1>ab
     //   fl(a) === <1>a
+    // each counter represents an error of `γγ3` (≈ 3u², the error bound of a 
+    // double-double addition); a double-double multiplication (`qmq`, ≤ 5u²)
+    // counts as 2 
     let _x0 = abs(x0);
     let _y0 = abs(y0);
     let _x1 = abs(x1);
@@ -224,12 +230,12 @@ function getIntervalBox2Dd([[x0, y0], [x1, y1], [x2, y2]], [t1, t2]) {
     // x0: <7>q1;
     _x1 = _t2 * _q2 + _s2 * _q1; // <= <11>
     // x1: <11>(<5>(t2*<3>q2) + <10>(<1>s2*<7>q1));
-    _x2 = (_tt2 * x2 + 2 * _ts2 * _q2) + _ss2 * _q1; // <= <14>
+    _x2 = (_tt2 * _x2 + 2 * _ts2 * _q2) + _ss2 * _q1; // <= <14>
     // x2: <14>(<9>(<3>(<2>tt2*x2) + <8>(2*<3>ts2*<3>q2)) + <13>(<4>ss2*<7>q1));
     // max errors: 
-    _x0 = 7 * uu * _x0;
-    _x1 = 11 * uu * _x1;
-    _x2 = 14 * uu * _x2;
+    _x0 = 7 * γγ3 * _x0;
+    _x1 = 11 * γγ3 * _x1;
+    _x2 = 14 * γγ3 * _x2;
     //---- y - calculation
     const r1 = qaq(qaq(qmd(y2, tt1), qmd(2 * y1, ts1)), qmd(y0, ss1));
     const r2 = qaq(qmd(y2, t1), qmd(y1, s1));
@@ -244,12 +250,12 @@ function getIntervalBox2Dd([[x0, y0], [x1, y1], [x2, y2]], [t1, t2]) {
     // y0: <7>r1;
     _y1 = _t2 * _r2 + _s2 * _r1; // <= <11>
     // y1: <11>(<5>(t2*<3>r2) + <10>(<1>s2*<7>r1));
-    _y2 = (_tt2 * y2 + 2 * _ts2 * _r2) + _ss2 * _r1; // <= <14>
+    _y2 = (_tt2 * _y2 + 2 * _ts2 * _r2) + _ss2 * _r1; // <= <14>
     // y2: <14>(<9>(<3>(<2>tt2*y2) + <8>(2*<3>ts2*<3>r2)) + <13>(<4>ss2*<7>r1));
     // max errors: 
-    _y0 = 7 * uu * _y0;
-    _y1 = 11 * uu * _y1;
-    _y2 = 14 * uu * _y2;
+    _y0 = 7 * γγ3 * _y0;
+    _y1 = 11 * γγ3 * _y1;
+    _y2 = 14 * γγ3 * _y2;
     const minX = qMin(qMin(qad(qx0, -_x0), qad(qx1, -_x1)), qad(qx2, -_x2));
     const maxX = qMax(qMax(qad(qx0, +_x0), qad(qx1, +_x1)), qad(qx2, +_x2));
     const minY = qMin(qMin(qad(qy0, -_y0), qad(qy1, -_y1)), qad(qy2, -_y2));
@@ -285,6 +291,9 @@ function getIntervalBox1Dd([[x0, y0], [x1, y1]], [t1, t2]) {
     //   <k>a + <l>b = <max(k,l) + 1>(a + b)
     //   <k>a<l>b = <k + l + 1>ab
     //   fl(a) === <1>a
+    // each counter represents an error of `γγ3` (≈ 3u², the error bound of a 
+    // double-double addition); a double-double multiplication (`qmq`, ≤ 5u²)
+    // counts as 2 
     let _x0 = abs(x0);
     let _y0 = abs(y0);
     let _x1 = abs(x1);
@@ -297,16 +306,16 @@ function getIntervalBox1Dd([[x0, y0], [x1, y1]], [t1, t2]) {
     _x1 = _x1 * _t2 + _x0 * _s2; // <= <7>
     // x1: <7>(<1>(x1*t2) + <6>(<3>x0*<1>s2));
     // max errors: 
-    _x0 = 3 * u * _x0;
-    _x1 = 7 * u * _x1;
+    _x0 = 3 * γγ3 * _x0;
+    _x1 = 7 * γγ3 * _x1;
     //---- y - calculation
     const qy0 = qaq(qmd(y1, t1), qmd(y0, s1));
     const qy1 = qaq(qmd(y1, t2), qmq(qy0, s2));
     _y0 = _y1 * _t1 + _y0 * _s1; // <= <3>
     _y1 = _y1 * _t2 + _y0 * _s2; // <= <7>
     // max errors: 
-    _y0 = 3 * u * _y0;
-    _y1 = 7 * u * _y1;
+    _y0 = 3 * γγ3 * _y0;
+    _y1 = 7 * γγ3 * _y1;
     const minX = qMin(qad(qx0, -_x0), qad(qx1, -_x1));
     const maxX = qMax(qad(qx0, +_x0), qad(qx1, +_x1));
     const minY = qMin(qad(qy0, -_y0), qad(qy1, -_y1));
@@ -344,13 +353,13 @@ function getIntervalBoxAtTDd(ps, t) {
     const p = evalDeCasteljauDd(ps, t);
     let pE;
     if (ps.length === 4) {
-        pE = evalDeCasteljauError(ps, t).map(c_ => 8 * 2 * γγ3 * c_);
+        pE = evalDeCasteljauError(ps, t).map(c_ => 9 * 2 * γγ3 * c_);
     }
     else if (ps.length === 3) {
-        pE = evalDeCasteljauError(ps, t).map(c_ => 5 * 2 * γγ3 * c_);
+        pE = evalDeCasteljauError(ps, t).map(c_ => 6 * 2 * γγ3 * c_);
     }
     else if (ps.length === 2) {
-        pE = evalDeCasteljauError(ps, t).map(c_ => 2 * 2 * γγ3 * c_);
+        pE = evalDeCasteljauError(ps, t).map(c_ => 3 * 2 * γγ3 * c_);
     }
     else if (ps.length === 1) {
         return [p, p];

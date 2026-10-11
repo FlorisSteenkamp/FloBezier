@@ -4,7 +4,7 @@ import { fromTo1InclErrorBound } from './from-to/from-to-1-incl-error-bound.js';
 /**
  * Returns a bezier curve, `ps`, that starts and ends at the given `t` parameters
  * (starting at `tS` and ending at `tE`) including a matching coordinate-wise
- * error bound, `_ps`, that needs to be multiplied by `3u`, `5u` or `8u` (for
+ * error bound, `_ps`, that needs to be multiplied by `3u`, `5u` or `9u` (for
  * lines, quadratic or cubic bezier curves respectively) before use,
  * where `u === Number.EPSILON/2`.
  *
@@ -26,7 +26,7 @@ function fromToInclErrorBound(ps, tS, tE) {
         return fromTo1InclErrorBound(ps, tS, tE);
     }
     if (ps.length === 1) {
-        return { ps, _ps: [[0]] };
+        return { ps, _ps: [[0, 0]] };
     }
     throw new Error('The given bezier curve must be of order <= 3.');
 }

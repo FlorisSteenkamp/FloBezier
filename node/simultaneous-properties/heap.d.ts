@@ -8,7 +8,11 @@ declare class Heap<T> {
     heap: T[];
     constructor(compare: (a: T, b: T) => number);
     insert(t: T): void;
-    popMax(): T;
+    /**
+     * Removes and returns the top element of the heap or returns `undefined`
+     * if the heap is empty (like `Array.prototype.pop`).
+     */
+    popMax(): T | undefined;
     private swimDown;
     swapMinOrMax(t: T): void;
     static getParentIdx(i: number): number;

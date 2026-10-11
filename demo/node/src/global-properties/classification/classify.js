@@ -210,7 +210,6 @@ function classifyGeneralCubic(ps) {
     }
     // if the discriminant is definitely positive
     if (Discr > Discr_) {
-        // calculate roots naively as a fast pre-filter
         return cubicGeneralCrunode;
     }
     // we need to check exactly - (a !== 0) at this point - tested for earlier
