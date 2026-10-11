@@ -1,9 +1,9 @@
 import { roots } from "flo-poly";
+import { distanceBetween } from "flo-vector2d";
 import { getIntervalBox } from "../../global-properties/bounds/get-interval-box/get-interval-box.js";
 import { getPFromBox } from "../../intersection/bezier-bezier-intersection/x.js";
 import { rootIntervalToDistanceSquaredInterval } from './root-interval-to-distance-squared-interval.js';
 import { getFootPointsOnBezierPolysCertified } from "./get-foot-points-polys-on-bezier-certified.js";
-const { sqrt } = Math;
 /**
  * Returns the closest point(s) (and parameter `t` value(s)) on the given
  * bezier curve to the given point (with `t ∈ [lb,ub]`).
@@ -39,10 +39,13 @@ function closestPointOnBezierCertified(ps, p, lb = 0, ub = 1) {
     const infos = ris.map((ri) => {
         const box = getIntervalBox(ps, [ri.tS, ri.tE]);
         const dSquaredI = rootIntervalToDistanceSquaredInterval(box, p);
+        const pBest = getPFromBox(box);
         return {
-            p: getPFromBox(box),
+            p: pBest,
             t: ri.t,
-            d: (sqrt(dSquaredI[0]) + sqrt(dSquaredI[1])) / 2,
+            // the distance to the best estimate point (which lies inside the
+            // box so that this distance lies inside the `dSquaredI` interval)
+            d: distanceBetween(p, pBest),
             dSquaredI,
             box,
             ri

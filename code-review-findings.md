@@ -14,8 +14,6 @@ bounds), then 31–37 (quick cleanup that also shrinks the published package).
 
 (results stay correct except in near-degenerate cases, where "certified" claims fail)
 
-23. `src/simultaneous-properties/closest-and-furthest-point-on-bezier/root-interval-to-distance-squared-interval.ts:32-65` — Lower bound is distance to the nearest *corner*; the true minimum is on an edge or 0 inside the box. `closestPointOnBezierCertified` on a point lying on the curve returns an interval excluding 0 (verified).
-
 24. `src/intersection/circle-bezier-intersection/circle-bezier-intersection.ts:59` — `2*e` drops the Stewart error counter (up to 9 for cubics) that the convention requires; bound is under-stated by 2x to 4.5x. Git history shows it was `γγ6*e` before the switch to `roots`.
 
 26. `src/global-properties/bounds/get-interval-box/get-interval-box.ts:194-198` and `get-interval-box-dd.ts:428-432` — Uses counters 8/5/2 where `evalDeCasteljauError` documents 9/6/3. Could just call `evalDeCasteljauWithErr`.
@@ -75,8 +73,6 @@ bounds), then 31–37 (quick cleanup that also shrinks the published package).
 ## Efficiency
 
 75. `src/intersection/get-endpoint-intersections/get-endpoint-intersections.ts:39-42` — `getAB(psA,psB)` and `getAB(psB,psA)` each do four exact power-basis conversions and four bigint transforms; the second is the inverse of the first. `getABs` array is re-allocated per call. `get-ab2.ts:13,29` computes `toPowerBasisExact(psA)` twice and creates a closure per call.
-
-76. `src/simultaneous-properties/closest-and-furthest-point-on-bezier/root-interval-to-distance-squared-interval.ts:36-51` — Allocates expansions for four corners to produce a double with a `(1±eps)` bound; the commented-out double version suffices and is allocation-free. Worth doing together with item 23.
 
 77. `src/simultaneous-properties/closest-distance-between-beziers/closest-points-between-beziers.ts:85` — Sorts a 4-element array to read the minimum.
 

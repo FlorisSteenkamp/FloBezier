@@ -1,68 +1,55 @@
-import { twoDiff, eEstimate, eMult, eAdd } from 'big-float-ts';
+import { u } from '../../error-analysis/error-analysis.js';
 
-const td = twoDiff;
+const { abs, max } = Math;
 
-
-const eps = Number.EPSILON;
+/**
+ * The relative widening applied to the computed squared distances: they are
+ * computed with 4 roundings (2 for the squared difference, 1 for the square
+ * and 1 for the sum), all of non-negative terms, so their relative error is at
+ * most `γ4 ≈ 4u`; `8u` covers that *and* the rounding of the multiplication
+ * by `(1 ∓ 8u)` itself (assuming no underflow).
+ *
+ * @internal
+ */
+const k = 8*u;
 
 
 /**
- * Returns the distance interval squared given the root interval (currently
- * ignoring multiplicity)
- * 
- * @param box
- * @param p
- * 
+ * Returns an interval, `[min,max]`, guaranteed to contain the squared distance
+ * between the given point and any point inside the given (axis-aligned) box.
+ *
+ * * `min` is (a lower bound of) the squared distance to the point of the box
+ * nearest to the given point (i.e. the given point clamped to the box), so it
+ * is exactly `0` if the point lies inside the box
+ * * `max` is (an upper bound of) the squared distance to the corner of the box
+ * furthest from the given point
+ * * calculated in double precision with an error bound (so `min` and `max` are
+ * within about 8 ulps of the exact extremes)
+ *
+ * @param box an axis-aligned box given as `[[minX,minY],[maxX,maxY]]`
+ * @param p a point, e.g. `[1,2]`
+ *
  * @internal
  */
 function rootIntervalToDistanceSquaredInterval(
-        box: number[][], 
-        p: number[]) {
+        box: number[][],
+        p: number[]): number[] {
 
-    const bl = box[0];
-    const tr = box[1];
-    const minX = bl[0];
-    const minY = bl[1];
-    const maxX = tr[0];
-    const maxY = tr[1];
+    const [[minX,minY],[maxX,maxY]] = box;
+    const [x,y] = p;
 
-    const x = p[0];  // <0>
-    const y = p[1];  // <0>
+    //---- the minimum: squared distance to `p` clamped to the box
+    const dxMin = x < minX ? minX - x : x > maxX ? x - maxX : 0;
+    const dyMin = y < minY ? minY - y : y > maxY ? y - maxY : 0;
+    const dMin = dxMin*dxMin + dyMin*dyMin;
 
-    let minDSquared = Infinity;
-    let maxDSquared = -Infinity;
+    //---- the maximum: squared distance to the furthest corner (found
+    // coordinate-wise, i.e. the furthest of the two box edges per coordinate)
+    const dxMax = max(abs(x - minX), abs(maxX - x));
+    const dyMax = max(abs(y - minY), abs(maxY - y));
+    const dMax = dxMax*dxMax + dyMax*dyMax;
 
-    // for each corner of the interval box
-    for (const [a,b] of [[minX,minY],[minX,maxY],[maxX,minY],[maxX,maxY]]) {
-        /*
-        // distance to 1st corner of interval box - `distance² = x² + y²`
-        const dc1 = (a - x)**2 + (b - y)**2;
-        // max absolute roundoff error of `dc1`
-        // <4>dc1 <-- <4>(<3>(<1>(a - x)**2) + <3>(<1>((b - y)**2))
-        const dc1E = 4*γ1*((a + x)**2 + (b + y)**2);
-        const dc1Min = dc1 - dc1E;  // distance minus max error
-        const dc1Max = dc1 + dc1E;  // distance plus max error
-        */
-
-        /** distance to 1st corner of interval box - `distance² = x² + y²` */
-        const ax = td(a,x);  // a - x
-        const by = td(b,y);  // b - y
-        const dc1Exact = eAdd(eMult(ax,ax),eMult(by,by));  // ax**2 + bx**2
-        const dc1 = eEstimate(dc1Exact);
-
-        const dc1Min = dc1*(1 - eps);  // distance minus max error
-        const dc1Max = dc1*(1 + eps);  // distance plus max error
-        
-        if (dc1Min <= minDSquared) {
-            minDSquared = dc1Min;
-        }
-
-        if (dc1Max >= maxDSquared) {
-            maxDSquared = dc1Max;
-        }
-    }
-
-    return [minDSquared,maxDSquared];
+    return [dMin*(1 - k), dMax*(1 + k)];
 }
 
 

@@ -35,8 +35,8 @@ describe('closestPointOnBezierCertified', function() {
                 expect(ri.t).toBeNearly(2**4, t);
                 // make sure the distance interval is small
                 expect(di[1] - di[0]).toBeLessThanOrEqual(maxCoordinate * 4*eps * 2**6);
-                // @ts-ignore
-                expect((di[1] + di[0])/2).toBeNearly(2**0, d);
+                // the best estimate distance lies within the distance interval
+                expect(d >= di[0] && d <= di[1]).toBe(true);
                 /** estimate of the closest point on the bezier */
                 const cpp = [
                     (box[0][0] + box[1][0]) / 2,
@@ -44,6 +44,8 @@ describe('closestPointOnBezierCertified', function() {
                 ];
                 const dEst = distanceBetween(cpp,point);
                 expect(di[0] <= dEst && di[1] >= dEst).toBe(true);
+                // `d` is the distance to the best estimate point (the box center)
+                expect(d).toEqual(dEst);
 
                 const { p: bp } = closestPointOnBezier(ps,point);
                 expect(cpp[0]).toBeNearly(2**16,bp[0]);
