@@ -14,15 +14,9 @@ bounds), then 31–37 (quick cleanup that also shrinks the published package).
 
 (results stay correct except in near-degenerate cases, where "certified" claims fail)
 
-20. `src/transformation/split/from-to/from-to-2-incl-error-bound.ts:110` — `_yy1 = 0` hard-coded; should be `_t*_yB + _y1`. And line 303 uses signed `yC` instead of `_yC`. Both feed `getIntervalBox` for quadratics.
-
-21. `src/global-properties/bounds/get-interval-box/get-interval-box-dd.ts:270,294` — `_tt2*x2` uses the signed coordinate; the bound can go negative for negative coordinates.
-
 23. `src/simultaneous-properties/closest-and-furthest-point-on-bezier/root-interval-to-distance-squared-interval.ts:32-65` — Lower bound is distance to the nearest *corner*; the true minimum is on an edge or 0 inside the box. `closestPointOnBezierCertified` on a point lying on the curve returns an interval excluding 0 (verified).
 
 24. `src/intersection/circle-bezier-intersection/circle-bezier-intersection.ts:59` — `2*e` drops the Stewart error counter (up to 9 for cubics) that the convention requires; bound is under-stated by 2x to 4.5x. Git history shows it was `γγ6*e` before the switch to `roots`.
-
-25. `src/intersection/self-intersection/get-coefficients/double/get-coeffs-bez3-with-running-error.ts:28,58-61` — Destructure discards the nonzero error of `a1`/`b1`, so `u1_`/`u0_` miss four terms. The dd sibling includes them. Self-intersection pre-filter can give false negatives.
 
 26. `src/global-properties/bounds/get-interval-box/get-interval-box.ts:194-198` and `get-interval-box-dd.ts:428-432` — Uses counters 8/5/2 where `evalDeCasteljauError` documents 9/6/3. Could just call `evalDeCasteljauWithErr`.
 

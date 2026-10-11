@@ -36,11 +36,14 @@ describe('bezierBezierIntersectionFast', function() {
             const psA = [[1,1],[3,2],[-1,4]];
             const psB = [[0,0],[2,1],[3,5]];
             const xs = bezierBezierIntersectionFast(psA, psB);
-            expect(xs).toBeNearly(2**4, [
-                [(0.16142255626725333 + 0.16142255626730329)/2,
-                 (0.4154959056656018 + 0.4154959056658596)/2],
-                [(0.23384178251805765 + 0.2338417825181156)/2,
-                 (0.4531565219986007 +  0.4531565219988556)/2]
+            // compared against the midpoints of the root intervals given by the
+            // (certified) `bezierBezierIntersection` (the 'fast' algorithm is not
+            // certified and its last few bits depend on the error bounds used)
+            expect(xs).toBeNearly(2**5, [
+                [(0.16142255626727792 + 0.16142255626727814)/2,
+                 (0.4154959056657305 + 0.41549590566573075)/2],
+                [(0.2338417825180862 + 0.23384178251808643)/2,
+                 (0.45315652199872825 + 0.45315652199872847)/2]
             ]);
         }
     });

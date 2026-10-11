@@ -7,6 +7,7 @@ import { getImplicitForm2Exact } from '../../src/implicit-form/expansion/e-get-i
 import { getImplicitForm3Exact } from '../../src/implicit-form/expansion/e-get-implicit-form3.js';
 import { getCoeffsBez3WithRunningError } from '../../src/intersection/self-intersection/get-coefficients/double/get-coeffs-bez3-with-running-error.js';
 import { getCoeffsBez3Exact } from '../../src/intersection/self-intersection/get-coefficients/exact/get-coeffs-bez3-exact.js';
+import { toPowerBasis3WithRunningError } from '../../src/to-power-basis/to-power-basis/double/to-power-basis-with-running-error.js';
 import { generateCuspAtHalf3 } from '../../src/create/generate-cusp-at-half-t.js';
 
 const { abs, round } = Math;
@@ -104,5 +105,31 @@ describe('double precision running error bounds', function() {
             // (the returned error bound is already scaled)
             return [0,1,2].map(k => [`u${2-k}`, abs(eEstimate(eDiff(ex[k], [r.coeffs[k]]))), r.errBound[k]]);
         });
+    });
+
+    it('should propagate the errors of all power basis coefficients into the self-intersection polynomial coefficient bounds',
+    function() {
+        // `u1 = f4*f5` where `f5 = a1*b3 - a3*b1`, so the error bound of `u1`
+        // must include (at least) `|f4|` times the (first order) propagated
+        // errors of `a1*b3` and `a3*b1`, including the errors of the power basis
+        // coefficients `a1` and `b1` (which were previously ignored)
+        let s = 77;
+        const rnd = () => { s = (s*1103515245 + 12345) % 2147483648; return s/2147483648; };
+        const u = (a: number, b: number) => a + (b - a)*rnd();
+
+        for (let i=0; i<3000; i++) {
+            const ps = [0,1,2,3].map(() => [u(-100,100), u(-100,100)]);
+
+            const {
+                coeffs: [[a3,a2,a1],[b3,b2,b1]],
+                errorBound: [[a3_,,a1_],[b3_,,b1_]]
+            } = toPowerBasis3WithRunningError(ps);
+            const f4 = a2*b3 - a3*b2;
+            const required = γ1*abs(f4)*(a1_*abs(b3) + abs(a1)*b3_ + a3_*abs(b1) + abs(a3)*b1_);
+
+            const { errBound } = getCoeffsBez3WithRunningError(ps);
+            // (allow for some round-off in calculating `required` above)
+            expect(errBound[1]).toBeGreaterThanOrEqual(required*(1 - 2**-40));
+        }
     });
 });

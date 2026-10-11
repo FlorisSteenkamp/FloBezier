@@ -86,7 +86,8 @@ function splitRight2(ps, t) {
     // <3>xx1 <= <3>(<2>(t*<1>xB) + x1)
     const _xx1 = _t * _xB + _x1;
     const _yy0 = tt * (_yA + _yB) + (2 * _t * _yA + _y0);
-    const _yy1 = 0;
+    // <3>yy1 <= <3>(<2>(t*<1>yB) + y1)
+    const _yy1 = _t * _yB + _y1;
     /** the coordinate-wise error bound */
     //const psR_ = [
     //    [5*u*_xx0, 5*u*_yy0],
@@ -245,7 +246,7 @@ function splitAtBoth2(ps, tS, tE) {
     // <5>xx2 = <5>(<4>(<1>ttE*<2>xC) - <3>(<2>(2*tE*<1>xA) - x0))
     const _xx2 = ttE * _xC + (2 * _tE * _xA + _x0);
     const _yy0 = ttS * _yC + (2 * _tS * _yA + _y0);
-    const _yy1 = _tStE * yC + (_yA * (_tE + _tS) + _y0);
+    const _yy1 = _tStE * _yC + (_yA * (_tE + _tS) + _y0);
     const _yy2 = ttE * _yC + (2 * _tE * _yA + _y0);
     return {
         ps: [[xx0, yy0], [xx1, yy1], [xx2, yy2]],
