@@ -1,6 +1,7 @@
 
 import { describe, expect, it } from '@jest/globals';
 import { eEstimate, eDiff } from 'big-float-ts';
+import { γγ3 } from '../../../src/error-analysis/error-analysis.js';
 import { randomCenteredAt0v2 } from '../../helpers/random-on-grid.js';
 import { getCoeffsBez3Bez3Dd } from '../../../src/intersection/bezier-bezier-intersection/get-coefficients/double-double/get-coeffs-bez3-bez3-dd.js';
 import { getCoeffsBez3Bez3Exact } from '../../../src/intersection/bezier-bezier-intersection/get-coefficients/exact/get-coeffs-bez3-bez3-exact.js';
@@ -106,10 +107,16 @@ function testCoeffsDd(
     let est = f(bz1, bz2);
     let exact = fExact(bz1, bz2);
 
-    for (let i=0; i<j*k; i++) {
+    // a polynomial of degree `j*k` has `j*k + 1` coefficients; if a curve is
+    // *exactly* of lower order the exact function returns the coefficients of
+    // a different (lower degree) polynomial - skip those
+    if (exact.length !== j*k + 1) { return; }
+
+    for (let i=0; i<=j*k; i++) {
         let rEst = est.coeffs[i];
         let rExact = exact[i];
-        let errBound = est.errBound[i];
+        // the returned error bound still needs to be scaled by `γγ3`
+        let errBound = γγ3*est.errBound[i];
 
         let errActual = abs(eEstimate(
             eDiff(rExact, rEst)
