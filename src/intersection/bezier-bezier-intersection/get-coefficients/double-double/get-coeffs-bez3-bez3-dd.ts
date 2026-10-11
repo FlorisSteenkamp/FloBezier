@@ -165,7 +165,7 @@ function getCoeffsBez3Bez3Dd(
     const c2d3 = qmq(c2,d3);
     const c2d3_ = c2_*_d3 + _c2*d3_ + 2*abs($c2d3);
     const c3c3 = qmq(c3,c3);
-    const c3c3_ = 2*(c3_*_c3 + $c3c3);
+    const c3c3_ = 2*(c3_*_c3 + abs($c3c3));
     const c3d0 = qmd(d0,c3);
     const c3d0_ = _d0*c3_ + abs($c3d0);
     const c3d1 = qmq(c3,d1);
@@ -422,7 +422,7 @@ function getCoeffsBez3Bez3Dd(
     const zc_ = d2_*_c2c2 + _d2*c2c2_ + 2*abs($zc);
     const $zd = 2*$c1*$wo;
     const zd = qm2(qmq(c1,wo));
-    const zd_ = 2*(c1_*_wo + _c1*wo_ + 2*abs($zd));
+    const zd_ = 2*(c1_*_wo + _c1*wo_ + abs($zd));
     const $wp = $zc + $zd;
     const wp = qaq(zc,zd);
     const wp_ = zc_ + zd_ + abs($wp);

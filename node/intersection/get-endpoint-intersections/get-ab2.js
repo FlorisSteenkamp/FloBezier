@@ -6,9 +6,13 @@ import { getAB } from "./get-ab.js";
 /** @internal */
 function getAB2(psA, psB) {
     const _xyA = toPowerBasisExact(psA);
-    // Both `_xyB[0][0]` and `_xyB[1][0]` can't be zero else we would have had
-    // a lower order bezier curve. Also, if `_xyB[0][0]` is zero 
-    // then `_xyA[0][0]` will also be zero (and same with the y coordinate)
+    // If the `t²` coefficient of one coordinate of `psA` is zero then that
+    // coordinate is linear in `t` (and, since both curves are the same
+    // algebraic curve, the same then holds for `psB`), so the (simpler) linear
+    // transform can be found from that coordinate alone using `getAB1` (which
+    // also avoids taking the square root of zero in `getTransform2`).
+    // Note: the `t²` coefficients of both coordinates can't be zero else we
+    // would have had a lower order bezier curve.
     const coord = eSign(_xyA[0][0]) === 0 ? 0 : eSign(_xyA[1][0]) === 0 ? 1 : -1;
     if (coord !== -1) {
         const psA0c = psA[0][coord];

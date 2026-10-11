@@ -4,8 +4,9 @@
  *
  * Obtuse here is defined as follows: let the cubic form triangles through its
  * control points P0, P1, P3 where P0 and P3 are the endpoints. If both interior
- * angles ∠P0 and ∠P2 are <= 90 degrees then the cubic is considered acute,
- * otherwise it is considered obtuse. The same should be true for P0, P2, P3.
+ * angles ∠P0 and ∠P3 are <= 90 degrees then the cubic is considered acute,
+ * otherwise it is considered obtuse. The same should be true for the angles
+ * ∠P0 and ∠P3 of the triangle through P0, P2, P3.
  */
 declare function isCubicObtuse(ps: number[][]): boolean;
 export { isCubicObtuse };

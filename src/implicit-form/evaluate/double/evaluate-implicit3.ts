@@ -5,7 +5,7 @@
  * (a degree 3 bivariate polynomial in `x` and `y`) at the point `[x,y]`.
  * 
  * * the implicit form is given by: `vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v`, 
- * where the `vₓ`, `vₓ`, `v`, etc are constants
+ * where the `vₓ`, `vᵧ`, `v`, etc are constants
  * 
  * @example
  * ```typescript

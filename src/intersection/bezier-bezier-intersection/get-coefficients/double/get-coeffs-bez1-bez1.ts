@@ -32,7 +32,7 @@ function getCoeffsBez1Bez1(
     //--------------------------------------------------------------------------
 
     const {
-        coeffs: { vₓ, vᵧ, v },  // all these are double-doubles
+        coeffs: { vₓ, vᵧ, v },  // all these are doubles
         errorBound: { vₓ_, vᵧ_, v_ }
     } = getImplicitForm1WithRunningError(ps1);
 

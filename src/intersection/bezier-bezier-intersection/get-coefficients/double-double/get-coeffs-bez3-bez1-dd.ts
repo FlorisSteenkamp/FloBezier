@@ -71,31 +71,27 @@ function getCoeffsBez3Bez1Dd(ps1: number[][], ps2: number[][]) {
 
     const c0c0 = tp(c0,c0);  // error free
     const c0c1 = qmd(c0,c1);
-    const c0c1_ = abs($c0c1);
+    const _c0c1_ = abs($c0c1);  // both the magnitude and the error bound (a product of two exact doubles)
     const c0d0 = tp(c0,d0);  // error free
     const c0d1 = qmd(c0,d1);
-    const c0d1_ = abs($c0d1);
+    const _c0d1_ = abs($c0d1);  // both the magnitude and the error bound (a product of two exact doubles)
     const c1c1 = qmq(c1,c1);
     const c1c1_ = 2*abs($c1c1);
     const c1d0 = qmd(d0,c1);
-    const c1d0_ = abs($c1d0);
+    const _c1d0_ = abs($c1d0);  // both the magnitude and the error bound (a product of two exact doubles)
     const c1d1 = qmq(c1,d1);
     const c1d1_ = 2*abs($c1d1);
     const d0d0 = tp(d0,d0);  // error free
     const d0d1 = qmd(d0,d1);
-    const d0d1_ = abs($d0d1);
+    const _d0d1_ = abs($d0d1);  // both the magnitude and the error bound (a product of two exact doubles)
     const d1d1 = qmq(d1,d1);
     const d1d1_ = 2*abs($d1d1);
     
     const _c0c0 = abs($c0c0);
-    const _c0c1 = abs($c0c1);
     const _c0d0 = abs($c0d0);
-    const _c0d1 = abs($c0d1);
     const _c1c1 = abs($c1c1);
-    const _c1d0 = abs($c1d0);
     const _c1d1 = abs($c1d1);
     const _d0d0 = abs($d0d0);
-    const _d0d1 = abs($d0d1);
     const _d1d1 = abs($d1d1);
 
     const $z1 = c0*$vₓₓₓ;
@@ -243,16 +239,16 @@ function getCoeffsBez3Bez1Dd(ps1: number[][], ps2: number[][]) {
     const uq_ = z5_ + vₓᵧ_ + _uq;
     const $ur = $c0c1*$un;
     const ur = qmq(c0c1,un);
-    const ur_ = c0c1_*_un + _c0c1*un_ + 2*abs($ur);
+    const ur_ = _c0c1_*_un + _c0c1_*un_ + 2*abs($ur);
     const $us = $d0d1*$uo;
     const us = qmq(d0d1,uo);
-    const us_ = d0d1_*_uo + _d0d1*uo_ + 2*abs($us);
+    const us_ = _d0d1_*_uo + _d0d1_*uo_ + 2*abs($us);
     const $ut = $c0d1*$up;
     const ut = qmq(c0d1,up);
-    const ut_ = c0d1_*_up + _c0d1*up_ + 2*abs($ut);
+    const ut_ = _c0d1_*_up + _c0d1_*up_ + 2*abs($ut);
     const $uu = $c1d0*$uq;
     const uu = qmq(c1d0,uq);
-    const uu_ = c1d0_*_uq + _c1d0*uq_ + 2*abs($uu);
+    const uu_ = _c1d0_*_uq + _c1d0_*uq_ + 2*abs($uu);
     const $uv = $c1*$vₓ;
     const uv = qmq(c1,vₓ);
     const uv_ = _c1*vₓ_ + 2*abs($uv);

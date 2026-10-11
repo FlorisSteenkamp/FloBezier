@@ -20,7 +20,7 @@ function getTransform2(
         return D2x;
     }
 
-    throw new Error('An unexpected error occured.')
+    throw new Error('An unexpected error occurred.')
 }
 
 

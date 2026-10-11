@@ -28,28 +28,29 @@ const { abs } = Math;
  * where [[γ]] and [[γγ]] are the usual error functions with `γ(1) === 1.1102230246251568e-16` 
  * and `γγ(3) === 3.697785493223493e-32`.
  * 
- * The `D` in the error counter formula is zero for double precision and 1 for
- * double-double precision.
- * 
+ * The `D` in the error counter formula is 1 for double precision and 0 for
+ * double-double precision (since the initial differences of the control point
+ * coordinates are calculated exactly in double-double precision).
+ *
  * ```
  * // for cubic bezier curves
- * return [ 
+ * return [
  *     [
- *         X2,  // <E> === D+3 (D = 0 for double, 1 for double-double precision)
+ *         X2,  // <E> === D+3 (D = 1 for double, 0 for double-double precision)
  *         X1,  // <E> === D+2
- *         X0   // <E> === D+3
+ *         X0   // <E> === D+1
  *     ],
  *     [
  *         Y2,  // <E> === D+3
  *         Y1,  // <E> === D+2
- *         Y0   // <E> === D+3
+ *         Y0   // <E> === D+1
  *     ]
  * ]
  *
  * // for quadratic bezier curves
- * return [ 
+ * return [
  *     [
- *         X1,  // <E> === D+1 (D = 0 for double, 1 for double-double precision)
+ *         X1,  // <E> === D+1 (D = 1 for double, 0 for double-double precision)
  *         X0   // <E> === D
  *     ],
  *     [
@@ -61,7 +62,7 @@ const { abs } = Math;
  * // for linear bezier curves (i.e. lines)
  * return [ 
  *     [
- *         X0_  // <E> === D (D = 0 for double, 1 for double-double precision)
+ *         X0_  // <E> === D (D = 1 for double, 0 for double-double precision)
  *     ],
  *     [
  *         Y0_  // <E> === D

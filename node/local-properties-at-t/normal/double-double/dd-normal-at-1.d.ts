@@ -1,8 +1,8 @@
 /**
  * Returns the normal vector (in double-double precision not necessarily of
  * unit length) of an order 0,1,2 or 3 bezier curve at `t === 1`, i.e.
- * Returns the result, `[x,y]`, of evaluating the derivative of a linear,
- * quadratic or cubic bezier curve's power basis at `t === 1`.
+ * returns the tangent (the derivative of the bezier curve's power basis
+ * evaluated at `t === 1`) rotated by 90 degrees.
  *
  * * *exact* result for order <= 2 bezier curves
  *

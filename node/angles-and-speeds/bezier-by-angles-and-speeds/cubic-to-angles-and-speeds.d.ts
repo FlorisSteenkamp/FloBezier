@@ -2,8 +2,8 @@ import { AnglesAndSpeeds } from "../angles-and-speeds.js";
 /**
  * For the given bernstein cubic bezier curve basis return the angles-and-speeds
  * basis coefficients, i.e.
- * * α   -> initial tangent angle in degrees
- * * β   -> terminal tangent angle in degrees
+ * * α   -> initial tangent angle in radians
+ * * β   -> terminal tangent angle in radians
  * * s0  -> inital speed
  * * s1  -> terminal speed
  * * L   -> distance between initial and final point (cannot be 0)

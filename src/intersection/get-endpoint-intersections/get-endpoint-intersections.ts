@@ -21,6 +21,9 @@ import { intersectBoxes } from "../../boxes/intersect-boxes.js";
  * 
  * @param psA an order 1,2 or 3 bezier curve
  * @param psB another bezier curve
+ * @param orderAlreadyReduced optional; defaults to `false`; set to `true` if the
+ * order of both curves has already been reduced as far as possible (e.g. via
+ * `reduceOrderIfPossible`) to avoid doing it again
  * 
  * @internal but still exported for backwards compatibility
  */
@@ -34,7 +37,7 @@ function getEndpointIntersections(
         psB = reduceOrderIfPossible(psB);
     }
 
-    // `psB.length` should equal `psB.length` (due to precondition)
+    // `psA.length` should equal `psB.length` (due to precondition)
 
     const getABs = [,,getAB1,getAB2,getAB3];
 

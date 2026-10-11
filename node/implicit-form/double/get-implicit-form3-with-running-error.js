@@ -1,17 +1,17 @@
 import { toPowerBasis3WithRunningError } from '../../to-power-basis/to-power-basis/double/to-power-basis-with-running-error.js';
 const { abs } = Math;
 /**
- * Returns a double-double precision implicit form of the given cubic
- * bezier curve curve and a coefficientwise error bound.
+ * Returns a double precision implicit form of the given cubic
+ * bezier curve and a coefficientwise error bound.
  *
  * Returned coefficients are subscripted to match their monomial's variables,
  * e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
  *
  * * the implicit form is given by: `vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0`
- * * intermediate calculations are done in double-double precision and this is
- * reflected in the error bound
- * * the error bound returned first needs to be scaled by `γγ3 === (3*u*u) / (1 - 3*u*u) === 3.697785493223493e-32`,
- * where `u === Number.EPSILON / 2` before use
+ * * intermediate calculations are done in double precision and this is
+ *   reflected in the error bound
+ * * the error bound returned still needs to be scaled by
+ *   `γ1 === u/(1 - u)` (where `u === Number.EPSILON / 2`) before use
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  *
  * @param ps a cubic bezier curve given as an array of its control points,
@@ -61,13 +61,13 @@ function getImplicitForm3WithRunningError(ps) {
     const b1b3_ = b1_ * _b3 + _b1 * b3_ + abs(b1b3);
     const b2b3 = b2 * b3;
     const _b2b3 = _b2 * _b3;
-    const b2b3_ = b2_ * _b3 + _b2 * b3_ + 2 * _b2b3;
+    const b2b3_ = b2_ * _b3 + _b2 * b3_ + _b2b3;
     const a2a3 = a2 * a3;
     const _a2a3 = abs(a2 * a3);
-    const a2a3_ = a2_ * _a3 + _a2 * a3_ + 2 * _a2a3;
+    const a2a3_ = a2_ * _a3 + _a2 * a3_ + _a2a3;
     const a3b3 = a3 * b3;
     const _a3b3 = abs(a3 * b3);
-    const a3b3_ = a3_ * _b3 + _a3 * b3_ + 2 * _a3b3;
+    const a3b3_ = a3_ * _b3 + _a3 * b3_ + _a3b3;
     const a3b0 = a3 * b0;
     const a3b0_ = a3_ * _b0 + abs(a3b0);
     const a0b3 = a0 * b3;

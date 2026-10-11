@@ -6,7 +6,7 @@ import { toPowerBasis2 } from '../../to-power-basis/to-power-basis/double/to-pow
  *
  * The returned coefficients encode:
  * * `A`, `B`: `E2(s, τ) = (s - t)^2⋅(A(s)⋅τ + B(s))`
-//  * * `C`, `D`: `E1(s, τ) = C(s)⋅τ + D(s)`
+ * * (`C`, `D`, i.e. `E1(s, τ) = C(s)⋅τ + D(s)`, are not returned in this case)
  * * `H`: the reduced eliminant in `s`
  *
  * Here `τ` is the ray parameter in `q(τ) = p + τ⋅v`.

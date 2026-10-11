@@ -13,7 +13,7 @@ function getTransform2(xyA, xyB) {
         erCompare(D2x, D2y) === 0) {
         return D2x;
     }
-    throw new Error('An unexpected error occured.');
+    throw new Error('An unexpected error occurred.');
 }
 /**
  * @param A A coordinate (x or y) of a bezier curve in power basis

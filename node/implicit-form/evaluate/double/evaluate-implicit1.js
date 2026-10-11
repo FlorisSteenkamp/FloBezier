@@ -2,7 +2,7 @@
  * Evaluates and returns the result of evaluating the given implicit function
  * (a degree 1 bivariate polynomial in `x` and `y`) at the point `[x,y]`.
  *
- * * the implicit form is given by: `vₓ*x + vᵧ*y + v`, where the `vₓ`, `vₓ`, `v`,
+ * * the implicit form is given by: `vₓ*x + vᵧ*y + v`, where the `vₓ`, `vᵧ`, `v`,
  * etc are constants
  *
  * @example

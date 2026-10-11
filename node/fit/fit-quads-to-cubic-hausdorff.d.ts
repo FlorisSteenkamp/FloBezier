@@ -4,8 +4,7 @@
  * (of quadratic order or less).
  *
  * * the start and end point of each approximating curve lies on the cubic
- * curve and the the tangents of each approximating curve coincide with that of
- * the cubic at each such point
+ * curve (the tangents at those points are, in general, *not* preserved)
  *
  * @param ps a cubic bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`

@@ -6,9 +6,10 @@
  * e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
  *
  * * the implicit form is given by: `vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0`
- * * intermediate calculations are done in double-double precision and this is
+ * * intermediate calculations are done in double precision and this is
  *   reflected in the error bound
- * * the error bound returned still needs to be scaled by `γγ1`,
+ * * the error bound returned still needs to be scaled by
+ *   `γ1 === u/(1 - u)` (where `u === Number.EPSILON / 2`) before use
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  *
  * @param ps a quadratic bezier curve given as an array of its control points,

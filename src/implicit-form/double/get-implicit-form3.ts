@@ -54,9 +54,9 @@ function getImplicitForm3(
     const vₓₓᵧ =  3*a3*b3b3;
     const vₓᵧᵧ = -3*b3*a3a3;
     const vᵧᵧᵧ =  a3*a3a3;
-    const vₓₓ = (u1*b3b3 + q3*(b1*b3 - b2*b2)) + tq2*b2*b3;
-    const vᵧᵧ = (u1*a3a3 + q3*(a1*a3 - a2*a2)) + tq2*a2*a3;
-    const vₓᵧ = 2*(q3*(a2*b2 - (a1b3 + a3b1)/2) - (u1*a3*b3 + q2*(a2b3 + a3b2)));
+    const vₓₓ = (u1*b3b3 + q3*(b1*b3 - b2*b2)) + tq2*(b2*b3);
+    const vᵧᵧ = (u1*a3a3 + q3*(a1*a3 - a2*a2)) + tq2*(a2*a3);
+    const vₓᵧ = 2*(q3*(a2*b2 - (a1b3 + a3b1)/2) - (u1*(a3*b3) + q2*(a2b3 + a3b2)));
     
     const s1 = (-3*q1q1 - 2*q1q5) + (tq2q4 + q3*q6);
     const s2 = 2*(q1*q2 - q3q4);

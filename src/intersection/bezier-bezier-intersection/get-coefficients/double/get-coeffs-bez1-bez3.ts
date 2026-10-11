@@ -16,7 +16,7 @@ const { abs } = Math;
  * double precision floating point numbers from highest to lowest power, 
  * e.g. `[5,-3,0]` represents the polynomial `5x^2 - 3x`.
  * 
- * * intermediate calculations are done in double-double precision
+ * * intermediate calculations are done in double precision
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
  * 
  * @param ps1 
@@ -86,7 +86,7 @@ function getCoeffsBez1Bez3(ps1: number[][], ps2: number[][]) {
 
     return {
         coeffs:   [v3, v2, v1, v0],
-        errBound: [v3_, v2_, v1_, v0_]  // still to be multiplied by `γγ3`
+        errBound: [v3_, v2_, v1_, v0_]  // still to be multiplied by `γ1`
     };
 }
 

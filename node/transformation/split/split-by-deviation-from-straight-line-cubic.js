@@ -5,7 +5,7 @@ const { abs, max } = Math;
 /**
  * Split the given cubic bezier curve into pieces (given as an array of
  * parameter `t` values) such that each piece is guaranteed to deviate less
- * than `maxD` from a straigh line.
+ * than `maxD` from a straight line.
  *
  * * a crude method is employed (for efficiency) by noting that the hausdorff
  * distance between a cubic and the line segment connecting its endpoints is at
@@ -16,9 +16,9 @@ const { abs, max } = Math;
  * by the two lines passing through the endpoint control points normal to the
  * line segment connecting the endpoint control points.
  *
- * @param ps an order 2 bezier curve given as an ordered array of its
- * control point coordinates, e.g. `[[0,0], [1,1], [2,1]]`
- * @param maxD
+ * @param ps a cubic bezier curve given as an ordered array of its
+ * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
+ * @param maxD the maximum allowed deviation of each piece from a straight line
  */
 function splitByDeviationFromStraighLine_Cubic(ps, maxD) {
     const tsS = [0];

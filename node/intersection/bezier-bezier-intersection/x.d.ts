@@ -5,7 +5,7 @@ import { RootInterval } from 'flo-poly';
 interface X {
     /**
      * The point of intersection calculated from the root interval `ri`.
-     * (Provided for convencience - use `box` for guaranteed containment.)
+     * (Provided for convenience - use `box` for guaranteed containment.)
      */
     readonly p: number[];
     /**
@@ -26,9 +26,10 @@ interface X {
      */
     readonly box: number[][];
     /**
-     * First bezier parameter `t` value of intersection taken as the midpoint of
-     * the root interval `ri` guaranteed to contain the intersection.
-     * (Provided for convencience - use `ri` for guaranteed containment.)
+     * First bezier parameter `t` value of intersection, i.e. the best estimate
+     * `t` value of the root interval `ri1` (guaranteed to contain the
+     * intersection). (Provided for convenience - use `ri1` for guaranteed
+     * containment.)
      */
     readonly t1: number;
     /**
@@ -39,9 +40,10 @@ interface X {
      */
     readonly ri1: RootInterval;
     /**
-     * Second bezier parameter `t` value of intersection taken as the midpoint of
-     * the root interval `ri` guaranteed to contain the intersection.
-     * (Provided for convencience - use `ri` for guaranteed containment.)
+     * Second bezier parameter `t` value of intersection, i.e. the best estimate
+     * `t` value of the root interval `ri2` (guaranteed to contain the
+     * intersection). (Provided for convenience - use `ri2` for guaranteed
+     * containment.)
      */
     readonly t2: number;
     /**

@@ -48,7 +48,7 @@ function furthestPointOnBezier(
     ts.push(0);
     ts.push(1); 
 
-    // Get point with minimum distance
+    // Get point with maximum distance
     let maxDSquared = -Infinity;
     let maxP: { p: number[], t: number, d: number } | undefined = undefined;
     for (const t of ts) {
@@ -60,7 +60,7 @@ function furthestPointOnBezier(
         }
     }
 
-    // keep TypeScript happy; `minP` cannot be `undefined` here
+    // keep TypeScript happy; `maxP` cannot be `undefined` here
     return maxP!;
 }
 

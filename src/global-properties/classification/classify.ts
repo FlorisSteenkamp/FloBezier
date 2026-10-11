@@ -288,7 +288,6 @@ function classifyGeneralCubic(ps: number[][]): GeneralCubic {
 
     // if the discriminant is definitely positive
     if (Discr > Discr_) {
-        // calculate roots naively as a fast pre-filter
         return cubicGeneralCrunode;
     }
 

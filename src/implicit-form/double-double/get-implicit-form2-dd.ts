@@ -5,7 +5,7 @@ const qno = ddNegativeOf;    // error -> 0
 const qm2 = ddMultBy2;       // error -> 0 
 //const qmd2 = qMultDouble1;  // error -> 1.5*γ²
 const qmd = ddMultDouble2;   // error -> 3*γ²
-const qmq = ddMultDd;      // error -> 7*γ² (theoretical), 5*γ² (worst found), we use 6*γ²
+const qmq = ddMultDd;      // error -> 5*γ² (proven, Muller & Rideau 2022, see https://doi.org/10.1145/3484514), 4.985*γ² (worst found), we use 6*γ²
 const qdq = ddDiffDd;      // error -> 3*γ²
 
 

@@ -79,7 +79,7 @@ function getCoeffsBez1Bez2(ps1: number[][], ps2: number[][]) {
 
     return {
         coeffs:   [v2, v1, v0],
-        errBound: [v2_, v1_, v0_]  // still to be multiplied by `γγ3`
+        errBound: [v2_, v1_, v0_]  // still to be multiplied by `γ1`
     };
 }
 

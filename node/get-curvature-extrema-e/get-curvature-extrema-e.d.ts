@@ -9,6 +9,9 @@ import type { Extrema } from "../get-curvature-extrema/extrema.js";
  * * see [MvG](https://math.stackexchange.com/a/1956264/130809)'s excellent
  * answer on math.stackexchange
  *
+ * * **slow**: uses Shewchuk expansion arithmetic - mainly intended for testing;
+ * prefer [[getCurvatureExtrema]] or [[getCurvatureExtremaDd]] otherwise
+ *
  * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  *

@@ -1,7 +1,7 @@
 import { FootAndEndpointInfo } from './foot-and-endpoint-info.js';
 /**
  * Returns the closest point(s) (and parameter `t` value(s)) on the given
- * bezier curve to the given point (with `t ∈ [0,1]`).
+ * bezier curve to the given point (with `t ∈ [lb,ub]`).
  *
  * * guaranteed accurate to within `4*Number.EPSILON` in the returned `t`
  * value(s)
@@ -19,6 +19,10 @@ import { FootAndEndpointInfo } from './foot-and-endpoint-info.js';
  * @param ps an order 0,1,2 or 3 bezier curve given as an ordered array of its
  * control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`
  * @param p a point, e.g. `[1,2]`
+ * @param lb optional; defaults to `0`; the lower bound of the `t` interval to
+ * search in (the point at `t === lb` is always considered)
+ * @param ub optional; defaults to `1`; the upper bound of the `t` interval to
+ * search in (the point at `t === ub` is always considered)
  *
  * @doc
  */

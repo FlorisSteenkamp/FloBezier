@@ -1,8 +1,10 @@
 /**
  * Calculates and returns the (two-sided) Hausdorff distance between the bezier
- * curves `A` and `B` as `[min,max]` where `min` is the minimum
- * guaranteed and `max` is the maximum guaranteed Hausdorff distance. The `min`
- * value will be a *much* more accurate result in general.
+ * curves `A` and `B`.
+ *
+ * * the returned value is the guaranteed *lower* bound of the calculated
+ * Hausdorff distance interval, which in general is a *much* more accurate
+ * result than the upper bound
  *
  * * to also obtain the parameter values and points at which the distance is
  * achieved, use `hausdorffDistanceExtra`

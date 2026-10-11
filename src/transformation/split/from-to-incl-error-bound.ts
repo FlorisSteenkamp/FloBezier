@@ -35,7 +35,7 @@ import { fromTo1InclErrorBound } from './from-to/from-to-1-incl-error-bound.js';
     }
 
     if (ps.length === 1) {
-        return { ps, _ps: [[0]] };
+        return { ps, _ps: [[0,0]] };
     }
 
     throw new Error('The given bezier curve must be of order <= 3.');

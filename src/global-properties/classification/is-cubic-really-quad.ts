@@ -14,8 +14,8 @@ const { abs } = Math;
  * 
  * * **exact**: not susceptible to floating point round-off
  * 
- * @param ps an order 0,1,2 or 3 bezier curve given as an array of its control
- * points, e.g. `[[1,2],[3,4],[5,6],[7,8]]`
+ * @param ps a cubic bezier curve given as an array of its control points, 
+ * e.g. `[[1,2],[3,4],[5,6],[7,8]]`
  * 
  * @doc mdx
  */

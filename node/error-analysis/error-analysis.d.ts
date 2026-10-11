@@ -1,8 +1,8 @@
-/** `2 * 2^-53` -> 2x the standard round-of unit `=== Number.EPSILON` */
+/** `2 * 2^-53` -> 2x the standard round-off unit `=== Number.EPSILON` */
 declare const eps: number;
-/** `2^-53` -> the standard round-of unit `=== eps/2` */
+/** `2^-53` -> the standard round-off unit `=== eps/2` */
 declare const u: number;
-/** `2^-106` -> the standard round-of unit for double-double precision `=== (eps/2)**2` */
+/** `2^-106` -> the standard round-off unit for double-double precision `=== (eps/2)**2` */
 declare const uu: number;
 /**
  * the standard floating point error function evaluated at `1`

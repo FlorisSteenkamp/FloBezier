@@ -43,7 +43,9 @@ const coeffFunctionsExact = [
  * double-double precision floating point numbers from highest to lowest power, 
  * e.g. `[[0,5],[0,-3],[0,0]]` represents the polynomial `5x^2 - 3x`.
  * 
- * * if there is an infinite number of intersections `undefined` is returned
+ * * if there is an infinite number of intersections (i.e. the curves are
+ * algebraically identical) the zero polynomial is returned - detecting and
+ * handling that case is left to the caller
  * * intermediate calculations are done in double-double precision with 
  * fallback to infinite precision (bar underflow / overflow)
  * 
