@@ -38,8 +38,6 @@ bounds), then 31–37 (quick cleanup that also shrinks the published package).
 
 29. `src/global-properties/bounds/get-interval-box/get-interval-box-dd.ts:366-379` — Line variant scales with `u` while quad/cubic use `uu`; the dd box for lines is 2^52 times looser than intended.
 
-30. `src/intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez3-bez3.ts:619-624` — Dead double variant: `3*c0` rounding not accounted for. Only matters if the directory is revived (see item 33).
-
 ---
 
 ## Improvements
@@ -48,7 +46,7 @@ bounds), then 31–37 (quick cleanup that also shrinks the published package).
 
 (package.json `files` includes `src`)
 
-33. `src/intersection/bezier-bezier-intersection/get-coefficients/double/` — Whole directory unreferenced; two files fully commented out, family incomplete, carries the bugs in item 30.
+33. `src/intersection/bezier-bezier-intersection/get-coefficients/double/` — Whole directory unreferenced; two files fully commented out, family incomplete, (item 30's error-bound bugs in `get-coeffs-bez3-bez3.ts` are now fixed). Note: `performance/src/naive/-naive.ts` still imports `get-coeffs-bez3-bez3.ts`.
 
 34. `src/transformation/split/split-by-deviation-from-straigh-line.ts` — Not exported, imports lack `.js` so would fail under ESM if wired in.
 
