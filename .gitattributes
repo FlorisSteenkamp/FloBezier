@@ -1,2 +1,7 @@
 * linguist-vendored
 *.ts linguist-vendored=false
+
+# Normalise line endings: LF in the repository and in the working tree
+# (Windows batch files are kept as CRLF)
+* text=auto eol=lf
+*.bat text eol=crlf
