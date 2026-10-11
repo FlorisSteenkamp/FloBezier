@@ -305,14 +305,14 @@ function getImplicitForm3DdWithRunningError(ps) {
     const v1_ = v3_ + q1q5_ + _v1;
     const v4 = qmq(s3, q6);
     const _v4 = abs(v4[1]);
-    const v4_ = _s3 * _q6 + s3_ * _q6 + _v4;
+    const v4_ = s3_ * _q6 + _s3 * q6_ + 2 * _v4;
     const v5 = qmq(q3q4, q4);
     const _v5 = abs(v5[1]);
-    const v5_ = _q3q4 * q4_ + q3q4_ * _q4 + _v5;
+    const v5_ = q3q4_ * _q4 + _q3q4 * q4_ + 2 * _v5;
     const v2 = qdq(v4, v5);
     const v2_ = v4_ + v5_ + abs(v2[1]);
     const v6 = qmq(q1, v1);
-    const v6_ = q1_ * _v1 + _q1 * v1_ + abs(v6[1]);
+    const v6_ = q1_ * _v1 + _q1 * v1_ + 2 * abs(v6[1]);
     // -------------------------------------------------------------------------
     //-------------------------------------------------------
     // const v = q1*(tq2q4 - q1q1 - q1q5) + s3*q6 - q3q4*q4;

@@ -96,6 +96,14 @@ function testErrorBound(fDd: F, fExact: FE, n1: number, n2: number, seed: number
 }
 
 
+/** directories with double-double calculations including error bounds */
+const ddDirs = [
+    'src/intersection/bezier-bezier-intersection/get-coefficients/double-double',
+    'src/intersection/self-intersection/get-coefficients/double-double',
+    'src/implicit-form/double-double'
+];
+
+
 describe('double-double intersection coefficients error bounds', function() {
     it('should give a valid (coefficient-wise) error bound for cubic-quadratic intersection coefficients, including hard cases',
     function() {
@@ -115,41 +123,69 @@ describe('double-double intersection coefficients error bounds', function() {
         // double-double product, i.e. `x = qmq(a,b)`, must include `2|x|`, i.e.
         // be of the form `x_ = ... + 2*abs($x)` (or `2*_x`, or `2*abs(x[1])`,
         // or `2*(a_*_a + |x|)` for a square).
-        const dirs = [
-            'src/intersection/bezier-bezier-intersection/get-coefficients/double-double',
-            'src/intersection/self-intersection/get-coefficients/double-double'
-        ];
-
         const violations: string[] = [];
         let count = 0;
-        for (const dir of dirs) {
+        for (const dir of ddDirs) {
             for (const file of readdirSync(dir).filter(f => f.endsWith('.ts'))) {
-                const lines = readFileSync(join(dir, file), 'utf8').split(/\r?\n/);
+                const src = readFileSync(join(dir, file), 'utf8');
+                // skip files that do not calculate an error bound at all
+                if (!/errBound|errorBound/.test(src)) { continue; }
+                const lines = src.split(/\r?\n/);
                 for (let i=0; i<lines.length; i++) {
-                    const m = lines[i].match(/^\s*const (\w+) = qmq\(/);
+                    const m = lines[i].match(/^\s*const ([\wₓᵧ]+) = qmq\(/);
                     if (!m) { continue; }
                     count++;
                     const v = m[1];
                     const V = v.replace(/\$/g, '\\$');
-                    // the error bound line may come just before or just after
-                    const near = [...lines.slice(i + 1, i + 6), ...lines.slice(Math.max(0, i - 6), i)];
-                    const errLine = near.find(l => new RegExp(`^\\s*const ${V}_ = `).test(l));
+                    // the error bound line can be anywhere in the file (variable
+                    // names are unique within a file)
+                    const errLine = lines.find(l => new RegExp(`^\\s*const ${V}_ = `).test(l));
                     if (errLine === undefined) {
                         violations.push(`${file}:${i+1} no error bound line found for \`${v}\``);
                         continue;
                     }
                     const ok =
                         new RegExp(`2\\*abs\\(\\$${V}\\)`).test(errLine) ||
+                        // `x_ = ... + 2*abs($a*$b)` for `x = qmq(a,b)`
+                        /2\*abs\(\$[\wₓᵧ]+\*\$[\wₓᵧ]+\)/.test(errLine) ||
                         new RegExp(`2\\*abs\\(${V}\\[1\\]\\)`).test(errLine) ||
                         new RegExp(`2\\*_${V}(?!\\w)`).test(errLine) ||
                         // a square: `x_ = 2*(a_*_a + |x|)`
-                        new RegExp(`^\\s*const ${V}_ = 2\\*\\(.*(_${V}|abs\\(\\$${V}\\)|abs\\(${V}\\[1\\]\\)|\\$${V})\\);\\s*$`).test(errLine);
+                        new RegExp(`^\\s*const ${V}_ = 2\\*\\(.*(_${V}|abs\\(\\$${V}\\)|abs\\(${V}\\[1\\]\\)|abs\\(\\$[\\wₓᵧ]+\\*\\$[\\wₓᵧ]+\\)|\\$${V})\\);\\s*$`).test(errLine);
                     if (!ok) { violations.push(`${file}:${i+1} ${errLine.trim()}`); }
                 }
             }
         }
 
         expect(count).toBeGreaterThan(300);
+        expect(violations).toEqual([]);
+    });
+
+    it('should not multiply two absolute values in any double-double error bound',
+    function() {
+        // In the naming convention `_x` is the absolute value of `x` and `x_`
+        // its error bound. Every term of an error bound must contain an error,
+        // so a term multiplying two absolute values (`_a*_b`) is always a bug,
+        // e.g. `v4_ = _s3*_q6 + ...` that should have been `v4_ = _s3*q6_ + ...`
+        const id = '[A-Za-z0-9ₓᵧ]+';
+        const errLineRe = new RegExp(`^\\s*const (${id})_ = (.*)$`);
+        const magMagRe = new RegExp(`(?<![\\w$ₓᵧ])_(${id})\\*_(${id})(?![\\wₓᵧ])`);
+
+        const violations: string[] = [];
+        let count = 0;
+        for (const dir of ddDirs) {
+            for (const file of readdirSync(dir).filter(f => f.endsWith('.ts'))) {
+                const lines = readFileSync(join(dir, file), 'utf8').split(/\r?\n/);
+                for (let i=0; i<lines.length; i++) {
+                    const m = lines[i].match(errLineRe);
+                    if (!m) { continue; }
+                    count++;
+                    if (magMagRe.test(m[2])) { violations.push(`${file}:${i+1} ${lines[i].trim()}`); }
+                }
+            }
+        }
+
+        expect(count).toBeGreaterThan(800);
         expect(violations).toEqual([]);
     });
 });
