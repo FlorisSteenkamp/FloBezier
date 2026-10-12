@@ -1,12 +1,16 @@
 import { getPFromBox } from "../bezier-bezier-intersection/x.js";
 import { reduceOrderIfPossible } from "../../transformation/reduce-order-if-possible.js";
-import { getAB1 } from "./get-ab1.js";
-import { getAB2 } from "./get-ab2.js";
-import { getAB3 } from "./get-ab3.js";
+import { toPowerBasisExact } from "../../to-power-basis/to-power-basis/exact/to-power-basis-exact.js";
+import { getTransform1 } from "./get-transform-1.js";
+import { getTransform2 } from "./get-transform-2.js";
+import { getTransform3 } from "./get-transform-3.js";
+import { getEndpointTs } from "./get-endpoint-ts.js";
 import { getIntervalBox } from "../../global-properties/bounds/get-interval-box/get-interval-box.js";
 import { sub1Ulp } from "../../sub-1-ulp.js";
 import { add1Ulp } from "../../add-1-ulp.js";
 import { intersectBoxes } from "../../boxes/intersect-boxes.js";
+/** @internal */
+const getTransforms = [, , getTransform1, getTransform2, getTransform3];
 /**
  * Returns the intersection range (given as 2 intersections (`X`s)) where the
  * endpoints of the two given *algebraically identical* curves
@@ -31,9 +35,14 @@ function getEndpointIntersections(psA, psB, orderAlreadyReduced = false) {
         psB = reduceOrderIfPossible(psB);
     }
     // `psA.length` should equal `psB.length` (due to precondition)
-    const getABs = [, , getAB1, getAB2, getAB3];
-    const [tA_B0, tA_B1] = getABs[psA.length](psA, psB);
-    const [tB_A0, tB_A1] = getABs[psA.length](psB, psA);
+    const getTransform = getTransforms[psA.length];
+    const xyA = toPowerBasisExact(psA);
+    // the exact parameter value of `A` at the start point of `B`
+    const dA_B0 = getTransform(xyA, toPowerBasisExact(psB));
+    // the exact parameter value of `A` at the end point of `B` (i.e. at the 
+    // start point of the reversed `B`)
+    const dA_B1 = getTransform(xyA, toPowerBasisExact(psB.slice().reverse()));
+    const [tA_B0, tA_B1, tB_A0, tB_A1] = getEndpointTs(dA_B0, dA_B1);
     //------------------------------------------------
     // Perform a simple unrolled sweep line algorithm
     //------------------------------------------------

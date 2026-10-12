@@ -1,6 +1,6 @@
 import { Horner, roots } from 'flo-poly';
 import { getMedialPointCoeffs } from './get-medial-point-coeffs.js';
-const { abs, max } = Math;
+const { abs } = Math;
 /**
  * Returns candidate ray parameter values `t`, bezier parameter values `s` and
  * medial points for points `q(t)` and b(s) that satisfy the medial condition with
@@ -38,7 +38,7 @@ function getMedialPoints(p, v, ps) {
     const { A, B, C, D, H } = getMedialPointCoeffs(p, v, ps);
     if (ps.length === 1) {
         // a point: a single linear equation in `t` (and no `s` dependence)
-        const t = chooseStableT(A[0], B[0]);
+        const t = chooseStableT(A[0], B[0], abs(A[0]));
         return {
             ts: [t],
             ss: [0],
@@ -46,17 +46,23 @@ function getMedialPoints(p, v, ps) {
         };
     }
     /** the possible parameter values of the bezier curve */
-    const ss = (roots(H, 0, 1) || []).map(r => r.t); //?
+    const ss = (roots(H, 0, 1) || []).map(r => r.t);
     /** the possible parameter values of the ray */
     const ts = [];
     /** the possible points on the ray */
     const qs = [];
+    /** the coefficient magnitudes (used to detect cancellation in `A(s)` and `C(s)`) */
+    const _A = A.map(abs);
+    const _C = C.map(abs);
     for (const s of ss) {
         const As = Horner(A, s);
         const Bs = Horner(B, s);
         const Cs = C.length ? Horner(C, s) : undefined;
         const Ds = D.length ? Horner(D, s) : undefined;
-        const t = chooseStableT(As, Bs, Cs, Ds);
+        // the magnitudes of the terms of `A(s)` and `C(s)` (`s` is in `[0,1]`)
+        const _As = Horner(_A, s);
+        const _Cs = C.length ? Horner(_C, s) : undefined;
+        const t = chooseStableT(As, Bs, _As, Cs, Ds, _Cs);
         ts.push(t);
         const q = [p[0] + t * v[0], p[1] + t * v[1]];
         qs.push(q);
@@ -64,16 +70,35 @@ function getMedialPoints(p, v, ps) {
     return { ts, ss, qs };
 }
 /**
+ * The factor (times `Number.EPSILON`) below which `|A|` (or `|C|`) relative to
+ * the magnitude of its terms is considered to be zero (due to cancellation).
+ *
+ * @internal
+ */
+const CANCELLATION_FACTOR = 8;
+/**
  * Recovers a numerically stable ray parameter `t` from linear equations
  * `A*t + B = 0` and (optionally) `C*t + D = 0` evaluated at a fixed `s`.
  *
- * If `C,D` are unavailable, this falls back to `-B/A`.
+ * * if `C,D` are unavailable, this falls back to `-B/A`
+ * * `A` (or `C`) is considered zero (i.e. that equation has no solution) if
+ * it is within a small multiple of `Number.EPSILON` of the magnitude of its
+ * terms (`_A` or `_C`), i.e. if it is zero up to cancellation - this is
+ * independent of the scale of the coordinates (unlike a fixed absolute
+ * threshold or one comparing `A` with `B` since, when scaling all coordinates
+ * by `k`, `A` scales with `k` but `B` with `k²`)
+ *
+ * @param A
+ * @param B
+ * @param _A the magnitude of the terms of `A` (e.g. `Σ|aᵢ|sⁱ`)
+ * @param C
+ * @param D
+ * @param _C the magnitude of the terms of `C`
+ *
+ * @internal
  */
-function chooseStableT(A, B, C, D) {
-    const epsScale = max(1, abs(A), abs(B), abs(C ?? 0), abs(D ?? 0));
-    const eps = Number.EPSILON * epsScale;
-    const denomAB = abs(A);
-    const hasAB = denomAB > eps;
+function chooseStableT(A, B, _A, C, D, _C) {
+    const hasAB = abs(A) > CANCELLATION_FACTOR * Number.EPSILON * _A;
     // If only A,B are present, preserve existing behavior.
     if (C === undefined || D === undefined) {
         if (hasAB) {
@@ -81,8 +106,7 @@ function chooseStableT(A, B, C, D) {
         }
         return NaN;
     }
-    const denomCD = abs(C);
-    const hasCD = denomCD > eps;
+    const hasCD = abs(C) > CANCELLATION_FACTOR * Number.EPSILON * (_C ?? abs(C));
     if (!hasAB && !hasCD) {
         return NaN;
     }
@@ -95,8 +119,9 @@ function chooseStableT(A, B, C, D) {
     const tAB = -B / A;
     const tCD = -D / C;
     // Score each candidate by how well it satisfies the *other* equation.
-    const scoreAB = abs(C * tAB + D) / (abs(C) + abs(D) + eps);
-    const scoreCD = abs(A * tCD + B) / (abs(A) + abs(B) + eps);
+    // (the denominators are non-zero since `A` and `C` are non-zero here)
+    const scoreAB = abs(C * tAB + D) / (abs(C) + abs(D));
+    const scoreCD = abs(A * tCD + B) / (abs(A) + abs(B));
     return scoreAB <= scoreCD ? tAB : tCD;
 }
 export { getMedialPoints };

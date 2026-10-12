@@ -178,10 +178,12 @@ describe('getCurvatureExtrema', function() {
             ].map(translate_).map(rotate_);
 
             const extrema = getCurvatureExtrema(ps);
+            // (the expected values are the exact results (rounded), i.e. as 
+            // given by `getCurvatureExtremaE`)
             expect(extrema).toBeNearly(2**4, { 
                 minima: [], 
-                maxima: [0.15617147171437748, 0.8457091576527154], 
-                inflections: [0.49374951030401965] 
+                maxima: [0.15617147171437734, 0.8457091576527168], 
+                inflections: [0.49374951030401976] 
             });
         }
         {
@@ -196,9 +198,11 @@ describe('getCurvatureExtrema', function() {
             ].map(translate_).map(rotate_);
 
             const extrema = getCurvatureExtrema(ps);
+            // (the expected values are the exact results (rounded), i.e. as 
+            // given by `getCurvatureExtremaE`)
             expect(extrema).toBeNearly(2**4, { 
                 minima: [], 
-                maxima: [0.14916374172712923, 0.8508362582728751],
+                maxima: [0.14916374172712932, 0.8508362582728707],
                 inflections: [0.4999999999999999] 
             });
         }
@@ -268,13 +272,17 @@ describe('getCurvatureExtrema', function() {
                 ).toBe(true);;
             }
 
-            expect(extrema).toBeNearly(2**6, {
+            // (the expected values are the exact results (rounded), i.e. as 
+            // given by `getCurvatureExtremaE`; this case is ill-conditioned 
+            // so that the double precision results are only accurate to within
+            // about 600 ulps)
+            expect(extrema).toBeNearly(2**10, {
                 minima: [
-                    0.49992314768895263
+                    0.4999231476894879
                 ],
                 maxima: [
-                    0.37298900928395184,
-                    0.6268781560395205
+                    0.37298900928390333,
+                    0.6268781560388238
                 ],
                 inflections: [] 
             });

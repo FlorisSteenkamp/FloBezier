@@ -1,8 +1,23 @@
-import { eDiff, eMult, eMultBy2, eNegativeOf } from 'big-float-ts';
+import { eDiff, eMult, eMultBy2, eNegativeOf, eSign } from 'big-float-ts';
 import { erCompare } from './er-compare.js';
 import { calcExactSquareRoot } from './calc-exact-square-root.js';
+import { getTransform1 } from './get-transform-1.js';
 /** @internal */
 function getTransform2(xyA, xyB) {
+    // If the `t²` coefficient of one coordinate of `xyA` is zero then that
+    // coordinate is linear in `t` (and, since both curves are the same
+    // algebraic curve, the same then holds for `xyB`), so the (simpler) linear
+    // transform can be found from that coordinate alone (which also avoids 
+    // taking the square root of zero below).
+    // Note: the `t²` coefficients of both coordinates can't be zero else we
+    // would have had a lower order bezier curve.
+    const coord = eSign(xyA[0][0]) === 0 ? 0 : eSign(xyA[1][0]) === 0 ? 1 : -1;
+    if (coord !== -1) {
+        // the linear coordinate as a line `[a1,a0]` (in both coordinates)
+        const [, a1, a0] = xyA[coord];
+        const [, b1, b0] = xyB[coord];
+        return getTransform1([[a1, a0], [a1, a0]], [[b1, b0], [b1, b0]]);
+    }
     const [D1x, D2x] = getTransformedTs2(xyA[0], xyB[0]);
     const [D1y, D2y] = getTransformedTs2(xyA[1], xyB[1]);
     if (erCompare(D1x, D1y) === 0 ||

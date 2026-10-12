@@ -34,7 +34,9 @@ const { min, max } = Math;
  * control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * @param B a bezier curve given by an ordered array of its
  * control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
- * @param tolerance optional; defaults to `max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000`;
+ * @param tolerance optional; defaults to `max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000`
+ * (only if not given, i.e. `0` is a valid tolerance in which case the result
+ * is refined until `maxIterations` is reached);
  * if the calculated absolute error bound is less than this, the result is
  * returned; this is *not* a hard tolerance and the bound can be less
  * accurate in hard cases (due to the `maxIterations` parameter). Luckily
@@ -72,8 +74,7 @@ function closestPointsBetweenBeziers(A, B, tolerance, maxIterations = 50) {
         // Find minimum distance from endpoints of B to A:
         const EB0 = closestPointOnBezier(A, B[0]);
         const EB1 = closestPointOnBezier(A, B[1]);
-        const cps = [EA0, EA1, EB0, EB1].sort((a, b) => a.d - b.d);
-        const d = cps[0].d;
+        const d = min(EA0.d, EA1.d, EB0.d, EB1.d);
         const pwds = [];
         if (EA0.d === d) {
             pwds.push({ pA: { p: A[0], t: 0 }, pB: EA0, d });
@@ -90,7 +91,7 @@ function closestPointsBetweenBeziers(A, B, tolerance, maxIterations = 50) {
         return pwds;
     }
     const l = max(maxAbsCoordinate(A), maxAbsCoordinate(B));
-    tolerance = tolerance || l / 1000_000;
+    tolerance = tolerance ?? l / 1000_000;
     // an array of intervals
     const [eL, eR] = calcHErrorBound(A, 0, 1);
     const dL = closestPointOnBezier(B, A[0]).d;

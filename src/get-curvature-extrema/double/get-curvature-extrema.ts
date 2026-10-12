@@ -1,16 +1,15 @@
-import { ddDifferentiate, eHorner, roots } from "flo-poly";
-import { eMult, eSign } from 'big-float-ts';
-import { getAbsCurvatureExtremaPolysDd } from "./get-abs-curvature-extrema-polys-dd.js";
-import { isCollinear } from "../global-properties/classification/is-collinear.js";
-import { isCubicReallyQuad } from "../global-properties/classification/is-cubic-really-quad.js";
-import { cubicToQuadratic } from "../transformation/degree-or-type/cubic-to-quadratic.js";
-import { getCurvatureExtremaQuadraticPolyDd } from './get-curvature-extrema-quadratic-poly-dd.js';
-import type { Extrema } from "../get-curvature-extrema/extrema.js";
+import type { Extrema } from '../extrema.js';
+import { roots, differentiate, Horner } from "flo-poly";
+import { getAbsCurvatureExtremaPolys } from "./get-abs-curvature-extrema-polys.js";
+import { isCollinear } from "../../global-properties/classification/is-collinear.js";
+import { isCubicReallyQuad } from "../../global-properties/classification/is-cubic-really-quad.js";
+import { cubicToQuadratic } from "../../transformation/degree-or-type/cubic-to-quadratic.js";
+import { getCurvatureExtremaQuadraticPoly } from './get-curvature-extrema-quadratic-poly.js';
 
 
 /**
  * Returns the parameter `t` values (in `[0,1]`) of local minimum / maximum 
- * absolute curvature for the given bezier curve.
+ * absolute curvature for the given bezier curve as well as inflection points.
  * 
  * If there are an infinite number of such `t` values (such as is the case for a 
  * line), an empty array is returned.
@@ -23,7 +22,9 @@ import type { Extrema } from "../get-curvature-extrema/extrema.js";
  * 
  * @doc mdx
  */
-function getCurvatureExtremaDd(ps: number[][]): Extrema {
+function getCurvatureExtrema(
+        ps: number[][]): Extrema {
+
     if (isCollinear(ps)) {
         return { minima: [], maxima: [], inflections: [] };
     }
@@ -33,17 +34,18 @@ function getCurvatureExtremaDd(ps: number[][]): Extrema {
     }
 
     if (ps.length === 3) {
-        const poly = getCurvatureExtremaQuadraticPolyDd(ps);
+        const poly = getCurvatureExtremaQuadraticPoly(ps);
         const maxima = roots(poly, 0, 1)?.map(r => r.t) || [];
+
         return {
             minima: [], 
-            maxima,
+            maxima, 
             inflections: []
         };
     }
 
 
-    const polys = getAbsCurvatureExtremaPolysDd(ps);
+    const polys = getAbsCurvatureExtremaPolys(ps);
     const p1 = polys.inflectionPoly;
     const p2 = polys.otherExtremaPoly;
 
@@ -52,7 +54,7 @@ function getCurvatureExtremaDd(ps: number[][]): Extrema {
     // get second derivative (using product rule) to see if it is a local 
     // minimum or maximum, i.e. diff(p1*p2) = p1'*p2 + p1*p2' = dp1*p2 + p1*dp2
     // = p1*dp2 (since dp1*p2 === 0)
-    const dp2 = ddDifferentiate(p2);
+    const dp2 = differentiate(p2);
 
     const minima: number[] = [];
     const maxima: number[] = [];
@@ -60,16 +62,12 @@ function getCurvatureExtremaDd(ps: number[][]): Extrema {
     for (let i=0; i<ts.length; i++) {
         const t = ts[i];
         
-        const dp2_ = eHorner(dp2, t);
-        const p1_ = eHorner(p1, t);
+        const dp2_ = Horner(dp2, t);
+        const p1_ = Horner(p1, t);
         
-        const secondDerivative = eMult(p1_,dp2_);
+        const secondDerivative = p1_*dp2_;
 
-        if (eSign(secondDerivative) >= 0) {
-            minima.push(t);
-        } else {
-            maxima.push(t);
-        }
+        (secondDerivative >= 0 ? minima : maxima).push(t);
     }
 
     const inflections = roots(p1, 0, 1)?.map(r => r.t) || [];
@@ -78,4 +76,5 @@ function getCurvatureExtremaDd(ps: number[][]): Extrema {
 }
 
 
-export { getCurvatureExtremaDd }
+export type { Extrema }
+export { getCurvatureExtrema }

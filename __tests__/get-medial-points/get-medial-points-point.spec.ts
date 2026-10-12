@@ -64,3 +64,34 @@ describe('getMedialPointCoeffs / ddGetMedialPointCoeffs unsupported orders', fun
         expect(() => getMedialPoints(p, v, ps4)).toThrow(msg);
     });
 });
+
+
+describe('getMedialPoints scale invariance', function() {
+    it('should give scaled results for scaled inputs (also for very small and very large coordinates)', function() {
+        // previously a fixed absolute threshold (and comparing `A` with `B`,
+        // which scale differently) made valid solutions `NaN` for very small 
+        // or very large coordinates
+        const cases = [
+            { p: [0,0], v: [1,0], ps: [[4,1]] },
+            { p: [1,-0.5], v: [0.1,1], ps: [[-1,2],[2,5]] },
+            { p: [0,0], v: [1,0.35], ps: [[2,-1],[4,3],[7,0]] },
+            { p: [0.5,0.25], v: [1,0.1], ps: [[1.5,0.1],[-3.2,0.35],[4.5,0.2],[6.5,0.2]] }
+        ];
+        for (const { p, v, ps } of cases) {
+            const ts = getMedialPoints(p, v, ps).ts;
+            expect(ts.length).toBeGreaterThan(0);
+            for (const k of [1e-30, 1e-12, 1e12, 1e30]) {
+                const sc = (q: number[]) => q.map(c => c*k);
+                // scaling `p` and `ps` (but not the direction `v`) scales `t`
+                const tsK = getMedialPoints(sc(p), v, ps.map(sc)).ts;
+                expect(tsK.length).toEqual(ts.length);
+                for (let i=0; i<ts.length; i++) {
+                    expect(abs(tsK[i]/(k*ts[i]) - 1)).toBeLessThan(1e-9);
+                }
+            }
+        }
+
+        // a very close point
+        expect(getMedialPoints([0,0], [1,0], [[4e-17,0]]).ts).toEqual([2e-17]);
+    });
+});

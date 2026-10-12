@@ -1,6 +1,4 @@
 import { toPowerBasis_1stDerivative } from "../to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.js";
-import { toPowerBasis_2ndDerivative } from "../to-power-basis/to-power-basis-2nd-derivative/double/to-power-basis-2nd-derivative.js";
-import { toPowerBasis_3rdDerivative } from "../to-power-basis/to-power-basis-3rd-derivative/double/to-power-basis-3rd-derivative.js";
 /**
  * Returns the polynomials whose zeros are the `t` values of the local
  * minima / maxima of the absolute curvature for the given bezier curve.
@@ -24,99 +22,45 @@ function getAbsCurvatureExtremaPolys(ps) {
     // dd(kappa^2)/dt === (x′′y′ − x′y′′)*((x′′′y′ − x′y′′′)(x′2 + y′2) − 3(x′x′′ + y′y′′)(x′′y′ − x′y′′))
     // Inflection points at: (x′′y′ − x′y′′) === 0
     // Max abs curvature at: ((x′′′y′ − x′y′′′)(x′2 + y′2) − 3(x′x′′ + y′y′′)(x′′y′ − x′y′′)) === 0
-    const [[dx2, dx1, dx0], [dy2, dy1, dy0]] = toPowerBasis_1stDerivative(ps); // max bitlength increase === 5
-    const [[ddx1, ddx0], [ddy1, ddy0]] = toPowerBasis_2ndDerivative(ps); // max bitlength increase === 6
-    const [[dddx], [dddy]] = toPowerBasis_3rdDerivative(ps); // max bitlength increase === 6
-    // ((x′′′y′ − x′y′′′)(x′2 + y′2) − 3(x′x′′ + y′y′′)(x′′y′ − x′y′′))
-    // or 
-    // x′′′x′x′y′ + x′′′y′y′y′ - y′′′x′x′x′ - y′′′x′y′y′ + 
-    // 3(x′′y′′x′x′ - x′′x′′x′y′ - x′′y′′y′y′ + y′′y′′x′y′)
-    // The above line becomes
-    // ((dddx*dy(t) − dx(t)*dddy)(dx(t)dx(t) + dy(t)dy(t)) − 3(dx(t)ddx(t) + dy(t)ddy(t))(ddx(t)dy(t) − dx(t)ddy(t)))
-    // or 
-    // dddx*dxt**2*dyt + dddx*dyt**3 - dddy*dxt**3 - dddy*dxt*dyt**2 - 
-    // 3*ddxt**2*dxt*dyt + 3*ddxt*ddyt*dxt**2 - 3*ddxt*ddyt*dyt**2 + 3*ddyt**2*dxt*dyt
-    // which becomes: (after substituting e.g. dy(t) = dy2*t^2 + dy1*t + dy0, etc. using Python and
-    // then expanding and collecting terms)
-    const dddx_dy1 = dddx * dy1;
-    const dddy_dx1 = dddy * dx1;
-    const ddx0_dy0 = ddx0 * dy0;
-    const ddx0_dy1 = ddx0 * dy1;
-    const ddy1_ddy1 = ddy1 * ddy1;
-    const ddx1_dy0 = ddx1 * dy0;
-    const ddy0_dx0 = ddy0 * dx0;
-    const ddy0_dx1 = ddy0 * dx1;
-    const ddy1_dx0 = ddy1 * dx0;
-    const dx0_dx1 = dx0 * dx1;
-    const dx0_dx2 = dx0 * dx2;
-    const dx0_dy2 = dx0 * dy2;
-    const dx1_dx1 = dx1 * dx1;
-    const dx1_dx2 = dx1 * dx2;
-    const dx1_dy1 = dx1 * dy1;
-    const dx2_dy0 = dx2 * dy0;
-    const dx2_dy2 = dx2 * dy2;
-    const dx2_dx2 = dx2 * dx2;
-    const dy0_dy1 = dy0 * dy1;
-    const dy0_dy2 = dy0 * dy2;
-    const dy1_dy1 = dy1 * dy1;
-    const dy1_dy2 = dy1 * dy2;
-    const dy2_dy2 = dy2 * dy2;
-    const ss = dddx * dy0 - dddy * dx0;
-    const uu = dddx_dy1 - dddy_dx1;
-    const vv = ddx0 * dx0 + ddy0 * dy0;
-    const ww = ddx0 * dx1 + ddx1 * dx0 + ddy0 * dy1 + ddy1 * dy0;
-    const xx = ddx0_dy0 - ddy0_dx0;
-    const yy = ddx0_dy1 + ddx1_dy0 - ddy0_dx1 - ddy1_dx0;
-    const qq = dx0 * dx0 + dy0 * dy0;
-    const rr = dx0_dx1 + dy0_dy1;
-    // t6 cancels! see https://math.stackexchange.com/a/1956264/130809
-    const z1 = dx1_dy1 + dx2_dy0;
-    const z2 = dy0_dy2 + dy1_dy1;
-    const z3 = dx0_dx2 + dx1_dx1;
-    const z4 = dx1 * dy2 + dx2 * dy1;
-    const z5 = dx2_dx2 - dy2_dy2;
-    const z6 = dx1_dx2 - dy1_dy2;
-    const z7 = dx0_dy2 + dx1_dy1;
-    const z8 = dx0_dx1 - dy0_dy1;
-    const z9 = dx0 * dy1 + dx1 * dy0;
-    const x1 = dy0_dy2 + z2;
-    const x2 = dx0_dx2 + z3;
-    const x3 = dx0_dy2 + z1;
-    const x4 = dx1_dy1 + z1;
-    const x5 = x2 - x1;
-    const x6 = z1 + dx2_dy0;
-    const x7 = z7 + dx2_dy0;
-    const x8 = 2 * ddy0_dx1 + ddy1_dx0;
-    const t5 = dx2_dx2 * (dddx_dy1 - 3 * dddy_dx1) +
-        dy2_dy2 * (3 * dddx_dy1 - dddy_dx1) +
-        2 * ((dx2_dy2) * ((dddx * dx1 - dddy * dy1) + 3 * (ddy0 * ddy1 - ddx0 * ddx1)) + 3 * ddx1 * ddy1 * z6) +
-        3 * (z4 * (ddy1_ddy1 - ddx1 * ddx1) + z5 * (ddx0 * ddy1 + ddy0 * ddx1));
-    const t4 = dddx * (dy2 * (x2 + 3 * z2) + dx2 * x4) -
-        dddy * (dx0 * (3 * dx2_dx2 + dy2_dy2) + dx1 * (3 * dx1_dx2 + 2 * dy1_dy2) + dx2 * x1) +
-        3 * (ddx0 * ((ddy0 * z5 - ddx0 * dx2_dy2) + 2 * (ddy1 * z6 - ddx1 * z4)) +
-            ddx1 * (2 * ddy0 * z6 + ddy1 * (2 * (dx0_dx2 - dy0_dy2) + (dx1_dx1 - dy1_dy1)) - ddx1 * x7) +
-            ddy0 * (ddy0 * dx2_dy2 + 2 * ddy1 * z4) +
-            ddy1_ddy1 * x3);
-    const t3 = dddx * (2 * dx0 * z4 + dx1 * x6 + dy1 * (4 * dy0_dy2 + x1)) -
-        dddy * (2 * dx0 * (3 * dx1_dx2 + dy1_dy2) + dx1 * (dx1_dx1 + 2 * dy0_dy2) + dy1 * x6) +
-        3 * (ddx0 * (2 * (ddy0 * z6 - ddx1 * x7) + ddy1 * x5 - ddx0 * z4) +
-            ddx1 * (2 * ddy1 * z8 - ddx1 * z9) +
-            ddy0 * (ddy0 * z4 + 2 * ddy1 * x3 + ddx1 * x5) +
-            ddy1_ddy1 * z9);
-    const t2 = dddx * (dx0 * (dx0_dy2 + 2 * z1) + dy0 * (dx1_dx1 + 3 * z2)) -
-        dddy * (dx0 * (3 * z3 + x1) + dy0 * x4) +
-        3 * (ddx0 * (ddy0 * x5 - ddx0 * x3 + 2 * (ddy1 * z8 - ddx1 * z9)) +
-            ddx1 * (dx0 * (x8 - ddx1 * dy0) - dy0 * (2 * ddy0 * dy1 + ddy1 * dy0)) +
-            ddy0 * (ddy0 * z1 + dx0 * (2 * ddy1 * dy1 + ddy0 * dy2)) +
-            ddy1 * dy0 * x8);
-    const t1 = (qq * uu + 2 * rr * ss) - 3 * (vv * yy + ww * xx);
-    const t0 = ss * qq - 3 * vv * xx;
-    const r3 = ddx1 * dy2 - ddy1 * dx2;
-    const r2 = ddx0 * dy2 + ddx1 * dy1 - ddy0 * dx2 - ddy1 * dx1;
-    const r1 = ddx0_dy1 + ddx1_dy0 - ddy0_dx1 - ddy1_dx0;
-    const r0 = ddx0_dy0 - ddy0_dx0;
+    //
+    // With the 1st derivative given by `x′ = a*t² + b*t + c` and 
+    // `y′ = d*t² + e*t + f`, the 2nd and 3rd derivatives are `x′′ = 2a*t + b`, 
+    // `x′′′ = 2a`, `y′′ = 2d*t + e` and `y′′′ = 2d` so that, after expanding 
+    // and collecting terms (using sympy), the polynomials can be written in 
+    // terms of only the 'cross products'
+    //   P = ae - bd,  Q = af - cd,  R = bf - ce 
+    // and the 'dot products'
+    //   Saa = a² + d²,  Sab = ab + de,  Sac = ac + df,
+    //   Sbb = b² + e²,  Sbc = bc + ef,  Scc = c² + f²
+    // as:
+    //   x′′y′ − x′y′′ = P*t² + 2Q*t + R  (the inflection polynomial)
+    // and (the other extrema polynomial)
+    //   t⁵: -4*Saa*P,  (t⁶ cancels, see https://math.stackexchange.com/a/1956264/130809)
+    //   t⁴: -(10*Saa*Q + 5*Sab*P),
+    //   t³: -(4*Saa*R + 16*Sab*Q + Sbb*P),
+    //   t²: -(10*Sab*R + (8*Sac + 3*Sbb)*Q),
+    //   t¹: -(8*Sac + 3*Sbb)*R,
+    //   t⁰: 2*Scc*Q - 3*Sbc*R
+    // `a,b,c` and `d,e,f` are the power basis coefficients of `x′` and `y′`
+    const [[a, b, c], [d, e, f]] = toPowerBasis_1stDerivative(ps);
+    const P = a * e - b * d;
+    const Q = a * f - c * d;
+    const R = b * f - c * e;
+    const Saa = a * a + d * d;
+    const Sab = a * b + d * e;
+    const Sac = a * c + d * f;
+    const Sbb = b * b + e * e;
+    const Sbc = b * c + e * f;
+    const Scc = c * c + f * f;
+    const S8 = 8 * Sac + 3 * Sbb;
+    const t5 = -4 * Saa * P;
+    const t4 = -(10 * Saa * Q + 5 * Sab * P);
+    const t3 = -((4 * Saa * R + 16 * Sab * Q) + Sbb * P);
+    const t2 = -(10 * Sab * R + S8 * Q);
+    const t1 = -S8 * R;
+    const t0 = 2 * Scc * Q - 3 * Sbc * R;
     return {
-        inflectionPoly: [r3, r2, r1, r0],
+        inflectionPoly: [P, 2 * Q, R],
         otherExtremaPoly: [t5, t4, t3, t2, t1, t0]
     };
 }

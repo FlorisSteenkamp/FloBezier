@@ -14,6 +14,14 @@ const { abs } = Math;
  * * the error bound returned still needs to be scaled by
  *   `γ1 === u/(1 - u)` (where `u === Number.EPSILON / 2`) before use
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
+ * * **precondition**: the given curve must really be of order 3 (e.g. use
+ * [[reduceOrderIfPossible]] first); for a degenerate curve (e.g. a cubic that
+ * is really a quadratic, a line or a point) all returned coefficients are zero
+ * (or, due to round-off, very nearly zero), i.e. the implicit form is
+ * meaningless, unlike [[getImplicitForm3Exact]] which falls back to the
+ * implicit form of the lower order curve; the returned error bound remains
+ * valid though, so that certified algorithms relying on it will correctly fall
+ * back to exact arithmetic
  *
  * @param ps a cubic bezier curve given as an array of its control points,
  * e.g. `[[1,2],[3,4],[5,7],[0,0]]`
@@ -69,10 +77,10 @@ function getImplicitForm3WithRunningError(ps) {
     const _b2b3 = _b2 * _b3;
     const b2b3_ = b2_ * _b3Eff + _b2 * b3_ + _b2b3;
     const a2a3 = a2 * a3;
-    const _a2a3 = abs(a2 * a3);
+    const _a2a3 = abs(a2a3);
     const a2a3_ = a2_ * _a3Eff + _a2 * a3_ + _a2a3;
     const a3b3 = a3 * b3;
-    const _a3b3 = abs(a3 * b3);
+    const _a3b3 = abs(a3b3);
     const a3b3_ = a3_ * _b3Eff + _a3 * b3_ + _a3b3;
     const a3b0 = a3 * b0;
     const a3b0_ = a3_ * _b0 + abs(a3b0);
@@ -91,37 +99,37 @@ function getImplicitForm3WithRunningError(ps) {
     const a0b1 = a0 * b1;
     const a0b1_ = _a0 * b1_ + abs(a0b1);
     const q1 = a3b0 - a0b3;
-    const q1_ = a3b0_ + a0b3_ + abs(a3b0 - a0b3);
+    const _q1 = abs(q1);
+    const q1_ = a3b0_ + a0b3_ + _q1;
     const q2 = a3b1 - a1b3;
-    const q2_ = a3b1_ + a1b3_ + abs(a3b1 - a1b3);
+    const _q2 = abs(q2);
+    const q2_ = a3b1_ + a1b3_ + _q2;
     const q3 = a3b2 - a2b3;
-    const q3_ = a3b2_ + a2b3_ + abs(a3b2 - a2b3);
+    const _q3 = abs(q3);
+    const q3_ = a3b2_ + a2b3_ + _q3;
     const q4 = a2b0 - a0b2;
-    const q4_ = a2b0_ + a0b2_ + abs(a2b0 - a0b2);
+    const _q4 = abs(q4);
+    const q4_ = a2b0_ + a0b2_ + _q4;
     const q5 = a2b1 - a1b2;
-    const q5_ = a2b1_ + a1b2_ + abs(a2b1 - a1b2);
+    const _q5 = abs(q5);
+    const q5_ = a2b1_ + a1b2_ + _q5;
     const q6 = a1b0 - a0b1;
-    const q6_ = a1b0_ + a0b1_ + abs(a1b0 - a0b1);
-    const _t1 = abs(b1b3 - b2b2);
+    const _q6 = abs(q6);
+    const q6_ = a1b0_ + a0b1_ + _q6;
     const t1 = b1b3 - b2b2;
+    const _t1 = abs(t1);
     const t1_ = b1b3_ + b2b2_ + _t1;
-    const _t2 = abs(a1a3 - a2a2);
     const t2 = a1a3 - a2a2;
-    const t2_ = a1a3_ + a2a2_ + abs(a1a3 - a2a2);
-    const _p1 = abs(a2b3 + a3b2);
+    const _t2 = abs(t2);
+    const t2_ = a1a3_ + a2a2_ + _t2;
     const p1 = a2b3 + a3b2;
-    const p1_ = a2b3_ + a3b2_ + abs(a2b3 + a3b2);
+    const _p1 = abs(p1);
+    const p1_ = a2b3_ + a3b2_ + _p1;
     const p2 = a1b3 + a3b1;
     const _p2 = abs(p2);
     const p2_ = a1b3_ + a3b1_ + _p2;
     const tq2 = 2 * q2;
     const tq2_ = 2 * q2_;
-    const _q1 = abs(q1);
-    const _q2 = abs(q2);
-    const _q3 = abs(q3);
-    const _q4 = abs(q4);
-    const _q5 = abs(q5);
-    const _q6 = abs(q6);
     const _tq2 = 2 * _q2;
     const q1q1 = q1 * q1;
     const q1q2 = q1 * q2;

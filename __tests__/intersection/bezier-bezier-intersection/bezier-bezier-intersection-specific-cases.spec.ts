@@ -419,8 +419,24 @@ describe('bezierBezierIntersection', function() {
 function omitPT(xs: X[]): Omit<X, 'p' | 't1' | 't2'>[] {
     return xs.map(x => {
         const { p, t1, t2, ...rest } = x;
-        return rest;
+        return zerosToPositive(rest);
     });
+}
+
+
+/** 
+ * Returns a deep copy of the given value with `-0` replaced by `0` (since
+ * `toEqual` distinguishes between them but they're considered equal here).
+ */
+function zerosToPositive<T>(v: T): T {
+    if (typeof v === 'number') { return (v === 0 ? 0 : v) as T; }
+    if (Array.isArray(v)) { return v.map(zerosToPositive) as T; }
+    if (v !== null && typeof v === 'object') {
+        return Object.fromEntries(
+            Object.entries(v).map(([k, w]) => [k, zerosToPositive(w)])
+        ) as T;
+    }
+    return v;
 }
 
 

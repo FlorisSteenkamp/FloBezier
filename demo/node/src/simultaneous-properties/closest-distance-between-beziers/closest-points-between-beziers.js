@@ -72,8 +72,7 @@ function closestPointsBetweenBeziers(A, B, tolerance, maxIterations = 50) {
         // Find minimum distance from endpoints of B to A:
         const EB0 = closestPointOnBezier(A, B[0]);
         const EB1 = closestPointOnBezier(A, B[1]);
-        const cps = [EA0, EA1, EB0, EB1].sort((a, b) => a.d - b.d);
-        const d = cps[0].d;
+        const d = min(EA0.d, EA1.d, EB0.d, EB1.d);
         const pwds = [];
         if (EA0.d === d) {
             pwds.push({ pA: { p: A[0], t: 0 }, pB: EA0, d });

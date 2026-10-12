@@ -24,7 +24,9 @@ const { max } = Math;
  * control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * @param B a bezier curve (the 'to' curve) given by an ordered array of its
  * control points e.g. `[[0,0],[1,1],[2,1],[2,0]]`
- * @param tolerance optional; defaults to `max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000`;
+ * @param tolerance optional; defaults to `max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000`
+ * (only if not given, i.e. `0` is a valid tolerance in which case the result
+ * is refined until `maxIterations` is reached);
  * if the calculated absolute error bound is less than this, the result is
  * returned; this is *not* a hard tolerance and the bound can be less
  * accurate in hard cases (due to the `maxIterations` parameter). Luckily
@@ -54,7 +56,7 @@ function hausdorffDistanceOneSidedExtra(A, B, tolerance, maxIterations = 50) {
             : { d: c1.d, tA: 1, pA: A[A.length - 1], tB: c1.t, pB: c1.p };
     }
     const l = max(maxAbsCoordinate(A), maxAbsCoordinate(B));
-    tolerance = tolerance || l / 1000_000;
+    tolerance = tolerance ?? l / 1000_000;
     // an array of intervals
     const [eL, eR] = calcHErrorBound(A, 0, 1);
     const d0 = closestPointOnBezier(B, A[0]).d;

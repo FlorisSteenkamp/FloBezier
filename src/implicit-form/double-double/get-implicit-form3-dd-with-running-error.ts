@@ -31,6 +31,14 @@ const ddGetImplicitForm3_WithRunningError = getImplicitForm3DdWithRunningError;
  * * the error bound returned first needs to be scaled by `γγ3 === (3*u*u) / (1 - 3*u*u) === 3.697785493223493e-32`,
  * where `u === Number.EPSILON / 2` before use
  * * adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
+ * * **precondition**: the given curve must really be of order 3 (e.g. use
+ * [[reduceOrderIfPossible]] first); for a degenerate curve (e.g. a cubic that
+ * is really a quadratic, a line or a point) all returned coefficients are zero
+ * (or, due to round-off, very nearly zero), i.e. the implicit form is
+ * meaningless, unlike [[getImplicitForm3Exact]] which falls back to the
+ * implicit form of the lower order curve; the returned error bound remains
+ * valid though, so that certified algorithms relying on it will correctly fall
+ * back to exact arithmetic
  * 
  * @param ps a cubic bezier curve given as an array of its control points, 
  * e.g. `[[1,2],[3,4],[5,7],[0,0]]`
@@ -153,26 +161,38 @@ function getImplicitForm3DdWithRunningError(
     const a0b1_ = _a0*b1_ + abs($a0b1);
 
     const q1 = qdq(a3b0,a0b3);
-    const q1_ = a3b0_ + a0b3_ + abs($a3b0 - $a0b3)
+    const $q1 = $a3b0 - $a0b3;
+    const _q1 = abs($q1);
+    const q1_ = a3b0_ + a0b3_ + _q1;
     const q2 = qdq(a3b1,a1b3);
-    const q2_ = a3b1_ + a1b3_ + abs($a3b1 - $a1b3)
+    const $q2 = $a3b1 - $a1b3;
+    const _q2 = abs($q2);
+    const q2_ = a3b1_ + a1b3_ + _q2;
     const q3 = qdq(a3b2,a2b3);
-    const q3_ = a3b2_ + a2b3_ + abs($a3b2 - $a2b3)
+    const $q3 = $a3b2 - $a2b3;
+    const _q3 = abs($q3);
+    const q3_ = a3b2_ + a2b3_ + _q3;
     const q4 = qdq(a2b0,a0b2);
-    const q4_ = a2b0_ + a0b2_ + abs($a2b0 - $a0b2)
+    const $q4 = $a2b0 - $a0b2;
+    const _q4 = abs($q4);
+    const q4_ = a2b0_ + a0b2_ + _q4;
     const q5 = qdq(a2b1,a1b2);
-    const q5_ = a2b1_ + a1b2_ + abs($a2b1 - $a1b2)
+    const $q5 = $a2b1 - $a1b2;
+    const _q5 = abs($q5);
+    const q5_ = a2b1_ + a1b2_ + _q5;
     const q6 = qdq(a1b0,a0b1);
-    const q6_ = a1b0_ + a0b1_ + abs($a1b0 - $a0b1)
+    const $q6 = $a1b0 - $a0b1;
+    const _q6 = abs($q6);
+    const q6_ = a1b0_ + a0b1_ + _q6;
     const _t1 = abs($b1b3 - $b2b2);
     const t1 = qdq(b1b3,b2b2);
     const t1_ = b1b3_ + b2b2_ + _t1;
     const _t2 = abs($a1a3 - $a2a2);
     const t2 = qdq(a1a3,a2a2);
-    const t2_ = a1a3_ + a2a2_ + abs($a1a3 - $a2a2)
+    const t2_ = a1a3_ + a2a2_ + _t2;
     const _p1 = abs($a2b3 + $a3b2);
     const p1 = qaq(a2b3,a3b2);
-    const p1_ = a2b3_ + a3b2_ + abs($a2b3 + $a3b2)
+    const p1_ = a2b3_ + a3b2_ + _p1;
     const $p2 = $a1b3 + $a3b1;
     const _p2 = abs($p2);
     const p2 = qaq(a1b3,a3b1);
@@ -180,19 +200,6 @@ function getImplicitForm3DdWithRunningError(
     const tq2 = qm2(q2);
     const tq2_ = 2*q2_;
 
-    const $q1 = $a3b0 - $a0b3;
-    const $q2 = $a3b1 - $a1b3;
-    const $q3 = $a3b2 - $a2b3;
-    const $q4 = $a2b0 - $a0b2;
-    const $q5 = $a2b1 - $a1b2;
-    const $q6 = $a1b0 - $a0b1;
-
-    const _q1 = abs($q1);
-    const _q2 = abs($q2);
-    const _q3 = abs($q3);
-    const _q4 = abs($q4);
-    const _q5 = abs($q5);
-    const _q6 = abs($q6);
     const _tq2 = 2*_q2;
 
     const q1q1  = qmq(q1,q1);

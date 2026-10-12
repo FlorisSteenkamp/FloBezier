@@ -1,7 +1,7 @@
 export type { BezierPiece } from './bezier-piece/bezier-piece.js';
 export type { Bound, XBounds, YBounds } from './global-properties/bounds/bounds.js';
 export type { X } from './intersection/bezier-bezier-intersection/x.js';
-export type { Extrema } from './get-curvature-extrema/get-curvature-extrema.js';
+export type { Extrema } from './get-curvature-extrema/double/get-curvature-extrema.js';
 export type { ClassificationType, Classification, NodeType } from './global-properties/classification/classify.js';
 export type { AnglesAndSpeeds } from './angles-and-speeds/angles-and-speeds.js';
 export type { PointsWithDistance } from './simultaneous-properties/closest-distance-between-beziers/points-with-distance.js';
@@ -132,9 +132,9 @@ export { hausdorffDistanceExtra } from './simultaneous-properties/hausdorff-dist
 export type { HausdorffDistanceExtra } from './simultaneous-properties/hausdorff-distance/hausdorff-distance-extra.js';
 export { controlPointLinesLength } from './global-properties/length/control-point-lines-length.js';
 export { splitByLength } from './transformation/split/split-by-length.js';
-export { getCurvatureExtrema } from './get-curvature-extrema/get-curvature-extrema.js';
-export { getCurvatureExtremaDd } from './get-curvature-extrema-dd/get-curvature-extrema-dd.js';
-export { getCurvatureExtremaE } from './get-curvature-extrema-e/get-curvature-extrema-e.js';
+export { getCurvatureExtrema } from './get-curvature-extrema/double/get-curvature-extrema.js';
+export { getCurvatureExtremaDd } from './get-curvature-extrema/double-double/get-curvature-extrema-dd.js';
+export { getCurvatureExtremaE } from './get-curvature-extrema/expansion/get-curvature-extrema-e.js';
 export { curviness } from './global-properties/curviness.js';
 export { splitByCurvature } from './transformation/split/split-by-curvature.js';
 export { splitByCurvatureAndLength } from './transformation/split/split-by-curvature-and-length.js';

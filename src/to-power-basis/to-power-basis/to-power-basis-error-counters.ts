@@ -187,7 +187,3 @@ export {
     toPowerBasis2ErrorCounters,
     toPowerBasis3ErrorCounters
 }
-
-
-
-// Quokka tests

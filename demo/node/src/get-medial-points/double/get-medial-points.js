@@ -46,7 +46,7 @@ function getMedialPoints(p, v, ps) {
         };
     }
     /** the possible parameter values of the bezier curve */
-    const ss = (roots(H, 0, 1) || []).map(r => r.t); //?
+    const ss = (roots(H, 0, 1) || []).map(r => r.t);
     /** the possible parameter values of the ray */
     const ts = [];
     /** the possible points on the ray */

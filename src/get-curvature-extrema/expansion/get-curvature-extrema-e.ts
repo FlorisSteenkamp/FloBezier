@@ -1,14 +1,14 @@
-import type { Extrema } from "../get-curvature-extrema/extrema.js";
+import type { Extrema } from "../extrema.js";
 import { roots, eHorner, eDifferentiate } from "flo-poly";
 import { eDiff, eMult, eSign } from 'big-float-ts';
 import { getAbsCurvatureExtremaPolysE } from "./get-abs-curvature-extrema-polys-e.js";
-import { isCollinear } from "../global-properties/classification/is-collinear.js";
-import { isCubicReallyQuad } from "../global-properties/classification/is-cubic-really-quad.js";
-import { cubicToQuadratic } from "../transformation/degree-or-type/cubic-to-quadratic.js";
+import { isCollinear } from "../../global-properties/classification/is-collinear.js";
+import { isCubicReallyQuad } from "../../global-properties/classification/is-cubic-really-quad.js";
+import { cubicToQuadratic } from "../../transformation/degree-or-type/cubic-to-quadratic.js";
 import { getCurvatureExtremaQuadraticPolyE } from './get-curvature-extrema-quadratic-poly-e.js';
-import { getCurvatureExtremaQuadraticPolyDd } from "../get-curvature-extrema-dd/get-curvature-extrema-quadratic-poly-dd.js";
-import { getAbsCurvatureExtremaPolysDd } from "../get-curvature-extrema-dd/get-abs-curvature-extrema-polys-dd.js";
-import { γγ3 } from "../error-analysis/error-analysis.js";
+import { getCurvatureExtremaQuadraticPolyDd } from "../double-double/get-curvature-extrema-quadratic-poly-dd.js";
+import { getAbsCurvatureExtremaPolysDd } from "../double-double/get-abs-curvature-extrema-polys-dd.js";
+import { γγ3 } from "../../error-analysis/error-analysis.js";
 
 const { abs } = Math;
 
