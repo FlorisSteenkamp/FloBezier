@@ -13,7 +13,7 @@ import { rootsWithSharedEndpoint } from '../bezier-bezier-intersection-shared-en
  * * if the curves share an endpoint (exactly) the known intersection at the
  * shared point is divided out of the intersection polynomial and returned 
  * *exactly* (which is much faster, especially if the curves are also tangent
- * at the shared point), see [[rootsWithSharedEndpoint]]
+ * at the shared point)
  *
  * * **precondition:** the bezier curves must be of lowest possible 
  * representable order, i.e. cubics are really cubics, etc. (else 
