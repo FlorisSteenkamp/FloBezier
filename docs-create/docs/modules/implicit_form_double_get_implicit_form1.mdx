@@ -1,0 +1,36 @@
+---
+id: "implicit_form_double_get_implicit_form1"
+title: "get-implicit-form1"
+---
+
+```typescript
+function getImplicitForm1(ps: number[][]): object
+```
+
+*Defined in [implicit-form/double/get-implicit-form1.ts:19](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/implicit-form/double/get-implicit-form1.ts#L19)*
+
+Returns the implicit form of the given linear bezier curve, i.e. line
+segment.
+* returned coefficients are subscripted to match their monomial's variables,
+e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
+* the implicit form is given by: `vₓx + vᵧy + v = 0`
+* intermediate calculations are done in **double** precision
+* adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
+
+import { GetImplicitForm1 } from '../mdx/getImplicitForm1';
+
+<GetImplicitForm1 />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | a line segment given as an array of its control points, e.g. `[[1,2],[3,4]]`     |
+
+**Returns:** object
+
+Name | Type |
+------ | ------ |
+`vₓ` | number |
+`vᵧ` | number |
+`v` | number |

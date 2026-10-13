@@ -1,0 +1,55 @@
+---
+id: "intersection_bezier_bezier_intersection_bezier_bezier_intersection"
+title: "bezier-bezier-intersection"
+---
+
+```typescript
+function bezierBezierIntersection(ps1: number[][], ps2: number[][]): X[]
+```
+
+*Defined in [intersection/bezier-bezier-intersection/bezier-bezier-intersection.ts:66](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/intersection/bezier-bezier-intersection/bezier-bezier-intersection.ts#L66)*
+
+Returns an array of intersections between two bezier curves up to cubic order
+(i.e. points, linear, quadratic or cubic bezier curves (i.e. order 0,1,2 or 3
+curves).
+The algorithm employed uses advanced techniques such as floating point error
+bounding, adaptive multi-precision floating point arithmetic, pre-filtering
+of easy cases, certified root finding and algebraic implicitization of the
+curves in order to find *guaranteed* accurate results.
+
+* this algorithm is mathematically guaranteed accurate to within
+`4 * Number.EPSILON` in the returned `t` parameter values of the bezier
+curves (bar underflow/overflow)
+
+* the returned intersections are *ordered* by `t` parameter value of the
+first bezier curve
+* if the two curves have an infinite number of intersections then the
+intersection of the endpoints of each curve with the other is returned
+instead (and the intersection `kind` property will equal `5`)
+* if an endpoint of one curve (exactly) coincides with an endpoint of the other curve the intersection at that point is returned *exactly* (with `t1` and `t2` exactly `0` or `1`, a box of zero size and the intersection `kind` property equal to `4`) - this case is also handled much faster (especially when the curves are tangent at the shared point, e.g. at a smooth join of consecutive segments of a path)
+
+* each intersection in the returned array of intersections is an object with
+the following properties (see the type `X`):
+     * `p`: point of intersection (calculated from the guaranteed root interval)
+     * `t1`: first bezier curve's parameter `t` value (calculated from the guaranteed root interval)
+     * `t2`: second bezier curve's parameter `t` value (calculated from the guaranteed root interval)
+     * `kind`: kind of intersection (see [[X]] for details)
+     * `ri1`: first bezier curve's root interval guaranteed to contain the
+              correct `t` value in the form `{ tS, tE, multiplicity }`,
+              where `tS` and `tE` are the start and end of the interval
+     * `ri2`: second bezier curve's root interval guaranteed to contain the
+              correct `t` value in the form `{ tS, tE, multiplicity }`,
+              where `tS` and `tE` are the start and end of the interval
+     * `box`: small box that is guaranteed to contain the intersection
+              (calculated from the guaranteed root interval)
+
+import { BezierBezierIntersection } from '../mdx/bezierBezierIntersection';
+
+<BezierBezierIntersection />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps1` | number[][] | an order 0,1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`    |
+`ps2` | number[][] | an order 0,1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`     |

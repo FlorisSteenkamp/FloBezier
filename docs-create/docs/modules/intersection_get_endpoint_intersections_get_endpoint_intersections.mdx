@@ -1,0 +1,27 @@
+---
+id: "intersection_get_endpoint_intersections_get_endpoint_intersections"
+title: "get-endpoint-intersections"
+---
+
+```typescript
+function getEndpointIntersections(psA: number[][], psB: number[][], orderAlreadyReduced: boolean): X[]
+```
+
+*Defined in [intersection/get-endpoint-intersections/get-endpoint-intersections.ts:36](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/intersection/get-endpoint-intersections/get-endpoint-intersections.ts#L36)*
+
+Returns the intersection range (given as 2 intersections (`X`s)) where the 
+endpoints of the two given *algebraically identical* curves 
+overlap (provided they overlap, else an empty array is returned).
+
+* **precondition:** the two given curves must be *algebraically identical*
+(i.e. identical except possibly for endpoints)
+
+* **precondition**: not all bezier control points collinear
+
+#### Parameters:
+
+Name | Type | Default value | Description |
+------ | ------ | ------ | ------ |
+`psA` | number[][] | - | an order 1,2 or 3 bezier curve |
+`psB` | number[][] | - | another bezier curve |
+`orderAlreadyReduced` | boolean | false | optional; defaults to `false`; set to `true` if the order of both curves has already been reduced as far as possible (e.g. via `reduceOrderIfPossible`) to avoid doing it again |

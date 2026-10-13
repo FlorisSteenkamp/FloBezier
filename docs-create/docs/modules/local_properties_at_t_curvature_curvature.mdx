@@ -1,0 +1,98 @@
+---
+id: "local_properties_at_t_curvature_curvature"
+title: "curvature"
+---
+
+```typescript
+function curvature(ps: number[][]): (t: number) => number
+function curvature(ps: number[][], t: number): number
+```
+
+*Defined in [local-properties-at-t/curvature/curvature.ts:23](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/curvature/curvature.ts#L23)*
+
+Returns the curvature `κ` of the given linear, quadratic or cubic bezier
+curve at a specific given parameter value `t`.
+
+* returns `Number.NaN` at a cusp - this can be tested for with `Number.isNaN`
+* **curried:** if `t` is omitted a function of `t` is returned instead (the
+power basis conversion is then only done once which is much faster if the
+curvature is to be evaluated at many `t` values for the same curve)
+
+import { Curvature } from '../mdx/curvature';
+
+<Curvature />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 1,2 or 3 bezier curve, e.g. `[[0,0],[1,1],[2,1],[2,0]]` |
+`t?` | number | the parameter value where the curvature should be evaluated (may be omitted, see above) |
+
+___
+
+```typescript
+function κ(ps: number[][]): (t: number) => number
+function κ(ps: number[][], t: number): number
+```
+
+*Defined in [local-properties-at-t/curvature/curvature.ts:46](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/curvature/curvature.ts#L46)*
+
+Alias for [curvature](local_properties_at_t_curvature_curvature.mdx).
+
+Returns the curvature `κ` of the given linear, quadratic or cubic bezier
+curve at a specific given parameter value `t`.
+
+* **alias**: [curvature](local_properties_at_t_curvature_curvature.mdx)
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 1, 2 or 3 bezier curve, e.g. `[[0,0],[1,1],[2,1],[2,0]]` |
+`t?` | number | the parameter value where the curvature should be evaluated |
+
+___
+
+```typescript
+function radiusOfCurvature(ps: number[][]): (t: number) => number
+function radiusOfCurvature(ps: number[][], t: number): number
+```
+
+*Defined in [local-properties-at-t/curvature/curvature.ts:60](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/curvature/curvature.ts#L60)*
+
+Returns the radius of curvature of the given linear, quadratic or cubic
+bezier curve at a specific given parameter value `t`.
+
+* **curried:** if `t` is omitted a function of `t` is returned instead (see
+[curvature](local_properties_at_t_curvature_curvature.mdx))
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 1,2 or 3 bezier curve, e.g. `[[0,0],[1,1],[2,1],[2,0]]` |
+`t?` | number | the parameter value where the radius of curvature should be evaluated (may be omitted, see above) |
+
+___
+
+```typescript
+function curvatureND(ps: number[][]): (t: number) => [number,number]
+function curvatureND(ps: number[][], t: number): [number,number]
+```
+
+*Defined in [local-properties-at-t/curvature/curvature.ts:81](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/curvature/curvature.ts#L81)*
+
+Returns the numerator and denominator of curvature `[N,D]`, i.e. `κ = N/D`
+of the given linear, quadratic or cubic bezier curve at a specific given
+parameter value `t`.
+
+* **curried:** if `t` is omitted a function of `t` is returned instead (see
+[curvature](local_properties_at_t_curvature_curvature.mdx))
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 1,2 or 3 bezier curve, e.g. `[[0,0],[1,1],[2,1],[2,0]]` |
+`t?` | number | the parameter value (may be omitted, see above) |

@@ -1,0 +1,22 @@
+---
+id: "transformation_affine_flip_horizontally"
+title: "flip-horizontally"
+---
+
+```typescript
+function flipHorizontally(ps: number[][]): number[][]
+```
+
+*Defined in [transformation/affine/flip-horizontally.ts:13](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/transformation/affine/flip-horizontally.ts#L13)*
+
+Returns the given bezier curve flipped horizontally (mirrored left-to-right) about the y-axis, i.e. each control point `[x,y]` is mapped to `[-x,y]`.
+
+import { FlipHorizontally } from '../mdx/flipHorizontally';
+
+<FlipHorizontally />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`     |

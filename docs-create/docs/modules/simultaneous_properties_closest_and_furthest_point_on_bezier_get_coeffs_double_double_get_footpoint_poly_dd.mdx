@@ -1,0 +1,24 @@
+---
+id: "simultaneous_properties_closest_and_furthest_point_on_bezier_get_coeffs_double_double_get_footpoint_poly_dd"
+title: "get-footpoint-poly-dd"
+---
+
+```typescript
+function getFootpointPolyDd(ps: number[][], p: number[]): number[][]
+```
+
+*Defined in [simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double-double/get-footpoint-poly-dd.ts:18](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double-double/get-footpoint-poly-dd.ts#L18)*
+
+Returns the polynomial whose roots are all the `t` parameter values on the 
+given bezier curve such that the line from the given point to the point on
+the bezier curve evaluated at `t` is tangent to the bezier curve at `t`.
+
+* intermediate calculations are done (and the final result returned in)
+double-double precision
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]` |
+`p` | number[] | a point, e.g. `[1,2]` |

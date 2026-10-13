@@ -1,0 +1,37 @@
+---
+id: "local_properties_at_t_evaluate_double_eval_de_casteljau_with_err"
+title: "eval-de-casteljau-with-err"
+---
+
+```typescript
+function evalDeCasteljauWithErr(ps: number[][], t: number): object
+```
+
+*Defined in [local-properties-at-t/evaluate/double/eval-de-casteljau-with-err.ts:24](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/evaluate/double/eval-de-casteljau-with-err.ts#L24)*
+
+Returns the resulting point of evaluating the given bezier curve at the given
+parameter `t` including a coordinate-wise error bound.
+* uses [De Casteljau's algorithm](https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm)
+in double precision floating point arithmetic
+
+The resulting point is returned as `{ p: number[], pE: number[] }`,
+where `p` is the point `[x,y]` and `pE` is the corresponding coordinate-wise
+absolute error bound of the calculation.
+
+import { EvalDeCasteljauWithErr } from '../mdx/evalDeCasteljauWithErr';
+
+<EvalDeCasteljauWithErr />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 1,2 or 3 bezier curve, e.g. `[[0,0],[1,1],[2,1],[2,0]]`    |
+`t` | number | the parameter value where the bezier should be evaluated     |
+
+**Returns:** object
+
+Name | Type |
+------ | ------ |
+`p` | number[] |
+`pE` | number[] |

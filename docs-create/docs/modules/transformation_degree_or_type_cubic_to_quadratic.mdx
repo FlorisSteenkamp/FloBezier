@@ -1,0 +1,30 @@
+---
+id: "transformation_degree_or_type_cubic_to_quadratic"
+title: "cubic-to-quadratic"
+---
+
+```typescript
+function cubicToQuadratic(ps: number[][], preserveTangents?: boolean): number[][] | undefined
+```
+
+*Defined in [transformation/degree-or-type/cubic-to-quadratic.ts:27](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/transformation/degree-or-type/cubic-to-quadratic.ts#L27)*
+
+Returns a quadratic approximation to the given cubic bezier curve.
+
+* the initial and final control points of the resulting bezier coincide with
+that of the curve being approximated
+
+* if `preserveTangents` is `true` and the cubic's initial and final tangents
+are parallel (including coincident, e.g. if all control points are collinear)
+or degenerate (i.e. `p0 === p1` or `p2 === p3`) then `undefined` is returned
+
+import { CubicToQuadratic } from '../mdx/cubicToQuadratic';
+
+<CubicToQuadratic />
+
+#### Parameters:
+
+Name | Type | Default value | Description |
+------ | ------ | ------ | ------ |
+`ps` | number[][] | - | a cubic bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`    |
+`preserveTangents` | boolean | false | optional; defaults to `false`; if `true` then the approximation must also preserve the tangents of the cubic at the initial and final control points     |

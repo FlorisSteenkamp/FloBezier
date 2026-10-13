@@ -1,0 +1,28 @@
+---
+id: "transformation_split_split_by_deviation_from_straight_line"
+title: "split-by-deviation-from-straight-line"
+---
+
+```typescript
+function splitByDeviationFromStraightLine(ps: number[][], maxD: number): number[]
+```
+
+*Defined in [transformation/split/split-by-deviation-from-straight-line.ts:23](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/transformation/split/split-by-deviation-from-straight-line.ts#L23)*
+
+Split the given order 0,1,2 or 3 bezier curve into pieces (given as an 
+array of parameter `t` values) such that each piece is guaranteed to 
+deviate less than `maxD` from a straight line (the line segment connecting 
+the piece's endpoints).
+
+* useful e.g. for flattening a bezier curve into a polyline within a given
+tolerance
+* points and lines are returned as a single piece, i.e. `[0,1]`
+* see also [splitByDeviationFromStraightLine_Quad](transformation_split_split_by_deviation_from_straight_line_quad) and 
+[splitByDeviationFromStraightLine_Cubic](transformation_split_split_by_deviation_from_straight_line_cubic)
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]` |
+`maxD` | number | the maximum allowed deviation of each piece from a straight line |

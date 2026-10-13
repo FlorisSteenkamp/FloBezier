@@ -1,0 +1,43 @@
+---
+id: "implicit_form_double_get_implicit_form3"
+title: "get-implicit-form3"
+---
+
+```typescript
+function getImplicitForm3(ps: number[][]): object
+```
+
+*Defined in [implicit-form/double/get-implicit-form3.ts:24](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/implicit-form/double/get-implicit-form3.ts#L24)*
+
+Returns the implicit form of the given cubic bezier curve.
+* returned coefficients are subscripted to match their monomial's variables,
+e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
+* the implicit form is given by: `vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0`
+* adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
+* takes about 1.2 micro-seconds on a 3rd gen i7 and Chrome 79
+* **precondition**: the given curve must really be of order 3 (e.g. use [reduceOrderIfPossible](transformation_reduce_order_if_possible.mdx) first); for a degenerate curve (e.g. a cubic that is really a quadratic, a line or a point) all returned coefficients are zero (or, due to round-off, very nearly zero), i.e. the implicit form is meaningless, unlike [getImplicitForm3Exact](implicit_form_expansion_e_get_implicit_form3.mdx) which falls back to the implicit form of the lower order curve
+
+import { GetImplicitForm3 } from '../mdx/getImplicitForm3';
+
+<GetImplicitForm3 />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | a cubic bezier curve given as an array of its control points, e.g. `[[1,2],[3,4],[5,7],[0,0]]`     |
+
+**Returns:** object
+
+Name | Type |
+------ | ------ |
+`vₓₓₓ` | number |
+`vₓₓᵧ` | number |
+`vₓᵧᵧ` | number |
+`vᵧᵧᵧ` | number |
+`vₓₓ` | number |
+`vₓᵧ` | number |
+`vᵧᵧ` | number |
+`vₓ` | number |
+`vᵧ` | number |
+`v` | number |

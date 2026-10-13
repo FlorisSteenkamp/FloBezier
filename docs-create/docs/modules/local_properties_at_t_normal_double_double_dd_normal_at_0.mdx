@@ -1,0 +1,23 @@
+---
+id: "local_properties_at_t_normal_double_double_dd_normal_at_0"
+title: "dd-normal-at-0"
+---
+
+```typescript
+function ddNormalAt0(ps: number[][]): number[][]
+```
+
+*Defined in [local-properties-at-t/normal/double-double/dd-normal-at-0.ts:16](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/normal/double-double/dd-normal-at-0.ts#L16)*
+
+Returns the normal vector (in double-double precision not necessarily of
+unit length) of an order 0,1,2 or 3 bezier curve at `t === 0`, i.e.
+returns the tangent (the derivative of the bezier curve's power basis
+evaluated at `t === 0`) rotated by 90 degrees.
+
+* *exact* result for order &lt;= 2 bezier curves
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | An order 1,2 or 3 bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]` |

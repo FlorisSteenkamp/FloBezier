@@ -1,0 +1,22 @@
+---
+id: "global_properties_bounds_get_x_bounds_tight"
+title: "get-x-bounds-tight"
+---
+
+```typescript
+function getXBoundsTight(ps: number[][]): XBounds
+```
+
+*Defined in [global-properties/bounds/get-x-bounds-tight.ts:15](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/global-properties/bounds/get-x-bounds-tight.ts#L15)*
+
+Returns tight x-coordinate bounds of the given bezier curve.
+
+import { GetXBoundsTight } from '../mdx/getXBoundsTight';
+
+<GetXBoundsTight />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 1, 2 or 3 bezier curve given as an array of control points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`     |

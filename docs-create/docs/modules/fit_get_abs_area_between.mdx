@@ -1,0 +1,27 @@
+---
+id: "fit_get_abs_area_between"
+title: "get-abs-area-between"
+---
+
+```typescript
+function getAbsAreaBetween(ps1: number[][], ps2: number[][]): number
+```
+
+*Defined in [fit/get-abs-area-between.ts:18](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/fit/get-abs-area-between.ts#L18)*
+
+Returns the *absolute* area between the two given curves.
+* **precondition**: the first and last control points of each curve must be equal
+* **precondition**: neither curve should have self-intersections else the results
+are ambiguous
+* can be used as an excellent error measure of the similarity between the two curves
+
+import { GetAbsAreaBetween } from '../mdx/getAbsAreaBetween';
+
+<GetAbsAreaBetween />
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`ps1` | number[][] |
+`ps2` | number[][] |

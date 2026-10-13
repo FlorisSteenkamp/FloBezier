@@ -1,0 +1,22 @@
+---
+id: "local_properties_at_t_normal_expansion_e_normal"
+title: "e-normal"
+---
+
+```typescript
+function eNormal(ps: number[][], t: number): number[][]
+```
+
+*Defined in [local-properties-at-t/normal/expansion/e-normal.ts:16](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/normal/expansion/e-normal.ts#L16)*
+
+Returns the *exact* normal vector (not necessarily of unit length) of an
+order 0,1,2 or 3 bezier curve at a specific parameter `t`, i.e.
+returns the tangent (the derivative of the bezier curve's power basis
+evaluated at `t`) rotated by 90 degrees.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | a linear, quadratic or cubic bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]` |
+`t` | number | the t parameter |

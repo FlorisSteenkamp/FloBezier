@@ -1,0 +1,19 @@
+---
+id: "global_properties_classification_is_really_point"
+title: "is-really-point"
+---
+
+```typescript
+function isReallyPoint(ps: number[][]): boolean
+```
+
+*Defined in [global-properties/classification/is-really-point.ts:11](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/global-properties/classification/is-really-point.ts#L11)*
+
+Returns `true` if the given bezier curve has all control points coincident,
+`false` otherwise.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given as an array of its control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`     |

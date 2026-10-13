@@ -1,0 +1,27 @@
+---
+id: "create_generate_self_intersecting"
+title: "generate-self-intersecting"
+---
+
+```typescript
+function generateSelfIntersecting(p0: number[], p1: number[], p2: number[], ts: number[]): number[][]
+```
+
+*Defined in [create/generate-self-intersecting.ts:15](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/create/generate-self-intersecting.ts#L15)*
+
+Returns the cubic bezier curve with given starting, 2nd and 3rd control
+points such that there is a self-intersection.
+* **in-exact:** the result may not be exact due to floating point round-off
+
+import { GenerateSelfIntersecting } from '../mdx/generateSelfIntersecting';
+
+<GenerateSelfIntersecting />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`p0` | number[] | the bezier's initial control point, e.g. `[1,2]`    |
+`p1` | number[] | the bezier's 2nd control point    |
+`p2` | number[] | the bezier's 3rd control point     |
+`ts` | number[] | the two `t` values where the self-intersection should occur    |

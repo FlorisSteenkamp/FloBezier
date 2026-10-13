@@ -1,0 +1,20 @@
+---
+id: "bezier_piece_is_bezier_piece_zero_length"
+title: "is-bezier-piece-zero-length"
+---
+
+```typescript
+function isBezierPieceZeroLength(piece: BezierPiece): boolean
+```
+
+*Defined in [bezier-piece/is-bezier-piece-zero-length.ts:11](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/bezier-piece/is-bezier-piece-zero-length.ts#L11)*
+
+Returns `true` if the given bezier piece has zero length, i.e. if the start
+and end parameter are the same or if all control points are the same;
+otherwise returns `false`.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`piece` | BezierPiece | the bezier piece to check |

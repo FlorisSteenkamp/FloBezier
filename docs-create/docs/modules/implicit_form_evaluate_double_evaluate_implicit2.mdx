@@ -1,0 +1,28 @@
+---
+id: "implicit_form_evaluate_double_evaluate_implicit2"
+title: "evaluate-implicit2"
+---
+
+```typescript
+function evaluateImplicit2(cs: object, x: number, y: number): number
+```
+
+*Defined in [implicit-form/evaluate/double/evaluate-implicit2.ts:21](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/implicit-form/evaluate/double/evaluate-implicit2.ts#L21)*
+
+Evaluates and returns the result of evaluating the given implicit function
+(a degree 2 bivariate polynomial in `x` and `y`) at the point `[x,y]`.
+
+* the implicit form is given by: `vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v`, where the `vₓ`, `vᵧ`, `v`,
+etc are constants
+
+```typescript
+evaluateImplicit2({ vₓₓ: 4, vₓᵧ: 5, vᵧᵧ: 6, vₓ: 1, vᵧ: 2, v: 3 }, 1, 1);  //=> 21
+```
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`cs` | &#123; `vₓₓ`: number; `vₓᵧ`: number; `vᵧᵧ`: number; `vₓ`: number; `vᵧ`: number; `v`: number &#125; | the polynomial to evaluate    |
+`x` | number | the `x` variable at which to evaluate    |
+`y` | number | the `y` variable at which to evaluate     |

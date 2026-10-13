@@ -1,0 +1,25 @@
+---
+id: "angles_and_speeds_bezier_by_angles_and_speeds_set_cubic_speeds"
+title: "set-cubic-speeds"
+---
+
+```typescript
+function setCubicSpeeds(ps: number[][], s0: number, s1: number): number[][]
+```
+
+*Defined in [angles-and-speeds/bezier-by-angles-and-speeds/set-cubic-speeds.ts:15](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/angles-and-speeds/bezier-by-angles-and-speeds/set-cubic-speeds.ts#L15)*
+
+For the given bernstein basis cubic bezier curve return a new cubic bezier
+curve with its initial and terminal speeds modified.
+
+* only the 2nd and 3rd control points are modified
+* call the original curve `A` and the returned curve `B` then it will be 
+true that `A[0] === B[0]` and `A[3] === B[3]`
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 3 (cubic) bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]` |
+`s0` | number |  |
+`s1` | number |  |

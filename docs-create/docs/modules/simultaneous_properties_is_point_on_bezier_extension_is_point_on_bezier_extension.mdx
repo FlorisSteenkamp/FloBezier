@@ -1,0 +1,21 @@
+---
+id: "simultaneous_properties_is_point_on_bezier_extension_is_point_on_bezier_extension"
+title: "is-point-on-bezier-extension"
+---
+
+```typescript
+function isPointOnBezierExtension(ps: number[][], p: number[][]): boolean
+```
+
+*Defined in [simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension.ts:19](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/simultaneous-properties/is-point-on-bezier-extension/is-point-on-bezier-extension.ts#L19)*
+
+Returns `true` if the given point is on the given bezier curve where the 
+parameter `t` is allowed to extend to ±∞, i.e. `t` is an element of 
+`(-∞, +∞)`, `false` otherwise.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0],[1,1],[2,1],[2,0]]` |
+`p` | number[][] | a point with coordinates given as [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)  expansions; if only double precision coordinates need to be provided then  wrap them in a one element array, e.g. for a point with `x` and `y` coordinates  of `1` and `2` set `p === [[1],[2]]`. |

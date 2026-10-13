@@ -1,0 +1,32 @@
+---
+id: "simultaneous_properties_closest_and_furthest_point_on_bezier_get_foot_points_polys_on_bezier_certified"
+title: "get-foot-points-polys-on-bezier-certified"
+---
+
+```typescript
+function getFootPointsOnBezierPolysCertified(ps: number[][], p: number[]): { polyDd: number[][]; polyE: number[]; getPolyExact: () => number[][]; }
+```
+
+*Defined in [simultaneous-properties/closest-and-furthest-point-on-bezier/get-foot-points-polys-on-bezier-certified.ts:34](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-foot-points-polys-on-bezier-certified.ts#L34)*
+
+Returns the polynomial (in `t`) whose roots are the parameter `t` values of
+the foot point(s) on the given bezier curve to the given point, i.e. the
+points on the curve where the line to the given point is perpendicular to
+the curve.
+
+The result is returned in the form expected by `flo-poly`'s `roots`
+function, i.e. as an object with the following properties:
+    * `polyDd`: the polynomial's coefficients in double-double precision
+    * `polyE`: a coefficient-wise absolute error bound of `polyDd`
+    * `getPolyExact`: a function returning the polynomial's coefficients
+      exactly (as Shewchuk expansions) - only called if needed
+
+* an order 0 curve (a point) has no foot points so the non-zero constant
+polynomial `1` is returned
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]` |
+`p` | number[] | a point, e.g. `[1,2]` |

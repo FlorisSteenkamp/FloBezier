@@ -1,0 +1,27 @@
+---
+id: "to_power_basis_to_power_basis_double_to_power_basis_with_running_error"
+title: "to-power-basis-with-running-error"
+---
+
+```typescript
+function toPowerBasisWithRunningError(ps: number[][]): object | object | object | object
+```
+
+*Defined in [to-power-basis/to-power-basis/double/to-power-basis-with-running-error.ts:22](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/to-power-basis/to-power-basis/double/to-power-basis-with-running-error.ts#L22)*
+
+Returns the power basis representation of a bezier curve of order cubic or
+less including a coefficient-wise absolute error bound.
+
+* intermediate calculations are done in double precision
+* the error bound still need to be multiplied by `γ(1) === u/(1-u)`
+where `u = Number.EPSILON/2` before use
+* returns the resulting power basis x and y coordinate polynomials from
+highest power to lowest, e.g. if `x(t) = at^2 + bt + c`
+and `y(t) = dt^2 + et + f` then  the result is returned
+as `[[a,b,c],[d,e,f]]`
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given by an ordered array of its control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`     |

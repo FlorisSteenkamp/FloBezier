@@ -1,0 +1,27 @@
+---
+id: "global_properties_get_bending_energy"
+title: "getBendingEnergy"
+---
+
+```typescript
+function getBendingEnergy(ps: number[][], maxCurviness?: number, gaussOrder?: 4 | 16 | 64): number
+```
+
+*Defined in [global-properties/get-bending-energy.ts:21](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/global-properties/get-bending-energy.ts#L21)*
+
+Returns an accurate approximation of the bending energy of the given bezier
+curve.
+
+import { GetBendingEnergy } from '../mdx/getBendingEnergy';
+
+<GetBendingEnergy />
+
+#### Parameters:
+
+Name | Type | Default value | Description |
+------ | ------ | ------ | ------ |
+`ps` | number[][] | - | an order 0, 1, 2 or 3 bezier curve given by an ordered array of its control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]` |
+`maxCurviness` | number | 1.125 | defaults to 1.125 |
+`gaussOrder` | 4 \| 16 \| 64 | 4 | defaults to 4 |
+
+**Returns:** number

@@ -1,0 +1,25 @@
+---
+id: "global_properties_bounds_get_bounding_box"
+title: "get-bounding-box"
+---
+
+```typescript
+function getBoundingBox(ps: number[][]): number[][]
+```
+
+*Defined in [global-properties/bounds/get-bounding-box.ts:17](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/global-properties/bounds/get-bounding-box.ts#L17)*
+
+Returns a tight axis-aligned bounding box of the given bezier curve.
+* **certified**: the box is guaranteed to engulf the given bezier curve.
+
+* returns the box in the form `[[minX, minY], [maxX, maxY]`
+
+import { GetBoundingBox } from '../mdx/getBoundingBox';
+
+<GetBoundingBox />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 1,2 or 3 bezier curve given as an array of its control points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`     |

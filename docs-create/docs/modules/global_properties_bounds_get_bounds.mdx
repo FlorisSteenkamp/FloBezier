@@ -1,0 +1,36 @@
+---
+id: "global_properties_bounds_get_bounds"
+title: "get-bounds"
+---
+
+```typescript
+function getBounds(ps: number[][]): object
+```
+
+*Defined in [global-properties/bounds/get-bounds.ts:21](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/global-properties/bounds/get-bounds.ts#L21)*
+
+Returns an axis-aligned bounding box together with the `t` values where the
+bounds on the bezier are reached in the form:
+```
+{
+     ts: [[tMinX, tMinY], [tMaxX, tMaxY]];
+     box: [[minX,  minY], [maxX,  maxY ]];
+}
+```
+
+import { GetBounds } from '../mdx/getBounds';
+
+<GetBounds />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 1,2 or 3 bezier curve given as an array of its control points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`     |
+
+**Returns:** object
+
+Name | Type |
+------ | ------ |
+`ts` | number[][] |
+`box` | number[][] |

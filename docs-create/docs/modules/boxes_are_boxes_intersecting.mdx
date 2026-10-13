@@ -1,0 +1,25 @@
+---
+id: "boxes_are_boxes_intersecting"
+title: "are-boxes-intersecting"
+---
+
+```typescript
+function areBoxesIntersecting(closed: boolean, a: number[][], b: number[][]): boolean
+```
+
+*Defined in [boxes/are-boxes-intersecting.ts:14](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/boxes/are-boxes-intersecting.ts#L14)*
+
+Returns `true` if the 2 given axis-aligned rectangular boxes intersect.
+* **exact**: not susceptible to floating point round-off
+
+import { AreBoxesIntersecting } from '../mdx/areBoxesIntersecting';
+
+<AreBoxesIntersecting />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`closed` | boolean | if `true`, interpret boxes as being closed (i.e. they contain their border), otherwise open.    |
+`a` | number[][] | an axis-aligned rectangular box (given by an array of two points, e.g. `[[1,2], [3,4]]`)    |
+`b` | number[][] | another axis-aligned rectangular box     |

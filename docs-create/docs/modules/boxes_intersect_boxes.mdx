@@ -1,0 +1,26 @@
+---
+id: "boxes_intersect_boxes"
+title: "intersect-boxes"
+---
+
+```typescript
+function intersectBoxes(a: number[][], b: number[][]): number[][] | undefined
+```
+
+*Defined in [boxes/intersect-boxes.ts:18](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/boxes/intersect-boxes.ts#L18)*
+
+Returns the intersection of 2 given axis-aligned rectangular boxes (or
+`undefined` if they don't intersect).
+* **exact**: not susceptible to floating point round-off
+* **closed**: interpret boxes as being closed (i.e. they contain their border).
+
+import { IntersectBoxes } from '../mdx/intersectBoxes';
+
+<IntersectBoxes />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`a` | number[][] | an axis-aligned rectangular box (given by an array of two points, e.g. `[[1,2], [3,4]]`)    |
+`b` | number[][] | another box     |

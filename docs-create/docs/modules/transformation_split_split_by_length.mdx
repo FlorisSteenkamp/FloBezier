@@ -1,0 +1,25 @@
+---
+id: "transformation_split_split_by_length"
+title: "split-by-length"
+---
+
+```typescript
+function splitByLength(ps: number[][], maxLength: number): number[]
+```
+
+*Defined in [transformation/split/split-by-length.ts:16](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/transformation/split/split-by-length.ts#L16)*
+
+Split the given bezier curve into pieces (given as an array of parameter
+`t` values) such that the longest curve length is guaranteed to be lower than
+the given max length.
+
+import { SplitByLength } from '../mdx/splitByLength';
+
+<SplitByLength />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`    |
+`maxLength` | number |      |

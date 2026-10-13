@@ -1,0 +1,43 @@
+---
+id: "get_curvature_extrema_double_get_curvature_extrema"
+title: "get-curvature-extrema"
+---
+
+• interface **Extrema**
+
+*Defined in [get-curvature-extrema/extrema.ts:7](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/get-curvature-extrema/extrema.ts#L7)*
+
+Curve extrema
+
+Name | Type | Description |
+------ | ------ | ------ |
+`minima` | number[] | list of paramter t values where minima occur    |
+`maxima` | number[] | list of paramter t values where maxima occur    |
+`inflections` | number[] | list of paramter t values where inflection points occur    |
+
+___
+
+```typescript
+function getCurvatureExtrema(ps: number[][]): Extrema
+```
+
+*Defined in [get-curvature-extrema/double/get-curvature-extrema.ts:25](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/get-curvature-extrema/double/get-curvature-extrema.ts#L25)*
+
+Returns the parameter `t` values (in `[0,1]`) of local minimum / maximum
+absolute curvature for the given bezier curve as well as inflection points.
+
+If there are an infinite number of such `t` values (such as is the case for a
+line), an empty array is returned.
+
+* see [MvG](https://math.stackexchange.com/a/1956264/130809)'s excellent
+answer on math.stackexchange
+
+import { GetCurvatureExtrema } from '../mdx/getCurvatureExtrema';
+
+<GetCurvatureExtrema />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`     |

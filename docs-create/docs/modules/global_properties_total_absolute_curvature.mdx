@@ -1,0 +1,25 @@
+---
+id: "global_properties_total_absolute_curvature"
+title: "total-absolute-curvature"
+---
+
+```typescript
+function totalAbsoluteCurvature(ps: number[][], interval?: number[]): number
+```
+
+*Defined in [global-properties/total-absolute-curvature.ts:20](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/global-properties/total-absolute-curvature.ts#L20)*
+
+Returns the total absolute curvature of the given bezier curve over the
+given interval
+* the result is given in radians.
+
+import { TotalAbsoluteCurvature } from '../mdx/totalAbsoluteCurvature';
+
+<TotalAbsoluteCurvature />
+
+#### Parameters:
+
+Name | Type | Default value | Description |
+------ | ------ | ------ | ------ |
+`ps` | number[][] | - | an order 0,1,2 or 3 bezier curve given as an array of its control points, e.g. `[[1,2],[3,4],[5,6],[7,8]]`    |
+`interval` | number[] | [0,1] |      |

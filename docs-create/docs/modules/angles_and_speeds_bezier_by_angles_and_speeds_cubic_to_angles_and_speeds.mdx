@@ -1,0 +1,26 @@
+---
+id: "angles_and_speeds_bezier_by_angles_and_speeds_cubic_to_angles_and_speeds"
+title: "cubic-to-angles-and-speeds"
+---
+
+```typescript
+function cubicToAnglesAndSpeeds(ps: number[][]): AnglesAndSpeeds
+```
+
+*Defined in [angles-and-speeds/bezier-by-angles-and-speeds/cubic-to-angles-and-speeds.ts:21](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/angles-and-speeds/bezier-by-angles-and-speeds/cubic-to-angles-and-speeds.ts#L21)*
+
+For the given bernstein cubic bezier curve basis return the angles-and-speeds
+basis coefficients, i.e.
+* α   -&gt; initial tangent angle in radians
+* β   -&gt; terminal tangent angle in radians
+* s0  -&gt; inital speed
+* s1  -&gt; terminal speed
+* L   -&gt; distance between initial and final point (cannot be 0)
+* rot -&gt; rotation of entire curve
+* p   -&gt; initial position offset
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 3 (cubic) bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]` |

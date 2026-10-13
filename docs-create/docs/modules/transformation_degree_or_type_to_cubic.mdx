@@ -1,0 +1,26 @@
+---
+id: "transformation_degree_or_type_to_cubic"
+title: "to-cubic"
+---
+
+```typescript
+function toCubic(ps: number[][]): number[][]
+```
+
+*Defined in [transformation/degree-or-type/to-cubic.ts:18](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/transformation/degree-or-type/to-cubic.ts#L18)*
+
+Returns a cubic bezier curve that is equivalent to the given linear or
+quadratic bezier curve.
+Cubics are just returned unaltered.
+
+This function simply uses `lineToCubic` or `quadraticToCubic` internally.
+
+import { ToCubic } from '../mdx/toCubic';
+
+<ToCubic />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0],[1,1],[2,1],[2,0]]`     |

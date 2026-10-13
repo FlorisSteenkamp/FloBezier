@@ -1,0 +1,21 @@
+---
+id: "from_power_basis_from_power_basis"
+title: "from-power-basis"
+---
+
+```typescript
+function fromPowerBasis(cs: number[][]): number[][]
+```
+
+*Defined in [from-power-basis/from-power-basis.ts:16](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/from-power-basis/from-power-basis.ts#L16)*
+
+Returns the Bernstein basis representation (i.e. control points) of a line,
+quadratic or cubic bezier given its power bases.
+* **non-exact**: due to floating-point round-off (see implementation to
+understand under what conditions the result would be exact)
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`cs` | number[][] | An order 1,2 or 3 parametric curve in power bases with the x-coordinate coefficients given first (as an array representing the polynomial from highest to lowest power coefficient), e.g. `[[1,2,3,4], [5,6,7,8]]` represents a cubic parametric curve given by `x(t) = t^3 + 2t^2 + 3t + 4, y(t) = 5t^3 + 6t^2 + 7t + 8`. |

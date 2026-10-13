@@ -1,0 +1,22 @@
+---
+id: "global_properties_bounds_get_y_bounds_tight"
+title: "get-y-bounds-tight"
+---
+
+```typescript
+function getYBoundsTight(ps: number[][]): YBounds
+```
+
+*Defined in [global-properties/bounds/get-y-bounds-tight.ts:15](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/global-properties/bounds/get-y-bounds-tight.ts#L15)*
+
+Returns tight y-coordinate bounds of the given bezier curve.
+
+import { GetYBoundsTight } from '../mdx/getYBoundsTight';
+
+<GetYBoundsTight />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 1, 2 or 3 bezier curve given as an array of control points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`     |

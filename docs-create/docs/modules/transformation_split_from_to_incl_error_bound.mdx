@@ -1,0 +1,35 @@
+---
+id: "transformation_split_from_to_incl_error_bound"
+title: "from-to-incl-error-bound"
+---
+
+```typescript
+function fromToInclErrorBound(ps: number[][], tS: number, tE: number): object
+```
+
+*Defined in [transformation/split/from-to-incl-error-bound.ts:20](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/transformation/split/from-to-incl-error-bound.ts#L20)*
+
+Returns a bezier curve, `ps`, that starts and ends at the given `t` parameters
+(starting at `tS` and ending at `tE`) including a matching coordinate-wise
+error bound, `_ps`, that needs to be multiplied by `3u`, `5u` or `9u` (for
+lines, quadratic or cubic bezier curves respectively) before use,
+where `u === Number.EPSILON/2`.
+
+import { FromToInclErrorBound } from '../mdx/fromToInclErrorBound';
+
+<FromToInclErrorBound />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`    |
+`tS` | number | the `t` parameter where the resultant bezier should start    |
+`tE` | number | the `t` parameter where the resultant bezier should end     |
+
+**Returns:** object
+
+Name | Type |
+------ | ------ |
+`ps` | number[][] |
+`_ps` | number[][] |

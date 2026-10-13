@@ -1,0 +1,25 @@
+---
+id: "local_properties_at_t_normal_double_unit_normal"
+title: "unit-normal"
+---
+
+```typescript
+function unitNormal(ps: number[][], t: number): number[] | undefined
+```
+
+*Defined in [local-properties-at-t/normal/double/unit-normal.ts:19](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/normal/double/unit-normal.ts#L19)*
+
+Returns the unit normal vector of a bezier curve at a specific given
+parameter value `t` (the `tangent` at that point rotated by 90 degrees and
+normalized).
+
+* uses double precision calculations internally
+* returns `undefined` if the tangent vanishes at `t` (e.g. at a cusp) since
+the curve has no well-defined direction there
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | a linear, quadratic or cubic bezier curve given by its ordered control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]` |
+`t` | number | the parameter value where the normal should be evaluated |

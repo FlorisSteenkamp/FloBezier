@@ -1,0 +1,46 @@
+---
+id: "get_medial_points_double_get_medial_points"
+title: "get-medial-points"
+---
+
+```typescript
+function getMedialPoints(p: number[], v: number[], ps: number[][]): { ts: number[]; ss: number[]; qs: number[][]; }
+```
+
+*Defined in [get-medial-points/double/get-medial-points.ts:38](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/get-medial-points/double/get-medial-points.ts#L38)*
+
+Returns candidate ray parameter values `t`, bezier parameter values `s` and
+medial points for points `q(t)` and b(s) that satisfy the medial condition with
+respect to `p` and `ps`:
+
+Let `p` be a fixed point in the plane.
+Let `v` be a direction vector defining the ray `q(t) = p + t⋅v`.
+Let `ps` be a bezier curve.
+
+* `q(t)` is equidistant from `p` and the nearest point on `ps`
+* that common distance is locally minimal among such candidates
+
+In other words, this function returns candidate ray parameters for the
+sought medial point(s). Selecting physically valid solutions (if needed)
+is done by the caller or by a later stage of this routine.
+
+* if `ps` is a point (an order 0 bezier curve), the single candidate is the
+intersection of the ray with the perpendicular bisector of `p` and the
+point, i.e. `t = -|p - P|² / (2v⋅(p - P))`; its bezier parameter value is
+returned as `0` (since all parameter values give the same point)
+* candidates are not filtered, e.g. `t` can be negative (the medial point
+lies behind `p`) or `NaN` (no solution, e.g. the ray is parallel to the 
+perpendicular bisector, or the solution is degenerate, e.g. `p` coincides
+with the point)
+
+import { GetMedialPoints } from '../mdx/getMedialPoints';
+
+<GetMedialPoints />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`p` | number[] | base point |
+`v` | number[] | ray direction from `p` |
+`ps` | number[][] | an order 0, 1, 2 or 3 bezier curve given as an array of control points, e.g. `[[0,0],[1,1],[2,1]]` |

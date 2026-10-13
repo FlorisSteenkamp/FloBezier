@@ -1,0 +1,24 @@
+---
+id: "global_properties_get_inflections"
+title: "get-inflections"
+---
+
+```typescript
+function getInflections(ps: number[][]): number[]
+```
+
+*Defined in [global-properties/get-inflections.ts:15](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/global-properties/get-inflections.ts#L15)*
+
+Returns the given order 1,2 or 3 bezier curve's inflection point `t`
+parameter values in ascending order.
+* see [Caffeine Owl](http://www.caffeineowl.com/graphics/2d/vectorial/cubic-inflexion.html)
+
+import { GetInflections } from '../mdx/getInflections';
+
+<GetInflections />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given as an array of its control points, e.g. `[[1,2],[3,4],[5,6],[7,8]]`     |

@@ -1,0 +1,24 @@
+---
+id: "fit_quadratic_to_polyline"
+title: "quadratic-to-polyline"
+---
+
+```typescript
+function quadraticToPolyline(ps: number[][], tolerance?: undefined | number): number[][]
+```
+
+*Defined in [fit/quadratic-to-polyline.ts:20](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/fit/quadratic-to-polyline.ts#L20)*
+
+Transforms the given quadratic bezier curve into a polyline approximation to
+within a given tolerance and returns the result.
+
+import { QuadraticToPolyline } from '../mdx/quadraticToPolyline';
+
+<QuadraticToPolyline />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | a quadratic bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1]]` |
+`tolerance?` | number | defaults to `2**-10` of the maximum coordinate of the given bezier curve (also if `0` is given since a polyline can't approximate a curved bezier with zero error); a tolerance given as the maximum Hausdorff distance allowed between the polyline and the bezier curve |

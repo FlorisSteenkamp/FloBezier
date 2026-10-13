@@ -1,0 +1,22 @@
+---
+id: "local_properties_at_t_tangent_double_tangent_at_1"
+title: "tangent-at-1"
+---
+
+```typescript
+function tangentAt1(ps: number[][]): number[]
+```
+
+*Defined in [local-properties-at-t/tangent/double/tangent-at-1.ts:13](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/tangent/double/tangent-at-1.ts#L13)*
+
+Returns the tangent vector (not necessarily of unit length) of an
+order 0,1,2 or 3 bezier curve at `t === 1`, i.e.
+Returns the result, `[x,y]`, of evaluating the derivative of a linear,
+quadratic or cubic bezier curve's power basis at `t === 1`.
+* uses double precision calculations internally
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | An order 1,2 or 3 bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`     |

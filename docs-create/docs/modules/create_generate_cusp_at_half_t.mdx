@@ -1,0 +1,29 @@
+---
+id: "create_generate_cusp_at_half_t"
+title: "generate-cusp-at-half-t"
+---
+
+```typescript
+function generateCuspAtHalf3(p0: number[], pz: number[], pE: number[]): number[][]
+```
+
+*Defined in [create/generate-cusp-at-half-t.ts:15](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/create/generate-cusp-at-half-t.ts#L15)*
+
+Returns the cubic bezier curve control points with a zero tangent vector
+(i.e. `[0,0]`) at `t = 0.5` (i.e. a 'cusp') at the given point with
+given starting and ending control points.
+* **non-exact**: due to floating-point round-off the cusp is not
+necessarily *exactly* at the given point, nor does the tangent vector
+necessarily vanish *exactly*.
+
+import { GenerateCuspAtHalf3 } from '../mdx/generateCuspAtHalf3';
+
+<GenerateCuspAtHalf3 />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`p0` | number[] | the bezier start point    |
+`pz` | number[] | the point at which the vanishing tangent should occur    |
+`pE` | number[] | the bezier end point     |

@@ -1,0 +1,31 @@
+---
+id: "implicit_form_expansion_e_get_implicit_form1"
+title: "e-get-implicit-form1"
+---
+
+```typescript
+function getImplicitForm1Exact(ps: number[][]): object | undefined
+```
+
+*Defined in [implicit-form/expansion/e-get-implicit-form1.ts:30](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/implicit-form/expansion/e-get-implicit-form1.ts#L30)*
+
+use `eGetImplicitForm1` instead (it is identical but with a new name)
+
+Returns the *exact* implicit form of the given linear bezier curve (a line
+segment) or `undefined` if the line degenerates to a point.
+
+* returned coefficients are subscripted to match their monomial's variables,
+e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
+* returned coefficients are given *exactly* as [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) expansions
+* the implicit form is given by: `vₓx + vᵧy + v = 0`
+* adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
+
+import { GetImplicitForm1Exact } from '../mdx/getImplicitForm1Exact';
+
+<GetImplicitForm1Exact />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] |      |

@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "charset": "utf8",
+        "strict": true,
+        "module": "es2020",
+        "target": "es2020",
+        "declaration": false,
+        "noEmitOnError": true,
+        "sourceMap": false,
+        "moduleResolution": "node",
+        "jsx": "react"
+    },
+    "include": [
+        "areBoxesIntersecting.tsx"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

@@ -1,0 +1,26 @@
+---
+id: "create_generate_arc_from_quads"
+title: "generate-arc-from-quads"
+---
+
+```typescript
+function generateArcFromQuads(c: number[], p1: number[], p2: number[]): number[][][]
+```
+
+*Defined in [create/generate-arc-from-quads.ts:45](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/create/generate-arc-from-quads.ts#L45)*
+
+Returns an arc approximation using unit eighth circle quadratic bezier
+curves. The result is returned as an array of quadratic bezier curves.
+
+* if the last returned arc is approximately smaller than 2**-40 of an eighth
+circle it is not added to the returned value
+* if the last returned arc is approximately (1 - 2**-40) of an eighth
+circle a full eighth circle is added to the returned value
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`c` | number[] | arc circle center |
+`p1` | number[] | arc goes from this point |
+`p2` | number[] | to a point on a line from c to this point (since the problem is over-specified) (if `p2` lies on the ray from `c` through `p1` (or `p2` equals `c`) a full circle is generated using 8 quadratic bezier curves; if `p2` lies on the opposite ray a half circle is generated) |

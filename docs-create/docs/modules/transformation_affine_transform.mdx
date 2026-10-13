@@ -1,0 +1,26 @@
+---
+id: "transformation_affine_transform"
+title: "transform"
+---
+
+```typescript
+function transform(ps: number[][], m: number[][]): number[][]
+```
+
+*Defined in [transformation/affine/transform.ts:17](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/transformation/affine/transform.ts#L17)*
+
+Returns the given bezier curve transformed by the given `2x3` affine transformation matrix `[[a,b,c], [d,e,f]]`, i.e. each control point `[x,y]` is mapped to `[a*x + b*y + c, d*x + e*y + f]`.
+
+* this is the general affine case - translation, scaling, rotation, reflection and shearing can all be expressed by an appropriate matrix
+* uses double precision calculations internally
+
+import { Transform } from '../mdx/transform';
+
+<Transform />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`    |
+`m` | number[][] | a `2x3` affine transformation matrix `[[a,b,c], [d,e,f]]`     |

@@ -1,0 +1,29 @@
+---
+id: "simultaneous_properties_closest_distance_between_beziers_closest_points_between_beziers"
+title: "closest-points-between-beziers"
+---
+
+```typescript
+function closestPointsBetweenBeziers(A: number[][], B: number[][], tolerance?: number | undefined, maxIterations: number): PointsWithDistance[]
+```
+
+*Defined in [simultaneous-properties/closest-distance-between-beziers/closest-points-between-beziers.ts:62](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/simultaneous-properties/closest-distance-between-beziers/closest-points-between-beziers.ts#L62)*
+
+Calculates and returns an accurate approximation to the minimum distance
+between the two given bezier curves. (Actually returns the parameter values
+from which the distance can then easily be calculated.)
+
+* partially based off [Computing the Hausdorff distance between two sets of parametric curves](https://www.semanticscholar.org/paper/COMPUTING-THE-HAUSDORFF-DISTANCE-BETWEEN-TWO-SETS-Kim-McLean/d2bd6529c4b118e389e1db209d8f1bf7467f9016)
+
+import { ClosestPointsBetweenBeziers } from '../mdx/closestPointsBetweenBeziers';
+
+<ClosestPointsBetweenBeziers />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`A` | number[][] | a bezier curve given by an ordered array of its control points e.g. `[[0,0],[1,1],[2,1],[2,0]]` |
+`B` | number[][] | a bezier curve given by an ordered array of its control points e.g. `[[0,0],[1,1],[2,1],[2,0]]` |
+`tolerance` | number \| undefined | optional; defaults to `max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000` (only if not given, i.e. `0` is a valid tolerance in which case the result is refined until `maxIterations` is reached); if the calculated absolute error bound is less than this, the result is  returned; this is *not* a hard tolerance and the bound can be less accurate in hard cases (due to the `maxIterations` parameter). Luckily  however, specifically the upper bound will be very accurate due to  its fast convergence in such hard cases (see the paper) |
+`maxIterations` | number | optional; defaults to `50`; if the desired guaranteed error bound  has not been achieved after `maxIterations` then the result will be returned |

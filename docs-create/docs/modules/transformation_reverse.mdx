@@ -1,0 +1,26 @@
+---
+id: "transformation_reverse"
+title: "reverse"
+---
+
+```typescript
+function reverse(ps: number[][]): number[][]
+```
+
+*Defined in [transformation/reverse.ts:17](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/transformation/reverse.ts#L17)*
+
+* this function deprecated due to being the same as JavaScript's
+  new Array.toReversed() function.
+
+Returns the given points (e.g. bezier curve) in reverse order.
+
+Implementation details:
+```
+const reverse = ps => ps.slice().reverse()
+```
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | a bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0],[1,1],[2,1],[2,0]]`     |

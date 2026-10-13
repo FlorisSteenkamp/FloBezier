@@ -1,0 +1,26 @@
+---
+id: "global_properties_bounds_get_control_point_box"
+title: "get-control-point-box"
+---
+
+```typescript
+function getControlPointBox(ps: number[][]): number[][]
+```
+
+*Defined in [global-properties/bounds/get-control-point-box.ts:14](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/global-properties/bounds/get-control-point-box.ts#L14)*
+
+Returns a tight axis-aligned bounding box of the given bezier curve's control
+points.
+
+* the box is not a tight bound of the bezier curve itself
+* the result is returned as `[[minX, minY], [maxX, maxY]]`
+
+import { GetControlPointBox } from '../mdx/getControlPointBox';
+
+<GetControlPointBox />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`     |

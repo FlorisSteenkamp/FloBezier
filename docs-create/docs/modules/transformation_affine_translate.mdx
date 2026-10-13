@@ -1,0 +1,25 @@
+---
+id: "transformation_affine_translate"
+title: "translate"
+---
+
+```typescript
+function translate(ps: number[][], v: number[]): number[][]
+```
+
+*Defined in [transformation/affine/translate.ts:15](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/transformation/affine/translate.ts#L15)*
+
+Returns the given bezier curve translated (moved) by the given vector.
+
+* uses double precision calculations internally
+
+import { Translate } from '../mdx/translate';
+
+<Translate />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`    |
+`v` | number[] | the translation vector, e.g. `[3,-2]`     |

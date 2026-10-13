@@ -1,0 +1,28 @@
+---
+id: "simultaneous_properties_closest_and_furthest_point_on_bezier_get_foot_points_on_bezier_certified"
+title: "get-foot-points-on-bezier-certified"
+---
+
+```typescript
+function getFootPointsOnBezierCertified(ps: number[][], p: number[], lb: number, ub: number): RootInterval[]
+```
+
+*Defined in [simultaneous-properties/closest-and-furthest-point-on-bezier/get-foot-points-on-bezier-certified.ts:26](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-foot-points-on-bezier-certified.ts#L26)*
+
+Returns root intervals guaranteed to contain the parameter `t` values of the
+foot point(s) on the given bezier curve to the given point (with
+`t ∈ [lb,ub]`), i.e. the points on the curve where the line to the given
+point is perpendicular to the curve.
+
+* guaranteed accurate to within `4*Number.EPSILON` in the returned `t`
+value(s)
+* an order 0 curve (a point) has no foot points so `[]` is returned
+
+#### Parameters:
+
+Name | Type | Default value | Description |
+------ | ------ | ------ | ------ |
+`ps` | number[][] | - | an order 0,1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]` |
+`p` | number[] | - | a point, e.g. `[1,2]` |
+`lb` | number | 0 | optional; defaults to `0`; the lower bound of the `t` interval to search in |
+`ub` | number | 1 | optional; defaults to `1`; the upper bound of the `t` interval to search in |

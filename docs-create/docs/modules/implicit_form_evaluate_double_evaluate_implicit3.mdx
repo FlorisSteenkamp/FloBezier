@@ -1,0 +1,28 @@
+---
+id: "implicit_form_evaluate_double_evaluate_implicit3"
+title: "evaluate-implicit3"
+---
+
+```typescript
+function evaluateImplicit3(cs: object, x: number, y: number): number
+```
+
+*Defined in [implicit-form/evaluate/double/evaluate-implicit3.ts:21](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/implicit-form/evaluate/double/evaluate-implicit3.ts#L21)*
+
+Evaluates and returns the result of evaluating the given implicit function
+(a degree 3 bivariate polynomial in `x` and `y`) at the point `[x,y]`.
+
+* the implicit form is given by: `vₓₓₓx³ + vₓₓᵧx²y + vₓᵧᵧxy² + vᵧᵧᵧy³ + vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v`,
+where the `vₓ`, `vᵧ`, `v`, etc are constants
+
+```typescript
+evaluateImplicit3({ vₓₓₓ: -1, vₓₓᵧ: -2, vₓᵧᵧ: -3, vᵧᵧᵧ: -4, vₓₓ: 4, vₓᵧ: 5, vᵧᵧ: 6, vₓ: 1, vᵧ: 2, v: 3 }, 7, -4);  //=> 123
+```
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`cs` | &#123; `vₓₓₓ`: number; `vₓₓᵧ`: number; `vₓᵧᵧ`: number; `vᵧᵧᵧ`: number; `vₓₓ`: number; `vₓᵧ`: number; `vᵧᵧ`: number; `vₓ`: number; `vᵧ`: number; `v`: number &#125; | the polynomial to evaluate    |
+`x` | number | the `x` variable at which to evaluate    |
+`y` | number | the `y` variable at which to evaluate     |

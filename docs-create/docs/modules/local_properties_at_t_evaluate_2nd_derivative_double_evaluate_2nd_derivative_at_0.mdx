@@ -1,0 +1,20 @@
+---
+id: "local_properties_at_t_evaluate_2nd_derivative_double_evaluate_2nd_derivative_at_0"
+title: "evaluate-2nd-derivative-at-0"
+---
+
+```typescript
+function evaluate2ndDerivativeAt0(ps: number[][]): number[]
+```
+
+*Defined in [local-properties-at-t/evaluate-2nd-derivative/double/evaluate-2nd-derivative-at-0.ts:11](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/evaluate-2nd-derivative/double/evaluate-2nd-derivative-at-0.ts#L11)*
+
+Returns the result, `[x,y]`, of evaluating the 2nd derivative of a linear,
+quadratic or cubic bezier curve's power basis at `t === 0`.
+* uses double precision calculations internally
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | An order 0,1,2 or 3 bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`     |

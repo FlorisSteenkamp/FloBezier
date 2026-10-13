@@ -1,0 +1,26 @@
+---
+id: "create_generate_arc_from_cubics"
+title: "generate-arc-from-cubics"
+---
+
+```typescript
+function generateArcFromCubics(c: number[], p1: number[], p2: number[]): number[][][]
+```
+
+*Defined in [create/generate-arc-from-cubics.ts:43](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/create/generate-arc-from-cubics.ts#L43)*
+
+Returns an arc approximation using unit quarter circle cubic bezier
+curves. The result is returned as an array of cubic bezier curves.
+
+* if the last returned arc is approximately smaller than 2**-40 of a quarter
+circle it is not added to the returned value
+* if the last returned arc is approximately (1 - 2**-40) of a quarter
+circle a full quarter circle is added to the returned value
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`c` | number[] | arc circle center |
+`p1` | number[] | arc goes from this point |
+`p2` | number[] | to a point on a line from c to this point (since the problem is over-specified) (if `p2` lies on the ray from `c` through `p1` (or `p2` equals `c`) a full circle is generated using 4 cubic bezier curves; if `p2` lies on the opposite ray a half circle is generated) |

@@ -1,0 +1,27 @@
+---
+id: "transformation_split_split_by_curvature_and_length"
+title: "split-by-curvature-and-length"
+---
+
+```typescript
+function splitByCurvatureAndLength(ps: number[][], maxCurviness?: number, maxLength?: number, minTSpan?: number): number[]
+```
+
+*Defined in [transformation/split/split-by-curvature-and-length.ts:24](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/transformation/split/split-by-curvature-and-length.ts#L24)*
+
+Split the given bezier curve into pieces (given as an array of parameter
+`t` values) such that each piece is flat within a given tolerance (where
+curvature is measured by the `curviness` function).
+
+import { SplitByCurvatureAndLength } from '../mdx/splitByCurvatureAndLength';
+
+<SplitByCurvatureAndLength />
+
+#### Parameters:
+
+Name | Type | Default value | Description |
+------ | ------ | ------ | ------ |
+`ps` | number[][] | - | an order 0,1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`    |
+`maxCurviness` | number | 0.4 | optional; defaults to `0.4 radians`; maximum curviness (must be > 0) as calculated using the `curviness` function (that measures the total angle in radians formed by the vectors formed by the ordered control points)    |
+`maxLength` | number | 10 | optional; defaults to `10`; maximum allowed length of any returned piece    |
+`minTSpan` | number | 2**-16 | optional; defaults to `2**-16`; the minimum `t` span that can be returned for a bezier piece; necessary for cubics otherwise a curve with a cusp would cause an infinite loop     |

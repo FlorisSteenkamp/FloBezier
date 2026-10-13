@@ -1,0 +1,34 @@
+---
+id: "intersection_circle_bezier_intersection_circle_bezier_intersection"
+title: "circle-bezier-intersection"
+---
+
+```typescript
+function circleBezierIntersection(circle: object, ps: number[][]): object[]
+```
+
+*Defined in [intersection/circle-bezier-intersection/circle-bezier-intersection.ts:30](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/intersection/circle-bezier-intersection/circle-bezier-intersection.ts#L30)*
+
+Returns the intersection between a circle and linear, quadratic or cubic bezier
+curve.
+The algorithm employed uses advanced techniques such
+as floating point error bounding, adaptive multi-precision floating
+point arithmetic, pre-filtering of easy cases, certified root finding and
+algebraic implicitization of the curves in order to find *guaranteed* accurate
+results (see points below)
+
+* the bezier curve's parameter `t` values are retuned in objects very
+similar to the type [[X]]
+* this algorithm is mathematically guaranteed accurate to within
+`4 * Number.EPSILON` in the `t` parameter values of the bezier curve
+
+import { CircleBezierIntersection } from '../mdx/circleBezierIntersection';
+
+<CircleBezierIntersection />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`circle` | &#123; `center`: number[]; `radius`: number &#125; | a circle given as the object `{ center: number[], radius: number }`    |
+`ps` | number[][] | an order 1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`     |

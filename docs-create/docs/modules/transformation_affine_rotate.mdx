@@ -1,0 +1,23 @@
+---
+id: "transformation_affine_rotate"
+title: "rotate"
+---
+
+```typescript
+function rotate(ps: number[][], θ: number): number[][]
+```
+
+*Defined in [transformation/affine/rotate.ts:16](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/transformation/affine/rotate.ts#L16)*
+
+Returns the given bezier curve rotated anti-clockwise about the origin by the given angle (in radians).
+
+import { Rotate } from '../mdx/rotate';
+
+<Rotate />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`    |
+`θ` | number | the rotation angle in radians (anti-clockwise)     |

@@ -1,0 +1,39 @@
+---
+id: "simultaneous_properties_closest_and_furthest_point_on_bezier_furthest_point_on_bezier"
+title: "furthest-point-on-bezier"
+---
+
+```typescript
+function furthestPointOnBezier(ps: number[][], p: number[]): object
+```
+
+*Defined in [simultaneous-properties/closest-and-furthest-point-on-bezier/furthest-point-on-bezier.ts:29](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/simultaneous-properties/closest-and-furthest-point-on-bezier/furthest-point-on-bezier.ts#L29)*
+
+Returns the furthest point(s) (and parameter `t` value(s)) on the given
+bezier curve to the given point (with `t ∈ [0,1]`).
+* intermediate calculations are done in double precision
+* in some cases there can be more than one furthest point, e.g. on parts of
+the axis of symmetry of a parabola (in which case only one of the points are returned)
+* the returned point(s) are objects with the following properties:
+    * `p`: the furthest point on the bezier curve
+    * `t`: the parameter value of the point on the bezier curve
+    * `d`: the furthest distance between the point and the bezier curve
+
+import { FurthestPointOnBezier } from '../mdx/furthestPointOnBezier';
+
+<FurthestPointOnBezier />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`    |
+`p` | number[] | a point, e.g. `[1,2]`     |
+
+**Returns:** object
+
+Name | Type |
+------ | ------ |
+`p` | number[] |
+`t` | number |
+`d` | number |

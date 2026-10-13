@@ -1,0 +1,24 @@
+---
+id: "transformation_split_from_to"
+title: "from-to"
+---
+
+```typescript
+function fromTo(ps: number[][], tS: number, tE: number): number[][]
+```
+
+*Defined in [transformation/split/from-to.ts:16](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/transformation/split/from-to.ts#L16)*
+
+Returns a bezier curve that starts and ends at the given `t` parameters.
+
+import { FromTo } from '../mdx/fromTo';
+
+<FromTo />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`    |
+`tS` | number | the `t` parameter where the resultant bezier should start    |
+`tE` | number | the `t` parameter where the resultant bezier should end     |

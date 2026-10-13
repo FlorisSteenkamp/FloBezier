@@ -1,0 +1,29 @@
+---
+id: "y_from_x_expansion_e_get_coeffs_y_from_x"
+title: "e-get-coeffs-y-from-x"
+---
+
+```typescript
+function eGetCoeffsYFromX(ps: number[][], x: number): number[][] | undefined
+```
+
+*Defined in [y-from-x/expansion/e-get-coeffs-y-from-x.ts:28](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/y-from-x/expansion/e-get-coeffs-y-from-x.ts#L28)*
+
+Returns a polynomial whose roots are the `y` coordinates given the `x`
+coordinate of the given bezier curve.
+
+* the coefficients are returned *exactly* as [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+expansions
+* if the given curve is degenerate (i.e. its order is really lower than
+suggested by the number of control points, e.g. a cubic that is really a
+quadratic) the higher order coefficients of the returned polynomial will
+simply be zero
+* if the given curve degenerates to a point the zero polynomial (all
+coefficients zero) is returned
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 1, 2 or 3 bezier curve given as an ordered array of its control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]` |
+`x` | number | the `x` coordinate |

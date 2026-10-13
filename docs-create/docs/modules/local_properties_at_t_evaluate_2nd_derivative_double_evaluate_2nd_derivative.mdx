@@ -1,0 +1,30 @@
+---
+id: "local_properties_at_t_evaluate_2nd_derivative_double_evaluate_2nd_derivative"
+title: "evaluate-2nd-derivative"
+---
+
+```typescript
+function evaluate2ndDerivative(ps: number[][]): (t: number) => number[]
+function evaluate2ndDerivative(ps: number[][], t: number): number[]
+```
+
+*Defined in [local-properties-at-t/evaluate-2nd-derivative/double/evaluate-2nd-derivative.ts:19](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/evaluate-2nd-derivative/double/evaluate-2nd-derivative.ts#L19)*
+
+Returns the `[x,y]` value of the twice differentiated (with respect to `t`)
+bezier curve's power basis when evaluated at `t`.
+
+* uses double precision calculations internally
+* **curried:** if `t` is omitted a function of `t` is returned instead (the
+power basis conversion is then only done once which is much faster if the
+derivative is to be evaluated at many `t` values for the same curve)
+
+import { Evaluate2ndDerivative } from '../mdx/evaluate2ndDerivative';
+
+<Evaluate2ndDerivative />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | a linear, quadratic or cubic bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]` |
+`t?` | number | the t parameter (may be omitted, see above) |

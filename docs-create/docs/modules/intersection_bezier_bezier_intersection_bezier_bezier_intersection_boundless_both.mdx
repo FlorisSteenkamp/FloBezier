@@ -1,0 +1,32 @@
+---
+id: "intersection_bezier_bezier_intersection_bezier_bezier_intersection_boundless_both"
+title: "bezier-bezier-intersection-boundless-both"
+---
+
+```typescript
+function bezierBezierIntersectionBoundlessBoth(ps1: number[][], ps2: number[][]): RootInterval[] | undefined
+```
+
+*Defined in [intersection/bezier-bezier-intersection/bezier-bezier-intersection-boundless-both.ts:29](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/intersection/bezier-bezier-intersection/bezier-bezier-intersection-boundless-both.ts#L29)*
+
+Returns the intersection between any of two linear, quadratic or cubic bezier
+curves without limiting the `t` parameter value of either curve,
+i.e. `t ∈ [-∞,+∞]`.
+
+* if the two curves have an infinite number of intersections `undefined` is returned
+* the second bezier curve's parameter `t` values are returned *ordered* by `t` value
+* if the curves share an endpoint (exactly) the known intersection at the
+shared point is divided out of the intersection polynomial and returned
+*exactly* (which is much faster, especially if the curves are also tangent
+at the shared point)
+
+* **precondition:** the bezier curves must be of lowest possible
+representable order, i.e. cubics are really cubics, etc. (else
+use [reduceOrderIfPossible](transformation_reduce_order_if_possible.mdx) first)
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps1` | number[][] | an order 1,2 or 3 bezier curve given as an array of its control points, e.g. `[[1,2],[3,4],[5,7],[0,0]]` |
+`ps2` | number[][] | an order 1,2 or 3 bezier curve given as an array of its control points, e.g. `[[1,2],[3,4],[5,7],[0,0]]` |

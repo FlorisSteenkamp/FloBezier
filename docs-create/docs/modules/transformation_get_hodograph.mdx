@@ -1,0 +1,22 @@
+---
+id: "transformation_get_hodograph"
+title: "get-hodograph"
+---
+
+```typescript
+function getHodograph(ps: number[][]): number[][]
+```
+
+*Defined in [transformation/get-hodograph.ts:9](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/transformation/get-hodograph.ts#L9)*
+
+Returns the hodograph of the given bezier curve.
+
+import { GetHodograph } from '../mdx/getHodograph';
+
+<GetHodograph />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`     |

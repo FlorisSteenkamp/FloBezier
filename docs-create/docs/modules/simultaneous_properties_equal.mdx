@@ -1,0 +1,20 @@
+---
+id: "simultaneous_properties_equal"
+title: "equal"
+---
+
+```typescript
+function equal(ps1: number[][], ps2: number[][]): boolean
+```
+
+*Defined in [simultaneous-properties/equal.ts:11](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/simultaneous-properties/equal.ts#L11)*
+
+Returns `true` if the two given bezier curves are exactly equal when compared
+by value (deep equality), `false` otherwise
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps1` | number[][] | an order 0,1,2 or 3 bezier curve given as an ordered array of its control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`    |
+`ps2` | number[][] | another bezier curve     |

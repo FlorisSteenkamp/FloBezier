@@ -1,0 +1,25 @@
+---
+id: "create_generate_quarter_circle"
+title: "generate-quarter-circle"
+---
+
+```typescript
+function generateQuarterCircle(scale: number, translation: number[]): number[][]
+```
+
+*Defined in [create/generate-quarter-circle.ts:12](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/create/generate-quarter-circle.ts#L12)*
+
+Returns a cubic bezier curve that is an approximation of the unit quarter
+circle in the first quadrant scaled and then translated.
+* see: [Approximate a circle with cubic Bézier curves](https://spencermortensen.com/articles/bezier-circle/)
+
+import { GenerateQuarterCircle } from '../mdx/generateQuarterCircle';
+
+<GenerateQuarterCircle />
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`scale` | number |
+`translation` | number[] |

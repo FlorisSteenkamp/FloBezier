@@ -1,0 +1,56 @@
+---
+id: "local_properties_at_t_curvature_dd_curvature"
+title: "dd-curvature"
+---
+
+```typescript
+function ddCurvatureND(ps: number[][], t: number): [number[], number[]]
+```
+
+*Defined in [local-properties-at-t/curvature/dd-curvature.ts:16](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/curvature/dd-curvature.ts#L16)*
+
+Returns the numerator and denominator of curvature `[N,D]`, i.e. `κ = N/D`
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] |  |
+`t` | number |  |
+
+___
+
+```typescript
+function ddCurvature(ps: number[][], t: number): number[]
+```
+
+*Defined in [local-properties-at-t/curvature/dd-curvature.ts:47](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/curvature/dd-curvature.ts#L47)*
+
+Returns the curvature `κ` of the given linear, quadratic or cubic bezier
+curve at a specific given parameter value `t`.
+
+* returns `Number.NaN` at a cusp - this can be tested for with `Number.isNaN`
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 1,2 or 3 bezier curve, e.g. `[[0,0],[1,1],[2,1],[2,0]]` |
+`t` | number | the parameter value where the curvature should be evaluated |
+
+___
+
+```typescript
+function ddRadiusOfCurvature(ps: number[][], t: number): number[]
+```
+
+*Defined in [local-properties-at-t/curvature/dd-curvature.ts:63](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/curvature/dd-curvature.ts#L63)*
+
+Returns the radius of curvature.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] |  |
+`t` | number |  |

@@ -1,0 +1,27 @@
+---
+id: "global_properties_total_curvature"
+title: "total-curvature"
+---
+
+```typescript
+function totalCurvature(ps: number[][], interval?: number[]): number
+```
+
+*Defined in [global-properties/total-curvature.ts:19](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/global-properties/total-curvature.ts#L19)*
+
+Returns the total curvature of the bezier over the given interval.
+
+* the result is given in radians.
+
+import { TotalCurvature } from '../mdx/totalCurvature';
+
+<TotalCurvature />
+
+#### Parameters:
+
+Name | Type | Default value | Description |
+------ | ------ | ------ | ------ |
+`ps` | number[][] | - | a cubic bezier, e.g. [[0,0],[1,1],[2,1],[2,0]] |
+`interval` | number[] | [0,1] | the interval of integration (often === [0,1]) |
+
+**Returns:** number

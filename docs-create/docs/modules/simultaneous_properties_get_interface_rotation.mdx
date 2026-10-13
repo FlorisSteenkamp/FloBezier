@@ -1,0 +1,27 @@
+---
+id: "simultaneous_properties_get_interface_rotation"
+title: "get-interface-rotation"
+---
+
+```typescript
+function getInterfaceRotation(a: number[], b: number[]): number
+```
+
+*Defined in [simultaneous-properties/get-interface-rotation.ts:26](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/simultaneous-properties/get-interface-rotation.ts#L26)*
+
+Returns the rotation angle (-𝜋 &lt;= θ &lt;= 𝜋 *guaranteed*) from some vector to
+another vector considering them to both start at the same point.
+
+If one of the vectors is the zero vector then `0` is returned.
+
+It can also be imagined that the 2nd vector starts where the 1st one ends.
+
+Intermediate calculations are done in double-double precision (only the
+final result is rounded to double precision) in a numerically stable manner.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`a` | number[] | the first 2d vector given as `[x,y]` where `x` and `y` are the  coordinates, e.g. `[2,3]` |
+`b` | number[] | the second 2d vector |

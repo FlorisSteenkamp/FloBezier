@@ -1,0 +1,23 @@
+---
+id: "local_properties_at_t_tangent_exact_tangent_at_0_exact"
+title: "tangent-at-0-exact"
+---
+
+```typescript
+function tangentAt0Exact(ps: number[][]): number[][]
+```
+
+*Defined in [local-properties-at-t/tangent/exact/tangent-at-0-exact.ts:34](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/tangent/exact/tangent-at-0-exact.ts#L34)*
+
+Returns the *exact* tangent vector (not necessarily of unit length) of an
+order 0,1,2 or 3 bezier curve at `t === 0`, i.e.
+returns the result, `[x,y]`, of evaluating the derivative of a linear,
+quadratic or cubic bezier curve's power basis at `t === 0`.
+
+* Alias: `eTangentAt0`
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`     |

@@ -1,0 +1,21 @@
+---
+id: "local_properties_at_t_normal_double_double_dd_normal"
+title: "dd-normal"
+---
+
+```typescript
+function ddNormal(ps: number[][], t: number): number[][]
+```
+
+*Defined in [local-properties-at-t/normal/double-double/dd-normal.ts:15](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/normal/double-double/dd-normal.ts#L15)*
+
+* Returns a normal vector (not necessarily of unit length) of a bezier curve 
+at a specific given parameter value `t` by simply taking the `tangent` at
+that point and rotating it by 90 degrees.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | a linear, quadratic or cubic bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]` |
+`t` | number | the `t` parameter |

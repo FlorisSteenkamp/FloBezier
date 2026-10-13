@@ -1,0 +1,24 @@
+---
+id: "global_properties_bounds_get_bounding_box_tight"
+title: "get-bounding-box-tight"
+---
+
+```typescript
+function getBoundingBoxTight(ps: number[][]): number[][]
+```
+
+*Defined in [global-properties/bounds/get-bounding-box-tight.ts:19](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/global-properties/bounds/get-bounding-box-tight.ts#L19)*
+
+Returns a **non-certified**, **rotated**, **tight** bounding box of the given
+bezier curve as four ordered points of a rotated rectangle (with each given
+as `[x,y]`)
+
+import { GetBoundingBoxTight } from '../mdx/getBoundingBoxTight';
+
+<GetBoundingBoxTight />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 1,2 or 3 bezier curve given as an array of its control points, e.g. `[[0,0], [1,1], [2,1], [2,0]]`     |

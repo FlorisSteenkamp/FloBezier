@@ -1,0 +1,36 @@
+---
+id: "implicit_form_double_get_implicit_form1_with_running_error"
+title: "get-implicit-form1-with-running-error"
+---
+
+```typescript
+function getImplicitForm1WithRunningError(ps: number[][]): object
+```
+
+*Defined in [implicit-form/double/get-implicit-form1-with-running-error.ts:25](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/implicit-form/double/get-implicit-form1-with-running-error.ts#L25)*
+
+Returns a double precision implicit form of the given line segment
+and a coefficientwise error bound.
+
+Returned coefficients are subscripted to match their monomial's variables,
+e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
+
+* the implicit form is given by: `vₓx + vᵧy + v = 0`
+* intermediate calculations are done in double precision and this is
+  reflected in the error bound
+* the error bound returned still needs to be scaled by
+  `γ1 === u/(1 - u)` (where `u === Number.EPSILON / 2`) before use
+* adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | a line segment given as an array of its control points, e.g. `[[1,2],[3,4]]` |
+
+**Returns:** object
+
+Name | Type |
+------ | ------ |
+`coeffs` | &#123; `vₓ`: number; `vᵧ`: number; `v`: number &#125; |
+`errorBound` | &#123; `vₓ_`: number; `vᵧ_`: number; `v_`: number &#125; |

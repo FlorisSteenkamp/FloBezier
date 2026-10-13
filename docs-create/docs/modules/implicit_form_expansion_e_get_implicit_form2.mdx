@@ -1,0 +1,31 @@
+---
+id: "implicit_form_expansion_e_get_implicit_form2"
+title: "e-get-implicit-form2"
+---
+
+```typescript
+function getImplicitForm2Exact(ps: number[][]): object | object | undefined
+```
+
+*Defined in [implicit-form/expansion/e-get-implicit-form2.ts:32](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/implicit-form/expansion/e-get-implicit-form2.ts#L32)*
+
+use `eGetImplicitForm2` instead (it is identical but with a new name)
+
+Returns the exact implicit form of the given quadratic bezier curve
+or `undefined` if the curve degenerates to a point.
+
+* returned coefficients are subscripted to match their monomial's variables,
+e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
+* returned coefficients are given *exactly* as [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) expansions
+* the implicit form is given by: `vₓₓx² +vₓᵧxy + vᵧᵧy² + vₓx + vᵧy + v = 0`
+* adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
+
+import { GetImplicitForm2Exact } from '../mdx/getImplicitForm2Exact';
+
+<GetImplicitForm2Exact />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] |      |

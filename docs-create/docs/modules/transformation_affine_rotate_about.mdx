@@ -1,0 +1,24 @@
+---
+id: "transformation_affine_rotate_about"
+title: "rotate-about"
+---
+
+```typescript
+function rotateAbout(ps: number[][], θ: number, center: number[]): number[][]
+```
+
+*Defined in [transformation/affine/rotate-about.ts:17](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/transformation/affine/rotate-about.ts#L17)*
+
+Returns the given bezier curve rotated anti-clockwise about the given point by the given angle (in radians).
+
+import { RotateAbout } from '../mdx/rotateAbout';
+
+<RotateAbout />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`    |
+`θ` | number | the rotation angle in radians (anti-clockwise)    |
+`center` | number[] | the point to rotate about, e.g. `[1,2]`     |

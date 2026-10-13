@@ -1,0 +1,30 @@
+---
+id: "local_properties_at_t_evaluate_double_double_eval_de_casteljau_dd"
+title: "eval-de-casteljau-dd"
+---
+
+```typescript
+function evalDeCasteljauDd(ps: number[][], t: number[]): number[][]
+```
+
+*Defined in [local-properties-at-t/evaluate/double-double/eval-de-casteljau-dd.ts:27](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/evaluate/double-double/eval-de-casteljau-dd.ts#L27)*
+
+Returns the resulting point (in double-double precision) of evaluating the
+given bezier curve at the given parameter `t` (given as a double-double
+precision floating point number).
+* uses [De Casteljau's algorithm](https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm)
+with intermediate calculations done in double-double precision floating point
+arithmetic.
+
+* to get an absolute error bound on the result call [[evalDeCasteljauError]]
+
+import { EvalDeCasteljauDd } from '../mdx/evalDeCasteljauDd';
+
+<EvalDeCasteljauDd />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 1,2 or 3 bezier curve, e.g. `[[0,0],[1,1],[2,1],[2,0]]`    |
+`t` | number[] | the parameter value where the bezier should be evaluated (given in double-double precision)     |

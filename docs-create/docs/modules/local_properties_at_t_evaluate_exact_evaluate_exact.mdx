@@ -1,0 +1,26 @@
+---
+id: "local_properties_at_t_evaluate_exact_evaluate_exact"
+title: "evaluate-exact"
+---
+
+```typescript
+function evaluateExact(ps: number[][], t: number): number[][]
+```
+
+*Defined in [local-properties-at-t/evaluate/exact/evaluate-exact.ts:18](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/evaluate/exact/evaluate-exact.ts#L18)*
+
+Returns the *exact* resulting point of evaluating the given bezier curve at
+the given `t` parameter.
+* the result is returned as `[x,y]`, where `x` and `y` are [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf) floating
+point expansions
+
+import { EvaluateExact } from '../mdx/evaluateExact';
+
+<EvaluateExact />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`    |
+`t` | number |      |

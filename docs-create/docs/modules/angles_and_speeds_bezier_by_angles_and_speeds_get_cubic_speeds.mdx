@@ -1,0 +1,19 @@
+---
+id: "angles_and_speeds_bezier_by_angles_and_speeds_get_cubic_speeds"
+title: "get-cubic-speeds"
+---
+
+```typescript
+function getCubicSpeeds(ps: number[][]): number[]
+```
+
+*Defined in [angles-and-speeds/bezier-by-angles-and-speeds/get-cubic-speeds.ts:11](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/angles-and-speeds/bezier-by-angles-and-speeds/get-cubic-speeds.ts#L11)*
+
+For the given bernstein basis cubic bezier curve return its initial and
+terminal speeds in the form `[s0,s1]`.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 3 (cubic) bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]` |

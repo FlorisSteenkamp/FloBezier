@@ -1,0 +1,28 @@
+---
+id: "transformation_affine_rotate_90_about"
+title: "rotate-90-about"
+---
+
+```typescript
+function rotate90About(ps: number[][], center: number[]): number[][]
+```
+
+*Defined in [transformation/affine/rotate-90-about.ts:15](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/transformation/affine/rotate-90-about.ts#L15)*
+
+Returns the given bezier curve rotated anti-clockwise about the given point
+by exactly 90 degrees.
+
+This is an exact special case of [rotateAbout](transformation_affine_rotate_about.mdx) that avoids the floating
+point error introduced by evaluating `sin`/`cos` of a rounded `Math.PI/2`.
+The rotation reduces to `(x,y) -> (-y,x)` (about the origin) which is exact.
+
+import { Rotate90About } from '../mdx/rotate90About';
+
+<Rotate90About />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`    |
+`center` | number[] | the point to rotate about, e.g. `[1,2]`     |

@@ -1,0 +1,24 @@
+---
+id: "local_properties_at_t_tangent_double_unit_tangent"
+title: "unit-tangent"
+---
+
+```typescript
+function unitTangent(ps: number[][], t: number): number[] | undefined
+```
+
+*Defined in [local-properties-at-t/tangent/double/unit-tangent.ts:17](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/tangent/double/unit-tangent.ts#L17)*
+
+Returns the unit tangent vector of an order 0,1,2 or 3 bezier curve at a
+specific given parameter value `t`.
+
+* uses double precision calculations internally
+* returns `undefined` if the tangent vanishes at `t` (e.g. at a cusp) since
+the curve has no well-defined direction there
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | a linear, quadratic or cubic bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]` |
+`t` | number | the t parameter |

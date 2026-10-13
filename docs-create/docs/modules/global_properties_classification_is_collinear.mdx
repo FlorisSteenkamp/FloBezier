@@ -1,0 +1,62 @@
+---
+id: "global_properties_classification_is_collinear"
+title: "is-collinear"
+---
+
+```typescript
+function isCollinear(ps: number[][]): boolean
+```
+
+*Defined in [global-properties/classification/is-collinear.ts:19](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/global-properties/classification/is-collinear.ts#L19)*
+
+Returns `true` if the given bezier curve has all control points collinear,
+`false` otherwise.
+* if you need to know whether a given bezier curve can be converted to an
+order 1 bezier curve (a line) such that the same `(x,y)` point is returned
+for the same `t` value then use e.g. [isQuadReallyLine](global_properties_classification_is_quad_really_line.mdx) instead.
+
+* **exact** not susceptible to floating point round-off
+
+import { IsCollinear } from '../mdx/isCollinear';
+
+<IsCollinear />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given as an array of its control points, e.g. `[[1,2],[3,4],[5,6],[7,8]]`     |
+
+___
+
+```typescript
+function isHorizontal(ps: number[][]): boolean
+```
+
+*Defined in [global-properties/classification/is-collinear.ts:53](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/global-properties/classification/is-collinear.ts#L53)*
+
+Returns `true` if the given bezier curve has all control points the
+same `y` value (possibly self-overlapping), `false` otherwise.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | An order 0, 1, 2 or 3 bezier curve. |
+
+___
+
+```typescript
+function isVertical(ps: number[][]): boolean
+```
+
+*Defined in [global-properties/classification/is-collinear.ts:73](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/global-properties/classification/is-collinear.ts#L73)*
+
+Returns `true` if the given bezier curve has all control points the
+same `x` value (possibly self-overlapping), `false` otherwise.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | An order 0, 1, 2 or 3 bezier curve. |

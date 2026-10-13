@@ -1,0 +1,27 @@
+---
+id: "global_properties_bounds_get_interval_box_get_interval_box"
+title: "get-interval-box"
+---
+
+```typescript
+function getIntervalBox(ps: number[][], ts: number[]): number[][]
+```
+
+*Defined in [global-properties/bounds/get-interval-box/get-interval-box.ts:25](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/global-properties/bounds/get-interval-box/get-interval-box.ts#L25)*
+
+Returns an axis-aligned-box that is guaranteed to engulf the entire
+given bezier curve from t1 to t2. The returned box is given as a pair
+of points (the box corners) in double precision, e.g. `[[1,1], [2,2]]`.
+* **precondition:** (to satisfy guarantee) t1 &lt; t2
+* **precondition:** (to satisfy guarantee) t1,t2 &gt;= 0 && t1,t2 &lt;= 1
+
+import { GetIntervalBox } from '../mdx/getIntervalBox';
+
+<GetIntervalBox />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 1,2 or 3 bezier curve given as an array of its control points, e.g. `[[0,0], [1,1], [2,1], [2,0]]` |
+`ts` | number[] | [first, second] parameter values, e.g. [0.11, 0.12] |

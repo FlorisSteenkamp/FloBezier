@@ -1,0 +1,26 @@
+---
+id: "transformation_affine_scale"
+title: "scale"
+---
+
+```typescript
+function scale(ps: number[][], s: number): number[][]
+```
+
+*Defined in [transformation/affine/scale.ts:17](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/transformation/affine/scale.ts#L17)*
+
+Returns the given bezier curve scaled about the origin by the given factor.
+
+* to scale about another point, first `translate` the curve, scale, then translate back
+* uses double precision calculations internally
+
+import { Scale } from '../mdx/scale';
+
+<Scale />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`    |
+`s` | number | the scale factor     |

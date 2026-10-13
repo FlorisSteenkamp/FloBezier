@@ -1,0 +1,40 @@
+---
+id: "implicit_form_double_double_get_implicit_form1_dd"
+title: "get-implicit-form1-dd"
+---
+
+```typescript
+function getImplicitForm1Dd(ps: number[][]): object
+```
+
+*Defined in [implicit-form/double-double/get-implicit-form1-dd.ts:30](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/implicit-form/double-double/get-implicit-form1-dd.ts#L30)*
+
+* use `ddGetImplicitForm1` instead (it is the same function but with a better name)
+
+Returns a double-double precision implicit form of the given
+linear bezier curve.
+
+Returned coefficients are subscripted to match their monomial's variables,
+e.g. `vₓᵧ` is the coefficient of the monomial `vₓᵧxy`
+
+* the implicit form is given by: `vₓx + vᵧy + v = 0`
+* intermediate calculations are performed in double-double precision
+* adapted from [Indrek Mandre](http://www.mare.ee/indrek/misc/2d.pdf)
+
+import { GetImplicitForm1Dd } from '../mdx/getImplicitForm1Dd';
+
+<GetImplicitForm1Dd />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | a line segment given as an array of its control points, e.g. `[[1,2],[3,4]]`     |
+
+**Returns:** object
+
+Name | Type |
+------ | ------ |
+`vₓ` | number[] |
+`vᵧ` | number[] |
+`v` | number[] |

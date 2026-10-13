@@ -1,0 +1,34 @@
+---
+id: "simultaneous_properties_hausdorff_distance_hausdorff_distance"
+title: "hausdorff-distance"
+---
+
+```typescript
+function hausdorffDistance(A: number[][], B: number[][], tolerance?: undefined | number, maxIterations?: undefined | number): number
+```
+
+*Defined in [simultaneous-properties/hausdorff-distance/hausdorff-distance.ts:31](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/simultaneous-properties/hausdorff-distance/hausdorff-distance.ts#L31)*
+
+Calculates and returns the (two-sided) Hausdorff distance between the bezier
+curves `A` and `B`.
+
+* the returned value is the guaranteed *lower* bound of the calculated
+Hausdorff distance interval, which in general is a *much* more accurate
+result than the upper bound
+
+* to also obtain the parameter values and points at which the distance is
+achieved, use `hausdorffDistanceExtra`
+* partially based off [Computing the Hausdorff distance between two sets of parametric curves](https://www.semanticscholar.org/paper/COMPUTING-THE-HAUSDORFF-DISTANCE-BETWEEN-TWO-SETS-Kim-McLean/d2bd6529c4b118e389e1db209d8f1bf7467f9016)
+
+import { HausdorffDistance } from '../mdx/hausdorffDistance';
+
+<HausdorffDistance />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`A` | number[][] | a bezier curve given by an ordered array of its control points e.g. `[[0,0],[1,1],[2,1],[2,0]]` |
+`B` | number[][] | a bezier curve given by an ordered array of its control points e.g. `[[0,0],[1,1],[2,1],[2,0]]` |
+`tolerance?` | number | optional; defaults to `max(maxAbsCoordinate(A),maxAbsCoordinate(B))/1000_000` (only if not given, i.e. `0` is a valid tolerance in which case the result is refined until `maxIterations` is reached); if the calculated absolute error bound is less than this, the result is returned; this is *not* a hard tolerance and the returned bound can be less accurate in hard cases (due to the `maxIterations` parameter). Luckily however, specifically the lower bound returned will be very accurate due to its fast convergence in such hard cases (see the paper) |
+`maxIterations?` | number | optional; defaults to `50`; if the desired guaranteed error bound has not been achieved after `maxIterations` then the result will be returned |

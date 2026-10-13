@@ -1,0 +1,20 @@
+---
+id: "local_properties_at_t_evaluate_1st_derivative_exact_evaluate_1st_derivative_exact"
+title: "evaluate-1st-derivative-exact"
+---
+
+```typescript
+function evaluate1stDerivativeExact(ps: number[][], t: number): number[][]
+```
+
+*Defined in [local-properties-at-t/evaluate-1st-derivative/exact/evaluate-1st-derivative-exact.ts:14](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/evaluate-1st-derivative/exact/evaluate-1st-derivative-exact.ts#L14)*
+
+Returns the *exact* result, `[x,y]`, of evaluating the 1st derivative of a 
+linear, quadratic or cubic bezier curve's power basis at `t`.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | a linear, quadratic or cubic bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]` |
+`t` | number | the t parameter |

@@ -1,0 +1,23 @@
+---
+id: "local_properties_at_t_tangent_double_double_dd_tangent_at_0"
+title: "dd-tangent-at-0"
+---
+
+```typescript
+function ddTangentAt0(ps: number[][]): number[][]
+```
+
+*Defined in [local-properties-at-t/tangent/double-double/dd-tangent-at-0.ts:20](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/tangent/double-double/dd-tangent-at-0.ts#L20)*
+
+Returns the tangent vector (in double-double precision not necessarily of
+unit length) of an order 0,1,2 or 3 bezier curve at `t === 0`, i.e.
+returns the result, `[x,y]`, of evaluating the derivative of a linear,
+quadratic or cubic bezier curve's power basis at `t === 0`. 
+
+* *exact* result for order &lt;= 2 bezier curves
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | An order 1,2 or 3 bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]` |

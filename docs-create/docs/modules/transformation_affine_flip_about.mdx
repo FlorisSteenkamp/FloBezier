@@ -1,0 +1,26 @@
+---
+id: "transformation_affine_flip_about"
+title: "flip-about"
+---
+
+```typescript
+function flipAbout(ps: number[][], p1: number[], p2: number[]): number[][]
+```
+
+*Defined in [transformation/affine/flip-about.ts:17](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/transformation/affine/flip-about.ts#L17)*
+
+Returns the given bezier curve reflected (flipped) about the line (axis) through the two given points.
+
+* the two axis points must be distinct
+
+import { FlipAbout } from '../mdx/flipAbout';
+
+<FlipAbout />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]`    |
+`p1` | number[] | a point on the axis, e.g. `[1,2]`    |
+`p2` | number[] | another (distinct) point on the axis, e.g. `[3,4]`     |

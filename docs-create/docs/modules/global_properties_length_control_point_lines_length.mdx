@@ -1,0 +1,24 @@
+---
+id: "global_properties_length_control_point_lines_length"
+title: "control-point-lines-length"
+---
+
+```typescript
+function controlPointLinesLength(ps: number[][]): number
+```
+
+*Defined in [global-properties/length/control-point-lines-length.ts:14](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/global-properties/length/control-point-lines-length.ts#L14)*
+
+Returns an upper bound for the length of the given bezier curve - this bound
+is not very strict as it uses the sum of the straight-line distances between
+control points as a measure.
+
+import { ControlPointLinesLength } from '../mdx/controlPointLinesLength';
+
+<ControlPointLinesLength />
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 0,1,2 or 3 bezier curve given as an array of its control points, e.g. `[[1,2],[3,4],[5,6],[7,8]]`     |

@@ -1,0 +1,25 @@
+---
+id: "global_properties_bounds_get_bounding_hull"
+title: "get-bounding-hull"
+---
+
+```typescript
+function getBoundingHull(ps: number[][], includeRedundantPoints: boolean): number[][] | undefined
+```
+
+*Defined in [global-properties/bounds/get-bounding-hull.ts:19](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/global-properties/bounds/get-bounding-hull.ts#L19)*
+
+Finds the convex hull of the given set of 2d points using the   
+Graham Scan algorithm and returns the hull as an array of points.
+
+* see https://en.wikipedia.org/wiki/Graham_scan
+
+**exact**: this algorithm is robust via adaptive infinite precision floating
+point arithmetic.
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | a set of points, e.g. a bezier curve, e.g. [[0,0],[1,1],[2,1],[2,0]] |
+`includeRedundantPoints` | boolean |  |

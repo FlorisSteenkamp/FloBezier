@@ -1,0 +1,25 @@
+---
+id: "get_curvature_extrema_double_double_get_curvature_extrema_dd"
+title: "get-curvature-extrema-dd"
+---
+
+```typescript
+function getCurvatureExtremaDd(ps: number[][]): Extrema
+```
+
+*Defined in [get-curvature-extrema/double-double/get-curvature-extrema-dd.ts:26](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/get-curvature-extrema/double-double/get-curvature-extrema-dd.ts#L26)*
+
+Returns the parameter `t` values (in `[0,1]`) of local minimum / maximum 
+absolute curvature for the given bezier curve.
+
+If there are an infinite number of such `t` values (such as is the case for a 
+line), an empty array is returned.
+
+* see [MvG](https://math.stackexchange.com/a/1956264/130809)'s excellent 
+answer on math.stackexchange
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 1,2 or 3 bezier curve given as an ordered array of its control point coordinates, e.g. `[[0,0], [1,1], [2,1], [2,0]]` |

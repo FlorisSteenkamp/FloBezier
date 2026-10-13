@@ -1,0 +1,22 @@
+---
+id: "local_properties_at_t_curvature_e_curvature"
+title: "e-curvature"
+---
+
+```typescript
+function eCurvature(ps: number[][], t: number): number
+```
+
+*Defined in [local-properties-at-t/curvature/e-curvature.ts:18](https://github.com/FlorisSteenkamp/FloBezier/blob/master/src/local-properties-at-t/curvature/e-curvature.ts#L18)*
+
+Returns the curvature `κ` of the given linear, quadratic or cubic bezier 
+curve at a specific given parameter value `t`. 
+
+* returns `Number.NaN` at a cusp - this can be tested for with `Number.isNaN`
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`ps` | number[][] | an order 1,2 or 3 bezier curve, e.g. `[[0,0],[1,1],[2,1],[2,0]]` |
+`t` | number | the parameter value where the curvature should be evaluated |
