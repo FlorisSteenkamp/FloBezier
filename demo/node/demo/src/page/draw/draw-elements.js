@@ -2,7 +2,7 @@ import { getBoundingBoxTight } from '../../../../src/global-properties/bounds/ge
 import { getBoundingBox } from '../../../../src/global-properties/bounds/get-bounding-box.js';
 import { getBoundingHull } from '../../../../src/global-properties/bounds/get-bounding-hull.js';
 import { getInflections } from '../../../../src/global-properties/get-inflections.js';
-import { getCurvatureExtrema } from '../../../../src/get-curvature-extrema/get-curvature-extrema.js';
+import { getCurvatureExtrema } from '../../../../src/get-curvature-extrema/double/get-curvature-extrema.js';
 import { splitByDeviationFromStraightLine } from '../../../../src/transformation/split/split-by-deviation-from-straight-line.js';
 import { fitQuadsToCubic } from '../../../../src/fit/fit-quads-to-cubic.js';
 import { tangent } from '../../../../src/local-properties-at-t/tangent/double/tangent.js';

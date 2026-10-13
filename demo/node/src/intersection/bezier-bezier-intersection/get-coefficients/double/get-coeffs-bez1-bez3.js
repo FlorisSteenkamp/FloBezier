@@ -1,5 +1,6 @@
 import { getImplicitForm1WithRunningError } from "../../../../implicit-form/double/get-implicit-form1-with-running-error.js";
 import { toPowerBasis3WithRunningError } from "../../../../to-power-basis/to-power-basis/double/to-power-basis-with-running-error.js";
+import { γ1 } from '../../../../error-analysis/error-analysis.js';
 const { abs } = Math;
 /**
  * Returns a polynomial in 1 variable (including coefficientwise error bound)
@@ -38,25 +39,25 @@ function getCoeffsBez1Bez3(ps1, ps2) {
     // a3*v_x + b3*v_y
     //const v3 = c3*vₓ + d3*vᵧ;
     const p1 = c3 * vₓ;
-    const p1_ = _c3 * vₓ_ + c3_ * _vₓ + abs(p1);
+    const p1_ = _c3 * vₓ_ + c3_ * (_vₓ + γ1 * vₓ_) + abs(p1);
     const p2 = d3 * vᵧ;
-    const p2_ = _d3 * vᵧ_ + d3_ * _vᵧ + abs(p2);
+    const p2_ = _d3 * vᵧ_ + d3_ * (_vᵧ + γ1 * vᵧ_) + abs(p2);
     const v3 = p1 + p2;
     const v3_ = p1_ + p2_ + abs(v3);
     // a2*v_x + b2*v_y
     //const v2 = c2*vₓ + d2*vᵧ;
     const p3 = c2 * vₓ;
-    const p3_ = _c2 * vₓ_ + c2_ * _vₓ + abs(p3);
+    const p3_ = _c2 * vₓ_ + c2_ * (_vₓ + γ1 * vₓ_) + abs(p3);
     const p4 = d2 * vᵧ;
-    const p4_ = _d2 * vᵧ_ + d2_ * _vᵧ + abs(p4);
+    const p4_ = _d2 * vᵧ_ + d2_ * (_vᵧ + γ1 * vᵧ_) + abs(p4);
     const v2 = p3 + p4;
     const v2_ = p3_ + p4_ + abs(v2);
     // a1*v_x + b1*v_y
     //const v1 = c1*vₓ + d1*vᵧ;
     const p5 = c1 * vₓ;
-    const p5_ = _c1 * vₓ_ + c1_ * _vₓ + abs(p5);
+    const p5_ = _c1 * vₓ_ + c1_ * (_vₓ + γ1 * vₓ_) + abs(p5);
     const p6 = d1 * vᵧ;
-    const p6_ = _d1 * vᵧ_ + d1_ * _vᵧ + abs(p6);
+    const p6_ = _d1 * vᵧ_ + d1_ * (_vᵧ + γ1 * vᵧ_) + abs(p6);
     const v1 = p5 + p6;
     const v1_ = p5_ + p6_ + abs(v1);
     // a0*v_x + b0*v_y + v_0

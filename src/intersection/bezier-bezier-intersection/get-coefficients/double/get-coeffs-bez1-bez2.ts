@@ -1,5 +1,6 @@
 import { getImplicitForm1WithRunningError } from "../../../../implicit-form/double/get-implicit-form1-with-running-error.js";
 import { toPowerBasis2WithRunningError } from "../../../../to-power-basis/to-power-basis/double/to-power-basis-with-running-error.js";
+import { γ1 } from '../../../../error-analysis/error-analysis.js';
 
 const { abs } = Math;
 
@@ -50,18 +51,18 @@ function getCoeffsBez1Bez2(ps1: number[][], ps2: number[][]) {
     // const v2 = c2*vₓ + d2*vᵧ;
     // --------------------------
     const p1 = c2*vₓ;
-    const p1_ = _c2*vₓ_ + c2_*_vₓ + abs(p1);
+    const p1_ = _c2*vₓ_ + c2_*(_vₓ + γ1*vₓ_) + abs(p1);
     const p2 = d2 * vᵧ;
-    const p2_ = _d2*vᵧ_ + d2_*_vᵧ + abs(p2);
+    const p2_ = _d2*vᵧ_ + d2_*(_vᵧ + γ1*vᵧ_) + abs(p2);
     const v2 = p1 + p2;
     const v2_ = p1_ + p2_ + abs(v2);
 
     // a1*v_x + b1*v_y
     //const v1 = c1*vₓ + d1*vᵧ;
     const p3 = c1*vₓ;
-    const p3_ = _c1*vₓ_ + c1_*_vₓ + abs(p3);
+    const p3_ = _c1*vₓ_ + c1_*(_vₓ + γ1*vₓ_) + abs(p3);
     const p4 = d1*vᵧ;
-    const p4_ = _d1*vᵧ_ + d1_*_vᵧ + abs(p4);
+    const p4_ = _d1*vᵧ_ + d1_*(_vᵧ + γ1*vᵧ_) + abs(p4);
     const v1 = p3 + p4;
     const v1_ = p3_ + p4_ + abs(v1);
 

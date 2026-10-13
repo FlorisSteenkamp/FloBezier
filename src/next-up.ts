@@ -19,7 +19,7 @@ const u64 = new BigUint64Array(f64.buffer);
  *
  * @param n a double floating point number
  */
-function add1Ulp(n: number): number {
+function nextUp(n: number): number {
     if (n !== n || n === Infinity) { return n; }  // NaN or Infinity
     if (n === 0) { return Number.MIN_VALUE; }  // also handles -0
 
@@ -30,4 +30,4 @@ function add1Ulp(n: number): number {
 }
 
 
-export { add1Ulp }
+export { nextUp }

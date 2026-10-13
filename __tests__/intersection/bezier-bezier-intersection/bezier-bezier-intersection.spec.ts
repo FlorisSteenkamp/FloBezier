@@ -5,8 +5,8 @@ import { evaluateExact } from '../../../src/local-properties-at-t/evaluate/exact
 import { getPss } from '../../helpers/intersection/get-pss.js';
 import type { X } from '../../../src/intersection/bezier-bezier-intersection/x.js';
 import { eAdd, eDiff, eEstimate, eMult } from 'big-float-ts';
-import { add1Ulp } from '../../../src/add-1-ulp.js';
-import { sub1Ulp } from '../../../src/sub-1-ulp.js';
+import { nextUp } from '../../../src/next-up.js';
+import { nextDown } from '../../../src/next-down.js';
 
 const eps = Number.EPSILON;
 const { sqrt, abs } = Math;
@@ -90,7 +90,7 @@ function getUlpRange(
     {
         let prev = t;
         for (let i=0; i<num; i++) {
-            const t = sub1Ulp(prev);
+            const t = nextDown(prev);
             tsBack.push(t);
             prev = t;
         }
@@ -99,7 +99,7 @@ function getUlpRange(
     {
         let prev = t;
         for (let i=0; i<num; i++) {
-            const t = add1Ulp(prev);
+            const t = nextUp(prev);
             tsForward.push(t);
             prev = t;
         }

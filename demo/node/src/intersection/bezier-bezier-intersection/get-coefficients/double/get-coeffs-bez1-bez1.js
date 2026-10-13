@@ -1,5 +1,6 @@
 import { getImplicitForm1WithRunningError } from "../../../../implicit-form/double/get-implicit-form1-with-running-error.js";
 import { toPowerBasis1WithRunningError } from "../../../../to-power-basis/to-power-basis/double/to-power-basis-with-running-error.js";
+import { γ1 } from '../../../../error-analysis/error-analysis.js';
 const { abs } = Math;
 /**
  * Returns a polynomial in 1 variable whose roots are the parameter values of
@@ -39,10 +40,10 @@ function getCoeffsBez1Bez1(ps1, ps2) {
     //----------------------------------
     const p1 = c1 * vₓ;
     const _p1 = abs(p1);
-    const p1_ = _c1 * vₓ_ + c1_ * _vₓ + _p1;
+    const p1_ = _c1 * vₓ_ + c1_ * (_vₓ + γ1 * vₓ_) + _p1;
     const p2 = d1 * vᵧ;
     const _p2 = abs(p2);
-    const p2_ = _d1 * vᵧ_ + d1_ * _vᵧ + _p2;
+    const p2_ = _d1 * vᵧ_ + d1_ * (_vᵧ + γ1 * vᵧ_) + _p2;
     const v1 = p1 + p2;
     const v1_ = p1_ + p2_ + abs(v1);
     //----------------------------------

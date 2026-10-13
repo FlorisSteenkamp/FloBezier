@@ -29,21 +29,18 @@ function getCurvatureExtremaQuadraticPoly(
     const y21 = y2 - y1;
     const wy = y21 - y10;
 
-    const n = 
-        x0*(wx - x1) - x1*(x21 - x1) + 
-        y0*(wy - y1) - y1*(y21 - y1);
-
+    // The maximum curvature of the parabola is at its vertex, i.e. where 
+    // `B′(t)·B″(t) = 0` with `B′(t) = 2(p10 + t*w)` and `B″(t) = 2w` (where
+    // `p10 = p1 - p0` and `w = p0 - 2p1 + p2`), i.e. at 
+    // `t = -(x10*wx + y10*wy)/(wx² + wy²)`; this is calculated from coordinate
+    // differences only so that it is independent of the position of the curve
+    // and avoids the cancellation of large terms (e.g. for nearly straight 
+    // curves or curves far from the origin)
+    const n = x10*wx + y10*wy;
     const d = wx*wx + wy*wy;
 
-    return [d, -n];
-
-    // const nd = 
-    //     (x0*(x2 - 3*x1 + x0)) - (x1*(x2 - 2*x1)) + 
-    //     (y0*(y2 - 3*y1 + y0)) - (y1*(y2 - 2*y1));
-    // const nd = (
-    //     (x0*x2 - 3*x0*x1 + x0*x0 - x1*x2 + 2*x1*x1) + 
-    //     (y0*y2 - 3*y0*y1 + y0*y0 - y1*y2 + 2*y1*y1)) /
-    //     ((x2 - 2*x1 + x0)**2 + (y2 - 2*y1 + y0)**2);
+    // the polynomial `d*t + n` (with zero `t = -n/d`)
+    return [d, n];
 }
 
 

@@ -6,8 +6,8 @@ import { getTransform2 } from "./get-transform-2.js";
 import { getTransform3 } from "./get-transform-3.js";
 import { getEndpointTs } from "./get-endpoint-ts.js";
 import { getIntervalBox } from "../../global-properties/bounds/get-interval-box/get-interval-box.js";
-import { sub1Ulp } from "../../sub-1-ulp.js";
-import { add1Ulp } from "../../add-1-ulp.js";
+import { nextDown } from "../../next-down.js";
+import { nextUp } from "../../next-up.js";
 import { intersectBoxes } from "../../boxes/intersect-boxes.js";
 
 
@@ -119,13 +119,13 @@ function getEndpointIntersections(
 
 /** @internal */
 function sub2Ulp(v: number) {
-    return sub1Ulp(sub1Ulp(v));
+    return nextDown(nextDown(v));
 }
 
 
 /** @internal */
 function add2Ulp(v: number) {
-    return add1Ulp(add1Ulp(v));
+    return nextUp(nextUp(v));
 }
 
 

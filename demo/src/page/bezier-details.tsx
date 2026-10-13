@@ -10,7 +10,7 @@ import { cubicToAnglesAndSpeeds } from '../../../src/angles-and-speeds/bezier-by
 import { getImplicitForm3 } from '../../../src/implicit-form/double/get-implicit-form3.js';
 import { getImplicitForm2 } from '../../../src/implicit-form/double/get-implicit-form2.js';
 import { getImplicitForm1 } from '../../../src/implicit-form/double/get-implicit-form1.js';
-import { getCurvatureExtrema } from '../../../src/get-curvature-extrema/get-curvature-extrema.js';
+import { getCurvatureExtrema } from '../../../src/get-curvature-extrema/double/get-curvature-extrema.js';
 import { curvature } from '../../../src/local-properties-at-t/curvature/curvature.js';
 import { area } from '../../../src/global-properties/area.js';
 import { curviness } from '../../../src/global-properties/curviness.js';

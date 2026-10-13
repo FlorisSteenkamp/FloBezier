@@ -1,7 +1,6 @@
-import { ddAddDd, ddDiffDd, ddMultDd, ddMultDouble2, ddNegativeOf, twoDiff } from "double-double";
+import { ddAddDd, ddDiffDd, ddMultDd, twoDiff } from "double-double";
 
 const td = twoDiff;
-const qmd = ddMultDouble2;
 const qmq = ddMultDd;
 const qaq = ddAddDd;
 const qdq = ddDiffDd
@@ -37,20 +36,18 @@ function getCurvatureExtremaQuadraticPolyDd(
     const y21 = td(y2,y1);
     const wy = qdq(y21,y10);
 
-    const n = qaq(
-        qdq(
-            qmd(x0,(qdq(wx,[0,x1]))),
-            qmd(x1,(qdq(x21,[0,x1])))
-        ),
-        qdq(
-            qmd(y0,(qdq(wy,[0,y1]))),
-            qmd(y1,(qdq(y21,[0,y1])))
-        )
-    );
-
+    // The maximum curvature of the parabola is at its vertex, i.e. where 
+    // `B′(t)·B″(t) = 0` with `B′(t) = 2(p10 + t*w)` and `B″(t) = 2w` (where
+    // `p10 = p1 - p0` and `w = p0 - 2p1 + p2`), i.e. at 
+    // `t = -(x10*wx + y10*wy)/(wx² + wy²)`; this is calculated from coordinate
+    // differences only so that it is independent of the position of the curve
+    // and avoids the cancellation of large terms (e.g. for nearly straight 
+    // curves or curves far from the origin)
+    const n = qaq(qmq(x10,wx),qmq(y10,wy));
     const d = qaq(qmq(wx,wx),qmq(wy,wy));
 
-    return [d, ddNegativeOf(n)];
+    // the polynomial `d*t + n` (with zero `t = -n/d`)
+    return [d, n];
 }
 
 

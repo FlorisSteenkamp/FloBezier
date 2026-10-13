@@ -1,9 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
 import { eEstimate } from 'big-float-ts';
 import { Horner } from 'flo-poly';
-import { getAbsCurvatureExtremaPolys } from '../../src/get-curvature-extrema/get-abs-curvature-extrema-polys.js';
-import { getAbsCurvatureExtremaPolysDd } from '../../src/get-curvature-extrema-dd/get-abs-curvature-extrema-polys-dd.js';
-import { getAbsCurvatureExtremaPolysE } from '../../src/get-curvature-extrema-e/get-abs-curvature-extrema-polys-e.js';
+import { getAbsCurvatureExtremaPolys } from '../../src/get-curvature-extrema/double/get-abs-curvature-extrema-polys.js';
+import { getAbsCurvatureExtremaPolysDd } from '../../src/get-curvature-extrema/double-double/get-abs-curvature-extrema-polys-dd.js';
+import { getAbsCurvatureExtremaPolysE } from '../../src/get-curvature-extrema/expansion/get-abs-curvature-extrema-polys-e.js';
 import { evaluate1stDerivative } from '../../src/local-properties-at-t/evaluate-1st-derivative/double/evaluate-1st-derivative.js';
 import { evaluate2ndDerivative } from '../../src/local-properties-at-t/evaluate-2nd-derivative/double/evaluate-2nd-derivative.js';
 

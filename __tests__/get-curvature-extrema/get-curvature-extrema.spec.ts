@@ -1,8 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
-import type { Extrema } from '../../src/get-curvature-extrema/get-curvature-extrema.js';
+import type { Extrema } from '../../src/get-curvature-extrema/double/get-curvature-extrema.js';
 import { squares } from 'squares-rng';
 import { rotate, translate } from 'flo-vector2d';
-import { getCurvatureExtrema } from '../../src/get-curvature-extrema/get-curvature-extrema.js';
+import { getCurvatureExtrema } from '../../src/get-curvature-extrema/double/get-curvature-extrema.js';
 import { curvature } from '../../src/local-properties-at-t/curvature/curvature.js';
 import { createCubicThatsReallyQuad } from '../helpers/create-cubic-thats-really-quad.js';
 
@@ -98,9 +98,10 @@ describe('getCurvatureExtrema', function() {
             const rotate_ = rotate(sin(0.1), cos(0.1));
             const ps = [[1,10],[6,3],[15,7]].map(rotate_);
             const extrema = getCurvatureExtrema(ps);
+            // (the exact result (rounded), i.e. as given by `getCurvatureExtremaE`)
             expect(extrema).toEqual({ 
                 minima: [], 
-                maxima: [0.41605839416058393], 
+                maxima: [0.4160583941605838], 
                 inflections: [] 
             });
         }

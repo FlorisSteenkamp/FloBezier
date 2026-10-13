@@ -9,6 +9,7 @@ import { bezierSelfIntersection } from '../self-intersection/bezier-self-interse
 import { getEndpointIntersections } from '../get-endpoint-intersections/get-endpoint-intersections.js';
 import { isCollinear } from '../../global-properties/classification/is-collinear.js';
 import { reduceOrderIfPossible } from '../../transformation/reduce-order-if-possible.js';
+import { getSharedEndpoint } from '../bezier-bezier-intersection-shared-endpoint/get-shared-endpoint.js';
 
 const eps = Number.EPSILON;
 const eps2 = 2*eps;
@@ -33,6 +34,12 @@ const eps2 = 2*eps;
  * * if the two curves have an infinite number of intersections then the 
  * intersection of the endpoints of each curve with the other is returned 
  * instead (and the intersection `kind` property will equal `5`)
+ * * if an endpoint of one curve (exactly) coincides with an endpoint of the 
+ * other curve the intersection at that point is returned *exactly* (with 
+ * `t1` and `t2` exactly `0` or `1`, a box of zero size and the intersection 
+ * `kind` property equal to `4`) - this case is also handled much faster 
+ * (especially when the curves are tangent at the shared point, e.g. at a 
+ * smooth join of consecutive segments of a path)
  * 
  * * each intersection in the returned array of intersections is an object with
  * the following properties (see the type [[X]]`):
@@ -82,6 +89,15 @@ function bezierBezierIntersection(
     const is1 = ris1.map(ri => getIntervalBox(ps1, [ri.tS, ri.tE]));
     const is2 = ris2.map(ri => getIntervalBox(ps2, [ri.tS, ri.tE]));
 
+    // the parameter values of an (exactly) shared endpoint (if any) - its 
+    // intersection is found exactly (see `rootsWithSharedEndpoint`)
+    const shared = getSharedEndpoint(ps1, ps2);
+    const isAt = (ri: { tS: number, tE: number }, t: number) => ri.tS === t && ri.tE === t;
+    const isShared = shared === undefined
+        ? () => false
+        : (ri1: { tS: number, tE: number }, ri2: { tS: number, tE: number }) => 
+            isAt(ri1, shared.reverse1 ? 1 : 0) && isAt(ri2, shared.reverse2 ? 1 : 0);
+
     const xs: X[] = [];
     for (let i=0; i<ris1.length; i++) {
         const box1 = is1[i];
@@ -92,7 +108,7 @@ function bezierBezierIntersection(
                 const ri1 = ris1[i];
                 const ri2 = ris2[j];
                 const x: X = { 
-                    p: getPFromBox(box), kind: 1, box,
+                    p: getPFromBox(box), kind: isShared(ri1, ri2) ? 4 : 1, box,
                     t1: ri1.t, ri1: ri1, 
                     t2: ri2.t, ri2: ri2
                 };

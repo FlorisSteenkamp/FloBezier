@@ -110,9 +110,9 @@ export { hausdorffDistance } from './simultaneous-properties/hausdorff-distance/
 export { hausdorffDistanceExtra } from './simultaneous-properties/hausdorff-distance/hausdorff-distance-extra.js';
 export { controlPointLinesLength } from './global-properties/length/control-point-lines-length.js';
 export { splitByLength } from './transformation/split/split-by-length.js';
-export { getCurvatureExtrema } from './get-curvature-extrema/get-curvature-extrema.js';
-export { getCurvatureExtremaDd } from './get-curvature-extrema-dd/get-curvature-extrema-dd.js';
-export { getCurvatureExtremaE } from './get-curvature-extrema-e/get-curvature-extrema-e.js';
+export { getCurvatureExtrema } from './get-curvature-extrema/double/get-curvature-extrema.js';
+export { getCurvatureExtremaDd } from './get-curvature-extrema/double-double/get-curvature-extrema-dd.js';
+export { getCurvatureExtremaE } from './get-curvature-extrema/expansion/get-curvature-extrema-e.js';
 export { curviness } from './global-properties/curviness.js';
 export { splitByCurvature } from './transformation/split/split-by-curvature.js';
 export { splitByCurvatureAndLength } from './transformation/split/split-by-curvature-and-length.js';

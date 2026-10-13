@@ -18,6 +18,12 @@ import { X } from './x.js';
  * * if the two curves have an infinite number of intersections then the
  * intersection of the endpoints of each curve with the other is returned
  * instead (and the intersection `kind` property will equal `5`)
+ * * if an endpoint of one curve (exactly) coincides with an endpoint of the
+ * other curve the intersection at that point is returned *exactly* (with
+ * `t1` and `t2` exactly `0` or `1`, a box of zero size and the intersection
+ * `kind` property equal to `4`) - this case is also handled much faster
+ * (especially when the curves are tangent at the shared point, e.g. at a
+ * smooth join of consecutive segments of a path)
  *
  * * each intersection in the returned array of intersections is an object with
  * the following properties (see the type [[X]]`):

@@ -1,5 +1,6 @@
 import { roots, RootInterval } from "flo-poly";
 import { getCoeffsBezBez }  from './get-coefficients/get-coeffs-bez-bez.js';
+import { rootsWithSharedEndpoint } from '../bezier-bezier-intersection-shared-endpoint/roots-with-shared-endpoint.js';
 
 
 /**
@@ -10,6 +11,10 @@ import { getCoeffsBezBez }  from './get-coefficients/get-coeffs-bez-bez.js';
  * * if the two curves have an infinite number of intersections `undefined` is returned
  * 
  * * the **second** bezier curve's parameter `t` values are returned *ordered* by `t` value
+ * * if the curves share an endpoint (exactly) the known intersection at the
+ * shared point is divided out of the intersection polynomial and returned 
+ * *exactly* (which is much faster, especially if the curves are also tangent
+ * at the shared point), see [[rootsWithSharedEndpoint]]
  *
  * * **precondition:** the bezier curves must be of lowest possible 
  * representable order, i.e. cubics are really cubics, etc. (else 
@@ -25,6 +30,9 @@ function bezierBezierIntersectionBoundless(
         ps1: number[][], 
         ps2: number[][]): RootInterval[] | undefined {
    
+    const ris = rootsWithSharedEndpoint(ps1, ps2, 0, 1);
+    if (ris !== null) { return ris; }
+
     const { coeffs, errBound, getPExact } = getCoeffsBezBez(ps1,ps2);
 
     return roots(coeffs, 0, 1, errBound, getPExact);

@@ -22,7 +22,7 @@ function sgnMin1([N, D]) {
  * i.e. `tA = c*tB + d` with `d = tA_B0` and `c = tA_B1 - tA_B0` so that
  * `tB_A0 = -tA_B0/c` and `tB_A1 = (1 - tA_B0)/c` (all calculated exactly)
  * * each returned value is accurate to within 2 ulps and, in particular,
- * exactly `0` or `1` if it is exactly `0` or `1` and correctly on the
+ * exactly `0` (possibly `-0`) or `1` if it is exactly `0` or `1` and on the
  * correct side of `0` and `1`
  *
  * @param dA_B0 the parameter value of `A` at the start point of `B`
@@ -41,11 +41,7 @@ function getEndpointTs(dA_B0, dA_B1) {
     const dB_A0 = [eNegativeOf(N0D1), den];
     // tB_A1 = (1 - tA_B0)/c = ((D0 - N0)*D1)/den
     const dB_A1 = [eMult(eDiff(D0, N0), D1), den];
-    return [dA_B0, dA_B1, dB_A0, dB_A1].map(d => {
-        const t = ensureRange(erEstimate(d), sgnMin1(d));
-        // normalize `-0` (e.g. from negating a zero numerator) to `0`
-        return t === 0 ? 0 : t;
-    });
+    return [dA_B0, dA_B1, dB_A0, dB_A1].map(d => ensureRange(erEstimate(d), sgnMin1(d)));
 }
 export { getEndpointTs };
 //# sourceMappingURL=get-endpoint-ts.js.map

@@ -1,5 +1,6 @@
 "use strict";
 // TODO - finish - search for ////
+// Experimental - if ps1[0] === ps2[0]
 // import { getImplicitForm3WithRunningError } from "../../../../implicit-form/double/get-implicit-form3-with-running-error.js";
 // import { toPowerBasis3WithRunningError } from "../../../../to-power-basis/to-power-basis/double/to-power-basis-with-running-error.js";
 // const { abs } = Math;

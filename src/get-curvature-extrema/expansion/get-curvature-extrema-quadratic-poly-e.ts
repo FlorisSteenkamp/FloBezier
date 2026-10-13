@@ -1,7 +1,6 @@
-import { twoDiff, eMultDouble2, eMult, eAdd, eDiff, eNegativeOf } from "big-float-ts";
+import { twoDiff, eMult, eAdd, eDiff } from "big-float-ts";
 
 
-const emd = eMultDouble2;
 const eme = eMult;
 const eae = eAdd;
 const ede = eDiff;
@@ -38,20 +37,18 @@ function getCurvatureExtremaQuadraticPolyE(
     const y21 = td(y2,y1);
     const wy = ede(y21,y10);
 
-    const n = eae(
-        ede(
-            emd(x0,(ede(wx,[x1]))),
-            emd(x1,(ede(x21,[x1])))
-        ),
-        ede(
-            emd(y0,(ede(wy,[y1]))),
-            emd(y1,(ede(y21,[y1])))
-        )
-    );
-
+    // The maximum curvature of the parabola is at its vertex, i.e. where 
+    // `B′(t)·B″(t) = 0` with `B′(t) = 2(p10 + t*w)` and `B″(t) = 2w` (where
+    // `p10 = p1 - p0` and `w = p0 - 2p1 + p2`), i.e. at 
+    // `t = -(x10*wx + y10*wy)/(wx² + wy²)`; this is calculated from coordinate
+    // differences only so that it is independent of the position of the curve
+    // and avoids the cancellation of large terms (e.g. for nearly straight 
+    // curves or curves far from the origin)
+    const n = eae(eme(x10,wx),eme(y10,wy));
     const d = eae(eme(wx,wx),eme(wy,wy));
 
-    return [d, eNegativeOf(n)];
+    // the polynomial `d*t + n` (with zero `t = -n/d`)
+    return [d, n];
 }
 
 
