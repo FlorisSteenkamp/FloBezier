@@ -114,10 +114,11 @@ export { getFootPointsOnBezierCertified } from './simultaneous-properties/closes
 export { getFootPointsOnBezierPolysCertified } from './simultaneous-properties/closest-and-furthest-point-on-bezier/get-foot-points-polys-on-bezier-certified.js';
 export { hausdorffDistanceOneSided } from './simultaneous-properties/hausdorff-distance/hausdorff-distance-one-sided.js';
 export { hausdorffDistanceOneSidedExtra } from './simultaneous-properties/hausdorff-distance/hausdorff-distance-one-sided-extra.js';
-export type { HausdorffDistanceOneSidedExtra } from './simultaneous-properties/hausdorff-distance/hausdorff-distance-one-sided-extra.js';
+export type { HausdorffDistanceOneSidedExtra, HausdorffDistanceExtra } from './simultaneous-properties/hausdorff-distance/hausdorff-distance-types.js';
 export { hausdorffDistance } from './simultaneous-properties/hausdorff-distance/hausdorff-distance.js';
 export { hausdorffDistanceExtra } from './simultaneous-properties/hausdorff-distance/hausdorff-distance-extra.js';
-export type { HausdorffDistanceExtra } from './simultaneous-properties/hausdorff-distance/hausdorff-distance-extra.js';
+export { hausdorffDistanceDirect, hausdorffDistanceOneSidedDirect } from './simultaneous-properties/hausdorff-distance-direct/hausdorff-distance-direct.js';
+export type { HausdorffDistanceOneSidedDirect, HausdorffDistanceDirect, HausdorffDirectKind } from './simultaneous-properties/hausdorff-distance-direct/hausdorff-distance-direct.js';
 export { controlPointLinesLength } from './global-properties/length/control-point-lines-length.js';
 export { splitByLength } from './transformation/split/split-by-length.js';
 export { getCurvatureExtrema } from './get-curvature-extrema/double/get-curvature-extrema.js';

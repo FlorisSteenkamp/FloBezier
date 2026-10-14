@@ -485,100 +485,7 @@ function twoSum(a, b) {
 //const R = a + b; const _ = R - a; const r = (a - (R - _)) + (b - _); return [r,R]
 
 //# sourceMappingURL=two-sum.js.map
-;// ./node_modules/big-float-ts/node/double-expansion/fast-expansion-sum.js
-// import { eCompress } from "./e-compress.js";
-/**
- * Returns the result of adding two expansions.
- *
- * Theorem 13: Let e = sum_(i=1)^m(e_i) and f = sum_(i=1)^n(f_i) be strongly
- * nonoverlapping expansions of m and n p-bit components, respectively, where
- * p >= 4. Suppose that the components of both e and f are sorted in order of
- * increasing magnitude, except that any of the e_i or f_i may be zero. On a
- * machine whose arithmetic uses the round-to-even rule, the following algorithm
- * will produce a strongly nonoverlapping expansion h such that
- * sum_(i=1)^(m+n)(e_i + f_i) = e + f, where the components of h are also in
- * order of increasing magnitude, except that any of the h_i may be zero.
- *
- * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
- */
-function fastExpansionSum(e, f) {
-    //const g = merge(e,f);
-    // inlined (above line)
-    const lenE = e.length;
-    const lenF = f.length;
-    let i = 0;
-    let j = 0;
-    const g = [];
-    while (i < lenE && j < lenF) {
-        if (e[i] === 0) {
-            i++;
-            continue;
-        }
-        if (f[j] === 0) {
-            j++;
-            continue;
-        }
-        if (Math.abs(e[i]) <= Math.abs(f[j])) {
-            g.push(e[i]);
-            i++;
-        }
-        else {
-            g.push(f[j]);
-            j++;
-        }
-    }
-    while (i < lenE) {
-        g.push(e[i]);
-        i++;
-    }
-    while (j < lenF) {
-        g.push(f[j]);
-        j++;
-    }
-    if (g.length === 0) {
-        return [0];
-    }
-    // end inlined
-    const len = g.length;
-    if (len === 1) {
-        return g;
-    }
-    //const h: number[] = new Array(len);
-    const h = [];
-    //const q: number;
-    //[h[0], q] = fastTwoSum(g[1], g[0]);
-    // inlined (above line)
-    const a = g[1];
-    const b = g[0];
-    let q = a + b;
-    //h[0] = b - (q - a);
-    const hh = b - (q - a);
-    if (hh !== 0) {
-        h.push(hh);
-    }
-    //let j = 0;
-    j = 0;
-    for (let i = 2; i < len; i++) {
-        //[h[i-1], q] = twoSum(q, g[i]);
-        // inlined (above line)
-        const b = g[i];
-        const R = q + b;
-        const _ = R - q;
-        //h[i-1] = (q - (R - _)) + (b - _);
-        const hh = (q - (R - _)) + (b - _);
-        if (hh !== 0) {
-            h.push(hh);
-        }
-        q = R;
-    }
-    //h[len-1] = q;
-    //h.push(q);
-    if (q !== 0 || h.length === 0) {
-        h.push(q);
-    }
-    //return compress(h);
-    return h;
-}
+;// ./node_modules/big-float-ts/node/double-expansion/merge.js
 /**
  * Returns the result of merging an expansion e and f into a single expansion,
  * in order of nondecreasing magnitude (possibly with interspersed zeros).
@@ -627,6 +534,59 @@ function merge(e, f) {
     return merged;
 }
 
+//# sourceMappingURL=merge.js.map
+;// ./node_modules/big-float-ts/node/double-expansion/fast-expansion-sum.js
+
+/**
+ * Returns the result of adding two expansions.
+ *
+ * Theorem 13: Let e = sum_(i=1)^m(e_i) and f = sum_(i=1)^n(f_i) be strongly
+ * nonoverlapping expansions of m and n p-bit components, respectively, where
+ * p >= 4. Suppose that the components of both e and f are sorted in order of
+ * increasing magnitude, except that any of the e_i or f_i may be zero. On a
+ * machine whose arithmetic uses the round-to-even rule, the following algorithm
+ * will produce a strongly nonoverlapping expansion h such that
+ * sum_(i=1)^(m+n)(e_i + f_i) = e + f, where the components of h are also in
+ * order of increasing magnitude, except that any of the h_i may be zero.
+ *
+ * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
+ *
+ * * `fastTwoSum` and `twoSum` are inlined for performance - calling them is
+ * about 2x slower due to the arrays they return
+ * * zero components are eliminated from the result
+ */
+function fastExpansionSum(e, f) {
+    const g = merge(e, f);
+    const len = g.length;
+    if (len === 1) {
+        return g;
+    }
+    const h = [];
+    // inlined: [hh, q] = fastTwoSum(g[1], g[0])
+    const a = g[1];
+    const b = g[0];
+    let q = a + b;
+    const hh = b - (q - a);
+    if (hh !== 0) {
+        h.push(hh);
+    }
+    for (let i = 2; i < len; i++) {
+        // inlined: [hh, q] = twoSum(q, g[i])
+        const b = g[i];
+        const R = q + b;
+        const _ = R - q;
+        const hh = (q - (R - _)) + (b - _);
+        if (hh !== 0) {
+            h.push(hh);
+        }
+        q = R;
+    }
+    if (q !== 0 || h.length === 0) {
+        h.push(q);
+    }
+    return h;
+}
+
 //# sourceMappingURL=fast-expansion-sum.js.map
 ;// ./node_modules/big-float-ts/node/double-expansion/e-negative-of.js
 /**
@@ -662,14 +622,26 @@ function eDiff(e, f) {
 }
 
 //# sourceMappingURL=e-diff.js.map
+;// ./node_modules/big-float-ts/node/basic/split-factor.js
+/**
+ * The Veltkamp splitting factor for doubles, `2**27 + 1`, i.e.
+ * `2**s + 1` with `s === Math.ceil(p/2)` where p (=== 53) is the number of
+ * significand bits in a double.
+ *
+ * * used by `split` and (inlined) by `twoProduct`, `twoSquare` and
+ * `scaleExpansion`
+ */
+const SPLIT_FACTOR = 134217729; // 2**27 + 1
+
+//# sourceMappingURL=split-factor.js.map
 ;// ./node_modules/big-float-ts/node/double-expansion/scale-expansion.js
-const scale_expansion_f = 134217729; // 2**27 + 1;
+
 /**
  * Returns the result of multiplying an expansion by a double.
  *
  * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
  *
- * Theorem 19 (Shwechuk): Let e = sum_(i=1)^m(e_i) be a nonoverlapping expansion
+ * Theorem 19 (Shewchuk): Let e = sum_(i=1)^m(e_i) be a nonoverlapping expansion
  * of m p-bit components, and const b be a p-bit value where p >= 4. Suppose that
  * the components of e are sorted in order of increasing magnitude, except that
  * any of the e_i may be zero. Then the following algorithm will produce a
@@ -677,150 +649,75 @@ const scale_expansion_f = 134217729; // 2**27 + 1;
  * components of h are also in order of increasing magnitude, except that any of
  * the h_i may be zero. Furthermore, if e is nonadjacent and round-to-even
  * tiebreaking is used, then h is non-adjacent.
+ *
+ * * the primitives (`twoProduct`, `twoSum`, `fastTwoSum`) are inlined for
+ * performance - calling them is 2-7x slower due to the arrays they return
+ * * zero components are eliminated from the result
+ * * subject to the same overflow / underflow limits as `twoProduct` (e.g.
+ * NaN results for components or `b` with magnitude > ~2^996)
  *
  * @param e a double floating point expansion
  * @param b a double
  */
 function scaleExpansion(e, b) {
     const m = e.length;
-    //const h: number[] = new Array(2*m);
-    let q_;
-    //[h[0], q] = tp(e[0], b);
-    // inlined (above line)
-    const a = e[0];
-    let q = a * b;
-    const c = scale_expansion_f * a;
-    const ah = c - (c - a);
-    const al = a - ah;
-    const d = scale_expansion_f * b;
+    // an empty expansion represents 0
+    if (m === 0) {
+        return [0];
+    }
+    // split `b` once (`[bh, bl] = split(b)`)
+    const d = SPLIT_FACTOR * b;
     const bh = d - (d - b);
     const bl = b - bh;
     const h = [];
-    //h[0] = (al*bl) - ((q - (ah*bh)) - (al*bh) - (ah*bl));
+    // inlined: [hh, q] = twoProduct(e[0], b)
+    const a = e[0];
+    let q = a * b;
+    const c = SPLIT_FACTOR * a;
+    const ah = c - (c - a);
+    const al = a - ah;
     const hh = (al * bl) - ((q - (ah * bh)) - (al * bh) - (ah * bl));
     if (hh !== 0) {
         h.push(hh);
     }
     for (let i = 1; i < m; i++) {
-        //const [t, T] = tp(e[i], b);
-        // inlined (above line)
+        // inlined: [t, T] = twoProduct(e[i], b)
         const a = e[i];
         const T = a * b;
-        const c = scale_expansion_f * a;
+        const c = SPLIT_FACTOR * a;
         const ah = c - (c - a);
         const al = a - ah;
-        const d = scale_expansion_f * b;
-        const bh = d - (d - b);
-        const bl = b - bh;
         const t = (al * bl) - ((T - (ah * bh)) - (al * bh) - (ah * bl));
-        //[h[2*i-1], q_] = ts(q, t);
-        // inlined (above line)
-        const x = q + t;
-        const bv = x - q;
-        //h[2*i-1] = (q - (x - bv)) + (t - bv);
-        //h.push((q - (x - bv)) + (t - bv));
-        const hh = (q - (x - bv)) + (t - bv);
+        // inlined: [hh, q_] = twoSum(q, t)
+        const q_ = q + t;
+        const bv = q_ - q;
+        const hh = (q - (q_ - bv)) + (t - bv);
         if (hh !== 0) {
             h.push(hh);
         }
-        q_ = x;
-        //[h[2*i], q] = fts(T, q_);
-        // inlined (above line)
+        // inlined: [hhh, q] = fastTwoSum(T, q_)
         const xx = T + q_;
-        //h[2*i] = q_ - (xx - T);
-        //h.push(q_ - (xx - T));
         const hhh = q_ - (xx - T);
         if (hhh !== 0) {
             h.push(hhh);
         }
         q = xx;
     }
-    //h[2*m - 1] = q;
-    //h.push(q);
     if (q !== 0 || h.length === 0) {
         h.push(q);
     }
-    //return eCompress(h);
     return h;
 }
 /**
  * Returns the result of multiplying an expansion by a double.
  *
- * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ * * identical to `scaleExpansion` but with the parameters swapped
  *
- * Theorem 19 (Shwechuk): Let e = sum_(i=1)^m(e_i) be a nonoverlapping expansion
- * of m p-bit components, and const b be a p-bit value where p >= 4. Suppose that
- * the components of e are sorted in order of increasing magnitude, except that
- * any of the e_i may be zero. Then the following algorithm will produce a
- * nonoverlapping expansion h such that h = sum_(i=1)^(2m)(h_i) = be, where the
- * components of h are also in order of increasing magnitude, except that any of
- * the h_i may be zero. Furthermore, if e is nonadjacent and round-to-even
- * tiebreaking is used, then h is non-adjacent.
- *
- * @param e a double floating point expansion
  * @param b a double
+ * @param e a double floating point expansion
  */
 function scaleExpansion2(b, e) {
-    const m = e.length;
-    //const h: number[] = new Array(2*m);
-    let q_;
-    //[h[0], q] = tp(e[0], b);
-    // inlined (above line)
-    const a = e[0];
-    let q = a * b;
-    const c = scale_expansion_f * a;
-    const ah = c - (c - a);
-    const al = a - ah;
-    const d = scale_expansion_f * b;
-    const bh = d - (d - b);
-    const bl = b - bh;
-    const h = [];
-    //h[0] = (al*bl) - ((q - (ah*bh)) - (al*bh) - (ah*bl));
-    const hh = (al * bl) - ((q - (ah * bh)) - (al * bh) - (ah * bl));
-    if (hh !== 0) {
-        h.push(hh);
-    }
-    for (let i = 1; i < m; i++) {
-        //const [t, T] = tp(e[i], b);
-        // inlined (above line)
-        const a = e[i];
-        const T = a * b;
-        const c = scale_expansion_f * a;
-        const ah = c - (c - a);
-        const al = a - ah;
-        const d = scale_expansion_f * b;
-        const bh = d - (d - b);
-        const bl = b - bh;
-        const t = (al * bl) - ((T - (ah * bh)) - (al * bh) - (ah * bl));
-        //[h[2*i-1], q_] = ts(q, t);
-        // inlined (above line)
-        const x = q + t;
-        const bv = x - q;
-        //h[2*i-1] = (q - (x - bv)) + (t - bv);
-        //h.push((q - (x - bv)) + (t - bv));
-        const hh = (q - (x - bv)) + (t - bv);
-        if (hh !== 0) {
-            h.push(hh);
-        }
-        q_ = x;
-        //[h[2*i], q] = fts(T, q_);
-        // inlined (above line)
-        const xx = T + q_;
-        //h[2*i] = q_ - (xx - T);
-        //h.push(q_ - (xx - T));
-        const hhh = q_ - (xx - T);
-        if (hhh !== 0) {
-            h.push(hhh);
-        }
-        q = xx;
-    }
-    //h[2*m - 1] = q;
-    //h.push(q);
-    if (q !== 0 || h.length === 0) {
-        h.push(q);
-    }
-    //return eCompress(h);
-    return h;
+    return scaleExpansion(e, b);
 }
 
 //# sourceMappingURL=scale-expansion.js.map
@@ -838,19 +735,37 @@ function scaleExpansion2(b, e) {
  * ef_1, ef_2, ..., then sum these using a distillation tree."
  *
  * A distillation tree used with fastExpansionSum will give O(k*log k) vs O(k^2)
- * operations.
- *
- * Implemented naively and not as described by Shewchuk (i.e. the algorithm
- * takes O(k^2) operations).
+ * operations, which is what is implemented here.
  * @param e a double floating point expansion
  * @param f another double floating point expansion
  */
 function expansionProduct(e, f) {
-    let sum = [0];
-    for (let i = 0; i < e.length; i++) {
-        sum = fastExpansionSum(sum, scaleExpansion(f, e[i]));
+    if (e.length === 1) {
+        return scaleExpansion(f, e[0]);
     }
-    return sum;
+    if (f.length === 1) {
+        return scaleExpansion(e, f[0]);
+    }
+    if (e.length === 0 || f.length === 0) {
+        return [0];
+    }
+    // form the expansions e*f_1, e*f_2, ... (iterating over the shorter one)
+    if (e.length < f.length) {
+        [e, f] = [f, e];
+    }
+    let terms = [];
+    for (let i = 0; i < f.length; i++) {
+        terms.push(scaleExpansion(e, f[i]));
+    }
+    // ... then sum them pairwise using a distillation tree
+    while (terms.length > 1) {
+        const next = [];
+        for (let i = 0; i < terms.length; i += 2) {
+            next.push(i + 1 < terms.length ? fastExpansionSum(terms[i], terms[i + 1]) : terms[i]);
+        }
+        terms = next;
+    }
+    return terms[0];
 }
 
 //# sourceMappingURL=expansion-product.js.map
@@ -868,18 +783,21 @@ function expansionProduct(e, f) {
  * Furthermore, if e is nonadjacent and round-to-even tiebreaking is used, then
  * h is nonadjacent.
  * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
+ *
+ * * `twoSum` is inlined for performance - calling it is 2-3x slower due to the
+ * array it returns
+ * * zero components are eliminated from the result
+ *
  * @param e A floating point expansion
- * @param b Another floating point expansion
+ * @param b A double
  */
 function growExpansion(e, b) {
     const m = e.length;
     let q = b;
-    //const h: number[] = new Array(m+1);
     const h = [];
-    //let j = 0;
     for (let i = 0; i < m; i++) {
         // Note the use of twoSum and not fastTwoSum.
-        //[h[i], q] = ts(q, e[i]);
+        // inlined: [hh, q] = twoSum(q, e[i])
         const ee = e[i];
         const x = q + ee;
         const bv = x - q;
@@ -889,11 +807,9 @@ function growExpansion(e, b) {
         }
         q = x;
     }
-    //h[j] = q;
     if (q !== 0 || h.length === 0) {
         h.push(q);
     }
-    //return compress(h);
     return h;
 }
 
@@ -1032,7 +948,7 @@ function two_sum_twoSum(a, b) {
     const bv = x - a;
     return [(a - (x - bv)) + (b - bv), x];
 }
-// inlined
+// inlined form (for use in hot loops):
 //const R = a + b; const _ = R - a; const r = (a - (R - _)) + (b - _); return [r,R]
 
 //# sourceMappingURL=two-sum.js.map
@@ -1085,7 +1001,7 @@ function isQuadReallyLine(ps) {
 
 //# sourceMappingURL=is-quad-really-line.js.map
 ;// ./node_modules/big-float-ts/node/basic/two-product.js
-const two_product_f = 134217729; // 2**27 + 1;
+
 /**
  * Returns the exact result of multiplying two doubles.
  *
@@ -1098,24 +1014,25 @@ const two_product_f = 134217729; // 2**27 + 1;
  * round-to-even tiebreaking is used, x and y are non-adjacent.
  *
  * See https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf
+ *
+ * * **overflow / underflow:** the inlined split overflows (giving NaN) for
+ * |a| > ~2^996 (or |b| > ~2^996) and the result is only exact if the
+ * product does not underflow, i.e. roughly |ab| > 2^-969
+ *
  * @param a A double
  * @param b Another double
  */
 function two_product_twoProduct(a, b) {
     const x = a * b;
-    //const [ah, al] = split(a);
-    const c = two_product_f * a;
+    // inlined: [ah, al] = split(a)
+    const c = SPLIT_FACTOR * a;
     const ah = c - (c - a);
     const al = a - ah;
-    //const [bh, bl] = split(b);
-    const d = two_product_f * b;
+    // inlined: [bh, bl] = split(b)
+    const d = SPLIT_FACTOR * b;
     const bh = d - (d - b);
     const bl = b - bh;
     const y = (al * bl) - ((x - (ah * bh)) - (al * bh) - (ah * bl));
-    //const err1 = x - (ah * bh);
-    //const err2 = err1 - (al * bh);
-    //const err3 = err2 - (ah * bl);
-    //const y = (al * bl) - err3;
     return [y, x];
 }
 
@@ -1242,6 +1159,10 @@ function eCompress(e) {
     const m = e_.length;
     if (m === 1) {
         return e_;
+    }
+    // an empty expansion represents 0
+    if (m === 0) {
+        return [0];
     }
     let Q = e_[m - 1];
     let bottom = m;
@@ -3097,179 +3018,6 @@ function ds(ps) {
 }
 
 //# sourceMappingURL=ds.js.map
-;// ./node_modules/flo-poly/node/calculus/double/differentiate.js
-/**
- * Returns the result of differentiating the given polynomial in double
- * precision.
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @example
- * ```typescript
- * differentiate([5, 4, 3, 2, 1]); //=> [20, 12, 6, 2]
- * ```
- *
- * @doc
- */
-function differentiate(p) {
-    const d = p.length - 1;
-    if (d <= 0) {
-        return [];
-    }
-    const result = new Array(d);
-    for (let i = 0; i < d; i++) {
-        result[i] = (d - i) * p[i];
-    }
-    return result;
-}
-
-//# sourceMappingURL=differentiate.js.map
-;// ./node_modules/flo-poly/node/roots/naive/brent-poly.js
-
-const brent_poly_eps = Number.EPSILON;
-const brent_poly_u = brent_poly_eps / 2;
-const { abs: brent_poly_abs, max: brent_poly_max } = Math;
-/**
- * Returns a refined root given a root bracketed in the interval (a,b) of the
- * given polynomial using Brent's Method.
- *
- * * near exact implementation of the original Brent Dekker Method (also known
- * as Brent's Method), except that it is specialzed to polynomial evaluation
- *
- * * the algorithm stops once the interval width becomes equal or less than
- * `2 * Number.EPSILON/2 * max(1,abs(a),abs(b))` where `a` and `b` are the current
- * lower and upper interval limits
- *
- * * Brent's Method is an excellent root-refinement choice since:
- *  * guaranteed converge (unlike the Newton and other so-called single-point
- * methods),
- *  * converges in a reasonable number of iterations even for highly contrived
- * functions (unlike Dekker's Method) and
- *  * nearly always converges fast, i.e. super-linearly (unlike the Secant and
- * Regula-Falsi methods).
- * * unfortunately the algorithm given on [Wikipedia](https://en.wikipedia.org/wiki/Brent%27s_method)
- * works but is not precisely Brent's method and runs about 2x or more slower
- * due to it not implementing the critically important 'micro-step' (Aug 2020).
- *
- * * see [Brent (page 47)](https://maths-people.anu.edu.au/~brent/pd/rpb011i.pdf)
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param lb the lower limit of the search interval.
- * @param ub the upper limit of the search interval.
- * @param fa (may be left out - will be calculated automatically) the result of
- * evaluating the input polynomial at `a`
- * @param fb (may be left out - will be calculated automatically) the result of
- * evaluating the input polynomial at `b`
- *
- * @example
- * ```typescript
- * const p = fromRoots([-10,2,3,4]);  //=> [1, 1, -64, 236, -240]
- * const a = 2.2;
- * const b = 3.8;
- * brentPoly(p,a,b); //=> 3.000000000000003
- * b = 3.1;
- * brentPoly(p,a,b); //=> 3.000000000000001
- * ```
- *
- * @doc
- */
-function brentPoly(p, lb, ub, fa = Horner(p, lb), fb = Horner(p, ub)) {
-    // Precondition: fa, fb !== 0
-    //---- Make local copies of a and b.
-    let a = lb;
-    let b = ub;
-    let c = a;
-    let fc = fa;
-    let e = b - a;
-    let d = e;
-    while (true) {
-        if (brent_poly_abs(fc) < brent_poly_abs(fb)) {
-            a = b;
-            b = c;
-            c = a;
-            fa = fb;
-            fb = fc;
-            fc = fa;
-        }
-        const δ = 2 * brent_poly_u * brent_poly_max(1, brent_poly_abs(a), brent_poly_abs(b));
-        const m = 0.5 * (c - b);
-        //if (abs(m) <= δ || fb === 0) {
-        if (brent_poly_abs(m) <= δ) {
-            // uncomment below if range to be returned
-            //return b < c ? [b,c] : [c,b];
-            // uncomment below if leftmost guess to be returned
-            //return b < c ? b : c;
-            // uncomment below if rightmost guess to be returned
-            //return b < c ? b : c;
-            // uncomment below if any guess to be returned
-            return b;
-        }
-        if (brent_poly_abs(e) < δ || brent_poly_abs(fa) <= brent_poly_abs(fb)) {
-            e = m;
-            d = e;
-        }
-        else {
-            let s = fb / fa;
-            let p;
-            let q;
-            if (a === c) {
-                p = 2 * m * s;
-                q = 1 - s;
-            }
-            else {
-                q = fa / fc;
-                const r = fb / fc;
-                p = s * (2 * m * q * (q - r) - (b - a) * (r - 1));
-                q = (q - 1) * (r - 1) * (s - 1);
-            }
-            if (0 < p) {
-                q = -q;
-            }
-            else {
-                p = -p;
-            }
-            s = e;
-            e = d;
-            if (2 * p < 3 * m * q - brent_poly_abs(δ * q) && p < brent_poly_abs(0.5 * s * q)) {
-                d = p / q;
-            }
-            else {
-                e = m;
-                d = e;
-            }
-        }
-        a = b;
-        fa = fb;
-        if (δ < brent_poly_abs(d)) {
-            b = b + d;
-        }
-        else if (0 < m) {
-            b = b + δ;
-        }
-        else {
-            //b = b - eps;
-            b = b - δ;
-        }
-        fb = Horner(p, b);
-        // inlined above line:
-        //fb = p[0]; for (let i=1; i<p.length; i++) { fb = fb*b + p[i]; }
-        if (fb === 0) {
-            return b;
-        }
-        if ((fb < 0) === (fc < 0)) { // (same sign - the product could underflow to zero)
-            c = a;
-            fc = fa;
-            e = b - a;
-            d = e;
-        }
-    }
-}
-
-//# sourceMappingURL=brent-poly.js.map
 ;// ./node_modules/flo-poly/node/change-variables/double/reflect-about-y-axis.js
 /**
  * Returns the result of reflecting the given polynomial about the Y-axis, i.e.
@@ -3301,7 +3049,7 @@ function reflectAboutYAxis(p) {
 }
 
 //# sourceMappingURL=reflect-about-y-axis.js.map
-;// ./node_modules/flo-poly/node/roots/root-bounds/positive-to-negative-bound.js
+;// ./node_modules/flo-poly/node/roots/root-bounds/positive-to-negative-bound-with-err.js
 
 /**
  * Returns a function that returns a negative root bound given a function that
@@ -3311,13 +3059,13 @@ function reflectAboutYAxis(p) {
  *
  * @internal
  */
-function positiveToNegativeBound(positiveBoundFunction) {
-    return (p) => {
-        return -positiveBoundFunction(reflectAboutYAxis(p));
+function positiveToNegativeBound_WithError(positiveBoundFunction) {
+    return (p, p_) => {
+        return -positiveBoundFunction(reflectAboutYAxis(p), p_);
     };
 }
 
-//# sourceMappingURL=positive-to-negative-bound.js.map
+//# sourceMappingURL=positive-to-negative-bound-with-err.js.map
 ;// ./node_modules/flo-poly/node/basic/double/negate.js
 /**
  * Returns the negative of the given polynomial (p -> -p).
@@ -3406,7 +3154,96 @@ function positiveRootUpperBound_LMQ(p) {
 }
 
 //# sourceMappingURL=positive-root-upper-bound-lmq.js.map
-;// ./node_modules/flo-poly/node/roots/root-bounds/lmq/negative-root-lower-bound-lmq.js
+;// ./node_modules/flo-poly/node/roots/root-bounds/lmq/to-poly-for-positive-root-upper-bound-lmq.js
+const { abs: to_poly_for_positive_root_upper_bound_lmq_abs } = Math;
+/**
+ * Returns a new polynomial, `q`, with coefficients `p[i] - |p_[i]|`, i.e. the
+ * smallest possible value of each coefficient given the coefficient-wise
+ * absolute error bounds, for use with `positiveRootUpperBound_LMQ`.
+ *
+ * * for `x > 0` every polynomial `p̃` in the family `|p̃[i] - p[i]| <= |p_[i]|`
+ *   satisfies `p̃(x) >= q(x)`; thus if `q(x) > 0` for all `x > U` then so is
+ *   `p̃(x)`, i.e. `U` is an upper bound on the positive roots of every `p̃`
+ *
+ * @param p polynomial coefficients from highest to lowest power
+ * @param p_ coefficient-wise absolute error bounds; must have same length as `p`
+ *
+ * @doc
+ */
+function toPolyForPositiveRootUpperBound_LMQ(p, p_) {
+    if (p.length !== p_.length) {
+        throw new Error('`p` and `p_` must be of equal length.');
+    }
+    const q = new Array(p.length);
+    for (let i = 0; i < p.length; i++) {
+        q[i] = p[i] - to_poly_for_positive_root_upper_bound_lmq_abs(p_[i]);
+    }
+    return q;
+}
+
+//# sourceMappingURL=to-poly-for-positive-root-upper-bound-lmq.js.map
+;// ./node_modules/flo-poly/node/roots/root-bounds/lmq/positive-root-upper-bound-lmq-with-err.js
+
+
+
+const { abs: positive_root_upper_bound_lmq_with_err_abs } = Math;
+/**
+ * Returns an upper bound for the positive real roots of *every* polynomial in
+ * the family described by the given polynomial and its coefficient-wise
+ * absolute error bounds using the LMQ bound.
+ *
+ * * for `x > 0` every polynomial `p̃` in the family satisfies `p̃(x) >= q(x)`
+ *   where `q` has coefficients `p[i] - |p_[i]|` (see
+ *   [[toPolyForPositiveRootUpperBound_LMQ]]); thus an upper bound on the
+ *   positive roots of `q` (above which `q > 0`) is also an upper bound on the
+ *   positive roots of every polynomial in the family
+ *
+ * * the sign of the leading coefficient must be certain: if it is certainly
+ *   negative the family is negated first and if its sign is uncertain no finite
+ *   bound exists and `Infinity` is returned
+ *
+ * * leading coefficients that are exactly zero *with* zero error are ignored
+ *
+ * @param p polynomial coefficients from highest to lowest power
+ * @param p_ coefficient-wise absolute error bounds
+ *
+ * @doc
+ */
+function positiveRootUpperBound_LMQ_WithError(p, p_) {
+    if (p.length !== p_.length) {
+        throw new Error('`p` and `p_` must be of equal length.');
+    }
+    // ignore exact leading zeros
+    let i = 0;
+    while (i < p.length && p[i] === 0 && p_[i] === 0) {
+        i++;
+    }
+    if (i > 0) {
+        p = p.slice(i);
+        p_ = p_.slice(i);
+    }
+    if (p.length <= 1) {
+        return 0; // a constant (or the zero polynomial)
+    }
+    const e0 = positive_root_upper_bound_lmq_with_err_abs(p_[0]);
+    if (p[0] - e0 > 0) {
+        // the leading coefficient is certainly positive
+    }
+    else if (p[0] + e0 < 0) {
+        // the leading coefficient is certainly negative - negate the entire
+        // family (the absolute error bounds are unaffected)
+        p = negate(p);
+    }
+    else {
+        // the sign of the leading coefficient is uncertain
+        return Infinity;
+    }
+    // `q` now has a positive leading coefficient
+    return positiveRootUpperBound_LMQ(toPolyForPositiveRootUpperBound_LMQ(p, p_));
+}
+
+//# sourceMappingURL=positive-root-upper-bound-lmq-with-err.js.map
+;// ./node_modules/flo-poly/node/roots/root-bounds/lmq/negative-root-lower-bound-lmq-with-err.js
 
 
 /**
@@ -3422,160 +3259,1789 @@ function positiveRootUpperBound_LMQ(p) {
  *
  * @doc
  */
-const negativeRootLowerBound_LMQ = positiveToNegativeBound(positiveRootUpperBound_LMQ);
+const negativeRootLowerBound_LMQ_WithError = positiveToNegativeBound_WithError(positiveRootUpperBound_LMQ_WithError);
 
-//# sourceMappingURL=negative-root-lower-bound-lmq.js.map
-;// ./node_modules/flo-poly/node/roots/naive/all-roots.js
-
-
-
-
-
-
+//# sourceMappingURL=negative-root-lower-bound-lmq-with-err.js.map
+;// ./node_modules/flo-poly/node/error-analysis/gamma.js
+/** `2 * 2^-53` -> 2x the standard round-of unit `=== Number.EPSILON` */
+const gamma_eps = Number.EPSILON;
+/** `2^-53` -> the standard round-of unit `=== eps/2` */
+const gamma_u = gamma_eps / 2;
+/** `2^-106` -> the standard round-of unit for double-double precision `=== (eps/2)**2` */
+const gamma_uu = gamma_u * gamma_u;
 /**
- *  * ❗**DEPRECATED**❗
+ * the standard floating point error function evaluated at `1`
  *
- * * Use **`roots`** instead, it is faster (and certified):
- * * `allRoots(p)` becomes `roots(p)!.map(r => (r.tE + r.tS) / 2)`
- * * `allRoots(p,a,b)` becomes `roots(p,a,b)!.map(r => (r.tE + r.tS) / 2)`
+ * * `=== 1.1102230246251568e-16`
+ * * very close to being `=== Number.EPSILON / 2`
+ */
+const gamma_1 = gamma_(1);
+/**
+ * the standard double-double floating point error function evaluated at `3`;
+ * the `3` factor is due to double-double arithmetic accuracy constraints
  *
- * Find and return all roots of the given polynomial in the given interval.
+ * * `=== 3.697785493223493e-32`
+ * * very close to being `=== 3*(Number.EPSILON / 2)**2`
+ */
+const gamma_3 = error_analysis_gamma_(3);
+/**
+ * The canonical floating point error function, γ.
  *
- * * an empty array is returned for a constant or the zero polynomial
+ * * very close to being `=== n * (Number.EPSILON / 2)`
+ * * see e.g. [Algorithms for Accurate, Validated and Fast Polynomial Evaluation](https://hal.archives-ouvertes.fr/hal-00285603/document)
+ * @param n the parameter - typically a small positive integer, e.g. for
+ * polynomial evaluation this `=== 2*d + 1`, where `d` is the degree of the
+ * polynomial
  *
- * * **non-exact:** roots are found 'naively' using double-precision arithmetic
- * and accuracy will thus depend on the condition number around the root - use
- * [[allRootsCertifiedSimplified]] or [[allRootsCertified]] instead if certified
- * root bounds are required (it is about 3x slower, but still very fast!)
+ * @doc
+ */
+function gamma_(n) {
+    const nu = n * gamma_u;
+    return nu / (1 - nu);
+}
+/**
+ * The canonical, once compensated (implying double-double precision),
+ * floating point error function.
  *
- * * close (where the definition of closeness depends on the condition
- * number) or multiple *even* roots can be returned as 0, 1 or more close
- * roots, whereas close or multiple *odd* roots are guaranteed to return *at
- * least 1 root*
+ * * very close to being `=== n * (Number.EPSILON / 2)**2`
+ * * see e.g. [Algorithms for Accurate, Validated and Fast Polynomial Evaluation](https://hal.archives-ouvertes.fr/hal-00285603/document)
+ * @param n the parameter - typically a small positive integer, e.g. for
+ * polynomial evaluation this === 2*d + 1, where d is the degree of the
+ * polynomial
  *
- * * optimized for polynomials of degree 1 to about 30
+ * @doc
+ */
+function error_analysis_gamma_(n) {
+    const nuu = n * gamma_uu;
+    return nuu / (1 - nuu);
+}
+// cache some standard error bound units
+const _γs = new Array(20).fill(0).map((_, i) => gamma_(i));
+/** @internal */
+function γs(n) {
+    return _γs[n] || gamma_(n);
+}
+
+//# sourceMappingURL=gamma.js.map
+;// ./node_modules/flo-poly/node/roots/reduce-interval.js
+
+
+
+
+const { min: reduce_interval_min, max: reduce_interval_max, abs: reduce_interval_abs } = Math;
+const MAX_DOUBLE = 1.7976931348623157e+308;
+/**
+ * Returns the result of reducing the given interval [lb,ub] to a potentially
+ * smaller interval that still contains all the roots of the given polynomial.
  *
- * * roots are refined using the celebrated Brent's Method (and evaluated using
- * Horner's Method) until a root interval is found with
- * width `<= eps * max(1, 2^⌈log₂r⌉)`, where `eps = Number.EPSILON` and
- * `r` is a root
+ * * the interval is reduced only if the current interval is infinite in either
+ *   direction
  *
- * * **ordered:** the returned roots are ordered from lowest to highest
+ * * the absolute coefficient-wise error bound used for the root bounds is
+ *   `pDd_[i]*errorMultiplier + |p[i]|*γ1`, i.e. the given error bound (of the
+ *   double-double precision polynomial) *plus* the round-off incurred when
+ *   the double-double precision coefficients were rounded to the double
+ *   precision coefficients `p` (which is at most half an ulp, i.e. `u|p[i]|`
+ *   with `u <= γ1`); without the latter the family of polynomials for which
+ *   the root bounds are calculated would not provably contain the exact
+ *   polynomial
+ *
+ * @param lb
+ * @param ub
+ * @param p the polynomial with coefficients given as double precision
+ * floating point numbers rounded from the double-double precision coefficients
+ * @param pDd_ the coefficient-wise error bound of the double-double precision
+ * polynomial that still needs to be multiplied by `errorMultiplier` to get
+ * the actual absolute error bound
+ * @param errorMultiplier the multiplier of `pDd_` to get the actual absolute
+ * error bound, e.g. `γγ3` or `1`
+ *
+ * @internal
+ */
+function reduceInterval(lb, ub, p, pDd_, errorMultiplier) {
+    const p_ = pDd_.map((E, i) => E * errorMultiplier + reduce_interval_abs(p[i]) * gamma_1);
+    lb = reduce_interval_max(lb, negativeRootLowerBound_LMQ_WithError(p, p_));
+    ub = reduce_interval_min(ub, positiveRootUpperBound_LMQ_WithError(p, p_));
+    const d = p.length - 1;
+    const F = 2 ** (-2 * d);
+    if (!Number.isFinite(lb)) {
+        lb = -F * MAX_DOUBLE;
+    }
+    if (!Number.isFinite(ub)) {
+        ub = F * MAX_DOUBLE;
+    }
+    while (true) {
+        const lb_ = reduce_interval_abs(Horner(p, lb));
+        const ub_ = reduce_interval_abs(Horner(p, ub));
+        if (lb_ > F * MAX_DOUBLE) {
+            lb /= 2;
+            continue;
+        }
+        if (ub_ > F * MAX_DOUBLE) {
+            ub /= 2;
+            continue;
+        }
+        break;
+    }
+    return [lb, ub];
+}
+
+//# sourceMappingURL=reduce-interval.js.map
+;// ./node_modules/flo-poly/node/roots/remove-leading-zero-coeffs.js
+
+const { abs: remove_leading_zero_coeffs_abs } = Math;
+/**
+ * Removes leading zero coefficients (that are not certifiably non-zero).
+ *
+ * * the given arrays are **not** modified - new arrays are returned if
+ *   anything changed (if the leading coefficient is certifiably non-zero the
+ *   given arrays are returned as is)
+ *
+ * * if the leading coefficient is not certifiably non-zero the exact
+ *   polynomial is consulted; the returned `pDd` is then the exact polynomial
+ *   rounded to double-double precision and `pDd_` the corresponding error bound
+ *
+ * * `p` and `getPExact()` *must* be of same length
+ *
+ * @internal
+*/
+function removeLeadingZeroCoeffs(pDd, pDd_, getPExact, errorMultiplier) {
+    // if leading coefficient is guaranteed > zero
+    if (pDd.length === 0 || remove_leading_zero_coeffs_abs(pDd[0][1]) > errorMultiplier * pDd_[0]) {
+        return { pDd, pDd_, pExact: undefined };
+    }
+    let pExact = getPExact(); // lazy loaded
+    // Create new `pDd` and `pDd_` from the exact polynomial's coefficients
+    // (without modifying the given arrays)
+    const n = pExact.length;
+    let pDdNew = new Array(n);
+    let pDd_New = new Array(n);
+    for (let i = 0; i < n; i++) {
+        const cExact = pExact[i];
+        const hi = cExact[cExact.length - 1] ?? 0;
+        const lo = cExact[cExact.length - 2] ?? 0;
+        pDdNew[i] = [lo, hi];
+        pDd_New[i] = remove_leading_zero_coeffs_abs(hi) * (gamma_3 / errorMultiplier);
+    }
+    let i = 0;
+    while (i < n && pDdNew[i][1] === 0) {
+        i++;
+    }
+    pDdNew = pDdNew.slice(i);
+    pDd_New = pDd_New.slice(i);
+    pExact = pExact.slice(i);
+    return { pDd: pDdNew, pDd_: pDd_New, pExact };
+}
+
+//# sourceMappingURL=remove-leading-zero-coeffs.js.map
+;// ./node_modules/flo-poly/node/change-variables/double/taylor-shift-with-inp-err.js
+const { abs: taylor_shift_with_inp_err_abs } = Math;
+/**
+ * Returns the Taylor shift `p(x + h)` of the given polynomial computed in
+ * `O(n^2)` via repeated synthetic division by `(x - h)` (Horner's scheme)
+ * including a **running** error bound based on the input error bounds.
  *
  * @param p a polynomial with coefficients given densely as an array of double
  * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
  * represents the polynomial `5x^2 - 3x`
- * @param lb defaults to `-Infinity`; lower bound of roots to be
- * returned
- * @param ub defaults to `Infinity`; upper bound of roots to be
- * returned
+ * @param h the shift amount
+ * @param p_ an error polynomial that represents a coefficient-wise error bound
+ * that has **not** been scaled by `γ1` yet
  *
  * @doc
  */
-function allRoots(p, lb = -Infinity, ub = Infinity) {
-    p = removeLeadingZeros(p);
-    //---- count and remove roots at zero
-    let numZerosAtZero = 0;
-    while (p[p.length - 1] === 0) {
-        p = p.slice(0, -1);
-        numZerosAtZero++;
-    }
-    //------------------------
-    // return an empty array for a constant or the zero polynomial
-    if (p.length <= 1) {
-        const roots = [];
-        for (let j = 0; j < numZerosAtZero; j++) {
-            roots.push(0);
+function taylorShiftWithInpErr(p, h, p_) {
+    const n = p.length - 1;
+    // The successive remainders are the Taylor coefficients of `p` about `h`,
+    // i.e. the coefficients of `p(x + h)`.
+    const _h = taylor_shift_with_inp_err_abs(h);
+    const q = p.slice();
+    const q_ = p_.slice();
+    for (let k = 0; k <= n; k++) {
+        for (let i = 1; i <= n - k; i++) {
+            const qi1 = q[i - 1];
+            const qi1_ = q_[i - 1];
+            const hq = h * qi1;
+            const hq_ = _h * qi1_ + taylor_shift_with_inp_err_abs(hq);
+            q[i] = q[i] + hq;
+            q_[i] = q_[i] + hq_ + taylor_shift_with_inp_err_abs(q[i]);
         }
-        return roots;
     }
-    if (lb === -Infinity) {
-        lb = negativeRootLowerBound_LMQ(p);
+    return [q, q_];
+}
+/**
+ * ❗**MODIFIES**❗ the given polynomial and its input-error bound to compute
+ * `p(x + 1)` together with a running error bound.
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ * @param p_ an error polynomial that represents a coefficient-wise error bound
+ * that has **not** been scaled by `γ1` yet
+ *
+ * @doc
+ */
+function inplaceTaylorShiftBy1WithInpErr(p, p_) {
+    const n = p.length - 1;
+    // The successive remainders are the Taylor coefficients of `p` about `h`,
+    // i.e. the coefficients of `p(x + 1)`.
+    for (let k = 0; k <= n; k++) {
+        for (let i = 1; i <= n - k; i++) {
+            const qi1 = p[i - 1];
+            const qi1_ = p_[i - 1];
+            // (the multiplication by `h === 1` is exact so the error of the
+            // product is just the error of `qi1`)
+            const hq_ = qi1_;
+            p[i] = p[i] + qi1;
+            p_[i] = p_[i] + hq_ + taylor_shift_with_inp_err_abs(p[i]);
+        }
     }
-    if (ub === Infinity) {
-        ub = positiveRootUpperBound_LMQ(p);
-    }
-    // Get all derivatives, i.e. 
-    // ps === [p, dp, ddp, ..., constant]
-    //        [0,  1,   2, ..., deg     ]
-    const ps = [p];
-    for (let i = 1; i <= p.length - 1; i++) {
-        ps.push(differentiate(ps[i - 1]));
-    }
-    //const δ = Math.max(2*eps, 2*eps * Math.max(Math.abs(lb), Math.abs(ub)));
-    /** root intervals */
-    let is = [];
-    // loop: ps[diffCount] === [linear, quadratic, ..., deg]
-    for (let diffCount = p.length - 2; diffCount >= 0; diffCount--) {
-        // Get roots within intervals:
-        // ---------------------------
-        // Finds and returns all roots of the given polynomial within the given 
-        // intervals, starting from the lower bound (lb) and ending at the upper
-        // bound (ub)
-        const p = ps[diffCount];
-        const roots = [];
-        let _a_ = lb;
-        let _A_ = Horner(p, _a_);
-        // if lower bound value is zero and this is the last iteration with 
-        // p === the original polynomial then push the root at the lower bound
-        if (_A_ === 0 && diffCount === 0) {
-            roots.push(lb);
-        }
-        for (let i = 0; i < is.length; i++) {
-            const _b_ = is[i];
-            const _B_ = Horner(p, _b_);
-            // if there is a root at the right interval then add it
-            if (_B_ === 0) {
-                roots.push(_b_);
-            }
-            else if (_A_ !== 0 && (_A_ < 0) !== (_B_ < 0)) {
-                // (sign test without a product, which could underflow to zero;
-                // `_B_ !== 0` here and a zero `_A_` was already pushed as a root)
-                roots.push(brentPoly(p, _a_, _b_, _A_, _B_));
-            }
-            _a_ = _b_;
-            _A_ = _B_;
-        }
-        const _B_ = Horner(p, ub);
-        // (sign test without a product, which could underflow to zero)
-        if (_A_ !== 0 && _B_ !== 0 && (_A_ < 0) !== (_B_ < 0)) {
-            roots.push(brentPoly(p, _a_, ub, _A_, _B_));
-        }
-        // if upper bound value is zero and this is the last iteration with 
-        // p === the original polynomial then push the root at the upper bound
-        if (_B_ === 0 && diffCount === 0) {
-            roots.push(ub);
-        }
-        is = roots;
-    }
-    if (numZerosAtZero > 0 && lb <= 0 && ub >= 0) {
-        // at this point the existing intervals, `is`, are sorted
-        // find the insertion spot and insert the zero roots to keep the roots
-        // sorted
-        const isWithZeroRoots = [];
-        let zerosInserted = false;
-        for (let i = 0; i < is.length; i++) {
-            if (!zerosInserted && is[i] >= 0) {
-                // push the zero roots
-                for (let j = 0; j < numZerosAtZero; j++) {
-                    isWithZeroRoots.push(0);
-                }
-                zerosInserted = true;
-            }
-            isWithZeroRoots.push(is[i]);
-        }
-        if (!zerosInserted) {
-            // push the zero roots
-            for (let j = 0; j < numZerosAtZero; j++) {
-                isWithZeroRoots.push(0);
-            }
-        }
-        return isWithZeroRoots;
-    }
-    return is;
 }
 
-//# sourceMappingURL=all-roots.js.map
+//# sourceMappingURL=taylor-shift-with-inp-err.js.map
+;// ./node_modules/flo-poly/node/change-variables/double/scale-with-inp-err.js
+const { abs: scale_with_inp_err_abs } = Math;
+/**
+ * Returns the polynomial `p(s·x)`, i.e. the coefficient of `xⁱ` scaled by `sⁱ`
+ * in double precision including an error bound that has **not** been scaled
+ * by `γ1` yet.
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ * @param s a scaling factor, i.e. the `s` in `p(x) <- p(sx)`
+ * @param p_ an error polynomial that represents a coefficient-wise error bound
+ * that has **not** been scaled by `γ1` yet
+ *
+ * @example
+ * ```typescript
+ * scaleWithInpErr([1,2,7], 3, [0,0,0]); //=> [[9, 6, 7], [18, 6, 0]]
+ * ```
+ *
+ * @doc
+ */
+function scaleWithInpErr(p, s, p_) {
+    const r = p.slice();
+    const r_ = p_.slice();
+    inplaceScaleWithInpErr(r, s, r_);
+    return [r, r_];
+}
+/**
+ * ❗**MODIFIES**❗ the given polynomial and its input-error bound to compute
+ * `p(s·x)` together with a running error bound.
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ * @param s a scaling factor
+ * @param p_ an error polynomial that represents a coefficient-wise error bound
+ * that has **not** been scaled by `γ1` yet
+ *
+ * @doc
+ */
+function inplaceScaleWithInpErr(p, s, p_) {
+    const n = p.length - 1;
+    if (n < 0) {
+        return;
+    }
+    const _s = scale_with_inp_err_abs(s);
+    let sPow = s;
+    let sPow_ = 0; // no error
+    for (let i = 1; i <= n; i++) {
+        const j = n - i;
+        const pn_i = p[j];
+        const _pn_i = scale_with_inp_err_abs(pn_i);
+        const pn_i_ = p_[j];
+        const scaledPn_i = pn_i * sPow;
+        p[j] = scaledPn_i;
+        // input error * |sⁱ| + |p| * err(sⁱ) + round-off of the product
+        p_[j] = pn_i_ * scale_with_inp_err_abs(sPow) + _pn_i * sPow_ + scale_with_inp_err_abs(scaledPn_i);
+        const nextSPow = sPow * s;
+        sPow_ = sPow_ * _s + scale_with_inp_err_abs(nextSPow);
+        sPow = nextSPow;
+    }
+}
+
+//# sourceMappingURL=scale-with-inp-err.js.map
+;// ./node_modules/double-double/node/double-mixed-double-double/dd-mult-double.js
+/** @internal */
+const dd_mult_double_f = 134217729; // 2**27 + 1;
+/**
+ * Returns the product of a double-double-precision floating point number and a
+ * double.
+ *
+ * * slower than ALGORITHM 8 (one call to fastTwoSum more) but about 2x more
+ * accurate
+ * * relative error bound: 1.5u^2 + 4u^3, i.e. fl(a*b) = (a*b)(1+ϵ),
+ * where ϵ <= 1.5u^2 + 4u^3, u = 0.5 * Number.EPSILON
+ * * the bound is very sharp
+ * * probably prefer `ddMultDouble2` due to extra speed
+ *
+ * * assumes no overflow; note that (Veltkamp) splitting overflows (giving
+ * `NaN`) if the magnitude of `x[1]` or `y` exceeds ~2^996
+ *
+ * * ALGORITHM 7 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
+ * @param y a double
+ * @param x a double-double precision floating point number
+ */
+function ddMultDouble1(y, x) {
+    const xl = x[0];
+    const xh = x[1];
+    //const [cl1,ch] = twoProduct(xh,y);
+    const ch = xh * y;
+    const c = dd_mult_double_f * xh;
+    const ah = c - (c - xh);
+    const al = xh - ah;
+    const d = dd_mult_double_f * y;
+    const bh = d - (d - y);
+    const bl = y - bh;
+    const cl1 = (al * bl) - ((ch - (ah * bh)) - (al * bh) - (ah * bl));
+    const cl2 = xl * y;
+    //const [tl1,th] = fastTwoSum(ch,cl2);
+    const th = ch + cl2;
+    const tl1 = cl2 - (th - ch);
+    const tl2 = tl1 + cl1;
+    //const [zl,zh] = fastTwoSum(th,tl2);
+    const zh = th + tl2;
+    const zl = tl2 - (zh - th);
+    return [zl, zh];
+}
+/**
+ * Returns the product of a double-double-precision floating point number and a double.
+ *
+ * * faster than ALGORITHM 7 (one call to fastTwoSum less) but about 2x less
+ * accurate
+ * * relative error bound: 3u^2, i.e. fl(a*b) = (a*b)(1+ϵ),
+ * where ϵ <= 3u^2, u = 0.5 * Number.EPSILON
+ * * the bound is sharp
+ * * probably prefer this algorithm due to extra speed
+ *
+ * * assumes no overflow; note that (Veltkamp) splitting overflows (giving
+ * `NaN`) if the magnitude of `x[1]` or `y` exceeds ~2^996
+ *
+ * * ALGORITHM 8 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
+ * @param y a double
+ * @param x a double-double precision floating point number
+ */
+function ddMultDouble2(y, x) {
+    const xl = x[0];
+    const xh = x[1];
+    //const [cl1,ch] = twoProduct(xh,y);
+    const ch = xh * y;
+    const c = dd_mult_double_f * xh;
+    const ah = c - (c - xh);
+    const al = xh - ah;
+    const d = dd_mult_double_f * y;
+    const bh = d - (d - y);
+    const bl = y - bh;
+    const cl1 = (al * bl) - ((ch - (ah * bh)) - (al * bh) - (ah * bl));
+    const cl2 = xl * y;
+    const cl3 = cl1 + cl2;
+    //return fastTwoSum(ch,cl3);
+    const xx = ch + cl3;
+    return [cl3 - (xx - ch), xx];
+}
+
+//# sourceMappingURL=dd-mult-double.js.map
+;// ./node_modules/flo-poly/node/change-variables/double-double/dd-taylor-shift-with-inp-err.js
+
+const { abs: dd_taylor_shift_with_inp_err_abs } = Math;
+/**
+ * Returns the Taylor shift `f(x + h)` of the given polynomial computed in
+ * `O(n^2)` via repeated synthetic division by `(x - h)` (Horner's scheme)
+ * including a **running** error bound based on the input error bounds that
+ * has **not** been scaled by `γγ(3)` yet.
+ *
+ * * intermediate calculations are performed in double-double precision floating
+ *   point arithmetic and the result is returned in double-double precision
+ *
+ * @param p a polynomial with coefficients given densely as an array of double-double
+ * precision floating point numbers from highest to lowest power, e.g. `[[0,5],[0,-3],[0,0]]`
+ * represents the polynomial `5x^2 - 3x`
+ * @param h the shift amount
+ */
+function ddTaylorShiftWithInpErr(p, h, p_) {
+    const n = p.length - 1;
+    if (n < 0) {
+        return [[], []];
+    }
+    // The successive remainders are the Taylor coefficients of `p` about `h`,
+    // i.e. the coefficients of `p(x + h)`.
+    const _h = dd_taylor_shift_with_inp_err_abs(h);
+    const q = p.slice();
+    const q_ = p_.slice();
+    for (let k = 0; k <= n; k++) {
+        for (let i = 1; i <= n - k; i++) {
+            const qi1 = q[i - 1];
+            const qi1_ = q_[i - 1];
+            const hq = ddMultDouble2(h, qi1);
+            const hq_ = _h * qi1_ + dd_taylor_shift_with_inp_err_abs(hq[1]);
+            const qi = q[i];
+            q[i] = ddAddDd(qi, hq);
+            q_[i] = q_[i] + hq_ + dd_taylor_shift_with_inp_err_abs(q[i][1]);
+        }
+    }
+    return [q, q_];
+}
+
+//# sourceMappingURL=dd-taylor-shift-with-inp-err.js.map
+;// ./node_modules/double-double/node/double-double/binary/dd-mult-dd.js
+/** @internal */
+const dd_mult_dd_f = 2 ** 27 + 1;
+/**
+ * Returns the product of two double-double-precision floating point numbers.
+ *
+ * * relative error bound: 5u^2, i.e. fl(a*b) = (a*b)(1+ϵ),
+ * where |ϵ| < 5u^2, u = 0.5 * Number.EPSILON (assuming no underflow or overflow)
+ * * this bound (for round-to-nearest ties-to-even, as used by JavaScript) was
+ * formally proven (in Coq) by J.-M. Muller and L. Rideau, see
+ * https://doi.org/10.1145/3484514 - it improves on the 7u^2 bound given in
+ * the original paper (below); the worst case found is 4.985u^2
+ *
+ * * assumes no overflow; note that (Veltkamp) splitting overflows (giving
+ * `NaN`) if the magnitude of `x[1]` or `y[1]` exceeds ~2^996
+ *
+ * * ALGORITHM 10 (DWTimesDW1) of https://hal.archives-ouvertes.fr/hal-01351529v3/document
+ * @param x a double-double precision floating point number
+ * @param y another double-double precision floating point number
+ */
+function ddMultDd(x, y) {
+    const xh = x[1];
+    const yh = y[1];
+    //const [cl1,ch] = twoProduct(xh,yh);
+    const ch = xh * yh;
+    const c = dd_mult_dd_f * xh;
+    const ah = c - (c - xh);
+    const al = xh - ah;
+    const d = dd_mult_dd_f * yh;
+    const bh = d - (d - yh);
+    const bl = yh - bh;
+    const cl1 = (al * bl) - ((ch - (ah * bh)) - (al * bh) - (ah * bl));
+    //return fastTwoSum(ch,cl1 + (xh*yl + xl*yh));
+    const b = cl1 + (xh * y[0] + x[0] * yh);
+    const xx = ch + b;
+    return [b - (xx - ch), xx];
+}
+
+//# sourceMappingURL=dd-mult-dd.js.map
+;// ./node_modules/flo-poly/node/change-variables/double-double/dd-scale-with-inp-err.js
+
+const { abs: dd_scale_with_inp_err_abs } = Math;
+/**
+ * The error bound is accumulated in units of `γγ3 ≈ 3u²` (the relative error
+ * bound of `ddMultDouble2`), but `ddMultDd` has a relative error bound of
+ * `7u²`, i.e. `7/3` units.
+ */
+const ddMultDdErrUnits = 7 / 3;
+/**
+ * Returns the polynomial `p(s·x)`, i.e. the coefficient of `xⁱ` scaled by `sⁱ`
+ * in double-double precision including an error bound that has **not** been
+ * scaled by `γγ3` yet.
+ *
+ * @param p a polynomial with coefficients given densely as an array of double-double
+ * floating point numbers from highest to lowest power, e.g. `[[0,5],[0,-3],[0,0]]`
+ * represents the polynomial `5x^2 - 3x`
+ * @param s a scaling factor, i.e. the `s` in `p(x) <- p(sx)`
+ * @param p_ an error polynomial that represents a coefficient-wise error bound
+ * that has **not** been scaled by `γγ3` yet
+ *
+ * @example
+ * ```typescript
+ * ddScaleWithInpErr([[0,1],[0,2],[0,7]], 3, [0,0,0]); //=> [[[0,9],[0,6],[0,7]], [30, 14, 0]]
+ * ```
+ *
+ * @doc
+ */
+function ddScaleWithInpErr(p, s, p_) {
+    const r = p.slice();
+    const r_ = p_.slice();
+    ddInplaceScaleWithInpErr(r, s, r_);
+    return [r, r_];
+}
+/**
+ * ❗**MODIFIES**❗ the given polynomial and its input-error bound to compute
+ * `p(s·x)` together with a running error bound.
+ *
+ * @param p a polynomial with coefficients given densely as an array of
+ * double-double floating point numbers from highest to lowest power, e.g.
+ * `[[0,5],[0,-3],[0,0]]` represents the polynomial `5x^2 - 3x`
+ * @param s a scaling factor
+ * @param p_ an error polynomial that represents a coefficient-wise error bound
+ * that has **not** been scaled by `γγ3` yet
+ *
+ * @doc
+ */
+function ddInplaceScaleWithInpErr(p, s, p_) {
+    const n = p.length - 1;
+    if (n < 0) {
+        return;
+    }
+    const _s = dd_scale_with_inp_err_abs(s);
+    let sPow = [0, s];
+    let sPow_ = 0; // no error
+    for (let i = 1; i <= n; i++) {
+        const j = n - i;
+        const pn_i = p[j];
+        const _pn_i = dd_scale_with_inp_err_abs(pn_i[1]);
+        const pn_i_ = p_[j];
+        const scaledPn_i = ddMultDd(sPow, pn_i);
+        p[j] = scaledPn_i;
+        // input error * |sⁱ| + |p| * err(sⁱ) + round-off of the product
+        p_[j] = pn_i_ * dd_scale_with_inp_err_abs(sPow[1]) + _pn_i * sPow_ + ddMultDdErrUnits * dd_scale_with_inp_err_abs(scaledPn_i[1]);
+        const nextSPow = ddMultDouble2(s, sPow); // relative error bound `3u²`, i.e. 1 unit
+        sPow_ = sPow_ * _s + dd_scale_with_inp_err_abs(nextSPow[1]);
+        sPow = nextSPow;
+    }
+}
+
+//# sourceMappingURL=dd-scale-with-inp-err.js.map
+;// ./node_modules/flo-poly/node/change-variables/expansion/e-taylor-shift.js
+
+const eChangeVariablesTranslateX = (/* unused pure expression or super */ null && (eTaylorShift));
+/**
+ * Returns the Taylor shift `f(x + h)` of the given polynomial computed in
+ * `O(n^2)` via repeated synthetic division by `(x - h)` (Horner's scheme).
+ *
+ * * the calculations are exact (bar overflow / underflow) since the
+ *   coefficients are Shewchuk floating point expansions
+ *
+ * @param p a polynomial with coefficients given densely as an array of Shewchuk expansion
+ * floating point numbers from highest to lowest power, e.g. `[[5],[-3],[0]]`
+ * represents the polynomial `5x^2 - 3x`
+ * @param h the shift amount
+ */
+function eTaylorShift(p, h) {
+    const n = p.length - 1;
+    if (n < 0) {
+        return [];
+    }
+    const q = p.slice();
+    for (let k = 0; k <= n; k++) {
+        for (let i = 1; i <= n - k; i++) {
+            q[i] = eCompress(fastExpansionSum(q[i], scaleExpansion(q[i - 1], h)));
+        }
+    }
+    return q;
+}
+
+//# sourceMappingURL=e-taylor-shift.js.map
+;// ./node_modules/flo-poly/node/change-variables/expansion/e-scale.js
+
+const eChangeVariablesScale = (/* unused pure expression or super */ null && (eScale));
+/**
+ * Returns the polynomial `f(s·x)`, i.e. the coefficient of `xⁱ` scaled by `sⁱ`.
+ *
+ * @param p a polynomial with coefficients given densely as an array of Shewchuk
+ * floating point expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
+ * represents the polynomial `5x^2 - 3x`
+ * @param s the scale factor
+ */
+function eScale(p, s) {
+    const n = p.length - 1;
+    if (n < 0) {
+        return [];
+    }
+    const r = new Array(n + 1);
+    r[n] = p[n];
+    // Keep powers of `s` as expansions to avoid rounding drift from repeated
+    // double multiplication (`sPow *= s`).
+    let sPow = [1];
+    for (let i = 1; i <= n; i++) {
+        sPow = scaleExpansion(sPow, s);
+        r[n - i] = expansionProduct(p[n - i], sPow);
+    }
+    return r;
+}
+
+//# sourceMappingURL=e-scale.js.map
+;// ./node_modules/flo-poly/node/roots/mobius/mobius-precise.js
+
+
+
+
+
+
+
+const { abs: mobius_precise_abs, sign } = Math;
+/**
+ * Returns the number of sign changes in the polynomial coefficents after
+ * applying a Mobius transformation to the given polynomial.
+ *
+ * * this is a specialized function used specifically by `isolateRoots`
+ *
+ * Applies a Mobius transformation to the given polynomial:
+ * * p(x) -> (x + 1)^n * p((ax + b) / (x + 1))
+ * * see e.g. https://arxiv.org/pdf/1605.00410.pdf equation (2)
+ *
+ * This runs in `O(n^2)` arithmetic operations (where `n` is the degree) by
+ * decomposing the Mobius map into elementary steps, rather than the `O(n^3)`
+ * of expanding and summing `Σ cᵢ (ax + b)^i (x + 1)^(n-i)` directly.
+ *
+ * The decomposition (see https://math.stackexchange.com/questions/694565)
+ * uses the identity `(ax + b)/(x + 1) = a + (b - a)/(x + 1)`, which yields
+ *
+ *   (x + 1)^n * p((ax + b)/(x + 1)) = S₁( R( Scₐ₋ᵦ( Sₐ(p) ) ) )
+ *
+ * where
+ *   * `Sₕ(f) = f(x + h)`           is a Taylor shift (`O(n^2)`),
+ *   * `Sc_s(f)` scales the coefficient of `xⁱ` by `sⁱ` (`O(n)`),
+ *   * `R(f)` reverses the coefficient array, i.e. `xⁿ f(1/x)` (`O(n)`).
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ * @param p_ an error polynomial that provides a coefficient-wise error bound
+ * **NOT** scaled by `γ1`
+ * @param pDd a polynomial with coefficients given densely as an array of
+ * double-double precision floating point numbers from highest to lowest power,
+ * e.g. `[[0,5],[0,-3],[0,0]]` represents the polynomial `5x^2 - 3x`
+ * @param pDd_ an array of numbers representing the absolute error bounds on the
+ * coefficients of `pDd`; the actual error bound on the coefficient of `xⁱ` is `pDd_[i]*γγ(3)`
+ * @param getPExact defaults to `undefined`; a function returning the exact
+ * polynomial (with coefficients given as Shewchuk expansions)
+ * @param a lower bound of the interval
+ * @param b upper bound of the interval
+ * @param A sign-certified evaluation of polynomial at the lower bound of the interval
+ * @param B sign-certified evaluation of polynomial at the upper bound of the interval
+ * @param failCount the number of times the Mobius transformation has failed to certify the sign
+ *
+ * @internal
+ */
+function mobiusAndNumSignChanges(p, p_, pDd, pDd_, getPExact) {
+    return function mobiusAndNumSignChanges_(a, b, A, B, failCount) {
+        //-------------------------------------------
+        // Taylor shift by `a`, i.e. p(x + a)
+        //-------------------------------------------
+        let [q, q_] = taylorShiftWithInpErr(p, a, p_);
+        //---------------------------------------------------
+        // Scale the coefficient of xⁱ by (b - a)ⁱ
+        //---------------------------------------------------
+        inplaceScaleWithInpErr(q, b - a, q_);
+        //-------------------------------------------------------------
+        // Reverse, i.e. xⁿ q(1/x) (homogenized inversion x -> 1/x)
+        //-------------------------------------------------------------
+        q.reverse();
+        q_.reverse();
+        //-------------------------------------------
+        // Taylor shift by 1, i.e. q(x + 1)
+        //-------------------------------------------
+        inplaceTaylorShiftBy1WithInpErr(q, q_);
+        let numSignChangesMax = 0; // Max possible number of real sign changes
+        let numUncertifyable = 0; // number of coefficients who's sign cannot be certified
+        // The sign of `A` and `B` are both !== 0 and is certified since it is an
+        // endpoint of the interval.
+        let _s = sign(A); // Sign is certified
+        for (let i = 1; i < q.length - 1; i++) {
+            let s = sign(q[i]);
+            const v = q[i];
+            const err = q_[i] * gamma_1;
+            if (mobius_precise_abs(v) <= err) {
+                // Important: Lemma 19 of Sagraloff & Mehlhorn 2015 (arXiv:1308.4088) is incorrect,
+                // we are actually allowed one uncertifyable coefficient (but **only** if numSignChanges
+                // equals 1)!
+                // Important: If we find max 1 "zero" and "numSignChangesMax" is 1 then
+                // we can guarantee that there is exactly 1 root in the interval.
+                numUncertifyable++;
+                // If we encounter a "zero" we make its sign different than the
+                // previous one so it can count as a sign change; this differs
+                // from the usual way of counting sign changes.
+                s = -_s;
+            }
+            if (s !== _s) {
+                numSignChangesMax++;
+                _s = s;
+            }
+        }
+        const s = sign(B); // Sign is certified
+        if (s !== _s) {
+            numSignChangesMax++;
+        }
+        // (every uncertifiable coefficient is counted as a sign change so
+        // `numSignChangesMax === 1` implies `numUncertifyable <= 1`)
+        if (numSignChangesMax === 1) {
+            return 1;
+        }
+        if (numUncertifyable > 0) {
+            return ddMobiusAndNumSignChanges(pDd, pDd_, a, b, A, B, failCount, getPExact);
+        }
+        return numSignChangesMax; // guaranteed OR need to split interval
+    };
+}
+function ddMobiusAndNumSignChanges(pDd, pDd_, a, b, A, B, failCount, getPExact) {
+    //-------------------------------------------
+    // Taylor shift by `a`, i.e. p(x + a)
+    //-------------------------------------------
+    let [q, q_] = ddTaylorShiftWithInpErr(pDd, a, pDd_);
+    //---------------------------------------------------
+    // Scale the coefficient of xⁱ by (b - a)ⁱ
+    //---------------------------------------------------
+    ddInplaceScaleWithInpErr(q, b - a, q_);
+    //-------------------------------------------------------------
+    // Reverse, i.e. xⁿ q(1/x) (homogenized inversion x -> 1/x)
+    //-------------------------------------------------------------
+    q.reverse();
+    q_.reverse();
+    //-------------------------------------------
+    // S₁: Taylor shift by 1, i.e. q(x + 1)
+    //-------------------------------------------
+    [q, q_] = ddTaylorShiftWithInpErr(q, 1, q_);
+    let numSignChanges = 0; // number of sign changes
+    let numUncertifyable = 0; // number of coefficients who's sign cannot be certified
+    // The sign of `A` and `B` are both !== 0 and is certified since it is an
+    // endpoint of the interval.
+    let _s = sign(A);
+    // (the first coefficient, `q[0]`, equals `p(a)`, i.e. `A`, whose sign is
+    // already certified - as for the double precision variant)
+    for (let i = 1; i < q.length - 1; i++) {
+        // No error in the sign of the last coefficient (important for parity of sign changes)
+        let s = sign(q[i][1]);
+        const err = q_[i] * gamma_3;
+        const c = q[i];
+        if (err >= mobius_precise_abs(c[1])) {
+            // Important: Lemma 19 of Sagraloff & Mehlhorn 2015 (arXiv:1308.4088) is incorrect,
+            // we are actually allowed one uncertifyable coefficient (but **only** if `numSignChanges`
+            // equals 1)!
+            // Important: If we find max 1 "zero" and "numSignChangesMax" is 1 then
+            // we can guarantee that there is exactly 1 root in the interval.
+            numUncertifyable++;
+            // If we encounter a "zero" we make its sign different than the
+            // previous one so it can count as a sign change; this differs
+            // from the usual way of counting sign changes.
+            s = -_s;
+        }
+        if (s !== _s) {
+            numSignChanges++;
+            _s = s;
+        }
+    }
+    const s = sign(B); // Sign is certified
+    if (s !== _s) {
+        numSignChanges++;
+    }
+    // (every uncertifiable coefficient is counted as a sign change so
+    // `numSignChanges === 1` implies `numUncertifyable <= 1`)
+    if (numSignChanges === 1) {
+        return 1; // **guaranteed** to have exactly one root in the interval
+    }
+    if (numUncertifyable === 0) {
+        return numSignChanges;
+    }
+    return failCount > 1
+        ? eMobiusAndNumSignChanges(getPExact, a, b, A, B)
+        : -numSignChanges; // `failCount` is still 1, so we can try again after another split of the interval;
+    // We need to split the interval into two subintervals since we
+    // cannot guarantee the number of sign changes in the Mobius coefficients.
+    // But, the sign of `A` and `B` are both !== 0 and certified so we *can* certify
+    // the parity (and max value) of the number of sign changes!
+}
+function eMobiusAndNumSignChanges(getPExact, a, b, A, B) {
+    const pE = getPExact();
+    let q = eTaylorShift(pE, a);
+    q = eScale(q, b - a);
+    q.reverse();
+    q = eTaylorShift(q, 1);
+    //--------------------------------------------------------
+    // Calc number of sign changes in the Mobius coefficients
+    //--------------------------------------------------------
+    let numSignChanges = 0; // number of sign changes
+    let _s = sign(A);
+    for (let i = 1; i < q.length - 1; i++) {
+        const c = q[i];
+        let s = sign(c[c.length - 1]); // Sign is certified (in exact precision)
+        if (s !== _s && s !== 0) {
+            numSignChanges++;
+            _s = s;
+        }
+    }
+    // Keep this to ensure parity of sign changes even when underflow occurs
+    const s = sign(B); // Sign is certified (up to over/underflow)
+    if (s !== _s) {
+        numSignChanges++;
+    }
+    return numSignChanges;
+}
+
+// exported for testing only
+
+//# sourceMappingURL=mobius-precise.js.map
+;// ./node_modules/flo-poly/node/evaluate/double/eft-horner.js
+
+
+/**
+ * Returns an EFT (error free transformation) for the Horner evaluation of a
+ * polymial at a specified x. The result is returned as an object with
+ * properties: `r̂ ->` the calculated evaluation, `pπ` and `pσ` -> two polynomials
+ * with coefficients around 2^53 times smaller than the input polynomial.
+ *
+ * * `r̂ + pπ(x) + pσ(x) ===` the *exact* evaluation (no error)
+ *
+ * * see [[1] Algorithms for Accurate, Validated and Fast Polynomial Evaluation, *Stef Graillat, Philippe Langlois and Nicolas Louvet*](https://projecteuclid.org/download/pdf_1/euclid.jjiam/1265033778)
+ * * see also [[2] *Philippe Langlois, Nicolas Louvet.* Faithful Polynomial Evaluation with Compensated Horner Algorithm. ARITH18: 18th IEEE International Symposium on Computer Arithmetic, Jun 2007, Montpellier, France. pp.141–149. ffhal-00107222f](https://hal.archives-ouvertes.fr/hal-00107222/document)
+ * * see also [[3] Horner's Method](https://en.wikipedia.org/wiki/Horner%27s_method)
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ * @param x the value at which to evaluate the polynomial
+ *
+ * @doc
+ */
+function EFTHorner(p, x) {
+    //--------------------------------------------------------------------------
+    // This is exactly *Algorithm 5* from [2] above
+    //--------------------------------------------------------------------------
+    const pπ = []; // A polynomial containing part of the error
+    const pσ = []; // Another polynomial containing part of the error
+    let σ;
+    let r̂ = p[0];
+    for (let i = 1; i < p.length; i++) {
+        const [π, pi] = two_product_twoProduct(r̂, x);
+        [σ, r̂] = two_sum_twoSum(pi, p[i]);
+        // inlined
+        //r̂ = pi + p[i]; const bv = r̂ - pi; σ = (pi - (x-bv)) + (p[i]-bv);
+        pπ.push(π);
+        pσ.push(σ);
+    }
+    return { r̂, pπ, pσ };
+}
+// inlined
+//const pπ: number[] = []; const pσ: number[] = []; const σ: number; const r̂ = p[0];    for (const i=1; i<p.length; i++) { const [π,pi] = twoProduct(r̂,x); [σ,r̂] = twoSum(pi, p[i]); pπ.push(π); pσ.push(σ); } return { r̂, pπ, pσ }
+
+//# sourceMappingURL=eft-horner.js.map
+;// ./node_modules/flo-poly/node/evaluate/double/horner-with-running-error.js
+
+const { abs: horner_with_running_error_abs } = Math;
+/**
+ * Returns the result of evaluating a polyniomial at a point x, including a
+ * running error bound as an array in the form `[r,e]` where `r` is the result
+ * of the evaluation and `e` is the error.
+ *
+ * * the error bound can also be calculated as `γ(2d) * AbsHorner(p,x)` but
+ *   the running error bound is considerably tighter (about 20x typically)
+ *
+ * * see e.g. page 95 (at bottom) of [Higham 2002](http://ftp.demec.ufpr.br/CFD/bibliografia/Higham_2002_Accuracy%20and%20Stability%20of%20Numerical%20Algorithms.pdf)
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ * @param x the value at which to evaluate the polynomial
+ *
+ * @doc
+ */
+function hornerWithRunningError(p, x) {
+    const _x = horner_with_running_error_abs(x);
+    let r̂ = p[0];
+    let e = horner_with_running_error_abs(r̂) * 0.5;
+    for (let i = 1; i < p.length; i++) {
+        r̂ = r̂ * x + p[i];
+        e = e * _x + horner_with_running_error_abs(r̂);
+    }
+    e = gamma_u * (2 * e - horner_with_running_error_abs(r̂));
+    return [r̂, e];
+}
+
+//# sourceMappingURL=horner-with-running-error.js.map
+;// ./node_modules/flo-poly/node/evaluate/double/abs-horner.js
+const abs_horner_abs = Math.abs;
+/**
+ * Returns the result of evaluating a univariate polynomial using
+ * Horner's method and where:
+ *  1. the absolute value of each coefficient is taken
+ *  2. the absolute value of `x` is taken
+ *
+ * * i.e. P(x) = ∑ᵢ₌₀ⁿ |aᵢ| |x|ⁱ
+ *
+ * * intermediate calculations are done in double precision
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ * @param x the value at which `p` should be evaluated
+ *
+ * @doc
+ */
+function AbsHorner(p, x) {
+    const _x = abs_horner_abs(x);
+    let q = 0;
+    for (let i = 0; i < p.length; i++) {
+        q = q * _x + abs_horner_abs(p[i]);
+    }
+    return q;
+}
+// inlined (with q => e2, p => p0)
+//let e2 = abs(p0[0]); for (let i=1; i<p0.length; i++) { e2 = e2*x + abs(p0[i]); }
+
+//# sourceMappingURL=abs-horner.js.map
+;// ./node_modules/flo-poly/node/evaluate/double/eval-certified.js
+
+
+
+
+
+const { abs: eval_certified_abs } = Math;
+const eval_certified_1 = gamma_(1);
+const γ2 = gamma_(2);
+/**
+ * Returns the result of evaluating the given polynomial (with specified
+ * coefficient-wise error bounds) at x such that the sign is correct when
+ * positive or negative and undecided when 0 - an additional `multiplier`
+ * parameter can enforce additional bits (beyond the sign) to be correct.
+ *
+ * * designed to be fast in 'easy' cases (say condition number < 2^53) and
+ * harder cases (condition number < 2^106) since nearly all typical
+ * calculations will have condition number < 2^106
+ * * a staggered approach is used - first double precision, then simulated
+ * double-double precision (i.e. once compensated Horner evluation) is tried
+ * before giving up and returning 0 - see point below
+ * * if zero is returned then the calculated result is too close to 0 to
+ * determine the sign; the caller of this function can then resort to a more
+ * accurate (possibly exact) evaluation
+ *
+ * @param p an array of 2 polynomials with coefficients given densely as an
+ * array of double precision floating point numbers from highest to
+ * lowest power, e.g. `[5,-3,0]` represents the polynomial `5x^2 - 3x`;
+ * the first polynomial's coefficients represent the 'high part' (a double) of a
+ * double-double precision value, while the second polynomial's coefficients
+ * represent the 'low part', i.e. designating `hp` for high part and `lp` for
+ * low part it must be that they are non-overlapping -> `twoSum(lp,hp)` will
+ * equal `[lp,hp]`; put another way, if the given polynomial is given as e.g. a
+ * linear polynomial with coefficients in double precision,
+ * e.g. `[[1.7053025658242404e-13, 2354.33721613], [-7.105427357601002e-15,284.5673337]]`
+ * then this parameter, `p`, should be `[[2354.33721613], 284.5673337], [1.7053025658242404e-13, -7.105427357601002e-15]]`
+ * which is simply the result of transposing the original polynomial if it is
+ * seen as a matrix
+ * @param pE defaults to `undefined`; an error polynomial that provides a
+ * coefficient-wise error bound on the input polynomial; all coefficients must
+ * be positive; if `undefined` then the input polynomial will be assumed exact
+ * @param x the value at which to evaluate the polynomial
+ * @param multiplier defaults to 1; the final calculation error needs to be a
+ * multiple of this number smaller than the evaluated value, otherwise zero is
+ * returned - useful if not only the sign is important but also some bits, e.g.
+ * if multiplier = 8 then 3 bits will have to be correct otherwise 0 is returned
+ *
+ * @doc
+ */
+function evalCertified(p, x, pE = undefined, multiplier = 1) {
+    const p0 = p[0];
+    // first do a fast evaluation
+    const [r, e1] = hornerWithRunningError(p0, x);
+    // inlined above line:
+    //const r = p0[0]; const e1 = Math.abs(r) / 2; for (const i=1; i<p0.length; i++) { r = r*x + p0[i]; e1 = Math.abs(x)*e1 + Math.abs(r); } e1 = Number.EPSILON * (2*e1 - Math.abs(r));
+    /** the error due to not considering p[1] */
+    const e2 = γ2 * AbsHorner(p0, x);
+    // inlined above line:
+    //const e2 = abs(p0[0]); for (const i=1; i<p0.length; i++) { e2 = e2*x + abs(p0[i]); }
+    /** error due to imprecision in coefficients */
+    // the line below was changed due to negative values of x now also allowed
+    const E = pE !== undefined ? Horner(pE, eval_certified_abs(x)) : 0;
+    //const E = p0[0]; for (const i=1; i<p0.length; i++) {E = E*x + p0[i]; }
+    const ee = e1 + e2 + E; // in difficult cases E can be larger than e1+e2
+    if (ee * multiplier < Math.abs(r)) {
+        // we are within bounds
+        return r;
+    }
+    // error is too large - do a more precise evaluation (i.e. once compensated
+    // with K === 2)
+    const EFTHorner_ = EFTHorner(p0, x);
+    const { pπ, pσ } = EFTHorner_;
+    let { r̂ } = EFTHorner_;
+    const [C1, c1] = hornerWithRunningError(pπ, x);
+    const [C2, c2] = hornerWithRunningError(pσ, x);
+    const [C3, c3] = hornerWithRunningError(p[1], x);
+    // typically: c1,c2 < c3 < E
+    let e = (c1 + c2 + c3) + E;
+    // typically: C1,C2 < C3 < r̂ and (C1 + C2 + C3 < r̂)
+    r̂ = (C1 + C2 + C3) + r̂;
+    e += eval_certified_1 * Math.abs(r̂);
+    if (e * multiplier < Math.abs(r̂)) {
+        return r̂;
+    }
+    // error is still too large to return the correct sign (if multiplier === 1)
+    return 0;
+}
+
+//# sourceMappingURL=eval-certified.js.map
+;// ./node_modules/flo-poly/node/evaluate/expansion/e-horner.js
+
+/**
+ * Returns the exact result (bar underflow / overflow) of evaluating a
+ * univariate polynomial using Horner's method - the result is returned as a
+ * Shewchuk expansion.
+ *
+ * @param p a polynomial with coefficients given densely as an array of
+ * Shewchuk expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
+ * represents the polynomial `5x^2 - 3x`
+ * @param x the value at which to evaluate the polynomial
+ *
+ * @doc
+ */
+function eHorner(p, x) {
+    let q = [0];
+    for (let i = 0; i < p.length; i++) {
+        // q = p[i] + x*q;
+        q = fastExpansionSum(p[i], scaleExpansion(q, x));
+    }
+    return q;
+}
+
+//# sourceMappingURL=e-horner.js.map
+;// ./node_modules/flo-poly/node/roots/refine-certified.js
+
+
+
+
+const { abs: refine_certified_abs, min: refine_certified_min, max: refine_certified_max, log2, ceil } = Math;
+/**
+ * Returns a refined root given a root bracketed in the interval `(a,b)` of the
+ * given polynomial using Brent's Method - modified slightly to allow for
+ * error certified bounds.
+ *
+ * * also returns (as the 3rd element of the returned array) the current Brent
+ * iterate `b` as the best point estimate within the interval
+ *
+ * * near exact implementation of the original Brent Dekker Method (also known
+ * as Brent's Method), except that it is specialized to polynomial evaluation.
+ *
+ * * Brent's Method is an excellent root-refinement choice since:
+ *  * guaranteed converge (unlike the Newton and other so-called single-point
+ *    methods),
+ *  * converges in a reasonable number of iterations even for highly contrived
+ *    functions (unlike Dekker's Method) and
+ *  * nearly always converges fast, i.e. super-linearly (unlike the Secant and
+ *    Regula-Falsi methods).
+ * * unfortunately the algorithm given on [Wikipedia](https://en.wikipedia.org/wiki/Brent%27s_method)
+ *   works but is not precisely Brent's method and runs about 2x or more slower
+ *   due to it not implementing the critically important 'micro-step' (Aug 2020).
+ *
+ * * see [Brent (page 47)](https://maths-people.anu.edu.au/~brent/pd/rpb011i.pdf)
+ * * [c++ implementation of Brent's Method](https://people.sc.fsu.edu/~jburkardt/cpp_src/brent/brent.cpp)
+ *
+ * @param p a polynomial with coefficients given densely as an array of double-double
+ * floating point numbers from highest to lowest power, e.g. `[[0,5],[0,-3],[0,0]]`
+ * represents the polynomial `5x^2 - 3x`. If `exact` is `true` then this is allowed
+ * to be `undefined`.
+ * @param p_ an error polynomial that provides a coefficientwise error bound on
+ * the input polynomial; all coefficients must be positive. If `exact` is `true`
+ * then this is allowed to be `undefined`.
+ * @param lb the lower limit of the search interval.
+ * @param ub the upper limit of the search interval.
+ * @param fa the result of evaluating the input polynomial at `a`
+ * @param fb the result of evaluating the input polynomial at `b`
+ * @param getPolyExact a function that returns the exact polynomial coefficients
+ * @param exact defaults to `false`; set to true if you need to do exact evaluations from the start
+ *
+ * @internal
+ */
+function refineCertified(p, p_, lb, ub, fa, fb, getPolyExact, exact) {
+    //---- Make local copies of a and b.
+    let a = lb;
+    let b = ub;
+    let c = a;
+    let fc = fa;
+    let e = b - a;
+    let d = e;
+    while (true) {
+        // update delta
+        if (refine_certified_abs(fc) < refine_certified_abs(fb)) {
+            a = b;
+            b = c;
+            c = a;
+            fa = fb;
+            fb = fc;
+            fc = fa;
+        }
+        // Original c++ code had the line below but with us t === 0 and b is 
+        // taken as 1 and 2.0 * macheps is taken as 2*u === Number.EPSILON (eps)
+        // or can also be taken as 4*u === 2*Number.EPSILON (2*eps)
+        // adaptive tolerance - relative to the current best iterate `b` (as in
+        // Brent's original); using `max(|a|,|b|)` would make the tolerance too
+        // loose when the previous iterate `a` is still far from the root (e.g. 
+        // after a first secant step from a wide bracket) and the returned
+        // interval could then be wider than the documented maximum width
+        let δ;
+        const mm = refine_certified_abs(b);
+        if (mm <= 1) {
+            δ = gamma_eps;
+        }
+        else {
+            // keep δ = eps * a power of 2
+            δ = gamma_eps * 2 ** ceil(log2(mm));
+        }
+        const m = 0.5 * (c - b);
+        //if (abs(m) <= δ || fb === 0) {
+        // modified from the original since we dont need the fb === 0 check here
+        if (refine_certified_abs(m) <= δ) {
+            return b < c
+                ? [b, c, b]
+                : [c, b, b];
+        }
+        if (refine_certified_abs(e) < δ || refine_certified_abs(fa) <= refine_certified_abs(fb)) {
+            e = m;
+            d = e;
+        }
+        else {
+            let s = fb / fa;
+            let v;
+            let q;
+            if (a === c) {
+                v = 2 * m * s;
+                q = 1 - s;
+            }
+            else {
+                q = fa / fc;
+                const r = fb / fc;
+                v = s * (2 * m * q * (q - r) - (b - a) * (r - 1));
+                q = (q - 1) * (r - 1) * (s - 1);
+            }
+            if (0 < v) {
+                q = -q;
+            }
+            else {
+                v = -v;
+            }
+            s = e;
+            e = d;
+            if (2 * v < 3 * m * q - refine_certified_abs(δ * q) && v < refine_certified_abs(0.5 * s * q)) {
+                d = v / q;
+            }
+            else {
+                e = m;
+                d = e;
+            }
+        }
+        a = b;
+        fa = fb;
+        if (δ < refine_certified_abs(d)) {
+            b = b + d;
+        }
+        else if (0 < m) {
+            b = b + δ;
+        }
+        else {
+            b = b - δ;
+        }
+        fb = exact
+            ? eEstimate(eHorner(getPolyExact(), b))
+            // keep TypeScript happy; neither `p` nor `pE` can be `undefined` 
+            // here by a precondition
+            : evalCertified(p, b, p_);
+        if (fb === 0) {
+            // Since `evalCertified` returns zero if undecided the zero result
+            // cannot be fully trusted at this point.
+            // if we are already doing exact evaluations this is an exact root
+            if (exact) {
+                return [b, b, b];
+            }
+            // We need to calculate δ/2 to the left and right of b to get 
+            // results that should usually be !== 0. 
+            // It is a pre-filter. If the result === 0 we need to sharpen the
+            // ability of the evaluation by somehow reducing the error bound
+            const sL = refine_certified_max(lb, b - δ); // don't overstep bounds
+            const sR = refine_certified_min(ub, b + δ); // ...
+            // Note: sR - sL <= 2*δ provided lb, ub are in [-1..1] - usually 
+            // (when sL === s - δ and sR === s + δ) sR - sL === 2*δ. Also δ > 0
+            // keep TypeScript happy; neither `p` nor `pE` can be `undefined` 
+            // here by a precondition
+            const fsL = evalCertified(p, sL, p_);
+            const fsR = evalCertified(p, sR, p_);
+            // if the evaluation method is strong enough *and* the signs
+            // differ (so that `[sL,sR]` is certified to bracket a root)
+            // return the result
+            if (fsL * fsR < 0) {
+                return [sL, sR, b];
+            }
+            // At this point either fsL or fsR === 0 (or they have the same
+            // sign and the root is not bracketed by `[sL,sR]`) so we need to
+            // sharpen the evaluation method
+            exact = true;
+            // get and cache the exact polynomial (we cache this since getting
+            // an exact polynomial takes about 15 times more time than getting
+            // a double-double polynomial and we very rarely expect to get to 
+            // this point)
+            fb = eEstimate(eHorner(getPolyExact(), b));
+            // if the exact evaluation returns 0 we have an exact root
+            if (fb === 0) {
+                return [b, b, b];
+            }
+            // else we've got a new value for fb and from here on we use exact
+            // evaluations
+        }
+        if ((0 < fb && 0 < fc) || (fb <= 0 && fc <= 0)) {
+            c = a;
+            fc = fa;
+            e = b - a;
+            d = e;
+        }
+    }
+}
+
+//# sourceMappingURL=refine-certified.js.map
+;// ./node_modules/flo-poly/node/evaluate/double/horner-with-inp-error.js
+const { abs: horner_with_inp_error_abs } = Math;
+/**
+ * Returns the value of the polynomial `p` evaluated at `x` along with an
+ * error bound on the result that has **NOT** yet been scaled by `γ1`.
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ * @param x the value at which to evaluate the polynomial
+ * @param p_ an error polynomial that provides a coefficient-wise error bound
+ * on the input polynomial **NOT** yet scaled by `γ1`
+ */
+function HornerWithInpError(p, x, p_) {
+    const _x = horner_with_inp_error_abs(x);
+    let r̂ = p[0];
+    let r̂_ = p_[0];
+    for (let i = 1; i < p.length; i++) {
+        const r̂x = r̂ * x;
+        r̂ = r̂x + p[i];
+        r̂_ = r̂_ * _x + horner_with_inp_error_abs(r̂x) + p_[i] + horner_with_inp_error_abs(r̂);
+    }
+    return [r̂, r̂_];
+}
+
+//# sourceMappingURL=horner-with-inp-error.js.map
+;// ./node_modules/flo-poly/node/roots/transpose-poly.js
+/**
+ * Transposes the given polynomial (given with multi-precision coefficients)
+ * into multiple polynomials with each consecutive polynomial 'adjusting'
+ * the prior one to higher precision.
+ *
+ * @param p
+ *
+ * @internal
+ */
+function transposePoly(p) {
+    // transpose the polynomial coefficients into multiple polynomials
+    const len = p[0].length;
+    const p_ = [];
+    for (let i = 0; i < len; i++) {
+        const _p = [];
+        for (let j = 0; j < p.length; j++) {
+            _p.push(p[j][len - (i + 1)]); // from highest to lowest
+        }
+        p_.push(_p);
+    }
+    return p_;
+}
+
+//# sourceMappingURL=transpose-poly.js.map
+;// ./node_modules/flo-poly/node/evaluate/double-double/dd-horner-with-inp-error.js
+/* unused harmony import specifier */ var dd_horner_with_inp_error_ddMultDd;
+
+const qmq = (/* unused pure expression or super */ null && (dd_horner_with_inp_error_ddMultDd));
+const qaq = ddAddDd;
+const qmd = ddMultDouble2;
+const { abs: dd_horner_with_inp_error_abs } = Math;
+/**
+ * Returns the value of the polynomial `p` evaluated at `x` along with an
+ * error bound on the result that has **NOT** yet been scaled by `γγ(3)`.
+ *
+ * @param p a polynomial with coefficients given densely as an array of
+ * double-double floating point numbers from highest to lowest power,
+ * e.g. `[[0,5],[0,-3],[0,0]]`  represents the polynomial `5x^2 - 3x`
+ * @param x the value at which to evaluate the polynomial
+ * @param p_ an error polynomial that provides a coefficient-wise error bound
+ * on the input polynomial **NOT** yet scaled by `γγ(3)`
+ */
+function ddHornerWithInpError(p, x, p_) {
+    const _x = dd_horner_with_inp_error_abs(x);
+    let r̂ = p[0];
+    let r̂_ = p_[0];
+    for (let i = 1; i < p.length; i++) {
+        const r̂x = qmd(x, r̂);
+        r̂ = qaq(r̂x, p[i]);
+        r̂_ = r̂_ * _x + dd_horner_with_inp_error_abs(r̂x[1]) + p_[i] + dd_horner_with_inp_error_abs(r̂[1]);
+    }
+    return [r̂, r̂_];
+}
+
+//# sourceMappingURL=dd-horner-with-inp-error.js.map
+;// ./node_modules/flo-poly/node/roots/descartes/isolate-roots.js
+
+
+
+
+
+
+
+
+
+const { abs: isolate_roots_abs, max: isolate_roots_max, log2: isolate_roots_log2, ceil: isolate_roots_ceil } = Math;
+const γγ3_γ1 = gamma_3 / gamma_1; // ~ 3*u
+/**
+ * Returns a list of intervals isolating the roots of the given polynomial
+ * within the given interval `[lb,ub]`.
+ *
+ * * the interval might be extended if roots fall close to its endpoints.
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`; this polynomial is derived
+ * from `pDd` as a double precision approximation
+ * @param pDd a polynomial with coefficients given densely as an array of
+ * double-double precision floating point numbers from highest to lowest power,
+ * e.g. `[[0,5],[0,-3],[0,0]]` represents the polynomial `5x^2 - 3x`
+ * @param pDd_ an array of numbers representing the absolute error bounds on the
+ * coefficients of `pDd`; the actual error bound on the coefficient of `xⁱ` is `pDd_[i]*γγ(3)`
+ * @param lb the start of the interval to search for roots
+ * @param ub the end of the interval to search for roots
+ * @param getPExact defaults to `undefined`; a function returning the exact
+ * polynomial (with coefficients given as Shewchuk expansions)
+ *
+ * @internal
+ */
+function isolateRoots(p, pDd, pDd_, lb, ub, getPExact) {
+    /**
+     * The error bound (that still needs to be multiplied by `γ(1)` of the double
+     * precision coefficients.
+     */
+    // `E*γγ3_γ1` -> the new error need to be scaled by `γ1` and not `γγ3`
+    // `abs(p[idx])` -> round-off from double-double to double precision
+    const p_ = pDd_.map((E, idx) => E * γγ3_γ1 + isolate_roots_abs(p[idx]));
+    //--------------------------------------------------------------------------
+    // Make sure endpoints don't fall too close to roots as this drastically
+    // slows down the root isolation process.
+    //--------------------------------------------------------------------------
+    const _lb_ = lb;
+    const _ub_ = ub;
+    let W = ub - lb;
+    let A;
+    let ea;
+    while (true) {
+        ([A, ea] = HornerWithInpError(p, lb, p_));
+        if (isolate_roots_abs(A) > ea * gamma_1) { // if we can certify the sign of `p(t)`
+            break;
+        }
+        lb -= W / 2;
+        W *= 2;
+        if (!Number.isFinite(lb)) {
+            // can only happen if the sign of the leading coefficient cannot
+            // be certified in double precision (fail explicitly rather than
+            // looping forever)
+            throw new Error('Unable to certify the sign of the polynomial at any finite lower bound.');
+        }
+    }
+    let B;
+    let eb;
+    while (true) {
+        ([B, eb] = HornerWithInpError(p, ub, p_));
+        if (isolate_roots_abs(B) > eb * gamma_1) { // if we can certify the sign of `p(t)`
+            break;
+        }
+        ub += W / 2;
+        W *= 2;
+        if (!Number.isFinite(ub)) {
+            throw new Error('Unable to certify the sign of the polynomial at any finite upper bound.');
+        }
+    }
+    //------------------------------------------------
+    // Initial root interval with sign-certified endpoint values and a fail count.
+    const Is = [[lb, ub, A, B, 0]];
+    const Is_ = []; // Isolated root intervals will be stored here
+    // let treeSize = 0;  // remove eventually
+    const mobiusAndNumSignChanges_ = mobiusAndNumSignChanges(p, p_, pDd, pDd_, getPExact);
+    let errBound;
+    let pDdTransposed;
+    while (Is.length > 0) {
+        // treeSize++;
+        const I = Is.pop();
+        const [a, b, A, B, failCount] = I;
+        //----------------------------------------------------------------------
+        // Descarte's rule of signs to count the number of roots in this interval
+        //----------------------------------------------------------------------
+        const varP = mobiusAndNumSignChanges_(a, b, A, B, failCount);
+        // If `varP < 0` we couldn't distinguish Mobius coefficients from `0`
+        // without going to infinite precision.
+        if (varP === 0) { // no roots in the open interval `(a,b)`
+            continue;
+        }
+        if (varP === 1) { // exactly one root in this interval
+            errBound = errBound || pDd_.map(E => E * gamma_3);
+            pDdTransposed = pDdTransposed || transposePoly(pDd);
+            const [tS, tE, t] = refineCertified(pDdTransposed, errBound, a, b, A, B, getPExact, false);
+            Is_.push({ t, tS, tE, multiplicity: 1 });
+            continue;
+        }
+        let realFailCount = varP < 0 ? failCount + 1 : 0;
+        //-----------------------------------------------------------------
+        // **possibly** more than one root in this interval
+        //-----------------------------------------------------------------
+        const W = b - a;
+        const minW = 2 * isolate_roots_abs(varP) * gamma_eps * isolate_roots_max(1, 2 ** isolate_roots_ceil(isolate_roots_log2(isolate_roots_max(isolate_roots_abs(a), isolate_roots_abs(b)))));
+        if (W <= minW) {
+            if (realFailCount === 0) {
+                // `varP` is guaranteed to be correct (except it can be larger by a multiple of 2)
+                // since the sign of `A` and `B` are both certified,
+                Is_.push({ t: (a + b) / 2, tS: a, tE: b, multiplicity: isolate_roots_abs(varP) });
+                continue; // stop recursion when intervals are too small
+            }
+            realFailCount = Infinity; // split one last time
+        }
+        const [t, T] = admissablePoint(p, p_, pDd, pDd_, a, b, getPExact);
+        // The sign of `T` is certified.
+        Is.push([a, t, A, T, realFailCount]);
+        Is.push([t, b, T, B, realFailCount]);
+    }
+    // treeSize; //?
+    Is_.reverse();
+    return Is_.filter(I => {
+        const { tS, tE } = I;
+        if (tE < _lb_ || tS > _ub_) {
+            return false;
+        }
+        return true;
+    });
+}
+function admissablePoint(p, p_, pDd, pDd_, a, b, getPExact) {
+    // We don't use multipoint evaluation here since it is too slow for low order
+    // polynomials but we need to find an "admissable" point to split the interval at.
+    // * see [Computing Real Roots of Real Polynomials](https://arxiv.org/pdf/1308.4088) by Sagraloff
+    // Algorithm: Admissible Point (note: their repeat-until loop should be repeat-while as they noted later)
+    //-----------------------------------------------------------------
+    const n = p.length - 1;
+    let c = 0; // count of points tested so far
+    let d = 1; // number of subintervals to split the interval into
+    // Corollary 16: Sagraloff & Mehlhorn 2015 (arXiv:1308.4088):
+    // The corollary starts with:
+    // Let $$L \ge L_{I,0} := \log M\!\left(\min\left(|P(a)|, |P(b)|\right)^{-1}\right) + 2(n + 1) + 1||
+    // Let L ≥ Lᵢ,₀ := log M(min(|P(a)|, |P(b)|)⁻¹) + 2(n + 1) + 1
+    // Note: We don't use the above Corollary (or Corollary 20) since we don't care if endpoints
+    // are close to zero (in fact, we prefer it) because we don't determine a bit-length precision beforehand;
+    // rather, we increase the precision each time until we can certify the coefficient signs.
+    // E.g. `t`s of points for `deg(p) === 4` for `I === [-0.5,1.5]`: [0.5, 0.25, 0.75, 0.125, 0.375]
+    while (true) {
+        d *= 2;
+        for (let j = 1; j < d; j += 2) {
+            c++;
+            const t = a + (b - a) * (d + 2 * j) / (4 * d); // sample in the middle half [a+W/4, a+3W/4]
+            const [T, e] = HornerWithInpError(p, t, p_);
+            if (isolate_roots_abs(T) > e * gamma_1) {
+                // If we can certify the sign of `p(t)` then don't waste time
+                // looking for the best point.
+                return [t, T];
+            }
+            if (c > n) {
+                // console.log('failed to find an admissable point in double precision');
+                return ddAdmissablePoint(pDd, pDd_, a, b, getPExact);
+            }
+        }
+    }
+}
+function ddAdmissablePoint(pDd, pDd_, a, b, getPExact) {
+    // E.g. `t`s of points for `deg(p) === 4` for `I === [-0.5,1.5]`: [0.5, 0.25, 0.75, 0.125, 0.375]
+    const n = pDd.length - 1;
+    let c = 0; // count of points tested so far
+    let d = 1; // number of subintervals to split the interval into
+    while (true) {
+        d *= 2;
+        for (let j = 1; j < d; j += 2) {
+            c++;
+            const t = a + (b - a) * (d + 2 * j) / (4 * d);
+            const [T, e] = ddHornerWithInpError(pDd, t, pDd_);
+            // If we can certify the sign of `p(t)` then don't waste time
+            // looking for the best point.
+            if (isolate_roots_abs(T[1]) > e * gamma_3) {
+                return [t, T[1]];
+            }
+            if (c > n) {
+                // console.log('failed to find an admissable point in double-double precision');
+                const pE = getPExact();
+                return eAdmissablePoint(pE, a, b);
+            }
+        }
+    }
+}
+function eAdmissablePoint(pE, a, b) {
+    // E.g. of points for degree(p) === 4: [0.5, 0.25, 0.75, 0.125, 0.375]
+    const n = pE.length - 1;
+    let d = 1; // number of subintervals to split the interval into
+    let c = 0; // count of points tested so far
+    while (true) {
+        d *= 2;
+        for (let j = 1; j < d; j += 2) {
+            c++;
+            const t = a + (b - a) * (d + 2 * j) / (4 * d);
+            const T = eCompress(eHorner(pE, t)); // no error
+            const $T = T[T.length - 1];
+            // If we can certify the sign of `p(t)` then don't waste time
+            // looking for the best point.
+            if ($T !== 0) { // no error
+                return [t, $T];
+            }
+            if (c > n) {
+                // It should not be possible to get to this point since we
+                // tested more points than the degree of the polynomial so
+                // at least one of the roots should have been resolved from zero.
+                // However, if underflow occurs in an expansion product we might
+                // reach this point.
+                throw new Error('Cannot resolve root even in Shewchuk expansion precision');
+            }
+        }
+    }
+}
+
+//# sourceMappingURL=isolate-roots.js.map
+;// ./node_modules/flo-poly/node/roots/descartes/roots.js
+
+
+
+
+const { abs: roots_abs, max: roots_max, log2: roots_log2, ceil: roots_ceil } = Math;
+/**
+ * Finds and returns all ordered *certified* root intervals (bar underflow /
+ * overflow) of the given polynomial (with coefficients given in double or
+ * double-double precision, including their multiplicities (see points below).
+ *
+ * * The input polynomial can be given in double precision by wrapping each
+ *   coefficient in an array, i.e. `polynomial.map(c => [0,c])` with the 'low double'
+ *   set to zero.
+ *
+ * * returns `undefined` for the zero polynomial
+ *
+ * * Let `W = 2 * m * Number.EPSILON * max(1, 2^⌈log₂r⌉)`, where `r` is a root
+ *   and `m` is the number of roots (the 'multiplicity') within the
+ *   interval, where multiplicity here includes roots seperated by less than
+ *   `W` and not necessarily only exact multiple roots
+ *
+ * * The returned intervals are of max width `W`; use [[refineK1]] to
+ *   reduce the root interval widths further and thus 'resolving' the roots if
+ *   required (although the roots are already *guaranteed* extremely accurate!).
+ *
+ * * The retuned root intervals will contain *all* roots.
+ *
+ * * The 'multiplicity' can be higher than the actual multiplicity of a root by
+ *   an integer multiple of 2 iff there are multiple roots in the interval
+ *   (else if a multiplicity of 0 or 1 is reported the result is exact).
+ *   [[refineK1]] can be used to resolve them further if required; note however
+ *   that root seperation is a function of polynomial height and can be very small
+ *   (see e.g. [Improving Root Separation Bounds, *Aaron Herman, Hoon Hong, Elias Tsigaridas*](https://hal.inria.fr/hal-01456686/document)
+ *
+ * * optimized for polynomials of degree 1 to about 30 (else over/underflow becomes an issue)
+ *
+ * * **precondition:** the coefficient magnitudes and degree of the polynomial
+ *   must be such that overflow/underflow won't occur at evaluation points where roots
+ *   are searched for, e.g. a 20th degree polynomial with coefficients of
+ *   magnitude around `Number.MAX_SAFE_INTEGER (= 9007199254740991)` evaluated at
+ *   `x = 1000000` will evaluate to about `10^136` (10 the the power of 136) which
+ *   is way too small for overflow to occur, however when evaluated at `x = 10^15`
+ *   overflow will occur; to prevent this possibility limit the bounds `lb` and `ub`
+ *   where roots are to be searched for to the range of interest, i.e. don't set
+ *   them to `Infinity` for automatic calculation.
+ *
+ * @param pDd a polynomial with coefficients given densely as an array of
+ * double-double precision floating point numbers (if only double precision
+ * coefficients are required then wrap each coefficient in an array, i.e.
+ * `p.map(c => [0,c])` with the 'low double' set to zero);
+ *
+ * the coefficients are given from highest to lowest power,
+ * e.g. `[[0,5],[0,-3],[0,0]]` represents the polynomial `5x^2 - 3x`;
+ *
+ * @param lb defaults to `-Infinity`; limiting the bound increases performance
+ * @param ub defaults to `+Infinity`; limiting the bound increases performance
+ * `Infinity` may be given if there is no upper bound
+ *
+ * @param pDd_ defaults to `undefined`; if `undefined` then the input polynomial
+ * will be assumed exact; an error polynomial that provides a
+ * coefficientwise error bound on the input polynomial with the actual error bound
+ * being `Eᵢ * γγ(3)` for the coefficient of `xⁱ`;
+ * Note: `γγ(3)` is almost identical to `3*(Number.EPSILON / 2)**2`;
+ * all coefficients must be positive;
+ *
+ * @param getPExact defaults to `undefined`; a function returning the exact
+ * polynomial (with coefficients given as Shewchuk expansions (see the example
+ * below)) - `getPExact` will *only* be called if required (and can thus be
+ * lazy loaded) when the error bounds are too high during calculation
+ * preventing certification of the root intervals; if `undefined` then the
+ * input polynomial will be assumed exact
+ *
+ * @param tryReduceInterval defaults to `false`; if `true` (or if `|lb|` or
+ * `|ub|` is larger than `2^20`, e.g. when they are infinite) then the interval
+ * `[lb,ub]` will be reduced to a smaller interval containing all roots (if
+ * possible) before starting the algorithm.
+ * Since `reduceInterval` is a relatively long running algorithm it is generally
+ * faster to set this to `false` and directly specify the interval of interest.
+ *
+ *
+ * @example
+ * ```typescript
+ *
+ * // -------------------------------------------------------------
+ * // 1. a basic example of an order 11 polynomial (with 10 roots)
+ * // -------------------------------------------------------------
+ * const p = [
+ *     3.033321234234234,
+ *     31.78342995971597,
+ *     -115.09145437671532,
+ *     -48.18962838294827,
+ *     241.04136127393173,
+ *     -26.63962334942254,
+ *     -81.82713958224285,
+ *     13.96128683321424,
+ *     7.3963444329341455,
+ *     -1.50733058206533,
+ *     -0.0015147128834111722
+ * ];
+ * //console.log(toCasStr(p))
+ * // => 3.033321234234234*x^10 + 31.78342995971597*x^9 - 115.09145437671532*x^8 -
+ * //    48.18962838294827*x^7 + 241.04136127393173*x^6 - 26.63962334942254*x^5 -
+ * //    81.82713958224285*x^4 + 13.96128683321424*x^3 + 7.3963444329341455*x^2 -
+ * //    1.50733058206533*x - 0.0015147128834111722
+ * // function to convert a double precision number to double-double precision
+ * // (note that the 'low double' is zero since the coefficients are assumed exact)
+ * const toDoubleDouble = (c: number) => [0,c];
+ * const rs = roots(
+ *     p.map(toDoubleDouble),
+ *     -Infinity,
+ *     Infinity
+ * );
+ * //console.log(rs);
+ * // => [
+ * //   { tS: -13.222221, tE: -13.222220999999996, multiplicity: 1 },
+ * //   { tS: -1.3498348570000003, tE: -1.3498348569999998, multiplicity: 1 },
+ * //   { tS: -0.4444777699999987, tE: -0.4444777699999985, multiplicity: 1 },
+ * //   { tS: -0.43554300000000135, tE: -0.4355430000000011, multiplicity: 1 },
+ * //   { tS: -0.001000000000000222, tE: -0.001, multiplicity: 1 },
+ * //   { tS: 0.22999999999999984, tE: 0.23000000000000007, multiplicity: 1 },
+ * //   { tS: 0.345347, tE: 0.34534700000000024, multiplicity: 1 },
+ * //   { tS: 0.5429999999999989, tE: 0.5429999999999993, multiplicity: 1 },
+ * //   { tS: 1.3221000000000016, tE: 1.322100000000002, multiplicity: 1 },
+ * //   { tS: 2.534533999999997, tE: 2.534533999999998, multiplicity: 1 }
+ * // ]
+ * //
+ *
+ *
+ * // -----------------------------------------------------------------------
+ * // 2. the Wilkinson polynomial of degree 50 (a hard(ish) case) --
+ * // see: https://en.wikipedia.org/wiki/Wilkinson%27s_polynomial
+ * // -----------------------------------------------------------------------
+ * const _roots = [...Array(50+1).keys()].slice(1).map(c => [c]);  // => [1,2,3,...,50]
+ * const { pDd, pDd_, pE } = eFromRoots(_roots);
+ * const getPExact = () => pE;
+ * // => polynomial of degree 50 with double-double precision coefficients
+ * //    including coefficient-wise error bound polynomial and a function to
+ * //    return the exact polynomial with Shewchuk expansion coefficients
+ * //console.log(toCasStr(getPExact()));
+ * // => x^50 - 1275*x^49 + 791350*x^48 - 318622500*x^47 + 93570498490*x^46 -
+ * //    21366198225750*x^45 + 3949131291964600*x^44 - ...
+ * const rs = roots(pDd,0,51,pDd_,getPExact);
+ * console.log(rs);  // => [
+ * //    { tS: 1, tE: 1, multiplicity: 1 },
+ * //    { tS: 2, tE: 2, multiplicity: 1 },
+ * //    .
+ * //    .
+ * //    .
+ * //    { tS: 50, tE: 50, multiplicity: 1 }
+ * // ]
+ * //
+ * // ...thus roots are returned accurately.
+ * ```
+ *
+ * @doc
+ */
+function roots(pDd, lb = -Infinity, ub = +Infinity, pDd_, getPExact, tryReduceInterval = false) {
+    if (typeof pDd[0] === 'number') {
+        pDd = pDd.map(c => [0, c]);
+    }
+    // We cache `pExact`
+    let pExact = undefined;
+    const getPExact_ = () => {
+        // If `getPExact` is not specified then assume the given double-double 
+        // precision coefficient polynomial is exact.
+        if (getPExact === undefined) {
+            return pDd;
+        }
+        // If `getPExact` is specified then use it and cache the result.
+        if (pExact === undefined) {
+            pExact = getPExact();
+        }
+        return pExact;
+    };
+    // if `pDd_` is not specified then assume there is no error
+    pDd_ = pDd_ || new Array(pDd.length).fill(0); // no error
+    //----------------------------------------------------------------------
+    // Remove leading zero coefficients 
+    //----------------------------------------------------------------------
+    ({ pDd, pDd_, pExact } = removeLeadingZeroCoeffs(pDd, pDd_, getPExact_, gamma_3));
+    if (pDd.length === 0) {
+        return undefined; // return `undefined` for the zero polynomial (of degree -1)
+    }
+    else if (pDd.length === 1) {
+        return []; // return `[]` for a (a non-zero) degree 0 polynomial
+    }
+    // Approximate `p` from `pDd`
+    const p = pDd.map(c => c[0] + c[1]);
+    if (tryReduceInterval ||
+        roots_abs(lb) > 2 ** 20 || roots_abs(ub) > 2 ** 20) {
+        [lb, ub] = reduceInterval(lb, ub, p, pDd_, gamma_3);
+    }
+    if (lb === ub) { // edge case
+        const halfWidth = 2 * gamma_eps * roots_max(1, 2 ** roots_ceil(roots_log2(roots_max(roots_abs(lb), roots_abs(ub)))));
+        lb -= halfWidth;
+        ub += halfWidth;
+    }
+    return isolateRoots(p, pDd, pDd_, lb, ub, getPExact_);
+}
+
+// Quokka tests (keep)
+// import { toCasStr } from "../../basic/to-cas-str.js";
+// import { eFromRoots } from "../from-roots/expansion/e-from-roots.js";
+// // -------------------------------------------------------------
+// // 1. a basic example of an order 11 polynomial (with 10 roots)
+// // -------------------------------------------------------------
+// {
+//     const p = [
+//         3.033321234234234,
+//         31.78342995971597,
+//         -115.09145437671532,
+//         -48.18962838294827,
+//         241.04136127393173,
+//         -26.63962334942254,
+//         -81.82713958224285,
+//         13.96128683321424,
+//         7.3963444329341455,
+//         -1.50733058206533,
+//         -0.0015147128834111722
+//     ];
+//     // console.log(toCasStr(p));
+//     const toDd = (c: number) => [0,c];
+//     const rs = roots(p.map(toDd), -Infinity, Infinity);
+//     console.log(rs);  //?
+//     // => [
+//     //   { tS: -13.222221, tE: -13.222220999999996, multiplicity: 1 },
+//     //   { tS: -1.3498348570000003, tE: -1.3498348569999998, multiplicity: 1 },
+//     //   { tS: -0.4444777699999987, tE: -0.4444777699999985, multiplicity: 1 },
+//     //   { tS: -0.43554300000000135, tE: -0.4355430000000011, multiplicity: 1 },
+//     //   { tS: -0.001000000000000222, tE: -0.001, multiplicity: 1 },
+//     //   { tS: 0.22999999999999984, tE: 0.23000000000000007, multiplicity: 1 },
+//     //   { tS: 0.345347, tE: 0.34534700000000024, multiplicity: 1 },
+//     //   { tS: 0.5429999999999989, tE: 0.5429999999999993, multiplicity: 1 },
+//     //   { tS: 1.3221000000000016, tE: 1.322100000000002, multiplicity: 1 },
+//     //   { tS: 2.534533999999997, tE: 2.534533999999998, multiplicity: 1 }
+//     // ]
+//     //
+// }
+// // -----------------------------------------------------------------------
+// // 2. the Wilkinson polynomial of degree 50 (a hard(ish) case) --
+// // see: https://en.wikipedia.org/wiki/Wilkinson%27s_polynomial
+// // -----------------------------------------------------------------------
+// {
+//     const _roots = [...Array(85+1).keys()].slice(1).map(c => [c]);
+//     const { pDd, pDd_, pE } = eFromRoots(_roots);
+//     const getPExact = () => pE;
+//     const rs = roots(pDd,0,71,pDd_,getPExact)!;
+//     console.log(rs.slice(rs?.length - 3, rs?.length));//?
+//     // => [
+//     //    { tS: 1, tE: 1, multiplicity: 1 },
+//     //    { tS: 2, tE: 2, multiplicity: 1 },
+//     //    .
+//     //    .
+//     //    .
+//     //    { tS: 70, tE: 70, multiplicity: 1 }
+//     // ]
+// }
+//# sourceMappingURL=roots.js.map
 ;// ./node/global-properties/length/speed-stationary-points.js
 
 
@@ -3619,7 +5085,8 @@ function getSpeedStationaryPoints(ps, tS, tE) {
     if (qd.length <= 1) {
         return [];
     } // constant - no stationary points
-    return allRoots(qd, tS, tE)
+    return (roots(qd, tS, tE) ?? [])
+        .map(r => r.t)
         .filter(t => t > tS && t < tE)
         .sort((a, b) => a - b);
 }
@@ -5550,2058 +7017,6 @@ function getPFromBox(box) {
 }
 
 //# sourceMappingURL=x.js.map
-;// ./node_modules/flo-poly/node/roots/root-bounds/positive-to-negative-bound-with-err.js
-
-/**
- * Returns a function that returns a negative root bound given a function that
- * returns a positive root bound.
- *
- * @param positiveBoundFunction
- *
- * @internal
- */
-function positiveToNegativeBound_WithError(positiveBoundFunction) {
-    return (p, p_) => {
-        return -positiveBoundFunction(reflectAboutYAxis(p), p_);
-    };
-}
-
-//# sourceMappingURL=positive-to-negative-bound-with-err.js.map
-;// ./node_modules/flo-poly/node/roots/root-bounds/lmq/to-poly-for-positive-root-upper-bound-lmq.js
-const { abs: to_poly_for_positive_root_upper_bound_lmq_abs } = Math;
-/**
- * Returns a new polynomial, `q`, with coefficients `p[i] - |p_[i]|`, i.e. the
- * smallest possible value of each coefficient given the coefficient-wise
- * absolute error bounds, for use with `positiveRootUpperBound_LMQ`.
- *
- * * for `x > 0` every polynomial `p̃` in the family `|p̃[i] - p[i]| <= |p_[i]|`
- *   satisfies `p̃(x) >= q(x)`; thus if `q(x) > 0` for all `x > U` then so is
- *   `p̃(x)`, i.e. `U` is an upper bound on the positive roots of every `p̃`
- *
- * @param p polynomial coefficients from highest to lowest power
- * @param p_ coefficient-wise absolute error bounds; must have same length as `p`
- *
- * @doc
- */
-function toPolyForPositiveRootUpperBound_LMQ(p, p_) {
-    if (p.length !== p_.length) {
-        throw new Error('`p` and `p_` must be of equal length.');
-    }
-    const q = new Array(p.length);
-    for (let i = 0; i < p.length; i++) {
-        q[i] = p[i] - to_poly_for_positive_root_upper_bound_lmq_abs(p_[i]);
-    }
-    return q;
-}
-
-//# sourceMappingURL=to-poly-for-positive-root-upper-bound-lmq.js.map
-;// ./node_modules/flo-poly/node/roots/root-bounds/lmq/positive-root-upper-bound-lmq-with-err.js
-
-
-
-const { abs: positive_root_upper_bound_lmq_with_err_abs } = Math;
-/**
- * Returns an upper bound for the positive real roots of *every* polynomial in
- * the family described by the given polynomial and its coefficient-wise
- * absolute error bounds using the LMQ bound.
- *
- * * for `x > 0` every polynomial `p̃` in the family satisfies `p̃(x) >= q(x)`
- *   where `q` has coefficients `p[i] - |p_[i]|` (see
- *   [[toPolyForPositiveRootUpperBound_LMQ]]); thus an upper bound on the
- *   positive roots of `q` (above which `q > 0`) is also an upper bound on the
- *   positive roots of every polynomial in the family
- *
- * * the sign of the leading coefficient must be certain: if it is certainly
- *   negative the family is negated first and if its sign is uncertain no finite
- *   bound exists and `Infinity` is returned
- *
- * * leading coefficients that are exactly zero *with* zero error are ignored
- *
- * @param p polynomial coefficients from highest to lowest power
- * @param p_ coefficient-wise absolute error bounds
- *
- * @doc
- */
-function positiveRootUpperBound_LMQ_WithError(p, p_) {
-    if (p.length !== p_.length) {
-        throw new Error('`p` and `p_` must be of equal length.');
-    }
-    // ignore exact leading zeros
-    let i = 0;
-    while (i < p.length && p[i] === 0 && p_[i] === 0) {
-        i++;
-    }
-    if (i > 0) {
-        p = p.slice(i);
-        p_ = p_.slice(i);
-    }
-    if (p.length <= 1) {
-        return 0; // a constant (or the zero polynomial)
-    }
-    const e0 = positive_root_upper_bound_lmq_with_err_abs(p_[0]);
-    if (p[0] - e0 > 0) {
-        // the leading coefficient is certainly positive
-    }
-    else if (p[0] + e0 < 0) {
-        // the leading coefficient is certainly negative - negate the entire
-        // family (the absolute error bounds are unaffected)
-        p = negate(p);
-    }
-    else {
-        // the sign of the leading coefficient is uncertain
-        return Infinity;
-    }
-    // `q` now has a positive leading coefficient
-    return positiveRootUpperBound_LMQ(toPolyForPositiveRootUpperBound_LMQ(p, p_));
-}
-
-//# sourceMappingURL=positive-root-upper-bound-lmq-with-err.js.map
-;// ./node_modules/flo-poly/node/roots/root-bounds/lmq/negative-root-lower-bound-lmq-with-err.js
-
-
-/**
- * Returns a negative lower (further from zero) bound of the real roots of the
- * given polynomial.
- *
- * See algoritm 6 of the paper by Vigklas, Akritas and Strzeboński,
- * specifically the LocalMaxQuadratic algorithm hence LMQ.
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- *
- * @doc
- */
-const negativeRootLowerBound_LMQ_WithError = positiveToNegativeBound_WithError(positiveRootUpperBound_LMQ_WithError);
-
-//# sourceMappingURL=negative-root-lower-bound-lmq-with-err.js.map
-;// ./node_modules/flo-poly/node/error-analysis/gamma.js
-/** `2 * 2^-53` -> 2x the standard round-of unit `=== Number.EPSILON` */
-const gamma_eps = Number.EPSILON;
-/** `2^-53` -> the standard round-of unit `=== eps/2` */
-const gamma_u = gamma_eps / 2;
-/** `2^-106` -> the standard round-of unit for double-double precision `=== (eps/2)**2` */
-const gamma_uu = gamma_u * gamma_u;
-/**
- * the standard floating point error function evaluated at `1`
- *
- * * `=== 1.1102230246251568e-16`
- * * very close to being `=== Number.EPSILON / 2`
- */
-const gamma_1 = gamma_(1);
-/**
- * the standard double-double floating point error function evaluated at `3`;
- * the `3` factor is due to double-double arithmetic accuracy constraints
- *
- * * `=== 3.697785493223493e-32`
- * * very close to being `=== 3*(Number.EPSILON / 2)**2`
- */
-const gamma_3 = error_analysis_gamma_(3);
-/**
- * The canonical floating point error function, γ.
- *
- * * very close to being `=== n * (Number.EPSILON / 2)`
- * * see e.g. [Algorithms for Accurate, Validated and Fast Polynomial Evaluation](https://hal.archives-ouvertes.fr/hal-00285603/document)
- * @param n the parameter - typically a small positive integer, e.g. for
- * polynomial evaluation this `=== 2*d + 1`, where `d` is the degree of the
- * polynomial
- *
- * @doc
- */
-function gamma_(n) {
-    const nu = n * gamma_u;
-    return nu / (1 - nu);
-}
-/**
- * The canonical, once compensated (implying double-double precision),
- * floating point error function.
- *
- * * very close to being `=== n * (Number.EPSILON / 2)**2`
- * * see e.g. [Algorithms for Accurate, Validated and Fast Polynomial Evaluation](https://hal.archives-ouvertes.fr/hal-00285603/document)
- * @param n the parameter - typically a small positive integer, e.g. for
- * polynomial evaluation this === 2*d + 1, where d is the degree of the
- * polynomial
- *
- * @doc
- */
-function error_analysis_gamma_(n) {
-    const nuu = n * gamma_uu;
-    return nuu / (1 - nuu);
-}
-// cache some standard error bound units
-const _γs = new Array(20).fill(0).map((_, i) => gamma_(i));
-/** @internal */
-function γs(n) {
-    return _γs[n] || gamma_(n);
-}
-
-//# sourceMappingURL=gamma.js.map
-;// ./node_modules/flo-poly/node/roots/reduce-interval.js
-
-
-
-
-const { min: reduce_interval_min, max: reduce_interval_max, abs: reduce_interval_abs } = Math;
-const MAX_DOUBLE = 1.7976931348623157e+308;
-/**
- * Returns the result of reducing the given interval [lb,ub] to a potentially
- * smaller interval that still contains all the roots of the given polynomial.
- *
- * * the interval is reduced only if the current interval is infinite in either
- *   direction
- *
- * * the absolute coefficient-wise error bound used for the root bounds is
- *   `pDd_[i]*errorMultiplier + |p[i]|*γ1`, i.e. the given error bound (of the
- *   double-double precision polynomial) *plus* the round-off incurred when
- *   the double-double precision coefficients were rounded to the double
- *   precision coefficients `p` (which is at most half an ulp, i.e. `u|p[i]|`
- *   with `u <= γ1`); without the latter the family of polynomials for which
- *   the root bounds are calculated would not provably contain the exact
- *   polynomial
- *
- * @param lb
- * @param ub
- * @param p the polynomial with coefficients given as double precision
- * floating point numbers rounded from the double-double precision coefficients
- * @param pDd_ the coefficient-wise error bound of the double-double precision
- * polynomial that still needs to be multiplied by `errorMultiplier` to get
- * the actual absolute error bound
- * @param errorMultiplier the multiplier of `pDd_` to get the actual absolute
- * error bound, e.g. `γγ3` or `1`
- *
- * @internal
- */
-function reduceInterval(lb, ub, p, pDd_, errorMultiplier) {
-    const p_ = pDd_.map((E, i) => E * errorMultiplier + reduce_interval_abs(p[i]) * gamma_1);
-    lb = reduce_interval_max(lb, negativeRootLowerBound_LMQ_WithError(p, p_));
-    ub = reduce_interval_min(ub, positiveRootUpperBound_LMQ_WithError(p, p_));
-    const d = p.length - 1;
-    const F = 2 ** (-2 * d);
-    if (!Number.isFinite(lb)) {
-        lb = -F * MAX_DOUBLE;
-    }
-    if (!Number.isFinite(ub)) {
-        ub = F * MAX_DOUBLE;
-    }
-    while (true) {
-        const lb_ = reduce_interval_abs(Horner(p, lb));
-        const ub_ = reduce_interval_abs(Horner(p, ub));
-        if (lb_ > F * MAX_DOUBLE) {
-            lb /= 2;
-            continue;
-        }
-        if (ub_ > F * MAX_DOUBLE) {
-            ub /= 2;
-            continue;
-        }
-        break;
-    }
-    return [lb, ub];
-}
-
-//# sourceMappingURL=reduce-interval.js.map
-;// ./node_modules/flo-poly/node/roots/remove-leading-zero-coeffs.js
-
-const { abs: remove_leading_zero_coeffs_abs } = Math;
-/**
- * Removes leading zero coefficients (that are not certifiably non-zero).
- *
- * * the given arrays are **not** modified - new arrays are returned if
- *   anything changed (if the leading coefficient is certifiably non-zero the
- *   given arrays are returned as is)
- *
- * * if the leading coefficient is not certifiably non-zero the exact
- *   polynomial is consulted; the returned `pDd` is then the exact polynomial
- *   rounded to double-double precision and `pDd_` the corresponding error bound
- *
- * * `p` and `getPExact()` *must* be of same length
- *
- * @internal
-*/
-function removeLeadingZeroCoeffs(pDd, pDd_, getPExact, errorMultiplier) {
-    // if leading coefficient is guaranteed > zero
-    if (pDd.length === 0 || remove_leading_zero_coeffs_abs(pDd[0][1]) > errorMultiplier * pDd_[0]) {
-        return { pDd, pDd_, pExact: undefined };
-    }
-    let pExact = getPExact(); // lazy loaded
-    // Create new `pDd` and `pDd_` from the exact polynomial's coefficients
-    // (without modifying the given arrays)
-    const n = pExact.length;
-    let pDdNew = new Array(n);
-    let pDd_New = new Array(n);
-    for (let i = 0; i < n; i++) {
-        const cExact = pExact[i];
-        const hi = cExact[cExact.length - 1] ?? 0;
-        const lo = cExact[cExact.length - 2] ?? 0;
-        pDdNew[i] = [lo, hi];
-        pDd_New[i] = remove_leading_zero_coeffs_abs(hi) * (gamma_3 / errorMultiplier);
-    }
-    let i = 0;
-    while (i < n && pDdNew[i][1] === 0) {
-        i++;
-    }
-    pDdNew = pDdNew.slice(i);
-    pDd_New = pDd_New.slice(i);
-    pExact = pExact.slice(i);
-    return { pDd: pDdNew, pDd_: pDd_New, pExact };
-}
-
-//# sourceMappingURL=remove-leading-zero-coeffs.js.map
-;// ./node_modules/flo-poly/node/change-variables/double/taylor-shift-with-inp-err.js
-const { abs: taylor_shift_with_inp_err_abs } = Math;
-/**
- * Returns the Taylor shift `p(x + h)` of the given polynomial computed in
- * `O(n^2)` via repeated synthetic division by `(x - h)` (Horner's scheme)
- * including a **running** error bound based on the input error bounds.
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param h the shift amount
- * @param p_ an error polynomial that represents a coefficient-wise error bound
- * that has **not** been scaled by `γ1` yet
- *
- * @doc
- */
-function taylorShiftWithInpErr(p, h, p_) {
-    const n = p.length - 1;
-    // The successive remainders are the Taylor coefficients of `p` about `h`,
-    // i.e. the coefficients of `p(x + h)`.
-    const _h = taylor_shift_with_inp_err_abs(h);
-    const q = p.slice();
-    const q_ = p_.slice();
-    for (let k = 0; k <= n; k++) {
-        for (let i = 1; i <= n - k; i++) {
-            const qi1 = q[i - 1];
-            const qi1_ = q_[i - 1];
-            const hq = h * qi1;
-            const hq_ = _h * qi1_ + taylor_shift_with_inp_err_abs(hq);
-            q[i] = q[i] + hq;
-            q_[i] = q_[i] + hq_ + taylor_shift_with_inp_err_abs(q[i]);
-        }
-    }
-    return [q, q_];
-}
-/**
- * ❗**MODIFIES**❗ the given polynomial and its input-error bound to compute
- * `p(x + 1)` together with a running error bound.
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param p_ an error polynomial that represents a coefficient-wise error bound
- * that has **not** been scaled by `γ1` yet
- *
- * @doc
- */
-function inplaceTaylorShiftBy1WithInpErr(p, p_) {
-    const n = p.length - 1;
-    // The successive remainders are the Taylor coefficients of `p` about `h`,
-    // i.e. the coefficients of `p(x + 1)`.
-    for (let k = 0; k <= n; k++) {
-        for (let i = 1; i <= n - k; i++) {
-            const qi1 = p[i - 1];
-            const qi1_ = p_[i - 1];
-            // (the multiplication by `h === 1` is exact so the error of the
-            // product is just the error of `qi1`)
-            const hq_ = qi1_;
-            p[i] = p[i] + qi1;
-            p_[i] = p_[i] + hq_ + taylor_shift_with_inp_err_abs(p[i]);
-        }
-    }
-}
-
-//# sourceMappingURL=taylor-shift-with-inp-err.js.map
-;// ./node_modules/flo-poly/node/change-variables/double/scale-with-inp-err.js
-const { abs: scale_with_inp_err_abs } = Math;
-/**
- * Returns the polynomial `p(s·x)`, i.e. the coefficient of `xⁱ` scaled by `sⁱ`
- * in double precision including an error bound that has **not** been scaled
- * by `γ1` yet.
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param s a scaling factor, i.e. the `s` in `p(x) <- p(sx)`
- * @param p_ an error polynomial that represents a coefficient-wise error bound
- * that has **not** been scaled by `γ1` yet
- *
- * @example
- * ```typescript
- * scaleWithInpErr([1,2,7], 3, [0,0,0]); //=> [[9, 6, 7], [18, 6, 0]]
- * ```
- *
- * @doc
- */
-function scaleWithInpErr(p, s, p_) {
-    const r = p.slice();
-    const r_ = p_.slice();
-    inplaceScaleWithInpErr(r, s, r_);
-    return [r, r_];
-}
-/**
- * ❗**MODIFIES**❗ the given polynomial and its input-error bound to compute
- * `p(s·x)` together with a running error bound.
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param s a scaling factor
- * @param p_ an error polynomial that represents a coefficient-wise error bound
- * that has **not** been scaled by `γ1` yet
- *
- * @doc
- */
-function inplaceScaleWithInpErr(p, s, p_) {
-    const n = p.length - 1;
-    if (n < 0) {
-        return;
-    }
-    const _s = scale_with_inp_err_abs(s);
-    let sPow = s;
-    let sPow_ = 0; // no error
-    for (let i = 1; i <= n; i++) {
-        const j = n - i;
-        const pn_i = p[j];
-        const _pn_i = scale_with_inp_err_abs(pn_i);
-        const pn_i_ = p_[j];
-        const scaledPn_i = pn_i * sPow;
-        p[j] = scaledPn_i;
-        // input error * |sⁱ| + |p| * err(sⁱ) + round-off of the product
-        p_[j] = pn_i_ * scale_with_inp_err_abs(sPow) + _pn_i * sPow_ + scale_with_inp_err_abs(scaledPn_i);
-        const nextSPow = sPow * s;
-        sPow_ = sPow_ * _s + scale_with_inp_err_abs(nextSPow);
-        sPow = nextSPow;
-    }
-}
-
-//# sourceMappingURL=scale-with-inp-err.js.map
-;// ./node_modules/flo-poly/node_modules/double-double/node/double-mixed-double-double/dd-mult-double.js
-/** @internal */
-const dd_mult_double_f = 134217729; // 2**27 + 1;
-/**
- * Returns the product of a double-double-precision floating point number and a
- * double.
- *
- * * slower than ALGORITHM 8 (one call to fastTwoSum more) but about 2x more
- * accurate
- * * relative error bound: 1.5u^2 + 4u^3, i.e. fl(a+b) = (a+b)(1+ϵ),
- * where ϵ <= 1.5u^2 + 4u^3, u = 0.5 * Number.EPSILON
- * * the bound is very sharp
- * * probably prefer `ddMultDouble2` due to extra speed
- *
- * * ALGORITHM 7 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
- * @param y a double
- * @param x a double-double precision floating point number
- */
-function ddMultDouble1(y, x) {
-    const xl = x[0];
-    const xh = x[1];
-    //const [cl1,ch] = twoProduct(xh,y);
-    const ch = xh * y;
-    const c = dd_mult_double_f * xh;
-    const ah = c - (c - xh);
-    const al = xh - ah;
-    const d = dd_mult_double_f * y;
-    const bh = d - (d - y);
-    const bl = y - bh;
-    const cl1 = (al * bl) - ((ch - (ah * bh)) - (al * bh) - (ah * bl));
-    const cl2 = xl * y;
-    //const [tl1,th] = fastTwoSum(ch,cl2);
-    const th = ch + cl2;
-    const tl1 = cl2 - (th - ch);
-    const tl2 = tl1 + cl1;
-    //const [zl,zh] = fastTwoSum(th,tl2);
-    const zh = th + tl2;
-    const zl = tl2 - (zh - th);
-    return [zl, zh];
-}
-/**
- * Returns the product of a double-double-precision floating point number and a double.
- *
- * * faster than ALGORITHM 7 (one call to fastTwoSum less) but about 2x less
- * accurate
- * * relative error bound: 3u^2, i.e. fl(a*b) = (a*b)(1+ϵ),
- * where ϵ <= 3u^2, u = 0.5 * Number.EPSILON
- * * the bound is sharp
- * * probably prefer this algorithm due to extra speed
- *
- * * ALGORITHM 8 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
- * @param y a double
- * @param x a double-double precision floating point number
- */
-function ddMultDouble2(y, x) {
-    const xl = x[0];
-    const xh = x[1];
-    //const [cl1,ch] = twoProduct(xh,y);
-    const ch = xh * y;
-    const c = dd_mult_double_f * xh;
-    const ah = c - (c - xh);
-    const al = xh - ah;
-    const d = dd_mult_double_f * y;
-    const bh = d - (d - y);
-    const bl = y - bh;
-    const cl1 = (al * bl) - ((ch - (ah * bh)) - (al * bh) - (ah * bl));
-    const cl2 = xl * y;
-    const cl3 = cl1 + cl2;
-    //return fastTwoSum(ch,cl3);
-    const xx = ch + cl3;
-    return [cl3 - (xx - ch), xx];
-}
-
-//# sourceMappingURL=dd-mult-double.js.map
-;// ./node_modules/flo-poly/node_modules/double-double/node/double-double/binary/dd-add-dd.js
-/**
- * Returns the result of adding two double-double-precision floating point
- * numbers.
- *
- * * relative error bound: 3u^2 + 13u^3, i.e. fl(a+b) = (a+b)(1+ϵ),
- * where ϵ <= 3u^2 + 13u^3, u = 0.5 * Number.EPSILON
- * * the error bound is not sharp - the worst case that could be found by the
- * authors were 2.25u^2
- *
- * ALGORITHM 6 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
- * @param x a double-double precision floating point number
- * @param y another double-double precision floating point number
- */
-function dd_add_dd_ddAddDd(x, y) {
-    const xl = x[0];
-    const xh = x[1];
-    const yl = y[0];
-    const yh = y[1];
-    //const [sl,sh] = twoSum(xh,yh);
-    const sh = xh + yh;
-    const _1 = sh - xh;
-    const sl = (xh - (sh - _1)) + (yh - _1);
-    //const [tl,th] = twoSum(xl,yl);
-    const th = xl + yl;
-    const _2 = th - xl;
-    const tl = (xl - (th - _2)) + (yl - _2);
-    const c = sl + th;
-    //const [vl,vh] = fastTwoSum(sh,c)
-    const vh = sh + c;
-    const vl = c - (vh - sh);
-    const w = tl + vl;
-    //const [zl,zh] = fastTwoSum(vh,w)
-    const zh = vh + w;
-    const zl = w - (zh - vh);
-    return [zl, zh];
-}
-
-//# sourceMappingURL=dd-add-dd.js.map
-;// ./node_modules/flo-poly/node/change-variables/double-double/dd-taylor-shift-with-inp-err.js
-
-const { abs: dd_taylor_shift_with_inp_err_abs } = Math;
-/**
- * Returns the Taylor shift `f(x + h)` of the given polynomial computed in
- * `O(n^2)` via repeated synthetic division by `(x - h)` (Horner's scheme)
- * including a **running** error bound based on the input error bounds that
- * has **not** been scaled by `γγ(3)` yet.
- *
- * * intermediate calculations are performed in double-double precision floating
- *   point arithmetic and the result is returned in double-double precision
- *
- * @param p a polynomial with coefficients given densely as an array of double-double
- * precision floating point numbers from highest to lowest power, e.g. `[[0,5],[0,-3],[0,0]]`
- * represents the polynomial `5x^2 - 3x`
- * @param h the shift amount
- */
-function ddTaylorShiftWithInpErr(p, h, p_) {
-    const n = p.length - 1;
-    if (n < 0) {
-        return [[], []];
-    }
-    // The successive remainders are the Taylor coefficients of `p` about `h`,
-    // i.e. the coefficients of `p(x + h)`.
-    const _h = dd_taylor_shift_with_inp_err_abs(h);
-    const q = p.slice();
-    const q_ = p_.slice();
-    for (let k = 0; k <= n; k++) {
-        for (let i = 1; i <= n - k; i++) {
-            const qi1 = q[i - 1];
-            const qi1_ = q_[i - 1];
-            const hq = ddMultDouble2(h, qi1);
-            const hq_ = _h * qi1_ + dd_taylor_shift_with_inp_err_abs(hq[1]);
-            const qi = q[i];
-            q[i] = dd_add_dd_ddAddDd(qi, hq);
-            q_[i] = q_[i] + hq_ + dd_taylor_shift_with_inp_err_abs(q[i][1]);
-        }
-    }
-    return [q, q_];
-}
-
-//# sourceMappingURL=dd-taylor-shift-with-inp-err.js.map
-;// ./node_modules/flo-poly/node_modules/double-double/node/double-double/binary/dd-mult-dd.js
-/** @internal */
-const dd_mult_dd_f = 2 ** 27 + 1;
-/**
- * Returns the product of two double-double-precision floating point numbers.
- *
- * * relative error bound: 7u^2, i.e. fl(a+b) = (a+b)(1+ϵ),
- * where ϵ <= 7u^2, u = 0.5 * Number.EPSILON
- * the error bound is not sharp - the worst case that could be found by the
- * authors were 5u^2
- *
- * * ALGORITHM 10 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
- * @param x a double-double precision floating point number
- * @param y another double-double precision floating point number
- */
-function ddMultDd(x, y) {
-    const xh = x[1];
-    const yh = y[1];
-    //const [cl1,ch] = twoProduct(xh,yh);
-    const ch = xh * yh;
-    const c = dd_mult_dd_f * xh;
-    const ah = c - (c - xh);
-    const al = xh - ah;
-    const d = dd_mult_dd_f * yh;
-    const bh = d - (d - yh);
-    const bl = yh - bh;
-    const cl1 = (al * bl) - ((ch - (ah * bh)) - (al * bh) - (ah * bl));
-    //return fastTwoSum(ch,cl1 + (xh*yl + xl*yh));
-    const b = cl1 + (xh * y[0] + x[0] * yh);
-    const xx = ch + b;
-    return [b - (xx - ch), xx];
-}
-
-//# sourceMappingURL=dd-mult-dd.js.map
-;// ./node_modules/flo-poly/node/change-variables/double-double/dd-scale-with-inp-err.js
-
-const { abs: dd_scale_with_inp_err_abs } = Math;
-/**
- * The error bound is accumulated in units of `γγ3 ≈ 3u²` (the relative error
- * bound of `ddMultDouble2`), but `ddMultDd` has a relative error bound of
- * `7u²`, i.e. `7/3` units.
- */
-const ddMultDdErrUnits = 7 / 3;
-/**
- * Returns the polynomial `p(s·x)`, i.e. the coefficient of `xⁱ` scaled by `sⁱ`
- * in double-double precision including an error bound that has **not** been
- * scaled by `γγ3` yet.
- *
- * @param p a polynomial with coefficients given densely as an array of double-double
- * floating point numbers from highest to lowest power, e.g. `[[0,5],[0,-3],[0,0]]`
- * represents the polynomial `5x^2 - 3x`
- * @param s a scaling factor, i.e. the `s` in `p(x) <- p(sx)`
- * @param p_ an error polynomial that represents a coefficient-wise error bound
- * that has **not** been scaled by `γγ3` yet
- *
- * @example
- * ```typescript
- * ddScaleWithInpErr([[0,1],[0,2],[0,7]], 3, [0,0,0]); //=> [[[0,9],[0,6],[0,7]], [30, 14, 0]]
- * ```
- *
- * @doc
- */
-function ddScaleWithInpErr(p, s, p_) {
-    const r = p.slice();
-    const r_ = p_.slice();
-    ddInplaceScaleWithInpErr(r, s, r_);
-    return [r, r_];
-}
-/**
- * ❗**MODIFIES**❗ the given polynomial and its input-error bound to compute
- * `p(s·x)` together with a running error bound.
- *
- * @param p a polynomial with coefficients given densely as an array of
- * double-double floating point numbers from highest to lowest power, e.g.
- * `[[0,5],[0,-3],[0,0]]` represents the polynomial `5x^2 - 3x`
- * @param s a scaling factor
- * @param p_ an error polynomial that represents a coefficient-wise error bound
- * that has **not** been scaled by `γγ3` yet
- *
- * @doc
- */
-function ddInplaceScaleWithInpErr(p, s, p_) {
-    const n = p.length - 1;
-    if (n < 0) {
-        return;
-    }
-    const _s = dd_scale_with_inp_err_abs(s);
-    let sPow = [0, s];
-    let sPow_ = 0; // no error
-    for (let i = 1; i <= n; i++) {
-        const j = n - i;
-        const pn_i = p[j];
-        const _pn_i = dd_scale_with_inp_err_abs(pn_i[1]);
-        const pn_i_ = p_[j];
-        const scaledPn_i = ddMultDd(sPow, pn_i);
-        p[j] = scaledPn_i;
-        // input error * |sⁱ| + |p| * err(sⁱ) + round-off of the product
-        p_[j] = pn_i_ * dd_scale_with_inp_err_abs(sPow[1]) + _pn_i * sPow_ + ddMultDdErrUnits * dd_scale_with_inp_err_abs(scaledPn_i[1]);
-        const nextSPow = ddMultDouble2(s, sPow); // relative error bound `3u²`, i.e. 1 unit
-        sPow_ = sPow_ * _s + dd_scale_with_inp_err_abs(nextSPow[1]);
-        sPow = nextSPow;
-    }
-}
-
-//# sourceMappingURL=dd-scale-with-inp-err.js.map
-;// ./node_modules/flo-poly/node/change-variables/expansion/e-taylor-shift.js
-
-const eChangeVariablesTranslateX = (/* unused pure expression or super */ null && (eTaylorShift));
-/**
- * Returns the Taylor shift `f(x + h)` of the given polynomial computed in
- * `O(n^2)` via repeated synthetic division by `(x - h)` (Horner's scheme).
- *
- * * the calculations are exact (bar overflow / underflow) since the
- *   coefficients are Shewchuk floating point expansions
- *
- * @param p a polynomial with coefficients given densely as an array of Shewchuk expansion
- * floating point numbers from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- * @param h the shift amount
- */
-function eTaylorShift(p, h) {
-    const n = p.length - 1;
-    if (n < 0) {
-        return [];
-    }
-    const q = p.slice();
-    for (let k = 0; k <= n; k++) {
-        for (let i = 1; i <= n - k; i++) {
-            q[i] = eCompress(fastExpansionSum(q[i], scaleExpansion(q[i - 1], h)));
-        }
-    }
-    return q;
-}
-
-//# sourceMappingURL=e-taylor-shift.js.map
-;// ./node_modules/flo-poly/node/change-variables/expansion/e-scale.js
-
-const eChangeVariablesScale = (/* unused pure expression or super */ null && (eScale));
-/**
- * Returns the polynomial `f(s·x)`, i.e. the coefficient of `xⁱ` scaled by `sⁱ`.
- *
- * @param p a polynomial with coefficients given densely as an array of Shewchuk
- * floating point expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- * @param s the scale factor
- */
-function eScale(p, s) {
-    const n = p.length - 1;
-    if (n < 0) {
-        return [];
-    }
-    const r = new Array(n + 1);
-    r[n] = p[n];
-    // Keep powers of `s` as expansions to avoid rounding drift from repeated
-    // double multiplication (`sPow *= s`).
-    let sPow = [1];
-    for (let i = 1; i <= n; i++) {
-        sPow = scaleExpansion(sPow, s);
-        r[n - i] = expansionProduct(p[n - i], sPow);
-    }
-    return r;
-}
-
-//# sourceMappingURL=e-scale.js.map
-;// ./node_modules/flo-poly/node/roots/mobius/mobius-precise.js
-
-
-
-
-
-
-
-const { abs: mobius_precise_abs, sign } = Math;
-/**
- * Returns the number of sign changes in the polynomial coefficents after
- * applying a Mobius transformation to the given polynomial.
- *
- * * this is a specialized function used specifically by `isolateRoots`
- *
- * Applies a Mobius transformation to the given polynomial:
- * * p(x) -> (x + 1)^n * p((ax + b) / (x + 1))
- * * see e.g. https://arxiv.org/pdf/1605.00410.pdf equation (2)
- *
- * This runs in `O(n^2)` arithmetic operations (where `n` is the degree) by
- * decomposing the Mobius map into elementary steps, rather than the `O(n^3)`
- * of expanding and summing `Σ cᵢ (ax + b)^i (x + 1)^(n-i)` directly.
- *
- * The decomposition (see https://math.stackexchange.com/questions/694565)
- * uses the identity `(ax + b)/(x + 1) = a + (b - a)/(x + 1)`, which yields
- *
- *   (x + 1)^n * p((ax + b)/(x + 1)) = S₁( R( Scₐ₋ᵦ( Sₐ(p) ) ) )
- *
- * where
- *   * `Sₕ(f) = f(x + h)`           is a Taylor shift (`O(n^2)`),
- *   * `Sc_s(f)` scales the coefficient of `xⁱ` by `sⁱ` (`O(n)`),
- *   * `R(f)` reverses the coefficient array, i.e. `xⁿ f(1/x)` (`O(n)`).
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param p_ an error polynomial that provides a coefficient-wise error bound
- * **NOT** scaled by `γ1`
- * @param pDd a polynomial with coefficients given densely as an array of
- * double-double precision floating point numbers from highest to lowest power,
- * e.g. `[[0,5],[0,-3],[0,0]]` represents the polynomial `5x^2 - 3x`
- * @param pDd_ an array of numbers representing the absolute error bounds on the
- * coefficients of `pDd`; the actual error bound on the coefficient of `xⁱ` is `pDd_[i]*γγ(3)`
- * @param getPExact defaults to `undefined`; a function returning the exact
- * polynomial (with coefficients given as Shewchuk expansions)
- * @param a lower bound of the interval
- * @param b upper bound of the interval
- * @param A sign-certified evaluation of polynomial at the lower bound of the interval
- * @param B sign-certified evaluation of polynomial at the upper bound of the interval
- * @param failCount the number of times the Mobius transformation has failed to certify the sign
- *
- * @internal
- */
-function mobiusAndNumSignChanges(p, p_, pDd, pDd_, getPExact) {
-    return function mobiusAndNumSignChanges_(a, b, A, B, failCount) {
-        //-------------------------------------------
-        // Taylor shift by `a`, i.e. p(x + a)
-        //-------------------------------------------
-        let [q, q_] = taylorShiftWithInpErr(p, a, p_);
-        //---------------------------------------------------
-        // Scale the coefficient of xⁱ by (b - a)ⁱ
-        //---------------------------------------------------
-        inplaceScaleWithInpErr(q, b - a, q_);
-        //-------------------------------------------------------------
-        // Reverse, i.e. xⁿ q(1/x) (homogenized inversion x -> 1/x)
-        //-------------------------------------------------------------
-        q.reverse();
-        q_.reverse();
-        //-------------------------------------------
-        // Taylor shift by 1, i.e. q(x + 1)
-        //-------------------------------------------
-        inplaceTaylorShiftBy1WithInpErr(q, q_);
-        let numSignChangesMax = 0; // Max possible number of real sign changes
-        let numUncertifyable = 0; // number of coefficients who's sign cannot be certified
-        // The sign of `A` and `B` are both !== 0 and is certified since it is an
-        // endpoint of the interval.
-        let _s = sign(A); // Sign is certified
-        for (let i = 1; i < q.length - 1; i++) {
-            let s = sign(q[i]);
-            const v = q[i];
-            const err = q_[i] * gamma_1;
-            if (mobius_precise_abs(v) <= err) {
-                // Important: Lemma 19 of Sagraloff & Mehlhorn 2015 (arXiv:1308.4088) is incorrect,
-                // we are actually allowed one uncertifyable coefficient (but **only** if numSignChanges
-                // equals 1)!
-                // Important: If we find max 1 "zero" and "numSignChangesMax" is 1 then
-                // we can guarantee that there is exactly 1 root in the interval.
-                numUncertifyable++;
-                // If we encounter a "zero" we make its sign different than the
-                // previous one so it can count as a sign change; this differs
-                // from the usual way of counting sign changes.
-                s = -_s;
-            }
-            if (s !== _s) {
-                numSignChangesMax++;
-                _s = s;
-            }
-        }
-        const s = sign(B); // Sign is certified
-        if (s !== _s) {
-            numSignChangesMax++;
-        }
-        // (every uncertifiable coefficient is counted as a sign change so
-        // `numSignChangesMax === 1` implies `numUncertifyable <= 1`)
-        if (numSignChangesMax === 1) {
-            return 1;
-        }
-        if (numUncertifyable > 0) {
-            return ddMobiusAndNumSignChanges(pDd, pDd_, a, b, A, B, failCount, getPExact);
-        }
-        return numSignChangesMax; // guaranteed OR need to split interval
-    };
-}
-function ddMobiusAndNumSignChanges(pDd, pDd_, a, b, A, B, failCount, getPExact) {
-    //-------------------------------------------
-    // Taylor shift by `a`, i.e. p(x + a)
-    //-------------------------------------------
-    let [q, q_] = ddTaylorShiftWithInpErr(pDd, a, pDd_);
-    //---------------------------------------------------
-    // Scale the coefficient of xⁱ by (b - a)ⁱ
-    //---------------------------------------------------
-    ddInplaceScaleWithInpErr(q, b - a, q_);
-    //-------------------------------------------------------------
-    // Reverse, i.e. xⁿ q(1/x) (homogenized inversion x -> 1/x)
-    //-------------------------------------------------------------
-    q.reverse();
-    q_.reverse();
-    //-------------------------------------------
-    // S₁: Taylor shift by 1, i.e. q(x + 1)
-    //-------------------------------------------
-    [q, q_] = ddTaylorShiftWithInpErr(q, 1, q_);
-    let numSignChanges = 0; // number of sign changes
-    let numUncertifyable = 0; // number of coefficients who's sign cannot be certified
-    // The sign of `A` and `B` are both !== 0 and is certified since it is an
-    // endpoint of the interval.
-    let _s = sign(A);
-    // (the first coefficient, `q[0]`, equals `p(a)`, i.e. `A`, whose sign is
-    // already certified - as for the double precision variant)
-    for (let i = 1; i < q.length - 1; i++) {
-        // No error in the sign of the last coefficient (important for parity of sign changes)
-        let s = sign(q[i][1]);
-        const err = q_[i] * gamma_3;
-        const c = q[i];
-        if (err >= mobius_precise_abs(c[1])) {
-            // Important: Lemma 19 of Sagraloff & Mehlhorn 2015 (arXiv:1308.4088) is incorrect,
-            // we are actually allowed one uncertifyable coefficient (but **only** if `numSignChanges`
-            // equals 1)!
-            // Important: If we find max 1 "zero" and "numSignChangesMax" is 1 then
-            // we can guarantee that there is exactly 1 root in the interval.
-            numUncertifyable++;
-            // If we encounter a "zero" we make its sign different than the
-            // previous one so it can count as a sign change; this differs
-            // from the usual way of counting sign changes.
-            s = -_s;
-        }
-        if (s !== _s) {
-            numSignChanges++;
-            _s = s;
-        }
-    }
-    const s = sign(B); // Sign is certified
-    if (s !== _s) {
-        numSignChanges++;
-    }
-    // (every uncertifiable coefficient is counted as a sign change so
-    // `numSignChanges === 1` implies `numUncertifyable <= 1`)
-    if (numSignChanges === 1) {
-        return 1; // **guaranteed** to have exactly one root in the interval
-    }
-    if (numUncertifyable === 0) {
-        return numSignChanges;
-    }
-    return failCount > 1
-        ? eMobiusAndNumSignChanges(getPExact, a, b, A, B)
-        : -numSignChanges; // `failCount` is still 1, so we can try again after another split of the interval;
-    // We need to split the interval into two subintervals since we
-    // cannot guarantee the number of sign changes in the Mobius coefficients.
-    // But, the sign of `A` and `B` are both !== 0 and certified so we *can* certify
-    // the parity (and max value) of the number of sign changes!
-}
-function eMobiusAndNumSignChanges(getPExact, a, b, A, B) {
-    const pE = getPExact();
-    let q = eTaylorShift(pE, a);
-    q = eScale(q, b - a);
-    q.reverse();
-    q = eTaylorShift(q, 1);
-    //--------------------------------------------------------
-    // Calc number of sign changes in the Mobius coefficients
-    //--------------------------------------------------------
-    let numSignChanges = 0; // number of sign changes
-    let _s = sign(A);
-    for (let i = 1; i < q.length - 1; i++) {
-        const c = q[i];
-        let s = sign(c[c.length - 1]); // Sign is certified (in exact precision)
-        if (s !== _s && s !== 0) {
-            numSignChanges++;
-            _s = s;
-        }
-    }
-    // Keep this to ensure parity of sign changes even when underflow occurs
-    const s = sign(B); // Sign is certified (up to over/underflow)
-    if (s !== _s) {
-        numSignChanges++;
-    }
-    return numSignChanges;
-}
-
-// exported for testing only
-
-//# sourceMappingURL=mobius-precise.js.map
-;// ./node_modules/flo-poly/node/evaluate/double/eft-horner.js
-
-
-/**
- * Returns an EFT (error free transformation) for the Horner evaluation of a
- * polymial at a specified x. The result is returned as an object with
- * properties: `r̂ ->` the calculated evaluation, `pπ` and `pσ` -> two polynomials
- * with coefficients around 2^53 times smaller than the input polynomial.
- *
- * * `r̂ + pπ(x) + pσ(x) ===` the *exact* evaluation (no error)
- *
- * * see [[1] Algorithms for Accurate, Validated and Fast Polynomial Evaluation, *Stef Graillat, Philippe Langlois and Nicolas Louvet*](https://projecteuclid.org/download/pdf_1/euclid.jjiam/1265033778)
- * * see also [[2] *Philippe Langlois, Nicolas Louvet.* Faithful Polynomial Evaluation with Compensated Horner Algorithm. ARITH18: 18th IEEE International Symposium on Computer Arithmetic, Jun 2007, Montpellier, France. pp.141–149. ffhal-00107222f](https://hal.archives-ouvertes.fr/hal-00107222/document)
- * * see also [[3] Horner's Method](https://en.wikipedia.org/wiki/Horner%27s_method)
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param x the value at which to evaluate the polynomial
- *
- * @doc
- */
-function EFTHorner(p, x) {
-    //--------------------------------------------------------------------------
-    // This is exactly *Algorithm 5* from [2] above
-    //--------------------------------------------------------------------------
-    const pπ = []; // A polynomial containing part of the error
-    const pσ = []; // Another polynomial containing part of the error
-    let σ;
-    let r̂ = p[0];
-    for (let i = 1; i < p.length; i++) {
-        const [π, pi] = two_product_twoProduct(r̂, x);
-        [σ, r̂] = two_sum_twoSum(pi, p[i]);
-        // inlined
-        //r̂ = pi + p[i]; const bv = r̂ - pi; σ = (pi - (x-bv)) + (p[i]-bv);
-        pπ.push(π);
-        pσ.push(σ);
-    }
-    return { r̂, pπ, pσ };
-}
-// inlined
-//const pπ: number[] = []; const pσ: number[] = []; const σ: number; const r̂ = p[0];    for (const i=1; i<p.length; i++) { const [π,pi] = twoProduct(r̂,x); [σ,r̂] = twoSum(pi, p[i]); pπ.push(π); pσ.push(σ); } return { r̂, pπ, pσ }
-
-//# sourceMappingURL=eft-horner.js.map
-;// ./node_modules/flo-poly/node/evaluate/double/horner-with-running-error.js
-
-const { abs: horner_with_running_error_abs } = Math;
-/**
- * Returns the result of evaluating a polyniomial at a point x, including a
- * running error bound as an array in the form `[r,e]` where `r` is the result
- * of the evaluation and `e` is the error.
- *
- * * the error bound can also be calculated as `γ(2d) * AbsHorner(p,x)` but
- *   the running error bound is considerably tighter (about 20x typically)
- *
- * * see e.g. page 95 (at bottom) of [Higham 2002](http://ftp.demec.ufpr.br/CFD/bibliografia/Higham_2002_Accuracy%20and%20Stability%20of%20Numerical%20Algorithms.pdf)
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param x the value at which to evaluate the polynomial
- *
- * @doc
- */
-function hornerWithRunningError(p, x) {
-    const _x = horner_with_running_error_abs(x);
-    let r̂ = p[0];
-    let e = horner_with_running_error_abs(r̂) * 0.5;
-    for (let i = 1; i < p.length; i++) {
-        r̂ = r̂ * x + p[i];
-        e = e * _x + horner_with_running_error_abs(r̂);
-    }
-    e = gamma_u * (2 * e - horner_with_running_error_abs(r̂));
-    return [r̂, e];
-}
-
-//# sourceMappingURL=horner-with-running-error.js.map
-;// ./node_modules/flo-poly/node/evaluate/double/abs-horner.js
-const abs_horner_abs = Math.abs;
-/**
- * Returns the result of evaluating a univariate polynomial using
- * Horner's method and where:
- *  1. the absolute value of each coefficient is taken
- *  2. the absolute value of `x` is taken
- *
- * * i.e. P(x) = ∑ᵢ₌₀ⁿ |aᵢ| |x|ⁱ
- *
- * * intermediate calculations are done in double precision
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param x the value at which `p` should be evaluated
- *
- * @doc
- */
-function AbsHorner(p, x) {
-    const _x = abs_horner_abs(x);
-    let q = 0;
-    for (let i = 0; i < p.length; i++) {
-        q = q * _x + abs_horner_abs(p[i]);
-    }
-    return q;
-}
-// inlined (with q => e2, p => p0)
-//let e2 = abs(p0[0]); for (let i=1; i<p0.length; i++) { e2 = e2*x + abs(p0[i]); }
-
-//# sourceMappingURL=abs-horner.js.map
-;// ./node_modules/flo-poly/node/evaluate/double/eval-certified.js
-
-
-
-
-
-const { abs: eval_certified_abs } = Math;
-const eval_certified_1 = gamma_(1);
-const γ2 = gamma_(2);
-/**
- * Returns the result of evaluating the given polynomial (with specified
- * coefficient-wise error bounds) at x such that the sign is correct when
- * positive or negative and undecided when 0 - an additional `multiplier`
- * parameter can enforce additional bits (beyond the sign) to be correct.
- *
- * * designed to be fast in 'easy' cases (say condition number < 2^53) and
- * harder cases (condition number < 2^106) since nearly all typical
- * calculations will have condition number < 2^106
- * * a staggered approach is used - first double precision, then simulated
- * double-double precision (i.e. once compensated Horner evluation) is tried
- * before giving up and returning 0 - see point below
- * * if zero is returned then the calculated result is too close to 0 to
- * determine the sign; the caller of this function can then resort to a more
- * accurate (possibly exact) evaluation
- *
- * @param p an array of 2 polynomials with coefficients given densely as an
- * array of double precision floating point numbers from highest to
- * lowest power, e.g. `[5,-3,0]` represents the polynomial `5x^2 - 3x`;
- * the first polynomial's coefficients represent the 'high part' (a double) of a
- * double-double precision value, while the second polynomial's coefficients
- * represent the 'low part', i.e. designating `hp` for high part and `lp` for
- * low part it must be that they are non-overlapping -> `twoSum(lp,hp)` will
- * equal `[lp,hp]`; put another way, if the given polynomial is given as e.g. a
- * linear polynomial with coefficients in double precision,
- * e.g. `[[1.7053025658242404e-13, 2354.33721613], [-7.105427357601002e-15,284.5673337]]`
- * then this parameter, `p`, should be `[[2354.33721613], 284.5673337], [1.7053025658242404e-13, -7.105427357601002e-15]]`
- * which is simply the result of transposing the original polynomial if it is
- * seen as a matrix
- * @param pE defaults to `undefined`; an error polynomial that provides a
- * coefficient-wise error bound on the input polynomial; all coefficients must
- * be positive; if `undefined` then the input polynomial will be assumed exact
- * @param x the value at which to evaluate the polynomial
- * @param multiplier defaults to 1; the final calculation error needs to be a
- * multiple of this number smaller than the evaluated value, otherwise zero is
- * returned - useful if not only the sign is important but also some bits, e.g.
- * if multiplier = 8 then 3 bits will have to be correct otherwise 0 is returned
- *
- * @doc
- */
-function evalCertified(p, x, pE = undefined, multiplier = 1) {
-    const p0 = p[0];
-    // first do a fast evaluation
-    const [r, e1] = hornerWithRunningError(p0, x);
-    // inlined above line:
-    //const r = p0[0]; const e1 = Math.abs(r) / 2; for (const i=1; i<p0.length; i++) { r = r*x + p0[i]; e1 = Math.abs(x)*e1 + Math.abs(r); } e1 = Number.EPSILON * (2*e1 - Math.abs(r));
-    /** the error due to not considering p[1] */
-    const e2 = γ2 * AbsHorner(p0, x);
-    // inlined above line:
-    //const e2 = abs(p0[0]); for (const i=1; i<p0.length; i++) { e2 = e2*x + abs(p0[i]); }
-    /** error due to imprecision in coefficients */
-    // the line below was changed due to negative values of x now also allowed
-    const E = pE !== undefined ? Horner(pE, eval_certified_abs(x)) : 0;
-    //const E = p0[0]; for (const i=1; i<p0.length; i++) {E = E*x + p0[i]; }
-    const ee = e1 + e2 + E; // in difficult cases E can be larger than e1+e2
-    if (ee * multiplier < Math.abs(r)) {
-        // we are within bounds
-        return r;
-    }
-    // error is too large - do a more precise evaluation (i.e. once compensated
-    // with K === 2)
-    const EFTHorner_ = EFTHorner(p0, x);
-    const { pπ, pσ } = EFTHorner_;
-    let { r̂ } = EFTHorner_;
-    const [C1, c1] = hornerWithRunningError(pπ, x);
-    const [C2, c2] = hornerWithRunningError(pσ, x);
-    const [C3, c3] = hornerWithRunningError(p[1], x);
-    // typically: c1,c2 < c3 < E
-    let e = (c1 + c2 + c3) + E;
-    // typically: C1,C2 < C3 < r̂ and (C1 + C2 + C3 < r̂)
-    r̂ = (C1 + C2 + C3) + r̂;
-    e += eval_certified_1 * Math.abs(r̂);
-    if (e * multiplier < Math.abs(r̂)) {
-        return r̂;
-    }
-    // error is still too large to return the correct sign (if multiplier === 1)
-    return 0;
-}
-
-//# sourceMappingURL=eval-certified.js.map
-;// ./node_modules/flo-poly/node/evaluate/expansion/e-horner.js
-
-/**
- * Returns the exact result (bar underflow / overflow) of evaluating a
- * univariate polynomial using Horner's method - the result is returned as a
- * Shewchuk expansion.
- *
- * @param p a polynomial with coefficients given densely as an array of
- * Shewchuk expansions from highest to lowest power, e.g. `[[5],[-3],[0]]`
- * represents the polynomial `5x^2 - 3x`
- * @param x the value at which to evaluate the polynomial
- *
- * @doc
- */
-function eHorner(p, x) {
-    let q = [0];
-    for (let i = 0; i < p.length; i++) {
-        // q = p[i] + x*q;
-        q = fastExpansionSum(p[i], scaleExpansion(q, x));
-    }
-    return q;
-}
-
-//# sourceMappingURL=e-horner.js.map
-;// ./node_modules/flo-poly/node/roots/refine-certified.js
-
-
-
-
-const { abs: refine_certified_abs, min: refine_certified_min, max: refine_certified_max, log2, ceil } = Math;
-/**
- * Returns a refined root given a root bracketed in the interval `(a,b)` of the
- * given polynomial using Brent's Method - modified slightly to allow for
- * error certified bounds.
- *
- * * also returns (as the 3rd element of the returned array) the current Brent
- * iterate `b` as the best point estimate within the interval
- *
- * * near exact implementation of the original Brent Dekker Method (also known
- * as Brent's Method), except that it is specialized to polynomial evaluation.
- *
- * * Brent's Method is an excellent root-refinement choice since:
- *  * guaranteed converge (unlike the Newton and other so-called single-point
- *    methods),
- *  * converges in a reasonable number of iterations even for highly contrived
- *    functions (unlike Dekker's Method) and
- *  * nearly always converges fast, i.e. super-linearly (unlike the Secant and
- *    Regula-Falsi methods).
- * * unfortunately the algorithm given on [Wikipedia](https://en.wikipedia.org/wiki/Brent%27s_method)
- *   works but is not precisely Brent's method and runs about 2x or more slower
- *   due to it not implementing the critically important 'micro-step' (Aug 2020).
- *
- * * see [Brent (page 47)](https://maths-people.anu.edu.au/~brent/pd/rpb011i.pdf)
- * * [c++ implementation of Brent's Method](https://people.sc.fsu.edu/~jburkardt/cpp_src/brent/brent.cpp)
- *
- * @param p a polynomial with coefficients given densely as an array of double-double
- * floating point numbers from highest to lowest power, e.g. `[[0,5],[0,-3],[0,0]]`
- * represents the polynomial `5x^2 - 3x`. If `exact` is `true` then this is allowed
- * to be `undefined`.
- * @param p_ an error polynomial that provides a coefficientwise error bound on
- * the input polynomial; all coefficients must be positive. If `exact` is `true`
- * then this is allowed to be `undefined`.
- * @param lb the lower limit of the search interval.
- * @param ub the upper limit of the search interval.
- * @param fa the result of evaluating the input polynomial at `a`
- * @param fb the result of evaluating the input polynomial at `b`
- * @param getPolyExact a function that returns the exact polynomial coefficients
- * @param exact defaults to `false`; set to true if you need to do exact evaluations from the start
- *
- * @internal
- */
-function refineCertified(p, p_, lb, ub, fa, fb, getPolyExact, exact) {
-    //---- Make local copies of a and b.
-    let a = lb;
-    let b = ub;
-    let c = a;
-    let fc = fa;
-    let e = b - a;
-    let d = e;
-    while (true) {
-        // update delta
-        if (refine_certified_abs(fc) < refine_certified_abs(fb)) {
-            a = b;
-            b = c;
-            c = a;
-            fa = fb;
-            fb = fc;
-            fc = fa;
-        }
-        // Original c++ code had the line below but with us t === 0 and b is 
-        // taken as 1 and 2.0 * macheps is taken as 2*u === Number.EPSILON (eps)
-        // or can also be taken as 4*u === 2*Number.EPSILON (2*eps)
-        // adaptive tolerance - relative to the current best iterate `b` (as in
-        // Brent's original); using `max(|a|,|b|)` would make the tolerance too
-        // loose when the previous iterate `a` is still far from the root (e.g. 
-        // after a first secant step from a wide bracket) and the returned
-        // interval could then be wider than the documented maximum width
-        let δ;
-        const mm = refine_certified_abs(b);
-        if (mm <= 1) {
-            δ = gamma_eps;
-        }
-        else {
-            // keep δ = eps * a power of 2
-            δ = gamma_eps * 2 ** ceil(log2(mm));
-        }
-        const m = 0.5 * (c - b);
-        //if (abs(m) <= δ || fb === 0) {
-        // modified from the original since we dont need the fb === 0 check here
-        if (refine_certified_abs(m) <= δ) {
-            return b < c
-                ? [b, c, b]
-                : [c, b, b];
-        }
-        if (refine_certified_abs(e) < δ || refine_certified_abs(fa) <= refine_certified_abs(fb)) {
-            e = m;
-            d = e;
-        }
-        else {
-            let s = fb / fa;
-            let v;
-            let q;
-            if (a === c) {
-                v = 2 * m * s;
-                q = 1 - s;
-            }
-            else {
-                q = fa / fc;
-                const r = fb / fc;
-                v = s * (2 * m * q * (q - r) - (b - a) * (r - 1));
-                q = (q - 1) * (r - 1) * (s - 1);
-            }
-            if (0 < v) {
-                q = -q;
-            }
-            else {
-                v = -v;
-            }
-            s = e;
-            e = d;
-            if (2 * v < 3 * m * q - refine_certified_abs(δ * q) && v < refine_certified_abs(0.5 * s * q)) {
-                d = v / q;
-            }
-            else {
-                e = m;
-                d = e;
-            }
-        }
-        a = b;
-        fa = fb;
-        if (δ < refine_certified_abs(d)) {
-            b = b + d;
-        }
-        else if (0 < m) {
-            b = b + δ;
-        }
-        else {
-            b = b - δ;
-        }
-        fb = exact
-            ? eEstimate(eHorner(getPolyExact(), b))
-            // keep TypeScript happy; neither `p` nor `pE` can be `undefined` 
-            // here by a precondition
-            : evalCertified(p, b, p_);
-        if (fb === 0) {
-            // Since `evalCertified` returns zero if undecided the zero result
-            // cannot be fully trusted at this point.
-            // if we are already doing exact evaluations this is an exact root
-            if (exact) {
-                return [b, b, b];
-            }
-            // We need to calculate δ/2 to the left and right of b to get 
-            // results that should usually be !== 0. 
-            // It is a pre-filter. If the result === 0 we need to sharpen the
-            // ability of the evaluation by somehow reducing the error bound
-            const sL = refine_certified_max(lb, b - δ); // don't overstep bounds
-            const sR = refine_certified_min(ub, b + δ); // ...
-            // Note: sR - sL <= 2*δ provided lb, ub are in [-1..1] - usually 
-            // (when sL === s - δ and sR === s + δ) sR - sL === 2*δ. Also δ > 0
-            // keep TypeScript happy; neither `p` nor `pE` can be `undefined` 
-            // here by a precondition
-            const fsL = evalCertified(p, sL, p_);
-            const fsR = evalCertified(p, sR, p_);
-            // if the evaluation method is strong enough *and* the signs
-            // differ (so that `[sL,sR]` is certified to bracket a root)
-            // return the result
-            if (fsL * fsR < 0) {
-                return [sL, sR, b];
-            }
-            // At this point either fsL or fsR === 0 (or they have the same
-            // sign and the root is not bracketed by `[sL,sR]`) so we need to
-            // sharpen the evaluation method
-            exact = true;
-            // get and cache the exact polynomial (we cache this since getting
-            // an exact polynomial takes about 15 times more time than getting
-            // a double-double polynomial and we very rarely expect to get to 
-            // this point)
-            fb = eEstimate(eHorner(getPolyExact(), b));
-            // if the exact evaluation returns 0 we have an exact root
-            if (fb === 0) {
-                return [b, b, b];
-            }
-            // else we've got a new value for fb and from here on we use exact
-            // evaluations
-        }
-        if ((0 < fb && 0 < fc) || (fb <= 0 && fc <= 0)) {
-            c = a;
-            fc = fa;
-            e = b - a;
-            d = e;
-        }
-    }
-}
-
-//# sourceMappingURL=refine-certified.js.map
-;// ./node_modules/flo-poly/node/evaluate/double/horner-with-inp-error.js
-const { abs: horner_with_inp_error_abs } = Math;
-/**
- * Returns the value of the polynomial `p` evaluated at `x` along with an
- * error bound on the result that has **NOT** yet been scaled by `γ1`.
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`
- * @param x the value at which to evaluate the polynomial
- * @param p_ an error polynomial that provides a coefficient-wise error bound
- * on the input polynomial **NOT** yet scaled by `γ1`
- */
-function HornerWithInpError(p, x, p_) {
-    const _x = horner_with_inp_error_abs(x);
-    let r̂ = p[0];
-    let r̂_ = p_[0];
-    for (let i = 1; i < p.length; i++) {
-        const r̂x = r̂ * x;
-        r̂ = r̂x + p[i];
-        r̂_ = r̂_ * _x + horner_with_inp_error_abs(r̂x) + p_[i] + horner_with_inp_error_abs(r̂);
-    }
-    return [r̂, r̂_];
-}
-
-//# sourceMappingURL=horner-with-inp-error.js.map
-;// ./node_modules/flo-poly/node/roots/transpose-poly.js
-/**
- * Transposes the given polynomial (given with multi-precision coefficients)
- * into multiple polynomials with each consecutive polynomial 'adjusting'
- * the prior one to higher precision.
- *
- * @param p
- *
- * @internal
- */
-function transposePoly(p) {
-    // transpose the polynomial coefficients into multiple polynomials
-    const len = p[0].length;
-    const p_ = [];
-    for (let i = 0; i < len; i++) {
-        const _p = [];
-        for (let j = 0; j < p.length; j++) {
-            _p.push(p[j][len - (i + 1)]); // from highest to lowest
-        }
-        p_.push(_p);
-    }
-    return p_;
-}
-
-//# sourceMappingURL=transpose-poly.js.map
-;// ./node_modules/flo-poly/node/evaluate/double-double/dd-horner-with-inp-error.js
-/* unused harmony import specifier */ var dd_horner_with_inp_error_ddMultDd;
-
-const qmq = (/* unused pure expression or super */ null && (dd_horner_with_inp_error_ddMultDd));
-const qaq = dd_add_dd_ddAddDd;
-const qmd = ddMultDouble2;
-const { abs: dd_horner_with_inp_error_abs } = Math;
-/**
- * Returns the value of the polynomial `p` evaluated at `x` along with an
- * error bound on the result that has **NOT** yet been scaled by `γγ(3)`.
- *
- * @param p a polynomial with coefficients given densely as an array of
- * double-double floating point numbers from highest to lowest power,
- * e.g. `[[0,5],[0,-3],[0,0]]`  represents the polynomial `5x^2 - 3x`
- * @param x the value at which to evaluate the polynomial
- * @param p_ an error polynomial that provides a coefficient-wise error bound
- * on the input polynomial **NOT** yet scaled by `γγ(3)`
- */
-function ddHornerWithInpError(p, x, p_) {
-    const _x = dd_horner_with_inp_error_abs(x);
-    let r̂ = p[0];
-    let r̂_ = p_[0];
-    for (let i = 1; i < p.length; i++) {
-        const r̂x = qmd(x, r̂);
-        r̂ = qaq(r̂x, p[i]);
-        r̂_ = r̂_ * _x + dd_horner_with_inp_error_abs(r̂x[1]) + p_[i] + dd_horner_with_inp_error_abs(r̂[1]);
-    }
-    return [r̂, r̂_];
-}
-
-//# sourceMappingURL=dd-horner-with-inp-error.js.map
-;// ./node_modules/flo-poly/node/roots/descartes/isolate-roots.js
-
-
-
-
-
-
-
-
-
-const { abs: isolate_roots_abs, max: isolate_roots_max, log2: isolate_roots_log2, ceil: isolate_roots_ceil } = Math;
-const γγ3_γ1 = gamma_3 / gamma_1; // ~ 3*u
-/**
- * Returns a list of intervals isolating the roots of the given polynomial
- * within the given interval `[lb,ub]`.
- *
- * * the interval might be extended if roots fall close to its endpoints.
- *
- * @param p a polynomial with coefficients given densely as an array of double
- * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
- * represents the polynomial `5x^2 - 3x`; this polynomial is derived
- * from `pDd` as a double precision approximation
- * @param pDd a polynomial with coefficients given densely as an array of
- * double-double precision floating point numbers from highest to lowest power,
- * e.g. `[[0,5],[0,-3],[0,0]]` represents the polynomial `5x^2 - 3x`
- * @param pDd_ an array of numbers representing the absolute error bounds on the
- * coefficients of `pDd`; the actual error bound on the coefficient of `xⁱ` is `pDd_[i]*γγ(3)`
- * @param lb the start of the interval to search for roots
- * @param ub the end of the interval to search for roots
- * @param getPExact defaults to `undefined`; a function returning the exact
- * polynomial (with coefficients given as Shewchuk expansions)
- *
- * @internal
- */
-function isolateRoots(p, pDd, pDd_, lb, ub, getPExact) {
-    /**
-     * The error bound (that still needs to be multiplied by `γ(1)` of the double
-     * precision coefficients.
-     */
-    // `E*γγ3_γ1` -> the new error need to be scaled by `γ1` and not `γγ3`
-    // `abs(p[idx])` -> round-off from double-double to double precision
-    const p_ = pDd_.map((E, idx) => E * γγ3_γ1 + isolate_roots_abs(p[idx]));
-    //--------------------------------------------------------------------------
-    // Make sure endpoints don't fall too close to roots as this drastically
-    // slows down the root isolation process.
-    //--------------------------------------------------------------------------
-    const _lb_ = lb;
-    const _ub_ = ub;
-    let W = ub - lb;
-    let A;
-    let ea;
-    while (true) {
-        ([A, ea] = HornerWithInpError(p, lb, p_));
-        if (isolate_roots_abs(A) > ea * gamma_1) { // if we can certify the sign of `p(t)`
-            break;
-        }
-        lb -= W / 2;
-        W *= 2;
-        if (!Number.isFinite(lb)) {
-            // can only happen if the sign of the leading coefficient cannot
-            // be certified in double precision (fail explicitly rather than
-            // looping forever)
-            throw new Error('Unable to certify the sign of the polynomial at any finite lower bound.');
-        }
-    }
-    let B;
-    let eb;
-    while (true) {
-        ([B, eb] = HornerWithInpError(p, ub, p_));
-        if (isolate_roots_abs(B) > eb * gamma_1) { // if we can certify the sign of `p(t)`
-            break;
-        }
-        ub += W / 2;
-        W *= 2;
-        if (!Number.isFinite(ub)) {
-            throw new Error('Unable to certify the sign of the polynomial at any finite upper bound.');
-        }
-    }
-    //------------------------------------------------
-    // Initial root interval with sign-certified endpoint values and a fail count.
-    const Is = [[lb, ub, A, B, 0]];
-    const Is_ = []; // Isolated root intervals will be stored here
-    // let treeSize = 0;  // remove eventually
-    const mobiusAndNumSignChanges_ = mobiusAndNumSignChanges(p, p_, pDd, pDd_, getPExact);
-    let errBound;
-    let pDdTransposed;
-    while (Is.length > 0) {
-        // treeSize++;
-        const I = Is.pop();
-        const [a, b, A, B, failCount] = I;
-        //----------------------------------------------------------------------
-        // Descarte's rule of signs to count the number of roots in this interval
-        //----------------------------------------------------------------------
-        const varP = mobiusAndNumSignChanges_(a, b, A, B, failCount);
-        // If `varP < 0` we couldn't distinguish Mobius coefficients from `0`
-        // without going to infinite precision.
-        if (varP === 0) { // no roots in the open interval `(a,b)`
-            continue;
-        }
-        if (varP === 1) { // exactly one root in this interval
-            errBound = errBound || pDd_.map(E => E * gamma_3);
-            pDdTransposed = pDdTransposed || transposePoly(pDd);
-            const [tS, tE, t] = refineCertified(pDdTransposed, errBound, a, b, A, B, getPExact, false);
-            Is_.push({ t, tS, tE, multiplicity: 1 });
-            continue;
-        }
-        let realFailCount = varP < 0 ? failCount + 1 : 0;
-        //-----------------------------------------------------------------
-        // **possibly** more than one root in this interval
-        //-----------------------------------------------------------------
-        const W = b - a;
-        const minW = 2 * isolate_roots_abs(varP) * gamma_eps * isolate_roots_max(1, 2 ** isolate_roots_ceil(isolate_roots_log2(isolate_roots_max(isolate_roots_abs(a), isolate_roots_abs(b)))));
-        if (W <= minW) {
-            if (realFailCount === 0) {
-                // `varP` is guaranteed to be correct (except it can be larger by a multiple of 2)
-                // since the sign of `A` and `B` are both certified,
-                Is_.push({ t: (a + b) / 2, tS: a, tE: b, multiplicity: isolate_roots_abs(varP) });
-                continue; // stop recursion when intervals are too small
-            }
-            realFailCount = Infinity; // split one last time
-        }
-        const [t, T] = admissablePoint(p, p_, pDd, pDd_, a, b, getPExact);
-        // The sign of `T` is certified.
-        Is.push([a, t, A, T, realFailCount]);
-        Is.push([t, b, T, B, realFailCount]);
-    }
-    // treeSize; //?
-    Is_.reverse();
-    return Is_.filter(I => {
-        const { tS, tE } = I;
-        if (tE < _lb_ || tS > _ub_) {
-            return false;
-        }
-        return true;
-    });
-}
-function admissablePoint(p, p_, pDd, pDd_, a, b, getPExact) {
-    // We don't use multipoint evaluation here since it is too slow for low order
-    // polynomials but we need to find an "admissable" point to split the interval at.
-    // * see [Computing Real Roots of Real Polynomials](https://arxiv.org/pdf/1308.4088) by Sagraloff
-    // Algorithm: Admissible Point (note: their repeat-until loop should be repeat-while as they noted later)
-    //-----------------------------------------------------------------
-    const n = p.length - 1;
-    let c = 0; // count of points tested so far
-    let d = 1; // number of subintervals to split the interval into
-    // Corollary 16: Sagraloff & Mehlhorn 2015 (arXiv:1308.4088):
-    // The corollary starts with:
-    // Let $$L \ge L_{I,0} := \log M\!\left(\min\left(|P(a)|, |P(b)|\right)^{-1}\right) + 2(n + 1) + 1||
-    // Let L ≥ Lᵢ,₀ := log M(min(|P(a)|, |P(b)|)⁻¹) + 2(n + 1) + 1
-    // Note: We don't use the above Corollary (or Corollary 20) since we don't care if endpoints
-    // are close to zero (in fact, we prefer it) because we don't determine a bit-length precision beforehand;
-    // rather, we increase the precision each time until we can certify the coefficient signs.
-    // E.g. `t`s of points for `deg(p) === 4` for `I === [-0.5,1.5]`: [0.5, 0.25, 0.75, 0.125, 0.375]
-    while (true) {
-        d *= 2;
-        for (let j = 1; j < d; j += 2) {
-            c++;
-            const t = a + (b - a) * (d + 2 * j) / (4 * d); // sample in the middle half [a+W/4, a+3W/4]
-            const [T, e] = HornerWithInpError(p, t, p_);
-            if (isolate_roots_abs(T) > e * gamma_1) {
-                // If we can certify the sign of `p(t)` then don't waste time
-                // looking for the best point.
-                return [t, T];
-            }
-            if (c > n) {
-                // console.log('failed to find an admissable point in double precision');
-                return ddAdmissablePoint(pDd, pDd_, a, b, getPExact);
-            }
-        }
-    }
-}
-function ddAdmissablePoint(pDd, pDd_, a, b, getPExact) {
-    // E.g. `t`s of points for `deg(p) === 4` for `I === [-0.5,1.5]`: [0.5, 0.25, 0.75, 0.125, 0.375]
-    const n = pDd.length - 1;
-    let c = 0; // count of points tested so far
-    let d = 1; // number of subintervals to split the interval into
-    while (true) {
-        d *= 2;
-        for (let j = 1; j < d; j += 2) {
-            c++;
-            const t = a + (b - a) * (d + 2 * j) / (4 * d);
-            const [T, e] = ddHornerWithInpError(pDd, t, pDd_);
-            // If we can certify the sign of `p(t)` then don't waste time
-            // looking for the best point.
-            if (isolate_roots_abs(T[1]) > e * gamma_3) {
-                return [t, T[1]];
-            }
-            if (c > n) {
-                // console.log('failed to find an admissable point in double-double precision');
-                const pE = getPExact();
-                return eAdmissablePoint(pE, a, b);
-            }
-        }
-    }
-}
-function eAdmissablePoint(pE, a, b) {
-    // E.g. of points for degree(p) === 4: [0.5, 0.25, 0.75, 0.125, 0.375]
-    const n = pE.length - 1;
-    let d = 1; // number of subintervals to split the interval into
-    let c = 0; // count of points tested so far
-    while (true) {
-        d *= 2;
-        for (let j = 1; j < d; j += 2) {
-            c++;
-            const t = a + (b - a) * (d + 2 * j) / (4 * d);
-            const T = eCompress(eHorner(pE, t)); // no error
-            const $T = T[T.length - 1];
-            // If we can certify the sign of `p(t)` then don't waste time
-            // looking for the best point.
-            if ($T !== 0) { // no error
-                return [t, $T];
-            }
-            if (c > n) {
-                // It should not be possible to get to this point since we
-                // tested more points than the degree of the polynomial so
-                // at least one of the roots should have been resolved from zero.
-                // However, if underflow occurs in an expansion product we might
-                // reach this point.
-                throw new Error('Cannot resolve root even in Shewchuk expansion precision');
-            }
-        }
-    }
-}
-
-//# sourceMappingURL=isolate-roots.js.map
-;// ./node_modules/flo-poly/node/roots/descartes/roots.js
-
-
-
-
-const { abs: roots_abs, max: roots_max, log2: roots_log2, ceil: roots_ceil } = Math;
-/**
- * Finds and returns all ordered *certified* root intervals (bar underflow /
- * overflow) of the given polynomial (with coefficients given in double or
- * double-double precision, including their multiplicities (see points below).
- *
- * * The input polynomial can be given in double precision by wrapping each
- *   coefficient in an array, i.e. `polynomial.map(c => [0,c])` with the 'low double'
- *   set to zero.
- *
- * * returns `undefined` for the zero polynomial
- *
- * * Let `W = 2 * m * Number.EPSILON * max(1, 2^⌈log₂r⌉)`, where `r` is a root
- *   and `m` is the number of roots (the 'multiplicity') within the
- *   interval, where multiplicity here includes roots seperated by less than
- *   `W` and not necessarily only exact multiple roots
- *
- * * The returned intervals are of max width `W`; use [[refineK1]] to
- *   reduce the root interval widths further and thus 'resolving' the roots if
- *   required (although the roots are already *guaranteed* extremely accurate!).
- *
- * * The retuned root intervals will contain *all* roots.
- *
- * * The 'multiplicity' can be higher than the actual multiplicity of a root by
- *   an integer multiple of 2 iff there are multiple roots in the interval
- *   (else if a multiplicity of 0 or 1 is reported the result is exact).
- *   [[refineK1]] can be used to resolve them further if required; note however
- *   that root seperation is a function of polynomial height and can be very small
- *   (see e.g. [Improving Root Separation Bounds, *Aaron Herman, Hoon Hong, Elias Tsigaridas*](https://hal.inria.fr/hal-01456686/document)
- *
- * * optimized for polynomials of degree 1 to about 30 (else over/underflow becomes an issue)
- *
- * * **precondition:** the coefficient magnitudes and degree of the polynomial
- *   must be such that overflow/underflow won't occur at evaluation points where roots
- *   are searched for, e.g. a 20th degree polynomial with coefficients of
- *   magnitude around `Number.MAX_SAFE_INTEGER (= 9007199254740991)` evaluated at
- *   `x = 1000000` will evaluate to about `10^136` (10 the the power of 136) which
- *   is way too small for overflow to occur, however when evaluated at `x = 10^15`
- *   overflow will occur; to prevent this possibility limit the bounds `lb` and `ub`
- *   where roots are to be searched for to the range of interest, i.e. don't set
- *   them to `Infinity` for automatic calculation.
- *
- * @param pDd a polynomial with coefficients given densely as an array of
- * double-double precision floating point numbers (if only double precision
- * coefficients are required then wrap each coefficient in an array, i.e.
- * `p.map(c => [0,c])` with the 'low double' set to zero);
- *
- * the coefficients are given from highest to lowest power,
- * e.g. `[[0,5],[0,-3],[0,0]]` represents the polynomial `5x^2 - 3x`;
- *
- * @param lb defaults to `-Infinity`; limiting the bound increases performance
- * @param ub defaults to `+Infinity`; limiting the bound increases performance
- * `Infinity` may be given if there is no upper bound
- *
- * @param pDd_ defaults to `undefined`; if `undefined` then the input polynomial
- * will be assumed exact; an error polynomial that provides a
- * coefficientwise error bound on the input polynomial with the actual error bound
- * being `Eᵢ * γγ(3)` for the coefficient of `xⁱ`;
- * Note: `γγ(3)` is almost identical to `3*(Number.EPSILON / 2)**2`;
- * all coefficients must be positive;
- *
- * @param getPExact defaults to `undefined`; a function returning the exact
- * polynomial (with coefficients given as Shewchuk expansions (see the example
- * below)) - `getPExact` will *only* be called if required (and can thus be
- * lazy loaded) when the error bounds are too high during calculation
- * preventing certification of the root intervals; if `undefined` then the
- * input polynomial will be assumed exact
- *
- * @param tryReduceInterval defaults to `false`; if `true` (or if `|lb|` or
- * `|ub|` is larger than `2^20`, e.g. when they are infinite) then the interval
- * `[lb,ub]` will be reduced to a smaller interval containing all roots (if
- * possible) before starting the algorithm.
- * Since `reduceInterval` is a relatively long running algorithm it is generally
- * faster to set this to `false` and directly specify the interval of interest.
- *
- *
- * @example
- * ```typescript
- *
- * // -------------------------------------------------------------
- * // 1. a basic example of an order 11 polynomial (with 10 roots)
- * // -------------------------------------------------------------
- * const p = [
- *     3.033321234234234,
- *     31.78342995971597,
- *     -115.09145437671532,
- *     -48.18962838294827,
- *     241.04136127393173,
- *     -26.63962334942254,
- *     -81.82713958224285,
- *     13.96128683321424,
- *     7.3963444329341455,
- *     -1.50733058206533,
- *     -0.0015147128834111722
- * ];
- * //console.log(toCasStr(p))
- * // => 3.033321234234234*x^10 + 31.78342995971597*x^9 - 115.09145437671532*x^8 -
- * //    48.18962838294827*x^7 + 241.04136127393173*x^6 - 26.63962334942254*x^5 -
- * //    81.82713958224285*x^4 + 13.96128683321424*x^3 + 7.3963444329341455*x^2 -
- * //    1.50733058206533*x - 0.0015147128834111722
- * // function to convert a double precision number to double-double precision
- * // (note that the 'low double' is zero since the coefficients are assumed exact)
- * const toDoubleDouble = (c: number) => [0,c];
- * const rs = roots(
- *     p.map(toDoubleDouble),
- *     -Infinity,
- *     Infinity
- * );
- * //console.log(rs);
- * // => [
- * //   { tS: -13.222221, tE: -13.222220999999996, multiplicity: 1 },
- * //   { tS: -1.3498348570000003, tE: -1.3498348569999998, multiplicity: 1 },
- * //   { tS: -0.4444777699999987, tE: -0.4444777699999985, multiplicity: 1 },
- * //   { tS: -0.43554300000000135, tE: -0.4355430000000011, multiplicity: 1 },
- * //   { tS: -0.001000000000000222, tE: -0.001, multiplicity: 1 },
- * //   { tS: 0.22999999999999984, tE: 0.23000000000000007, multiplicity: 1 },
- * //   { tS: 0.345347, tE: 0.34534700000000024, multiplicity: 1 },
- * //   { tS: 0.5429999999999989, tE: 0.5429999999999993, multiplicity: 1 },
- * //   { tS: 1.3221000000000016, tE: 1.322100000000002, multiplicity: 1 },
- * //   { tS: 2.534533999999997, tE: 2.534533999999998, multiplicity: 1 }
- * // ]
- * //
- *
- *
- * // -----------------------------------------------------------------------
- * // 2. the Wilkinson polynomial of degree 50 (a hard(ish) case) --
- * // see: https://en.wikipedia.org/wiki/Wilkinson%27s_polynomial
- * // -----------------------------------------------------------------------
- * const _roots = [...Array(50+1).keys()].slice(1).map(c => [c]);  // => [1,2,3,...,50]
- * const { pDd, pDd_, pE } = eFromRoots(_roots);
- * const getPExact = () => pE;
- * // => polynomial of degree 50 with double-double precision coefficients
- * //    including coefficient-wise error bound polynomial and a function to
- * //    return the exact polynomial with Shewchuk expansion coefficients
- * //console.log(toCasStr(getPExact()));
- * // => x^50 - 1275*x^49 + 791350*x^48 - 318622500*x^47 + 93570498490*x^46 -
- * //    21366198225750*x^45 + 3949131291964600*x^44 - ...
- * const rs = roots(pDd,0,51,pDd_,getPExact);
- * console.log(rs);  // => [
- * //    { tS: 1, tE: 1, multiplicity: 1 },
- * //    { tS: 2, tE: 2, multiplicity: 1 },
- * //    .
- * //    .
- * //    .
- * //    { tS: 50, tE: 50, multiplicity: 1 }
- * // ]
- * //
- * // ...thus roots are returned accurately.
- * ```
- *
- * @doc
- */
-function roots(pDd, lb = -Infinity, ub = +Infinity, pDd_, getPExact, tryReduceInterval = false) {
-    if (typeof pDd[0] === 'number') {
-        pDd = pDd.map(c => [0, c]);
-    }
-    // We cache `pExact`
-    let pExact = undefined;
-    const getPExact_ = () => {
-        // If `getPExact` is not specified then assume the given double-double 
-        // precision coefficient polynomial is exact.
-        if (getPExact === undefined) {
-            return pDd;
-        }
-        // If `getPExact` is specified then use it and cache the result.
-        if (pExact === undefined) {
-            pExact = getPExact();
-        }
-        return pExact;
-    };
-    // if `pDd_` is not specified then assume there is no error
-    pDd_ = pDd_ || new Array(pDd.length).fill(0); // no error
-    //----------------------------------------------------------------------
-    // Remove leading zero coefficients 
-    //----------------------------------------------------------------------
-    ({ pDd, pDd_, pExact } = removeLeadingZeroCoeffs(pDd, pDd_, getPExact_, gamma_3));
-    if (pDd.length === 0) {
-        return undefined; // return `undefined` for the zero polynomial (of degree -1)
-    }
-    else if (pDd.length === 1) {
-        return []; // return `[]` for a (a non-zero) degree 0 polynomial
-    }
-    // Approximate `p` from `pDd`
-    const p = pDd.map(c => c[0] + c[1]);
-    if (tryReduceInterval ||
-        roots_abs(lb) > 2 ** 20 || roots_abs(ub) > 2 ** 20) {
-        [lb, ub] = reduceInterval(lb, ub, p, pDd_, gamma_3);
-    }
-    if (lb === ub) { // edge case
-        const halfWidth = 2 * gamma_eps * roots_max(1, 2 ** roots_ceil(roots_log2(roots_max(roots_abs(lb), roots_abs(ub)))));
-        lb -= halfWidth;
-        ub += halfWidth;
-    }
-    return isolateRoots(p, pDd, pDd_, lb, ub, getPExact_);
-}
-
-// Quokka tests (keep)
-// import { toCasStr } from "../../basic/to-cas-str.js";
-// import { eFromRoots } from "../from-roots/expansion/e-from-roots.js";
-// // -------------------------------------------------------------
-// // 1. a basic example of an order 11 polynomial (with 10 roots)
-// // -------------------------------------------------------------
-// {
-//     const p = [
-//         3.033321234234234,
-//         31.78342995971597,
-//         -115.09145437671532,
-//         -48.18962838294827,
-//         241.04136127393173,
-//         -26.63962334942254,
-//         -81.82713958224285,
-//         13.96128683321424,
-//         7.3963444329341455,
-//         -1.50733058206533,
-//         -0.0015147128834111722
-//     ];
-//     // console.log(toCasStr(p));
-//     const toDd = (c: number) => [0,c];
-//     const rs = roots(p.map(toDd), -Infinity, Infinity);
-//     console.log(rs);  //?
-//     // => [
-//     //   { tS: -13.222221, tE: -13.222220999999996, multiplicity: 1 },
-//     //   { tS: -1.3498348570000003, tE: -1.3498348569999998, multiplicity: 1 },
-//     //   { tS: -0.4444777699999987, tE: -0.4444777699999985, multiplicity: 1 },
-//     //   { tS: -0.43554300000000135, tE: -0.4355430000000011, multiplicity: 1 },
-//     //   { tS: -0.001000000000000222, tE: -0.001, multiplicity: 1 },
-//     //   { tS: 0.22999999999999984, tE: 0.23000000000000007, multiplicity: 1 },
-//     //   { tS: 0.345347, tE: 0.34534700000000024, multiplicity: 1 },
-//     //   { tS: 0.5429999999999989, tE: 0.5429999999999993, multiplicity: 1 },
-//     //   { tS: 1.3221000000000016, tE: 1.322100000000002, multiplicity: 1 },
-//     //   { tS: 2.534533999999997, tE: 2.534533999999998, multiplicity: 1 }
-//     // ]
-//     //
-// }
-// // -----------------------------------------------------------------------
-// // 2. the Wilkinson polynomial of degree 50 (a hard(ish) case) --
-// // see: https://en.wikipedia.org/wiki/Wilkinson%27s_polynomial
-// // -----------------------------------------------------------------------
-// {
-//     const _roots = [...Array(85+1).keys()].slice(1).map(c => [c]);
-//     const { pDd, pDd_, pE } = eFromRoots(_roots);
-//     const getPExact = () => pE;
-//     const rs = roots(pDd,0,71,pDd_,getPExact)!;
-//     console.log(rs.slice(rs?.length - 3, rs?.length));//?
-//     // => [
-//     //    { tS: 1, tE: 1, multiplicity: 1 },
-//     //    { tS: 2, tE: 2, multiplicity: 1 },
-//     //    .
-//     //    .
-//     //    .
-//     //    { tS: 70, tE: 70, multiplicity: 1 }
-//     // ]
-// }
-//# sourceMappingURL=roots.js.map
-;// ./node_modules/double-double/node/double-mixed-double-double/dd-mult-double.js
-/** @internal */
-const double_mixed_double_double_dd_mult_double_f = 134217729; // 2**27 + 1;
-/**
- * Returns the product of a double-double-precision floating point number and a
- * double.
- *
- * * slower than ALGORITHM 8 (one call to fastTwoSum more) but about 2x more
- * accurate
- * * relative error bound: 1.5u^2 + 4u^3, i.e. fl(a*b) = (a*b)(1+ϵ),
- * where ϵ <= 1.5u^2 + 4u^3, u = 0.5 * Number.EPSILON
- * * the bound is very sharp
- * * probably prefer `ddMultDouble2` due to extra speed
- *
- * * assumes no overflow; note that (Veltkamp) splitting overflows (giving
- * `NaN`) if the magnitude of `x[1]` or `y` exceeds ~2^996
- *
- * * ALGORITHM 7 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
- * @param y a double
- * @param x a double-double precision floating point number
- */
-function dd_mult_double_ddMultDouble1(y, x) {
-    const xl = x[0];
-    const xh = x[1];
-    //const [cl1,ch] = twoProduct(xh,y);
-    const ch = xh * y;
-    const c = double_mixed_double_double_dd_mult_double_f * xh;
-    const ah = c - (c - xh);
-    const al = xh - ah;
-    const d = double_mixed_double_double_dd_mult_double_f * y;
-    const bh = d - (d - y);
-    const bl = y - bh;
-    const cl1 = (al * bl) - ((ch - (ah * bh)) - (al * bh) - (ah * bl));
-    const cl2 = xl * y;
-    //const [tl1,th] = fastTwoSum(ch,cl2);
-    const th = ch + cl2;
-    const tl1 = cl2 - (th - ch);
-    const tl2 = tl1 + cl1;
-    //const [zl,zh] = fastTwoSum(th,tl2);
-    const zh = th + tl2;
-    const zl = tl2 - (zh - th);
-    return [zl, zh];
-}
-/**
- * Returns the product of a double-double-precision floating point number and a double.
- *
- * * faster than ALGORITHM 7 (one call to fastTwoSum less) but about 2x less
- * accurate
- * * relative error bound: 3u^2, i.e. fl(a*b) = (a*b)(1+ϵ),
- * where ϵ <= 3u^2, u = 0.5 * Number.EPSILON
- * * the bound is sharp
- * * probably prefer this algorithm due to extra speed
- *
- * * assumes no overflow; note that (Veltkamp) splitting overflows (giving
- * `NaN`) if the magnitude of `x[1]` or `y` exceeds ~2^996
- *
- * * ALGORITHM 8 of https://hal.archives-ouvertes.fr/hal-01351529v3/document
- * @param y a double
- * @param x a double-double precision floating point number
- */
-function dd_mult_double_ddMultDouble2(y, x) {
-    const xl = x[0];
-    const xh = x[1];
-    //const [cl1,ch] = twoProduct(xh,y);
-    const ch = xh * y;
-    const c = double_mixed_double_double_dd_mult_double_f * xh;
-    const ah = c - (c - xh);
-    const al = xh - ah;
-    const d = double_mixed_double_double_dd_mult_double_f * y;
-    const bh = d - (d - y);
-    const bl = y - bh;
-    const cl1 = (al * bl) - ((ch - (ah * bh)) - (al * bh) - (ah * bl));
-    const cl2 = xl * y;
-    const cl3 = cl1 + cl2;
-    //return fastTwoSum(ch,cl3);
-    const xx = ch + cl3;
-    return [cl3 - (xx - ch), xx];
-}
-
-//# sourceMappingURL=dd-mult-double.js.map
-;// ./node_modules/double-double/node/double-double/binary/dd-mult-dd.js
-/** @internal */
-const binary_dd_mult_dd_f = 2 ** 27 + 1;
-/**
- * Returns the product of two double-double-precision floating point numbers.
- *
- * * relative error bound: 5u^2, i.e. fl(a*b) = (a*b)(1+ϵ),
- * where |ϵ| < 5u^2, u = 0.5 * Number.EPSILON (assuming no underflow or overflow)
- * * this bound (for round-to-nearest ties-to-even, as used by JavaScript) was
- * formally proven (in Coq) by J.-M. Muller and L. Rideau, see
- * https://doi.org/10.1145/3484514 - it improves on the 7u^2 bound given in
- * the original paper (below); the worst case found is 4.985u^2
- *
- * * assumes no overflow; note that (Veltkamp) splitting overflows (giving
- * `NaN`) if the magnitude of `x[1]` or `y[1]` exceeds ~2^996
- *
- * * ALGORITHM 10 (DWTimesDW1) of https://hal.archives-ouvertes.fr/hal-01351529v3/document
- * @param x a double-double precision floating point number
- * @param y another double-double precision floating point number
- */
-function dd_mult_dd_ddMultDd(x, y) {
-    const xh = x[1];
-    const yh = y[1];
-    //const [cl1,ch] = twoProduct(xh,yh);
-    const ch = xh * yh;
-    const c = binary_dd_mult_dd_f * xh;
-    const ah = c - (c - xh);
-    const al = xh - ah;
-    const d = binary_dd_mult_dd_f * yh;
-    const bh = d - (d - yh);
-    const bl = yh - bh;
-    const cl1 = (al * bl) - ((ch - (ah * bh)) - (al * bh) - (ah * bl));
-    //return fastTwoSum(ch,cl1 + (xh*yl + xl*yh));
-    const b = cl1 + (xh * y[0] + x[0] * yh);
-    const xx = ch + b;
-    return [b - (xx - ch), xx];
-}
-
-//# sourceMappingURL=dd-mult-dd.js.map
 ;// ./node_modules/double-double/node/double-double/unary/dd-negative-of.js
 /**
  * Returns the negative of the given double-double precision floating point
@@ -7645,7 +7060,7 @@ function ddAddDouble(x, y) {
 ;// ./node/to-power-basis/to-power-basis/double-double/to-power-basis-dd-with-running-error.js
 
 const to_power_basis_dd_with_running_error_td = twoDiff; // error -> 0
-const to_power_basis_dd_with_running_error_qmd = dd_mult_double_ddMultDouble2; // error -> 3*u²
+const to_power_basis_dd_with_running_error_qmd = ddMultDouble2; // error -> 3*u²
 const to_power_basis_dd_with_running_error_qaq = ddAddDd;
 const qad = ddAddDouble; // error -> 2*u²
 const { abs: to_power_basis_dd_with_running_error_abs } = Math;
@@ -7798,7 +7213,7 @@ function toPowerBasis0DdWithRunningError(ps) {
 
 
 const qdq = ddDiffDd; // error -> 3*γ²
-const get_implicit_form1_dd_with_running_error_qmd = dd_mult_double_ddMultDouble2;
+const get_implicit_form1_dd_with_running_error_qmd = ddMultDouble2;
 const ddn = ddNegativeOf;
 const { abs: get_implicit_form1_dd_with_running_error_abs } = Math;
 const ddGetImplicitForm1_WithRunningError = getImplicitForm1DdWithRunningError;
@@ -7852,8 +7267,8 @@ function getImplicitForm1DdWithRunningError(ps) {
 
 const { abs: get_coeffs_bez1_bez1_dd_abs } = Math;
 const get_coeffs_bez1_bez1_dd_qaq = ddAddDd;
-const get_coeffs_bez1_bez1_dd_qmd = dd_mult_double_ddMultDouble2;
-const get_coeffs_bez1_bez1_dd_qmq = dd_mult_dd_ddMultDd;
+const get_coeffs_bez1_bez1_dd_qmd = ddMultDouble2;
+const get_coeffs_bez1_bez1_dd_qmq = ddMultDd;
 /**
  * Returns a polynomial in 1 variable (including coefficientwise error bound)
  * whose roots are the parameter values of the intersection points of two
@@ -7937,8 +7352,8 @@ function ddMultBy2(f) {
 const qno = ddNegativeOf; // error -> 0
 const qm2 = ddMultBy2; // error -> 0 
 //const qmd2 = qMultDouble1;  // error -> 1.5*γ²
-const get_implicit_form2_dd_with_running_error_qmd = dd_mult_double_ddMultDouble2; // error -> 3*γ²
-const get_implicit_form2_dd_with_running_error_qmq = dd_mult_dd_ddMultDd; // error -> 5*γ² (proven, Muller & Rideau 2022, see https://doi.org/10.1145/3484514), 4.985*γ² (worst found), we use 6*γ²
+const get_implicit_form2_dd_with_running_error_qmd = ddMultDouble2; // error -> 3*γ²
+const get_implicit_form2_dd_with_running_error_qmq = ddMultDd; // error -> 5*γ² (proven, Muller & Rideau 2022, see https://doi.org/10.1145/3484514), 4.985*γ² (worst found), we use 6*γ²
 const get_implicit_form2_dd_with_running_error_qdq = ddDiffDd; // error -> 3*γ²
 const { abs: get_implicit_form2_dd_with_running_error_abs } = Math;
 const ddGetImplicitForm2_WithRunningError = getImplicitForm2DdWithRunningError;
@@ -8097,8 +7512,8 @@ function getImplicitForm2DdWithRunningError(ps) {
 
 const get_coeffs_bez2_bez1_dd_tp = twoProduct;
 const get_coeffs_bez2_bez1_dd_qm2 = ddMultBy2;
-const get_coeffs_bez2_bez1_dd_qmd = dd_mult_double_ddMultDouble2;
-const get_coeffs_bez2_bez1_dd_qmq = dd_mult_dd_ddMultDd;
+const get_coeffs_bez2_bez1_dd_qmd = ddMultDouble2;
+const get_coeffs_bez2_bez1_dd_qmq = ddMultDd;
 const get_coeffs_bez2_bez1_dd_qaq = ddAddDd;
 const { abs: get_coeffs_bez2_bez1_dd_abs } = Math;
 /**
@@ -8272,8 +7687,8 @@ const get_implicit_form3_dd_with_running_error_qno = ddNegativeOf; // error -> 0
 const get_implicit_form3_dd_with_running_error_qm2 = ddMultBy2; // error -> 0 
 const qd2 = ddDivBy2; // error -> 0 
 //const qmd2 = qMultDouble1;  // error -> 1.5*γ²
-const get_implicit_form3_dd_with_running_error_qmd = dd_mult_double_ddMultDouble2; // error -> 3*γ²
-const get_implicit_form3_dd_with_running_error_qmq = dd_mult_dd_ddMultDd; // error -> 5*γ² (proven, Muller & Rideau 2022, see https://doi.org/10.1145/3484514), 4.985*γ² (worst found), we use 6*γ²
+const get_implicit_form3_dd_with_running_error_qmd = ddMultDouble2; // error -> 3*γ²
+const get_implicit_form3_dd_with_running_error_qmq = ddMultDd; // error -> 5*γ² (proven, Muller & Rideau 2022, see https://doi.org/10.1145/3484514), 4.985*γ² (worst found), we use 6*γ²
 const get_implicit_form3_dd_with_running_error_qdq = ddDiffDd; // error -> 3*γ²
 const get_implicit_form3_dd_with_running_error_qaq = ddAddDd; // error -> 3*γ²
 const ddGetImplicitForm3_WithRunningError = getImplicitForm3DdWithRunningError;
@@ -8607,8 +8022,8 @@ function getImplicitForm3DdWithRunningError(ps) {
 
 const get_coeffs_bez3_bez1_dd_tp = twoProduct;
 const get_coeffs_bez3_bez1_dd_qm2 = ddMultBy2;
-const get_coeffs_bez3_bez1_dd_qmd = dd_mult_double_ddMultDouble2;
-const get_coeffs_bez3_bez1_dd_qmq = dd_mult_dd_ddMultDd;
+const get_coeffs_bez3_bez1_dd_qmd = ddMultDouble2;
+const get_coeffs_bez3_bez1_dd_qmq = ddMultDd;
 const get_coeffs_bez3_bez1_dd_qaq = ddAddDd;
 const { abs: get_coeffs_bez3_bez1_dd_abs } = Math;
 /**
@@ -8925,8 +8340,8 @@ function getCoeffsBez3Bez1Dd(ps1, ps2) {
 
 
 const get_coeffs_bez1_bez2_dd_qaq = ddAddDd;
-const get_coeffs_bez1_bez2_dd_qmd = dd_mult_double_ddMultDouble2;
-const get_coeffs_bez1_bez2_dd_qmq = dd_mult_dd_ddMultDd;
+const get_coeffs_bez1_bez2_dd_qmd = ddMultDouble2;
+const get_coeffs_bez1_bez2_dd_qmq = ddMultDd;
 const { abs: get_coeffs_bez1_bez2_dd_abs } = Math;
 /**
  * Returns a polynomial in 1 variable (including coefficientwise error bound)
@@ -9011,8 +8426,8 @@ function getCoeffsBez1Bez2Dd(ps1, ps2) {
 
 const get_coeffs_bez2_bez2_dd_tp = twoProduct;
 const get_coeffs_bez2_bez2_dd_qm2 = ddMultBy2;
-const get_coeffs_bez2_bez2_dd_qmd = dd_mult_double_ddMultDouble2;
-const get_coeffs_bez2_bez2_dd_qmq = dd_mult_dd_ddMultDd;
+const get_coeffs_bez2_bez2_dd_qmd = ddMultDouble2;
+const get_coeffs_bez2_bez2_dd_qmq = ddMultDd;
 const get_coeffs_bez2_bez2_dd_qaq = ddAddDd;
 const { abs: get_coeffs_bez2_bez2_dd_abs } = Math;
 /**
@@ -9311,8 +8726,8 @@ function getCoeffsBez2Bez2Dd(ps1, ps2) {
 
 const get_coeffs_bez3_bez2_dd_tp = twoProduct;
 const get_coeffs_bez3_bez2_dd_qm2 = ddMultBy2;
-const get_coeffs_bez3_bez2_dd_qmd = dd_mult_double_ddMultDouble2;
-const get_coeffs_bez3_bez2_dd_qmq = dd_mult_dd_ddMultDd;
+const get_coeffs_bez3_bez2_dd_qmd = ddMultDouble2;
+const get_coeffs_bez3_bez2_dd_qmq = ddMultDd;
 const get_coeffs_bez3_bez2_dd_qaq = ddAddDd;
 const { abs: get_coeffs_bez3_bez2_dd_abs } = Math;
 /**
@@ -10038,8 +9453,8 @@ function getCoeffsBez3Bez2Dd(ps1, ps2) {
 
 
 const get_coeffs_bez1_bez3_dd_qaq = ddAddDd;
-const get_coeffs_bez1_bez3_dd_qmd = dd_mult_double_ddMultDouble2;
-const get_coeffs_bez1_bez3_dd_qmq = dd_mult_dd_ddMultDd;
+const get_coeffs_bez1_bez3_dd_qmd = ddMultDouble2;
+const get_coeffs_bez1_bez3_dd_qmq = ddMultDd;
 const { abs: get_coeffs_bez1_bez3_dd_abs } = Math;
 /**
  * Returns a polynomial in 1 variable (including coefficientwise error bound)
@@ -10114,8 +9529,8 @@ function getCoeffsBez1Bez3Dd(ps1, ps2) {
 
 const get_coeffs_bez2_bez3_dd_tp = twoProduct;
 const get_coeffs_bez2_bez3_dd_qm2 = ddMultBy2;
-const get_coeffs_bez2_bez3_dd_qmd = dd_mult_double_ddMultDouble2;
-const get_coeffs_bez2_bez3_dd_qmq = dd_mult_dd_ddMultDd;
+const get_coeffs_bez2_bez3_dd_qmd = ddMultDouble2;
+const get_coeffs_bez2_bez3_dd_qmq = ddMultDd;
 const get_coeffs_bez2_bez3_dd_qaq = ddAddDd;
 const { abs: get_coeffs_bez2_bez3_dd_abs } = Math;
 /**
@@ -10552,8 +9967,8 @@ function getCoeffsBez2Bez3Dd(ps1, ps2) {
 
 const get_coeffs_bez3_bez3_dd_tp = twoProduct;
 const get_coeffs_bez3_bez3_dd_qm2 = ddMultBy2;
-const get_coeffs_bez3_bez3_dd_qmd = dd_mult_double_ddMultDouble2;
-const get_coeffs_bez3_bez3_dd_qmq = dd_mult_dd_ddMultDd;
+const get_coeffs_bez3_bez3_dd_qmd = ddMultDouble2;
+const get_coeffs_bez3_bez3_dd_qmq = ddMultDd;
 const get_coeffs_bez3_bez3_dd_qaq = ddAddDd;
 const { abs: get_coeffs_bez3_bez3_dd_abs } = Math;
 /**
@@ -11846,7 +11261,7 @@ function getCoeffsBez1Bez1Exact(ps1, ps2) {
 ;// ./node_modules/big-float-ts/node/double-expansion/e-mult-by-2.js
 /**
  * Returns the result of multiplying a floating point expansion by 2.
- * * **error free**
+ * * **error free** unless overflow occurs
  * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
  *
  * @param e a floating point expansion
@@ -12040,7 +11455,7 @@ function getCoeffsBez2Bez1Exact(ps1, ps2) {
 ;// ./node_modules/big-float-ts/node/double-expansion/e-div-by-2.js
 /**
  * Returns the result of dividing a floating point expansion by 2.
- * * **error free**
+ * * **error free** unless underflow occurs (a subnormal component may lose its lowest bit)
  *
  * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
  *
@@ -13825,7 +13240,7 @@ function getImplicitForm1AtStartDd(ps) {
 
 
 
-const get_coeffs_bez1_bez1_shared_start_dd_qmq = dd_mult_dd_ddMultDd;
+const get_coeffs_bez1_bez1_shared_start_dd_qmq = ddMultDd;
 const get_coeffs_bez1_bez1_shared_start_dd_qaq = ddAddDd;
 const { abs: get_coeffs_bez1_bez1_shared_start_dd_abs } = Math;
 /**
@@ -13881,7 +13296,7 @@ function getCoeffsBez1Bez1SharedStartDd(ps1, ps2) {
 
 
 
-const get_coeffs_bez1_bez2_shared_start_dd_qmq = dd_mult_dd_ddMultDd;
+const get_coeffs_bez1_bez2_shared_start_dd_qmq = ddMultDd;
 const get_coeffs_bez1_bez2_shared_start_dd_qaq = ddAddDd;
 const { abs: get_coeffs_bez1_bez2_shared_start_dd_abs } = Math;
 /**
@@ -13949,7 +13364,7 @@ function getCoeffsBez1Bez2SharedStartDd(ps1, ps2) {
 
 
 
-const get_coeffs_bez1_bez3_shared_start_dd_qmq = dd_mult_dd_ddMultDd;
+const get_coeffs_bez1_bez3_shared_start_dd_qmq = ddMultDd;
 const get_coeffs_bez1_bez3_shared_start_dd_qaq = ddAddDd;
 const { abs: get_coeffs_bez1_bez3_shared_start_dd_abs } = Math;
 /**
@@ -14025,9 +13440,9 @@ function getCoeffsBez1Bez3SharedStartDd(ps1, ps2) {
 
 
 
-const get_implicit_form2_at_start_dd_qmq = dd_mult_dd_ddMultDd;
+const get_implicit_form2_at_start_dd_qmq = ddMultDd;
 const get_implicit_form2_at_start_dd_qdq = ddDiffDd;
-const get_implicit_form2_at_start_dd_qmd = dd_mult_double_ddMultDouble2;
+const get_implicit_form2_at_start_dd_qmd = ddMultDouble2;
 const get_implicit_form2_at_start_dd_qno = ddNegativeOf;
 const { abs: get_implicit_form2_at_start_dd_abs } = Math;
 /**
@@ -14098,7 +13513,7 @@ function getImplicitForm2AtStartDd(ps) {
 
 
 
-const get_coeffs_bez2_bez1_shared_start_dd_qmq = dd_mult_dd_ddMultDd;
+const get_coeffs_bez2_bez1_shared_start_dd_qmq = ddMultDd;
 const get_coeffs_bez2_bez1_shared_start_dd_qaq = ddAddDd;
 const { abs: get_coeffs_bez2_bez1_shared_start_dd_abs } = Math;
 /**
@@ -14185,7 +13600,7 @@ function getCoeffsBez2Bez1SharedStartDd(ps1, ps2) {
 
 
 
-const get_coeffs_bez2_bez2_shared_start_dd_qmq = dd_mult_dd_ddMultDd;
+const get_coeffs_bez2_bez2_shared_start_dd_qmq = ddMultDd;
 const get_coeffs_bez2_bez2_shared_start_dd_qaq = ddAddDd;
 const { abs: get_coeffs_bez2_bez2_shared_start_dd_abs } = Math;
 /**
@@ -14355,7 +13770,7 @@ function getCoeffsBez2Bez2SharedStartDd(ps1, ps2) {
 
 
 
-const get_coeffs_bez2_bez3_shared_start_dd_qmq = dd_mult_dd_ddMultDd;
+const get_coeffs_bez2_bez3_shared_start_dd_qmq = ddMultDd;
 const get_coeffs_bez2_bez3_shared_start_dd_qaq = ddAddDd;
 const { abs: get_coeffs_bez2_bez3_shared_start_dd_abs } = Math;
 /**
@@ -14639,10 +14054,10 @@ function getCoeffsBez2Bez3SharedStartDd(ps1, ps2) {
 
 
 
-const get_implicit_form3_at_start_dd_qmq = dd_mult_dd_ddMultDd;
+const get_implicit_form3_at_start_dd_qmq = ddMultDd;
 const get_implicit_form3_at_start_dd_qaq = ddAddDd;
 const get_implicit_form3_at_start_dd_qdq = ddDiffDd;
-const get_implicit_form3_at_start_dd_qmd = dd_mult_double_ddMultDouble2;
+const get_implicit_form3_at_start_dd_qmd = ddMultDouble2;
 const get_implicit_form3_at_start_dd_qm2 = ddMultBy2;
 const get_implicit_form3_at_start_dd_qno = ddNegativeOf;
 const { abs: get_implicit_form3_at_start_dd_abs } = Math;
@@ -14834,7 +14249,7 @@ function getImplicitForm3AtStartDd(ps) {
 
 
 
-const get_coeffs_bez3_bez1_shared_start_dd_qmq = dd_mult_dd_ddMultDd;
+const get_coeffs_bez3_bez1_shared_start_dd_qmq = ddMultDd;
 const get_coeffs_bez3_bez1_shared_start_dd_qaq = ddAddDd;
 const { abs: get_coeffs_bez3_bez1_shared_start_dd_abs } = Math;
 /**
@@ -14959,7 +14374,7 @@ function getCoeffsBez3Bez1SharedStartDd(ps1, ps2) {
 
 
 
-const get_coeffs_bez3_bez2_shared_start_dd_qmq = dd_mult_dd_ddMultDd;
+const get_coeffs_bez3_bez2_shared_start_dd_qmq = ddMultDd;
 const get_coeffs_bez3_bez2_shared_start_dd_qaq = ddAddDd;
 const { abs: get_coeffs_bez3_bez2_shared_start_dd_abs } = Math;
 /**
@@ -15320,7 +14735,7 @@ function getCoeffsBez3Bez2SharedStartDd(ps1, ps2) {
 
 
 
-const get_coeffs_bez3_bez3_shared_start_dd_qmq = dd_mult_dd_ddMultDd;
+const get_coeffs_bez3_bez3_shared_start_dd_qmq = ddMultDd;
 const get_coeffs_bez3_bez3_shared_start_dd_qaq = ddAddDd;
 const { abs: get_coeffs_bez3_bez3_shared_start_dd_abs } = Math;
 /**
@@ -17241,7 +16656,7 @@ function eToDd(e) {
 const is_point_on_bezier_extension_1_qaq = ddAddDd;
 const is_point_on_bezier_extension_1_epr = expansionProduct;
 const is_point_on_bezier_extension_1_fes = fastExpansionSum;
-const is_point_on_bezier_extension_1_qmq = dd_mult_dd_ddMultDd;
+const is_point_on_bezier_extension_1_qmq = ddMultDd;
 const { abs: is_point_on_bezier_extension_1_abs } = Math;
 /**
  * Returns `true` if the given point is on the given line where
@@ -17610,7 +17025,7 @@ function getImplicitForm2ErrorCounters(ps) {
 
 
 
-const is_point_on_bezier_extension_2_qmq = dd_mult_dd_ddMultDd;
+const is_point_on_bezier_extension_2_qmq = ddMultDd;
 const is_point_on_bezier_extension_2_qaq = ddAddDd;
 const is_point_on_bezier_extension_2_epr = expansionProduct;
 const is_point_on_bezier_extension_2_fes = fastExpansionSum;
@@ -17970,7 +17385,7 @@ function getImplicitForm3ErrorCounters(ps) {
 
 
 
-const is_point_on_bezier_extension_3_qmq = dd_mult_dd_ddMultDd;
+const is_point_on_bezier_extension_3_qmq = ddMultDd;
 const is_point_on_bezier_extension_3_qaq = ddAddDd;
 const is_point_on_bezier_extension_3_epr = expansionProduct;
 const is_point_on_bezier_extension_3_fes = fastExpansionSum;
@@ -18257,7 +17672,7 @@ function isPointOnBezierExtension(ps, p) {
 ;// ./node/to-power-basis/to-power-basis/double-double/to-power-basis-dd.js
 
 const to_power_basis_dd_td = twoDiff; // error -> 0
-const to_power_basis_dd_qmd = dd_mult_double_ddMultDouble2; // error -> 3*u²
+const to_power_basis_dd_qmd = ddMultDouble2; // error -> 3*u²
 const to_power_basis_dd_qaq = ddAddDd;
 const to_power_basis_dd_qad = ddAddDouble; // error -> 2*u²
 const to_power_basis_dd_ts = twoSum;
@@ -19035,7 +18450,7 @@ function intersectBoxes(a, b) {
 ;// ./node_modules/big-float-ts/node/double-expansion/e-mult-by-neg-2.js
 /**
  * Multiply a floating point expansion by -2.
- * * **error free**
+ * * **error free** unless overflow occurs
  * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
  *
  * @param e a floating point expansion
@@ -19504,167 +18919,49 @@ function erCompare(a, b) {
 }
 
 //# sourceMappingURL=er-compare.js.map
-;// ./node_modules/big-float-ts/node/double-representation/double-to-octets.js
-// Modified from https://github.com/bartaz/ieee754-visualization/
-// under the MIT license
-// Copyright 2013 Bartek Szopka (original author)
+;// ./node_modules/big-float-ts/node/double-representation/double-view.js
 /**
- * Returns the ieee-574 8 bytes composing the given double, starting from the
- * sign bit and ending in the lsb of the significand.
- * e.g. 123.456 -> [64, 94, 221, 47, 26, 159, 190, 119]
+ * A shared scratch `DataView` over 8 bytes used to inspect the IEEE-754 bits
+ * of a double without allocating on every call.
+ *
+ * * **not re-entrant**: callers must read what they need immediately after
+ * writing (which is always the case in this single-threaded library).
  */
-function doubleToOctets(number) {
-    const buffer = new ArrayBuffer(8);
-    new DataView(buffer).setFloat64(0, number, false);
-    return Array.from(new Uint8Array(buffer));
+const doubleView = new DataView(new ArrayBuffer(8));
+/**
+ * Returns the high 32-bit word (sign, 11 exponent bits and the top 20 fraction
+ * bits) of the given double.
+ */
+function getHiWord(a) {
+    doubleView.setFloat64(0, a);
+    return doubleView.getUint32(0);
 }
 
-//# sourceMappingURL=double-to-octets.js.map
-;// ./node_modules/big-float-ts/node/double-representation/parse-double.js
-/* unused harmony import specifier */ var doubleToBinaryString;
-// Modified from https://github.com/bartaz/ieee754-visualization/
-// under the MIT license
-// Copyright 2013 Bartek Szopka (original author)
+//# sourceMappingURL=double-view.js.map
+;// ./node_modules/big-float-ts/node/double-representation/get-lowest-set-bit.js
 
-
-/**
- * Returns the relevant parts of the given IEEE-754 double. The returned
- * exponent has been normalized (i.e. 1023 ha been subtracted) and the
- * significand has the hidden bit added if appropriate.
- * See https://github.com/bartaz/ieee754-visualization
- */
-function parseDouble(x) {
-    const parts = doubleToOctets(x);
-    const p0 = parts[0];
-    const p1 = parts[1];
-    const sign = p0 >> 7;
-    const exponent_ = ((p0 & 0b0111_1111) << 4) + ((p1 & 0b11110000) >> 4);
-    //---- Check for negative / positive zero / denormalized numbers.
-    const hiddenMsb = exponent_ === 0 ? 0 : 16;
-    // Note: exponent === 0 => 0 or denormalized number (a.k.a. subnormal number).
-    const exponent = exponent_ === 0
-        ? exponent_ - 1022 // Subnormals use a biased exponent of 1 (not 0!)
-        : exponent_ - 1023;
-    //---- Break up the significand into bytes
-    const significand = parts.slice(1);
-    significand[0] = (p1 & 0b0000_1111) + hiddenMsb;
-    return {
-        sign,
-        exponent,
-        significand
-    };
-}
-/**
- * Returns the relevant parts of the given IEEE-754 double.
- * See https://github.com/bartaz/ieee754-visualization.
- * This is a slower version of parseDouble that gives binary string
- * representations of the components.
- */
-function parseDoubleDetailed(x) {
-    const str = doubleToBinaryString(x);
-    // sign{1} exponent{11} fraction{52} === 64 bits (+1 hidden!)
-    const [, sign, exponent, significand] = str.match(/^(.)(.{11})(.{52})$/);
-    const exponent_ = parseInt(exponent, 2);
-    const hidden = exponent_ === 0 ? "0" : "1";
-    return {
-        full: sign + exponent + hidden + significand,
-        sign,
-        exponent,
-        hidden,
-        significand
-    };
-}
-
-//# sourceMappingURL=parse-double.js.map
-;// ./node_modules/big-float-ts/node/double-representation/significand.js
-
-/**
- * Return the significand of the given double with the hidden bit added (in case
- * a is not subnormal or 0, etc.)
- * @param a A double
- */
-function significand(a) {
-    return parseDouble(a).significand;
-}
-
-//# sourceMappingURL=significand.js.map
-;// ./node_modules/big-float-ts/node/double-representation/get-max-set-bit.js
-
-/**
- * Returns the lowest set bit of the given value in [1, (2**31)-1],
- * i.e. from 1 up to 2147483647 else if no bit is set (input === 0) returns
- * NaN, otherwise if the number is out of range returns a non-finite
- * number.
- * See https://stackoverflow.com/a/35190288/2010061
- */
-function getLowestSetBit_(a) {
-    return Math.log2(a & -a);
-}
 /**
  * Returns the lowest set bit of the given number's significand (where the lsb
  * is bit 0 and the msb is bit 52). If no bit is set (input === 0 or +-inf or
  * NaN) returns NaN.
- * See https://stackoverflow.com/a/35190288/2010061
  */
 function getLowestSetBit(a) {
     if (a === 0 || !Number.isFinite(a)) {
         // There is no lowest set bit
         return NaN;
     }
+    doubleView.setFloat64(0, a);
+    const lo = doubleView.getUint32(4);
+    if (lo !== 0) {
+        return 31 - Math.clz32(lo & -lo);
+    }
     // Note: the significand includes the hidden bit!
-    const s = significand(a);
-    const len = s.length;
-    for (let i = len - 1; i >= 0; i--) {
-        if (s[i] === 0) {
-            continue;
-        }
-        const l = getLowestSetBit_(s[i]);
-        if (Number.isFinite(l)) {
-            return (8 * (len - i - 1)) + l;
-        }
-    }
-    return NaN;
-}
-/**
- * Returns the highest set bit of the given value in [1, 255], i.e. from 1 up
- * to 255. If the input number === 0 returns NaN.
- * See https://stackoverflow.com/a/35190288/2010061
- */
-function getHighestSetBit_(a) {
-    return a >= 128 ? 7
-        : a >= 64 ? 6
-            : a >= 32 ? 5
-                : a >= 16 ? 4
-                    : a >= 8 ? 3
-                        : a >= 4 ? 2
-                            : a >= 2 ? 1
-                                : a >= 1 ? 0
-                                    : NaN;
-}
-/**
- * Returns the highest set bit of the given double. If no bit is set (input
- * === 0 or +/-inf or NaN) returns NaN.
- * See https://stackoverflow.com/a/35190288/2010061
- */
-function getHighestSetBit(a) {
-    if (a === 0 || !Number.isFinite(a)) {
-        // There is no lowest set bit
-        return NaN;
-    }
-    // At this point there must be a highest set bit (always === 52 if the 
-    // number is not a subnormal.
-    const s = significand(a);
-    const len = s.length;
-    for (let i = 0; i < len; i++) {
-        const l = getHighestSetBit_(s[i]);
-        if (Number.isFinite(l)) {
-            return (8 * (len - i - 1)) + l;
-        }
-    }
-    return NaN;
+    const hi = doubleView.getUint32(0);
+    const sigHi = (hi & 0xfffff) | ((hi & 0x7ff00000) === 0 ? 0 : 0x100000);
+    return 32 + 31 - Math.clz32(sigHi & -sigHi);
 }
 
-//# sourceMappingURL=get-max-set-bit.js.map
+//# sourceMappingURL=get-lowest-set-bit.js.map
 ;// ./node_modules/big-float-ts/node/double-representation/exponent.js
 
 /**
@@ -19672,7 +18969,9 @@ function getHighestSetBit(a) {
  * @param a A double
  */
 function exponent(a) {
-    return parseDouble(a).exponent;
+    const expField = (getHiWord(a) >>> 20) & 0x7ff;
+    // Subnormals (and 0) use a biased exponent of 1 (not 0!)
+    return expField === 0 ? -1022 : expField - 1023;
 }
 
 //# sourceMappingURL=exponent.js.map
@@ -19682,7 +18981,7 @@ function exponent(a) {
 /**
  * Returns the true exponent of the lsb that is set of the given number or
  * NaN if a === 0 or +-inf or NaN.
- * @param a An array of numbers to check
+ * @param a A double
  */
 function lsbExponent(a) {
     if (a === 0 || !Number.isFinite(a)) {
@@ -20169,13 +19468,40 @@ function ensureRange(t, min1Sign) {
 }
 
 //# sourceMappingURL=ensure-range.js.map
+;// ./node_modules/big-float-ts/node/double-representation/get-highest-set-bit.js
+
+/**
+ * Returns the highest set bit of the given double. If no bit is set (input
+ * === 0 or +/-inf or NaN) returns NaN.
+ */
+function getHighestSetBit(a) {
+    if (a === 0 || !Number.isFinite(a)) {
+        // There is no highest set bit
+        return NaN;
+    }
+    // At this point there must be a highest set bit (always === 52 if the
+    // number is not a subnormal.
+    doubleView.setFloat64(0, a);
+    const hi = doubleView.getUint32(0);
+    if ((hi & 0x7ff00000) !== 0) {
+        return 52; // normal number => the hidden bit
+    }
+    // subnormal
+    const sigHi = hi & 0xfffff;
+    if (sigHi !== 0) {
+        return 32 + 31 - Math.clz32(sigHi);
+    }
+    return 31 - Math.clz32(doubleView.getUint32(4));
+}
+
+//# sourceMappingURL=get-highest-set-bit.js.map
 ;// ./node_modules/big-float-ts/node/double-representation/msb-exponent.js
 
 
 /**
  * Returns the true exponent of the msb that is set of the given number or
  * NaN if a === 0 or +-inf or NaN.
- * @param a An array of numbers to check
+ * @param a A double
  */
 function msbExponent(a) {
     if (a === 0 || !Number.isFinite(a)) {
@@ -20199,6 +19525,9 @@ function msbExponent(a) {
  * a = a_hi + a_lo.
  *
  * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ *
+ * * **overflow:** `a * (2**(53-bits) + 1)` overflows (giving NaN) for
+ * |a| > ~2^(1023 - (53-bits)), e.g. ~2^996 when keeping 26 bits
  *
  * @param a a double
  * @param bits the number of significand bits to leave intact
@@ -20241,17 +19570,35 @@ function eToBitlength(a, l) {
         i--;
     }
     const keepBits = Math.min(l - (maxMsb - msb), 53);
-    let b = a[i];
-    b = reduceSignificand(b, keepBits);
+    const b = a[i];
     const result = a.slice(i);
-    result[0] = b;
+    if (keepBits > 0) {
+        result[0] = reduceSignificand(b, keepBits);
+    }
+    else {
+        // The component lies just below the bits being kept (its msb is one
+        // position below the kept lsb) so it rounds to either 0 or
+        // `±2^(msb+1)`. (`reduceSignificand` is not valid for 0 bits.)
+        const p = 2 ** msb;
+        const absB = Math.abs(b);
+        // On an exact tie the next lower component (if any) decides,
+        // otherwise round to even (i.e. 0).
+        const roundUp = absB > p ||
+            (i > 0 && Math.sign(a[i - 1]) === Math.sign(b));
+        if (!roundUp) {
+            // here `i` is not the top component (since then `keepBits >= 1`)
+            return result.slice(1);
+        }
+        result[0] = Math.sign(b) * 2 * p;
+    }
     return result;
 }
 
 //# sourceMappingURL=e-to-bitlength.js.map
 ;// ./node_modules/big-float-ts/node/double-representation/bit-length.js
-/* unused harmony import specifier */ var bit_length_getHighestSetBit;
 /* unused harmony import specifier */ var bit_length_getLowestSetBit;
+/* unused harmony import specifier */ var bit_length_getHighestSetBit;
+
 
 
 
@@ -20290,6 +19637,8 @@ function expBitLength(a) {
 
 
 
+
+
 /**
  * Returns the result of a/b using Goldschmidt division.
  *
@@ -20307,7 +19656,10 @@ function expBitLength(a) {
  */
 // TODO - test this function properly or replace with a better one
 function eDiv(N, D, expansionLength) {
-    let D_ = D;
+    let D_ = eCompress(D);
+    if (eSign(D_) === 0) {
+        throw new Error('division by zero');
+    }
     let N_ = N;
     let exact = false;
     let resultBitlengthUpperBound = 0;
@@ -20323,7 +19675,7 @@ function eDiv(N, D, expansionLength) {
     let F = [1 / eEstimate(D_)]; // Initial guess - out by 1/2 upls
     let i = 1;
     while (true) {
-        N_ = expansionProduct(N_, F);
+        N_ = eCompress(expansionProduct(N_, F));
         // The precision bitlength doubles on each iteration
         if (i > expansionLength) {
             // we now have roughly double the needed precision - we actually 
@@ -20334,19 +19686,21 @@ function eDiv(N, D, expansionLength) {
                 // Any bits > expansionLength * 53 must be thrown away as they
                 // are wrong - all other bits are exact.
                 N_ = eToBitlength(N_, resultBitlengthUpperBound);
-                // TODO - below is just for testing - remove later
-                //if (compare(mult(D, N_), N) !== 0) {
-                //    console.log(mult(D, N_))
-                //    throw new Error(`division in-exact - probably due to underflow, N: ${N}, D: ${D}, Result: ${N_}, product: ${mult(D, N_)}`); 
-                //} 
                 return N_;
             }
-            // Returning only significant bits helps with sign determination later on.
-            return N_.slice(N_.length - expansionLength, N_.length);
+            // Returning only significant bits helps with sign determination 
+            // later on (`N_` is compressed so its top components are the most
+            // significant).
+            return N_.slice(Math.max(0, N_.length - expansionLength));
         }
-        D_ = expansionProduct(D_, F);
-        F = eDiff([2], D_);
+        D_ = eCompress(expansionProduct(D_, F));
         i *= 2;
+        // `D_` is now within about 2^(-53*i/2) of 1 so `F` only needs about
+        // 53*i significant bits for the next iteration; truncating it (with a
+        // generous margin) keeps the expansions from growing without bound
+        // and does not affect the exactness of `N_/D_` since both are 
+        // multiplied by the same `F`.
+        F = eToBitlength(eDiff([2], D_), 2 * 53 * i + 53);
     }
 }
 
@@ -21830,7 +21184,7 @@ function evalDeCasteljauWithErr(ps, t) {
 //# sourceMappingURL=eval-de-casteljau-with-err.js.map
 ;// ./node/local-properties-at-t/evaluate/double-double/eval-de-casteljau-dd.js
 
-const eval_de_casteljau_dd_qmq = dd_mult_dd_ddMultDd;
+const eval_de_casteljau_dd_qmq = ddMultDd;
 const eval_de_casteljau_dd_qaq = ddAddDd;
 const eval_de_casteljau_dd_qdq = ddDiffDd;
 const eval_de_casteljau_dd_td = twoDiff;
@@ -22016,8 +21370,8 @@ function totalAbsoluteCurvature(ps, interval = [0, 1]) {
 //# sourceMappingURL=total-absolute-curvature.js.map
 ;// ./node/transformation/reverse.js
 /**
- * * this function deprecated due to being the same as JavaScript's
- *   new Array.toReversed() function.
+ * * this function is deprecated due to being the same as JavaScript's
+ *   new `Array.toReversed()` function.
  *
  * Returns the given points (e.g. bezier curve) in reverse order.
  *
@@ -22077,8 +21431,8 @@ const get_implicit_form3_dd_qno = ddNegativeOf; // error -> 0
 const get_implicit_form3_dd_qm2 = ddMultBy2; // error -> 0 
 const get_implicit_form3_dd_qd2 = ddDivBy2; // error -> 0 
 //const qmd2 = qMultDouble1;  // error -> 1.5*γ²
-const get_implicit_form3_dd_qmd = dd_mult_double_ddMultDouble2; // error -> 3*γ²
-const get_implicit_form3_dd_qmq = dd_mult_dd_ddMultDd; // error -> 5*γ² (proven, Muller & Rideau 2022, see https://doi.org/10.1145/3484514), 4.985*γ² (worst found), we use 6*γ²
+const get_implicit_form3_dd_qmd = ddMultDouble2; // error -> 3*γ²
+const get_implicit_form3_dd_qmq = ddMultDd; // error -> 5*γ² (proven, Muller & Rideau 2022, see https://doi.org/10.1145/3484514), 4.985*γ² (worst found), we use 6*γ²
 const get_implicit_form3_dd_qdq = ddDiffDd; // error -> 3*γ²
 const get_implicit_form3_dd_qaq = ddAddDd; // error -> 3*γ²
 const ddGetImplicitForm3 = (/* unused pure expression or super */ null && (getImplicitForm3Dd));
@@ -22198,8 +21552,8 @@ function evaluateImplicit2(cs, x, y) {
 const get_implicit_form2_dd_qno = ddNegativeOf; // error -> 0
 const get_implicit_form2_dd_qm2 = ddMultBy2; // error -> 0 
 //const qmd2 = qMultDouble1;  // error -> 1.5*γ²
-const get_implicit_form2_dd_qmd = dd_mult_double_ddMultDouble2; // error -> 3*γ²
-const get_implicit_form2_dd_qmq = dd_mult_dd_ddMultDd; // error -> 5*γ² (proven, Muller & Rideau 2022, see https://doi.org/10.1145/3484514), 4.985*γ² (worst found), we use 6*γ²
+const get_implicit_form2_dd_qmd = ddMultDouble2; // error -> 3*γ²
+const get_implicit_form2_dd_qmq = ddMultDd; // error -> 5*γ² (proven, Muller & Rideau 2022, see https://doi.org/10.1145/3484514), 4.985*γ² (worst found), we use 6*γ²
 const get_implicit_form2_dd_qdq = ddDiffDd; // error -> 3*γ²
 const ddGetImplicitForm2 = (/* unused pure expression or super */ null && (getImplicitForm2Dd));
 /**
@@ -22324,7 +21678,7 @@ function getImplicitForm1(ps) {
 
 
 const get_implicit_form1_dd_qdq = ddDiffDd; // error -> 3*γ²
-const get_implicit_form1_dd_qmd = dd_mult_double_ddMultDouble2;
+const get_implicit_form1_dd_qmd = ddMultDouble2;
 const get_implicit_form1_dd_qno = ddNegativeOf;
 const ddGetImplicitForm1 = (/* unused pure expression or super */ null && (getImplicitForm1Dd));
 /**
@@ -22786,7 +22140,7 @@ function toPowerBasis_3rdDerivative(ps) {
 
 const to_power_basis_1st_derivative_dd_ts = twoSum; // error -> 0
 const to_power_basis_1st_derivative_dd_td = twoDiff; // error -> 0
-const to_power_basis_1st_derivative_dd_qmd = dd_mult_double_ddMultDouble2; // error -> 3*u²
+const to_power_basis_1st_derivative_dd_qmd = ddMultDouble2; // error -> 3*u²
 const to_power_basis_1st_derivative_dd_qaq = ddAddDd;
 const to_power_basis_1st_derivative_dd_qad = ddAddDouble; // error -> 2*u²
 /**
@@ -22868,7 +22222,7 @@ function toPowerBasis1_1stDerivativeDd(ps) {
 
 const to_power_basis_2nd_derivative_dd_td = twoDiff;
 const to_power_basis_2nd_derivative_dd_qaq = ddAddDd;
-const to_power_basis_2nd_derivative_dd_qmd = dd_mult_double_ddMultDouble2;
+const to_power_basis_2nd_derivative_dd_qmd = ddMultDouble2;
 const to_power_basis_2nd_derivative_dd_qad = ddAddDouble;
 /**
  * Returns the 2nd derivative of the power basis representation of a bezier
@@ -22915,7 +22269,7 @@ function toPowerBasis_2ndDerivativeDd(ps) {
 
 const to_power_basis_3rd_derivative_dd_td = twoDiff;
 const to_power_basis_3rd_derivative_dd_qaq = ddAddDd;
-const to_power_basis_3rd_derivative_dd_qmd = dd_mult_double_ddMultDouble2;
+const to_power_basis_3rd_derivative_dd_qmd = ddMultDouble2;
 /**
  * Returns the 3rd derivative of the power basis representation of a bezier
  * curve of order cubic or less (with intermediate calculations done in
@@ -23412,7 +22766,7 @@ function unitNormal(ps, t) {
 //# sourceMappingURL=unit-normal.js.map
 ;// ./node/local-properties-at-t/tangent/double-double/dd-tangent-at-0.js
 
-const dd_tangent_at_0_qmd = dd_mult_double_ddMultDouble2;
+const dd_tangent_at_0_qmd = ddMultDouble2;
 const dd_tangent_at_0_td = twoDiff;
 /**
  * Returns the tangent vector (in double-double precision not necessarily of
@@ -23480,7 +22834,7 @@ function ddNormalAt0(ps) {
 //# sourceMappingURL=dd-normal-at-0.js.map
 ;// ./node/local-properties-at-t/tangent/double-double/dd-tangent-at-1.js
 
-const dd_tangent_at_1_qmd = dd_mult_double_ddMultDouble2;
+const dd_tangent_at_1_qmd = ddMultDouble2;
 const dd_tangent_at_1_td = twoDiff;
 /**
  * Returns the tangent vector (not necessarily of unit length) of an
@@ -23566,7 +22920,7 @@ function ddHorner(p, x) {
     let q = [0, 0];
     for (let i = 0; i < p.length; i++) {
         // q = p[i] + x*q;
-        q = dd_add_dd_ddAddDd(p[i], ddMultDouble2(x, q));
+        q = ddAddDd(p[i], ddMultDouble2(x, q));
     }
     return q;
 }
@@ -23804,7 +23158,7 @@ function curvatureNDOf(ps) {
 
 
 
-const dd_curvature_qmq = dd_mult_dd_ddMultDd;
+const dd_curvature_qmq = ddMultDd;
 const dd_curvature_qaq = ddAddDd;
 const dd_curvature_qdq = ddDiffDd;
 /**
@@ -24120,8 +23474,8 @@ const qOne = [0, 1];
 const get_interval_box_dd_qdq = ddDiffDd;
 const get_interval_box_dd_qad = ddAddDouble;
 const get_interval_box_dd_qaq = ddAddDd;
-const get_interval_box_dd_qmq = dd_mult_dd_ddMultDd;
-const get_interval_box_dd_qmd = dd_mult_double_ddMultDouble2;
+const get_interval_box_dd_qmq = ddMultDd;
+const get_interval_box_dd_qmd = ddMultDouble2;
 const get_interval_box_dd_qm2 = ddMultBy2;
 const qDivQuadWithError = ddDivDdWithError;
 const qMin = ddMin;
@@ -24545,8 +23899,8 @@ function ddMultBy4(f) {
 
 const get_footpoint_poly_3_dd_td = twoDiff;
 const get_footpoint_poly_3_dd_qaq = ddAddDd;
-const get_footpoint_poly_3_dd_qmd = dd_mult_double_ddMultDouble2;
-const get_footpoint_poly_3_dd_qmq = dd_mult_dd_ddMultDd;
+const get_footpoint_poly_3_dd_qmd = ddMultDouble2;
+const get_footpoint_poly_3_dd_qmq = ddMultDd;
 const get_footpoint_poly_3_dd_qm2 = ddMultBy2;
 const qm4 = ddMultBy4;
 const get_footpoint_poly_3_dd_qdq = ddDiffDd;
@@ -24639,8 +23993,8 @@ function getFootpointPoly3Dd(ps, p) {
 
 const get_footpoint_poly_2_dd_td = twoDiff;
 const get_footpoint_poly_2_dd_qaq = ddAddDd;
-const get_footpoint_poly_2_dd_qmd = dd_mult_double_ddMultDouble2;
-const get_footpoint_poly_2_dd_qmq = dd_mult_dd_ddMultDd;
+const get_footpoint_poly_2_dd_qmd = ddMultDouble2;
+const get_footpoint_poly_2_dd_qmq = ddMultDd;
 const get_footpoint_poly_2_dd_qm2 = ddMultBy2;
 const qdifq = ddDiffDd;
 const get_footpoint_poly_2_dd_qm4 = ddMultBy4;
@@ -25485,6 +24839,8728 @@ function hausdorffDistanceOneSided(A, B, tolerance, maxIterations = 50) {
 }
 
 //# sourceMappingURL=hausdorff-distance-one-sided.js.map
+;// ./node/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly.js
+
+
+
+/**
+ * Returns a polynomial in 1 variable whose roots are the parameter values of
+ * the foot points on the given bezier curve of the given point.
+ *
+ * The returned polynomial coefficients are given densely as an array of
+ * double precision floating point numbers from highest to lowest power,
+ * e.g. `[[0,5],[0,-3],[0,0]]` represents the polynomial `5x^2 - 3x`.
+ *
+ * * intermediate calculations are done in double precision
+ *
+ * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
+ * control points, e.g. `[[1,2],[3,4],[5,7],[0,0]]`
+ * @param p
+ */
+function getFootpointPoly(ps, p) {
+    if (ps.length === 4) {
+        return getFootpointPoly3(ps, p);
+    }
+    if (ps.length === 3) {
+        return getFootpointPoly2(ps, p);
+    }
+    if (ps.length === 2) {
+        return getFootpointPoly1(ps, p);
+    }
+    throw new Error('The given bezier curve must be of order 1,2 or 3');
+}
+
+//# sourceMappingURL=get-footpoint-poly.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/bernstein-roots.js
+/** power → Bernstein conversion matrices (row-major, `(n+1)²`), cached per degree */
+const conv = [];
+function convMatrix(n) {
+    let M = conv[n];
+    if (M !== undefined) {
+        return M;
+    }
+    M = new Float64Array((n + 1) * (n + 1));
+    // b_i = Σ_{j≤i} C(i,j)/C(n,j) a_j
+    for (let i = 0; i <= n; i++) {
+        let cij = 1, cnj = 1;
+        for (let j = 0; j <= i; j++) {
+            M[i * (n + 1) + j] = cij / cnj;
+            cij = cij * (i - j) / (j + 1);
+            cnj = cnj * (n - j) / (j + 1);
+        }
+    }
+    conv[n] = M;
+    return M;
+}
+/**
+ * Real roots in `[0,1]` of a univariate polynomial (power basis, coefficients
+ * in *descending* order, as `flo-poly`'s `roots`) by Bernstein subdivision
+ * with Descartes' rule of signs: the number of sign changes of the Bernstein
+ * coefficients on an interval bounds the number of roots there (with the
+ * same parity); `0` - no root, `1` - exactly one root (refined by bisection on
+ * the power form), else the interval is halved (de Casteljau).
+ *
+ * * intervals narrower than `tol` with more than one sign change (clusters or
+ * multiple roots) report their midpoint
+ * * plain double precision; no error bounds
+ */
+function bernsteinRoots01(p, tol = 1e-12) {
+    const n = p.length - 1;
+    if (n < 1) {
+        return [];
+    }
+    // ascending power coefficients
+    const a = new Float64Array(n + 1);
+    for (let i = 0; i <= n; i++) {
+        a[i] = p[n - i];
+    }
+    const M = convMatrix(n);
+    const b = new Float64Array(n + 1);
+    for (let i = 0; i <= n; i++) {
+        let s = 0;
+        const o = i * (n + 1);
+        for (let j = 0; j <= i; j++) {
+            s += M[o + j] * a[j];
+        }
+        b[i] = s;
+    }
+    const roots = [];
+    rec(a, n, b, 0, 1, tol, roots);
+    return roots;
+}
+function hornerF(a, n, x) {
+    let r = 0;
+    for (let i = n; i >= 0; i--) {
+        r = r * x + a[i];
+    }
+    return r;
+}
+/**
+ * The single root in `[x0,x1]` (a sign change is assumed, endpoints may be
+ * roots) by the Illinois variant of regula falsi (bracketing, superlinear),
+ * falling back to bisection steps if it stalls.
+ */
+function illinois(a, n, x0, x1) {
+    let f0 = hornerF(a, n, x0), f1 = hornerF(a, n, x1);
+    if (f0 === 0) {
+        return x0;
+    }
+    if (f1 === 0) {
+        return x1;
+    }
+    let side = 0;
+    for (let k = 0; k < 100; k++) {
+        let x = (x0 * f1 - x1 * f0) / (f1 - f0);
+        // keep strictly inside (and bisect if the secant point is unusable)
+        if (!(x > x0 && x < x1)) {
+            x = (x0 + x1) / 2;
+        }
+        const fx = hornerF(a, n, x);
+        if (fx === 0 || x1 - x0 <= 2e-16 * (1 + bernstein_roots_abs(x))) {
+            return x;
+        }
+        if ((fx < 0) === (f1 < 0)) {
+            x1 = x;
+            f1 = fx;
+            if (side === -1) {
+                f0 /= 2;
+            }
+            side = -1;
+        }
+        else {
+            x0 = x;
+            f0 = fx;
+            if (side === 1) {
+                f1 /= 2;
+            }
+            side = 1;
+        }
+    }
+    return (x0 + x1) / 2;
+}
+const { abs: bernstein_roots_abs } = Math;
+function rec(a, n, c, lo, hi, tol, roots) {
+    // sign changes (ignoring zeros)
+    let v = 0, prev = 0;
+    for (let i = 0; i <= n; i++) {
+        const x = c[i];
+        const s = x > 0 ? 1 : x < 0 ? -1 : 0;
+        if (s !== 0) {
+            if (prev !== 0 && s !== prev) {
+                v++;
+            }
+            prev = s;
+        }
+    }
+    if (v === 0) {
+        // an exact zero at an end point
+        if (c[0] === 0 && lo === 0) {
+            roots.push(0);
+        }
+        if (c[n] === 0) {
+            roots.push(hi);
+        }
+        return;
+    }
+    if (v === 1) {
+        roots.push(illinois(a, n, lo, hi));
+        return;
+    }
+    if (hi - lo < tol) {
+        roots.push((lo + hi) / 2);
+        return;
+    }
+    // de Casteljau at 1/2
+    const L = new Float64Array(n + 1), R = new Float64Array(n + 1);
+    const t = c.slice();
+    L[0] = t[0];
+    R[n] = t[n];
+    for (let r = 1; r <= n; r++) {
+        for (let i = 0; i <= n - r; i++) {
+            t[i] = (t[i] + t[i + 1]) / 2;
+        }
+        L[r] = t[0];
+        R[n - r] = t[n - r];
+    }
+    const mid = (lo + hi) / 2;
+    rec(a, n, L, lo, mid, tol, roots);
+    rec(a, n, R, mid, hi, tol, roots);
+}
+
+//# sourceMappingURL=bernstein-roots.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/maiG_A1B2.js
+// GENERATED by gen-resultants.py - do not edit
+/**
+ * MA two interior footpoints, A of degree 1, B of degree 2: `G(σ,π)` (the implicit form
+ * of `A` at the intersection of the normals of `B` at `s1`, `s2`; `σ = s1 + s2`,
+ * `π = s1·s2`) as `g[j][i]`, the coefficient of `σ^i π^j`
+ * (12 terms; multiplications: 35 without sharing,
+ * 22 with 6 shared products)
+ */
+function maiG_A1B2(v, bx, by) {
+    const x0 = v[0];
+    const x1 = v[1];
+    const x2 = v[2];
+    const x3 = bx[2];
+    const x4 = by[2];
+    const x5 = x3 * x1;
+    const x6 = x4 * x4;
+    const x7 = x3 * x5;
+    const x8 = x4 * x0;
+    const x9 = x3 * x8;
+    const x10 = x6 * x1;
+    const x11 = x2 * x4;
+    const x12 = x3 * x9;
+    const x13 = x6 * x8;
+    const x14 = x3 * x7;
+    const x15 = x5 * x6;
+    const o = new Float64Array(6);
+    o[0] = -x1 - 2 * x11;
+    o[1] = -3 * x5;
+    o[2] = -2 * x7 - 2 * x10;
+    o[3] = 6 * x9 - 4 * x7 + 2 * x10;
+    o[4] = 4 * x12 + 4 * x13 - 4 * x14 - 4 * x15;
+    o[5] = 0;
+    const g = [];
+    for (let j = 0; j < 2; j++) {
+        g.push(Array.from(o.subarray(j * 3, (j + 1) * 3)));
+    }
+    return g;
+}
+
+//# sourceMappingURL=maiG_A1B2.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/maiG_A1B3.js
+// GENERATED by gen-resultants.py - do not edit
+/**
+ * MA two interior footpoints, A of degree 1, B cubic: `G(σ,π)` (the implicit form
+ * of `A` at the intersection of the normals of `B` at `s1`, `s2`; `σ = s1 + s2`,
+ * `π = s1·s2`) as `g[j][i]`, the coefficient of `σ^i π^j`
+ * (58 terms; multiplications: 197 without sharing,
+ * 98 with 30 shared products)
+ */
+function maiG_A1B3(v, bx, by) {
+    const x0 = v[0];
+    const x1 = v[1];
+    const x2 = v[2];
+    const x3 = bx[2];
+    const x4 = bx[3];
+    const x5 = by[2];
+    const x6 = by[3];
+    const x7 = x4 * x1;
+    const x8 = x5 * x0;
+    const x9 = x6 * x6;
+    const x10 = x3 * x1;
+    const x11 = x6 * x0;
+    const x12 = x4 * x7;
+    const x13 = x5 * x6;
+    const x14 = x3 * x3;
+    const x15 = x4 * x8;
+    const x16 = x5 * x5;
+    const x17 = x4 * x11;
+    const x18 = x9 * x1;
+    const x19 = x3 * x7;
+    const x20 = x3 * x10;
+    const x21 = x3 * x12;
+    const x22 = x3 * x15;
+    const x23 = x4 * x17;
+    const x24 = x4 * x12;
+    const x25 = x4 * x15;
+    const x26 = x5 * x2;
+    const x27 = x6 * x2;
+    const x28 = x7 * x9;
+    const x29 = x7 * x14;
+    const x30 = x8 * x9;
+    const x31 = x8 * x13;
+    const x32 = x9 * x10;
+    const x33 = x9 * x11;
+    const x34 = x10 * x13;
+    const x35 = x13 * x1;
+    const x36 = x16 * x1;
+    const x37 = x3 * x8;
+    const x38 = x3 * x27;
+    const x39 = x4 * x26;
+    const x40 = x8 * x14;
+    const x41 = x8 * x16;
+    const x42 = x10 * x14;
+    const x43 = x10 * x16;
+    const x44 = x11 * x14;
+    const x45 = x7 * x16;
+    const x46 = x3 * x17;
+    const x47 = x7 * x13;
+    const o = new Float64Array(20);
+    o[0] = -x1 - 2 * x26;
+    o[1] = -3 * x10 - 3 * x27;
+    o[2] = -2 * x20 - 4 * x7 - 2 * x36;
+    o[3] = -5 * x19 - 5 * x35;
+    o[4] = -3 * x12 - 3 * x18;
+    o[5] = 6 * x37 - 3 * x11 - 4 * x20 + 7 * x7 + 2 * x36 - 6 * x38 + 6 * x39;
+    o[6] = 4 * x40 + 8 * x15 + 4 * x41 - 4 * x42 + 2 * x19 - 4 * x43 + 10 * x35;
+    o[7] = 10 * x22 + 10 * x31 - 10 * x29 - 10 * x34 + 9 * x12 + 9 * x18;
+    o[8] = 6 * x25 + 6 * x30 - 6 * x21 - 6 * x32;
+    o[9] = 0;
+    o[10] = 6 * x44 - 10 * x22 + 12 * x17 - 4 * x31 + 4 * x29 + 10 * x34 - 15 * x12 - 6 * x45 - 3 * x18;
+    o[11] = 15 * x46 - 12 * x25 + 3 * x30 - 3 * x21 + 12 * x32 - 15 * x47;
+    o[12] = 9 * x23 + 9 * x33 - 9 * x24 - 9 * x28;
+    o[13] = 0;
+    o[14] = 0;
+    o[15] = -9 * x23 - 9 * x33 + 9 * x24 + 9 * x28;
+    o[16] = 0;
+    o[17] = 0;
+    o[18] = 0;
+    o[19] = 0;
+    const g = [];
+    for (let j = 0; j < 4; j++) {
+        g.push(Array.from(o.subarray(j * 5, (j + 1) * 5)));
+    }
+    return g;
+}
+
+//# sourceMappingURL=maiG_A1B3.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/maiG_A2B2.js
+// GENERATED by gen-resultants.py - do not edit
+/**
+ * MA two interior footpoints, A of degree 2, B of degree 2: `G(σ,π)` (the implicit form
+ * of `A` at the intersection of the normals of `B` at `s1`, `s2`; `σ = s1 + s2`,
+ * `π = s1·s2`) as `g[j][i]`, the coefficient of `σ^i π^j`
+ * (62 terms; multiplications: 306 without sharing,
+ * 113 with 29 shared products)
+ */
+function maiG_A2B2(v, bx, by) {
+    const x0 = v[0];
+    const x1 = v[1];
+    const x2 = v[2];
+    const x3 = v[3];
+    const x4 = v[4];
+    const x5 = v[5];
+    const x6 = bx[2];
+    const x7 = by[2];
+    const x8 = x6 * x7;
+    const x9 = x7 * x7;
+    const x10 = x6 * x6;
+    const x11 = x8 * x8;
+    const x12 = x8 * x1;
+    const x13 = x10 * x2;
+    const x14 = x7 * x9;
+    const x15 = x9 * x9;
+    const x16 = x10 * x13;
+    const x17 = x11 * x2;
+    const x18 = x8 * x4;
+    const x19 = x10 * x12;
+    const x20 = x8 * x2;
+    const x21 = x11 * x0;
+    const x22 = x14 * x1;
+    const x23 = x15 * x2;
+    const x24 = x6 * x18;
+    const x25 = x6 * x19;
+    const x26 = x6 * x13;
+    const x27 = x6 * x16;
+    const x28 = x6 * x17;
+    const x29 = x7 * x20;
+    const x30 = x7 * x11;
+    const x31 = x9 * x22;
+    const x32 = x9 * x12;
+    const x33 = x9 * x2;
+    const x34 = x20 * x14;
+    const x35 = x30 * x1;
+    const x36 = x14 * x4;
+    const x37 = x4 * x7;
+    const x38 = x5 * x9;
+    const x39 = x2 * x6;
+    const x40 = x3 * x7;
+    const x41 = x8 * x40;
+    const x42 = x6 * x12;
+    const x43 = x3 * x11;
+    const x44 = x3 * x15;
+    const x45 = x10 * x18;
+    const x46 = x9 * x18;
+    const x47 = x6 * x21;
+    const x48 = x0 * x8;
+    const x49 = x14 * x48;
+    const x50 = x10 * x21;
+    const x51 = x9 * x21;
+    const x52 = x0 * x9;
+    const x53 = x15 * x52;
+    const x54 = x10 * x19;
+    const x55 = x11 * x12;
+    const x56 = x12 * x15;
+    const x57 = x10 * x16;
+    const x58 = x11 * x13;
+    const x59 = x9 * x17;
+    const o = new Float64Array(15);
+    o[0] = x2 + 2 * x37 + 4 * x38;
+    o[1] = 6 * x39 + 6 * x18;
+    o[2] = 13 * x13 + 4 * x33 + 4 * x24 + 4 * x36;
+    o[3] = 12 * x26 + 12 * x29;
+    o[4] = 4 * x16 + 8 * x17 + 4 * x23;
+    o[5] = -6 * x12 + 8 * x13 - 4 * x33 - 12 * x41 + 8 * x24 - 4 * x36;
+    o[6] = -22 * x42 - 4 * x22 + 32 * x26 - 4 * x29 - 8 * x43 - 8 * x44 + 8 * x45 + 8 * x46;
+    o[7] = -24 * x19 - 24 * x32 + 40 * x16 + 32 * x17 - 8 * x23;
+    o[8] = -8 * x25 - 16 * x35 - 8 * x31 + 16 * x27 + 32 * x28 + 16 * x34;
+    o[9] = 0;
+    o[10] = 36 * x21 - 24 * x19 + 12 * x32 + 16 * x16 - 16 * x17 + 4 * x23;
+    o[11] = 48 * x47 + 48 * x49 - 40 * x25 - 32 * x35 + 8 * x31 + 32 * x27 + 16 * x28 - 16 * x34;
+    o[12] = 16 * x50 + 32 * x51 + 16 * x53 - 16 * x54 - 32 * x55 - 16 * x56 + 16 * x57 + 32 * x58 + 16 * x59;
+    o[13] = 0;
+    o[14] = 0;
+    const g = [];
+    for (let j = 0; j < 3; j++) {
+        g.push(Array.from(o.subarray(j * 5, (j + 1) * 5)));
+    }
+    return g;
+}
+
+//# sourceMappingURL=maiG_A2B2.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/maiG_A2B3.js
+// GENERATED by gen-resultants.py - do not edit
+/**
+ * MA two interior footpoints, A of degree 2, B cubic: `G(σ,π)` (the implicit form
+ * of `A` at the intersection of the normals of `B` at `s1`, `s2`; `σ = s1 + s2`,
+ * `π = s1·s2`) as `g[j][i]`, the coefficient of `σ^i π^j`
+ * (870 terms; multiplications: 5004 without sharing,
+ * 1294 with 361 shared products)
+ */
+function maiG_A2B3(v, bx, by) {
+    const x0 = v[0];
+    const x1 = v[1];
+    const x2 = v[2];
+    const x3 = v[3];
+    const x4 = v[4];
+    const x5 = v[5];
+    const x6 = bx[2];
+    const x7 = bx[3];
+    const x8 = by[2];
+    const x9 = by[3];
+    const x10 = x7 * x9;
+    const x11 = x6 * x8;
+    const x12 = x9 * x9;
+    const x13 = x7 * x7;
+    const x14 = x8 * x8;
+    const x15 = x6 * x6;
+    const x16 = x10 * x1;
+    const x17 = x10 * x2;
+    const x18 = x11 * x1;
+    const x19 = x9 * x12;
+    const x20 = x13 * x2;
+    const x21 = x10 * x0;
+    const x22 = x7 * x8;
+    const x23 = x9 * x11;
+    const x24 = x6 * x7;
+    const x25 = x15 * x2;
+    const x26 = x11 * x11;
+    const x27 = x10 * x4;
+    const x28 = x12 * x12;
+    const x29 = x8 * x14;
+    const x30 = x10 * x17;
+    const x31 = x8 * x11;
+    const x32 = x10 * x3;
+    const x33 = x14 * x0;
+    const x34 = x11 * x17;
+    const x35 = x6 * x15;
+    const x36 = x7 * x14;
+    const x37 = x20 * x13;
+    const x38 = x13 * x18;
+    const x39 = x10 * x21;
+    const x40 = x11 * x4;
+    const x41 = x13 * x16;
+    const x42 = x6 * x12;
+    const x43 = x10 * x16;
+    const x44 = x19 * x1;
+    const x45 = x11 * x22;
+    const x46 = x8 * x13;
+    const x47 = x8 * x19;
+    const x48 = x9 * x17;
+    const x49 = x11 * x21;
+    const x50 = x8 * x9;
+    const x51 = x7 * x15;
+    const x52 = x22 * x13;
+    const x53 = x14 * x2;
+    const x54 = x12 * x0;
+    const x55 = x6 * x23;
+    const x56 = x6 * x19;
+    const x57 = x9 * x1;
+    const x58 = x26 * x2;
+    const x59 = x8 * x12;
+    const x60 = x9 * x29;
+    const x61 = x12 * x14;
+    const x62 = x15 * x15;
+    const x63 = x9 * x4;
+    const x64 = x26 * x0;
+    const x65 = x12 * x15;
+    const x66 = x13 * x1;
+    const x67 = x14 * x14;
+    const x68 = x11 * x2;
+    const x69 = x24 * x15;
+    const x70 = x28 * x2;
+    const x71 = x22 * x14;
+    const x72 = x33 * x13;
+    const x73 = x8 * x23;
+    const x74 = x9 * x21;
+    const x75 = x9 * x43;
+    const x76 = x31 * x2;
+    const x77 = x6 * x32;
+    const x78 = x29 * x1;
+    const x79 = x13 * x40;
+    const x80 = x13 * x3;
+    const x81 = x6 * x27;
+    const x82 = x11 * x0;
+    const x83 = x23 * x0;
+    const x84 = x13 * x0;
+    const x85 = x46 * x4;
+    const x86 = x52 * x1;
+    const x87 = x19 * x4;
+    const x88 = x6 * x30;
+    const x89 = x6 * x48;
+    const x90 = x6 * x70;
+    const x91 = x7 * x20;
+    const x92 = x7 * x30;
+    const x93 = x7 * x34;
+    const x94 = x7 * x37;
+    const x95 = x7 * x38;
+    const x96 = x7 * x41;
+    const x97 = x8 * x43;
+    const x98 = x9 * x32;
+    const x99 = x11 * x32;
+    const x100 = x11 * x43;
+    const x101 = x20 * x24;
+    const x102 = x20 * x14;
+    const x103 = x20 * x51;
+    const x104 = x20 * x15;
+    const x105 = x22 * x17;
+    const x106 = x23 * x16;
+    const x107 = x25 * x12;
+    const x108 = x28 * x33;
+    const x109 = x28 * x18;
+    const x110 = x28 * x0;
+    const x111 = x28 * x3;
+    const x112 = x12 * x44;
+    const x113 = x12 * x53;
+    const x114 = x12 * x3;
+    const x115 = x30 * x15;
+    const x116 = x36 * x16;
+    const x117 = x37 * x15;
+    const x118 = x38 * x13;
+    const x119 = x39 * x14;
+    const x120 = x46 * x66;
+    const x121 = x47 * x2;
+    const x122 = x48 * x15;
+    const x123 = x68 * x19;
+    const x124 = x17 * x19;
+    const x125 = x6 * x20;
+    const x126 = x6 * x34;
+    const x127 = x6 * x38;
+    const x128 = x6 * x41;
+    const x129 = x6 * x75;
+    const x130 = x7 * x25;
+    const x131 = x7 * x27;
+    const x132 = x7 * x58;
+    const x133 = x7 * x16;
+    const x134 = x8 * x10;
+    const x135 = x8 * x28;
+    const x136 = x8 * x17;
+    const x137 = x10 * x43;
+    const x138 = x20 * x26;
+    const x139 = x20 * x31;
+    const x140 = x20 * x35;
+    const x141 = x20 * x36;
+    const x142 = x20 * x62;
+    const x143 = x20 * x69;
+    const x144 = x21 * x52;
+    const x145 = x21 * x71;
+    const x146 = x21 * x73;
+    const x147 = x22 * x32;
+    const x148 = x22 * x43;
+    const x149 = x135 * x1;
+    const x150 = x23 * x25;
+    const x151 = x23 * x53;
+    const x152 = x23 * x18;
+    const x153 = x23 * x2;
+    const x154 = x23 * x3;
+    const x155 = x24 * x25;
+    const x156 = x24 * x27;
+    const x157 = x24 * x30;
+    const x158 = x24 * x34;
+    const x159 = x24 * x37;
+    const x160 = x24 * x38;
+    const x161 = x24 * x41;
+    const x162 = x25 * x28;
+    const x163 = x25 * x42;
+    const x164 = x25 * x51;
+    const x165 = x25 * x15;
+    const x166 = x26 * x54;
+    const x167 = x26 * x16;
+    const x168 = x27 * x50;
+    const x169 = x28 * x54;
+    const x170 = x28 * x16;
+    const x171 = x29 * x66;
+    const x172 = x29 * x19;
+    const x173 = x172 * x0;
+    const x174 = x29 * x4;
+    const x175 = x12 * x30;
+    const x176 = x12 * x34;
+    const x177 = x12 * x39;
+    const x178 = x12 * x49;
+    const x179 = x12 * x58;
+    const x180 = x12 * x16;
+    const x181 = x12 * x76;
+    const x182 = x12 * x78;
+    const x183 = x12 * x18;
+    const x184 = x12 * x2;
+    const x185 = x30 * x13;
+    const x186 = x31 * x16;
+    const x187 = x33 * x61;
+    const x188 = x34 * x13;
+    const x189 = x34 * x15;
+    const x190 = x35 * x48;
+    const x191 = x36 * x18;
+    const x192 = x36 * x2;
+    const x193 = x37 * x13;
+    const x194 = x38 * x14;
+    const x195 = x38 * x15;
+    const x196 = x39 * x13;
+    const x197 = x39 * x50;
+    const x198 = x13 * x41;
+    const x199 = x13 * x49;
+    const x200 = x13 * x64;
+    const x201 = x13 * x72;
+    const x202 = x41 * x14;
+    const x203 = x41 * x15;
+    const x204 = x42 * x44;
+    const x205 = x42 * x16;
+    const x206 = x42 * x18;
+    const x207 = x42 * x2;
+    const x208 = x44 * x14;
+    const x209 = x44 * x15;
+    const x210 = x45 * x16;
+    const x211 = x45 * x84;
+    const x212 = x45 * x2;
+    const x213 = x46 * x17;
+    const x214 = x47 * x54;
+    const x215 = x47 * x16;
+    const x216 = x47 * x18;
+    const x217 = x47 * x3;
+    const x218 = x48 * x14;
+    const x219 = x49 * x14;
+    const x220 = x14 * x53;
+    const x221 = x14 * x16;
+    const x222 = x14 * x74;
+    const x223 = x50 * x16;
+    const x224 = x51 * x16;
+    const x225 = x51 * x18;
+    const x226 = x52 * x66;
+    const x227 = x52 * x4;
+    const x228 = x55 * x16;
+    const x229 = x55 * x2;
+    const x230 = x56 * x68;
+    const x231 = x56 * x17;
+    const x232 = x56 * x4;
+    const x233 = x57 * x15;
+    const x234 = x57 * x67;
+    const x235 = x59 * x17;
+    const x236 = x59 * x4;
+    const x237 = x60 * x2;
+    const x238 = x61 * x16;
+    const x239 = x61 * x18;
+    const x240 = x65 * x16;
+    const x241 = x65 * x18;
+    const x242 = x6 * x111;
+    const x243 = x6 * x25;
+    const x244 = x6 * x37;
+    const x245 = x6 * x40;
+    const x246 = x6 * x44;
+    const x247 = x6 * x58;
+    const x248 = x6 * x63;
+    const x249 = x6 * x16;
+    const x250 = x6 * x79;
+    const x251 = x7 * x39;
+    const x252 = x7 * x40;
+    const x253 = x7 * x49;
+    const x254 = x7 * x64;
+    const x255 = x7 * x72;
+    const x256 = x7 * x79;
+    const x257 = x7 * x18;
+    const x258 = x7 * x99;
+    const x259 = x7 * x2;
+    const x260 = x8 * x32;
+    const x261 = x9 * x77;
+    const x262 = x10 * x32;
+    const x263 = x10 * x77;
+    const x264 = x11 * x77;
+    const x265 = x11 * x19;
+    const x266 = x20 * x45;
+    const x267 = x110 * x15;
+    const x268 = x114 * x31;
+    const x269 = x21 * x22;
+    const x270 = x21 * x29;
+    const x271 = x21 * x46;
+    const x272 = x21 * x56;
+    const x273 = x21 * x59;
+    const x274 = x21 * x19;
+    const x275 = x22 * x1;
+    const x276 = x22 * x4;
+    const x277 = x134 * x27;
+    const x278 = x23 * x27;
+    const x279 = x23 * x33;
+    const x280 = x23 * x76;
+    const x281 = x24 * x39;
+    const x282 = x24 * x40;
+    const x283 = x24 * x49;
+    const x284 = x24 * x58;
+    const x285 = x24 * x64;
+    const x286 = x24 * x16;
+    const x287 = x24 * x18;
+    const x288 = x24 * x2;
+    const x289 = x25 * x35;
+    const x290 = x25 * x55;
+    const x291 = x25 * x65;
+    const x292 = x25 * x69;
+    const x293 = x26 * x3;
+    const x294 = x27 * x12;
+    const x295 = x27 * x31;
+    const x296 = x27 * x35;
+    const x297 = x27 * x13;
+    const x298 = x27 * x42;
+    const x299 = x27 * x14;
+    const x300 = x27 * x51;
+    const x301 = x27 * x15;
+    const x302 = x29 * x32;
+    const x303 = x29 * x68;
+    const x304 = x29 * x17;
+    const x305 = x12 * x33;
+    const x306 = x12 * x40;
+    const x307 = x30 * x14;
+    const x308 = x30 * x50;
+    const x309 = x31 * x54;
+    const x310 = x31 * x80;
+    const x311 = x31 * x83;
+    const x312 = x31 * x84;
+    const x313 = x31 * x18;
+    const x314 = x32 * x46;
+    const x315 = x32 * x59;
+    const x316 = x33 * x45;
+    const x317 = x33 * x60;
+    const x318 = x34 * x14;
+    const x319 = x35 * x44;
+    const x320 = x35 * x63;
+    const x321 = x35 * x16;
+    const x322 = x35 * x18;
+    const x323 = x265 * x3;
+    const x324 = x36 * x53;
+    const x325 = x36 * x80;
+    const x326 = x36 * x3;
+    const x327 = x37 * x14;
+    const x328 = x39 * x15;
+    const x329 = x13 * x81;
+    const x330 = x13 * x85;
+    const x331 = x40 * x42;
+    const x332 = x45 * x18;
+    const x333 = x45 * x3;
+    const x334 = x46 * x1;
+    const x335 = x47 * x0;
+    const x336 = x49 * x15;
+    const x337 = x14 * x57;
+    const x338 = x14 * x63;
+    const x339 = x14 * x72;
+    const x340 = x14 * x78;
+    const x341 = x14 * x80;
+    const x342 = x14 * x86;
+    const x343 = x14 * x18;
+    const x344 = x14 * x98;
+    const x345 = x14 * x5;
+    const x346 = x50 * x18;
+    const x347 = x50 * x2;
+    const x348 = x52 * x17;
+    const x349 = x55 * x18;
+    const x350 = x55 * x3;
+    const x351 = x56 * x82;
+    const x352 = x57 * x62;
+    const x353 = x59 * x1;
+    const x354 = x15 * x63;
+    const x355 = x15 * x16;
+    const x356 = x15 * x87;
+    const x357 = x15 * x18;
+    const x358 = x60 * x16;
+    const x359 = x60 * x18;
+    const x360 = x60 * x3;
+    const x361 = x61 * x3;
+    const x362 = x62 * x16;
+    const x363 = x67 * x16;
+    const x364 = x69 * x16;
+    const x365 = x69 * x18;
+    const x366 = x71 * x1;
+    const x367 = x71 * x4;
+    const x368 = x73 * x17;
+    const x369 = x73 * x4;
+    const x370 = x82 * x19;
+    const x371 = x4 * x8;
+    const x372 = x2 * x6;
+    const x373 = x5 * x50;
+    const x374 = x5 * x12;
+    const x375 = x3 * x31;
+    const x376 = x3 * x50;
+    const x377 = x5 * x23;
+    const x378 = x5 * x36;
+    const x379 = x6 * x18;
+    const x380 = x6 * x57;
+    const x381 = x3 * x67;
+    const x382 = x15 * x40;
+    const x383 = x14 * x40;
+    const x384 = x5 * x42;
+    const x385 = x5 * x134;
+    const x386 = x3 * x42;
+    const x387 = x5 * x65;
+    const x388 = x5 * x10;
+    const x389 = x11 * x388;
+    const x390 = x13 * x345;
+    const x391 = x6 * x64;
+    const x392 = x0 * x55;
+    const x393 = x0 * x45;
+    const x394 = x29 * x82;
+    const x395 = x8 * x21;
+    const x396 = x0 * x60;
+    const x397 = x35 * x57;
+    const x398 = x15 * x154;
+    const x399 = x7 * x293;
+    const x400 = x3 * x65;
+    const x401 = x14 * x154;
+    const x402 = x14 * x326;
+    const x403 = x62 * x63;
+    const x404 = x40 * x51;
+    const x405 = x23 * x40;
+    const x406 = x36 * x40;
+    const x407 = x15 * x64;
+    const x408 = x26 * x33;
+    const x409 = x33 * x36;
+    const x410 = x33 * x67;
+    const x411 = x18 * x62;
+    const x412 = x18 * x26;
+    const x413 = x18 * x67;
+    const x414 = x25 * x62;
+    const x415 = x25 * x26;
+    const x416 = x26 * x53;
+    const x417 = x15 * x83;
+    const x418 = x15 * x54;
+    const x419 = x35 * x114;
+    const x420 = x13 * x174;
+    const x421 = x35 * x83;
+    const x422 = x6 * x49;
+    const x423 = x6 * x74;
+    const x424 = x35 * x233;
+    const x425 = x67 * x275;
+    const x426 = x45 * x53;
+    const x427 = x15 * x98;
+    const x428 = x27 * x36;
+    const x429 = x54 * x62;
+    const x430 = x15 * x74;
+    const x431 = x20 * x67;
+    const x432 = x35 * x74;
+    const x433 = x6 * x39;
+    const x434 = x17 * x71;
+    const o = new Float64Array(63);
+    o[0] = x2 + 2 * x371 + 4 * x345;
+    o[1] = 6 * x372 + 6 * x40 + 3 * x63 + 12 * x373;
+    o[2] = 13 * x25 + 8 * x259 + 4 * x53 + 4 * x245 + 9 * x248 + 8 * x276 + 4 * x174 + 9 * x374;
+    o[3] = 12 * x243 + 34 * x288 + 12 * x76 + 10 * x347 + 6 * x354 + 10 * x252 + 12 * x27 + 16 * x338;
+    o[4] = 4 * x165 + 46 * x130 + 8 * x58 + 30 * x153 + 22 * x20 + 16 * x192 + 4 * x220 + 6 * x184 + 15 * x81 + 6 * x85 + 21 * x236;
+    o[5] = 20 * x155 + 20 * x229 + 58 * x125 + 20 * x212 + 18 * x207 + 40 * x136 + 20 * x237 + 9 * x131 + 9 * x87;
+    o[6] = 37 * x104 + 12 * x107 + 50 * x34 + 24 * x91 + 12 * x102 + 24 * x48 + 37 * x113;
+    o[7] = 30 * x101 + 30 * x89 + 30 * x105 + 30 * x121;
+    o[8] = 9 * x37 + 18 * x30 + 9 * x70;
+    o[9] = -6 * x18 + 3 * x57 + 8 * x25 - 14 * x259 - 4 * x53 - 12 * x375 + 6 * x376 + 8 * x245 + 6 * x248 - 20 * x276 - 4 * x174 + 24 * x377 - 24 * x378;
+    o[10] = -22 * x379 + 9 * x380 - 8 * x275 - 4 * x78 + 32 * x243 - 46 * x288 - 4 * x76 - 20 * x347 - 8 * x293 - 18 * x154 - 16 * x326 - 8 * x381 + 9 * x114 + 8 * x382 + 30 * x354 - 22 * x252 + 8 * x383 - 21 * x27 - 26 * x338 + 36 * x384 - 36 * x385;
+    o[11] = -24 * x357 + 6 * x233 - 58 * x257 - 24 * x343 + 12 * x16 - 4 * x337 + 40 * x165 + 12 * x130 + 32 * x58 - 40 * x153 - 74 * x20 - 44 * x192 - 8 * x220 - 18 * x184 - 12 * x350 - 20 * x333 - 24 * x260 - 32 * x360 + 24 * x320 + 8 * x282 + 18 * x81 + 44 * x369 - 42 * x85 - 12 * x367 - 48 * x236;
+    o[12] = -8 * x322 - 92 * x287 - 16 * x313 + 15 * x249 - 60 * x346 - 38 * x334 - 32 * x366 - 8 * x340 + 9 * x353 + 16 * x289 + 124 * x155 + 32 * x247 + 60 * x229 - 128 * x125 + 4 * x212 + 16 * x303 - 42 * x207 - 150 * x136 - 60 * x237 - 30 * x99 - 12 * x341 - 42 * x361 + 60 * x301 - 18 * x79 + 72 * x306 - 27 * x131 - 30 * x299 - 27 * x87;
+    o[13] = -40 * x225 - 40 * x152 - 116 * x38 - 40 * x191 - 36 * x183 + 9 * x133 - 80 * x221 - 40 * x234 + 9 * x44 + 80 * x164 + 80 * x150 + 84 * x104 + 80 * x132 + 24 * x107 - 40 * x34 + 80 * x151 - 114 * x91 - 48 * x102 - 114 * x48 - 148 * x113 - 18 * x147 - 18 * x217 + 36 * x156 + 36 * x232 - 18 * x227 - 18 * x168;
+    o[14] = -74 * x127 - 24 * x206 - 100 * x186 - 48 * x86 - 24 * x171 - 48 * x223 - 74 * x182 + 148 * x140 + 48 * x163 + 200 * x126 - 54 * x101 + 48 * x139 - 54 * x89 + 148 * x181 - 150 * x105 - 150 * x121;
+    o[15] = -60 * x95 - 60 * x106 - 60 * x116 - 60 * x208 + 120 * x103 + 120 * x122 + 120 * x93 + 120 * x123 - 54 * x37 - 108 * x30 - 54 * x70;
+    o[16] = -18 * x120 - 36 * x97 - 18 * x149 + 36 * x244 + 72 * x88 + 36 * x90;
+    o[17] = 0;
+    o[18] = 36 * x64 - 36 * x83 + 9 * x54 - 24 * x357 + 6 * x233 + 52 * x257 + 12 * x343 - 33 * x16 - 2 * x337 + 16 * x165 - 64 * x130 - 16 * x58 - 20 * x153 + 79 * x20 + 40 * x192 + 4 * x220 + 6 * x184 - 48 * x350 + 56 * x333 + 18 * x386 - 42 * x260 + 8 * x360 + 24 * x320 - 32 * x282 - 42 * x81 - 32 * x369 + 72 * x85 + 24 * x367 + 6 * x236 + 36 * x387 - 72 * x389 + 36 * x390;
+    o[19] = 48 * x391 - 24 * x392 + 96 * x393 + 48 * x394 - 48 * x395 - 24 * x396 - 40 * x322 - 6 * x397 + 38 * x287 - 32 * x313 - 57 * x249 + 84 * x346 + 68 * x334 + 44 * x366 + 8 * x340 - 33 * x353 + 32 * x289 - 96 * x155 + 16 * x247 - 140 * x229 + 124 * x125 - 12 * x212 - 16 * x303 - 6 * x207 + 170 * x136 + 40 * x237 - 24 * x398 + 24 * x399 - 18 * x400 - 48 * x99 - 24 * x401 + 72 * x341 + 24 * x402 - 36 * x98 + 6 * x361 + 24 * x403 - 24 * x404 - 24 * x301 + 24 * x405 + 18 * x79 - 24 * x406 - 114 * x306 + 45 * x131 + 108 * x299 + 9 * x87;
+    o[20] = 16 * x407 + 184 * x254 + 32 * x408 - 60 * x49 + 120 * x279 + 64 * x72 + 64 * x409 + 16 * x410 - 60 * x305 - 16 * x411 - 12 * x352 - 104 * x225 - 32 * x412 - 63 * x355 - 64 * x152 + 216 * x38 + 16 * x191 - 16 * x413 + 75 * x183 - 84 * x133 + 142 * x221 + 68 * x234 - 36 * x44 + 16 * x414 + 48 * x164 + 32 * x415 - 40 * x150 - 162 * x104 - 48 * x132 + 16 * x416 - 132 * x107 - 90 * x34 - 160 * x151 + 264 * x91 + 144 * x102 + 24 * x324 + 168 * x48 + 148 * x113 - 60 * x264 + 60 * x310 - 45 * x261 - 60 * x268 + 18 * x147 + 60 * x302 - 27 * x217 + 60 * x296 - 60 * x250 + 60 * x331 - 45 * x156 - 60 * x295 - 90 * x232 + 72 * x227 + 117 * x168;
+    o[21] = 80 * x285 + 80 * x311 + 232 * x312 + 80 * x316 + 72 * x309 - 36 * x269 + 160 * x270 + 80 * x317 - 36 * x335 - 80 * x365 - 60 * x321 - 80 * x349 - 10 * x127 - 80 * x332 - 60 * x206 - 129 * x286 + 80 * x186 - 80 * x359 - 9 * x246 + 162 * x86 + 72 * x171 + 42 * x223 + 162 * x182 + 80 * x292 + 80 * x290 - 92 * x140 + 80 * x284 - 72 * x163 - 320 * x126 + 80 * x280 + 180 * x101 - 24 * x139 - 60 * x89 - 444 * x181 + 450 * x105 + 120 * x304 + 210 * x121 - 36 * x258 - 36 * x323 + 36 * x325 - 27 * x262 + 36 * x344 - 27 * x111 + 36 * x300 + 36 * x356 - 36 * x256 - 36 * x278 + 27 * x297 + 27 * x294;
+    o[22] = 148 * x200 + 48 * x166 + 200 * x219 + 96 * x255 + 48 * x339 + 96 * x222 + 148 * x187 - 148 * x195 - 48 * x241 - 111 * x224 - 200 * x167 - 36 * x209 + 144 * x95 - 48 * x194 - 6 * x106 - 148 * x239 - 72 * x41 + 204 * x116 - 72 * x180 + 129 * x208 + 148 * x142 + 48 * x291 + 200 * x189 - 162 * x103 + 48 * x138 - 312 * x122 + 148 * x179 - 180 * x93 - 480 * x123 + 243 * x37 + 72 * x141 + 342 * x30 + 222 * x218 + 99 * x70;
+    o[23] = 120 * x211 + 120 * x146 + 120 * x145 + 120 * x173 - 120 * x160 - 120 * x228 - 90 * x128 - 120 * x210 - 90 * x205 - 120 * x216 + 90 * x120 + 90 * x97 + 120 * x143 + 120 * x190 + 120 * x158 + 120 * x230 - 180 * x88 - 180 * x90 + 180 * x213 + 180 * x235;
+    o[24] = 36 * x201 + 72 * x119 + 36 * x108 - 36 * x118 - 72 * x100 - 36 * x109 - 27 * x96 - 54 * x75 - 27 * x112 + 36 * x117 + 72 * x115 + 36 * x162 + 54 * x94 + 108 * x92 + 54 * x124;
+    o[25] = 0;
+    o[26] = 0;
+    o[27] = 72 * x417 - 120 * x254 - 36 * x418 + 204 * x49 - 48 * x279 - 72 * x74 + 24 * x305 - 24 * x352 + 64 * x225 - 18 * x355 + 88 * x152 - 160 * x38 - 56 * x191 - 48 * x183 + 138 * x133 + 14 * x221 - 8 * x234 + 18 * x44 - 32 * x164 - 80 * x150 + 176 * x104 + 64 * x132 + 24 * x107 + 140 * x34 + 40 * x151 - 228 * x91 - 144 * x102 - 24 * x324 - 60 * x48 - 12 * x113 - 36 * x419 + 96 * x264 - 60 * x310 - 72 * x261 + 24 * x268 + 90 * x147 - 24 * x302 + 18 * x217 - 24 * x296 + 24 * x250 - 60 * x331 + 90 * x156 + 96 * x295 + 18 * x232 - 108 * x227 - 36 * x420 - 36 * x168;
+    o[28] = 48 * x421 - 80 * x285 + 372 * x422 + 16 * x311 - 304 * x312 - 80 * x316 - 90 * x423 + 36 * x309 + 264 * x269 + 32 * x270 - 32 * x317 - 18 * x335 - 24 * x424 + 56 * x365 - 96 * x321 + 32 * x349 - 18 * x127 + 32 * x332 + 108 * x206 + 165 * x286 - 136 * x186 + 56 * x359 - 9 * x246 - 204 * x86 - 132 * x171 - 24 * x425 + 162 * x223 - 46 * x182 - 32 * x292 - 80 * x290 + 160 * x140 + 16 * x284 - 72 * x163 + 240 * x126 - 80 * x280 - 156 * x101 + 84 * x139 + 48 * x426 + 102 * x89 + 272 * x181 - 510 * x105 - 180 * x304 - 60 * x121 - 90 * x427 + 162 * x258 - 18 * x323 - 72 * x325 + 27 * x262 + 18 * x344 + 27 * x111 + 18 * x300 - 72 * x356 - 18 * x256 + 162 * x278 - 27 * x297 - 90 * x428 - 27 * x294;
+    o[29] = 240 * x336 - 296 * x200 + 144 * x166 + 588 * x253 - 160 * x219 + 108 * x370 - 192 * x255 - 96 * x339 - 54 * x39 + 288 * x222 - 56 * x187 - 54 * x110 - 120 * x362 + 176 * x195 - 24 * x241 - 54 * x224 + 160 * x167 + 36 * x209 - 342 * x95 - 24 * x194 - 42 * x106 + 176 * x239 + 234 * x41 - 390 * x116 - 120 * x363 + 234 * x180 - 56 * x142 - 96 * x291 - 160 * x189 + 396 * x103 + 144 * x138 + 216 * x122 - 296 * x179 + 360 * x93 + 240 * x318 + 480 * x123 - 468 * x37 - 180 * x141 - 522 * x30 - 480 * x218 - 54 * x70 - 54 * x263 - 54 * x242 + 54 * x314 + 54 * x315 + 54 * x329 + 54 * x298 - 54 * x330 - 54 * x277;
+    o[30] = 444 * x283 + 144 * x351 - 360 * x211 + 240 * x146 + 288 * x271 - 216 * x145 + 288 * x273 + 84 * x173 - 222 * x364 - 72 * x319 + 138 * x160 - 12 * x228 + 126 * x128 - 12 * x210 + 126 * x205 + 138 * x216 - 270 * x120 - 72 * x342 - 126 * x97 - 222 * x358 + 144 * x149 + 84 * x143 - 216 * x190 + 240 * x158 - 360 * x230 + 144 * x266 + 252 * x88 + 444 * x368 + 252 * x90 - 540 * x213 - 540 * x235;
+    o[31] = 360 * x199 + 360 * x178 - 144 * x201 + 72 * x119 + 216 * x108 - 180 * x203 - 180 * x240 - 36 * x118 - 72 * x100 - 36 * x109 + 108 * x96 - 180 * x202 + 216 * x75 - 180 * x238 + 108 * x112 + 216 * x117 + 72 * x115 - 144 * x162 + 360 * x188 + 360 * x176 - 216 * x94 - 432 * x92 - 216 * x124;
+    o[32] = 108 * x144 + 216 * x197 + 108 * x214 - 54 * x161 - 108 * x129 - 54 * x204 - 54 * x226 - 108 * x148 - 54 * x215 + 108 * x159 + 216 * x157 + 108 * x231;
+    o[33] = 0;
+    o[34] = 0;
+    o[35] = 0;
+    o[36] = 36 * x429 - 120 * x336 + 100 * x200 + 144 * x430 - 48 * x166 - 348 * x253 + 80 * x219 - 108 * x370 + 198 * x39 - 96 * x222 + 16 * x187 + 54 * x110 + 24 * x362 - 40 * x195 + 60 * x241 - 6 * x224 - 152 * x167 + 18 * x209 + 204 * x95 + 60 * x194 + 204 * x106 - 40 * x239 - 270 * x41 - 30 * x116 + 24 * x363 - 126 * x180 - 6 * x208 + 16 * x142 + 80 * x189 - 192 * x103 - 48 * x138 - 96 * x122 + 100 * x179 - 300 * x93 - 120 * x318 - 60 * x123 + 351 * x37 + 216 * x141 + 36 * x431 + 216 * x30 + 72 * x218 + 9 * x70 + 54 * x263 + 54 * x242 - 54 * x314 - 54 * x315 - 54 * x329 - 54 * x298 + 54 * x330 + 54 * x277;
+    o[37] = 180 * x432 - 516 * x283 - 36 * x351 + 240 * x211 + 360 * x433 - 180 * x146 - 432 * x271 + 24 * x145 - 72 * x273 - 96 * x173 + 78 * x364 + 108 * x319 + 18 * x160 - 12 * x228 - 279 * x128 - 12 * x210 + 81 * x205 + 18 * x216 + 252 * x120 + 108 * x342 - 207 * x97 + 78 * x358 - 99 * x149 - 96 * x143 + 24 * x190 - 180 * x158 + 240 * x230 + 126 * x244 - 36 * x266 - 306 * x88 - 516 * x368 - 72 * x90 + 630 * x213 + 180 * x434 + 270 * x235;
+    o[38] = 333 * x328 + 108 * x267 - 720 * x199 - 270 * x178 + 144 * x201 + 216 * x251 - 324 * x119 + 216 * x274 - 243 * x108 + 27 * x203 + 252 * x240 + 216 * x118 - 18 * x100 + 216 * x109 - 324 * x96 + 252 * x202 - 432 * x75 + 27 * x238 - 108 * x112 - 243 * x117 - 324 * x115 + 144 * x162 - 270 * x188 - 720 * x176 + 432 * x94 + 108 * x327 + 648 * x92 + 333 * x307 + 216 * x124;
+    o[39] = 270 * x281 + 270 * x272 - 324 * x144 - 378 * x197 - 54 * x214 - 108 * x161 + 54 * x129 + 162 * x204 + 162 * x226 + 54 * x148 - 108 * x215 - 54 * x159 - 378 * x157 - 324 * x231 + 270 * x348 + 270 * x308;
+    o[40] = 81 * x196 + 162 * x177 + 81 * x169 - 81 * x198 - 162 * x137 - 81 * x170 + 81 * x193 + 162 * x185 + 81 * x175;
+    o[41] = 0;
+    o[42] = 0;
+    o[43] = 0;
+    o[44] = 0;
+    o[45] = -108 * x328 - 108 * x267 + 180 * x199 + 180 * x178 - 216 * x251 + 72 * x119 - 216 * x274 + 72 * x108 + 18 * x203 + 18 * x240 - 90 * x118 - 180 * x100 - 90 * x109 + 243 * x96 + 18 * x202 + 270 * x75 + 18 * x238 + 27 * x112 + 72 * x117 + 72 * x115 + 180 * x188 + 180 * x176 - 270 * x94 - 108 * x327 - 324 * x92 - 108 * x307 - 54 * x124;
+    o[46] = -270 * x281 - 270 * x272 + 216 * x144 + 162 * x197 - 54 * x214 + 162 * x161 + 54 * x129 - 108 * x204 - 108 * x226 + 54 * x148 + 162 * x215 - 54 * x159 + 162 * x157 + 216 * x231 - 270 * x348 - 270 * x308;
+    o[47] = -162 * x196 - 324 * x177 - 162 * x169 + 162 * x198 + 324 * x137 + 162 * x170 - 162 * x193 - 324 * x185 - 162 * x175;
+    o[48] = 0;
+    o[49] = 0;
+    o[50] = 0;
+    o[51] = 0;
+    o[52] = 0;
+    o[53] = 0;
+    o[54] = 81 * x196 + 162 * x177 + 81 * x169 - 81 * x198 - 162 * x137 - 81 * x170 + 81 * x193 + 162 * x185 + 81 * x175;
+    o[55] = 0;
+    o[56] = 0;
+    o[57] = 0;
+    o[58] = 0;
+    o[59] = 0;
+    o[60] = 0;
+    o[61] = 0;
+    o[62] = 0;
+    const g = [];
+    for (let j = 0; j < 7; j++) {
+        g.push(Array.from(o.subarray(j * 9, (j + 1) * 9)));
+    }
+    return g;
+}
+
+//# sourceMappingURL=maiG_A2B3.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/maiG_A3B2.js
+// GENERATED by gen-resultants.py - do not edit
+/**
+ * MA two interior footpoints, A of degree 3, B of degree 2: `G(σ,π)` (the implicit form
+ * of `A` at the intersection of the normals of `B` at `s1`, `s2`; `σ = s1 + s2`,
+ * `π = s1·s2`) as `g[j][i]`, the coefficient of `σ^i π^j`
+ * (210 terms; multiplications: 1441 without sharing,
+ * 350 with 90 shared products)
+ */
+function maiG_A3B2(v, bx, by) {
+    const x0 = v[0];
+    const x1 = v[1];
+    const x2 = v[2];
+    const x3 = v[3];
+    const x4 = v[4];
+    const x5 = v[5];
+    const x6 = v[6];
+    const x7 = v[7];
+    const x8 = v[8];
+    const x9 = v[9];
+    const x10 = bx[2];
+    const x11 = by[2];
+    const x12 = x10 * x11;
+    const x13 = x11 * x11;
+    const x14 = x10 * x10;
+    const x15 = x12 * x12;
+    const x16 = x13 * x13;
+    const x17 = x14 * x14;
+    const x18 = x12 * x2;
+    const x19 = x15 * x3;
+    const x20 = x11 * x12;
+    const x21 = x15 * x1;
+    const x22 = x10 * x14;
+    const x23 = x12 * x6;
+    const x24 = x11 * x15;
+    const x25 = x17 * x3;
+    const x26 = x13 * x16;
+    const x27 = x10 * x15;
+    const x28 = x13 * x20;
+    const x29 = x17 * x18;
+    const x30 = x15 * x18;
+    const x31 = x11 * x16;
+    const x32 = x24 * x2;
+    const x33 = x15 * x5;
+    const x34 = x12 * x0;
+    const x35 = x16 * x20;
+    const x36 = x10 * x25;
+    const x37 = x10 * x19;
+    const x38 = x11 * x13;
+    const x39 = x11 * x26;
+    const x40 = x13 * x19;
+    const x41 = x24 * x6;
+    const x42 = x25 * x14;
+    const x43 = x26 * x3;
+    const x44 = x14 * x19;
+    const x45 = x34 * x15;
+    const x46 = x10 * x23;
+    const x47 = x10 * x29;
+    const x48 = x12 * x4;
+    const x49 = x13 * x32;
+    const x50 = x22 * x23;
+    const x51 = x22 * x25;
+    const x52 = x24 * x0;
+    const x53 = x27 * x18;
+    const x54 = x28 * x3;
+    const x55 = x31 * x6;
+    const x56 = x35 * x3;
+    const x57 = x39 * x2;
+    const x58 = x16 * x18;
+    const x59 = x16 * x3;
+    const x60 = x17 * x21;
+    const x61 = x19 * x20;
+    const x62 = x13 * x23;
+    const x63 = x13 * x30;
+    const x64 = x13 * x33;
+    const x65 = x13 * x18;
+    const x66 = x13 * x21;
+    const x67 = x13 * x3;
+    const x68 = x22 * x18;
+    const x69 = x22 * x19;
+    const x70 = x22 * x21;
+    const x71 = x22 * x3;
+    const x72 = x23 * x14;
+    const x73 = x23 * x15;
+    const x74 = x23 * x16;
+    const x75 = x23 * x17;
+    const x76 = x24 * x4;
+    const x77 = x25 * x17;
+    const x78 = x26 * x18;
+    const x79 = x26 * x1;
+    const x80 = x26 * x5;
+    const x81 = x27 * x5;
+    const x82 = x28 * x5;
+    const x83 = x29 * x14;
+    const x84 = x30 * x14;
+    const x85 = x31 * x2;
+    const x86 = x14 * x33;
+    const x87 = x14 * x18;
+    const x88 = x14 * x21;
+    const x89 = x14 * x3;
+    const x90 = x35 * x1;
+    const x91 = x38 * x6;
+    const x92 = x15 * x21;
+    const x93 = x15 * x8;
+    const x94 = x16 * x16;
+    const x95 = x16 * x19;
+    const x96 = x16 * x21;
+    const x97 = x16 * x8;
+    const x98 = x17 * x19;
+    const x99 = x20 * x21;
+    const x100 = x20 * x3;
+    const x101 = x94 * x1;
+    const x102 = x6 * x11;
+    const x103 = x8 * x13;
+    const x104 = x9 * x38;
+    const x105 = x3 * x10;
+    const x106 = x8 * x20;
+    const x107 = x5 * x20;
+    const x108 = x7 * x12;
+    const x109 = x13 * x108;
+    const x110 = x10 * x18;
+    const x111 = x2 * x38;
+    const x112 = x5 * x16;
+    const x113 = x7 * x24;
+    const x114 = x7 * x31;
+    const x115 = x8 * x27;
+    const x116 = x8 * x28;
+    const x117 = x10 * x21;
+    const x118 = x1 * x28;
+    const x119 = x15 * x48;
+    const x120 = x16 * x48;
+    const x121 = x27 * x48;
+    const x122 = x13 * x76;
+    const x123 = x4 * x39;
+    const x124 = x22 * x33;
+    const x125 = x20 * x33;
+    const x126 = x5 * x35;
+    const x127 = x17 * x46;
+    const x128 = x23 * x27;
+    const x129 = x13 * x41;
+    const x130 = x15 * x19;
+    const x131 = x27 * x34;
+    const x132 = x13 * x52;
+    const x133 = x14 * x45;
+    const x134 = x13 * x45;
+    const x135 = x26 * x34;
+    const x136 = x22 * x45;
+    const x137 = x15 * x52;
+    const x138 = x16 * x52;
+    const x139 = x0 * x16;
+    const x140 = x31 * x139;
+    const x141 = x10 * x60;
+    const x142 = x21 * x27;
+    const x143 = x21 * x28;
+    const x144 = x20 * x79;
+    const x145 = x22 * x29;
+    const x146 = x22 * x30;
+    const x147 = x15 * x32;
+    const x148 = x16 * x32;
+    const x149 = x17 * x36;
+    const x150 = x17 * x37;
+    const x151 = x19 * x27;
+    const x152 = x19 * x28;
+    const o = new Float64Array(28);
+    o[0] = -x3 - 2 * x102 - 4 * x103 - 8 * x104;
+    o[1] = -9 * x105 - 12 * x23 - 12 * x106;
+    o[2] = -33 * x89 - 6 * x67 - 26 * x46 - 8 * x91 - 8 * x93 - 8 * x97;
+    o[3] = -63 * x71 - 36 * x100 - 24 * x72 - 24 * x62;
+    o[4] = -66 * x25 - 78 * x19 - 12 * x59 - 8 * x50 - 16 * x41 - 8 * x55;
+    o[5] = -36 * x36 - 72 * x37 - 36 * x54;
+    o[6] = -8 * x42 - 24 * x44 - 24 * x40 - 8 * x43;
+    o[7] = 6 * x18 - 12 * x89 + 6 * x67 + 12 * x107 - 16 * x46 + 8 * x91 + 24 * x109 - 16 * x93 + 8 * x97;
+    o[8] = 40 * x110 + 4 * x111 - 84 * x71 + 24 * x100 + 44 * x33 + 8 * x112 - 64 * x72 + 8 * x62 + 16 * x113 + 16 * x114 - 16 * x115 - 16 * x116;
+    o[9] = 102 * x87 + 48 * x65 - 228 * x25 - 42 * x19 + 24 * x59 + 48 * x81 + 48 * x82 - 80 * x50 - 64 * x41 + 16 * x55;
+    o[10] = 124 * x68 + 140 * x32 + 16 * x85 - 300 * x36 - 276 * x37 + 24 * x54 + 16 * x86 + 32 * x64 + 16 * x80 - 32 * x75 - 64 * x73 - 32 * x74;
+    o[11] = 72 * x29 + 144 * x30 + 72 * x58 - 192 * x42 - 360 * x44 - 144 * x40 + 24 * x43;
+    o[12] = 16 * x47 + 48 * x53 + 48 * x49 + 16 * x57 - 48 * x51 - 144 * x69 - 144 * x61 - 48 * x56;
+    o[13] = 0;
+    o[14] = -36 * x21 + 48 * x87 - 24 * x65 - 48 * x25 + 48 * x19 - 12 * x59 - 72 * x76 + 48 * x81 - 24 * x82 - 32 * x50 + 32 * x41 - 8 * x55;
+    o[15] = -156 * x117 - 48 * x118 + 224 * x68 - 8 * x32 - 16 * x85 - 240 * x36 + 96 * x37 + 12 * x54 - 96 * x119 - 96 * x120 + 80 * x86 + 64 * x64 - 16 * x80 - 64 * x75 - 32 * x73 + 32 * x74;
+    o[16] = -232 * x88 - 248 * x66 - 16 * x79 + 368 * x29 + 304 * x30 - 64 * x58 - 432 * x42 - 240 * x44 + 168 * x40 - 24 * x43 - 32 * x121 - 64 * x122 - 32 * x123 + 32 * x124 + 64 * x125 + 32 * x126 - 32 * x127 - 64 * x128 - 32 * x129;
+    o[17] = -144 * x70 - 288 * x99 - 144 * x90 + 256 * x47 + 480 * x53 + 192 * x49 - 32 * x57 - 336 * x51 - 576 * x69 - 144 * x61 + 96 * x56;
+    o[18] = -32 * x60 - 96 * x92 - 96 * x96 - 32 * x101 + 64 * x83 + 192 * x84 + 192 * x63 + 64 * x78 - 96 * x77 - 288 * x98 - 288 * x130 - 96 * x95;
+    o[19] = 0;
+    o[20] = 0;
+    o[21] = 216 * x45 - 144 * x88 + 72 * x66 + 96 * x29 - 96 * x30 + 24 * x58 - 64 * x42 + 96 * x44 - 48 * x40 + 8 * x43;
+    o[22] = 432 * x131 + 432 * x132 - 336 * x70 - 240 * x99 + 96 * x90 + 256 * x47 + 96 * x53 - 144 * x49 + 16 * x57 - 192 * x51 + 144 * x61 - 48 * x56;
+    o[23] = 288 * x133 + 576 * x134 + 288 * x135 - 256 * x60 - 480 * x92 - 192 * x96 + 32 * x101 + 224 * x83 + 384 * x84 + 96 * x63 - 64 * x78 - 192 * x77 - 288 * x98 + 96 * x95;
+    o[24] = 64 * x136 + 192 * x137 + 192 * x138 + 64 * x140 - 64 * x141 - 192 * x142 - 192 * x143 - 64 * x144 + 64 * x145 + 192 * x146 + 192 * x147 + 64 * x148 - 64 * x149 - 192 * x150 - 192 * x151 - 64 * x152;
+    o[25] = 0;
+    o[26] = 0;
+    o[27] = 0;
+    const g = [];
+    for (let j = 0; j < 4; j++) {
+        g.push(Array.from(o.subarray(j * 7, (j + 1) * 7)));
+    }
+    return g;
+}
+
+//# sourceMappingURL=maiG_A3B2.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/eval-program.js
+/**
+ * Evaluates the program for the given inputs.
+ *
+ * @param P the program
+ * @param inputs the input values (`P.nIn` of them)
+ */
+function evalProgram(P, inputs) {
+    const { nIn, pairs, coef, fstart, fidx, ostart } = P;
+    const nPairs = pairs.length >> 1;
+    const T = new Float64Array(nIn + nPairs);
+    for (let i = 0; i < nIn; i++) {
+        T[i] = inputs[i];
+    }
+    for (let k = 0; k < nPairs; k++) {
+        T[nIn + k] = T[pairs[2 * k]] * T[pairs[2 * k + 1]];
+    }
+    const nOut = ostart.length - 1;
+    const out = new Float64Array(nOut);
+    for (let o = 0; o < nOut; o++) {
+        let s = 0;
+        for (let t = ostart[o]; t < ostart[o + 1]; t++) {
+            let p = coef[t];
+            for (let f = fstart[t]; f < fstart[t + 1]; f++) {
+                p *= T[fidx[f]];
+            }
+            s += p;
+        }
+        out[o] = s;
+    }
+    return out;
+}
+
+function evalProgram2(P, inputs) {
+    const { nIn, pairs, coef, fidx, ostart, c0 } = P;
+    const nPairs = pairs.length >> 1;
+    const T = new Float64Array(nIn + nPairs);
+    for (let i = 0; i < nIn; i++) {
+        T[i] = inputs[i];
+    }
+    for (let k = 0, n = nIn; k < nPairs; k++, n++) {
+        T[n] = T[pairs[2 * k]] * T[pairs[2 * k + 1]];
+    }
+    const nOut = c0.length;
+    const out = new Float64Array(nOut);
+    for (let o = 0; o < nOut; o++) {
+        let s = c0[o];
+        const e = ostart[o + 1];
+        for (let t = ostart[o]; t < e; t++) {
+            s += coef[t] * T[fidx[t]];
+        }
+        out[o] = s;
+    }
+    return out;
+}
+
+//# sourceMappingURL=eval-program.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/maiG_A3B3.js
+// GENERATED by gen-resultants.py - do not edit
+
+const P = {
+    nIn: 14,
+    pairs: new Int32Array([
+        11, 13, 10, 12, 13, 13, 11, 11, 12, 12, 10, 10, 14, 14, 15, 15, 13, 16, 14, 15, 11, 17, 12, 18,
+        16, 16, 10, 19, 17, 17, 14, 2, 15, 2, 18, 18, 19, 3, 20, 1, 20, 3, 12, 14, 16, 22, 19, 19,
+        12, 15, 14, 6, 13, 14, 21, 1, 24, 17, 20, 0, 21, 3, 15, 6, 13, 15, 12, 2, 11, 20, 25, 18,
+        21, 0, 23, 1, 10, 16, 23, 3, 13, 2, 14, 22, 22, 2, 15, 22, 11, 18, 10, 17, 17, 18, 28, 3,
+        11, 21, 12, 6, 26, 1, 13, 6, 32, 19, 16, 18, 20, 5, 14, 25, 23, 5, 14, 4, 24, 18, 27, 16,
+        25, 2, 10, 26, 29, 19, 26, 0, 15, 4, 12, 13, 15, 25, 23, 0, 30, 19, 10, 24, 21, 5, 10, 20,
+        12, 22, 11, 27, 27, 17, 31, 1, 11, 23, 13, 25, 31, 0, 22, 6, 12, 4, 16, 19, 10, 11, 13, 4,
+        11, 31, 10, 21, 28, 17, 10, 28, 25, 4, 30, 20, 26, 3, 36, 1, 29, 21, 10, 23, 14, 43, 15, 43,
+        54, 20, 29, 20, 36, 2, 47, 20, 14, 50, 22, 4, 31, 3, 32, 20, 10, 40, 13, 43, 28, 18, 25, 6,
+        16, 21, 17, 21, 12, 43, 39, 19, 11, 37, 26, 16, 16, 35, 35, 17, 40, 18, 10, 3, 42, 18, 27, 3,
+        38, 5, 49, 1, 11, 35, 15, 50, 47, 23, 54, 23, 10, 48, 14, 7, 15, 7, 24, 32, 18, 22, 11, 19,
+        13, 7, 27, 19, 16, 37, 10, 46, 28, 1, 16, 38, 18, 20, 14, 0, 24, 30, 26, 5, 38, 17, 46, 18,
+        23, 8, 15, 36, 17, 19, 49, 2, 56, 19, 25, 16, 31, 5, 11, 38, 12, 36, 13, 50, 14, 36, 24, 3,
+        12, 50, 12, 7, 15, 0, 24, 29, 25, 22, 25, 0, 27, 32, 54, 21, 55, 1, 19, 8, 10, 62, 14, 92,
+        26, 30, 36, 4, 57, 1, 65, 20, 26, 29, 31, 17, 35, 5, 17, 23, 69, 1, 69, 5, 10, 42, 14, 105,
+        15, 105, 25, 17, 28, 47, 30, 21, 16, 20, 16, 23, 36, 6, 37, 17, 17, 20, 55, 5, 19, 22, 69, 3,
+        12, 81, 14, 77, 24, 63, 49, 3, 57, 5, 13, 81, 15, 77, 24, 19, 36, 0, 80, 3, 35, 1, 40, 19,
+        42, 3, 48, 18, 80, 5, 14, 135, 28, 29, 28, 30, 29, 31, 38, 1, 49, 0, 65, 23, 20, 97, 80, 1,
+        11, 25, 12, 77, 15, 92, 32, 40, 49, 4, 18, 56, 18, 3, 65, 21, 22, 7, 15, 135, 45, 19, 46, 19,
+        47, 21, 20, 8, 24, 94, 25, 7, 27, 5, 30, 31, 37, 1, 49, 5, 21, 97, 21, 8, 24, 39, 49, 6,
+        97, 23, 159, 5, 31, 18, 32, 46, 37, 54, 10, 22, 24, 45, 26, 71, 26, 78, 146, 23, 16, 34, 16, 104,
+        34, 17, 17, 61, 19, 5, 10, 8, 11, 34, 13, 49, 14, 209, 15, 209, 24, 34, 24, 53, 24, 61, 117, 16,
+        117, 17, 127, 30, 127, 47, 131, 42, 131, 55, 26, 32, 26, 56, 28, 32, 159, 3, 29, 42, 29, 48, 29, 72,
+        166, 3, 168, 3, 168, 5, 169, 35, 30, 42, 30, 48, 30, 100, 32, 42, 32, 48, 32, 55, 32, 100, 33, 60,
+        33, 67, 16, 53, 16, 103, 16, 113, 34, 40, 34, 46, 34, 52, 34, 18, 34, 59, 34, 79, 34, 96, 36, 7,
+        37, 65, 40, 1, 40, 5, 40, 8, 17, 53, 17, 113, 47, 100, 52, 104, 18, 61, 18, 104, 18, 110, 18, 112,
+        55, 3, 56, 20, 56, 23, 59, 61, 19, 20, 64, 67, 22, 0, 10, 200, 10, 34, 10, 61, 11, 205, 11, 53,
+        13, 9, 14, 249, 24, 133, 24, 138, 24, 188, 24, 190, 24, 196, 24, 44, 24, 66, 24, 76, 24, 82, 24, 106,
+        24, 113, 24, 8, 116, 16, 116, 17, 117, 40, 117, 46, 118, 34, 119, 31, 120, 29, 25, 105, 127, 29, 127, 32,
+        128, 3, 129, 3, 130, 33, 130, 3, 131, 159, 131, 168, 131, 57, 132, 3, 133, 40, 133, 42, 133, 55, 26, 33,
+        26, 34, 26, 41, 26, 44, 26, 51, 26, 53, 26, 63, 26, 64, 26, 74, 26, 76, 26, 82, 26, 8, 136, 33,
+        138, 16, 138, 17, 139, 18, 139, 19, 140, 30, 143, 28, 143, 23, 27, 29, 27, 34, 27, 61, 27, 104, 144, 77,
+        144, 81, 149, 34, 150, 60, 151, 33, 28, 154, 28, 33, 28, 34, 28, 41, 28, 44, 28, 51, 28, 53, 28, 61,
+        28, 63, 28, 66, 28, 74, 28, 76, 28, 82, 156, 33, 157, 33, 162, 23, 163, 77, 29, 166, 29, 192, 29, 60,
+        29, 62, 29, 67, 29, 75, 29, 85, 29, 86, 29, 98, 29, 100, 29, 101, 165, 33, 166, 30, 166, 5, 169, 38,
+        30, 192, 30, 72, 30, 75, 30, 85, 30, 101, 174, 3, 178, 18, 182, 52, 182, 18, 31, 33, 31, 16, 31, 56,
+        31, 64, 186, 18, 189, 32, 193, 18, 32, 199, 32, 57, 32, 90, 32, 23, 194, 18, 195, 43, 33, 58, 33, 62,
+        33, 20, 33, 21, 33, 86, 33, 90, 33, 91, 33, 23, 16, 44, 16, 66, 16, 106, 16, 111, 34, 35, 34, 38,
+        34, 58, 34, 73, 34, 20, 34, 83, 34, 87, 34, 23, 216, 42, 35, 61, 35, 93, 35, 104, 225, 42, 225, 100,
+        36, 92, 236, 55, 236, 57, 38, 61, 38, 104, 39, 52, 39, 18, 39, 59, 39, 83, 40, 44, 40, 66, 41, 42,
+        41, 55, 42, 47, 42, 51, 42, 63, 42, 66, 42, 76, 42, 82, 17, 44, 17, 66, 17, 103, 17, 106, 17, 111,
+        46, 1, 47, 48, 48, 63, 48, 66, 48, 76, 48, 82, 51, 60, 51, 67, 51, 72, 51, 86, 52, 53, 52, 103,
+        53, 18, 53, 58, 53, 59, 53, 79, 53, 83, 53, 96, 18, 103, 18, 111, 56, 75, 56, 21, 56, 85, 56, 107,
+        57, 64, 57, 3, 58, 108, 58, 109, 59, 103, 60, 5, 61, 83, 61, 88, 63, 20, 19, 110, 19, 112, 64, 86,
+        65, 85, 66, 20, 68, 79, 69, 8, 71, 21, 72, 3, 20, 74, 20, 76, 20, 82, 75, 3, 79, 103, 79, 111,
+        21, 110, 21, 112, 23, 110, 23, 112, 10, 193, 10, 194, 10, 203, 10, 210, 10, 255, 10, 53, 10, 93, 11, 125,
+        11, 191, 11, 215, 11, 221, 11, 44, 11, 66, 11, 76, 12, 105, 13, 209, 24, 114, 24, 116, 24, 117, 24, 121,
+        24, 125, 24, 134, 24, 137, 24, 181, 24, 33, 24, 216, 24, 229, 24, 242, 24, 41, 24, 51, 24, 70, 24, 74,
+        24, 103, 24, 108, 24, 109, 24, 111, 114, 58, 116, 40, 116, 46, 116, 18, 117, 27, 118, 33, 118, 41, 118, 44,
+        118, 3, 119, 18, 119, 20, 119, 21, 119, 23, 120, 30, 120, 5, 121, 16, 121, 17, 122, 30, 122, 32, 122, 47,
+        123, 30, 123, 32, 123, 47, 124, 26, 124, 28, 124, 20, 124, 21, 124, 23, 125, 17, 126, 29, 126, 30, 126, 32,
+        127, 5, 128, 41, 128, 64, 128, 5, 129, 33, 129, 41, 129, 5, 130, 41, 132, 153, 132, 29, 132, 172, 132, 30,
+        132, 1, 132, 5, 133, 46, 133, 57, 26, 134, 26, 138, 26, 162, 26, 170, 26, 242, 26, 39, 26, 45, 26, 47,
+        26, 66, 26, 102, 26, 113, 134, 28, 134, 42, 134, 48, 135, 22, 136, 34, 136, 41, 136, 44, 136, 3, 138, 28,
+        139, 27, 139, 37, 139, 21, 140, 29, 140, 45, 140, 5, 143, 27, 143, 37, 143, 21, 27, 154, 27, 173, 27, 182,
+        27, 185, 27, 186, 27, 222, 27, 223, 27, 252, 27, 39, 27, 53, 27, 93, 27, 103, 27, 110, 27, 111, 27, 112,
+        144, 43, 144, 50, 144, 92, 148, 29, 148, 30, 149, 33, 149, 68, 150, 35, 150, 38, 150, 69, 150, 72, 150, 80,
+        151, 64, 152, 56, 152, 97, 28, 170, 28, 173, 28, 176, 28, 196, 28, 206, 28, 39, 28, 45, 28, 89, 154, 37,
+        154, 21, 155, 52, 155, 18, 156, 3, 157, 3, 159, 32, 160, 33, 160, 41, 160, 51, 161, 16, 161, 17, 162, 20,
+        162, 21, 163, 43, 163, 81, 29, 174, 29, 180, 29, 187, 29, 201, 29, 16, 29, 219, 29, 17, 29, 52, 29, 58,
+        29, 59, 29, 73, 29, 83, 29, 88, 29, 91, 29, 99, 165, 34, 167, 23, 168, 32, 173, 37, 30, 174, 30, 187,
+        30, 201, 30, 219, 30, 37, 30, 60, 30, 62, 30, 67, 30, 73, 30, 83, 30, 86, 30, 88, 30, 98, 174, 5,
+        175, 55, 175, 100, 177, 18, 177, 19, 181, 16, 183, 38, 183, 18, 31, 211, 31, 51, 184, 18, 185, 19, 186, 52,
+        189, 63, 189, 94, 190, 16, 190, 17, 191, 16, 191, 17, 192, 45, 193, 19, 32, 201, 32, 16, 32, 37, 32, 17,
+        32, 62, 32, 73, 32, 21, 32, 87, 32, 88, 194, 19, 195, 81, 196, 21, 198, 63, 198, 94, 199, 63, 200, 19,
+        202, 63, 202, 94, 203, 18, 33, 213, 33, 16, 33, 217, 33, 35, 33, 241, 33, 38, 33, 40, 33, 42, 33, 17,
+        33, 46, 33, 48, 33, 18, 33, 55, 33, 57, 33, 69, 33, 72, 33, 79, 33, 80, 33, 83, 33, 85, 33, 95,
+        33, 98, 33, 99, 33, 101, 33, 107, 205, 16, 205, 17, 207, 18, 212, 18, 213, 41, 213, 51, 16, 215, 16, 224,
+        16, 247, 16, 39, 16, 51, 16, 64, 16, 68, 16, 70, 16, 76, 16, 82, 34, 42, 34, 48, 34, 55, 34, 57,
+        34, 60, 34, 62, 34, 67, 34, 75, 34, 21, 34, 85, 34, 86, 34, 88, 34, 90, 34, 99, 34, 101, 34, 107,
+        214, 18, 215, 17, 216, 100, 217, 41, 218, 35, 218, 38, 219, 5, 222, 59, 223, 59, 35, 44, 35, 64, 35, 65,
+        228, 38, 230, 43, 231, 23, 233, 21, 36, 43, 36, 50, 36, 77, 36, 81, 235, 21, 235, 23, 37, 110, 244, 23,
+        38, 64, 38, 68, 38, 93, 256, 54, 39, 17, 39, 58, 39, 60, 39, 67, 39, 73, 39, 20, 39, 75, 39, 85,
+        39, 87, 39, 88, 39, 91, 39, 95, 39, 96, 39, 101, 40, 41, 40, 89, 40, 3, 41, 57, 41, 60, 41, 67,
+        41, 72, 41, 75, 41, 83, 41, 90, 41, 95, 41, 101, 41, 23, 42, 44, 42, 45, 42, 53, 42, 61, 42, 74,
+        43, 49, 17, 51, 17, 68, 17, 70, 17, 76, 17, 82, 44, 52, 44, 18, 44, 55, 44, 57, 44, 58, 44, 59,
+        44, 60, 44, 67, 44, 75, 44, 79, 44, 83, 44, 86, 44, 90, 44, 96, 44, 101, 44, 23, 45, 48, 45, 52,
+        45, 59, 45, 20, 45, 75, 45, 83, 45, 85, 45, 101, 46, 66, 46, 68, 47, 90, 48, 74, 48, 102, 49, 77,
+        51, 58, 51, 75, 51, 83, 51, 91, 51, 95, 51, 98, 51, 101, 52, 68, 52, 106, 52, 111, 53, 60, 53, 67,
+        53, 73, 53, 75, 53, 86, 53, 87, 53, 88, 53, 101, 18, 64, 18, 68, 18, 93, 18, 106, 18, 108, 18, 109,
+        54, 85, 54, 107, 55, 64, 55, 66, 55, 89, 55, 102, 56, 99, 57, 89, 58, 106, 59, 68, 59, 70, 59, 106,
+        60, 61, 60, 3, 62, 76, 63, 90, 63, 100, 63, 23, 19, 93, 64, 69, 64, 75, 64, 80, 65, 107, 66, 90,
+        67, 89, 67, 3, 70, 79, 70, 83, 70, 86, 70, 96, 71, 72, 73, 104, 20, 102, 20, 110, 20, 112, 20, 113,
+        74, 90, 74, 23, 76, 21, 79, 106, 83, 3, 21, 113, 86, 3, 88, 3, 93, 23, 93, 107, 98, 3, 23, 113,
+        10, 178, 10, 184, 10, 39, 10, 292, 10, 44, 10, 56, 10, 68, 10, 70, 10, 112, 11, 114, 11, 121, 11, 161,
+        11, 29, 11, 190, 11, 32, 11, 33, 11, 220, 11, 239, 11, 253, 11, 39, 11, 51, 11, 70, 11, 82, 11, 108,
+        11, 109, 12, 9, 13, 249, 13, 92, 24, 124, 24, 161, 24, 164, 24, 170, 24, 191, 24, 206, 24, 220, 24, 225,
+        24, 232, 24, 47, 24, 68, 24, 84, 24, 89, 114, 145, 114, 16, 114, 17, 114, 52, 114, 18, 114, 59, 115, 26,
+        115, 35, 115, 38, 115, 20, 115, 75, 115, 85, 115, 99, 115, 23, 115, 107, 116, 58, 118, 68, 118, 84, 118, 5,
+        118, 8, 119, 35, 119, 38, 120, 153, 120, 172, 120, 71, 120, 78, 120, 1, 120, 8, 121, 28, 121, 20, 121, 23,
+        122, 39, 122, 63, 122, 71, 122, 74, 122, 94, 123, 39, 123, 63, 123, 71, 123, 74, 123, 94, 25, 43, 25, 77,
+        124, 16, 124, 17, 125, 26, 125, 27, 125, 28, 125, 20, 125, 87, 126, 33, 126, 39, 126, 51, 126, 76, 127, 78,
+        127, 94, 128, 33, 128, 34, 128, 44, 128, 1, 128, 8, 129, 34, 129, 44, 129, 61, 129, 1, 129, 8, 130, 34,
+        130, 44, 130, 89, 130, 1, 130, 5, 130, 8, 131, 46, 26, 142, 26, 171, 26, 176, 26, 179, 26, 231, 26, 240,
+        26, 84, 26, 94, 134, 16, 134, 17, 136, 5, 136, 8, 137, 16, 137, 17, 137, 52, 137, 59, 138, 21, 139, 31,
+        140, 39, 140, 71, 140, 78, 141, 58, 141, 60, 141, 67, 142, 20, 27, 155, 27, 177, 27, 178, 27, 184, 27, 200,
+        27, 203, 27, 210, 27, 227, 27, 260, 27, 45, 27, 56, 27, 65, 27, 66, 27, 68, 27, 70, 27, 76, 27, 82,
+        27, 106, 144, 7, 145, 33, 145, 41, 145, 45, 145, 51, 145, 70, 145, 108, 145, 109, 147, 56, 147, 65, 148, 32,
+        148, 39, 149, 41, 149, 44, 151, 34, 151, 41, 151, 44, 151, 3, 152, 65, 152, 71, 152, 8, 153, 67, 153, 72,
+        28, 188, 28, 208, 28, 226, 28, 240, 28, 535, 28, 84, 28, 102, 28, 113, 154, 31, 155, 35, 155, 95, 156, 34,
+        156, 41, 156, 44, 157, 34, 158, 16, 158, 17, 160, 45, 160, 68, 160, 70, 163, 50, 163, 92, 29, 37, 29, 271,
+        29, 18, 29, 79, 29, 87, 29, 96, 164, 16, 164, 40, 164, 17, 165, 41, 165, 44, 165, 3, 167, 35, 169, 69,
+        169, 80, 170, 23, 173, 31, 30, 180, 30, 16, 30, 271, 30, 17, 30, 52, 30, 58, 30, 59, 30, 87, 30, 91,
+        30, 99, 174, 1, 175, 42, 175, 57, 176, 40, 176, 23, 178, 37, 178, 19, 179, 40, 179, 20, 180, 39, 180, 71,
+        180, 5, 181, 17, 181, 58, 183, 35, 31, 34, 31, 39, 31, 53, 31, 54, 31, 61, 31, 65, 31, 74, 31, 110,
+        184, 37, 184, 19, 185, 35, 185, 38, 187, 71, 188, 42, 188, 48, 188, 62, 189, 74, 192, 39, 195, 50, 197, 52,
+        197, 59, 197, 79, 198, 45, 198, 74, 198, 78, 199, 74, 199, 94, 201, 39, 202, 45, 202, 74, 202, 78, 203, 19,
+        33, 37, 33, 52, 33, 59, 33, 19, 33, 73, 33, 75, 33, 87, 33, 88, 33, 96, 204, 43, 204, 50, 204, 77,
+        204, 81, 206, 16, 206, 17, 207, 16, 207, 52, 208, 20, 208, 21, 208, 23, 210, 18, 210, 19, 211, 18, 212, 16,
+        213, 45, 16, 220, 16, 221, 16, 229, 16, 231, 16, 232, 16, 234, 16, 239, 16, 41, 16, 45, 16, 63, 16, 74,
+        16, 84, 16, 89, 16, 108, 16, 109, 16, 3, 34, 72, 34, 91, 214, 38, 220, 17, 221, 17, 35, 228, 35, 237,
+        35, 250, 35, 41, 35, 68, 35, 84, 35, 3, 224, 18, 226, 40, 227, 18, 227, 19, 229, 17, 230, 81, 233, 37,
+        234, 40, 239, 17, 37, 39, 37, 51, 37, 56, 37, 64, 37, 76, 37, 93, 37, 112, 37, 5, 244, 20, 244, 21,
+        246, 40, 246, 46, 246, 48, 38, 44, 38, 65, 38, 8, 254, 18, 258, 19, 261, 18, 262, 18, 39, 42, 39, 48,
+        39, 62, 39, 72, 39, 21, 39, 99, 268, 48, 40, 68, 40, 84, 40, 102, 41, 17, 41, 46, 41, 52, 41, 58,
+        41, 59, 41, 69, 41, 73, 41, 86, 41, 87, 41, 88, 41, 91, 41, 107, 42, 89, 42, 102, 43, 22, 17, 45,
+        17, 63, 17, 74, 17, 84, 17, 108, 17, 109, 17, 3, 44, 46, 44, 72, 44, 73, 44, 87, 44, 88, 44, 91,
+        44, 107, 45, 60, 45, 67, 45, 72, 45, 73, 45, 87, 45, 88, 45, 91, 45, 95, 45, 96, 45, 100, 46, 89,
+        46, 3, 46, 8, 47, 62, 48, 71, 48, 78, 48, 94, 48, 5, 49, 81, 49, 7, 50, 22, 51, 52, 51, 18,
+        51, 59, 51, 19, 51, 73, 51, 79, 51, 87, 51, 88, 51, 96, 52, 64, 52, 70, 52, 84, 52, 108, 52, 109,
+        52, 3, 53, 72, 53, 91, 18, 70, 54, 99, 57, 66, 57, 102, 57, 8, 444, 71, 58, 70, 58, 3, 59, 84,
+        59, 108, 59, 109, 59, 111, 59, 3, 60, 68, 60, 70, 60, 71, 60, 89, 60, 8, 61, 72, 61, 101, 62, 63,
+        62, 71, 62, 74, 63, 21, 19, 68, 19, 70, 19, 73, 64, 73, 64, 95, 65, 99, 66, 87, 66, 88, 66, 23,
+        67, 68, 67, 70, 67, 71, 67, 8, 68, 83, 68, 86, 68, 91, 68, 95, 70, 87, 70, 91, 70, 95, 71, 75,
+        71, 85, 71, 98, 71, 99, 72, 78, 72, 5, 72, 8, 73, 76, 73, 82, 73, 3, 20, 93, 20, 94, 74, 21,
+        74, 100, 75, 78, 75, 5, 75, 8, 76, 87, 76, 88, 77, 22, 78, 85, 79, 84, 80, 8, 81, 22, 82, 87,
+        82, 88, 83, 84, 21, 93, 84, 86, 85, 93, 85, 8, 86, 5, 86, 8, 87, 3, 89, 91, 90, 94, 90, 102,
+        90, 8, 91, 3, 92, 22, 93, 99, 95, 8, 102, 23, 10, 114, 10, 29, 10, 183, 10, 33, 10, 313, 10, 45,
+        10, 51, 10, 64, 10, 65, 10, 84, 10, 108, 10, 109, 11, 124, 11, 134, 11, 137, 11, 30, 11, 181, 11, 206,
+        11, 229, 11, 272, 11, 273, 11, 41, 11, 45, 11, 339, 11, 63, 11, 545, 11, 74, 11, 3, 13, 135, 14, 9,
+        15, 249, 15, 9, 24, 158, 24, 226, 24, 234, 24, 245, 24, 251, 24, 102, 114, 27, 114, 19, 114, 96, 115, 31,
+        115, 18, 115, 21, 116, 42, 116, 60, 1049, 31, 118, 1, 119, 37, 119, 19, 120, 39, 120, 45, 121, 42, 121, 48,
+        121, 90, 122, 45, 122, 78, 122, 8, 123, 45, 123, 78, 123, 8, 25, 81, 25, 9, 125, 37, 126, 41, 126, 45,
+        126, 66, 126, 82, 132, 8, 26, 70, 136, 1, 137, 145, 137, 58, 137, 96, 140, 8, 141, 31, 141, 52, 141, 18,
+        141, 62, 141, 72, 141, 21, 141, 95, 141, 98, 142, 16, 142, 48, 142, 52, 142, 58, 142, 60, 142, 67, 142, 72,
+        142, 75, 142, 85, 142, 95, 27, 30, 27, 183, 27, 33, 27, 207, 27, 212, 27, 228, 27, 243, 27, 254, 27, 258,
+        27, 41, 27, 44, 27, 315, 27, 317, 27, 51, 27, 384, 27, 54, 27, 506, 27, 64, 27, 108, 27, 109, 144, 0,
+        146, 152, 146, 31, 146, 35, 146, 330, 146, 20, 146, 21, 146, 85, 146, 107, 147, 33, 147, 315, 147, 316, 147, 51,
+        147, 54, 147, 506, 147, 64, 147, 93, 148, 45, 148, 1, 148, 5, 148, 8, 149, 5, 149, 8, 1367, 46, 1375, 28,
+        151, 1, 151, 8, 152, 39, 152, 45, 152, 78, 153, 60, 153, 75, 28, 161, 28, 164, 28, 175, 28, 245, 28, 70,
+        155, 37, 155, 19, 156, 61, 156, 1, 156, 8, 157, 41, 157, 44, 157, 89, 157, 1, 157, 5, 157, 8, 158, 52,
+        158, 18, 158, 58, 158, 59, 158, 19, 158, 79, 160, 84, 161, 20, 161, 23, 162, 37, 163, 7, 164, 46, 164, 18,
+        164, 58, 165, 8, 167, 31, 167, 38, 167, 18, 167, 19, 167, 21, 170, 16, 170, 17, 171, 189, 171, 199, 171, 48,
+        171, 20, 171, 90, 171, 23, 172, 67, 172, 72, 172, 75, 30, 18, 30, 79, 30, 96, 175, 40, 176, 46, 177, 31,
+        177, 37, 177, 21, 179, 46, 179, 48, 179, 55, 179, 57, 179, 90, 181, 18, 183, 19, 31, 41, 31, 44, 31, 45,
+        31, 68, 31, 70, 31, 71, 31, 89, 31, 8, 187, 78, 187, 8, 195, 92, 195, 7, 197, 18, 197, 58, 201, 45,
+        204, 0, 204, 7, 207, 19, 211, 37, 211, 19, 212, 52, 212, 19, 16, 226, 16, 47, 16, 102, 34, 69, 34, 80,
+        34, 98, 214, 35, 214, 37, 214, 19, 217, 248, 217, 1, 217, 5, 219, 8, 35, 238, 35, 332, 35, 351, 35, 97,
+        35, 8, 224, 58, 226, 46, 228, 19, 230, 50, 232, 17, 232, 58, 234, 17, 237, 18, 237, 19, 238, 38, 238, 21,
+        238, 23, 240, 20, 241, 41, 241, 1, 241, 5, 243, 38, 243, 46, 243, 79, 37, 257, 37, 41, 37, 316, 37, 317,
+        37, 45, 37, 393, 37, 66, 37, 68, 37, 70, 37, 82, 245, 40, 245, 20, 247, 18, 248, 40, 248, 46, 248, 95,
+        250, 18, 250, 19, 251, 40, 253, 17, 38, 41, 38, 332, 38, 351, 38, 3, 254, 19, 256, 71, 256, 97, 257, 21,
+        259, 43, 259, 50, 259, 81, 261, 19, 262, 19, 263, 18, 263, 19, 39, 98, 268, 62, 268, 73, 269, 55, 269, 57,
+        269, 90, 41, 18, 41, 62, 41, 19, 41, 79, 41, 21, 41, 96, 41, 98, 313, 19, 17, 47, 17, 89, 44, 62,
+        44, 69, 314, 19, 45, 18, 45, 58, 45, 62, 45, 21, 45, 98, 330, 71, 330, 78, 46, 84, 46, 102, 48, 8,
+        52, 71, 52, 78, 52, 5, 52, 8, 53, 98, 18, 54, 18, 65, 18, 84, 54, 19, 55, 8, 444, 78, 58, 71,
+        58, 84, 58, 89, 58, 8, 60, 78, 60, 84, 61, 69, 61, 80, 488, 21, 62, 66, 62, 78, 62, 82, 62, 94,
+        62, 5, 62, 8, 19, 64, 19, 65, 19, 546, 19, 84, 19, 108, 19, 109, 66, 73, 66, 21, 67, 78, 67, 84,
+        67, 1, 67, 5, 69, 89, 71, 73, 71, 20, 72, 89, 72, 1, 73, 78, 73, 5, 73, 8, 20, 78, 74, 98,
+        78, 98, 79, 3, 82, 21, 84, 95, 85, 97, 86, 1, 91, 5, 91, 8, 22, 9, 94, 23, 95, 5, 96, 108,
+        96, 109, 96, 3, 97, 99, 97, 107, 98, 5, 98, 8, 107, 8, 8, 18, 8, 79, 18, 338, 8, 16, 16, 1047,
+        5, 79, 18, 142, 18, 146, 38, 338, 9, 230, 10, 30, 10, 54, 11, 47, 5, 58, 5, 16, 21, 171, 38, 146,
+        7, 230, 16, 171, 8, 99, 16, 1575, 18, 1573, 9, 259, 35, 338, 1, 16, 21, 94, 38, 97, 16, 94, 52, 1575,
+        23, 1047, 9, 195, 10, 41, 1, 149, 1, 165, 1, 52, 1, 91, 21, 78, 58, 78, 31, 78, 16, 78, 18, 71,
+        31, 97, 99, 146, 62, 171, 46, 245, 10, 238, 11, 1438, 27, 1431, 8, 180, 79, 251, 11, 1523, 9, 204, 23, 338,
+        58, 1573, 1, 95, 1, 60, 11, 89, 18, 89, 78, 99, 21, 102, 17, 102, 11, 234, 31, 102, 27, 84, 38, 84,
+        45, 147, 45, 99, 21, 121, 16, 141, 21, 44, 16, 172, 10, 115, 27, 1930, 107, 338, 90, 1047, 24, 1606, 10, 137,
+        10, 167, 11, 170, 25, 50, 52, 172, 46, 175, 0, 13, 35, 2023, 0, 163, 1, 73, 78, 95, 19, 115, 16, 71,
+        73, 142, 99, 141, 27, 238, 123, 171, 122, 171, 23, 245, 17, 1438, 73, 179, 27, 158, 59, 251, 52, 251, 35, 251,
+        17, 1523, 19, 137, 18, 137, 60, 172, 11, 232, 18, 232, 58, 153, 18, 1049, 27, 250, 78, 180, 38, 250, 62, 102,
+        46, 234, 98, 102, 5, 46, 147, 2056, 62, 246, 84, 149, 62, 134, 84, 91, 11, 1574, 27, 314, 87, 240, 27, 237,
+        45, 180, 38, 237, 62, 121, 27, 137, 21, 170, 49, 50, 24, 175, 17, 226, 92, 230, 49, 92, 41, 147, 41, 99,
+        41, 80, 80, 89, 27, 748, 27, 197, 21, 242, 21, 161, 37, 176, 21, 176, 44, 99, 44, 80, 95, 172, 16, 153,
+        27, 115, 37, 238, 31, 351, 27, 167, 73, 172, 10, 211, 52, 153, 1, 1483, 78, 148, 37, 115, 18, 546, 71, 95,
+        95, 1367, 60, 164, 21, 125, 45, 187, 73, 141, 17, 545, 37, 167, 241, 248, 89, 98, 37, 258, 58, 247, 44, 98,
+        148, 172, 37, 332, 95, 153, 115, 147, 24, 253, 172, 1483, 27, 211, 73, 153, 10, 119, 73, 248, 74, 187, 17, 273,
+        71, 148, 39, 187, 37, 1766, 148, 153, 72, 116, 153, 1483, 27, 119, 17, 272
+    ]),
+    coef: new Float64Array([
+        -1, -2, -4, -8, -9, -12, -3, -12,
+        -12, -36, -33, -12, -6, -26, -18, -16,
+        -8, -8, -36, -16, -8, -9, -54, -63,
+        -87, -36, -15, -24, -39, -68, -24, -24,
+        -32, -24, -20, -27, -48, -44, -27, -66,
+        -246, -78, -90, -57, -48, -12, -9, -8,
+        -36, -92, -16, -102, -96, -44, -32, -8,
+        -42, -18, -60, -12, -36, -90, -36, -339,
+        -72, -195, -318, -204, -36, -54, -120, -60,
+        -12, -40, -138, -64, -116, -40, -126, -66,
+        -128, -52, -18, -45, -36, -81, -8, -228,
+        -24, -180, -648, -276, -24, -117, -510, -180,
+        -136, -132, -48, -72, -8, -111, -60, -74,
+        -84, -174, -160, -54, -48, -24, -168, -134,
+        -27, -27, -60, -60, -573, -120, -108, -690,
+        -120, -546, -348, -60, -306, -333, -330, -240,
+        -60, -90, -111, -36, -60, -210, -72, -96,
+        -72, -171, -186, -36, -300, -714, -222, -414,
+        -222, -870, -300, -270, -171, -144, -36, -198,
+        -444, -186, -27, -90, -90, -18, -126, -108,
+        -305, -180, -555, -180, -441, -180, -522, -555,
+        -81, -360, -180, -360, -305, -27, -54, -27,
+        -279, -333, -54, -450, -450, -108, -54, -216,
+        -333, -108, -279, -135, -270, -135, -135, -270,
+        -135, -27, -81, -81, -27, 6, -3, -12,
+        21, 6, 12, -6, -16, -6, 34, 8,
+        24, -12, -16, -24, 52, 8, -72, 72,
+        40, -18, 8, 4, -84, 132, 24, 30,
+        44, 16, 8, -9, -64, -60, 128, 8,
+        42, 52, 16, 72, 32, 16, -36, -16,
+        -120, 80, -16, -36, 120, 64, -216, 216,
+        102, -39, 106, 48, -24, -2, -228, 183,
+        -42, 150, 195, 132, 24, 27, 48, 54,
+        116, 48, -27, 20, -80, -174, 54, -64,
+        90, 68, 196, 112, 16, 96, 48, 40,
+        54, 96, 88, -27, -96, 8, -144, 36,
+        -136, 132, 48, 63, 174, -162, 162, 124,
+        -36, 400, 140, -102, 84, 70, 64, 16,
+        -24, -300, -354, -276, 90, 906, 384, 24,
+        144, 450, 180, 16, 72, 184, 32, -18,
+        144, 192, 76, 64, -36, 16, -6, -32,
+        -192, -176, -64, -240, -288, 460, 64, -32,
+        144, 222, 492, 144, 54, 36, 120, 24,
+        72, 180, -108, -168, 96, -126, -372, 252,
+        192, 198, 72, -12, 638, 144, -138, 326,
+        520, 368, 72, -18, -66, 112, 68, -18,
+        -192, -1194, -360, -510, 909, -204, -144, 171,
+        1470, 300, 678, 576, 180, 342, 24, 444,
+        24, 80, 276, 128, 232, 80, -45, 252,
+        96, 256, 104, -45, -72, -136, -648, -304,
+        108, -112, -408, 252, 152, -232, 90, 360,
+        192, 24, 714, 476, 90, 72, 162, -270,
+        36, -414, 72, 81, 252, 81, 16, 456,
+        48, -60, 360, 1222, 552, 48, 150, -174,
+        860, 360, -54, 224, 240, 96, -24, 16,
+        88, -48, -1128, -144, -840, -1194, -1176, -144,
+        -198, 180, -600, 2124, 852, -48, 1188, -48,
+        888, 1770, 1140, 240, 450, 120, 148, 168,
+        348, 320, 108, 96, 48, -27, 336, 268,
+        -27, -360, -176, -456, -600, -640, -180, 456,
+        24, 96, -656, 342, 684, 120, 342, 744,
+        54, 54, -162, -162, 108, 108, 120, 120,
+        1146, 240, 216, -111, 1380, 240, -36, 1032,
+        696, 120, 402, 666, -72, 564, 480, -72,
+        120, 9, -360, -360, -2508, -720, -468, -2640,
+        -720, 807, -978, -360, 522, -888, 3000, 60,
+        -360, 990, 1098, 828, 180, 1260, 2553, 930,
+        162, 222, 72, 120, 420, 144, 192, 144,
+        342, -666, -216, -18, -1068, 18, -156, 18,
+        -906, 252, 72, 810, 222, 558, 372, 72,
+        600, 1428, 444, 828, 444, -90, 1740, 600,
+        -90, 540, 324, 288, 72, 270, 888, 372,
+        -54, -1116, -216, -1800, -2454, -1332, -1404, -1332,
+        -1890, -1800, -540, 1944, 216, -216, 2322, 666,
+        -1116, 378, 2430, 1080, 2430, 1830, 180, 180,
+        36, 252, 216, -540, -540, 108, -504, -612,
+        162, 180, 324, 180, 162, 610, 360, 1110,
+        360, 882, 360, 1044, 1110, 162, -27, 720,
+        360, -54, 720, 610, -27, -1830, -1080, -3330,
+        -1080, -693, -1080, -801, -3330, -108, 990, -1080,
+        990, -1830, 837, 378, 1674, 2331, 837, 1953,
+        54, 108, 54, -162, -324, -162, 54, 108,
+        54, 558, 666, 108, 900, 900, 216, 108,
+        432, 666, 216, 558, -1674, -1998, -324, -2700,
+        -2700, 432, -324, 864, -1998, 432, -1674, 1080,
+        2160, 1080, 270, 540, 270, 270, 540, 270,
+        -810, -1620, -810, -810, -1620, -810, 243, 729,
+        729, 243, 54, 162, 162, 54, -162, -486,
+        -486, -162, -36, 36, -9, 48, -18, -94,
+        -24, 54, 8, -48, 180, 48, 30, -192,
+        -102, -12, -9, -72, 72, -18, 48, 24,
+        -140, -24, -18, 84, 4, -32, -48, 176,
+        32, 84, 64, -242, -104, -8, -12, 168,
+        -184, -72, 120, -16, -96, 112, -36, 240,
+        88, -264, -72, -12, -216, 432, -216, -156,
+        132, -96, -48, -27, 48, 24, 224, -60,
+        -328, -8, 225, -132, -124, -88, -16, 63,
+        -240, 792, 96, 420, -804, -216, 12, -18,
+        -465, -120, -96, -60, -192, -96, 108, 96,
+        48, -27, 80, 216, -208, 64, -72, 60,
+        -180, -184, -112, 99, -16, 72, -64, -240,
+        384, -32, 468, 352, -524, 32, 192, -237,
+        -580, -92, -18, 96, -96, 288, -84, 96,
+        -108, -240, -96, 252, -36, -96, 96, -252,
+        456, -96, -168, 96, 252, 480, -432, -444,
+        -36, -324, 648, -324, -232, 144, -616, -248,
+        -18, 348, 24, -64, -64, -36, -16, 42,
+        368, -42, 94, 304, 258, -364, -1104, -560,
+        -64, 30, 327, -152, -112, 63, -432, 756,
+        -240, 1110, 207, 774, 168, 315, -990, 120,
+        -1353, -1062, -288, -477, -24, -444, -32, -144,
+        -368, -64, 72, -168, -384, -128, -128, 144,
+        -32, 192, 32, 288, 64, 64, -18, 396,
+        368, -780, -176, 99, 32, -378, 36, -440,
+        -160, 171, -32, -336, 144, -64, 216, -160,
+        396, 288, -32, 924, 72, 240, 416, 126,
+        -972, -552, -96, -954, -416, 144, 96, 54,
+        -240, 378, 384, -396, -384, 108, 36, -216,
+        48, 168, -36, -456, 396, 528, 810, -396,
+        -72, -135, -846, -27, -144, 48, -1196, -288,
+        552, -524, -808, -656, -45, -144, 288, 228,
+        32, -32, -9, 256, 24, 1312, 480, 171,
+        448, -1876, -8, 192, -357, 966, -1924, -656,
+        180, -772, -720, -240, 366, -32, -144, -336,
+        -864, -576, 360, 3351, 960, -144, 1080, 3135,
+        1680, -3825, -1236, 204, -1170, 96, -3765, -2100,
+        -300, -630, -48, -160, -552, -256, -464, -160,
+        180, -504, -120, -512, -208, 252, 96, 112,
+        36, 984, 352, -532, 64, 99, 672, -72,
+        -376, 256, -261, -552, -336, 252, -48, -456,
+        -528, 108, -144, -64, -888, -448, 928, 32,
+        -96, 1254, 1120, -304, 648, -1128, 72, 96,
+        1038, 1728, -792, -2232, -672, -504, -864, 360,
+        -216, 135, 504, -144, -504, 135, -540, 576,
+        -684, -36, 297, 864, 432, -432, -180, -567,
+        -32, -912, -96, 240, -720, -2296, -1104, -96,
+        -132, 696, -1400, -720, 216, -352, -432, -27,
+        -192, 384, -32, 92, -27, 64, 24, 1464,
+        192, 264, 1152, 692, 1488, 192, 144, 1059,
+        -992, 792, 81, -3352, -1536, 24, -804, 64,
+        -1804, 678, -1896, -1536, 486, -336, 186, -96,
+        -1728, -288, -1080, 1812, -1368, -288, 756, 5640,
+        405, 2184, 288, 2187, -96, 4440, -4350, 1560,
+        1080, -450, -3402, -2664, -720, -3123, -72, -5550,
+        -1488, -297, -240, -296, -336, -696, -640, -216,
+        -192, -96, 108, -672, -536, 108, 480, 56,
+        180, 576, 948, 640, 468, -984, -144, 333,
+        36, 776, -27, -288, -1104, -240, 72, -744,
+        -720, 184, -816, -228, -640, 72, 828, 384,
+        1968, -1016, 144, 480, 480, 864, 3180, -1170,
+        -432, -2718, -1692, -828, 216, 216, -216, 81,
+        -216, 81, -324, -324, 432, 432, -108, -81,
+        -108, -81, -240, -240, -2292, -480, -432, 444,
+        -2760, -480, 144, -1944, -1392, -240, -384, -1332,
+        288, -936, -960, 288, -240, 324, 480, 180,
+        480, 3096, 960, 756, 942, 3480, 960, 72,
+        -2448, 1008, 480, -648, 1248, 1494, -4788, -300,
+        774, 480, -1878, -1620, -1296, -288, -450, -3276,
+        -1308, 450, -720, -720, -2952, -1440, -432, -1620,
+        -1440, 5358, 72, -720, 5148, 1332, 8460, 3240,
+        -720, 4500, -5697, -1080, 324, -3888, 3330, 4464,
+        -351, -8370, -4320, -540, -6210, -3660, -444, -144,
+        -240, -840, -288, -384, -288, -684, 888, 288,
+        -204, 333, 1296, 108, 36, -72, 486, 1128,
+        -468, -144, 216, -1080, -444, 216, -387, -1332,
+        -432, 648, -1752, 810, 528, 1260, -1572, -324,
+        288, 1476, 888, 2700, -729, -1476, -1026, -1926,
+        -297, -744, -144, -1200, -2856, -888, -1656, -888,
+        360, -3480, -1200, 360, -1080, -612, -576, -144,
+        -288, -1776, -744, 324, 1488, 288, 558, 2400,
+        108, 2662, 1776, 2412, 1776, 1512, 2076, 2400,
+        612, 1026, -3600, -648, 288, -2412, -1098, 1488,
+        -612, 648, -3528, -1692, 864, -2628, -2492, 216,
+        -2232, -432, -3600, -1092, -2664, 108, -2664, 3510,
+        -3600, 2160, 2277, 1674, -432, 6543, 9324, -2232,
+        1566, -2790, 2700, 2610, 9150, -3780, -2214, -324,
+        -6264, -9657, -1674, -2484, -4743, -360, -360, -72,
+        -504, -432, 720, 720, -288, 270, 504, 270,
+        792, -216, -360, -162, -360, 54, -1080, -1080,
+        648, -504, -1152, 324, 720, 1188, 720, 864,
+        -432, -1404, -972, -1220, -720, -2220, -720, -1764,
+        -720, -2088, -2220, -324, 108, -1440, -720, 216,
+        -1440, -1220, 108, 2440, 1440, 915, 4440, 540,
+        1440, 180, 1440, 1845, 4440, 540, 1134, -1980,
+        1440, 1188, -855, 2440, 54, -1404, -648, -1728,
+        -3456, -324, -2433, -3660, -2160, -6660, -2160, 2007,
+        -2160, 4104, -6660, 972, 6885, -2160, 10260, -3660,
+        -2619, 324, -1998, 6993, 621, 10044, -6345, -1620,
+        -9450, -2745, -3105, -108, -216, -108, 216, 432,
+        216, -108, 81, -216, 162, -108, 81, -324,
+        -648, -324, 216, 432, 216, -162, -324, -162,
+        -1116, -1332, -216, -1800, -1800, -432, -216, -864,
+        -1332, -432, -1116, 2232, 2664, 432, 837, 3600,
+        999, 3600, 162, -1026, 432, -702, 2664, 324,
+        2232, 324, -1728, 648, -2781, 324, -1053, -3348,
+        -3996, -648, -5400, -5400, 1863, -648, 5751, -3996,
+        3888, -3348, 1620, 7290, 5670, -1782, -486, -4374,
+        -2997, -3402, -2511, -810, -540, -1080, -540, -540,
+        -1080, -540, 1080, 2160, 1080, 405, 1080, 810,
+        2160, 405, 1080, -432, -891, -486, -27, -1620,
+        -3240, -1620, -1620, -3240, -1620, 81, 1458, 2673,
+        1296, -1215, -2430, -1215, -108, -324, -324, -108,
+        216, 648, 648, 216, 81, 243, 243, 81,
+        -324, -972, -972, -324, -243, -729, -729, -243,
+        216, -324, 162, -27, -144, 72, 372, 72,
+        -456, -24, 135, -6, 96, -464, -96, 204,
+        -128, 614, 280, 24, 96, -414, -112, 4,
+        -27, -64, 432, 96, 240, -1116, -528, -48,
+        -72, -420, -120, 1000, 726, 156, 153, 8,
+        36, -360, 456, 288, -624, 96, -54, 198,
+        -48, 192, -272, -36, -240, -248, 632, 184,
+        198, 108, -474, -40, 16, -36, -96, 160,
+        384, 256, -736, -224, 72, -474, -640, -104,
+        -36, 930, 528, 72, 156, 24, 360, -816,
+        -108, 456, 504, -96, -432, 96, -36, -144,
+        384, -240, 252, 312, -864, -528, -72, 648,
+        216, 108, -216, 648, -648, 216, 432, -432,
+        864, 432, 108, -864, -432, 216, 108, -336,
+        -24, 464, -240, 72, -1032, 680, 976, 608,
+        324, 96, -504, -600, -296, -16, 108, 256,
+        96, -1024, 96, 516, -1120, 912, -256, -144,
+        312, -1188, 1172, 224, -36, 800, 684, 192,
+        -744, 16, -28, -192, 1152, 1440, -2988, -384,
+        144, -3660, -600, 2652, 624, -240, 72, -48,
+        -708, 3000, 1380, 120, 180, -384, 448, -72,
+        -1104, -320, 108, 1184, 448, -144, 216, -816,
+        -208, 216, 64, -36, 288, -352, 108, -264,
+        128, 264, -256, 396, -984, -600, 680, -160,
+        360, 816, 528, -414, 96, -564, 116, -54,
+        -192, 256, 672, 64, -896, 64, 1224, -1272,
+        -1440, 256, -36, 1056, -240, -192, -1680, -904,
+        684, 2472, 672, 180, 156, 144, -288, 216,
+        144, 72, 144, -864, -288, 432, -72, 576,
+        144, -540, 72, -108, -144, 288, -144, 216,
+        -144, -360, 288, 1008, 144, -144, -540, -1944,
+        -108, 648, 936, 216, 288, -144, 2232, 576,
+        -1656, 792, 1152, 1152, 270, 288, -1080, -576,
+        -576, -144, 270, -256, -192, -792, -480, 72,
+        -1308, -264, 3236, 528, 468, -192, 456, -3036,
+        1672, 1008, -468, 640, 672, 423, 240, -1140,
+        32, -352, 135, 224, 192, -80, 384, 888,
+        -704, -2388, -1072, 96, -840, -549, -1264, -1744,
+        243, 4658, 2152, 88, 552, -64, 1292, -1878,
+        1654, 1408, -918, 232, -444, -192, 528, -288,
+        1680, -216, 912, 1224, -2040, 1920, -3777, -3732,
+        -552, -3357, 96, -3264, 1200, -2700, -840, -900,
+        5247, 4284, 1260, 3393, 144, 4692, 780, 162,
+        -96, 96, -144, -1344, -192, 1696, 192, -756,
+        -1056, -1008, 896, 270, -96, 36, 768, 576,
+        -684, 96, -1032, 208, 162, 96, -96, 144,
+        624, 192, -976, -192, 666, 336, -1512, -896,
+        96, -846, 1980, 144, 9, -96, 90, -928,
+        243, -360, 2028, 720, -1170, 138, -96, 96,
+        -192, -192, 400, 192, 672, 492, 320, -96,
+        1008, -1764, -576, 96, -1404, 1792, -1116, -2376,
+        -1728, -1314, -2664, 2520, 1224, 144, 3582, 2388,
+        288, 360, -720, 540, 360, 360, -756, -720,
+        324, 216, 360, -81, -324, -81, -360, 720,
+        -360, -360, 216, 720, 756, -756, -360, -1836,
+        540, 81, 1080, 81, 64, 1824, 192, -720,
+        1440, 4296, 2208, 192, -72, -2088, 2160, 1440,
+        -648, 512, 768, 162, 384, -1440, 64, -720,
+        162, -64, -96, -1344, -192, -1536, -1248, 1416,
+        -1248, 360, -192, -456, -4740, 1968, -768, -108,
+        4768, 2544, 828, 96, -1080, -64, 2592, 108,
+        -2028, 1032, 1584, -540, 384, -1056, 64, 96,
+        960, 192, 1296, 768, -3400, 576, 192, -624,
+        1356, -5408, -192, 144, 2832, -1240, -288, -552,
+        64, -4840, -3906, 6608, 16, -1314, -864, 2316,
+        3474, 2976, 888, -1572, 96, 3184, 1232, -918,
+        -64, -672, -192, 3096, -192, -192, 1872, 6720,
+        1440, -9532, -1800, 192, -2664, -64, 4584, -15600,
+        -3360, 1440, -5400, 8460, 1152, -1224, 2574, -288,
+        -8532, -5136, -270, 14670, 8460, 1440, 6750, 2620,
+        -480, 480, -720, -480, -1392, -1152, 2112, 480,
+        -1548, -528, -480, -108, -216, 1680, 162, 480,
+        -1656, 162, 480, -480, 720, 480, -384, 576,
+        -336, -480, 936, -1296, 480, -54, -972, 144,
+        -480, -432, -1776, 1512, 576, -702, 1674, 1776,
+        -702, -288, -480, 480, -480, 720, 720, -720,
+        480, 2400, -480, -2268, -2688, 480, -288, 4272,
+        1080, -432, -4644, -4992, -3204, 1404, 4320, 720,
+        1566, 3780, 162, 216, 216, -432, 324, -432,
+        324, 216, -324, 216, -324, -216, -216, 432,
+        432, -216, -324, -216, -324, 324, 324, 480,
+        480, 4584, 960, 864, -1332, 5520, 960, -432,
+        3648, 2784, 480, -72, 2664, -864, 1488, 1920,
+        -864, 480, -1332, -480, -720, -480, -2352, -960,
+        -1152, -4656, -3360, -960, -576, 6084, -120, 666,
+        -480, -1176, -1440, 216, -5832, 6384, 960, -2052,
+        -480, 2184, 2160, 1872, 432, 432, -2160, 2892,
+        432, 1512, -990, 480, 720, 480, 840, 960,
+        720, 3204, 480, 960, 324, -5512, -1104, 480,
+        -3432, -1224, -1416, -5052, -3120, -396, 480, -5232,
+        8958, 2760, -144, 2400, -240, -3744, 1242, -2961,
+        8184, 5244, -3474, 720, 1404, 2864, -513, -480,
+        -480, -48, -960, 432, 3120, -960, 324, 888,
+        -480, 6084, 5328, -3360, 4560, -480, 3600, -8226,
+        -7020, -864, -12636, -10080, 6696, -2700, 2160, -7920,
+        -2160, -9900, -14280, 9423, 6318, 1188, 12798, 21186,
+        5688, 3375, 4518, -888, -288, 888, -1332, -912,
+        -432, -216, 912, -2016, -888, 864, 288, -864,
+        1080, 888, -864, -684, 888, 288, -888, 1332,
+        912, 432, -1584, -912, 216, 888, 936, -288,
+        54, -1080, -888, 54, -1116, 162, 1800, -486,
+        1800, -648, -888, -288, 888, -912, 720, 912,
+        2520, -888, -1404, 288, -1656, 888, 4248, -1458,
+        -2664, -2808, -6264, -1350, 1890, 432, 4536, 1332,
+        2646, 1488, 288, 2400, 5712, 1776, 3312, 1776,
+        -1080, 6960, 2400, -1080, 2160, 1152, 1152, 288,
+        72, 3552, 1488, -1080, -1488, -288, -2232, -2400,
+        -432, -832, -1776, -4032, -1776, -6768, -744, -2400,
+        -3168, -1944, 6480, 1728, 540, -288, -648, 1728,
+        540, -1488, 72, -2376, 4392, 2448, -2484, 792,
+        2648, -108, 1488, 288, 2232, 2400, 432, -1816,
+        1776, 1584, 1776, 3288, -4536, 2400, 1188, -936,
+        36, -1944, 288, -3168, -7944, 1488, -2304, -4032,
+        7308, -1728, -4032, -792, -7528, 4896, 2988, 432,
+        2304, 10908, 2232, -2592, 2820, -1488, -288, -2400,
+        2232, -1776, 4032, -1776, 8880, -2400, 6480, -9180,
+        -504, -288, -2124, 15096, -1488, 756, -21600, -2160,
+        -13500, 14640, 6696, -1944, -1296, 2916, -19224, -6696,
+        -3780, -19980, 19440, 7020, 23220, 11520, 3780, -720,
+        -720, 720, -1080, -1080, -720, 216, 720, -648,
+        720, -864, 720, 720, -720, 1080, 1080, 720,
+        -864, -720, -648, -720, 216, 648, -324, 1296,
+        -648, 648, -324, -720, -720, 720, -720, -648,
+        720, 864, 720, 1512, -216, -3672, -3456, 648,
+        1080, 1296, 1080, 648, 2440, 1440, 4440, 1440,
+        3528, 1440, 4176, 4440, 648, -324, 2880, 1440,
+        -648, 2880, 2440, -324, -2440, -1440, -3660, -4440,
+        -2160, -1440, 2052, -1440, -4176, -4440, -1728, -4752,
+        3960, -1440, -5184, -540, -2440, -432, 2268, 1080,
+        162, 216, 4500, 324, -2052, 1920, 162, 2440,
+        1440, 3660, 4440, 2160, 1440, -3972, 1440, -324,
+        4440, 648, 621, -6300, 1440, 297, -6300, 2440,
+        -324, 5022, 3294, -4500, -1728, -7500, -2052, 8046,
+        2160, -4104, 8397, 3660, -2052, 351, -2440, -1440,
+        -4440, -1440, 2232, -1440, 9324, -4440, 2592, 4140,
+        -1440, 17640, -2440, -9153, -3240, -15471, -6318, 16740,
+        -6480, -6480, -20250, -10980, -13770, 6885, 2592, 14985,
+        15309, 9315, 12717, 1215, -216, -432, -216, 216,
+        -324, 432, -648, 216, -324, 216, 432, 216,
+        -216, 324, -432, 648, -216, 324, -216, -432,
+        -216, 216, 432, 216, -648, -1296, -648, 324,
+        648, 324, 2232, 2664, 432, 3600, 3600, 864,
+        432, 1728, 2664, 864, 2232, -2232, -2664, -432,
+        -3348, -3600, -3996, -3600, -648, 2376, -432, -648,
+        -2664, -3024, -2232, -1296, 2592, -2592, 2484, -1296,
+        -108, 2232, 2664, 432, 3348, 3600, 3996, 3600,
+        648, -2268, 432, -1836, 2664, 432, 2232, -1134,
+        -432, -2268, -3564, -1134, -3132, 2538, 648, 3888,
+        3996, 162, 3348, -1188, -2232, -2664, -432, -3600,
+        -3600, -1188, -432, 5724, -2664, 6912, -2232, -6480,
+        3240, 9720, -324, -1944, -4374, -11988, -7776, -10044,
+        -3726, 7290, 14580, 7290, 1080, 2160, 1080, 1080,
+        2160, 1080, -1080, -2160, -1080, -1620, -1080, -3240,
+        -2160, -1620, -1080, 756, 648, -972, -864, 1080,
+        2160, 1080, 1620, 1080, 3240, 2160, 1620, 1080,
+        108, 324, 324, 108, -567, 1620, -1701, 3240,
+        -1701, 1620, -567, -1080, -2160, -1080, -1080, -2160,
+        -1080, -2592, -2916, 1944, 2268, -4860, -9720, -4860,
+        1701, 5103, 5103, 1701, 216, 648, 648, 216,
+        -216, -648, -648, -216, -324, -972, -972, -324,
+        216, 648, 648, 216, 324, 972, 972, 324,
+        324, 972, 972, 324, -216, -648, -648, -216,
+        -972, -2916, -2916, -972, 648, -1080, -648, 2376,
+        -432, 162, -1566, 432, 324, -108, -288, 624,
+        108, -336, 696, -1480, -456, -72, -588, 2316,
+        208, -96, 306, -837, 66, 32, -81, 96,
+        -352, -96, -640, 1696, 544, 264, -894, 1152,
+        328, -108, -2158, -1264, -184, -1080, -112, 1758,
+        632, -40, 378, -16, 48, 192, 480, -1440,
+        -480, -144, -1920, -480, 3684, 2208, 336, 792,
+        -156, 2370, 1200, 120, 180, -3258, -2790, -792,
+        -1089, -72, -468, -36, -27, -504, 1392, 216,
+        -920, -1728, 384, 1920, -448, 432, 72, -828,
+        336, -32, -108, 144, -576, 464, 108, -648,
+        864, 1168, 252, -1368, -456, -828, -780, 128,
+        -108, 1368, 144, -96, 360, 12, 192, -224,
+        480, -1056, -1024, -144, 1440, 480, -504, -440,
+        1368, 2304, 624, 360, 192, -2070, -1296, -216,
+        -792, -216, -18, 216, -792, 936, 432, -144,
+        -360, -1080, 288, -216, 648, -144, 216, 144,
+        -288, 360, 144, -540, -936, -108, 1296, 792,
+        432, -756, -216, -324, 864, -1440, -432, 5796,
+        288, -4176, -1440, -3348, 180, 6192, 1296, 405,
+        -576, -324, -2052, -288, 288, 81, -480, 992,
+        36, -1560, 416, -328, 544, -36, 816, 3792,
+        -1156, 832, -288, -3808, -2464, -1755, -448, 2688,
+        -936, -54, 3000, 1376, -16, -765, -64, 372,
+        192, -640, 144, -832, 2176, 64, -888, -2136,
+        2976, -800, -108, -912, 1456, 608, -1248, 2672,
+        3555, -3656, -828, 126, 224, -1176, -2772, -2544,
+        -816, 3435, -96, 124, -196, 378, 384, 960,
+        -2592, -384, 288, -4560, 480, 6096, 576, -480,
+        -576, -4020, 11880, 2280, -480, 540, -5238, -432,
+        1224, 486, 288, 6540, 1488, 135, -10395, -6120,
+        -900, -2070, -360, -288, 768, -108, -480, -2232,
+        -96, 4788, 576, 108, -2304, -480, -1800, 144,
+        192, 432, 2448, 144, -594, -192, 324, 144,
+        -162, 144, -480, 336, 504, -192, -504, -1044,
+        -144, 192, -972, 1944, -336, 2160, -180, 480,
+        -1800, 360, -1728, -1008, 810, -144, 1476, -504,
+        378, 216, 192, -192, 480, -1008, -576, 432,
+        1152, 96, -2160, 480, 1512, 1440, -768, -324,
+        -2412, -1188, 576, 288, 5184, 4104, 684, -1053,
+        -4968, -1548, -648, -1116, -27, 540, -1512, 108,
+        1404, -324, -216, -324, -432, 324, 108, 324,
+        -108, 432, 216, -1404, -108, 324, 1512, 324,
+        -324, -540, -324, 288, -480, 6048, 384, -7248,
+        -960, -2160, 2592, 15732, -1344, -96, -324, -5376,
+        -3648, -5292, -480, 6624, -1008, -972, 4032, 2400,
+        243, -192, -2592, -192, 504, 243, -192, 384,
+        -72, -2832, -96, 3592, 672, -252, -408, 180,
+        2096, 384, 684, -7228, -824, -1953, 192, 1080,
+        2752, -324, 11256, -6272, -2272, 3222, 288, -768,
+        -2448, -2400, -2115, -816, 6504, -96, 1160, -1539,
+        -512, 243, 96, -288, 960, -192, -1136, -384,
+        -1008, -1884, -1216, -672, -720, 7564, 2896, 96,
+        -240, -2528, -372, 7672, 3968, -1998, -384, 4332,
+        -10464, -3768, 432, -3582, 192, -2212, 2080, -1602,
+        5949, -6432, -5580, 5175, -1056, 2730, -724, 378,
+        192, 480, -336, 96, 1008, 960, -3336, -3216,
+        -384, -4104, -312, -1020, -3600, 480, -6840, 11925,
+        8316, 504, 12726, -288, 6324, -4920, 810, 4500,
+        11700, 3600, 10170, 6960, -12501, -9666, -2484, -12663,
+        -216, -18927, -4788, -1890, -1278, -1440, 3216, -540,
+        -864, -1776, -2646, 1824, -756, 5400, -384, -756,
+        336, 324, -1440, -576, 540, 2304, -336, -540,
+        774, 720, -1776, 144, 1056, 90, -1104, -540,
+        1620, 1104, -1056, -2484, -144, -567, 2160, 1776,
+        -1647, -486, 1296, -3168, -720, 2889, -288, 513,
+        336, 576, -336, 384, -2088, -1824, -1368, 1776,
+        2862, 864, 324, -3216, -3888, 2430, 3888, 1440,
+        4050, 8748, 540, -3672, -1296, -6318, -4086, -1566,
+        324, 324, -648, -648, 324, 324, -324, -324,
+        648, 648, -324, -324, 2160, -2976, 1584, 16632,
+        -480, 2592, -13584, -3552, -3996, 10656, 768, -1296,
+        17064, -4848, -2640, 3024, 1512, -2304, -2304, -2592,
+        -576, 8280, 1536, -2592, -816, -756, -1440, 2256,
+        -540, -864, -5736, 1200, -1116, 2420, 2112, -1827,
+        -840, 672, 108, 9696, -2004, 1920, 3546, 3456,
+        -11568, -4560, -3834, -144, 5196, -4080, -1674, 1536,
+        1629, 7416, -4728, -4848, 4446, -720, 6192, -808,
+        -810, 720, -1536, 144, 1272, -1920, -288, 3392,
+        -672, -2808, -2112, -4686, 9120, -1200, -4536, -4080,
+        936, 4920, 864, 60, 9600, -2256, 1584, 8388,
+        -9024, 3528, 3636, 1440, -4854, 5888, -432, -8280,
+        -5904, -1152, 2772, -12768, -4272, 6732, -384, 816,
+        576, 2640, -5472, -768, 288, 3552, -11640, 480,
+        -2880, 11583, -2016, -1584, 2088, -13236, 2976, -3240,
+        32130, 3960, -2160, 9000, -16860, -10233, 1620, 1836,
+        972, 34767, 16056, 4725, 14292, -31185, -15120, -1620,
+        -26460, -13140, -1755, -2664, -864, 4824, -999, -576,
+        -324, -2160, -108, 2736, -1458, -504, 1944, -1296,
+        -648, 3456, 504, -648, 837, 1332, 432, -2160,
+        -360, 828, -837, -1512, -828, 1944, 360, 1458,
+        2160, -1836, -1944, -432, 972, -1620, -1332, 1296,
+        999, 324, -504, 1296, 504, -2736, 2160, 729,
+        576, -540, -4824, -1944, 108, 864, 6318, 2664,
+        7560, -1296, -4104, -1944, -4779, -648, 6696, 1296,
+        -7320, 6480, 22464, -5328, 11664, 3672, -11232, -4320,
+        -3240, 14256, -2520, -3240, 3888, 6480, -3456, -3024,
+        4536, 7344, -624, -1944, -4464, -864, 5088, -1674,
+        -3312, -324, -3276, 4392, -3276, -1008, -5040, 1656,
+        -3726, -450, 3456, -1026, 1890, 14508, -11376, -144,
+        10782, -576, 2856, 1674, -5328, -3312, -2025, -432,
+        6336, -8820, -2754, -2232, 8964, 1242, -729, 2232,
+        432, -2856, 144, -864, -3456, -2664, -1656, 9612,
+        1008, 1548, -4392, -4464, -648, 16704, 3312, -6426,
+        5904, -5088, -378, -11502, -576, 864, -5220, 8892,
+        4464, -4518, 5868, 6966, -15840, -6552, 11340, -8442,
+        -8352, 4374, 1998, 624, 3024, 2520, 4320, -7506,
+        -3672, -8316, 5328, -2160, -8640, -6480, -19440, 7320,
+        16848, 5670, -1296, 29808, 9018, -6696, 4860, -26352,
+        11340, 13500, 40770, 35100, 13230, -15633, -8262, -972,
+        -28188, -35586, -5022, -13365, -19224, -810, -2160, -2160,
+        3024, -810, 1728, -810, -1296, -864, 810, 432,
+        810, 1296, 1080, 1080, -864, -648, 216, -216,
+        -324, 648, -1458, 864, -1134, 324, -1080, 1458,
+        -1080, 1134, -1296, -432, 864, 1296, -1728, -3024,
+        1458, 2160, 3726, 2160, 2268, -1458, -3726, -2268,
+        10980, 6480, -8928, 9324, 4752, 14904, -7920, 16848,
+        5580, 1944, -3456, -1728, -972, 6048, -4176, -1944,
+        9504, 2052, -972, -7320, -4320, 5268, -2745, -4824,
+        -1620, -2592, 3672, 3420, 189, -1080, -108, -7992,
+        -432, -3159, -324, -324, -3078, 4293, 1608, 81,
+        6264, -7992, -2160, 9288, -2484, -3660, 3024, 4383,
+        3660, 2160, -1608, 324, 432, -3150, 1080, -7560,
+        -3420, -2160, 5832, 2592, 6534, 4824, -6048, -5268,
+        5427, 432, 4320, 4374, 6534, 7320, -1053, -648,
+        -7452, -2808, -5211, -13176, 5454, -8118, 3213, -2052,
+        4176, 1728, -5580, 7920, 1701, -4752, -4428, -9324,
+        -9504, 8928, 17415, -6480, 8100, -10980, -19440, -2268,
+        3564, 9720, 34263, 16524, 40824, 4536, -23895, -4860,
+        -38070, -8235, -14175, -648, -1296, -648, 648, -243,
+        1296, -486, 648, -243, 324, 648, 324, -324,
+        243, -648, 486, -324, 243, -648, -1296, -648,
+        648, 1296, 648, -243, -486, -243, 10044, 11988,
+        1944, -5400, 5400, 10800, 3888, -3456, 7776, 1188,
+        3888, 4644, -6696, -7992, -1296, 2052, -2511, -3996,
+        -2997, -6048, -486, 5508, -1296, 6966, -2592, 1458,
+        -1296, -3132, -648, -972, -486, -3996, -1944, 6399,
+        -3348, -972, 3753, 3348, 3996, 648, 1296, 2592,
+        1296, -1782, 6048, -7614, 3996, -5832, -2052, -1836,
+        1296, 7992, -2592, 6696, -4428, 3321, -7128, 8019,
+        -10206, 6075, -3078, 1377, -4644, -1188, 3456, -10800,
+        -5400, 5400, 7371, -1944, 15309, -11988, 2430, -10044,
+        -5508, 12150, 36450, 24300, -7047, -1458, -18225, -8991,
+        -15309, -7533, -4131, 4860, 9720, 4860, -1296, 972,
+        5832, 3564, -3240, -6480, -3240, -324, -1215, -2592,
+        -2430, -4212, -1215, -1944, 1944, -1620, 4617, -3240,
+        3402, -1620, 729, 1620, 3240, 1620, 1944, 4212,
+        2592, 324, 486, 3240, -972, 6480, -3402, 3240,
+        -1944, -1944, -3402, -972, 486, -3564, -5832, -972,
+        1296, -4860, -9720, -4860, 2187, 10206, 13851, 5832,
+        -3645, -7290, -3645, 972, 2916, 2916, 972, -648,
+        -1944, -1944, -648, -324, -243, -972, -729, -972,
+        -729, -324, -243, 324, 972, 972, 324, 648,
+        1944, 1944, 648, 486, 1458, 1458, 486, -972,
+        -2916, -2916, -972, -729, -2187, -2187, -729, 648,
+        -2160, -324, 1800, 3672, -864, -6192, 1440, -1296,
+        -540, 5724, -2448, 288, 972, -1539, 864, -144,
+        -243, -144, 768, -880, -468, 984, 288, -2384,
+        -144, 2824, 920, 576, 3372, -640, -6000, -640,
+        448, -2592, 168, 2763, -276, -224, 891, 32,
+        -36, -192, 416, -480, 480, 1792, -2912, -928,
+        -1176, 1160, 1896, -3712, -1520, 792, -684, 4386,
+        2736, 456, 4656, 832, -160, 414, -4500, -1824,
+        144, -2133, 96, -480, 12, -81, -192, -960,
+        2208, 672, 720, -1200, 5280, 1920, 720, -6948,
+        -4320, -720, -3312, 1092, 600, -108, -6840, -4320,
+        -720, -1800, -360, 6858, 6210, 1944, 4185, 216,
+        2376, 324, 351, 54, -216, 936, -1320, -864,
+        288, 600, 3168, -768, 864, -2448, 480, -1188,
+        -432, -96, -324, 1620, -720, 96, 756, -144,
+        -144, 384, -360, -240, 36, 1272, -108, -1296,
+        -1272, -1152, 240, 1404, 360, 1620, 1764, -384,
+        756, 216, -2106, -216, 144, -1296, -72, -54,
+        -96, 96, -480, 1152, 768, 576, -600, -1296,
+        -288, 1080, 1320, 360, -2106, -3456, -936, -1296,
+        -1152, -54, 2646, 1512, 216, 1944, 648, 162,
+        -324, -324, 648, 648, -324, -324, 324, 324,
+        -648, -648, 324, 324, 432, -1440, 1200, 5832,
+        -144, -15048, -480, -1620, -648, 6720, 1200, 16308,
+        -3816, -384, 324, -15696, -528, -3240, 960, 324,
+        -1728, 7344, -792, -768, 648, 192, 864, -144,
+        672, -720, -1224, 528, 3768, -864, 1656, 16,
+        -240, -612, 1608, 288, -324, -8472, -2016, -1344,
+        1404, 7104, 3936, 5400, 480, -3936, 2352, 432,
+        -384, -1512, -7632, -2976, 336, 1440, 192, -2340,
+        64, 648, -192, 384, -480, -192, 1344, -720,
+        -2432, -288, -336, 240, 4776, -2208, 864, 900,
+        2736, 72, -2112, -528, 1200, -7320, 720, -144,
+        -6786, 4488, 264, 180, -672, 6492, -1064, 270,
+        5544, 4860, 1440, -7776, 144, 132, 936, -3168,
+        -120, -192, -960, 2688, 384, -1200, 6720, 480,
+        -2160, -7596, -1152, 144, 2304, 9192, -1200, 756,
+        -18360, -1800, 1440, -900, 5160, 6588, -648, -2160,
+        -3456, -432, -21564, -7128, -1620, -2340, 20790, 12960,
+        2160, 9180, 2700, 270, -1080, 4176, 216, -4536,
+        -1836, 864, 324, 1440, 4752, -1224, 432, 576,
+        -3024, 144, 648, -972, -576, 648, -108, -468,
+        -648, 360, 720, 108, 1620, -540, -108, -3240,
+        -720, 2160, -360, 1080, 1728, 648, -729, -1404,
+        468, -810, -972, -81, 576, -144, -576, 1224,
+        -1440, -972, -864, 1620, 4536, 432, 864, -216,
+        -6480, -4176, -3024, 810, 4644, 1080, 972, 2484,
+        162, 3240, -9360, 1080, 5880, 18954, -5040, 1944,
+        -36000, 360, -2997, -540, -2160, -972, 8352, 2880,
+        23328, -15912, 720, 6318, -4374, -9936, -2880, -1944,
+        720, 7236, -4320, -1944, -240, 2187, -1080, 4080,
+        360, -2760, -3312, 3120, 108, 2604, -3720, 4824,
+        2640, 8124, 960, 3555, -858, -3840, 1350, 2628,
+        -22392, 6024, 1200, -7452, 3144, -720, -2430, 4464,
+        3456, 5778, 720, -14436, -912, 6588, 960, -3735,
+        -1278, 810, -960, -720, 720, -1200, 3384, 3840,
+        -1656, -960, -9522, -2640, -1272, 3720, 2880, 3375,
+        -10608, -3120, 6408, -9168, 2760, 648, 13662, 3816,
+        -360, 6678, -3306, -4080, 10746, -192, -11340, 11466,
+        8568, -14688, 1080, -5193, 2748, -3348, -1314, 240,
+        -720, -720, -2880, 4860, 2160, 8856, -360, -864,
+        7560, 5040, 13320, -5880, -18387, -10530, -1080, -23490,
+        -792, 9360, -2538, 13428, -13770, -16740, -3240, -35910,
+        -26280, -4050, 18873, 12636, 2268, 26973, 36153, 9018,
+        8343, 7992, 243, -1998, -648, 6318, 2268, -5184,
+        -486, 324, -486, 1458, 864, 972, -1944, 1458,
+        -1458, 486, -162, -1512, -1134, 1620, -1296, 1296,
+        1458, -1620, 2430, 1134, 972, -1944, 1512, -3402,
+        162, -1458, 1458, 1944, -864, -1458, -324, 5184,
+        -2430, -2268, -4374, -6318, -1944, 2916, 648, 5346,
+        1998, 2430, 10044, 1944, -24120, 1080, 10728, 28836,
+        -17676, 12636, -1404, -36072, 2880, -2430, -4644, -7920,
+        -2430, -972, 3456, 1728, 10692, -15552, -720, 11178,
+        -2808, -3348, 486, -3348, -648, 9384, 3384, -2688,
+        -3042, 5868, 108, 4356, -10332, -1872, -450, 1728,
+        3132, 13248, 3312, 7992, -9936, 216, 7506, -234,
+        2004, -486, -14040, 6120, 3744, -11826, -10836, 1344,
+        2214, -3906, -1344, -3744, -2004, -216, -3312, 9216,
+        -1728, 4428, 1872, 1512, -5184, -4356, -900, -5868,
+        1584, 2688, -9882, 6300, -3384, -5238, -1404, -9384,
+        4644, 5796, 11178, 6048, 648, -2484, 17964, 3348,
+        -16200, 2016, -2538, 3348, 720, -1728, 7920, -2880,
+        -7938, 1404, 7560, 17676, 6048, -10728, -29970, -1080,
+        -3780, 24120, 14040, 5994, -5184, -1944, -10692, -46602,
+        -10044, -18792, -45468, -2106, 38070, 12960, 47790, 19710,
+        9720, -1620, -1620, 3564, 3888, 324, -1944, 486,
+        -2268, 972, -324, 486, 648, -324, -972, -1620,
+        1620, 972, -486, 324, -972, -648, -486, 324,
+        2268, 1944, -324, -3888, -3564, 486, 1620, 972,
+        1620, 486, 16470, 9720, -30780, -7290, 3240, 8640,
+        20898, -21600, 22356, -9990, 1458, -12960, 2160, -729,
+        -6480, -10260, -1458, 6480, -5670, -729, -5490, -3240,
+        9540, 8370, 1080, 1620, 891, 4320, 2187, 9450,
+        1296, -17712, 5400, -16794, 540, 918, 6390, 6048,
+        2160, 4293, -9774, 5940, 8586, -18657, -720, 4293,
+        -2835, 720, -5940, -2160, -6390, -540, -5400, 6318,
+        -9450, 11826, -4320, 5508, -1620, 7290, -1080, 5724,
+        -8370, 7398, -9540, 8964, -9234, 15336, 3240, -19845,
+        12042, 5490, -11988, -3294, -1377, 5670, 10260, -2160,
+        9990, 21600, -8640, -16443, -3240, -26487, 7290, -4860,
+        30780, 5184, -20250, -9720, -57510, -16470, -37260, 15552,
+        5346, 35235, 28917, 23814, 23571, 4131, -486, -972,
+        -486, 486, 972, 486, 486, 972, 486, -486,
+        -972, -486, -486, -972, -486, 486, 972, 486,
+        15066, 17982, 2916, -19440, -14580, 4860, 2592, 5832,
+        -8748, 11664, -13122, 5832, -1782, -5022, -5994, -972,
+        2916, 5832, 2916, 3888, 2916, 972, 5832, 2430,
+        2916, 5346, -7776, 4536, -14580, 972, -5832, -3564,
+        972, 3564, -972, -4536, -5346, -2430, -972, -3888,
+        -1944, -2916, -5832, 5832, -2916, 3888, 5832, 972,
+        5832, 5994, -5832, 5022, -5832, 1782, 13122, 8748,
+        -2592, -4860, 14580, 19440, -2916, -2916, -17496, -17982,
+        -26244, -15066, -11664, 14580, 29160, 14580, 7290, 14580,
+        7290, -4860, -7290, 2430, -2430, -4860, -2430, -1620,
+        -2430, 810, 1620, 1215, 3645, -4860, 3645, -3240,
+        1215, 3240, 4860, -1620, -810, 2430, 1620, -2430,
+        2430, -7290, 4860, -7290, 2430, -2430, -2430, 7290,
+        4860, -7290, -14580, -7290, 3645, 10935, 10935, 3645,
+        1458, 4374, 4374, 1458, -486, -1458, -1458, -486,
+        -972, -2916, -2916, -972, 972, 2916, 2916, 972,
+        486, 1458, 1458, 486, -1458, -4374, -4374, -1458,
+        216, -1080, 1800, 1296, -432, -1000, -6264, 1440,
+        -1944, 6840, -1200, 3564, 1512, 288, 972, -9828,
+        4176, -480, -5508, 1296, 3672, -2376, 576, 1944,
+        -64, -648, 144, -480, 360, 400, 468, -1608,
+        324, 336, 2040, 1296, -480, -2580, -600, -1584,
+        -5892, 1152, -432, -1440, 8316, 816, -480, 7740,
+        -624, 160, 864, -5211, 540, 480, -3726, -96,
+        252, 96, -243, 96, -160, 480, -672, -1152,
+        -288, 600, 2352, 480, 1272, -2040, 360, -1998,
+        4992, 1608, -1872, 3120, -400, -162, -5130, -2808,
+        -360, -9504, -1968, 480, -2934, -120, 7074, 2808,
+        -216, 6156, -144, 1728, -72, 810, 72, 64,
+        480, -1584, -288, -1008, 1200, -5760, -1440, -2880,
+        1000, 7452, 3888, 432, 6480, -2340, -1800, 756,
+        -900, 10530, 6480, 1080, 6480, 2160, 270, -9288,
+        -7938, -2268, -9315, -216, -5832, -972, -1782, -486,
+        -27, 648, 648, -1728, -1728, 1080, 1296, 648,
+        1296, -432, -1458, 432, -1620, 432, -162, -108,
+        -108, 648, 1188, 540, -540, -1458, -1188, -1620,
+        -648, -162, 1620, 108, 1944, 108, 324, -432,
+        -432, 432, -648, -1080, 1620, 1728, 1944, 1728,
+        324, -1782, -648, -2268, -648, -486, 1620, -7992,
+        -972, 10980, 6480, -1080, -3600, -26028, 5796, -8748,
+        -864, 16848, -720, 8910, 756, 3600, 2430, -972,
+        -12312, 2592, 288, -5346, -1728, 1008, 486, 1044,
+        864, -1992, -612, -60, 36, -4392, 2916, -792,
+        9900, 3276, 1368, -864, -2052, -6336, -2160, -9369,
+        864, -936, -2484, 2880, -1056, 405, 10368, 2952,
+        -432, 594, 4572, 48, -3294, 900, -48, 432,
+        1056, 936, 2160, -4716, 864, -3780, -3276, 216,
+        216, 792, -1152, 4392, 2952, 60, 8343, -1332,
+        612, -432, -10152, 1992, -2295, -2340, -6372, -4536,
+        -864, 8829, -1116, -1044, 9288, 540, 567, -1008,
+        -288, -3600, 720, 5400, 864, -1728, -5796, -2808,
+        3600, 14580, 1080, -2700, -10980, -2160, -5508, 648,
+        972, 7290, 29268, 7992, 6642, 11340, 324, -23895,
+        -12960, -1620, -19440, -6480, -2025, 1620, 1620, -2916,
+        -2592, 324, 1296, -243, 972, -486, -324, -243,
+        -972, -324, 648, 1620, -1620, -648, 243, 324,
+        486, 972, 243, 324, -972, -1296, -324, 2592,
+        2916, -243, -1620, -486, -1620, -243, 5022, 972,
+        -22950, -8100, 24084, 11988, -1188, 3888, -5022, -4320,
+        -35316, 12960, -22032, 5130, -2916, 10368, 864, 5346,
+        -7776, 5400, 6804, -10044, 1836, 1458, 2628, 4428,
+        -756, -4662, 1944, -3708, -5373, -2610, 1917, -5652,
+        -810, 22572, -936, 11394, -1872, 5022, -4086, -3888,
+        -1728, -8910, 13662, 72, -13932, 9801, 2250, -5022,
+        351, -2250, -72, 1728, 4086, 1872, 936, -3726,
+        5652, -12690, 2610, -864, 3708, -9936, -1944, -6048,
+        4662, -17388, 756, -5076, 13041, -9288, -4428, 22761,
+        3186, -2628, 10287, 4374, 567, -1836, -5400, -864,
+        -5130, -12960, 4320, 14013, 5022, 24543, 1188, 1134,
+        -24084, -1296, 13770, 8100, 47790, 22950, 17820, -17739,
+        -9234, -972, -33291, -32805, -5022, -17253, -15471, -1701,
+        972, 1944, 972, -972, -1944, -972, -972, -1944,
+        -972, 972, 1944, 972, 972, 1944, 972, -972,
+        -1944, -972, 8235, 4860, -32076, -24867, -2916, 22680,
+        9720, 1620, 9720, -10935, -1728, -15552, 9720, -21384,
+        5184, -5832, -2889, 2457, 8424, 2592, 6264, -2457,
+        1404, -5832, -9801, 5076, -9882, -1917, -81, -2700,
+        13284, -2376, 14499, 6588, -1134, 5589, -2349, -5589,
+        -6588, 2376, 2700, 1917, -5076, 5832, 6966, -1404,
+        1296, 2457, -8586, -6264, -2916, -8100, -2592, 1134,
+        -8424, 16848, -2457, 7614, 2889, -5184, -9720, 1728,
+        10935, -1620, -22680, -1215, 2916, 16038, 24867, 26001,
+        32076, 8748, -25515, -4860, -41310, -8235, -15795, 7533,
+        8991, 1458, -21870, -31590, -9720, 7776, 2916, 2916,
+        5832, -11421, 2916, -6561, -243, 5589, 5832, 9396,
+        8748, 1458, 2106, -2592, -4860, 5346, -11664, 12393,
+        -8748, 4455, -1944, -4455, -12393, -5346, 2592, -2106,
+        -1458, -8748, -9396, 6804, -5832, 17496, -5589, 14580,
+        243, 3888, 6561, 11421, -2916, -7776, 9720, 31590,
+        21870, -8748, -1458, -23328, -8991, -20412, -7533, -5832,
+        3645, 7290, 3645, -5832, -13851, -10206, -2187, -1701,
+        -1458, 2187, 1944, 3888, 8019, 4374, 243, -243,
+        -4374, -8019, -3888, -1944, -2187, 1458, 1701, 2187,
+        10206, 13851, 5832, -3645, -7290, -3645, 729, 2187,
+        2187, 729, -729, -2187, -2187, -729, 729, 2187,
+        2187, 729, -729, -2187, -2187, -729, -972, -972,
+        3240, 3240, -2700, -3888, -1404, -3888, 1296, 7938,
+        -2160, 9396, -2160, 1458, -4617, 2592, -432, -5346,
+        2592, -432, -729, -108, -108, -360, -1440, -1080,
+        900, 1728, 3204, 1728, 2304, -5832, -360, -9504,
+        360, -3672, 720, 5589, -486, -288, 7290, -540,
+        -288, 1701, -54, 288, 288, -720, -360, 360,
+        972, -2304, 1512, -3204, 540, -900, 3186, 1080,
+        9072, 1440, 6426, 360, 540, -6642, -2160, 108,
+        -9477, -2592, 108, -2916, -432, -81, 432, 432,
+        2160, 2160, -4212, -1296, -5832, 1404, -1620, 2700,
+        -8100, -3240, -9720, -3240, -1620, 7776, 5346, 972,
+        11907, 6804, 972, 4374, 1458, 243, -486, -972,
+        -486, 486, 972, 486, 486, 972, 486, -486,
+        -972, -486, -486, -972, -486, 486, 972, 486,
+        -4860, -4860, 12960, 12960, -6480, -9720, -1620, -9720,
+        4860, 9720, -1620, 9720, 1620, 540, -1080, -1620,
+        -4320, -3780, 540, 2160, 8100, 1080, 6480, -1080,
+        -1620, -7128, -1080, -3564, -2700, 4536, -1620, 972,
+        1620, 2700, 1080, 1080, -1080, -2160, -5832, -540,
+        -1296, 3780, 5184, 4320, 648, 3888, 1620, -4536,
+        1080, -11016, -540, -2592, -1620, 1620, -4860, 1620,
+        6480, 2916, -5832, -12960, -10692, -12960, -1944, 14580,
+        4860, 19440, 4860, 4860, -8991, -11907, -2916, 17010,
+        21870, 4860, -3888, -5832, 2430, -11664, 10449, -5832,
+        4131, 3321, 567, -2754, -8748, -8424, -2754, -3078,
+        1296, 7047, -4536, 15309, -6885, 9477, -1053, 1215,
+        1053, 6885, 4536, -1296, 3078, 2754, 8424, 8748,
+        -8262, 2754, -18954, -567, -13122, -3321, -2430, -4131,
+        -10449, -2430, 3888, -4860, -21870, -17010, 9477, 2916,
+        22599, 11907, 16767, 8991, 3645, -7290, -14580, -7290,
+        7290, 14580, 7290, 4860, 7290, -2430, -4860, -7290,
+        2430, -2430, 7290, 4860, 2430, -7290, -4860, -7290,
+        -14580, -7290, 7290, 14580, 7290, -2187, -6561, -6561,
+        -2187, 2187, 6561, 6561, 2187, -2187, -6561, -6561,
+        -2187, 2187, 6561, 6561, 2187, 1458, 2916, 1458,
+        -2430, -4860, -2430, 2916, -972, 5832, -1944, 2916,
+        -972, -648, -1296, -648, 1620, 4050, 3240, 810,
+        -3159, 162, -6561, 324, -3645, 162, -243, -162,
+        -324, -162, -810, -3240, -4050, -1620, 3402, 648,
+        7290, 1296, 4374, 648, 486, 972, 1944, 972,
+        2430, 4860, 2430, -3645, -1458, -8019, -2916, -5103,
+        -1458, -729, 3645, 7290, 3645, -2916, -5103, -1458,
+        729, -2673, -4374, -729, 972, 1944, 2187, -1458,
+        -1701, 1701, 1458, -2187, -1944, -972, 729, 4374,
+        2673, -729, 1458, 5103, 2916, -3645, -7290, -3645,
+        2187, 6561, 6561, 2187, -2187, -6561, -6561, -2187,
+        2187, 6561, 6561, 2187, -2187, -6561, -6561, -2187,
+        -729, -2187, -2187, -729, 729, 2187, 2187, 729,
+        -729, -2187, -2187, -729, 729, 2187, 2187, 729
+    ]),
+    fidx: new Int32Array([
+        3, 63, 1941, 1606, 131, 45, 65, 1375, 1942, 1943, 32, 1571, 236, 1549, 1552, 1568, 121, 251, 1431, 1888, 1758, 1944, 1945, 133,
+        1935, 1833, 1923, 240, 1901, 1566, 1864, 39, 1880, 1679, 1719, 1877, 1790, 1929, 1930, 66, 1036, 44, 1430, 1411, 1464, 116, 1338, 1170,
+        1172, 1427, 1480, 1024, 1374, 1406, 1032, 253, 1332, 1542, 158, 1474, 317, 1493, 176, 1534, 1026, 1135, 1469, 1235, 215, 1454, 1350, 1539,
+        314, 1182, 125, 237, 1405, 1865, 1331, 1041, 488, 1271, 93, 1082, 1147, 1533, 780, 570, 784, 257, 781, 569, 921, 779, 53, 714,
+        169, 987, 1020, 898, 597, 999, 679, 938, 937, 894, 991, 564, 208, 610, 865, 609, 243, 384, 785, 640, 1017, 933, 1510, 563,
+        929, 1014, 713, 567, 602, 1196, 660, 205, 573, 1016, 565, 992, 260, 227, 882, 883, 831, 970, 502, 465, 453, 143, 501, 233,
+        464, 337, 518, 531, 61, 547, 353, 34, 365, 352, 104, 489, 487, 410, 538, 379, 340, 370, 523, 368, 335, 433, 334, 521,
+        551, 363, 336, 362, 439, 252, 185, 200, 285, 117, 283, 318, 303, 218, 322, 270, 309, 326, 323, 281, 312, 282, 293, 311,
+        290, 267, 266, 264, 265, 30, 54, 32, 1571, 236, 134, 1946, 1549, 1552, 1568, 121, 1947, 1948, 251, 1431, 1888, 1758, 1949, 1950,
+        1951, 1952, 1953, 74, 133, 1935, 1833, 1923, 84, 1954, 164, 1955, 240, 1901, 1566, 1864, 39, 1880, 1956, 1957, 1958, 1438, 1959, 1960,
+        1679, 1719, 1523, 1877, 1790, 1929, 1961, 1962, 82, 1882, 1559, 1736, 29, 1879, 66, 1036, 44, 1430, 1411, 1464, 116, 1338, 1553, 1678,
+        1557, 220, 1876, 1928, 1170, 1172, 1427, 1480, 1024, 1374, 1406, 1032, 253, 1332, 1663, 1630, 1627, 1621, 1659, 238, 1744, 1899, 1542, 158,
+        1704, 1474, 1939, 317, 1493, 1963, 1964, 1637, 1652, 1738, 242, 1545, 1737, 1859, 1570, 161, 1774, 176, 1534, 1026, 1135, 1469, 1235, 215,
+        1454, 1350, 1539, 1903, 1806, 1898, 1881, 1932, 70, 1703, 535, 1938, 316, 1717, 1911, 1814, 314, 1182, 1867, 125, 237, 1405, 1865, 1753,
+        1331, 1041, 488, 1271, 93, 1629, 1732, 1762, 1660, 1715, 1919, 1940, 1698, 1082, 1683, 1147, 545, 1533, 748, 258, 1044, 197, 76, 177,
+        1244, 1246, 247, 1242, 1034, 1226, 1269, 56, 780, 570, 784, 257, 781, 569, 921, 779, 53, 714, 169, 987, 1020, 898, 597, 999,
+        1371, 1262, 1029, 1522, 1145, 1038, 1081, 1144, 1146, 191, 1048, 1532, 1188, 1423, 679, 1486, 938, 1477, 937, 894, 991, 1425, 564, 208,
+        610, 1040, 865, 609, 263, 1157, 1179, 1258, 1538, 1461, 1507, 243, 1134, 384, 1177, 1248, 1250, 393, 1458, 1247, 1432, 1513, 1245, 1229,
+        138, 1249, 1027, 1059, 1407, 1033, 1227, 1272, 1333, 1173, 785, 1647, 640, 1017, 933, 1373, 1510, 563, 929, 1014, 713, 567, 602, 273,
+        1196, 660, 205, 573, 1016, 1482, 1408, 1334, 1043, 1457, 210, 1506, 1232, 68, 1133, 1230, 155, 1360, 1219, 1426, 565, 1384, 992, 260,
+        1419, 227, 1420, 882, 883, 1267, 831, 970, 1730, 1137, 1531, 1517, 1128, 1123, 624, 761, 919, 750, 837, 571, 106, 760, 162, 154,
+        749, 756, 139, 751, 731, 733, 224, 729, 881, 235, 625, 944, 502, 782, 465, 453, 1412, 143, 501, 924, 233, 464, 337, 518,
+        596, 531, 61, 547, 353, 34, 365, 352, 104, 1003, 561, 579, 1000, 632, 566, 629, 757, 890, 681, 941, 996, 489, 989, 487,
+        880, 410, 577, 538, 892, 379, 755, 752, 739, 753, 616, 975, 613, 734, 946, 1011, 732, 754, 196, 589, 720, 113, 738, 719,
+        649, 786, 783, 680, 340, 925, 370, 920, 523, 863, 368, 335, 433, 855, 334, 521, 828, 551, 363, 336, 362, 439, 917, 835,
+        608, 969, 712, 622, 893, 707, 939, 648, 252, 884, 185, 885, 200, 348, 389, 422, 527, 223, 435, 103, 388, 182, 173, 421,
+        427, 110, 423, 445, 112, 346, 492, 452, 451, 285, 345, 117, 491, 283, 318, 519, 303, 484, 218, 322, 270, 309, 326, 323,
+        342, 544, 432, 490, 542, 333, 497, 508, 478, 438, 437, 436, 387, 386, 495, 412, 507, 548, 426, 381, 395, 394, 396, 520,
+        516, 281, 485, 312, 469, 282, 486, 293, 311, 290, 294, 295, 328, 289, 324, 325, 297, 298, 299, 275, 307, 286, 267, 266,
+        264, 265, 320, 319, 305, 280, 329, 310, 308, 321, 41, 506, 1965, 82, 1882, 1559, 1736, 29, 1879, 66, 1036, 44, 1430, 1411,
+        1464, 116, 1338, 1966, 1967, 1968, 1553, 1678, 1557, 220, 1876, 188, 1928, 1170, 1172, 1427, 1480, 1024, 1374, 1406, 1032, 253, 1332, 1663,
+        1630, 1627, 1621, 1659, 1744, 1899, 1542, 158, 1704, 1474, 1939, 1493, 1969, 1970, 1971, 1972, 1973, 1974, 229, 1975, 216, 1976, 1637, 1652,
+        1738, 242, 1545, 1737, 1859, 1570, 161, 1774, 176, 1534, 1026, 1135, 1469, 1235, 215, 1454, 1350, 1539, 1977, 250, 1978, 1979, 1980, 1981,
+        1982, 115, 1903, 1806, 1898, 1881, 1932, 70, 1703, 535, 1938, 316, 1717, 1911, 1814, 314, 1182, 1867, 125, 237, 1405, 1753, 1331, 1041,
+        488, 1271, 93, 1983, 1984, 1629, 1732, 1985, 1986, 1762, 1987, 1660, 1715, 1988, 1989, 1919, 1940, 1990, 1698, 1991, 1082, 1683, 1147, 545,
+        1533, 1992, 1993, 1994, 1853, 1805, 1565, 1851, 1995, 51, 1702, 1996, 1997, 315, 1998, 1910, 748, 258, 1044, 197, 76, 177, 1244, 1246,
+        247, 1242, 1034, 1226, 1269, 56, 780, 570, 784, 257, 781, 569, 921, 779, 53, 714, 169, 987, 1020, 898, 597, 999, 1999, 1936,
+        1897, 2000, 1875, 1931, 1872, 2001, 2002, 1789, 2003, 1775, 2004, 1371, 1262, 2005, 1918, 1029, 1522, 1145, 1038, 1081, 1574, 1144, 1146, 191,
+        1048, 1532, 2006, 1188, 1423, 2007, 679, 1486, 938, 1477, 2008, 937, 894, 991, 1425, 564, 208, 610, 1040, 865, 609, 1636, 1624, 1767,
+        1631, 263, 1632, 1157, 1619, 2009, 1179, 1677, 1709, 1604, 1258, 1601, 1538, 1706, 1461, 1507, 1760, 243, 1134, 384, 1646, 1653, 1856, 1830,
+        1550, 1854, 1697, 1562, 1591, 239, 1682, 1614, 190, 1572, 1927, 1177, 1670, 1248, 1250, 393, 1458, 1247, 1432, 1513, 1245, 1229, 138, 1249,
+        1027, 1059, 1407, 1033, 1227, 1272, 1333, 1173, 785, 1647, 640, 1017, 933, 1373, 1510, 563, 929, 1014, 713, 567, 602, 273, 660, 205,
+        573, 1016, 1827, 1895, 546, 1826, 1889, 1922, 254, 1908, 1885, 1756, 1836, 1586, 1680, 1846, 1676, 1482, 1871, 1408, 1886, 1784, 1334, 1043,
+        1457, 1716, 210, 1506, 1232, 68, 1718, 1133, 1230, 155, 1863, 1609, 1360, 1799, 1219, 1866, 1426, 565, 1384, 1798, 992, 260, 1419, 1868,
+        227, 1420, 882, 883, 1267, 831, 970, 1665, 1731, 1620, 1800, 1579, 1820, 1137, 1649, 1850, 1849, 1832, 1531, 1710, 1517, 1128, 1569, 1123,
+        1811, 1181, 1855, 1443, 1391, 1390, 1393, 1751, 1330, 1042, 1441, 1429, 184, 1916, 1860, 33, 1887, 1132, 1757, 1335, 64, 1819, 1377, 624,
+        1924, 1224, 761, 919, 750, 1763, 837, 571, 106, 760, 162, 154, 749, 756, 139, 1822, 751, 731, 733, 224, 729, 881, 235, 1816,
+        625, 1907, 944, 502, 782, 2010, 465, 453, 143, 501, 924, 233, 1752, 464, 337, 518, 596, 531, 61, 547, 353, 34, 1078, 365,
+        352, 104, 1504, 1103, 1098, 1536, 1543, 1071, 1581, 1797, 1512, 1389, 1328, 1143, 1175, 1465, 1370, 1451, 1003, 1349, 561, 579, 1342, 1028,
+        1000, 1323, 1516, 632, 566, 339, 629, 757, 1109, 1424, 1422, 890, 1385, 681, 941, 1100, 996, 1095, 489, 989, 1093, 487, 880, 410,
+        577, 538, 892, 379, 1160, 1136, 1158, 1662, 1159, 313, 1259, 1139, 1218, 1217, 1090, 1873, 1199, 1883, 1398, 1191, 1394, 1233, 1392, 1448,
+        1347, 1400, 1023, 1057, 1355, 1039, 1445, 1325, 1127, 1035, 221, 1122, 1535, 1251, 1525, 1176, 1162, 755, 1241, 752, 1228, 739, 1287, 1171,
+        753, 616, 1479, 975, 613, 734, 946, 1011, 732, 1243, 754, 196, 589, 720, 113, 738, 719, 649, 1487, 1740, 786, 1415, 783, 680,
+        1192, 340, 925, 1234, 370, 920, 523, 863, 1417, 368, 335, 433, 855, 334, 521, 828, 551, 363, 336, 272, 362, 439, 1478, 1587,
+        1505, 1376, 1472, 1503, 1492, 1585, 1184, 1319, 1061, 1481, 1388, 1695, 917, 1463, 835, 1318, 608, 1052, 1436, 969, 1231, 203, 712, 1114,
+        1365, 1322, 1354, 622, 1382, 893, 1528, 707, 1421, 939, 1353, 648, 252, 884, 185, 885, 200, 717, 906, 908, 586, 900, 896, 901,
+        915, 950, 766, 832, 767, 1089, 1062, 1473, 808, 897, 998, 968, 746, 690, 623, 1012, 1362, 348, 614, 389, 611, 918, 422, 971,
+        836, 527, 223, 435, 745, 103, 388, 830, 182, 173, 421, 427, 110, 423, 445, 112, 778, 1189, 1489, 346, 615, 492, 612, 452,
+        935, 451, 285, 345, 926, 117, 491, 927, 283, 318, 519, 303, 484, 218, 322, 575, 270, 309, 595, 326, 323, 771, 1292, 1208,
+        1006, 651, 984, 1450, 653, 667, 879, 560, 642, 342, 775, 544, 774, 432, 891, 886, 943, 942, 940, 490, 770, 542, 792, 333,
+        497, 508, 478, 904, 600, 658, 1397, 694, 584, 802, 953, 878, 583, 773, 568, 813, 772, 656, 572, 671, 662, 737, 726, 735,
+        980, 438, 585, 437, 1013, 436, 736, 387, 1010, 974, 386, 744, 1030, 495, 412, 507, 548, 426, 381, 668, 1254, 965, 641, 395,
+        930, 394, 601, 396, 520, 659, 516, 931, 281, 485, 312, 469, 282, 486, 293, 823, 311, 822, 290, 1004, 700, 764, 588, 945,
+        255, 639, 916, 860, 834, 796, 626, 578, 768, 793, 910, 936, 1018, 706, 887, 647, 405, 459, 375, 512, 513, 638, 708, 456,
+        443, 440, 446, 414, 550, 383, 347, 504, 539, 466, 540, 294, 607, 295, 524, 328, 442, 222, 289, 111, 324, 186, 325, 411,
+        543, 650, 448, 450, 297, 406, 298, 846, 299, 376, 275, 307, 286, 267, 369, 266, 470, 264, 483, 265, 480, 430, 515, 343,
+        462, 359, 434, 390, 529, 429, 341, 425, 552, 424, 431, 320, 319, 305, 280, 371, 474, 372, 522, 399, 366, 329, 310, 308,
+        321, 477, 468, 479, 400, 301, 302, 331, 296, 503, 304, 279, 287, 288, 327, 284, 300, 278, 277, 361, 276, 274, 306, 291,
+        137, 167, 2011, 332, 1853, 1805, 1565, 1851, 51, 1702, 315, 1910, 748, 1044, 197, 76, 177, 1244, 1246, 247, 1242, 1034, 1226, 1269,
+        56, 780, 570, 784, 257, 781, 569, 921, 779, 53, 714, 169, 987, 1020, 898, 597, 999, 1936, 1897, 1875, 1931, 1872, 2012, 1789,
+        1775, 1371, 1262, 1918, 1029, 1522, 1145, 1038, 1081, 1144, 1146, 191, 1048, 1532, 1188, 1423, 679, 1486, 938, 1477, 937, 894, 991, 1425,
+        564, 208, 610, 1040, 865, 609, 1636, 1624, 1767, 1631, 263, 1632, 1157, 1619, 1179, 1677, 1709, 1604, 1258, 1601, 1538, 1706, 1461, 1507,
+        1760, 1134, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 206, 2022, 2024, 2025, 1646, 1653, 1856, 1830, 2026, 1550, 1854, 1697, 1562,
+        1591, 239, 1682, 1614, 190, 1572, 1927, 1177, 1670, 1248, 1250, 393, 1458, 1247, 1432, 1513, 1245, 1229, 138, 1249, 1027, 1059, 1407, 1033,
+        1227, 1272, 1333, 1173, 785, 640, 1017, 933, 1373, 563, 929, 1014, 713, 567, 602, 273, 1196, 660, 205, 573, 1016, 1827, 1895, 2027,
+        546, 1826, 2028, 1889, 1922, 254, 1908, 1885, 1756, 2029, 1836, 1586, 1680, 1846, 1676, 1482, 1871, 1408, 1886, 1784, 1334, 1043, 1457, 1716,
+        210, 1506, 1232, 68, 1718, 1133, 1230, 155, 1863, 1609, 1360, 1799, 1219, 1866, 1426, 565, 1384, 1798, 992, 260, 1419, 1868, 227, 1420,
+        882, 883, 1267, 831, 970, 2030, 2031, 2032, 2033, 1665, 2034, 1731, 2035, 1620, 1800, 1579, 2036, 1730, 1820, 1137, 2037, 2038, 2039, 1649,
+        2040, 1850, 2041, 1849, 1832, 2042, 1531, 1710, 1517, 1128, 1569, 1123, 2043, 1723, 1558, 2044, 114, 1722, 2045, 2046, 211, 2047, 1733, 2048,
+        181, 2049, 1657, 1811, 1824, 1181, 1855, 1675, 1443, 1391, 1390, 1393, 1783, 1751, 1330, 1042, 1441, 1429, 184, 1916, 1860, 33, 1887, 1132,
+        1757, 1335, 64, 1819, 1377, 624, 1924, 1224, 761, 919, 750, 1763, 837, 571, 106, 760, 162, 154, 749, 756, 139, 1822, 751, 731,
+        733, 224, 729, 881, 235, 1816, 625, 1907, 944, 502, 782, 465, 453, 1412, 143, 501, 924, 233, 1752, 464, 337, 518, 596, 531,
+        61, 547, 353, 34, 1078, 365, 352, 104, 2050, 2051, 1917, 1504, 2052, 1103, 2053, 1937, 1098, 1536, 1543, 1874, 2054, 1071, 1581, 1797,
+        1512, 2055, 1389, 1328, 1143, 2057, 2058, 1847, 1175, 2059, 1465, 2060, 1370, 1451, 1003, 1349, 2061, 561, 579, 1342, 1028, 2062, 1000, 1323,
+        1516, 632, 566, 339, 629, 757, 2063, 2064, 1109, 2065, 1424, 2066, 1422, 890, 1385, 2067, 681, 941, 1100, 2068, 996, 1095, 489, 989,
+        1093, 487, 880, 410, 577, 1829, 538, 892, 379, 1844, 1622, 1625, 1801, 1633, 1160, 1843, 1136, 1158, 1626, 1662, 1159, 313, 1813, 1748,
+        1747, 1580, 1259, 1828, 1139, 1218, 1707, 1217, 1090, 1873, 1199, 1883, 2069, 1617, 2070, 1544, 1721, 1726, 1794, 2071, 1725, 1561, 1605, 1792,
+        1831, 2072, 2073, 124, 2074, 1739, 2075, 1773, 231, 2076, 1671, 1398, 2077, 1650, 1191, 1394, 1233, 1648, 2078, 1392, 1448, 1347, 1400, 1023,
+        1057, 1355, 1547, 1039, 1445, 2079, 1325, 1551, 1127, 1035, 221, 1122, 1535, 1251, 2080, 1645, 1525, 2081, 1176, 1162, 755, 1241, 2082, 752,
+        1228, 739, 1287, 1171, 753, 616, 1479, 975, 2083, 613, 734, 946, 1011, 732, 1243, 754, 196, 589, 720, 113, 1921, 738, 719, 649,
+        2084, 1487, 2085, 786, 1415, 2086, 783, 680, 1192, 340, 925, 1234, 370, 2087, 920, 523, 863, 1417, 368, 335, 433, 855, 334, 1564,
+        521, 828, 551, 363, 336, 272, 362, 439, 1902, 1603, 1834, 1600, 1478, 1587, 1505, 1759, 1920, 1376, 1884, 262, 1472, 1503, 228, 1835,
+        1492, 183, 1818, 1711, 1812, 1925, 1184, 1319, 1061, 1890, 1481, 1388, 1909, 1695, 917, 1463, 1755, 835, 1318, 608, 1052, 1436, 969, 1231,
+        203, 712, 1607, 1765, 1674, 1114, 1365, 1322, 1602, 1354, 1599, 622, 1382, 1893, 893, 1528, 707, 1421, 939, 1353, 648, 252, 884, 1845,
+        185, 885, 200, 1635, 1634, 1727, 1664, 1728, 1548, 1692, 1729, 1821, 1786, 1643, 1651, 1708, 1705, 1681, 1618, 1807, 1848, 1788, 1809, 1615,
+        1724, 1149, 1616, 1148, 1031, 1067, 1720, 1439, 1734, 1795, 1796, 1320, 1327, 1687, 1560, 1749, 1200, 1590, 1540, 1608, 1361, 1804, 717, 1852,
+        906, 1183, 908, 1699, 1275, 586, 900, 1301, 1857, 896, 901, 1900, 915, 950, 766, 832, 1701, 767, 1089, 1062, 1037, 1473, 808, 897,
+        178, 998, 968, 1611, 1364, 1742, 746, 1896, 690, 623, 1012, 1743, 1362, 348, 614, 1764, 389, 611, 918, 422, 971, 836, 1741, 527,
+        223, 435, 745, 103, 388, 830, 182, 173, 421, 427, 110, 1351, 423, 445, 112, 1610, 1810, 778, 1894, 1189, 1489, 1837, 346, 615,
+        1861, 492, 612, 452, 935, 1700, 451, 285, 345, 926, 117, 491, 927, 283, 318, 519, 1268, 303, 484, 218, 322, 575, 270, 309,
+        595, 326, 323, 1261, 1075, 1369, 1521, 1346, 1515, 771, 1537, 1292, 1460, 1208, 1578, 1435, 1006, 1358, 1070, 651, 1498, 1167, 1527, 1174,
+        1080, 1161, 984, 1281, 1450, 1529, 653, 1056, 667, 879, 1499, 560, 642, 342, 775, 544, 774, 432, 1112, 1673, 1169, 1168, 891, 1260,
+        886, 1541, 943, 1316, 942, 1345, 940, 490, 770, 542, 792, 333, 497, 1091, 508, 1092, 478, 1151, 1150, 1239, 1053, 1284, 1236, 1222,
+        1312, 1356, 1437, 1311, 1253, 1691, 1577, 1761, 1104, 1352, 1223, 1105, 1399, 1396, 1446, 1401, 1164, 904, 1214, 600, 1194, 1442, 658, 1395,
+        1440, 1397, 694, 584, 1306, 1359, 802, 953, 1022, 1329, 878, 583, 773, 568, 813, 772, 656, 572, 1526, 1509, 1518, 1178, 1187, 671,
+        1286, 662, 1285, 737, 726, 1152, 735, 980, 438, 585, 1102, 437, 1013, 1097, 436, 736, 387, 1010, 974, 386, 744, 495, 412, 1051,
+        507, 548, 1225, 426, 381, 1488, 1906, 1255, 668, 1416, 1254, 1414, 965, 1418, 641, 395, 930, 1215, 394, 601, 1195, 396, 520, 659,
+        516, 931, 281, 485, 1238, 312, 469, 1456, 282, 486, 293, 823, 311, 822, 290, 1101, 1096, 1088, 1434, 1076, 1379, 1004, 1278, 700,
+        1462, 764, 1221, 1500, 1207, 1386, 1297, 1142, 588, 1471, 945, 1491, 255, 639, 916, 860, 834, 796, 626, 1293, 1190, 1205, 1141, 578,
+        1099, 768, 1094, 793, 910, 936, 1018, 706, 1383, 887, 1197, 647, 580, 741, 594, 687, 1086, 1058, 973, 765, 825, 1201, 1263, 1264,
+        603, 762, 688, 854, 826, 857, 718, 905, 954, 899, 405, 902, 459, 633, 375, 587, 512, 955, 806, 513, 981, 194, 638, 708,
+        805, 456, 443, 798, 440, 446, 833, 709, 663, 728, 988, 689, 722, 414, 710, 550, 664, 383, 347, 504, 982, 539, 466, 874,
+        540, 294, 295, 524, 328, 442, 222, 289, 727, 111, 324, 829, 186, 325, 669, 1357, 997, 1459, 411, 670, 543, 869, 650, 448,
+        932, 450, 923, 297, 406, 298, 299, 376, 275, 960, 307, 961, 286, 267, 369, 266, 470, 264, 483, 265, 877, 866, 763, 1403,
+        795, 948, 791, 979, 1118, 1001, 692, 562, 654, 983, 655, 957, 1002, 711, 678, 674, 1165, 776, 666, 1019, 895, 889, 888, 990,
+        794, 790, 701, 620, 645, 788, 724, 1252, 1204, 867, 914, 758, 949, 907, 819, 903, 952, 631, 691, 627, 559, 480, 697, 430,
+        814, 515, 995, 693, 343, 800, 462, 864, 359, 677, 682, 673, 672, 985, 683, 958, 685, 434, 789, 390, 1015, 529, 646, 429,
+        341, 425, 552, 424, 431, 320, 913, 319, 947, 305, 725, 280, 703, 598, 1138, 966, 962, 371, 934, 474, 851, 372, 928, 522,
+        399, 366, 329, 859, 310, 740, 308, 964, 321, 477, 468, 479, 636, 533, 398, 581, 357, 482, 493, 457, 494, 407, 514, 463,
+        416, 377, 454, 400, 301, 302, 331, 500, 511, 417, 413, 349, 549, 554, 382, 555, 296, 503, 304, 279, 287, 358, 288, 525,
+        327, 447, 284, 498, 509, 977, 392, 355, 715, 300, 278, 277, 361, 408, 475, 378, 276, 274, 306, 291, 759, 455, 723, 418,
+        481, 415, 401, 698, 476, 385, 460, 541, 862, 534, 517, 441, 420, 665, 528, 526, 344, 350, 553, 419, 537, 849, 471, 1005,
+        536, 473, 356, 367, 1723, 1558, 2088, 114, 1722, 1766, 211, 1733, 2089, 1657, 1824, 1181, 1675, 1443, 1391, 1390, 1393, 1783, 1330, 1042,
+        1441, 1429, 184, 33, 1132, 1335, 64, 1377, 624, 1224, 761, 919, 750, 837, 571, 106, 760, 162, 154, 749, 756, 139, 751, 731,
+        733, 224, 729, 881, 235, 625, 944, 502, 782, 465, 453, 1412, 143, 501, 924, 233, 464, 337, 518, 596, 531, 61, 547, 353,
+        34, 1078, 365, 352, 104, 1917, 1504, 2090, 1103, 1937, 1098, 1536, 1543, 1874, 1071, 1512, 1389, 1328, 1143, 1847, 1175, 1465, 1370, 1451,
+        1003, 1349, 561, 579, 1342, 1028, 1000, 1323, 1516, 632, 566, 339, 629, 757, 1109, 1424, 1422, 890, 1385, 681, 941, 1100, 996, 1095,
+        489, 989, 1093, 487, 880, 410, 577, 1829, 538, 892, 379, 2091, 1844, 1622, 1625, 1801, 1633, 1160, 1843, 1136, 1158, 1626, 1159, 1813,
+        1748, 1747, 1580, 1259, 1828, 1139, 1218, 1707, 1217, 1090, 2092, 1199, 2093, 1617, 2094, 1544, 1721, 1726, 1794, 2095, 1725, 1561, 1605, 2096,
+        1792, 1831, 124, 1739, 1773, 231, 1671, 1398, 2097, 1650, 1191, 1394, 1233, 1648, 1392, 1448, 1347, 1400, 1023, 1057, 1355, 1547, 1039, 1445,
+        1325, 1551, 1127, 1035, 221, 1122, 1535, 1251, 1645, 1525, 1176, 1162, 755, 1241, 752, 1228, 739, 1287, 1171, 753, 616, 1479, 975, 613,
+        734, 946, 1011, 732, 1243, 754, 196, 589, 720, 113, 1921, 738, 719, 649, 1487, 1740, 786, 1415, 783, 680, 1192, 340, 925, 1234,
+        370, 920, 523, 863, 1417, 368, 335, 433, 855, 334, 1564, 521, 828, 551, 363, 336, 272, 362, 439, 2098, 1902, 2099, 1603, 1834,
+        1600, 1478, 2100, 2101, 1505, 1759, 1920, 1376, 1884, 262, 1472, 1503, 228, 1835, 1492, 1585, 183, 2102, 1818, 1711, 1812, 1925, 1184, 1319,
+        1061, 1890, 1481, 1388, 1909, 917, 1463, 1755, 835, 1318, 608, 1052, 1436, 2103, 969, 1231, 203, 712, 1607, 1765, 1674, 1114, 2104, 1365,
+        1322, 1602, 1354, 1599, 622, 1382, 1893, 893, 1528, 707, 1421, 2105, 939, 1353, 648, 252, 884, 1845, 185, 885, 200, 2106, 1635, 1634,
+        1727, 1664, 1728, 1548, 1692, 1729, 1821, 1786, 1643, 1651, 1708, 1705, 1681, 1618, 1807, 1848, 1788, 2107, 1809, 2108, 1615, 1583, 1724, 1149,
+        1616, 1770, 1148, 1031, 1067, 1720, 1439, 1734, 1795, 109, 1796, 1320, 1327, 212, 1687, 1560, 119, 1749, 1200, 1590, 1540, 214, 2109, 1608,
+        1825, 1361, 1804, 717, 1852, 1823, 906, 1183, 908, 1699, 1275, 586, 900, 1301, 1857, 896, 901, 1900, 915, 950, 766, 832, 1701, 767,
+        1089, 1062, 1037, 1473, 808, 2110, 897, 178, 998, 968, 2111, 1611, 1364, 1742, 746, 1896, 690, 623, 1012, 1743, 1362, 348, 614, 1764,
+        389, 611, 918, 422, 971, 836, 1741, 527, 223, 435, 745, 103, 2112, 388, 830, 182, 173, 421, 427, 110, 1351, 423, 445, 112,
+        1610, 1810, 778, 1894, 1189, 1837, 346, 615, 1861, 492, 612, 452, 935, 1700, 451, 285, 345, 926, 117, 2113, 491, 927, 283, 318,
+        519, 1268, 303, 484, 218, 322, 575, 270, 1589, 309, 595, 326, 323, 1644, 1261, 1913, 1075, 1369, 1521, 1346, 1515, 771, 1537, 1926,
+        1460, 1546, 1208, 1578, 1435, 1006, 1358, 1070, 651, 1668, 1498, 1167, 1527, 1174, 1080, 1161, 984, 1281, 1529, 653, 1056, 667, 879, 1499,
+        560, 642, 342, 775, 1567, 544, 774, 432, 1112, 1673, 1169, 1168, 891, 1260, 886, 1541, 943, 1316, 942, 1345, 940, 490, 770, 1598,
+        542, 792, 333, 497, 1091, 508, 1092, 478, 1661, 1858, 1628, 1802, 1623, 1658, 1745, 1746, 1576, 1808, 1612, 1785, 1582, 1151, 1150, 1584,
+        1239, 1839, 1053, 1284, 1555, 1236, 1222, 1735, 1312, 1356, 1437, 1311, 1253, 1691, 1577, 1556, 1761, 1104, 1352, 1787, 1223, 1105, 1669, 1399,
+        1667, 1396, 1446, 1401, 1164, 904, 1214, 1639, 600, 1194, 1654, 1442, 658, 1395, 1440, 1397, 694, 584, 1306, 1359, 802, 953, 1022, 1329,
+        878, 583, 773, 568, 813, 1912, 772, 656, 572, 1815, 1526, 1509, 1518, 1178, 1187, 671, 1286, 662, 1285, 737, 726, 1152, 735, 980,
+        438, 585, 1102, 437, 1013, 1097, 436, 736, 387, 1010, 974, 1713, 386, 744, 1030, 495, 412, 1051, 507, 548, 1225, 426, 381, 1488,
+        1906, 1255, 668, 1416, 1254, 1414, 965, 1418, 641, 395, 930, 1215, 394, 601, 1195, 396, 520, 659, 1862, 516, 931, 281, 485, 1238,
+        312, 469, 1456, 282, 486, 293, 823, 1563, 311, 822, 290, 1870, 1842, 1101, 1793, 1096, 1750, 1088, 1434, 1686, 1076, 1379, 1004, 1278,
+        1914, 700, 1462, 261, 764, 1817, 1694, 1221, 1500, 1207, 1386, 1297, 1142, 588, 1471, 945, 1491, 255, 639, 1690, 916, 860, 1754, 834,
+        796, 626, 1293, 1190, 1205, 1803, 1141, 578, 1099, 768, 1094, 793, 910, 1595, 936, 1685, 1018, 706, 1383, 887, 1197, 647, 1063, 1308,
+        580, 741, 1065, 594, 1064, 687, 1086, 1058, 1046, 973, 765, 1524, 825, 1201, 1263, 1264, 603, 762, 688, 854, 1115, 1274, 826, 1298,
+        857, 1363, 718, 905, 954, 899, 405, 902, 1180, 459, 633, 1257, 375, 587, 512, 955, 806, 513, 981, 194, 638, 708, 805, 1915,
+        456, 443, 798, 1131, 440, 446, 833, 1116, 1714, 709, 663, 728, 988, 689, 722, 414, 710, 550, 664, 383, 347, 504, 982, 539,
+        466, 874, 540, 294, 607, 1210, 295, 524, 1153, 328, 442, 222, 289, 727, 111, 324, 829, 186, 325, 669, 1357, 997, 1459, 411,
+        670, 543, 869, 650, 448, 932, 450, 923, 297, 406, 1413, 298, 846, 1130, 299, 376, 275, 960, 307, 961, 286, 267, 369, 1270,
+        266, 470, 1266, 264, 483, 265, 1156, 1077, 877, 1502, 866, 1501, 763, 1403, 795, 948, 791, 979, 1372, 1166, 1001, 692, 562, 654,
+        983, 655, 957, 1002, 711, 1202, 1054, 1348, 1496, 1211, 678, 674, 1165, 776, 666, 1019, 895, 1317, 889, 1277, 888, 990, 794, 790,
+        1068, 1066, 701, 620, 645, 1055, 788, 1084, 724, 1341, 1252, 1204, 1107, 867, 914, 1106, 758, 949, 1326, 1447, 1444, 907, 1304, 819,
+        1163, 903, 952, 631, 691, 627, 559, 480, 697, 1300, 430, 814, 1299, 515, 995, 1449, 693, 343, 1343, 800, 462, 1324, 864, 359,
+        1519, 1508, 677, 682, 673, 672, 985, 683, 958, 685, 434, 789, 390, 1015, 529, 646, 429, 341, 1282, 425, 552, 1291, 424, 431,
+        320, 913, 319, 947, 305, 725, 280, 703, 598, 1138, 966, 962, 371, 934, 474, 851, 372, 928, 522, 1125, 399, 1121, 366, 329,
+        859, 310, 740, 308, 964, 321, 477, 1237, 468, 1340, 479, 1296, 1290, 1117, 1087, 1433, 1198, 1072, 1378, 1069, 1220, 1497, 1212, 1206,
+        1060, 1470, 1387, 1490, 292, 1110, 1111, 1108, 1428, 1294, 1288, 1380, 1381, 1511, 574, 605, 871, 636, 533, 398, 1085, 581, 972, 357,
+        824, 482, 827, 801, 787, 493, 716, 457, 817, 494, 1485, 407, 514, 463, 416, 377, 454, 400, 1402, 582, 301, 818, 803, 302,
+        978, 193, 331, 743, 876, 1366, 500, 511, 417, 413, 349, 549, 554, 382, 555, 296, 637, 747, 304, 875, 279, 287, 358, 288,
+        525, 327, 447, 284, 498, 509, 977, 392, 355, 715, 300, 909, 278, 843, 277, 922, 361, 408, 475, 378, 276, 986, 274, 842,
+        306, 844, 291, 705, 621, 868, 759, 455, 723, 418, 956, 821, 951, 481, 815, 415, 599, 401, 558, 698, 476, 695, 385, 811,
+        460, 993, 541, 676, 684, 675, 862, 534, 517, 441, 420, 661, 665, 1021, 528, 643, 526, 344, 350, 553, 419, 537, 849, 471,
+        1005, 967, 853, 963, 536, 473, 356, 367, 858, 657, 848, 634, 532, 686, 397, 496, 461, 810, 530, 696, 403, 812, 458, 364,
+        373, 449, 380, 499, 510, 721, 644, 402, 590, 556, 557, 428, 505, 467, 360, 391, 576, 354, 742, 409, 404, 472, 374, 2114,
+        1583, 2115, 1149, 1770, 1148, 1031, 1067, 2116, 1439, 109, 1320, 1327, 212, 119, 1200, 1540, 214, 1825, 1361, 717, 1823, 906, 1183, 908,
+        1275, 586, 900, 1301, 896, 901, 915, 950, 766, 832, 767, 1037, 808, 897, 178, 998, 968, 1364, 746, 690, 623, 1012, 348, 614,
+        389, 611, 918, 422, 971, 836, 527, 223, 435, 745, 103, 388, 830, 182, 173, 421, 427, 110, 1351, 423, 445, 112, 778, 1489,
+        346, 615, 492, 612, 452, 935, 451, 285, 345, 926, 117, 491, 927, 283, 318, 519, 1268, 303, 484, 218, 322, 575, 270, 1589,
+        309, 595, 326, 323, 2117, 1644, 1261, 1913, 1075, 1369, 1521, 1346, 1515, 771, 1537, 1926, 1292, 1460, 1546, 1435, 1006, 1358, 1070, 651,
+        1668, 1498, 1167, 1527, 1174, 1080, 1161, 984, 1281, 1450, 1529, 653, 1056, 667, 879, 1499, 560, 642, 342, 775, 1567, 544, 774, 432,
+        1112, 1169, 1168, 891, 1260, 886, 1541, 943, 1316, 942, 1345, 940, 490, 770, 1598, 542, 792, 333, 497, 1091, 2118, 508, 1092, 478,
+        1661, 1858, 1628, 1802, 1623, 1658, 1745, 1746, 1576, 1808, 1612, 1785, 2119, 1582, 1151, 2120, 1150, 1584, 1239, 2121, 1839, 1053, 1284, 1555,
+        1236, 1222, 1735, 1312, 1356, 2122, 1437, 1311, 1253, 1556, 1104, 1352, 1787, 1223, 1105, 2123, 1669, 1399, 1667, 1396, 1446, 1401, 1164, 904,
+        1214, 1639, 600, 1194, 1654, 1442, 658, 1395, 1440, 694, 584, 1306, 1359, 802, 953, 1022, 1329, 878, 583, 773, 568, 813, 1912, 772,
+        656, 572, 1815, 1526, 1509, 1518, 1178, 1187, 671, 1286, 662, 1285, 737, 726, 1152, 735, 980, 438, 585, 1102, 437, 1013, 1097, 436,
+        736, 387, 1010, 974, 1713, 386, 744, 1030, 495, 412, 1051, 507, 2124, 548, 1225, 426, 381, 1488, 1255, 668, 1416, 1414, 965, 1418,
+        641, 395, 930, 1215, 394, 601, 1195, 396, 520, 659, 1862, 516, 931, 281, 485, 1238, 312, 2125, 469, 1456, 282, 486, 293, 823,
+        1563, 311, 822, 290, 2126, 1870, 1842, 1101, 1793, 1096, 1750, 1088, 1434, 1686, 1076, 1379, 1004, 1278, 1914, 700, 1462, 261, 764, 1817,
+        1694, 1221, 1500, 1207, 1386, 1297, 1142, 588, 1471, 945, 1491, 255, 639, 1690, 916, 860, 1754, 834, 796, 626, 1293, 1190, 1205, 1803,
+        1141, 578, 1099, 768, 1094, 793, 910, 1595, 936, 1685, 1018, 706, 1383, 2127, 887, 1197, 647, 1769, 1063, 1308, 580, 1905, 741, 1772,
+        1065, 594, 1593, 1064, 687, 1781, 1086, 1058, 1046, 973, 765, 1524, 825, 1201, 1263, 108, 1264, 603, 762, 207, 688, 854, 1782, 1115,
+        1274, 826, 1298, 857, 1363, 718, 905, 954, 899, 405, 902, 1180, 459, 633, 1257, 375, 587, 512, 955, 806, 513, 981, 194, 638,
+        708, 805, 1915, 456, 443, 798, 1131, 440, 446, 833, 1116, 1714, 709, 663, 728, 988, 689, 722, 414, 710, 550, 664, 383, 347,
+        504, 982, 539, 466, 874, 540, 294, 607, 1210, 295, 524, 1153, 328, 442, 222, 289, 727, 111, 1791, 324, 829, 186, 325, 669,
+        1357, 997, 1459, 411, 670, 543, 869, 650, 448, 932, 450, 923, 297, 406, 1413, 298, 846, 1130, 299, 376, 275, 960, 1878, 307,
+        961, 286, 267, 369, 1270, 266, 470, 1266, 264, 483, 265, 1642, 1638, 1156, 1077, 877, 1502, 866, 1501, 763, 1403, 795, 948, 791,
+        979, 1118, 1372, 1166, 1001, 692, 562, 654, 983, 655, 957, 1002, 711, 1202, 1054, 1348, 1496, 1211, 678, 674, 1165, 776, 666, 1019,
+        895, 1317, 889, 1277, 888, 990, 1596, 794, 1597, 790, 1656, 1641, 1068, 1066, 701, 1934, 620, 1840, 645, 1055, 788, 1554, 1084, 724,
+        1688, 1341, 1252, 1204, 1107, 867, 914, 1106, 758, 949, 1326, 1666, 1672, 1447, 1444, 907, 1304, 819, 1163, 903, 952, 631, 691, 627,
+        559, 480, 697, 1300, 430, 814, 1299, 515, 995, 1449, 693, 343, 1343, 800, 462, 1324, 864, 359, 1519, 1508, 677, 682, 673, 672,
+        985, 683, 958, 685, 434, 789, 390, 1015, 529, 646, 429, 341, 1282, 425, 552, 1291, 424, 431, 320, 913, 1689, 319, 947, 1712,
+        305, 725, 280, 703, 598, 1138, 966, 962, 371, 934, 474, 851, 372, 928, 522, 1125, 399, 1121, 366, 329, 859, 1892, 310, 740,
+        1777, 308, 964, 321, 477, 1237, 468, 1340, 479, 1869, 1841, 1296, 1290, 1117, 1087, 1433, 1198, 1072, 1378, 1069, 1220, 1497, 1212, 1693,
+        1613, 1206, 1060, 1470, 1387, 1490, 292, 1110, 1111, 1108, 1428, 1294, 1288, 1380, 1594, 1381, 1684, 1511, 1186, 1310, 574, 605, 871, 636,
+        1410, 533, 1337, 398, 1321, 1085, 581, 1045, 972, 357, 1404, 824, 482, 1520, 1113, 1256, 827, 801, 787, 493, 716, 457, 817, 494,
+        1485, 407, 514, 463, 416, 377, 454, 400, 1402, 582, 301, 818, 803, 302, 978, 193, 331, 743, 876, 1366, 500, 511, 417, 413,
+        349, 549, 554, 382, 555, 296, 637, 503, 747, 304, 875, 279, 287, 358, 1240, 288, 525, 1273, 327, 447, 284, 498, 509, 977,
+        392, 355, 715, 300, 909, 278, 843, 277, 922, 361, 408, 1455, 475, 1216, 378, 276, 986, 274, 842, 306, 844, 291, 1155, 1074,
+        1073, 1368, 1344, 1265, 1494, 1079, 1025, 1279, 1280, 1495, 1283, 1154, 1530, 1203, 1315, 1276, 1467, 1453, 1771, 705, 621, 868, 759, 1050,
+        455, 1083, 723, 1779, 418, 1305, 1302, 1484, 956, 821, 951, 481, 815, 415, 599, 401, 558, 698, 476, 695, 385, 811, 460, 993,
+        541, 676, 684, 675, 862, 534, 517, 441, 420, 661, 1021, 528, 643, 526, 344, 1514, 350, 1295, 553, 1289, 419, 537, 849, 471,
+        1005, 967, 853, 963, 536, 1696, 473, 1213, 356, 1193, 367, 858, 657, 848, 592, 606, 873, 634, 532, 397, 797, 799, 777, 496,
+        461, 530, 696, 403, 458, 364, 373, 449, 380, 499, 510, 644, 402, 556, 557, 428, 635, 505, 730, 467, 699, 360, 391, 354,
+        742, 911, 850, 841, 409, 404, 472, 374, 618, 619, 617, 1140, 820, 816, 1303, 994, 856, 630, 1119, 628, 861, 1468, 959, 769,
+        704, 1209, 1009, 652, 1476, 852, 847, 845, 2128, 1769, 1063, 2129, 1308, 580, 1905, 741, 1772, 1065, 594, 1593, 1064, 687, 1781, 1046,
+        973, 765, 1524, 825, 108, 603, 762, 207, 688, 854, 1782, 1115, 1274, 826, 1298, 857, 1363, 718, 905, 954, 899, 405, 902, 1180,
+        459, 633, 1257, 375, 587, 512, 955, 806, 513, 981, 194, 805, 456, 443, 798, 1131, 440, 446, 833, 1116, 709, 663, 728, 988,
+        689, 722, 414, 710, 550, 664, 383, 347, 504, 982, 539, 466, 874, 540, 294, 607, 1210, 295, 524, 1153, 328, 442, 222, 289,
+        727, 111, 1791, 324, 829, 186, 325, 669, 997, 411, 670, 543, 869, 448, 932, 450, 923, 297, 406, 1413, 298, 846, 1130, 299,
+        376, 275, 960, 1878, 307, 961, 286, 267, 369, 1270, 266, 2130, 470, 1266, 264, 483, 265, 1642, 1638, 1156, 1077, 877, 1502, 866,
+        1501, 763, 795, 948, 791, 979, 1118, 1372, 1166, 1001, 692, 562, 654, 983, 655, 957, 1002, 711, 1202, 1054, 1348, 1496, 1211, 678,
+        674, 776, 666, 1019, 895, 1317, 889, 1277, 888, 990, 1596, 794, 1597, 790, 2131, 1656, 1641, 1068, 2132, 1066, 701, 1934, 620, 1840,
+        645, 1055, 788, 1554, 1084, 724, 1688, 1341, 1107, 867, 914, 1106, 758, 949, 1326, 1666, 1672, 1447, 1444, 907, 1304, 819, 1163, 903,
+        952, 631, 691, 627, 559, 480, 697, 1300, 430, 814, 1299, 515, 995, 1449, 693, 343, 1343, 800, 462, 1324, 864, 359, 1519, 1508,
+        677, 682, 673, 672, 985, 683, 958, 685, 434, 789, 390, 1015, 529, 646, 429, 341, 1282, 425, 552, 1291, 424, 431, 320, 913,
+        1689, 319, 947, 1712, 305, 725, 280, 703, 598, 966, 962, 371, 934, 474, 851, 372, 928, 522, 1125, 399, 1121, 366, 329, 859,
+        1892, 310, 740, 1777, 308, 964, 321, 477, 1237, 2133, 468, 1340, 479, 1869, 1841, 1296, 1290, 1117, 1087, 1433, 1198, 1072, 1378, 1069,
+        1220, 1497, 1212, 1693, 1613, 1206, 1060, 1470, 1387, 1490, 292, 1110, 1111, 1108, 1428, 1294, 1288, 1380, 1594, 1381, 1684, 1511, 1592, 1780,
+        1186, 1310, 574, 1904, 605, 1768, 871, 636, 1410, 533, 1337, 398, 1321, 1085, 581, 1045, 972, 357, 1404, 824, 482, 1520, 1113, 1256,
+        827, 801, 787, 493, 716, 457, 817, 494, 1485, 407, 514, 463, 416, 377, 454, 400, 1402, 582, 301, 818, 803, 302, 978, 193,
+        331, 743, 876, 1366, 500, 511, 417, 413, 349, 549, 554, 382, 555, 296, 637, 503, 747, 304, 875, 279, 287, 358, 1240, 288,
+        525, 1273, 327, 447, 284, 498, 509, 977, 392, 355, 715, 300, 909, 278, 843, 277, 922, 361, 408, 1455, 475, 1216, 378, 276,
+        986, 1588, 274, 842, 1778, 306, 844, 291, 1155, 1074, 1073, 1368, 1344, 1265, 1494, 1079, 1025, 1279, 1280, 1495, 1283, 1154, 1530, 1203,
+        1315, 1276, 1655, 1640, 1467, 1453, 1771, 705, 1933, 621, 1838, 868, 759, 1050, 455, 1083, 723, 1779, 418, 1305, 1302, 1484, 956, 821,
+        951, 481, 815, 415, 599, 401, 558, 698, 476, 695, 385, 811, 460, 993, 541, 676, 684, 675, 862, 534, 517, 441, 420, 661,
+        665, 1021, 528, 643, 526, 344, 1514, 350, 1295, 553, 1289, 419, 537, 849, 471, 1005, 967, 853, 963, 536, 1696, 473, 1213, 356,
+        1193, 367, 858, 1891, 657, 1776, 848, 1185, 1307, 1309, 592, 606, 873, 634, 1409, 532, 1336, 686, 1313, 397, 797, 799, 777, 496,
+        461, 810, 530, 696, 403, 812, 458, 364, 373, 449, 380, 499, 510, 721, 644, 402, 590, 556, 557, 428, 635, 505, 730, 467,
+        699, 360, 391, 576, 354, 742, 911, 850, 841, 409, 1475, 404, 1339, 472, 1129, 374, 1466, 1452, 1314, 618, 619, 617, 1140, 820,
+        816, 1303, 994, 856, 630, 1119, 628, 861, 1468, 959, 769, 704, 1209, 1009, 652, 1476, 852, 847, 845, 1126, 1124, 1120, 591, 604,
+        870, 872, 804, 807, 809, 976, 702, 593, 1007, 1008, 912, 838, 839, 840, 1592, 1780, 1186, 1310, 574, 1904, 605, 1768, 871, 1410,
+        533, 1337, 398, 1321, 1045, 972, 357, 1404, 824, 482, 1520, 1113, 1256, 827, 801, 787, 493, 716, 457, 817, 494, 407, 514, 463,
+        416, 377, 454, 582, 301, 818, 803, 302, 978, 193, 331, 743, 876, 500, 511, 417, 413, 349, 549, 554, 382, 555, 296, 637,
+        503, 747, 304, 875, 279, 287, 358, 1240, 288, 525, 1273, 327, 447, 284, 498, 509, 392, 355, 300, 909, 278, 843, 277, 922,
+        408, 1455, 475, 1216, 378, 276, 986, 1588, 274, 842, 1778, 306, 844, 291, 1155, 1074, 1073, 1368, 1344, 1265, 1494, 1079, 1025, 1279,
+        1280, 1495, 1283, 1154, 1530, 1203, 1315, 1276, 1655, 1640, 1467, 1453, 705, 1933, 621, 1838, 868, 1050, 455, 1083, 418, 1305, 1302, 1484,
+        956, 821, 951, 481, 815, 415, 599, 401, 558, 476, 695, 385, 811, 460, 993, 541, 676, 684, 675, 534, 517, 441, 420, 661,
+        665, 1021, 528, 643, 526, 344, 1514, 350, 1295, 553, 1289, 419, 537, 471, 967, 853, 963, 536, 473, 1213, 356, 1193, 367, 858,
+        1891, 657, 1776, 848, 1185, 1307, 1309, 592, 606, 873, 634, 1409, 532, 1336, 686, 1313, 397, 797, 799, 777, 496, 461, 810, 530,
+        696, 403, 812, 458, 364, 373, 449, 380, 499, 510, 721, 644, 402, 590, 556, 557, 428, 635, 505, 730, 467, 699, 360, 391,
+        576, 354, 742, 911, 850, 841, 409, 1475, 404, 1339, 472, 1129, 374, 1466, 1452, 1314, 618, 619, 617, 820, 816, 994, 856, 630,
+        628, 861, 959, 769, 704, 1009, 652, 852, 847, 845, 1126, 1124, 1120, 591, 604, 870, 872, 804, 807, 809, 976, 702, 593, 1007,
+        1008, 912, 838, 839, 840, 1185, 1307, 1309, 592, 606, 873, 1409, 532, 1336, 686, 1313, 397, 797, 799, 777, 496, 461, 810, 530,
+        403, 812, 458, 364, 373, 449, 380, 499, 510, 721, 402, 590, 556, 557, 428, 635, 505, 730, 467, 699, 360, 391, 576, 354,
+        911, 850, 841, 409, 1475, 404, 1339, 472, 1129, 374, 1466, 1452, 1314, 618, 619, 617, 1140, 820, 816, 1303, 994, 856, 630, 1119,
+        628, 861, 1468, 959, 769, 704, 1209, 1009, 652, 1476, 852, 847, 845, 1126, 1124, 1120, 591, 604, 870, 872, 804, 807, 809, 976,
+        702, 593, 1007, 1008, 912, 838, 839, 840, 591, 604, 870, 872, 804, 807, 809, 976, 702, 593, 1007, 1008, 912, 838, 839, 840
+    ]),
+    ostart: new Int32Array([
+        0, 4, 10, 23, 39, 62, 86, 114, 138, 160, 176, 187, 193, 197, 216, 248, 295, 354, 422, 494, 558, 613, 657, 682,
+        698, 706, 706, 759, 844, 956, 1080, 1218, 1337, 1443, 1528, 1580, 1612, 1632, 1632, 1632, 1734, 1884, 2076, 2279, 2465, 2628, 2762, 2844,
+        2900, 2932, 2932, 2932, 2932, 3084, 3283, 3500, 3694, 3864, 3998, 4083, 4139, 4175, 4175, 4175, 4175, 4175, 4356, 4553, 4738, 4890, 5008, 5078,
+        5120, 5144, 5144, 5144, 5144, 5144, 5144, 5318, 5470, 5594, 5671, 5728, 5758, 5774, 5774, 5774, 5774, 5774, 5774, 5774, 5888, 5956, 6013, 6037,
+        6053, 6053, 6053, 6053, 6053, 6053, 6053, 6053, 6053, 6106, 6136, 6152, 6152, 6152, 6152, 6152, 6152, 6152, 6152, 6152, 6152, 6152, 6168, 6168,
+        6168, 6168, 6168, 6168, 6168, 6168, 6168, 6168, 6168, 6168, 6168
+    ]),
+    c0: new Float64Array([
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0
+    ])
+};
+/**
+ * MA two interior footpoints, A of degree 3, B cubic: `G(σ,π)` (the implicit form
+ * of `A` at the intersection of the normals of `B` at `s1`, `s2`; `σ = s1 + s2`,
+ * `π = s1·s2`) as `g[j][i]`, the coefficient of `σ^i π^j`
+ * (6168 terms; multiplications: 49810 without sharing,
+ * 8287 with 1927 shared products)
+ */
+function maiG_A3B3(v, bx, by) {
+    const o = evalProgram2(P, [v[0], v[1], v[2], v[3], v[4], v[5], v[6], v[7], v[8], v[9], bx[2], bx[3], by[2], by[3]]);
+    const g = [];
+    for (let j = 0; j < 10; j++) {
+        g.push(Array.from(o.subarray(j * 13, (j + 1) * 13)));
+    }
+    return g;
+}
+
+//# sourceMappingURL=maiG_A3B3.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/resI_A1B2.js
+// GENERATED by gen-resultants.py - do not edit
+/**
+ * type I, A of degree 1, B of degree 2 (degree 1 in `s`, 3 terms)
+ * (returned coefficients in descending powers of `s`)
+ * (3 terms; multiplications: 4 without sharing,
+ * 4 with 0 shared products)
+ */
+function resI_A1B2(ax, ay, bx, by) {
+    const x0 = ax[0];
+    const x1 = ax[1];
+    const x2 = ay[0];
+    const x3 = ay[1];
+    const x4 = bx[2];
+    const x5 = by[2];
+    const o = new Float64Array(2);
+    o[0] = 2 * x1 * x5 - 2 * x3 * x4;
+    o[1] = -x3;
+    return Array.from(o);
+}
+
+//# sourceMappingURL=resI_A1B2.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/resI_A1B3.js
+// GENERATED by gen-resultants.py - do not edit
+/**
+ * type I, A of degree 1, B of degree 3 (degree 2 in `s`, 5 terms)
+ * (returned coefficients in descending powers of `s`)
+ * (5 terms; multiplications: 8 without sharing,
+ * 8 with 0 shared products)
+ */
+function resI_A1B3(ax, ay, bx, by) {
+    const x0 = ax[0];
+    const x1 = ax[1];
+    const x2 = ay[0];
+    const x3 = ay[1];
+    const x4 = bx[2];
+    const x5 = bx[3];
+    const x6 = by[2];
+    const x7 = by[3];
+    const o = new Float64Array(3);
+    o[0] = 3 * x1 * x7 - 3 * x3 * x5;
+    o[1] = 2 * x1 * x6 - 2 * x3 * x4;
+    o[2] = -x3;
+    return Array.from(o);
+}
+
+//# sourceMappingURL=resI_A1B3.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/resI_A2B1.js
+// GENERATED by gen-resultants.py - do not edit
+/**
+ * type I, A of degree 2, B of degree 1 (degree 1 in `s`, 4 terms)
+ * (returned coefficients in descending powers of `s`)
+ * (4 terms; multiplications: 10 without sharing,
+ * 9 with 1 shared products)
+ */
+function resI_A2B1(ax, ay, bx, by) {
+    const x0 = ax[0];
+    const x1 = ax[1];
+    const x2 = ax[2];
+    const x3 = ay[0];
+    const x4 = ay[1];
+    const x5 = ay[2];
+    const x6 = x5 * x5;
+    const o = new Float64Array(2);
+    o[0] = -4 * x6;
+    o[1] = 4 * x0 * x6 - 2 * x1 * x4 * x5 + x2 * x4 * x4;
+    return Array.from(o);
+}
+
+//# sourceMappingURL=resI_A2B1.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/resI_A2B2.js
+// GENERATED by gen-resultants.py - do not edit
+/**
+ * type I, A of degree 2, B of degree 2 (degree 5 in `s`, 53 terms)
+ * (returned coefficients in descending powers of `s`)
+ * (53 terms; multiplications: 260 without sharing,
+ * 124 with 22 shared products)
+ */
+function resI_A2B2(ax, ay, bx, by) {
+    const x0 = ax[0];
+    const x1 = ax[1];
+    const x2 = ax[2];
+    const x3 = ay[0];
+    const x4 = ay[1];
+    const x5 = ay[2];
+    const x6 = bx[2];
+    const x7 = by[2];
+    const x8 = x5 * x6;
+    const x9 = x2 * x7;
+    const x10 = x7 * x9;
+    const x11 = x6 * x8;
+    const x12 = x4 * x4;
+    const x13 = x5 * x7;
+    const x14 = x7 * x8;
+    const x15 = x1 * x1;
+    const x16 = x0 * x9;
+    const x17 = x1 * x4;
+    const x18 = x6 * x9;
+    const x19 = x2 * x12;
+    const x20 = x0 * x8;
+    const x21 = x3 * x8;
+    const x22 = x6 * x19;
+    const x23 = x3 * x5;
+    const x24 = x5 * x5;
+    const x25 = x6 * x22;
+    const x26 = x6 * x10;
+    const x27 = x7 * x11;
+    const x28 = x11 * x17;
+    const x29 = x13 * x15;
+    const o = new Float64Array(6);
+    o[0] = -32 * x18 * x18 - 32 * x10 * x10 + 64 * x11 * x18 + 64 * x10 * x14 - 32 * x11 * x11 - 32 * x14 * x14;
+    o[1] = -48 * x9 * x18 + 128 * x9 * x11 + 32 * x10 * x13 - 80 * x8 * x11 - 32 * x13 * x14;
+    o[2] = 32 * x16 * x18 - 64 * x11 * x16 + 32 * x11 * x20 - 8 * x15 * x26 + 16 * x15 * x27 + 8 * x7 * x7 * x29 - 16 * x7 * x10 * x17 - 16 * x6 * x28 + 32 * x3 * x9 * x10 - 16 * x9 * x9 - 64 * x10 * x21 + 8 * x6 * x25 + 16 * x12 * x26 + 80 * x8 * x9 + 32 * x14 * x21 - 8 * x12 * x27 - 72 * x8 * x8 - 8 * x13 * x13;
+    o[3] = 16 * x9 * x16 - 64 * x8 * x16 + 48 * x8 * x20 - 4 * x10 * x15 + 16 * x14 * x15 - 24 * x28 - 32 * x10 * x23 + 12 * x25 + 8 * x10 * x12 + 16 * x5 * x9 + 32 * x13 * x21 - 8 * x12 * x14 - 28 * x5 * x8;
+    o[4] = -16 * x5 * x16 + 24 * x5 * x20 + 4 * x29 - 12 * x8 * x17 + 6 * x22 + 8 * x13 * x23 - 2 * x12 * x13 - 4 * x24;
+    o[5] = 4 * x0 * x24 - 2 * x5 * x17 + x19;
+    return Array.from(o);
+}
+
+//# sourceMappingURL=resI_A2B2.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/resI_A2B3.js
+// GENERATED by gen-resultants.py - do not edit
+/**
+ * type I, A of degree 2, B of degree 3 (degree 9 in `s`, 214 terms)
+ * (returned coefficients in descending powers of `s`)
+ * (214 terms; multiplications: 1141 without sharing,
+ * 472 with 53 shared products)
+ */
+function resI_A2B3(ax, ay, bx, by) {
+    const x0 = ax[0];
+    const x1 = ax[1];
+    const x2 = ax[2];
+    const x3 = ay[0];
+    const x4 = ay[1];
+    const x5 = ay[2];
+    const x6 = bx[2];
+    const x7 = bx[3];
+    const x8 = by[2];
+    const x9 = by[3];
+    const x10 = x5 * x6;
+    const x11 = x2 * x8;
+    const x12 = x5 * x7;
+    const x13 = x2 * x9;
+    const x14 = x4 * x4;
+    const x15 = x1 * x1;
+    const x16 = x7 * x10;
+    const x17 = x9 * x11;
+    const x18 = x5 * x8;
+    const x19 = x6 * x10;
+    const x20 = x7 * x12;
+    const x21 = x9 * x13;
+    const x22 = x8 * x11;
+    const x23 = x1 * x4;
+    const x24 = x9 * x10;
+    const x25 = x0 * x11;
+    const x26 = x5 * x9;
+    const x27 = x8 * x12;
+    const x28 = x6 * x13;
+    const x29 = x9 * x12;
+    const x30 = x2 * x14;
+    const x31 = x7 * x11;
+    const x32 = x8 * x10;
+    const x33 = x0 * x13;
+    const x34 = x7 * x13;
+    const x35 = x3 * x12;
+    const x36 = x6 * x11;
+    const x37 = x3 * x10;
+    const x38 = x6 * x30;
+    const x39 = x9 * x15;
+    const x40 = x0 * x10;
+    const x41 = x3 * x5;
+    const x42 = x0 * x12;
+    const x43 = x8 * x15;
+    const x44 = x3 * x11;
+    const x45 = x6 * x38;
+    const x46 = x6 * x14;
+    const x47 = x6 * x15;
+    const x48 = x7 * x7;
+    const x49 = x7 * x14;
+    const x50 = x7 * x15;
+    const x51 = x8 * x14;
+    const x52 = x9 * x14;
+    const x53 = x23 * x16;
+    const x54 = x3 * x13;
+    const x55 = x5 * x5;
+    const x56 = x7 * x30;
+    const x57 = x8 * x23;
+    const x58 = x8 * x18;
+    const x59 = x9 * x23;
+    const x60 = x9 * x39;
+    const x61 = x20 * x23;
+    const x62 = x23 * x19;
+    const o = new Float64Array(10);
+    o[0] = -108 * x34 * x34 - 108 * x21 * x21 + 216 * x20 * x34 + 216 * x21 * x29 - 108 * x20 * x20 - 108 * x29 * x29;
+    o[1] = -180 * x28 * x34 - 144 * x31 * x34 - 324 * x17 * x21 + 504 * x16 * x34 + 144 * x21 * x24 + 144 * x20 * x31 + 504 * x17 * x29 - 324 * x16 * x20 - 144 * x24 * x29 - 180 * x27 * x29;
+    o[2] = -72 * x28 * x28 - 240 * x28 * x31 - 48 * x31 * x31 - 144 * x13 * x34 - 360 * x17 * x17 + 384 * x16 * x28 + 336 * x16 * x31 + 336 * x17 * x24 + 360 * x13 * x20 + 384 * x17 * x27 + 72 * x21 * x26 - 360 * x16 * x16 - 48 * x24 * x24 - 240 * x24 * x27 - 216 * x12 * x20 - 72 * x27 * x27 - 72 * x26 * x29;
+    o[3] = 108 * x33 * x34 - 216 * x20 * x33 + 108 * x20 * x42 - 27 * x21 * x50 + 54 * x20 * x39 + 27 * x26 * x60 - 54 * x21 * x59 - 54 * x7 * x61 + 108 * x21 * x54 - 96 * x28 * x36 - 80 * x31 * x36 - 108 * x13 * x28 - 192 * x13 * x31 - 176 * x17 * x22 - 216 * x21 * x35 + 27 * x48 * x56 + 54 * x21 * x49 + 96 * x19 * x28 + 256 * x16 * x36 + 528 * x13 * x16 + 256 * x17 * x32 + 240 * x11 * x20 + 96 * x22 * x27 + 168 * x17 * x26 + 108 * x29 * x35 - 27 * x20 * x52 - 176 * x16 * x19 - 80 * x24 * x32 - 468 * x12 * x16 - 96 * x27 * x32 - 48 * x24 * x26 - 120 * x18 * x29;
+    o[4] = 72 * x28 * x33 + 144 * x25 * x34 - 288 * x16 * x33 - 144 * x20 * x25 + 216 * x16 * x42 - 18 * x21 * x47 - 36 * x17 * x50 + 72 * x16 * x39 + 36 * x20 * x43 + 54 * x18 * x60 - 108 * x17 * x59 - 108 * x7 * x53 + 216 * x17 * x54 - 32 * x36 * x36 - 144 * x11 * x28 - 64 * x11 * x31 - 32 * x22 * x22 - 36 * x13 * x13 - 144 * x21 * x37 - 288 * x17 * x35 + 54 * x38 * x48 + 36 * x21 * x46 + 72 * x17 * x49 + 64 * x19 * x36 + 192 * x13 * x19 + 352 * x11 * x16 + 64 * x22 * x32 + 168 * x12 * x13 + 128 * x17 * x18 + 144 * x24 * x35 + 72 * x27 * x35 - 36 * x16 * x52 - 18 * x20 * x51 - 32 * x19 * x19 - 336 * x10 * x16 - 32 * x32 * x32 - 80 * x18 * x24 - 144 * x12 * x12 - 48 * x18 * x27 - 12 * x26 * x26;
+    o[5] = 96 * x25 * x28 + 48 * x25 * x31 + 36 * x13 * x33 - 96 * x19 * x33 - 192 * x16 * x25 - 144 * x12 * x33 + 144 * x16 * x40 + 108 * x12 * x42 - 24 * x17 * x47 - 12 * x22 * x50 - 9 * x15 * x21 + 24 * x19 * x39 + 48 * x16 * x43 + 36 * x15 * x29 + 36 * x39 * x58 - 72 * x17 * x57 - 72 * x6 * x53 - 54 * x61 + 144 * x17 * x44 - 48 * x11 * x36 - 48 * x11 * x13 - 192 * x17 * x37 - 96 * x22 * x35 - 72 * x21 * x41 + 36 * x7 * x45 + 48 * x17 * x46 + 27 * x30 * x48 + 24 * x22 * x49 + 18 * x14 * x21 + 128 * x11 * x19 + 120 * x10 * x13 + 112 * x11 * x12 + 32 * x18 * x22 + 48 * x24 * x37 + 96 * x27 * x37 + 72 * x26 * x35 - 12 * x19 * x52 - 24 * x16 * x51 - 18 * x14 * x29 - 80 * x10 * x19 - 204 * x10 * x12 - 32 * x18 * x32 - 20 * x18 * x26;
+    o[6] = 32 * x25 * x36 + 48 * x13 * x25 - 64 * x19 * x25 - 96 * x10 * x33 - 96 * x12 * x25 + 32 * x19 * x40 + 144 * x12 * x40 - 8 * x22 * x47 - 12 * x15 * x17 + 16 * x19 * x43 + 24 * x15 * x24 + 24 * x15 * x27 + 8 * x43 * x58 - 16 * x22 * x57 - 16 * x6 * x62 - 72 * x53 + 32 * x22 * x44 - 16 * x11 * x11 - 64 * x22 * x37 - 96 * x17 * x41 + 8 * x6 * x45 + 36 * x7 * x38 + 16 * x22 * x46 + 24 * x14 * x17 + 80 * x10 * x11 + 24 * x5 * x13 + 32 * x32 * x37 + 48 * x24 * x41 + 48 * x18 * x35 - 8 * x19 * x51 - 12 * x14 * x24 - 12 * x14 * x27 - 72 * x10 * x10 - 40 * x5 * x12 - 8 * x18 * x18;
+    o[7] = 16 * x11 * x25 - 64 * x10 * x25 - 24 * x5 * x33 + 48 * x10 * x40 + 36 * x5 * x42 - 4 * x15 * x22 + 16 * x15 * x32 + 6 * x15 * x26 - 24 * x62 - 18 * x12 * x23 - 32 * x18 * x44 + 12 * x45 + 9 * x56 + 8 * x14 * x22 + 16 * x5 * x11 + 32 * x18 * x37 + 12 * x26 * x41 - 8 * x14 * x32 - 3 * x14 * x26 - 28 * x5 * x10;
+    o[8] = -16 * x5 * x25 + 24 * x5 * x40 + 4 * x15 * x18 - 12 * x10 * x23 + 6 * x38 + 8 * x18 * x41 - 2 * x14 * x18 - 4 * x55;
+    o[9] = 4 * x0 * x55 - 2 * x5 * x23 + x30;
+    return Array.from(o);
+}
+
+//# sourceMappingURL=resI_A2B3.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/resI_A3B1.js
+// GENERATED by gen-resultants.py - do not edit
+/**
+ * type I, A of degree 3, B of degree 1 (degree 2 in `s`, 20 terms)
+ * (returned coefficients in descending powers of `s`)
+ * (20 terms; multiplications: 91 without sharing,
+ * 55 with 14 shared products)
+ */
+function resI_A3B1(ax, ay, bx, by) {
+    const x0 = ax[0];
+    const x1 = ax[1];
+    const x2 = ax[2];
+    const x3 = ax[3];
+    const x4 = ay[0];
+    const x5 = ay[1];
+    const x6 = ay[2];
+    const x7 = ay[3];
+    const x8 = x5 * x7;
+    const x9 = x0 * x7;
+    const x10 = x3 * x6;
+    const x11 = x1 * x6;
+    const x12 = x2 * x8;
+    const x13 = x6 * x6;
+    const x14 = x3 * x5;
+    const x15 = x7 * x7;
+    const x16 = x0 * x10;
+    const x17 = x1 * x8;
+    const x18 = x2 * x5;
+    const x19 = x2 * x13;
+    const x20 = x5 * x10;
+    const x21 = x7 * x9;
+    const o = new Float64Array(3);
+    o[0] = -27 * x7 * x15;
+    o[1] = 54 * x9 * x15 - 18 * x11 * x15 - 18 * x7 * x12 + 12 * x7 * x19 + 18 * x8 * x10 - 8 * x10 * x13;
+    o[2] = -27 * x9 * x21 + 18 * x11 * x21 + 18 * x9 * x12 - 12 * x9 * x19 - 18 * x8 * x16 + 8 * x13 * x16 - 9 * x1 * x7 * x17 + 6 * x11 * x12 + 6 * x14 * x17 - 4 * x11 * x20 - 3 * x12 * x18 + 2 * x18 * x20 - x5 * x14 * x14;
+    return Array.from(o);
+}
+
+//# sourceMappingURL=resI_A3B1.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/resI_A3B2.js
+// GENERATED by gen-resultants.py - do not edit
+/**
+ * type I, A of degree 3, B of degree 2 (degree 9 in `s`, 785 terms)
+ * (returned coefficients in descending powers of `s`)
+ * (785 terms; multiplications: 6496 without sharing,
+ * 1817 with 246 shared products)
+ */
+function resI_A3B2(ax, ay, bx, by) {
+    const x0 = ax[0];
+    const x1 = ax[1];
+    const x2 = ax[2];
+    const x3 = ax[3];
+    const x4 = ay[0];
+    const x5 = ay[1];
+    const x6 = ay[2];
+    const x7 = ay[3];
+    const x8 = bx[2];
+    const x9 = by[2];
+    const x10 = x8 * x9;
+    const x11 = x7 * x10;
+    const x12 = x3 * x9;
+    const x13 = x8 * x8;
+    const x14 = x9 * x9;
+    const x15 = x5 * x6;
+    const x16 = x3 * x10;
+    const x17 = x7 * x13;
+    const x18 = x2 * x11;
+    const x19 = x6 * x6;
+    const x20 = x12 * x14;
+    const x21 = x1 * x7;
+    const x22 = x2 * x5;
+    const x23 = x10 * x12;
+    const x24 = x1 * x11;
+    const x25 = x0 * x7;
+    const x26 = x3 * x13;
+    const x27 = x9 * x12;
+    const x28 = x6 * x19;
+    const x29 = x2 * x14;
+    const x30 = x4 * x11;
+    const x31 = x5 * x5;
+    const x32 = x8 * x17;
+    const x33 = x8 * x16;
+    const x34 = x1 * x1;
+    const x35 = x2 * x19;
+    const x36 = x5 * x18;
+    const x37 = x7 * x7;
+    const x38 = x2 * x2;
+    const x39 = x0 * x12;
+    const x40 = x1 * x2;
+    const x41 = x3 * x11;
+    const x42 = x6 * x24;
+    const x43 = x9 * x21;
+    const x44 = x11 * x15;
+    const x45 = x6 * x18;
+    const x46 = x1 * x6;
+    const x47 = x5 * x31;
+    const x48 = x1 * x18;
+    const x49 = x4 * x7;
+    const x50 = x3 * x15;
+    const x51 = x4 * x20;
+    const x52 = x26 * x15;
+    const x53 = x0 * x17;
+    const x54 = x11 * x11;
+    const x55 = x6 * x21;
+    const x56 = x22 * x22;
+    const x57 = x0 * x8;
+    const x58 = x0 * x16;
+    const x59 = x2 * x9;
+    const x60 = x10 * x38;
+    const x61 = x1 * x21;
+    const x62 = x1 * x31;
+    const x63 = x4 * x12;
+    const x64 = x7 * x9;
+    const x65 = x23 * x15;
+    const x66 = x28 * x13;
+    const x67 = x2 * x45;
+    const x68 = x7 * x8;
+    const x69 = x37 * x14;
+    const x70 = x1 * x24;
+    const x71 = x10 * x28;
+    const x72 = x10 * x15;
+    const x73 = x20 * x22;
+    const x74 = x17 * x17;
+    const x75 = x4 * x18;
+    const x76 = x9 * x23;
+    const x77 = x35 * x13;
+    const x78 = x13 * x15;
+    const x79 = x16 * x16;
+    const x80 = x0 * x32;
+    const x81 = x0 * x33;
+    const x82 = x7 * x14;
+    const x83 = x11 * x26;
+    const x84 = x20 * x12;
+    const x85 = x23 * x27;
+    const x86 = x34 * x19;
+    const x87 = x21 * x14;
+    const x88 = x27 * x12;
+    const x89 = x29 * x43;
+    const x90 = x0 * x20;
+    const x91 = x0 * x41;
+    const x92 = x3 * x8;
+    const x93 = x6 * x29;
+    const x94 = x7 * x25;
+    const x95 = x8 * x25;
+    const x96 = x8 * x30;
+    const x97 = x9 * x37;
+    const x98 = x10 * x35;
+    const x99 = x10 * x18;
+    const x100 = x27 * x15;
+    const x101 = x12 * x12;
+    const x102 = x0 * x23;
+    const x103 = x0 * x18;
+    const x104 = x4 * x33;
+    const x105 = x5 * x70;
+    const x106 = x8 * x26;
+    const x107 = x9 * x38;
+    const x108 = x9 * x15;
+    const x109 = x11 * x27;
+    const x110 = x23 * x12;
+    const x111 = x24 * x31;
+    const x112 = x24 * x34;
+    const x113 = x34 * x45;
+    const x114 = x13 * x52;
+    const x115 = x40 * x15;
+    const x116 = x14 * x61;
+    const x117 = x2 * x21;
+    const x118 = x3 * x62;
+    const x119 = x4 * x27;
+    const x120 = x4 * x16;
+    const x121 = x6 * x43;
+    const x122 = x7 * x30;
+    const x123 = x8 * x11;
+    const x124 = x8 * x22;
+    const x125 = x21 * x31;
+    const x126 = x23 * x16;
+    const x127 = x25 * x32;
+    const x128 = x29 * x29;
+    const x129 = x13 * x67;
+    const x130 = x13 * x16;
+    const x131 = x15 * x15;
+    const x132 = x0 * x26;
+    const x133 = x0 * x27;
+    const x134 = x2 * x43;
+    const x135 = x2 * x60;
+    const x136 = x5 * x24;
+    const x137 = x5 * x34;
+    const x138 = x5 * x61;
+    const x139 = x6 * x20;
+    const x140 = x8 * x19;
+    const x141 = x9 * x11;
+    const x142 = x9 * x20;
+    const x143 = x11 * x28;
+    const x144 = x11 * x64;
+    const x145 = x11 * x66;
+    const x146 = x21 * x29;
+    const x147 = x22 * x17;
+    const x148 = x25 * x12;
+    const x149 = x26 * x47;
+    const x150 = x26 * x57;
+    const x151 = x26 * x62;
+    const x152 = x27 * x49;
+    const x153 = x29 * x45;
+    const x154 = x12 * x51;
+    const x155 = x39 * x16;
+    const x156 = x13 * x17;
+    const x157 = x40 * x78;
+    const x158 = x15 * x64;
+    const x159 = x60 * x18;
+    const x160 = x0 * x3;
+    const x161 = x1 * x34;
+    const x162 = x2 * x34;
+    const x163 = x3 * x57;
+    const x164 = x4 * x23;
+    const x165 = x4 * x97;
+    const x166 = x5 * x21;
+    const x167 = x7 * x29;
+    const x168 = x8 * x24;
+    const x169 = x8 * x36;
+    const x170 = x8 * x46;
+    const x171 = x8 * x47;
+    const x172 = x9 * x22;
+    const x173 = x9 * x24;
+    const x174 = x9 * x49;
+    const x175 = x9 * x19;
+    const x176 = x10 * x40;
+    const x177 = x10 * x67;
+    const x178 = x10 * x16;
+    const x179 = x20 * x29;
+    const x180 = x21 * x18;
+    const x181 = x23 * x39;
+    const x182 = x25 * x68;
+    const x183 = x25 * x17;
+    const x184 = x26 * x13;
+    const x185 = x27 * x63;
+    const x186 = x29 * x49;
+    const x187 = x12 * x30;
+    const x188 = x32 * x17;
+    const x189 = x38 * x59;
+    const x190 = x43 * x14;
+    const x191 = x45 * x59;
+    const x192 = x59 * x93;
+    const x193 = x15 * x16;
+    const x194 = x0 * x85;
+    const x195 = x2 * x128;
+    const x196 = x2 * x29;
+    const x197 = x2 * x38;
+    const x198 = x2 * x93;
+    const x199 = x3 * x47;
+    const x200 = x4 * x177;
+    const x201 = x4 * x32;
+    const x202 = x4 * x15;
+    const x203 = x4 * x17;
+    const x204 = x6 * x60;
+    const x205 = x6 * x107;
+    const x206 = x7 * x20;
+    const x207 = x7 * x22;
+    const x208 = x8 * x113;
+    const x209 = x8 * x42;
+    const x210 = x8 * x72;
+    const x211 = x9 * x28;
+    const x212 = x9 * x40;
+    const x213 = x10 * x11;
+    const x214 = x10 * x23;
+    const x215 = x10 * x191;
+    const x216 = x10 * x36;
+    const x217 = x10 * x70;
+    const x218 = x11 * x36;
+    const x219 = x11 * x42;
+    const x220 = x20 * x27;
+    const x221 = x20 * x34;
+    const x222 = x20 * x46;
+    const x223 = x20 * x14;
+    const x224 = x116 * x19;
+    const x225 = x117 * x15;
+    const x226 = x21 * x166;
+    const x227 = x22 * x14;
+    const x228 = x22 * x72;
+    const x229 = x22 * x74;
+    const x230 = x23 * x23;
+    const x231 = x23 * x40;
+    const x232 = x140 * x75;
+    const x233 = x25 * x41;
+    const x234 = x162 * x99;
+    const x235 = x172 * x36;
+    const x236 = x175 * x70;
+    const x237 = x27 * x51;
+    const x238 = x28 * x14;
+    const x239 = x29 * x59;
+    const x240 = x12 * x47;
+    const x241 = x12 * x15;
+    const x242 = x30 * x41;
+    const x243 = x31 * x43;
+    const x244 = x32 * x53;
+    const x245 = x32 * x56;
+    const x246 = x33 * x13;
+    const x247 = x34 * x59;
+    const x248 = x35 * x76;
+    const x249 = x13 * x19;
+    const x250 = x46 * x72;
+    const x251 = x46 * x74;
+    const x252 = x46 * x89;
+    const x253 = x48 * x108;
+    const x254 = x56 * x82;
+    const x255 = x87 * x18;
+    const o = new Float64Array(10);
+    o[0] = 864 * x33 * x79 + 1728 * x23 * x110 + 864 * x20 * x84 - 2592 * x33 * x83 - 5184 * x11 * x126 - 2592 * x20 * x109 + 2592 * x32 * x83 + 5184 * x33 * x54 + 2592 * x20 * x54 - 864 * x32 * x74 - 1728 * x32 * x54 - 864 * x54 * x141;
+    o[1] = 2592 * x16 * x79 + 2592 * x12 * x85 - 9072 * x16 * x83 - 10368 * x11 * x110 - 1296 * x20 * x206 + 10368 * x17 * x83 + 12960 * x16 * x54 + 2592 * x20 * x144 - 3888 * x17 * x74 - 5184 * x17 * x54 - 1296 * x54 * x82;
+    o[2] = -1728 * x58 * x79 - 1728 * x39 * x85 + 5184 * x58 * x83 + 5184 * x11 * x181 - 5184 * x53 * x83 - 5184 * x54 * x58 + 1728 * x53 * x74 + 1728 * x53 * x54 + 576 * x79 * x176 + 576 * x20 * x231 - 1728 * x48 * x130 - 2304 * x48 * x76 - 576 * x20 * x89 + 1152 * x48 * x156 + 1728 * x24 * x99 + 576 * x14 * x255 + 576 * x46 * x230 + 576 * x20 * x222 + 576 * x42 * x184 - 576 * x42 * x142 - 576 * x13 * x251 - 576 * x13 * x219 - 128 * x135 * x178 - 128 * x20 * x59 * x60 + 384 * x13 * x159 + 640 * x99 * x196 + 256 * x128 * x167 - 384 * x76 * x204 - 384 * x20 * x192 - 768 * x13 * x129 - 1152 * x10 * x177 - 384 * x14 * x153 + 576 * x22 * x230 + 576 * x20 * x73 + 576 * x36 * x184 - 576 * x36 * x142 + 384 * x77 * x130 + 1152 * x98 * x178 + 768 * x98 * x142 - 576 * x13 * x229 - 576 * x13 * x218 + 384 * x77 * x156 + 384 * x99 * x249 - 1728 * x63 * x126 - 1728 * x51 * x88 + 2808 * x12 * x79 + 864 * x12 * x84 + 5184 * x30 * x79 + 5184 * x30 * x84 - 576 * x16 * x114 - 1728 * x72 * x79 - 1152 * x20 * x65 - 12312 * x33 * x41 - 6480 * x11 * x88 - 5184 * x30 * x83 - 5184 * x30 * x109 + 576 * x17 * x114 + 2304 * x44 * x130 + 1728 * x44 * x76 - 256 * x66 * x184 - 640 * x66 * x178 - 384 * x71 * x76 + 16848 * x32 * x41 + 11664 * x12 * x54 + 648 * x20 * x69 + 1728 * x30 * x74 + 1728 * x30 * x54 - 576 * x44 * x156 - 576 * x44 * x213 + 128 * x13 * x145 + 128 * x71 * x213 - 7344 * x7 * x188 - 6048 * x54 * x68 - 648 * x69 * x141;
+    o[3] = -3456 * x39 * x79 - 864 * x39 * x84 + 12960 * x41 * x81 + 5184 * x39 * x109 - 15552 * x41 * x80 - 7776 * x39 * x54 + 6048 * x17 * x127 + 3456 * x54 * x95 + 1152 * x40 * x126 + 288 * x40 * x220 - 4320 * x33 * x48 - 2592 * x20 * x48 + 3456 * x32 * x48 + 2880 * x18 * x173 + 288 * x82 * x89 + 864 * x46 * x85 + 1728 * x42 * x106 - 288 * x23 * x42 - 288 * x55 * x223 - 2016 * x46 * x188 - 1152 * x42 * x123 - 256 * x23 * x135 - 64 * x38 * x179 + 960 * x8 * x159 + 768 * x18 * x239 - 576 * x60 * x139 - 2304 * x8 * x129 - 1920 * x215 - 192 * x29 * x64 * x93 + 864 * x22 * x85 + 1728 * x36 * x106 - 288 * x23 * x36 - 288 * x73 * x82 + 1152 * x33 * x77 + 2112 * x23 * x98 + 384 * x19 * x179 - 2016 * x32 * x147 - 1152 * x36 * x123 + 1344 * x32 * x77 + 768 * x99 * x140 - 2592 * x63 * x110 + 1296 * x16 * x101 + 10368 * x16 * x187 + 2592 * x20 * x152 - 1728 * x33 * x52 - 3168 * x16 * x65 - 576 * x20 * x100 - 8100 * x16 * x41 - 1296 * x7 * x84 - 12960 * x41 * x96 - 5184 * x20 * x122 + 2016 * x32 * x52 + 5472 * x33 * x44 + 1728 * x20 * x44 - 896 * x66 * x106 - 1472 * x33 * x71 - 384 * x20 * x71 + 14256 * x17 * x41 + 4536 * x7 * x109 + 5184 * x32 * x122 + 2592 * x30 * x144 - 1728 * x32 * x44 - 864 * x44 * x141 + 384 * x66 * x123 + 192 * x71 * x141 - 7560 * x7 * x74 - 3456 * x7 * x54 - 108 * x69 * x82;
+    o[4] = 864 * x58 * x155 - 2592 * x81 * x91 + 2592 * x80 * x91 - 864 * x53 * x127 - 576 * x58 * x231 + 1728 * x48 * x81 + 576 * x48 * x90 - 1152 * x48 * x80 - 576 * x103 * x173 - 576 * x46 * x194 - 576 * x42 * x150 + 576 * x42 * x102 + 576 * x46 * x244 + 128 * x102 * x135 - 384 * x57 * x159 - 256 * x103 * x239 + 384 * x90 * x204 + 768 * x57 * x129 + 384 * x0 * x215 - 576 * x22 * x194 - 576 * x36 * x150 + 576 * x36 * x102 - 384 * x77 * x81 - 768 * x98 * x102 + 576 * x22 * x244 - 384 * x77 * x80 + 1728 * x63 * x181 - 2160 * x12 * x155 - 5184 * x30 * x155 + 576 * x52 * x81 + 1152 * x58 * x65 + 11664 * x41 * x58 + 1296 * x25 * x84 + 5184 * x57 * x242 - 576 * x52 * x80 - 1728 * x44 * x81 + 256 * x66 * x150 + 384 * x71 * x81 - 18144 * x41 * x53 - 3888 * x25 * x109 - 1728 * x30 * x127 + 576 * x44 * x80 - 128 * x57 * x145 + 8640 * x25 * x74 + 2592 * x25 * x54 + 128 * x126 * x161 - 384 * x33 * x112 - 128 * x20 * x112 + 288 * x32 * x112 + 192 * x70 * x173 + 32 * x116 * x190 - 32 * x23 * x34 * x60 + 96 * x8 * x234 + 64 * x9 * x18 * x29 * x34 - 64 * x10 * x139 * x162 - 192 * x13 * x208 - 192 * x9 * x10 * x113 - 64 * x14 * x252 + 384 * x85 * x137 + 192 * x105 * x106 - 768 * x23 * x105 - 192 * x5 * x20 * x116 + 128 * x86 * x246 + 256 * x86 * x214 + 96 * x86 * x223 - 288 * x137 * x188 + 192 * x136 * x168 + 96 * x136 * x190 - 64 * x140 * x217 - 32 * x14 * x236 - 64 * x73 * x176 + 192 * x10 * x48 * x172 + 128 * x89 * x227 - 576 * x4 * x40 * x85 + 720 * x40 * x110 + 1728 * x48 * x164 + 576 * x51 * x146 - 64 * x33 * x157 - 128 * x65 * x176 - 192 * x1 * x15 * x179 - 3888 * x16 * x48 - 720 * x20 * x134 - 1152 * x75 * x168 - 576 * x75 * x190 + 192 * x32 * x157 + 128 * x48 * x210 + 64 * x14 * x253 + 4032 * x17 * x48 + 1584 * x255 - 576 * x46 * x237 - 96 * x33 * x151 - 192 * x62 * x126 + 288 * x62 * x220 + 288 * x46 * x84 - 576 * x42 * x104 + 576 * x42 * x51 + 192 * x32 * x151 + 768 * x33 * x111 - 192 * x20 * x111 - 128 * x114 * x170 - 192 * x33 * x250 + 2016 * x26 * x42 - 288 * x27 * x42 + 576 * x42 * x201 - 384 * x32 * x111 + 64 * x78 * x209 - 2880 * x251 - 864 * x219 + 128 * x51 * x135 - 160 * x23 * x189 - 384 * x9 * x60 * x75 - 256 * x49 * x59 * x128 + 864 * x159 + 224 * x7 * x195 + 384 * x51 * x198 + 32 * x56 * x246 + 64 * x56 * x214 - 192 * x107 * x139 + 768 * x8 * x200 + 384 * x4 * x9 * x153 - 96 * x13 * x245 - 256 * x124 * x216 - 128 * x14 * x235 - 2688 * x129 - 1056 * x153 - 576 * x22 * x237 + 288 * x12 * x73 - 576 * x36 * x104 + 576 * x36 * x51 - 384 * x98 * x104 - 768 * x51 * x98 + 64 * x114 * x124 + 192 * x33 * x228 + 192 * x72 * x73 + 2016 * x26 * x36 - 288 * x27 * x36 + 1344 * x16 * x77 + 1248 * x248 + 576 * x36 * x201 - 384 * x13 * x232 + 64 * x78 * x169 - 2880 * x229 - 864 * x218 + 1920 * x17 * x77 + 576 * x19 * x99 + 864 * x63 * x154 - 864 * x63 * x88 + 216 * x12 * x101 - 2592 * x30 * x185 + 576 * x104 * x193 + 1152 * x65 * x119 + 6480 * x30 * x101 - 32 * x106 * x149 - 192 * x16 * x33 * x47 - 288 * x47 * x85 - 2016 * x16 * x52 - 1872 * x12 * x65 - 2592 * x12 * x41 + 2592 * x30 * x187 - 576 * x52 * x96 - 1728 * x30 * x65 + 256 * x66 * x104 + 384 * x71 * x164 - 11664 * x242 - 1296 * x51 * x97 + 128 * x83 * x171 + 384 * x11 * x23 * x47 - 64 * x15 * x33 * x78 - 96 * x65 * x72 + 2880 * x17 * x52 + 4752 * x16 * x44 + 432 * x20 * x158 - 1280 * x26 * x66 - 1248 * x16 * x71 - 96 * x28 * x142 + 6642 * x41 * x68 + 648 * x20 * x37 - 864 * x30 * x30 * x68 + 576 * x44 * x96 - 128 * x71 * x96 + 6048 * x17 * x122 + 1296 * x30 * x69 - 128 * x54 * x171 + 32 * x44 * x210 - 2016 * x17 * x44 - 432 * x44 * x82 + 448 * x145 + 96 * x14 * x143 - 4590 * x32 * x37 - 972 * x11 * x97;
+    o[5] = 864 * x39 * x155 - 3888 * x58 * x91 + 5184 * x53 * x91 - 2160 * x53 * x183 - 576 * x40 * x181 + 2592 * x48 * x58 + 288 * x90 * x134 - 2304 * x48 * x53 - 576 * x87 * x103 - 288 * x39 * x222 - 1152 * x42 * x132 + 576 * x42 * x133 + 1440 * x17 * x46 * x53 + 128 * x102 * x189 - 576 * x60 * x103 - 128 * x25 * x195 + 192 * x90 * x205 + 1536 * x0 * x129 + 384 * x0 * x153 - 288 * x39 * x73 - 1152 * x36 * x132 + 576 * x36 * x133 - 768 * x58 * x77 - 768 * x0 * x248 + 1440 * x53 * x147 - 960 * x53 * x77 + 864 * x39 * x185 - 432 * x39 * x101 - 5184 * x39 * x187 + 1152 * x52 * x58 + 1152 * x39 * x65 + 4536 * x39 * x41 + 7776 * x30 * x91 - 1440 * x52 * x53 - 2592 * x44 * x58 + 640 * x66 * x132 + 576 * x58 * x71 - 10368 * x41 * x95 - 648 * x20 * x94 - 3456 * x30 * x183 + 1152 * x44 * x53 - 256 * x0 * x145 + 6480 * x32 * x94 + 864 * x25 * x144 + 128 * x110 * x161 - 576 * x16 * x112 - 64 * x43 * x221 + 576 * x17 * x112 + 192 * x24 * x116 - 32 * x34 * x38 * x76 + 144 * x234 + 32 * x61 * x128 - 32 * x139 * x247 - 384 * x13 * x113 - 192 * x14 * x113 + 192 * x84 * x137 + 384 * x26 * x105 - 768 * x27 * x105 + 256 * x86 * x130 + 256 * x76 * x86 - 720 * x74 * x137 + 288 * x24 * x136 + 48 * x5 * x87 * x87 - 96 * x19 * x217 - 16 * x14 * x224 - 32 * x73 * x212 + 192 * x48 * x227 - 288 * x40 * x154 + 144 * x40 * x88 + 1728 * x48 * x119 - 128 * x16 * x157 - 128 * x65 * x212 - 1512 * x12 * x48 - 1728 * x24 * x75 - 288 * x87 * x186 + 480 * x17 * x157 + 192 * x48 * x72 + 32 * x15 * x29 * x87 + 2304 * x8 * x180 + 288 * x7 * x89 - 192 * x16 * x151 - 192 * x62 * x110 - 864 * x42 * x120 + 288 * x51 * x121 + 480 * x17 * x151 + 1152 * x16 * x111 - 96 * x20 * x243 - 320 * x46 * x114 - 288 * x16 * x250 + 1152 * x42 * x92 - 72 * x20 * x55 + 1152 * x42 * x203 - 768 * x17 * x111 + 128 * x42 * x78 - 2160 * x32 * x55 - 288 * x11 * x121 + 64 * x51 * x189 - 32 * x20 * x197 - 384 * x75 * x196 + 336 * x18 * x107 + 64 * x56 * x130 + 64 * x56 * x76 + 1152 * x200 + 192 * x93 * x186 - 240 * x56 * x156 - 384 * x22 * x216 - 64 * x14 * x254 - 1536 * x8 * x67 - 192 * x7 * x192 - 864 * x36 * x120 + 288 * x73 * x174 - 576 * x98 * x120 - 384 * x9 * x35 * x51 + 160 * x22 * x114 + 288 * x16 * x228 + 96 * x73 * x108 + 1152 * x36 * x92 - 72 * x7 * x73 + 768 * x33 * x35 + 240 * x20 * x35 + 1152 * x36 * x203 - 768 * x75 * x249 + 128 * x36 * x78 - 2160 * x32 * x207 - 288 * x36 * x64 + 1440 * x32 * x35 + 192 * x18 * x175 - 1296 * x49 * x154 + 864 * x79 * x202 + 576 * x15 * x154 + 1296 * x49 * x88 - 80 * x26 * x149 - 288 * x47 * x79 - 144 * x47 * x84 - 1152 * x33 * x50 - 360 * x15 * x88 - 324 * x7 * x101 + 2592 * x30 * x152 - 1152 * x30 * x52 - 1728 * x30 * x100 + 512 * x66 * x120 + 384 * x4 * x28 * x76 - 4536 * x12 * x122 + 256 * x47 * x83 + 384 * x47 * x109 - 128 * x78 * x193 - 96 * x65 * x108 + 2160 * x32 * x50 + 1800 * x12 * x44 - 960 * x28 * x106 - 464 * x23 * x28 + 1620 * x7 * x41 - 1296 * x30 * x122 + 864 * x30 * x44 - 192 * x30 * x71 + 3456 * x37 * x96 + 216 * x69 * x174 - 192 * x47 * x54 + 48 * x44 * x72 - 1152 * x44 * x68 - 72 * x69 * x108 + 256 * x28 * x123 + 16 * x64 * x238 - 1647 * x17 * x37 - 108 * x7 * x69;
+    o[6] = 216 * x12 * x39 * x39 - 1944 * x39 * x91 + 3888 * x57 * x233 - 2160 * x25 * x127 - 144 * x27 * x39 * x40 + 1296 * x39 * x48 - 1728 * x57 * x180 - 144 * x25 * x89 - 864 * x42 * x163 + 144 * x55 * x90 + 1440 * x55 * x80 + 32 * x90 * x197 - 288 * x103 * x107 + 1152 * x57 * x67 + 96 * x25 * x192 - 864 * x36 * x163 + 144 * x25 * x73 - 576 * x35 * x81 - 192 * x35 * x90 + 1440 * x22 * x127 - 960 * x35 * x80 - 1296 * x25 * x185 + 864 * x50 * x81 + 288 * x39 * x100 + 648 * x25 * x101 + 3888 * x30 * x148 - 1440 * x50 * x80 - 1296 * x39 * x44 + 640 * x28 * x150 + 288 * x28 * x102 - 2916 * x233 - 2592 * x30 * x182 + 864 * x44 * x95 - 192 * x57 * x143 + 2700 * x17 * x94 + 108 * x25 * x69 + 32 * x88 * x161 - 288 * x12 * x112 + 432 * x61 * x168 + 48 * x43 * x116 - 8 * x38 * x221 + 72 * x18 * x247 - 288 * x208 - 48 * x252 + 288 * x92 * x105 - 192 * x20 * x138 + 192 * x33 * x86 + 64 * x20 * x86 - 720 * x32 * x138 + 144 * x43 * x136 - 48 * x236 + 48 * x22 * x89 + 432 * x51 * x117 - 96 * x33 * x115 - 32 * x20 * x115 - 216 * x27 * x117 - 864 * x43 * x75 + 480 * x32 * x115 + 96 * x253 + 648 * x180 - 144 * x33 * x118 - 48 * x62 * x88 - 432 * x42 * x63 + 480 * x32 * x118 + 576 * x12 * x111 - 320 * x52 * x170 - 144 * x46 * x65 + 324 * x3 * x42 + 864 * x55 * x96 - 576 * x123 * x125 + 96 * x15 * x209 - 900 * x17 * x55 - 36 * x55 * x82 - 96 * x107 * x186 + 48 * x38 * x167 + 48 * x33 * x56 + 16 * x20 * x56 + 576 * x4 * x191 - 240 * x245 - 192 * x235 - 432 * x67 - 432 * x36 * x63 - 288 * x35 * x164 + 160 * x52 * x124 + 144 * x22 * x65 + 324 * x3 * x36 + 216 * x16 * x35 + 864 * x49 * x169 - 576 * x232 + 96 * x15 * x169 - 900 * x7 * x147 - 36 * x22 * x69 + 600 * x17 * x35 + 24 * x19 * x167 + 432 * x63 * x193 - 80 * x92 * x149 - 144 * x16 * x240 - 324 * x16 * x50 + 648 * x4 * x37 * x51 - 864 * x50 * x96 - 432 * x15 * x20 * x49 + 384 * x28 * x104 + 96 * x28 * x51 - 648 * x37 * x119 + 192 * x41 * x171 + 96 * x47 * x206 - 96 * x33 * x131 - 24 * x20 * x131 + 900 * x17 * x50 + 252 * x7 * x100 - 400 * x26 * x28 - 64 * x27 * x28 + 162 * x12 * x37 - 648 * x30 * x165 + 432 * x30 * x158 - 96 * x30 * x211 + 972 * x30 * x37 - 96 * x47 * x144 + 24 * x44 * x108 - 324 * x7 * x44 + 72 * x143 - 324 * x37 * x68;
+    o[7] = -324 * x39 * x148 + 1296 * x25 * x91 - 1080 * x25 * x183 + 216 * x117 * x133 - 576 * x21 * x103 - 288 * x42 * x160 + 720 * x53 * x55 - 48 * x25 * x29 * x38 + 384 * x0 * x67 - 288 * x36 * x160 - 192 * x35 * x58 + 720 * x25 * x147 - 480 * x35 * x53 + 288 * x50 * x58 + 648 * x25 * x152 - 720 * x50 * x53 - 216 * x25 * x100 + 320 * x28 * x132 + 48 * x28 * x133 - 324 * x12 * x94 - 864 * x30 * x94 + 288 * x25 * x44 - 64 * x0 * x143 + 594 * x37 * x95 - 48 * x21 * x27 * x34 + 144 * x24 * x61 + 12 * x40 * x146 - 96 * x113 + 96 * x3 * x105 + 64 * x16 * x86 - 360 * x17 * x138 + 24 * x87 * x166 - 8 * x224 - 32 * x16 * x115 - 144 * x49 * x146 + 240 * x17 * x115 + 16 * x15 * x146 + 72 * x7 * x134 - 48 * x16 * x118 - 72 * x55 * x119 + 240 * x17 * x118 + 96 * x27 * x125 - 160 * x46 * x52 - 24 * x46 * x100 + 36 * x12 * x55 + 288 * x30 * x55 - 192 * x11 * x125 + 32 * x15 * x42 - 198 * x55 * x68 + 16 * x16 * x56 + 96 * x49 * x198 - 120 * x17 * x56 - 32 * x254 - 48 * x6 * x38 * x64 - 72 * x22 * x152 - 48 * x35 * x119 + 80 * x22 * x52 + 24 * x22 * x100 + 36 * x12 * x207 + 24 * x12 * x35 + 288 * x36 * x49 - 192 * x19 * x75 + 32 * x15 * x36 - 198 * x37 * x124 + 132 * x35 * x68 + 72 * x63 * x241 - 40 * x3 * x149 - 24 * x47 * x101 - 36 * x12 * x50 - 288 * x30 * x50 + 128 * x28 * x120 + 64 * x41 * x47 - 32 * x16 * x131 + 198 * x50 * x68 - 88 * x28 * x92 - 108 * x4 * x49 * x69 + 72 * x69 * x202 - 16 * x49 * x238 + 108 * x49 * x97 - 16 * x47 * x69 + 4 * x82 * x131 - 36 * x15 * x97 + 8 * x28 * x64 - 27 * x7 * x37;
+    o[8] = 162 * x25 * x148 - 270 * x25 * x182 - 72 * x25 * x134 - 36 * x39 * x55 + 180 * x55 * x95 + 48 * x25 * x205 - 36 * x22 * x148 - 24 * x35 * x39 + 180 * x22 * x182 - 120 * x35 * x95 + 36 * x39 * x50 - 180 * x50 * x95 + 80 * x28 * x163 - 108 * x25 * x165 + 36 * x25 * x158 - 8 * x25 * x211 + 54 * x25 * x37 + 18 * x43 * x61 - 12 * x40 * x121 + 12 * x12 * x138 + 8 * x12 * x86 - 90 * x8 * x226 - 4 * x12 * x115 + 60 * x8 * x225 - 6 * x12 * x118 + 60 * x92 * x125 - 40 * x50 * x170 + 36 * x49 * x121 - 24 * x7 * x243 + 4 * x15 * x121 - 18 * x7 * x55 + 2 * x12 * x56 - 30 * x56 * x68 + 20 * x50 * x124 + 36 * x22 * x165 - 24 * x35 * x174 + 4 * x22 * x158 - 18 * x22 * x37 + 12 * x7 * x35 - 10 * x92 * x199 - 36 * x49 * x241 + 16 * x28 * x63 + 8 * x7 * x240 - 4 * x12 * x131 + 18 * x7 * x50 - 8 * x3 * x28;
+    o[9] = -27 * x25 * x94 + 18 * x25 * x55 + 18 * x22 * x94 - 12 * x25 * x35 - 18 * x25 * x50 + 8 * x28 * x160 - 9 * x226 + 6 * x225 + 6 * x3 * x125 - 4 * x46 * x50 - 3 * x7 * x56 + 2 * x22 * x50 - x3 * x199;
+    return Array.from(o);
+}
+
+//# sourceMappingURL=resI_A3B2.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/resI_A3B3.js
+// GENERATED by gen-resultants.py - do not edit
+
+const resI_A3B3_P = {
+    nIn: 12,
+    pairs: new Int32Array([
+        7, 8, 3, 10, 9, 11, 11, 11, 2, 10, 6, 8, 9, 9, 7, 14, 10, 13, 5, 12, 3, 14, 7, 10,
+        1, 6, 3, 15, 8, 13, 0, 12, 5, 5, 6, 6, 2, 11, 1, 16, 7, 18, 4, 12, 8, 12, 1, 1,
+        2, 15, 0, 13, 10, 12, 2, 9, 3, 8, 5, 6, 17, 17, 13, 14, 4, 13, 16, 16, 9, 20, 7, 15,
+        1, 17, 2, 14, 8, 21, 6, 29, 9, 19, 10, 23, 11, 25, 11, 20, 13, 18, 5, 17, 4, 7, 2, 8,
+        13, 15, 6, 21, 1, 35, 3, 18, 0, 7, 5, 16, 2, 18, 1, 30, 12, 14, 11, 19, 23, 18, 8, 40,
+        5, 28, 1, 28, 4, 19, 6, 17, 9, 12, 0, 22, 17, 21, 11, 13, 12, 15, 29, 17, 10, 20, 12, 18,
+        3, 11, 9, 32, 2, 36, 5, 35, 16, 21, 1, 5, 6, 45, 0, 3, 6, 16, 24, 24, 9, 13, 11, 12,
+        29, 16, 8, 26, 9, 23, 6, 42, 35, 21, 9, 22, 4, 23, 10, 10, 11, 22, 25, 25, 0, 26, 0, 32,
+        24, 19, 5, 30, 2, 19, 7, 11, 51, 18, 20, 20, 9, 38, 26, 26, 42, 17, 2, 30, 4, 22, 5, 39,
+        1, 36, 45, 16, 5, 36, 28, 17, 8, 34, 19, 19, 10, 38, 23, 31, 24, 18, 26, 27, 28, 29, 30, 36,
+        14, 51, 89, 21, 5, 21, 34, 34, 39, 21, 22, 22, 1, 39, 28, 21, 2, 5, 7, 7, 9, 63, 11, 40,
+        16, 75, 22, 27, 24, 31, 29, 39, 0, 25, 11, 33, 12, 49, 23, 23, 24, 20, 30, 21, 50, 17, 16, 17,
+        2, 43, 4, 25, 8, 25, 9, 10, 9, 26, 27, 31, 30, 59, 33, 20, 41, 19, 3, 41, 22, 28, 31, 31,
+        7, 9, 11, 38, 27, 34, 32, 32, 12, 12, 33, 19, 0, 20, 4, 26, 13, 13, 24, 33, 34, 48, 41, 20,
+        1, 25, 11, 26, 24, 48, 14, 37, 41, 44, 42, 16, 50, 59, 61, 18, 65, 20, 19, 20, 0, 40, 2, 49,
+        2, 21, 6, 28, 7, 13, 9, 53, 22, 26, 24, 27, 24, 65, 31, 47, 35, 42, 42, 89, 45, 17, 0, 19,
+        3, 54, 24, 32, 29, 30, 14, 61, 40, 18, 44, 19, 7, 37, 13, 60, 22, 24, 25, 19, 26, 31, 30, 42,
+        31, 53, 36, 21, 38, 38, 39, 45, 66, 21, 1, 49, 3, 57, 3, 19, 9, 43, 10, 46, 10, 19, 11, 43,
+        12, 27, 13, 43, 23, 58, 25, 33, 26, 28, 30, 50, 41, 63, 15, 44, 46, 20, 62, 19, 6, 49, 8, 27,
+        9, 44, 13, 37, 22, 48, 23, 19, 23, 20, 25, 109, 27, 27, 27, 48, 28, 45, 28, 92, 29, 66, 31, 34,
+        33, 38, 39, 42, 50, 16, 18, 96, 0, 46, 1, 21, 3, 52, 3, 73, 4, 20, 7, 24, 10, 82, 23, 33,
+        24, 41, 138, 19, 26, 37, 26, 57, 31, 32, 35, 50, 47, 67, 58, 19, 63, 19, 18, 81, 1, 110, 2, 29,
+        2, 45, 2, 86, 3, 25, 4, 105, 6, 131, 7, 64, 8, 71, 10, 27, 10, 55, 11, 71, 12, 13, 12, 43,
+        12, 80, 22, 37, 23, 62, 26, 34, 26, 48, 27, 32, 28, 42, 28, 75, 30, 75, 33, 49, 36, 59, 39, 75,
+        40, 54, 41, 52, 15, 93, 49, 19, 50, 89, 62, 20, 0, 63, 2, 180, 3, 69, 4, 51, 4, 61, 9, 33,
+        9, 40, 9, 56, 9, 70, 11, 37, 11, 60, 22, 57, 22, 73, 23, 41, 23, 46, 23, 52, 23, 70, 24, 55,
+        25, 15, 25, 44, 27, 33, 30, 92, 14, 81, 39, 50, 39, 92, 41, 46, 15, 20, 44, 20, 52, 19, 2, 42,
+        5, 66, 9, 68, 10, 53, 11, 27, 12, 60, 12, 68, 22, 34, 22, 18, 117, 16, 25, 58, 25, 71, 26, 73,
+        32, 37, 38, 62, 38, 20, 39, 16, 42, 59, 46, 19, 57, 20, 58, 20, 66, 19, 19, 91, 2, 28, 2, 50,
+        5, 110, 10, 33, 11, 23, 12, 76, 13, 56, 120, 25, 23, 38, 24, 15, 24, 43, 24, 54, 25, 41, 25, 62,
+        26, 72, 29, 36, 30, 35, 30, 45, 31, 33, 31, 48, 32, 18, 33, 33, 36, 36, 36, 92, 38, 19, 41, 43,
+        46, 58, 49, 21, 52, 58, 57, 71, 73, 20, 0, 110, 1, 156, 3, 9, 4, 82, 5, 59, 7, 27, 7, 65,
+        8, 22, 10, 34, 10, 52, 11, 78, 12, 83, 13, 47, 22, 14, 22, 67, 22, 72, 120, 19, 123, 16, 24, 68,
+        134, 29, 25, 91, 26, 43, 26, 67, 30, 86, 31, 43, 14, 20, 33, 15, 33, 46, 33, 95, 34, 49, 40, 72,
+        41, 70, 44, 47, 44, 57, 18, 108, 1, 150, 2, 75, 3, 79, 4, 43, 4, 55, 7, 12, 7, 73, 7, 87,
+        8, 33, 9, 27, 11, 127, 11, 61, 12, 70, 22, 15, 22, 43, 23, 98, 131, 16, 24, 60, 25, 57, 27, 59,
+        28, 50, 28, 16, 31, 65, 14, 19, 33, 79, 36, 45, 36, 86, 37, 43, 38, 15, 40, 57, 44, 52, 44, 79,
+        52, 63, 52, 91, 62, 95, 71, 72, 18, 88, 76, 83, 93, 103, 2, 92, 6, 86, 7, 31, 8, 20, 9, 34,
+        11, 34, 11, 51, 12, 56, 13, 27, 13, 31, 117, 49, 119, 32, 120, 33, 23, 15, 23, 111, 123, 39, 131, 17,
+        24, 88, 25, 40, 147, 18, 159, 27, 27, 38, 27, 66, 162, 16, 180, 59, 31, 38, 14, 41, 14, 93, 32, 65,
+        33, 52, 33, 103, 36, 75, 37, 37, 38, 103, 44, 46, 46, 62, 16, 86, 53, 87, 56, 76, 57, 63, 58, 111,
+        64, 85, 70, 20, 70, 98, 18, 93, 73, 19, 19, 109, 0, 23, 0, 142, 0, 70, 1, 356, 4, 113, 4, 156,
+        4, 32, 4, 53, 6, 39, 7, 72, 8, 48, 9, 37, 9, 91, 10, 149, 11, 62, 11, 90, 13, 24, 13, 48,
+        13, 72, 22, 104, 23, 95, 123, 30, 123, 59, 130, 18, 24, 38, 134, 45, 134, 21, 140, 32, 26, 49, 155, 36,
+        155, 39, 27, 14, 27, 37, 27, 43, 166, 59, 191, 16, 193, 39, 31, 37, 33, 68, 35, 86, 36, 42, 36, 50,
+        257, 21, 37, 65, 37, 18, 41, 79, 43, 94, 45, 59, 47, 87, 48, 109, 50, 66, 52, 62, 54, 91, 56, 94,
+        58, 98, 59, 86, 62, 79, 66, 75, 68, 95, 70, 19, 71, 73, 18, 20, 77, 84, 0, 52, 0, 98, 3, 72,
+        4, 204, 4, 308, 4, 47, 4, 78, 4, 81, 6, 117, 6, 380, 9, 24, 9, 31, 9, 71, 10, 11, 10, 114,
+        10, 31, 11, 68, 12, 47, 12, 84, 13, 22, 13, 26, 13, 87, 22, 158, 118, 25, 118, 41, 24, 37, 24, 56,
+        24, 57, 138, 68, 25, 73, 150, 17, 26, 104, 153, 14, 159, 53, 162, 28, 168, 64, 29, 49, 30, 238, 14, 33,
+        14, 78, 32, 73, 32, 102, 37, 57, 38, 53, 38, 18, 39, 49, 41, 58, 15, 43, 15, 19, 15, 100, 42, 66,
+        44, 65, 44, 111, 45, 66, 46, 65, 374, 17, 51, 103, 61, 103, 63, 18, 65, 19, 66, 92, 0, 71, 0, 85,
+        0, 105, 1, 50, 2, 123, 2, 232, 2, 358, 2, 16, 3, 109, 4, 52, 5, 50, 6, 66, 7, 47, 8, 31,
+        8, 105, 9, 58, 10, 61, 11, 115, 11, 121, 12, 54, 12, 55, 22, 49, 117, 25, 118, 15, 120, 44, 128, 76,
+        130, 14, 24, 70, 24, 82, 136, 18, 142, 41, 148, 40, 155, 30, 27, 17, 27, 67, 30, 445, 31, 67, 14, 38,
+        14, 408, 33, 44, 33, 48, 33, 58, 33, 70, 34, 38, 34, 62, 34, 67, 257, 42, 257, 50, 38, 48, 39, 358,
+        40, 73, 41, 91, 41, 98, 41, 111, 15, 65, 43, 19, 44, 44, 44, 18, 16, 66, 53, 62, 53, 18, 54, 71,
+        57, 84, 58, 58, 17, 86, 64, 84, 65, 79, 68, 19, 68, 20, 18, 19, 84, 106, 85, 102, 2, 6, 2, 155,
+        2, 166, 2, 193, 4, 46, 4, 85, 4, 99, 5, 303, 7, 380, 9, 183, 9, 190, 9, 41, 9, 48, 9, 77,
+        10, 69, 10, 74, 10, 78, 11, 199, 11, 31, 11, 338, 11, 81, 11, 99, 12, 38, 12, 69, 13, 73, 22, 87,
+        117, 28, 134, 42, 134, 50, 139, 26, 25, 36, 146, 53, 147, 14, 26, 87, 155, 59, 159, 78, 27, 49, 27, 71,
+        27, 18, 162, 59, 162, 17, 166, 30, 166, 75, 28, 39, 30, 193, 30, 16, 31, 57, 203, 63, 14, 96, 14, 108,
+        32, 85, 33, 98, 34, 100, 34, 104, 232, 59, 238, 36, 238, 39, 35, 298, 35, 49, 35, 17, 254, 57, 37, 48,
+        298, 59, 41, 104, 15, 68, 15, 87, 15, 104, 43, 48, 44, 58, 45, 644, 49, 50, 49, 75, 49, 92, 408, 103,
+        58, 65, 62, 68, 63, 72, 63, 73, 81, 103, 86, 89, 0, 113, 0, 125, 0, 314, 1, 2, 1, 59, 1, 66,
+        2, 134, 4, 112, 4, 116, 4, 70, 4, 90, 4, 96, 4, 98, 4, 104, 5, 49, 6, 191, 6, 747, 7, 58,
+        7, 62, 8, 113, 8, 119, 8, 137, 8, 166, 8, 233, 8, 393, 8, 544, 9, 141, 9, 208, 9, 14, 10, 125,
+        10, 480, 10, 552, 10, 637, 10, 88, 11, 151, 11, 198, 11, 230, 11, 480, 11, 637, 11, 88, 13, 57, 22, 119,
+        22, 41, 112, 19, 114, 33, 115, 72, 117, 148, 117, 17, 119, 48, 23, 55, 23, 85, 122, 67, 123, 66, 131, 59,
+        131, 19, 24, 47, 24, 52, 24, 67, 24, 83, 136, 14, 25, 298, 143, 26, 143, 27, 143, 387, 143, 57, 144, 33,
+        145, 67, 146, 47, 148, 67, 150, 36, 151, 524, 26, 100, 155, 66, 158, 67, 159, 61, 159, 88, 27, 104, 162, 35,
+        165, 64, 28, 351, 28, 49, 28, 86, 175, 20, 181, 44, 29, 297, 29, 303, 190, 54, 190, 78, 193, 43, 31, 55,
+        31, 69, 14, 212, 14, 536, 14, 88, 32, 56, 32, 64, 32, 66, 32, 76, 212, 15, 216, 65, 33, 298, 33, 43,
+        33, 90, 33, 111, 232, 49, 37, 49, 38, 76, 39, 66, 290, 15, 41, 385, 41, 78, 312, 57, 43, 72, 43, 87,
+        44, 109, 46, 96, 49, 443, 16, 59, 418, 17, 53, 100, 57, 88, 59, 97, 60, 79, 62, 70, 536, 103, 65, 108,
+        69, 91, 76, 100, 19, 90, 108, 109
+    ]),
+    coef: new Float64Array([
+        6561, 13122, 6561, -19683, -39366, -19683, 19683, 39366,
+        19683, -6561, -13122, -6561, 21870, 21870, 13122, 48114,
+        34992, -78732, -91854, -13122, -26244, -118098, -91854, 91854,
+        118098, 26244, 13122, 91854, 78732, -34992, -48114, -13122,
+        -21870, -21870, 26973, 8748, 43740, 80190, 8748, 17496,
+        69984, 17496, 79461, -124659, -69984, -104976, -275562, -61236,
+        -8748, -59049, -131220, -65610, -177147, -6561, 177147, 131220,
+        8748, 61236, 275562, 104976, 65610, 69984, 78732, 124659,
+        13122, -79461, -69984, -8748, -80190, -43740, -24057, -8748,
+        -30618, -26973, -6561, -13122, -13122, 39366, 39366, -39366,
+        -39366, 13122, 13122, 4374, 4374, -13122, -17496, -4374,
+        8748, 13122, 4374, 4374, 4374, 4374, -4374, -4374,
+        -4374, -972, -972, 2916, 4860, 1944, -2916, -2916,
+        -5832, -8748, -2916, 4374, 4374, 4374, -4374, 2916,
+        8748, 5832, -4374, -4374, 2916, 2916, -13122, -13122,
+        14580, 53946, 32076, 29160, 42282, 116640, 13122, 1944,
+        34992, 50544, 64152, 99630, 39366, 39366, -4374, -13122,
+        -8748, -97686, -17496, -166212, -209952, -34992, -183708, -306180,
+        -96228, -118098, -78732, -64152, -196830, -180792, -30618, -39366,
+        -39366, 4374, 17496, 13122, -1944, -4860, -2916, 180792,
+        64152, 118098, 306180, 34992, 249318, 209952, 170586, 166212,
+        8748, 43740, 17496, 183708, 97686, 52488, 13122, 13122,
+        -4374, -4374, 972, 972, -99630, -50544, -1944, -116640,
+        -29160, -107892, -32076, -87480, -53946, -8748, -51030, -14580,
+        -21870, -30618, -8748, -26244, -48114, 118098, 52488, 52488,
+        118098, -144342, -78732, -26244, -91854, 56862, 34992, 21870,
+        10206, 2916, 8748, 16038, -39366, -24786, -17496, -51030,
+        -18954, 32076, 27702, 2916, 5832, 29160, 16038, 7290,
+        11664, 18954, 16038, -1458, -2916, 2916, 1458, -16038,
+        -18954, -11664, -7290, -2268, -648, -1944, -3564, 8748,
+        7128, 3888, 13932, 8424, -4860, -7776, -12636, -21384,
+        -18468, -1944, -3888, -19440, -10692, 7290, 11664, 18954,
+        16038, -1458, -2916, 2916, 1458, -16038, 10692, 19440,
+        3888, 1944, 18468, 21384, -18954, -11664, -7290, 12636,
+        7776, 4860, -21870, -34992, -56862, 2916, 29160, 35964,
+        33534, 46656, 6480, 84564, 84240, 48114, 23328, 18144,
+        16038, 93312, 74520, 4374, 91854, 26244, 78732, 144342,
+        -16038, -29160, -5832, -2916, -27702, -32076, -37908, -130248,
+        -52488, -55404, -212139, -233280, -34992, -244944, -149688, -288684,
+        -120528, -26244, -11664, -65610, -218700, -103032, -30618, -59049,
+        -118098, -52488, -52488, -118098, 18954, 51030, 17496, 24786,
+        39366, -8424, -13932, -3888, -7128, -8748, 103032, 11664,
+        120528, 149688, 376164, 233280, 122472, 55404, 166212, 52488,
+        398034, 130248, 34992, 85293, 139968, 37908, 52488, 83106,
+        2187, 48114, 26244, 8748, 30618, -16038, -8748, -2916,
+        -10206, 3564, 1944, 648, 2268, -74520, -18144, -84240,
+        -6480, -200475, -46656, -93312, -35964, -2916, -145800, -29160,
+        -29160, -35721, -20412, -2916, -26244, -26973, -2187, -23328,
+        -61236, -32076, -17496, -21870, -69984, -4374, 131220, 17496,
+        157464, 157464, 17496, 78732, 131220, 26244, -209952, -52488,
+        -96228, -183708, -91854, -69984, -39366, 102060, 34992, 58320,
+        34992, 8748, 17496, 7776, 20412, 10692, 5832, 7290,
+        23328, 1458, -43740, -8748, -52488, -71928, -5832, -26244,
+        -55404, -14580, -34020, 46656, 19440, 21384, 61236, 10692,
+        20412, 21384, 16038, 23328, 1458, 2916, 19440, 11664,
+        5832, 34020, 23328, -1944, 10692, -10692, 10206, 1944,
+        -2916, -23328, -1458, -34020, -11664, -19440, -11664, -2916,
+        -5832, -1728, -4536, -2376, -1296, -1620, -5184, -324,
+        9720, 2592, 11664, 20304, 1296, 5832, 14904, 4536,
+        15120, -1944, -12960, -7776, -3888, -22680, -31104, -12960,
+        -14256, -40824, -7128, -13608, -14256, -10692, -15552, -972,
+        2916, 19440, 11664, 5832, 34020, 23328, -1944, 10692,
+        -10692, 10206, 1944, -2916, -23328, -1458, 15552, 14256,
+        7128, 40824, 14256, 6804, 12960, 12636, 31104, 1944,
+        -34020, -11664, -19440, -11664, -2916, -5832, 22680, 7776,
+        12960, 7776, 1944, 3888, -8748, -58320, -34992, -17496,
+        -102060, 5832, 19440, 8748, 7992, 67068, 33696, 56376,
+        30240, 24786, 69984, 5184, 2592, 32076, 67392, 33264,
+        16038, 69984, 183708, 96228, 52488, 65610, 209952, 13122,
+        -23328, -21384, -10692, -61236, -21384, -10206, -19440, -18954,
+        -46656, -2916, -5832, -50544, -43416, -107892, -58320, -282852,
+        -114048, -104976, -81648, -27216, -148716, -320760, -68688, -21870,
+        -87480, -106920, -31104, -91854, -60264, -131220, -17496, -157464,
+        -157464, -17496, -78732, -131220, -26244, 34020, 55404, 5832,
+        71928, 52488, 11664, 8748, 32076, 43740, 8748, -15120,
+        -14904, -1296, -20304, -11664, -5184, -2592, -8424, -9720,
+        -1944, 31104, 68688, 27216, 281880, 114048, 29160, 250776,
+        58320, 285768, 43416, 253692, 303264, 50544, 74358, 55404,
+        56862, 34992, 5832, 122472, 65124, 8748, 69984, 17496,
+        32076, 61236, 30618, 23328, 13122, -23328, -5832, -10692,
+        -20412, -10206, -7776, -4374, 5184, 1296, 2376, 4536,
+        2268, 1728, 972, -33264, -2592, -30240, -197640, -33696,
+        -44064, -7992, -155520, -19440, -9720, -131220, -58320, -5832,
+        -55404, -35964, -1458, -43740, -14580, -7290, 6561, -19683,
+        19683, -6561, -4374, 13122, 4374, -8748, -4374, -4374,
+        -4374, 4374, 4374, 972, -2916, -1944, 2916, 5832,
+        2916, -4374, -4374, 4374, -2916, -5832, 4374, -2916,
+        13122, -5832, -46656, -40824, -32076, -46656, -3888, -43740,
+        -50544, -16038, -39366, 4374, 8748, 64152, 174960, 52488,
+        52488, 170586, 174960, 17496, 104976, 64152, 78732, 39366,
+        -4374, -13122, 1944, 2916, -151632, -11664, -139968, -122472,
+        -262440, -139968, -52488, -61236, -17496, -91854, -13122, 4374,
+        -972, 97200, 15552, 58320, 123930, 23328, 34992, 29160,
+        972, -2916, -972, 2187, 1458, 243, -243, 729,
+        486, -486, -1458, -1458, -486, 2916, 1458, -5832,
+        -1458, 972, 1944, 729, -2187, 1458, 729, -486,
+        -243, -486, 1458, 972, -4374, 1944, 15552, 13608,
+        10692, 15552, 1296, 14580, 16848, 5346, 13122, 4374,
+        -486, -972, -1458, -21384, -58320, -25272, -17496, -56862,
+        -77760, -10206, -34992, -26568, -41796, -32400, -8748, -4374,
+        1458, 972, 486, 33696, 4536, 31104, 42768, 58320,
+        44712, 22356, 15552, 13608, 5184, 34992, 16848, 5346,
+        -4374, -729, -1458, 2187, 7776, 19440, 4374, 5184,
+        15552, 32400, -4374, 4374, 1458, 5832, -1458, -972,
+        -1458, 16848, -648, 15552, -1944, 29160, 1944, -4860,
+        -15552, 6804, 648, -4374, -16848, -5346, 4374, -2916,
+        486, -32400, -5184, -19440, -41310, -7776, -11664, -9720,
+        972, -432, -3456, -3024, -2376, -3456, -288, -3240,
+        -3744, -1188, -2916, -1944, 4752, 12960, 7344, 3888,
+        12636, 21600, 3240, 7776, 7056, 12744, 14400, 2916,
+        243, 486, -5184, -12960, -2916, -3456, -10368, -21600,
+        5832, 2916, -729, -1944, -972, -22464, -3024, -20736,
+        -28512, -38880, -29808, -14904, -10368, -9072, -3456, -23328,
+        -11232, -3564, -4374, 7776, 19440, 4374, 5184, 15552,
+        32400, -4374, 4374, -2916, -5832, 486, 1458, 1458,
+        16848, -648, 15552, -1944, 29160, 1944, -4860, -15552,
+        6804, 648, -4374, -16848, -5346, 11232, 3456, 10368,
+        29808, 19440, 28512, 18144, 20736, 4536, 3024, 26244,
+        22464, 7128, 4374, -2916, 486, -32400, -5184, -19440,
+        -41310, -7776, -11664, -9720, 21600, 3456, 12960, 27540,
+        5184, 7776, 6480, 6561, -23328, -58320, -13122, -15552,
+        -46656, -97200, 3888, 4320, 17496, 44712, 12096, 9477,
+        12528, 4320, 49572, 50544, 21384, 24192, 5832, 8208,
+        23328, -19683, 4374, 8748, 17496, 139968, 122472, 96228,
+        139968, 11664, 131220, 151632, 48114, -243, -1458, -2187,
+        -16848, -5184, -15552, -44712, -29160, -42768, -27216, -31104,
+        -6804, -4536, -39366, -33696, -10692, -7776, -16848, -20412,
+        -143856, -28512, -94284, -20736, -111537, -116640, -198288, -156816,
+        -20736, -65610, -29160, -19440, -33534, -3888, -102060, -34344,
+        -4374, 19683, -4374, -13122, 1944, 2916, -64152, -174960,
+        -52488, -52488, -170586, -174960, -17496, -104976, -64152, -78732,
+        972, 2916, -486, -729, 32400, 26568, 77760, 17496,
+        41310, 25272, 68526, 58320, 5832, 44712, 21384, 26244,
+        -14400, -7056, -21600, -3888, -18360, -7344, -17820, -12960,
+        -1296, -12096, -4752, -5832, 3888, 20736, 104976, 20736,
+        187920, 28512, 68040, 281394, 217728, 16848, 26244, 169128,
+        75816, 7776, 173502, 43416, 55404, 93312, 25272, 14580,
+        13851, -6561, 4374, -972, 50544, 3888, 46656, 40824,
+        87480, 46656, 17496, 20412, 5832, 30618, -972, 243,
+        -16848, -1296, -15552, -13608, -29160, -15552, -5832, -6804,
+        -1944, -10206, 3744, 288, 3456, 3024, 6480, 3456,
+        1296, 1512, 432, 2268, -8208, -4320, -109080, -12096,
+        -7776, -73440, -4320, -191970, -62208, -3888, -38880, -11988,
+        -92340, -19440, -4860, -27945, -17496, -2916, -10692, -8991,
+        -243, 8748, 13122, -39366, -26244, 52488, 13122, -21870,
+        -5832, -8748, 26244, 2916, 17496, 11664, -23328, -5832,
+        -5832, -8748, -2916, -11664, -11664, 5832, -2916, 8748,
+        14580, 1296, 1944, -5832, -1296, -3888, -5184, 1944,
+        7776, 15552, 3888, 3888, 5832, -2916, -11664, -11664,
+        5832, -2916, 8748, -7776, -7776, -1944, -11664, 14580,
+        -9720, 8748, 34992, -11664, -31104, -11664, -9072, -64152,
+        -33696, -29160, -18144, -10206, -23328, -52488, -78732, 11664,
+        11664, 2916, 17496, 11664, 85536, 58320, 122472, 58320,
+        227448, 85536, 52488, 34992, 11664, 52488, 87480, 4374,
+        78732, 52488, -14580, -26244, -17496, 6480, 5832, 3888,
+        -54432, -101088, -27216, -279936, -93312, -17496, -174960, -34992,
+        -122472, -78732, -69984, -13122, -34992, -8748, 11664, 2916,
+        -2592, -648, 51840, 2592, 25920, 174960, 23328, 23328,
+        58320, 36450, 11664, 8748, 1296, 1944, -5832, -648,
+        -3888, -2592, 5832, 1944, 1458, 2916, 810, -324,
+        -486, 1458, 324, 972, 1296, -324, -1296, -3888,
+        -1944, -972, -2916, -1620, 1944, 7776, 3888, -7776,
+        972, -11664, -4860, 2592, 2592, 648, 3888, 2430,
+        -7290, 2916, 486, 1944, 1944, -972, -162, -648,
+        -648, -324, -1296, 1944, 2916, 3240, -2916, -11664,
+        3888, 10368, 3888, 3024, 21384, 11232, 9720, 6048,
+        3402, 7776, 17496, 26244, 14580, -1296, -1296, -324,
+        -1944, -4860, -3888, -28512, -19440, -40824, -27216, -75816,
+        -37152, -29160, -11664, -4752, -17496, -44712, -17280, -2916,
+        -17496, -2916, -11664, -11664, 4860, 1944, 324, 1296,
+        1296, 12096, 22464, 9936, 62208, 31104, 7776, 38880,
+        10800, 48600, 11232, 17496, 25272, 6048, 6318, 7776,
+        -14580, -1944, -1944, -486, -2916, 7290, 7776, 8640,
+        11664, 864, 15552, 17280, 1458, -8748, 2916, -5832,
+        11664, 4860, 11664, -972, 7776, -3888, -3240, -2916,
+        -1944, 6048, 11232, -864, 31104, -1944, 19440, 864,
+        -7776, -11232, 8748, -1944, -6048, -1944, -7776, 11664,
+        2916, -7776, -1944, 1296, 324, -17280, -864, -8640,
+        -58320, -7776, -7776, -19440, -12150, -3888, -2916, 648,
+        2592, -864, -2304, -864, -672, -4752, -2496, -2160,
+        -1344, -756, -1728, -3888, -5832, -6480, 864, 6336,
+        4320, 9072, 7776, 16848, 10176, 9072, 2592, 1248,
+        3888, 13392, 7680, 972, 9720, 648, 648, 162,
+        972, -5184, -5760, -7776, -576, -10368, -11520, -972,
+        11664, 1944, 7776, 7776, -2430, -3888, -648, -2592,
+        -2592, -8064, -14976, -6624, -41472, -20736, -5184, -25920,
+        -7200, -32400, -7488, -11664, -16848, -4032, -4212, -5184,
+        -14580, 7776, 8640, 11664, 864, 15552, 17280, 1458,
+        -8748, 2916, -5832, 11664, -5832, -3888, -3888, -15552,
+        1620, 2916, 972, 1944, 3888, 6048, 11232, -864,
+        31104, -1944, 19440, 864, -7776, -11232, 8748, -1944,
+        -6048, -1944, -7776, 4032, 7488, 7200, 20736, 20736,
+        6480, 12960, 6624, 37584, 14976, 5832, 18144, 8064,
+        5508, 10368, 11664, 2916, -7776, -1944, 1296, 324,
+        -17280, -864, -8640, -58320, -7776, -7776, -19440, -12150,
+        -3888, -2916, 11520, 576, 5760, 38880, 5184, 5184,
+        12960, 8100, 2592, 1944, 21870, -23328, -25920, -34992,
+        -2592, -46656, -51840, -4374, 864, 11664, 9936, 1728,
+        18954, 33048, 18144, 4374, 4752, 3456, 11664, 864,
+        16848, -13122, -52488, 8748, 5832, 5832, 23328, 34992,
+        93312, 34992, 27216, 192456, 101088, 87480, 54432, 30618,
+        69984, -810, -2916, -1458, -1944, -5832, -6048, -11232,
+        -10800, -31104, -31104, -9720, -19440, -9936, -56376, -22464,
+        -8748, -27216, -12096, -8262, -15552, -2592, -27216, -47952,
+        -5184, -27702, -148716, -57024, -66096, -28512, -49572, -2592,
+        -72900, -44712, -49896, -10368, -13122, 26244, 39366, -11664,
+        -17496, -2916, -26244, 5184, 3888, 1296, 5832, -11664,
+        -85536, -58320, -122472, -58320, -227448, -85536, -52488, -34992,
+        -11664, -52488, -87480, -4374, 2592, 3888, 648, 5832,
+        -1296, -972, -324, -1458, 17280, 4752, 37152, 58320,
+        27216, 48600, 19440, 95256, 28512, 17496, 12150, 15552,
+        3888, 20412, 29160, 1458, -7680, -1248, -10176, -25920,
+        -7776, -12528, -4320, -25488, -6336, -3888, -5400, -4320,
+        -864, -5184, -6480, -324, 2592, 15552, 69984, 5184,
+        138024, 51840, 187596, 54432, 2592, 61236, 121500, 132192,
+        16848, 10206, 36936, 23328, 3888, 34020, 10854, -13122,
+        -8748, 8748, 5832, -1944, -1296, 18144, 33696, 9072,
+        93312, 31104, 5832, 58320, 11664, 40824, 26244, 23328,
+        4374, -1944, -1296, 486, 324, -6048, -11232, -3024,
+        -31104, -10368, -1944, -19440, -3888, -13608, -8748, -7776,
+        -1458, 1344, 2496, 672, 6912, 2304, 432, 4320,
+        864, 3024, 1944, 1728, 324, -864, -31968, -1728,
+        -12960, -139860, -29376, -864, -9072, -64800, -6480, -81000,
+        -36936, -3888, -14904, -5994, -17820, -4860, -810, 2916,
+        17496, 8748, 4374, -26244, -52488, -8748, -19683, 52488,
+        34992, 26244, -29160, -10935, -1944, -11664, -5832, -2916,
+        17496, 34992, 7776, 5832, 13122, 11664, 1458, -23328,
+        -1944, -15552, -11664, -11664, -5832, -2916, -7776, -11664,
+        -1458, -11664, 1944, -7776, 11664, -5832, 5832, 2916,
+        19440, 7290, 432, 2592, 1296, 648, -3888, -7776,
+        -3456, -1296, -2916, -5184, -648, 5184, 7776, 972,
+        15552, 1296, 10368, 7776, 7776, 3888, 1944, -7776,
+        -11664, -1458, -11664, 1944, -7776, 11664, -5832, 5832,
+        2916, -7776, -2592, -5184, -15552, -3888, -7776, -3888,
+        19440, 7290, -12960, -4860, 23328, 34992, 4374, -7776,
+        -6912, -23328, -42768, -12096, -7290, -6480, -2592, -20412,
+        -16848, -17496, -104976, -52488, -26244, 11664, 3888, 7776,
+        23328, 5832, 11664, 5832, 15552, 28512, 29160, 163296,
+        28512, 75816, 15552, 74358, 58320, 69984, 42768, 13122,
+        52488, 104976, 17496, 39366, -19440, -17496, -34992, -7290,
+        -5832, -13122, 8640, 3888, 7776, 3240, 1296, 2916,
+        -7776, -36288, -132192, -20736, -186624, -23328, -40824, -166212,
+        -93312, -8748, -52488, -17496, -30618, -34992, -23328, -17496,
+        11664, 7776, 5832, -2592, -1728, -1296, 14688, 4320,
+        123120, 10368, 5184, 38880, 102060, 23328, 11664, 14580,
+        432, 2592, 1296, 648, -3888, -7776, -1728, -1296,
+        -2916, -2592, -324, 5832, 648, 3888, 3888, 2916,
+        1944, 972, 1080, -108, -648, -324, -162, 972,
+        1944, 864, 324, 729, 1296, 162, -864, -1296,
+        -162, -3888, -648, -2592, -3888, -1944, -1944, -972,
+        -2160, 5184, 7776, 972, 3888, -2592, 2592, -15552,
+        1944, -7776, -3888, -6480, 2592, 864, 1728, 5184,
+        1296, 2592, 1296, 3240, -9720, 1944, 3888, 1296,
+        -3645, 648, 1458, 1944, 243, -648, -1296, -432,
+        -216, -486, -648, -81, -864, -1296, -162, 648,
+        3888, 1944, 972, 4320, -7776, -11664, -1458, 2592,
+        2304, 7776, 14256, 4032, 2430, 2160, 864, 6804,
+        5616, 5832, 34992, 17496, 8748, 19440, -1296, -432,
+        -864, -2592, -648, -1296, -648, -6480, -5184, -9504,
+        -9720, -54432, -12960, -25272, -6624, -24786, -31104, -23328,
+        -21168, -4896, -8262, -11664, -23328, -7776, -3888, -8748,
+        -11664, -1458, 6480, 1296, 2592, 864, 2430, 432,
+        972, 1296, 162, 1728, 8064, 29376, 7200, 41472,
+        7488, 16848, 36936, 34992, 4032, 4374, 11664, 6048,
+        864, 13608, 5616, -19440, -1944, -648, -1296, -3888,
+        -972, -1944, -972, 9720, 3456, 1440, 11664, 6912,
+        4896, 3888, -5832, -11664, 7776, -1944, -4374, 11664,
+        1458, 6480, 7776, 15552, -2592, 2430, 2592, 5832,
+        -3888, -486, -4320, -1944, -3888, -1620, -648, -1458,
+        864, 4032, 14688, -288, 20736, 288, -3240, 18468,
+        -3888, -4032, -1458, 5832, -216, -864, -3402, -5616,
+        11664, 7776, 5832, -7776, -5184, -3888, 1296, 864,
+        648, -4896, -1440, -41040, -3456, -1728, -12960, -34020,
+        -7776, -3888, -4860, 1728, 2592, 324, -576, -512,
+        -1728, -3168, -896, -540, -480, -192, -1512, -1248,
+        -1296, -7776, -3888, -1944, -8640, 1152, 2112, 2160,
+        12096, 3648, 5616, 1792, 5508, 9504, 5184, 6240,
+        2176, 2700, 12960, 648, 216, 432, 1296, 324,
+        648, 324, -2304, -960, -7776, -4608, -3264, -2592,
+        7776, 15552, 5184, 2592, 5832, 7776, 972, -3240,
+        -2592, -5184, -1728, -1215, -864, -1944, -2592, -324,
+        -1152, -5376, -19584, -4800, -27648, -4992, -11232, -24624,
+        -23328, -2688, -2916, -7776, -4032, -576, -9072, -3744,
+        -19440, 3456, 1440, 11664, 6912, 4896, 3888, -5832,
+        -11664, 7776, -1944, -4374, 11664, 1458, -3888, -7776,
+        -10368, -1296, -2916, -15552, -1944, 2160, 1944, 3888,
+        2592, 810, 648, 1458, 3888, 486, 864, 4032,
+        14688, -288, 20736, 288, -3240, 18468, -3888, -4032,
+        -1458, 5832, -216, -864, -3402, -5616, 576, 2688,
+        9792, 4992, 13824, 4800, 13392, 12312, 25920, 5376,
+        3888, 3888, 4176, 1152, 11340, 7488, 11664, 7776,
+        5832, -7776, -5184, -3888, 1296, 864, 648, -4896,
+        -1440, -41040, -3456, -1728, -12960, -34020, -7776, -3888,
+        -4860, 3264, 960, 27360, 2304, 1152, 8640, 22680,
+        5184, 2592, 3240, 29160, -10368, -4320, -34992, -20736,
+        -14688, -11664, 2592, 12636, 7344, 2592, 8748, 7776,
+        6048, 729, -34992, -52488, -6561, 5832, 11664, 15552,
+        1944, 4374, 23328, 2916, 23328, 20736, 69984, 128304,
+        36288, 21870, 19440, 7776, 61236, 50544, -1080, -1944,
+        -3888, -3888, -405, -648, -1458, -5832, -729, -864,
+        -4032, -14688, -7488, -20736, -7200, -20088, -18468, -38880,
+        -8064, -5832, -5832, -6264, -1728, -17010, -11232, -9072,
+        -36936, -49572, -10368, -18225, -66096, -35640, -14904, -9072,
+        -8019, -1296, -14580, 8748, 52488, 26244, 13122, -11664,
+        -5832, -7776, -34992, -5832, -17496, -8748, 5184, 1296,
+        3456, 7776, 2592, 3888, 1944, -15552, -28512, -29160,
+        -163296, -28512, -75816, -15552, -74358, -58320, -69984, -42768,
+        -13122, 2592, 1296, 1728, 7776, 1296, 3888, 1944,
+        -1296, -324, -864, -1944, -648, -972, -486, 4896,
+        6624, 41040, 12960, 11448, 67392, 9504, 34020, 33048,
+        5184, 28674, 19440, 28188, 14256, 4374, -2176, -1792,
+        -18240, -3648, -2928, -17856, -2112, -15120, -9072, -1152,
+        -7236, -4320, -7344, -3168, -972, 10368, 25272, 92016,
+        12960, 88452, 46656, 81000, 33048, 2592, 23814, 19197,
+        25920, 4212, 1458, -8748, -17496, -2916, -6561, 5832,
+        11664, 1944, 4374, -1296, -2592, -432, -972, 2592,
+        12096, 44064, 6912, 62208, 7776, 13608, 55404, 31104,
+        2916, 17496, 5832, 10206, -1296, -2592, -432, -972,
+        324, 648, 108, 243, -864, -4032, -14688, -2304,
+        -20736, -2592, -4536, -18468, -10368, -972, -5832, -1944,
+        -3402, 192, 896, 3264, 512, 4608, 576, 1008,
+        4104, 2304, 216, 1296, 432, 756, -3888, -50760,
+        -5184, -15120, -87750, -25920, -1296, -5184, -24840, -3240,
+        -12555, -7128, -972, -2106, -999, 5832, 11664, 2916,
+        1944, 8748, -5832, -34992, -17496, -26244, -26244, 23328,
+        34992, 52488, 17496, -19440, -29160, -3888, -7776, -1944,
+        -1296, -5832, 3888, 23328, 11664, 17496, 7776, 17496,
+        5184, 3888, -10368, -15552, -3888, -23328, -7776, -1944,
+        -7776, -1296, -5832, -7776, -5184, -3888, -5184, -7776,
+        3888, -11664, 7776, 1944, -3888, 1296, 5832, 12960,
+        19440, 864, 1728, 432, 288, 1296, -864, -5184,
+        -2592, -3888, -3456, -3888, -2304, -1728, 5184, 3456,
+        2592, 6912, 10368, 2592, 15552, 5184, 1296, 5184,
+        864, 3888, -7776, -5184, -3888, -5184, -7776, 3888,
+        -11664, 7776, 1944, -3888, 1296, 5832, -3456, -5184,
+        -5184, -7776, -10368, -2592, -2592, -1728, -7776, 12960,
+        19440, -8640, -12960, 23328, 15552, 11664, -1728, -15552,
+        -9504, -1728, -14580, -13608, -6048, -1458, -34992, -69984,
+        -17496, -11664, -52488, 5184, 7776, 7776, 11664, 15552,
+        3888, 3888, 2592, 11664, 5184, 38880, 54432, 5184,
+        26244, 99144, 28512, 23328, 7776, 14580, 14580, 11664,
+        69984, 34992, 52488, 52488, -12960, -3888, -23328, -19440,
+        -11664, -17496, -17496, 5760, 864, 5184, 8640, 2592,
+        3888, 3888, -5184, -23328, -88128, -5184, -116640, -31104,
+        -110808, -23328, -20412, -32076, -23328, -1458, -15552, -23328,
+        -34992, -11664, 5184, 7776, 11664, 3888, -1152, -1728,
+        -2592, -864, 1728, 43200, 1728, 8640, 106920, 15552,
+        3888, 19440, 19440, 5832, 1944, 864, 1728, 432,
+        288, 1296, -864, -5184, -2592, -3888, -1728, -3888,
+        -1152, -864, 2592, 3888, 1296, 5832, 2592, 648,
+        1944, 432, 1944, 720, -216, -432, -108, -72,
+        -324, 216, 1296, 648, 972, 864, 972, 576,
+        432, -864, -576, -432, -1728, -2592, -1296, -3888,
+        -2592, -648, -1296, -432, -1944, -1440, 5184, 3456,
+        2592, 1728, 2592, -5184, 3888, -10368, -2592, 1296,
+        -1728, -7776, -4320, 1152, 1728, 1728, 2592, 3456,
+        864, 864, 576, 2592, 2160, -6480, 432, 2592,
+        -9720, 1296, 1944, 1296, 1944, 864, 648, -144,
+        -864, -432, -648, -432, -648, -288, -216, -864,
+        -576, -432, 1296, 2592, 648, 432, 1944, 2880,
+        -7776, -5184, -3888, 576, 5184, 3168, 576, 4860,
+        4536, 2016, 486, 11664, 23328, 5832, 3888, 17496,
+        12960, -576, -864, -864, -1296, -1728, -432, -432,
+        -288, -1296, -4320, -1728, -12960, -18144, -2304, -8748,
+        -33048, -14688, -7776, -3744, -4860, -576, -8748, -2592,
+        -15552, -7776, -11664, -7776, -11664, -5184, -3888, 4320,
+        288, 1728, 6480, 864, 1296, 864, 1296, 576,
+        432, 1152, 5184, 19584, 1728, 25920, 12096, 24624,
+        8352, 576, 9396, 7128, 9720, 2016, 810, -12960,
+        -864, -1296, -1296, -1944, -2592, -648, -648, -432,
+        -1944, 6480, 576, 5184, 1152, 576, 3888, -1296,
+        -7776, -3888, -5832, 7776, -5832, 5184, 3888, 4320,
+        1728, 10368, 6480, 5184, 7776, -2592, 7776, -1728,
+        -1296, -2880, -432, -2592, -4320, -1296, -1944, -1944,
+        576, 2592, 9792, 12960, -1728, 12312, -576, -576,
+        -2592, 3564, -1944, -2016, -324, 5184, 7776, 11664,
+        3888, -3456, -5184, -7776, -2592, 576, 864, 1296,
+        432, -576, -14400, -576, -2880, -35640, -5184, -1296,
+        -6480, -6480, -1944, -648, 1728, 1152, 864, -128,
+        -1152, -704, -128, -1080, -1008, -448, -108, -2592,
+        -5184, -1296, -864, -3888, -5760, 384, 2880, 4032,
+        640, 1944, 7344, 4416, 1728, 1088, 1080, 256,
+        2808, 8640, 288, 432, 432, 648, 864, 216,
+        216, 144, 648, -384, -3456, -768, -384, -2592,
+        1728, 10368, 5184, 7776, 5184, 7776, 3456, 2592,
+        -2160, -576, -3456, -3240, -1728, -2592, -1728, -2592,
+        -1152, -864, -768, -3456, -13056, -1152, -17280, -8064,
+        -16416, -5568, -384, -6264, -4752, -6480, -1344, -540,
+        -12960, 576, 5184, 1152, 576, 3888, -1296, -7776,
+        -3888, -5832, 7776, -5832, 5184, 3888, -864, -5184,
+        -2592, -3888, -10368, -3888, -6912, -5184, 1440, 432,
+        2592, 2160, 1296, 1944, 2592, 1944, 1728, 1296,
+        576, 2592, 9792, 12960, -1728, 12312, -576, -576,
+        -2592, 3564, -1944, -2016, -324, 384, 1728, 6528,
+        1152, 8640, 9216, 8208, 5952, 768, 7992, 2376,
+        7776, 2688, 756, 5184, 7776, 11664, 3888, -3456,
+        -5184, -7776, -2592, 576, 864, 1296, 432, -576,
+        -14400, -576, -2880, -35640, -5184, -1296, -6480, -6480,
+        -1944, -648, 384, 9600, 384, 1920, 23760, 3456,
+        864, 4320, 4320, 1296, 432, 19440, -1728, -15552,
+        -3456, -1728, -11664, 2808, 5832, 1728, 864, 1458,
+        -34992, -23328, -17496, 1296, 7776, 3888, 5832, 15552,
+        5832, 10368, 7776, 5184, 46656, 28512, 5184, 43740,
+        40824, 18144, 4374, -720, -432, -2592, -1080, -1296,
+        -1944, -3888, -1944, -2592, -1944, -576, -2592, -9792,
+        -1728, -12960, -13824, -12312, -8928, -1152, -11988, -3564,
+        -11664, -4032, -1134, -12312, -24300, -22032, -6480, -5832,
+        -10692, -7128, 17496, 34992, 8748, 5832, 26244, -5184,
+        -7776, -11664, -11664, -23328, -5832, -3888, -3888, -17496,
+        2304, 3456, 2592, 5184, 5184, 1296, 1728, 864,
+        3888, -5184, -38880, -54432, -5184, -26244, -99144, -28512,
+        -23328, -7776, -14580, -14580, 1152, 1728, 2592, 2592,
+        5184, 1296, 864, 864, 3888, -576, -864, -648,
+        -1296, -1296, -324, -432, -216, -972, 576, 14400,
+        2304, 15840, 35640, 23328, 1728, 10044, 39528, 9504,
+        6480, 9720, 2592, 5508, 4860, -256, -6400, -640,
+        -4160, -15840, -6336, -384, -2520, -10224, -2112, -2880,
+        -2592, -576, -1368, -1080, 16848, 21384, 58968, 11664,
+        27702, 18144, 12798, 6480, 648, 3402, -1944, -11664,
+        -5832, -8748, -8748, 1296, 7776, 3888, 5832, 5832,
+        -288, -1728, -864, -1296, -1296, 1728, 7776, 29376,
+        1728, 38880, 10368, 36936, 7776, 6804, 10692, 7776,
+        486, -288, -1728, -864, -1296, -1296, 72, 432,
+        216, 324, 324, -576, -2592, -9792, -576, -12960,
+        -3456, -12312, -2592, -2268, -3564, -2592, -162, 128,
+        576, 2176, 128, 2880, 768, 2736, 576, 504,
+        792, 576, 36, -7344, -42120, -6048, -8640, -27000,
+        -9936, -648, -1458, -3510, -540, 3888, 2592, 5832,
+        5832, 729, -7776, -11664, -8748, -34992, -8748, -6561,
+        3888, 15552, 34992, 34992, 13122, -6480, -29160, -7290,
+        -2592, -1728, -3888, -3888, -486, 5184, 7776, 5832,
+        23328, 3456, 5832, 864, 4374, 3888, -1728, -6912,
+        -15552, -2592, -15552, -1728, -3888, -5832, -3888, -486,
+        -3456, -864, -3888, -864, -3456, -7776, 2592, -7776,
+        1728, 3888, -2916, 3888, 486, 4320, 19440, 4860,
+        576, 384, 864, 864, 108, -1152, -1728, -1296,
+        -5184, -1536, -1296, -384, -972, -1728, 2304, 576,
+        2592, 1152, 4608, 10368, 1728, 10368, 1152, 2592,
+        3888, 2592, 324, -3456, -864, -3888, -864, -3456,
+        -7776, 2592, -7776, 1728, 3888, -2916, 3888, 486,
+        -576, -2304, -5184, -3456, -5184, -2304, -5184, -1944,
+        -5184, -648, 4320, 19440, 4860, -2880, -12960, -3240,
+        10368, 2592, 11664, -3456, -9720, -3024, -864, -2916,
+        -23328, -15552, -34992, -34992, -4374, 864, 3456, 7776,
+        5184, 7776, 3456, 7776, 2916, 7776, 972, 12960,
+        34992, 33048, 5184, 10206, 19440, 7128, 15552, 23328,
+        17496, 69984, 17496, 13122, -4320, -5184, -19440, -7776,
+        -5832, -23328, -4860, -5832, -4374, 1920, 1152, 8640,
+        1728, 1296, 5184, 2160, 1296, 972, -15552, -27216,
+        -77760, -7776, -44712, -15552, -21384, -5832, -3402, -2592,
+        -10368, -23328, -23328, -8748, 864, 3456, 7776, 7776,
+        2916, -192, -768, -1728, -1728, -648, 6048, 49680,
+        3456, 6480, 40500, 7776, 1296, 3240, 576, 384,
+        864, 864, 108, -1152, -1728, -1296, -5184, -768,
+        -1296, -192, -972, -864, 432, 1728, 3888, 864,
+        3888, 576, 1296, 1458, 1296, 240, 162, -144,
+        -96, -216, -216, -27, 288, 432, 324, 1296,
+        384, 324, 96, 243, 432, -384, -96, -432,
+        -288, -1152, -2592, -864, -2592, -576, -1296, -972,
+        -1296, -480, -162, 2304, 576, 2592, 288, 1152,
+        2592, -3456, 2592, -2304, -5184, 972, -5184, -1440,
+        -648, 192, 768, 1728, 1152, 1728, 768, 1728,
+        648, 1728, 720, 216, -2160, 576, -9720, 864,
+        648, 2592, 576, -2430, 648, 144, 486, 648,
+        -192, -288, -216, -864, -192, -216, -48, -162,
+        -216, -384, -96, -432, 864, 576, 1296, 1296,
+        960, 162, -3456, -864, -3888, 1152, 3240, 1008,
+        288, 972, 7776, 5184, 11664, 11664, 4320, 1458,
+        -96, -384, -864, -576, -864, -384, -864, -324,
+        -864, -1440, -108, -4320, -11664, -11016, -2592, -3402,
+        -6480, -4104, -3456, -5184, -3888, -15552, -3456, -3888,
+        -864, -2916, -3888, 1440, 384, 6480, 576, 432,
+        1728, 384, 1620, 432, 96, 324, 432, 3456,
+        6048, 17280, 2880, 9936, 6696, 4752, 2304, 288,
+        1728, -4320, -144, -576, -1296, -864, -1296, -576,
+        -1296, -486, -1296, 2160, -162, 864, 1728, -1728,
+        -2592, -1944, -7776, 3456, -1944, 864, -1458, 3888,
+        1440, 2304, 6480, 3456, 2592, 10368, -1152, 1620,
+        2592, -288, 1944, -1296, -960, -576, -4320, -864,
+        -648, -2592, -1080, -648, -486, 1728, 3024, 8640,
+        -288, 4968, -1512, 2376, -360, -288, -594, 864,
+        3456, 7776, 7776, 2916, -576, -2304, -5184, -5184,
+        -1944, 96, 384, 864, 864, 324, -2016, -16560,
+        -1152, -2160, -13500, -2592, -432, -1080, 768, 192,
+        864, -256, -720, -224, -64, -216, -1728, -1152,
+        -2592, -2592, -1920, -324, 960, 2592, 2448, 768,
+        756, 1440, 1296, 2880, 48, 192, 432, 288,
+        432, 192, 432, 162, 432, 54, -576, -1152,
+        2304, 3456, 2592, 10368, 2304, 2592, 576, 1944,
+        2592, -720, -768, -3240, -1152, -864, -3456, -768,
+        -810, -864, -192, -648, -864, -2304, -4032, -11520,
+        -1920, -6624, -4464, -3168, -1536, -192, -1152, -4320,
+        864, 1728, -1728, -2592, -1944, -7776, 3456, -1944,
+        864, -1458, 3888, -1152, -1728, -1296, -5184, -4608,
+        -1296, -1152, -972, -5184, 480, 576, 2160, 864,
+        648, 2592, 1152, 540, 648, 288, 486, 1296,
+        1728, 3024, 8640, -288, 4968, -1512, 2376, -360,
+        -288, -594, 1152, 2016, 5760, 2112, 3312, 5472,
+        1584, 1776, 384, 1548, 864, 3456, 7776, 7776,
+        2916, -576, -2304, -5184, -5184, -1944, 96, 384,
+        864, 864, 324, -2016, -16560, -1152, -2160, -13500,
+        -2592, -432, -1080, 1344, 11040, 768, 1440, 9000,
+        1728, 288, 720, 6480, -2592, -5184, 1296, 972,
+        -15552, -3888, -17496, 1728, 2592, 1944, 7776, 6912,
+        1944, 1728, 1458, 7776, 10368, 29160, 9072, 2592,
+        8748, -240, -576, -1080, -864, -648, -2592, -1728,
+        -270, -648, -432, -486, -1944, -1728, -3024, -8640,
+        -3168, -4968, -8208, -2376, -2664, -576, -2322, -8100,
+        -7776, -3564, -1296, -729, 11664, 7776, 17496, 17496,
+        2187, -864, -3456, -7776, -7776, -7776, -5184, -11664,
+        -2916, -11664, -1458, 384, 1536, 3456, 1728, 3456,
+        1152, 2592, 1296, 2592, 324, -12960, -34992, -33048,
+        -5184, -10206, -19440, -7128, 192, 768, 1728, 1728,
+        1728, 1152, 2592, 648, 2592, 324, -96, -384,
+        -864, -432, -864, -288, -648, -324, -648, -81,
+        2016, 16560, 5472, 13824, 13500, 13608, 1728, 3834,
+        7560, 2376, -896, -7360, -1472, -3552, -6000, -3600,
+        -384, -948, -1920, -528, 14256, 9963, 18468, 4536,
+        3402, 2592, -2592, -3888, -2916, -11664, -2916, -2187,
+        1728, 2592, 1944, 7776, 1944, 1458, -384, -576,
+        -432, -1728, -432, -324, 5184, 9072, 25920, 2592,
+        14904, 5184, 7128, 1944, 1134, -384, -576, -432,
+        -1728, -432, -324, 96, 144, 108, 432, 108,
+        81, -1728, -3024, -8640, -864, -4968, -1728, -2376,
+        -648, -378, 384, 672, 1920, 192, 1104, 384,
+        528, 144, 84, -7560, -19305, -3456, -2430, -3267,
+        -1404, -108, -162, 864, 3888, 1296, 1458, -2592,
+        -11664, -11664, -4374, -8748, 2592, 7776, 23328, 17496,
+        8748, -864, -12960, -14580, -576, -2592, -864, -972,
+        1728, 7776, 7776, 576, 2916, 5832, 1728, -1152,
+        -3456, -10368, -576, -7776, -2592, -3888, -864, -972,
+        -576, -1728, -576, -1728, -5184, 576, -3888, 2592,
+        -1944, 864, 972, 576, 8640, 9720, 128, 576,
+        192, 216, -384, -1728, -1728, -256, -648, -1296,
+        -768, 384, 1152, 768, 2304, 6912, 384, 5184,
+        1728, 2592, 576, 648, -576, -1728, -576, -1728,
+        -5184, 576, -3888, 2592, -1944, 864, 972, -384,
+        -1152, -3456, -768, -2592, -3456, -1296, -1152, -1296,
+        576, 8640, 9720, -384, -5760, -6480, 1728, 5184,
+        -2160, -1944, -5184, -23328, -7776, -8748, 576, 1728,
+        5184, 1152, 3888, 5184, 1944, 1728, 1944, 11664,
+        13608, 6480, 1296, 1458, 5184, 23328, 23328, 8748,
+        17496, -576, -8640, -1728, -7776, -9720, -7776, -2916,
+        -5832, 256, 3840, 384, 1728, 4320, 1728, 648,
+        1296, -18144, -15552, -29808, -3888, -6318, -2592, -1728,
+        -5184, -15552, -11664, -5832, 576, 1728, 5184, 3888,
+        1944, -128, -384, -1152, -864, -432, 8640, 28080,
+        2592, 2160, 5670, 1296, 162, 128, 576, 192,
+        216, -384, -1728, -1728, -128, -648, -1296, -384,
+        288, 864, 2592, 192, 1944, 864, 972, 288,
+        32, 324, -32, -144, -48, -54, 96, 432,
+        432, 64, 162, 324, 192, -64, -192, -192,
+        -576, -1728, -192, -1296, -864, -648, -288, -64,
+        -324, 384, 1152, 192, 576, 1728, -768, 1296,
+        -3456, 648, -1152, -192, -1296, 128, 384, 1152,
+        256, 864, 1152, 432, 384, 96, 432, -288,
+        -4320, 192, 864, -4860, 864, 96, 324, 648,
+        288, -64, -288, -288, -32, -108, -216, -96,
+        -64, -192, 192, 864, 288, 128, 324, -576,
+        -1728, 720, 648, 1728, 7776, 2592, 576, 2916,
+        -64, -192, -576, -128, -432, -576, -216, -192,
+        -192, -216, -3888, -4536, -2160, -720, -486, -1152,
+        -5184, -5184, -576, -1944, -3888, -1728, 192, 2880,
+        128, 576, 3240, 576, 64, 216, 432, 192,
+        4032, 3456, 6624, 1584, 1404, 1224, -576, -96,
+        -288, -864, -192, -648, -864, -324, -288, 288,
+        -324, 288, -576, -2592, -2592, 576, -972, -1944,
+        1728, 192, 2880, 768, 3456, 3240, 3456, -192,
+        1296, 2592, -576, -128, -1920, -192, -864, -2160,
+        -864, -324, -648, 2016, 1728, 3312, -288, 702,
+        -360, 576, 1728, 5184, 3888, 1944, -384, -1152,
+        -3456, -2592, -1296, 64, 192, 576, 432, 216,
+        -2880, -9360, -864, -720, -1890, -432, -54, 128,
+        384, -160, -144, -384, -1728, -576, -256, -648,
+        864, 1008, 480, 224, 108, 384, 32, 96,
+        288, 64, 216, 288, 108, 96, 108, -192,
+        768, 3456, 3456, 384, 1296, 2592, 1152, -96,
+        -1440, -256, -1152, -1620, -1152, -128, -432, -864,
+        -384, -2688, -2304, -4416, -1056, -936, -816, -576,
+        288, -576, -2592, -2592, 576, -972, -1944, 1728,
+        -384, -1728, -1728, -768, -648, -1296, -2304, 64,
+        960, 192, 864, 1080, 864, 192, 324, 648,
+        576, 2016, 1728, 3312, -288, 702, -360, 1344,
+        1152, 2208, 1248, 468, 1056, 576, 1728, 5184,
+        3888, 1944, -384, -1152, -3456, -2592, -1296, 64,
+        192, 576, 432, 216, -2880, -9360, -864, -720,
+        -1890, -432, -54, 1920, 6240, 576, 480, 1260,
+        288, 36, 864, -864, 216, -2592, -7776, 576,
+        2592, 2592, 1152, 972, 1944, 3456, 6480, 5832,
+        -32, -480, -192, -864, -540, -864, -288, -324,
+        -648, -864, -2016, -1728, -3312, -1872, -702, -1584,
+        -2592, -972, 2592, 11664, 3888, 4374, -576, -1728,
+        -5184, -1728, -3888, -7776, -1944, -2592, -2916, 256,
+        768, 2304, 384, 1728, 1728, 864, 576, 648,
+        -11664, -13608, -6480, -1296, -1458, 128, 384, 1152,
+        384, 864, 1728, 432, 576, 648, -64, -192,
+        -576, -96, -432, -432, -216, -144, -162, 2880,
+        9360, 4752, 5256, 1890, 2592, 432, 540, -1280,
+        -4160, -1248, -1328, -840, -672, -96, -132, 6642,
+        2430, 2268, 648, -864, -3888, -3888, -1458, -2916,
+        576, 2592, 2592, 972, 1944, -128, -576, -576,
+        -216, -432, 6048, 5184, 9936, 1296, 2106, 864,
+        -128, -576, -576, -216, -432, 32, 144, 144,
+        54, 108, -2016, -1728, -3312, -432, -702, -288,
+        448, 384, 736, 96, 156, 64, -4590, -4644,
+        -972, -270, 864, 972, -3888, -5832, -2916, -729,
+        5184, 5832, 11664, 2916, -2160, -9720, -2430, -576,
+        -648, 2592, 3888, 1944, 288, 486, -2304, -2592,
+        -5184, -576, -1296, -648, -288, -1152, -1296, -2592,
+        576, -648, 648, 1440, 6480, 1620, 128, 144,
+        -576, -864, -432, -128, -108, 192, 1536, 1728,
+        3456, 384, 864, 432, -288, -1152, -1296, -2592,
+        576, -648, 648, -768, -864, -1728, -768, -432,
+        -864, 1440, 6480, 1620, -960, -4320, -1080, 864,
+        -432, -5184, -5832, 1152, 1296, 2592, 1152, 648,
+        1296, 4536, 1944, 7776, 11664, 5832, 1458, -1440,
+        -6480, -2592, -3888, -1620, -1944, -486, 640, 2880,
+        576, 864, 720, 432, 108, -10368, -4374, -4212,
+        -648, -3456, -3888, -7776, -1944, 1152, 1296, 2592,
+        648, -256, -288, -576, -144, 6480, 7830, 864,
+        270, 128, 144, -576, -864, -432, -64, -108,
+        576, 648, 1296, 192, 324, 216, -32, -36,
+        144, 216, 108, 32, 27, -32, -384, -432,
+        -864, -192, -216, -216, 192, 384, 432, 864,
+        -768, 216, -864, 256, 288, 576, 256, 144,
+        288, -720, -3240, 288, 432, -810, 216, 48,
+        54, -96, -144, -72, -16, -18, -32, 192,
+        216, -288, 144, 1728, 1944, -128, -144, -288,
+        -128, -72, -144, -1512, -648, -1728, -2592, -1296,
+        -288, -324, 480, 2160, 192, 288, 540, 144,
+        32, 36, 2304, 972, 936, 288, -192, -216,
+        -432, -192, -108, -216, -864, -1296, -648, 288,
+        -162, 480, 2160, 1152, 1728, 540, 864, -96,
+        216, -320, -1440, -288, -432, -360, -216, -54,
+        1152, 486, 468, -72, 1152, 1296, 2592, 648,
+        -768, -864, -1728, -432, 128, 144, 288, 72,
+        -2160, -2610, -288, -90, 64, -32, -384, -432,
+        336, 144, 64, 72, 144, 64, 36, 72,
+        1152, 1728, 864, 192, 216, -240, -1080, -384,
+        -576, -270, -288, -64, -72, -1536, -648, -624,
+        -192, -864, -1296, -648, 288, -162, -576, -864,
+        -432, -384, -108, 160, 720, 288, 432, 180,
+        216, 96, 54, 1152, 486, 468, -72, 768,
+        324, 312, 240, 1152, 1296, 2592, 648, -768,
+        -864, -1728, -432, 128, 144, 288, 72, -2160,
+        -2610, -288, -90, 1440, 1740, 192, 60, -1296,
+        864, 1296, 648, 576, 162, 1296, -80, -360,
+        -288, -432, -90, -216, -144, -54, -1152, -486,
+        -468, -360, -324, 2592, 2916, -1152, -1296, -2592,
+        -1728, -648, -1944, 512, 576, 1152, 384, 288,
+        432, -4536, -1944, 256, 288, 576, 384, 144,
+        432, -128, -144, -288, -96, -72, -108, 2160,
+        2610, 1800, 738, -960, -1160, -464, -184, 1620,
+        243, -1296, -1944, -972, -243, 864, 1296, 648,
+        162, -192, -288, -144, -36, 3456, 1458, 1404,
+        216, -192, -288, -144, -36, 48, 72, 36,
+        9, -1152, -486, -468, -72, 256, 108, 104,
+        16, -1647, -459, -108, 216, -1944, -972, 3888,
+        1944, 1944, -2160, -3240, -144, 1296, 648, -1728,
+        -864, -864, -144, -864, -432, -432, 144, 1440,
+        2160, 32, -288, -144, 1152, 576, 576, 96,
+        -864, -432, -432, 144, -576, -288, -288, -192,
+        1440, 2160, -960, -1440, -1296, 864, 432, 432,
+        288, 648, 3888, 1944, -1440, -2160, -1296, -648,
+        640, 960, 288, 144, -2916, -486, -2592, -1296,
+        -1296, 864, 432, 432, -192, -96, -96, 2700,
+        864, 108, 32, -288, -144, 432, 216, 216,
+        48, -8, 72, 36, -288, -144, -144, -48,
+        288, 144, 144, -192, 192, 96, 96, 64,
+        -720, -1080, 144, 72, -48, -24, 48, 432,
+        -96, -48, -48, -32, -216, -864, -432, 480,
+        720, 96, 48, 648, 108, -144, -72, -72,
+        -48, -432, -216, 480, 720, 576, 288, -320,
+        -480, -144, -72, 324, 54, 864, 432, 432,
+        -576, -288, -288, 96, 48, 48, -900, -288,
+        -36, -96, 48, 48, 24, 24, 16, 576,
+        288, -240, -360, -192, -96, -432, -72, -432,
+        -216, -288, -144, 160, 240, 144, 72, 324,
+        54, 216, 36, 864, 432, 432, -576, -288,
+        -288, 96, 48, 48, -900, -288, -36, 600,
+        192, 24, 432, 216, -80, -120, -144, -72,
+        -324, -54, 648, -864, -432, -432, -432, 384,
+        192, 192, 96, -648, 192, 96, 96, 96,
+        -96, -48, -48, -24, 900, 288, 252, -400,
+        -128, -64, 162, -648, -324, 432, 216, -96,
+        -48, 972, 162, -96, -48, 24, 12, -324,
+        -54, 72, 12, -324, -324, 1296, 243, -1080,
+        -405, 216, -576, -108, -288, -54, 720, 270,
+        -48, 384, 72, -288, -54, -192, -36, 720,
+        270, -480, -180, 288, 54, 648, -720, -270,
+        -216, 320, 120, 48, -324, -864, -162, 288,
+        54, -64, -12, 594, -48, 144, 27, 12,
+        -96, -18, 96, 18, 64, 12, -360, -135,
+        24, -8, -32, -6, -144, 240, 90, 16,
+        72, -48, -9, -72, 240, 90, 96, -160,
+        -60, -24, 36, 288, 54, -192, -36, 32,
+        6, -198, 16, 3, 96, -120, -45, -32,
+        -48, -72, -48, 80, 30, 24, 36, 24,
+        288, 54, -192, -36, 32, 6, -198, 132,
+        72, -40, -15, -24, -36, -288, -54, 128,
+        24, 64, 12, -32, -6, 198, -88, -108,
+        72, -16, 108, -16, 4, -36, 8, -27,
+        162, -270, -72, -36, 180, 48, -36, -24,
+        180, -120, 36, -180, 80, -108, 36, -8,
+        54, 18, -12, 12, 8, -90, -4, 60,
+        -6, 60, -40, 36, -24, 4, -18, 2,
+        -30, 20, 36, -24, 4, -18, 12, -10,
+        -36, 16, 8, -4, 18, -8, -27, 18,
+        18, -12, -18, 8, -9, 6, 6, -4,
+        -3, 2, -1
+    ]),
+    fstart: new Int32Array([
+        0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46,
+        48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78, 80, 82, 84, 86, 88, 90, 92, 94,
+        96, 98, 100, 102, 104, 106, 108, 110, 112, 114, 116, 118, 120, 122, 124, 126, 128, 130, 132, 134, 136, 138, 140, 142,
+        144, 146, 148, 150, 152, 154, 156, 158, 160, 162, 164, 166, 168, 170, 172, 174, 176, 178, 180, 182, 184, 186, 188, 190,
+        192, 194, 196, 198, 201, 203, 205, 207, 209, 211, 213, 215, 217, 219, 221, 223, 225, 227, 229, 231, 233, 235, 237, 239,
+        241, 243, 245, 247, 249, 251, 253, 255, 257, 259, 261, 263, 265, 267, 269, 271, 273, 275, 277, 279, 281, 283, 285, 287,
+        289, 291, 293, 295, 297, 299, 301, 303, 305, 307, 309, 311, 313, 315, 317, 319, 321, 323, 325, 327, 329, 331, 333, 335,
+        337, 339, 341, 343, 345, 347, 349, 351, 353, 355, 357, 359, 361, 363, 365, 367, 369, 371, 373, 375, 377, 379, 381, 383,
+        385, 387, 390, 392, 394, 396, 398, 400, 402, 404, 406, 408, 410, 412, 414, 416, 418, 420, 422, 424, 426, 428, 430, 432,
+        434, 436, 438, 440, 442, 444, 446, 448, 450, 452, 454, 456, 458, 460, 462, 464, 466, 468, 470, 472, 474, 476, 478, 480,
+        482, 484, 486, 488, 490, 492, 494, 496, 498, 500, 502, 504, 506, 508, 510, 512, 514, 516, 518, 520, 522, 524, 526, 528,
+        530, 532, 534, 536, 538, 540, 542, 544, 546, 548, 550, 552, 554, 556, 558, 560, 562, 564, 566, 568, 570, 572, 574, 576,
+        578, 580, 582, 584, 586, 588, 590, 592, 594, 596, 598, 600, 602, 604, 606, 608, 610, 612, 614, 616, 618, 620, 622, 624,
+        626, 628, 630, 632, 634, 636, 638, 640, 642, 644, 646, 648, 650, 652, 654, 656, 658, 660, 662, 664, 666, 668, 670, 672,
+        674, 676, 678, 680, 682, 684, 686, 688, 690, 692, 694, 696, 698, 700, 702, 704, 706, 708, 710, 712, 714, 716, 718, 720,
+        722, 724, 726, 728, 730, 732, 734, 736, 738, 741, 743, 745, 747, 749, 751, 753, 755, 757, 759, 761, 763, 765, 767, 769,
+        771, 773, 775, 777, 779, 781, 783, 785, 787, 789, 791, 793, 795, 797, 799, 801, 803, 805, 807, 809, 811, 813, 815, 817,
+        819, 821, 823, 825, 827, 829, 831, 833, 835, 837, 839, 841, 843, 845, 847, 849, 851, 853, 855, 857, 859, 861, 863, 865,
+        867, 869, 871, 873, 875, 877, 879, 881, 883, 885, 887, 889, 891, 893, 895, 897, 899, 901, 903, 905, 907, 909, 911, 913,
+        915, 917, 919, 921, 923, 925, 927, 929, 931, 933, 935, 937, 939, 941, 943, 945, 947, 949, 951, 953, 955, 957, 959, 961,
+        963, 965, 967, 969, 971, 973, 975, 977, 979, 981, 983, 986, 988, 990, 992, 994, 996, 998, 1000, 1002, 1004, 1006, 1008, 1010,
+        1012, 1014, 1016, 1018, 1020, 1022, 1024, 1026, 1028, 1030, 1032, 1034, 1036, 1038, 1040, 1042, 1044, 1046, 1048, 1050, 1052, 1054, 1056, 1058,
+        1060, 1062, 1064, 1066, 1068, 1070, 1072, 1074, 1076, 1078, 1080, 1082, 1084, 1086, 1088, 1090, 1092, 1094, 1096, 1098, 1100, 1102, 1104, 1106,
+        1108, 1110, 1112, 1114, 1116, 1118, 1120, 1122, 1124, 1126, 1128, 1130, 1132, 1134, 1136, 1138, 1140, 1142, 1144, 1146, 1148, 1150, 1152, 1154,
+        1156, 1158, 1160, 1162, 1164, 1166, 1168, 1170, 1172, 1174, 1176, 1178, 1180, 1182, 1184, 1186, 1188, 1190, 1192, 1194, 1196, 1198, 1200, 1202,
+        1204, 1206, 1208, 1210, 1212, 1214, 1216, 1218, 1220, 1222, 1224, 1226, 1228, 1230, 1232, 1234, 1236, 1238, 1240, 1242, 1244, 1246, 1248, 1250,
+        1252, 1254, 1256, 1258, 1260, 1262, 1264, 1266, 1268, 1270, 1272, 1274, 1276, 1278, 1280, 1282, 1284, 1286, 1288, 1290, 1292, 1294, 1296, 1298,
+        1300, 1302, 1304, 1306, 1308, 1310, 1312, 1314, 1316, 1318, 1320, 1322, 1324, 1326, 1328, 1330, 1332, 1334, 1336, 1338, 1340, 1342, 1344, 1346,
+        1348, 1350, 1352, 1354, 1356, 1358, 1360, 1362, 1364, 1366, 1369, 1372, 1374, 1376, 1378, 1380, 1383, 1385, 1387, 1389, 1391, 1393, 1396, 1398,
+        1400, 1402, 1404, 1406, 1408, 1410, 1412, 1414, 1416, 1418, 1420, 1422, 1424, 1426, 1428, 1430, 1432, 1434, 1436, 1438, 1440, 1442, 1444, 1446,
+        1448, 1450, 1452, 1454, 1456, 1458, 1460, 1462, 1464, 1466, 1468, 1470, 1472, 1474, 1476, 1478, 1480, 1482, 1484, 1486, 1488, 1490, 1492, 1494,
+        1496, 1498, 1500, 1502, 1504, 1506, 1509, 1511, 1514, 1516, 1518, 1520, 1522, 1524, 1526, 1528, 1530, 1532, 1534, 1536, 1538, 1540, 1542, 1544,
+        1546, 1548, 1550, 1552, 1554, 1556, 1558, 1560, 1562, 1564, 1566, 1568, 1570, 1572, 1574, 1576, 1578, 1580, 1582, 1584, 1586, 1588, 1590, 1592,
+        1594, 1596, 1598, 1600, 1602, 1604, 1606, 1608, 1610, 1612, 1614, 1616, 1618, 1620, 1622, 1624, 1626, 1628, 1630, 1632, 1634, 1636, 1638, 1640,
+        1642, 1644, 1646, 1648, 1650, 1652, 1654, 1656, 1658, 1660, 1662, 1664, 1666, 1668, 1670, 1672, 1674, 1677, 1679, 1681, 1683, 1685, 1687, 1689,
+        1691, 1693, 1695, 1697, 1699, 1701, 1703, 1705, 1707, 1709, 1711, 1713, 1715, 1717, 1719, 1721, 1723, 1725, 1727, 1729, 1731, 1733, 1735, 1737,
+        1739, 1741, 1743, 1745, 1748, 1750, 1752, 1754, 1756, 1758, 1760, 1762, 1764, 1766, 1768, 1770, 1772, 1774, 1776, 1778, 1780, 1782, 1784, 1786,
+        1788, 1790, 1792, 1794, 1796, 1798, 1800, 1802, 1804, 1806, 1808, 1810, 1812, 1814, 1816, 1818, 1820, 1822, 1824, 1826, 1828, 1830, 1832, 1834,
+        1836, 1838, 1840, 1842, 1844, 1846, 1848, 1851, 1853, 1855, 1857, 1859, 1861, 1863, 1865, 1867, 1869, 1871, 1873, 1875, 1877, 1879, 1881, 1883,
+        1885, 1887, 1889, 1891, 1893, 1895, 1897, 1899, 1901, 1903, 1905, 1907, 1909, 1911, 1913, 1915, 1917, 1919, 1921, 1923, 1925, 1927, 1929, 1931,
+        1933, 1935, 1937, 1939, 1941, 1943, 1945, 1947, 1949, 1951, 1953, 1955, 1957, 1959, 1961, 1963, 1965, 1967, 1969, 1971, 1973, 1975, 1977, 1979,
+        1981, 1983, 1985, 1987, 1989, 1991, 1993, 1995, 1997, 1999, 2001, 2003, 2005, 2007, 2009, 2011, 2013, 2015, 2017, 2019, 2021, 2023, 2025, 2027,
+        2029, 2031, 2033, 2035, 2037, 2039, 2042, 2044, 2046, 2048, 2050, 2052, 2054, 2056, 2058, 2060, 2062, 2064, 2066, 2068, 2070, 2072, 2074, 2076,
+        2078, 2080, 2082, 2084, 2086, 2088, 2090, 2092, 2094, 2096, 2098, 2100, 2102, 2104, 2106, 2108, 2110, 2112, 2114, 2116, 2118, 2120, 2122, 2124,
+        2126, 2128, 2130, 2132, 2134, 2136, 2138, 2140, 2142, 2144, 2146, 2148, 2150, 2152, 2154, 2156, 2158, 2160, 2162, 2164, 2166, 2168, 2170, 2172,
+        2174, 2176, 2178, 2180, 2182, 2184, 2186, 2188, 2190, 2192, 2194, 2196, 2198, 2200, 2202, 2204, 2206, 2208, 2210, 2212, 2214, 2216, 2218, 2220,
+        2222, 2224, 2226, 2228, 2230, 2232, 2234, 2236, 2238, 2240, 2242, 2244, 2246, 2248, 2250, 2252, 2254, 2256, 2258, 2260, 2262, 2264, 2266, 2268,
+        2270, 2272, 2274, 2276, 2278, 2280, 2282, 2284, 2286, 2288, 2290, 2292, 2294, 2296, 2298, 2300, 2302, 2304, 2306, 2308, 2310, 2312, 2314, 2316,
+        2318, 2320, 2322, 2324, 2326, 2328, 2330, 2332, 2334, 2336, 2338, 2340, 2342, 2344, 2346, 2348, 2350, 2352, 2354, 2356, 2358, 2360, 2362, 2364,
+        2366, 2368, 2370, 2372, 2374, 2376, 2378, 2380, 2382, 2384, 2386, 2388, 2390, 2392, 2394, 2396, 2398, 2400, 2402, 2404, 2406, 2408, 2410, 2412,
+        2414, 2416, 2418, 2420, 2422, 2424, 2426, 2428, 2430, 2432, 2434, 2436, 2438, 2440, 2442, 2444, 2446, 2448, 2450, 2452, 2454, 2456, 2458, 2460,
+        2462, 2464, 2466, 2468, 2470, 2472, 2474, 2476, 2478, 2480, 2482, 2484, 2486, 2488, 2490, 2492, 2494, 2496, 2498, 2500, 2502, 2504, 2506, 2508,
+        2510, 2512, 2514, 2516, 2518, 2520, 2522, 2524, 2526, 2528, 2530, 2532, 2534, 2536, 2538, 2540, 2542, 2544, 2546, 2548, 2550, 2552, 2554, 2556,
+        2558, 2560, 2562, 2564, 2566, 2568, 2570, 2572, 2574, 2576, 2578, 2581, 2583, 2585, 2587, 2589, 2591, 2593, 2595, 2597, 2599, 2601, 2603, 2605,
+        2607, 2609, 2611, 2613, 2615, 2617, 2619, 2621, 2623, 2625, 2627, 2629, 2631, 2633, 2635, 2637, 2639, 2641, 2643, 2645, 2647, 2649, 2651, 2653,
+        2655, 2657, 2659, 2661, 2663, 2665, 2667, 2669, 2671, 2673, 2675, 2677, 2679, 2681, 2683, 2685, 2687, 2689, 2691, 2693, 2695, 2697, 2699, 2701,
+        2703, 2705, 2707, 2709, 2711, 2713, 2715, 2717, 2719, 2721, 2723, 2725, 2727, 2729, 2732, 2734, 2736, 2738, 2740, 2742, 2744, 2746, 2748, 2750,
+        2752, 2754, 2756, 2758, 2760, 2762, 2764, 2766, 2768, 2771, 2773, 2775, 2777, 2779, 2781, 2783, 2785, 2787, 2789, 2791, 2793, 2795, 2797, 2799,
+        2801, 2803, 2805, 2807, 2809, 2811, 2813, 2815, 2817, 2819, 2821, 2823, 2825, 2827, 2829, 2831, 2833, 2835, 2837, 2839, 2841, 2843, 2845, 2847,
+        2849, 2851, 2853, 2855, 2857, 2859, 2861, 2863, 2865, 2867, 2869, 2871, 2873, 2875, 2877, 2879, 2881, 2883, 2885, 2887, 2889, 2891, 2893, 2895,
+        2897, 2899, 2901, 2903, 2905, 2907, 2910, 2912, 2914, 2916, 2918, 2920, 2922, 2924, 2926, 2928, 2930, 2932, 2934, 2936, 2938, 2940, 2942, 2944,
+        2947, 2949, 2951, 2953, 2955, 2957, 2959, 2961, 2963, 2965, 2967, 2969, 2971, 2974, 2977, 2979, 2981, 2984, 2986, 2988, 2990, 2992, 2994, 2996,
+        2998, 3000, 3002, 3004, 3006, 3008, 3010, 3012, 3014, 3016, 3018, 3020, 3022, 3024, 3026, 3028, 3030, 3032, 3034, 3036, 3038, 3040, 3042, 3044,
+        3046, 3048, 3050, 3052, 3054, 3056, 3058, 3060, 3062, 3064, 3066, 3068, 3070, 3072, 3074, 3076, 3079, 3081, 3083, 3085, 3087, 3089, 3091, 3093,
+        3095, 3097, 3099, 3101, 3103, 3105, 3107, 3109, 3111, 3113, 3115, 3117, 3120, 3122, 3124, 3126, 3128, 3130, 3132, 3134, 3136, 3138, 3140, 3142,
+        3144, 3146, 3148, 3150, 3152, 3154, 3156, 3158, 3160, 3162, 3164, 3166, 3167, 3169, 3171, 3173, 3175, 3177, 3179, 3181, 3183, 3185, 3187, 3189,
+        3191, 3193, 3195, 3197, 3199, 3201, 3203, 3205, 3207, 3209, 3211, 3213, 3215, 3217, 3219, 3221, 3223, 3225, 3227, 3229, 3231, 3233, 3235, 3237,
+        3239, 3241, 3243, 3245, 3247, 3249, 3251, 3253, 3255, 3257, 3259, 3261, 3263, 3265, 3267, 3269, 3271, 3273, 3275, 3277, 3279, 3281, 3283, 3285,
+        3287, 3289, 3291, 3293, 3295, 3297, 3299, 3301, 3303, 3305, 3307, 3309, 3311, 3313, 3315, 3317, 3319, 3321, 3323, 3325, 3327, 3329, 3331, 3333,
+        3335, 3337, 3339, 3341, 3343, 3345, 3347, 3349, 3351, 3353, 3355, 3357, 3359, 3361, 3363, 3365, 3367, 3369, 3371, 3373, 3375, 3377, 3379, 3381,
+        3383, 3385, 3387, 3389, 3391, 3393, 3395, 3397, 3399, 3401, 3403, 3405, 3407, 3409, 3411, 3413, 3415, 3417, 3419, 3421, 3423, 3425, 3427, 3429,
+        3431, 3433, 3435, 3437, 3439, 3441, 3443, 3445, 3447, 3449, 3451, 3453, 3455, 3457, 3459, 3461, 3463, 3465, 3467, 3469, 3471, 3473, 3475, 3477,
+        3479, 3481, 3483, 3485, 3487, 3489, 3491, 3493, 3495, 3497, 3499, 3501, 3503, 3505, 3507, 3509, 3511, 3513, 3515, 3517, 3519, 3521, 3523, 3525,
+        3527, 3529, 3531, 3533, 3535, 3537, 3539, 3541, 3543, 3545, 3547, 3549, 3551, 3553, 3555, 3557, 3559, 3561, 3563, 3564, 3566, 3568, 3570, 3572,
+        3574, 3576, 3578, 3580, 3582, 3584, 3586, 3588, 3590, 3592, 3594, 3596, 3598, 3600, 3602, 3604, 3606, 3608, 3610, 3612, 3614, 3616, 3618, 3620,
+        3622, 3624, 3626, 3628, 3630, 3632, 3634, 3636, 3638, 3640, 3642, 3644, 3646, 3648, 3650, 3652, 3654, 3656, 3658, 3660, 3662, 3664, 3666, 3668,
+        3670, 3672, 3674, 3676, 3678, 3680, 3682, 3684, 3686, 3688, 3690, 3692, 3694, 3696, 3698, 3700, 3702, 3704, 3706, 3708, 3710, 3712, 3714, 3716,
+        3718, 3720, 3722, 3724, 3726, 3728, 3730, 3732, 3734, 3736, 3738, 3740, 3742, 3744, 3746, 3748, 3750, 3752, 3754, 3756, 3758, 3760, 3762, 3764,
+        3766, 3768, 3770, 3772, 3774, 3776, 3779, 3781, 3783, 3785, 3787, 3789, 3791, 3793, 3795, 3797, 3799, 3801, 3804, 3806, 3808, 3810, 3812, 3814,
+        3816, 3818, 3820, 3823, 3825, 3827, 3829, 3831, 3833, 3835, 3837, 3839, 3841, 3843, 3845, 3847, 3849, 3851, 3853, 3855, 3857, 3859, 3861, 3863,
+        3865, 3867, 3869, 3871, 3873, 3875, 3877, 3879, 3881, 3883, 3885, 3887, 3889, 3891, 3893, 3895, 3897, 3899, 3901, 3903, 3905, 3907, 3909, 3911,
+        3913, 3915, 3917, 3919, 3921, 3923, 3925, 3927, 3929, 3931, 3933, 3935, 3937, 3939, 3941, 3943, 3945, 3947, 3949, 3951, 3953, 3955, 3958, 3960,
+        3962, 3964, 3966, 3968, 3970, 3972, 3974, 3976, 3978, 3980, 3982, 3984, 3986, 3988, 3990, 3992, 3994, 3996, 3998, 4000, 4002, 4004, 4006, 4008,
+        4010, 4012, 4015, 4017, 4019, 4021, 4023, 4025, 4027, 4029, 4031, 4033, 4035, 4037, 4039, 4041, 4043, 4045, 4047, 4049, 4051, 4053, 4055, 4057,
+        4059, 4061, 4063, 4065, 4067, 4069, 4071, 4073, 4075, 4077, 4079, 4081, 4083, 4085, 4087, 4089, 4091, 4093, 4095, 4097, 4099, 4101, 4103, 4105,
+        4107, 4109, 4111, 4113, 4115, 4117, 4120, 4122, 4124, 4126, 4128, 4130, 4132, 4134, 4136, 4138, 4140, 4142, 4144, 4146, 4148, 4150, 4152, 4154,
+        4156, 4158, 4160, 4162, 4164, 4166, 4168, 4170, 4172, 4174, 4176, 4178, 4180, 4182, 4184, 4186, 4188, 4190, 4192, 4194, 4196, 4198, 4200, 4202,
+        4204, 4206, 4209, 4211, 4213, 4215, 4217, 4219, 4221, 4223, 4225, 4227, 4229, 4231, 4233, 4235, 4237, 4239, 4241, 4243, 4245, 4247, 4249, 4251,
+        4253, 4255, 4257, 4259, 4262, 4264, 4266, 4268, 4270, 4272, 4274, 4276, 4278, 4280, 4282, 4284, 4286, 4288, 4290, 4292, 4294, 4296, 4298, 4300,
+        4302, 4304, 4306, 4308, 4310, 4312, 4314, 4316, 4318, 4320, 4322, 4324, 4326, 4328, 4330, 4332, 4334, 4336, 4338, 4340, 4342, 4344, 4346, 4348,
+        4350, 4352, 4354, 4356, 4358, 4360, 4363, 4365, 4367, 4369, 4371, 4373, 4375, 4377, 4379, 4381, 4383, 4385, 4387, 4389, 4391, 4393, 4395, 4397,
+        4399, 4401, 4403, 4405, 4407, 4409, 4411, 4413, 4415, 4417, 4419, 4421, 4423, 4425, 4427, 4429, 4431, 4433, 4435, 4437, 4439, 4441, 4443, 4445,
+        4447, 4449, 4451, 4453, 4455, 4457, 4459, 4461, 4463, 4465, 4467, 4469, 4471, 4473, 4475, 4477, 4479, 4481, 4483, 4485, 4487, 4489, 4491, 4493,
+        4495, 4498, 4500, 4502, 4504, 4506, 4508, 4510, 4512, 4514, 4516, 4518, 4520, 4522, 4524, 4526, 4528, 4530, 4532, 4535, 4537, 4539, 4541, 4543,
+        4545, 4547, 4549, 4551, 4553, 4555, 4557, 4559, 4561, 4563, 4565, 4567, 4569, 4571, 4573, 4575, 4577, 4579, 4581, 4583, 4586, 4588, 4590, 4592,
+        4594, 4596, 4598, 4600, 4602, 4604, 4606, 4608, 4610, 4612, 4615, 4617, 4619, 4621, 4623, 4625, 4627, 4629, 4631, 4633, 4635, 4637, 4639, 4641,
+        4643, 4645, 4647, 4649, 4651, 4653, 4655, 4657, 4659, 4661, 4663, 4665, 4667, 4669, 4671, 4673, 4675, 4677, 4679, 4681, 4683, 4685, 4687, 4689,
+        4691, 4693, 4695, 4697, 4699, 4701, 4703, 4705, 4707, 4709, 4711, 4713, 4715, 4717, 4719, 4721, 4723, 4725, 4727, 4729, 4731, 4733, 4735, 4737,
+        4739, 4741, 4743, 4745, 4747, 4749, 4751, 4753, 4755, 4757, 4759, 4761, 4763, 4765, 4767, 4769, 4771, 4773, 4775, 4777, 4779, 4781, 4783, 4785,
+        4787, 4789, 4791, 4793, 4795, 4797, 4799, 4801, 4803, 4805, 4807, 4809, 4811, 4813, 4815, 4818, 4820, 4822, 4824, 4826, 4828, 4830, 4832, 4834,
+        4836, 4838, 4840, 4842, 4844, 4846, 4848, 4850, 4852, 4854, 4856, 4858, 4860, 4862, 4864, 4866, 4868, 4870, 4872, 4874, 4876, 4878, 4880, 4882,
+        4884, 4886, 4888, 4890, 4892, 4894, 4896, 4898, 4900, 4902, 4904, 4906, 4908, 4910, 4912, 4914, 4916, 4918, 4920, 4922, 4924, 4926, 4928, 4930,
+        4932, 4934, 4936, 4938, 4940, 4942, 4944, 4946, 4948, 4950, 4952, 4954, 4956, 4958, 4960, 4962, 4964, 4966, 4968, 4970, 4972, 4974, 4976, 4978,
+        4980, 4982, 4984, 4986, 4988, 4990, 4992, 4994, 4996, 4998, 5000, 5002, 5004, 5006, 5008, 5010, 5012, 5014, 5016, 5018, 5020, 5022, 5024, 5026,
+        5028, 5030, 5032, 5034, 5036, 5038, 5040, 5042, 5044, 5046, 5048, 5050, 5052, 5054, 5056, 5058, 5060, 5062, 5064, 5066, 5068, 5070, 5072, 5074,
+        5076, 5078, 5080, 5082, 5084, 5087, 5089, 5091, 5093, 5095, 5097, 5099, 5101, 5103, 5105, 5107, 5109, 5111, 5113, 5115, 5117, 5119, 5121, 5123,
+        5125, 5127, 5129, 5131, 5133, 5135, 5137, 5139, 5141, 5143, 5145, 5147, 5149, 5151, 5153, 5155, 5157, 5159, 5161, 5163, 5165, 5167, 5169, 5171,
+        5173, 5175, 5177, 5179, 5181, 5183, 5185, 5187, 5189, 5191, 5193, 5195, 5197, 5199, 5201, 5203, 5205, 5207, 5209, 5211, 5213, 5215, 5217, 5219,
+        5221, 5223, 5225, 5227, 5229, 5231, 5233, 5235, 5237, 5239, 5241, 5243, 5245, 5247, 5249, 5251, 5253, 5255, 5257, 5260, 5262, 5264, 5265, 5267,
+        5269, 5272, 5274, 5276, 5278, 5280, 5282, 5284, 5286, 5288, 5290, 5292, 5294, 5296, 5298, 5300, 5302, 5304, 5306, 5308, 5310, 5312, 5314, 5316,
+        5318, 5320, 5322, 5324, 5326, 5328, 5330, 5332, 5334, 5336, 5338, 5340, 5342, 5344, 5346, 5348, 5350, 5352, 5354, 5356, 5358, 5360, 5362, 5364,
+        5366, 5368, 5370, 5372, 5374, 5376, 5378, 5380, 5382, 5384, 5386, 5388, 5390, 5392, 5394, 5396, 5398, 5400, 5402, 5404, 5406, 5408, 5410, 5412,
+        5414, 5416, 5418, 5420, 5422, 5424, 5426, 5428, 5430, 5432, 5434, 5436, 5438, 5440, 5442, 5444, 5446, 5448, 5450, 5452, 5454, 5456, 5458, 5460,
+        5462, 5464, 5466, 5468, 5470, 5472, 5474, 5476, 5478, 5480, 5482, 5484, 5486, 5488, 5490, 5492, 5494, 5496, 5498, 5500, 5502, 5504, 5506, 5508,
+        5510, 5512, 5514, 5516, 5518, 5520, 5522, 5524, 5526, 5528, 5530, 5532, 5534, 5536, 5538, 5540, 5542, 5544, 5546, 5548, 5550, 5552, 5554, 5556,
+        5558, 5560, 5562, 5564, 5566, 5568, 5570, 5572, 5574, 5576, 5578, 5580, 5582, 5584, 5586, 5588, 5590, 5592, 5594, 5596, 5598, 5600, 5602, 5604,
+        5606, 5608, 5610, 5612, 5614, 5616, 5618, 5620, 5622, 5624, 5626, 5628, 5630, 5632, 5634, 5636, 5638, 5640, 5642, 5644, 5646, 5648, 5650, 5652,
+        5654, 5657, 5659, 5661, 5663, 5665, 5667, 5669, 5671, 5673, 5675, 5677, 5679, 5681, 5683, 5685, 5687, 5689, 5691, 5693, 5695, 5697, 5699, 5701,
+        5703, 5705, 5707, 5709, 5711, 5713, 5715, 5717, 5719, 5721, 5723, 5725, 5727, 5729, 5731, 5733, 5736, 5738, 5740, 5742, 5744, 5746, 5748, 5750,
+        5752, 5754, 5756, 5758, 5760, 5762, 5764, 5766, 5768, 5770, 5772, 5774, 5776, 5778, 5780, 5782, 5784, 5786, 5788, 5790, 5792, 5794, 5796, 5798,
+        5800, 5802, 5804, 5806, 5808, 5810, 5812, 5814, 5816, 5818, 5820, 5822, 5824, 5826, 5828, 5830, 5832, 5834, 5836, 5838, 5840, 5842, 5844, 5846,
+        5848, 5850, 5852, 5854, 5856, 5858, 5860, 5862, 5864, 5866, 5868, 5870, 5872, 5874, 5876, 5878, 5880, 5882, 5884, 5886, 5888, 5890, 5892, 5894,
+        5896, 5898, 5900, 5902, 5904, 5906, 5908, 5910, 5912, 5914, 5916, 5918, 5920, 5922, 5924, 5926, 5928, 5930, 5932, 5934, 5936, 5938, 5940, 5942,
+        5944, 5946, 5948, 5950, 5952, 5954, 5956, 5958, 5960, 5962, 5964, 5966, 5968, 5970, 5972, 5974, 5976, 5978, 5980, 5982, 5984, 5986, 5988, 5991,
+        5993, 5995, 5998, 6000, 6002, 6004, 6006, 6008, 6010, 6013, 6015, 6017, 6019, 6021, 6023, 6025, 6027, 6029, 6031, 6033, 6035, 6037, 6039, 6041,
+        6043, 6045, 6047, 6049, 6051, 6053, 6055, 6057, 6059, 6061, 6063, 6065, 6067, 6069, 6071, 6073, 6075, 6077, 6079, 6081, 6083, 6085, 6087, 6089,
+        6091, 6093, 6095, 6097, 6099, 6101, 6103, 6105, 6107, 6109, 6111, 6113, 6115, 6117, 6119, 6121, 6123, 6125, 6127, 6129, 6131, 6133, 6135, 6137,
+        6139, 6141, 6143, 6145, 6147, 6149, 6151, 6153, 6155, 6157, 6159, 6161, 6163, 6165, 6167, 6169, 6171, 6173, 6175, 6177, 6179, 6181, 6183, 6185,
+        6187, 6189, 6191, 6193, 6195, 6197, 6199, 6201, 6203, 6205, 6207, 6209, 6211, 6213, 6215, 6217, 6219, 6221, 6223, 6225, 6227, 6229, 6231, 6233,
+        6235, 6237, 6239, 6241, 6243, 6245, 6246, 6248, 6250, 6252, 6254, 6256, 6258, 6260, 6262, 6264, 6266, 6268, 6270, 6272, 6274, 6276, 6278, 6280,
+        6282, 6284, 6286, 6288, 6290, 6292, 6294, 6296, 6298, 6300, 6302, 6304, 6306, 6308, 6310, 6312, 6314, 6316, 6318, 6320, 6322, 6324, 6326, 6328,
+        6330, 6332, 6334, 6336, 6338, 6340, 6342, 6344, 6346, 6348, 6350, 6352, 6354, 6356, 6358, 6360, 6362, 6364, 6366, 6368, 6370, 6372, 6374, 6376,
+        6378, 6380, 6382, 6384, 6386, 6388, 6390, 6392, 6394, 6396, 6398, 6400, 6402, 6404, 6406, 6408, 6410, 6412, 6414, 6416, 6418, 6420, 6422, 6424,
+        6426, 6428, 6430, 6432, 6434, 6436, 6438, 6440, 6442, 6444, 6446, 6448, 6450, 6452, 6454, 6456, 6458, 6460, 6462, 6464, 6466, 6468, 6470, 6472,
+        6474, 6476, 6478, 6480, 6482, 6484, 6486, 6488, 6490, 6492, 6494, 6496, 6498, 6500, 6502, 6504, 6506, 6508, 6510, 6512, 6514, 6516, 6518, 6519,
+        6521, 6523, 6525, 6527, 6529, 6531, 6533, 6535, 6537, 6539, 6541, 6543, 6545, 6547, 6549, 6551, 6553, 6555, 6557, 6559, 6561, 6563, 6565, 6567,
+        6569, 6571, 6573, 6575, 6577, 6579, 6581, 6583, 6585, 6587, 6589, 6591, 6593, 6595, 6597, 6599, 6601, 6603, 6605, 6607, 6609, 6611, 6613, 6615,
+        6617, 6619, 6621, 6623, 6625, 6627, 6629, 6631, 6633, 6635, 6637, 6639, 6641, 6643, 6645, 6647, 6649, 6651, 6653, 6655, 6657, 6659, 6661, 6663,
+        6665, 6667, 6669, 6671, 6673, 6675, 6677, 6679, 6681, 6683, 6685, 6687, 6689, 6691, 6693, 6695, 6697, 6699, 6701, 6703, 6705, 6707, 6709, 6711,
+        6713, 6715, 6717, 6719, 6721, 6723, 6725, 6727, 6729, 6731, 6733, 6735, 6737, 6739, 6741, 6743, 6745, 6747, 6749, 6751, 6753, 6755, 6757, 6759,
+        6761, 6763, 6765, 6767, 6769, 6771, 6773, 6775, 6777, 6779, 6781, 6783, 6785, 6787, 6789, 6791, 6793, 6795, 6797, 6799, 6801, 6803, 6805, 6807,
+        6809, 6811, 6813, 6815, 6817, 6819, 6821, 6823, 6825, 6827, 6829, 6831, 6833, 6835, 6837, 6839, 6841, 6843, 6845, 6847, 6849, 6851, 6853, 6855,
+        6857, 6859, 6861, 6863, 6865, 6867, 6869, 6871, 6873, 6875, 6877, 6879, 6881, 6883, 6885, 6887, 6889, 6891, 6893, 6895, 6897, 6899, 6901, 6903,
+        6905, 6907, 6909, 6911, 6913, 6915, 6917, 6919, 6921, 6923, 6925, 6927, 6929, 6931, 6933, 6935, 6937, 6939, 6941, 6943, 6945, 6947, 6949, 6951,
+        6953, 6955, 6957, 6959, 6961, 6963, 6965, 6967, 6969, 6971, 6973, 6975, 6977, 6979, 6981, 6983, 6985, 6987, 6989, 6991, 6993, 6995, 6997, 6999,
+        7001, 7003, 7005, 7007, 7009, 7011, 7013, 7015, 7017, 7019, 7021, 7023, 7025, 7027, 7029, 7031, 7033, 7035, 7037, 7039, 7041, 7043, 7045, 7047,
+        7049, 7051, 7053, 7055, 7057, 7059, 7061, 7063, 7065, 7067, 7069, 7071, 7073, 7075, 7077, 7079, 7081, 7083, 7085, 7087, 7089, 7091, 7093, 7095,
+        7097, 7099, 7101, 7103, 7105, 7107, 7109, 7111, 7113, 7115, 7117, 7119, 7121, 7123, 7125, 7127, 7129, 7132, 7134, 7136, 7138, 7140, 7142, 7144,
+        7146, 7148, 7150, 7152, 7154, 7156, 7158, 7160, 7162, 7164, 7166, 7168, 7170, 7172, 7174, 7176, 7178, 7180, 7182, 7184, 7186, 7188, 7190, 7192,
+        7194, 7196, 7198, 7200, 7202, 7204, 7206, 7208, 7210, 7212, 7214, 7216, 7218, 7220, 7222, 7224, 7226, 7228, 7230, 7232, 7234, 7236, 7238, 7240,
+        7242, 7244, 7246, 7248, 7250, 7252, 7254, 7256, 7258, 7260, 7262, 7264, 7266, 7268, 7270, 7272, 7274, 7276, 7278, 7280, 7282, 7284, 7286, 7288,
+        7290, 7292, 7294, 7296, 7298, 7300, 7302, 7304, 7306, 7308, 7310, 7312, 7314, 7316, 7318, 7320, 7322, 7324, 7326, 7328, 7330, 7332, 7335, 7338,
+        7340, 7342, 7344, 7346, 7348, 7350, 7352, 7354, 7356, 7358, 7360, 7362, 7364, 7366, 7368, 7370, 7372, 7374, 7376, 7378, 7380, 7382, 7384, 7386,
+        7388, 7390, 7392, 7394, 7396, 7398, 7400, 7402, 7404, 7406, 7408, 7410, 7412, 7414, 7416, 7418, 7420, 7422, 7424, 7426, 7428, 7430, 7432, 7434,
+        7436, 7438, 7440, 7442, 7444, 7446, 7449, 7451, 7453, 7455, 7457, 7459, 7461, 7463, 7465, 7467, 7469, 7471, 7473, 7475, 7477, 7479, 7481, 7483,
+        7485, 7487, 7489, 7491, 7493, 7495, 7497, 7499, 7501, 7503, 7505, 7507, 7509, 7511, 7513, 7515, 7517, 7519, 7521, 7523, 7525, 7527, 7529, 7531,
+        7533, 7535, 7537, 7539, 7541, 7544, 7546, 7548, 7550, 7552, 7554, 7556, 7558, 7560, 7562, 7564, 7566, 7568, 7570, 7572, 7574, 7576, 7578, 7580,
+        7582, 7584, 7586, 7588, 7590, 7592, 7594, 7596, 7598, 7600, 7602, 7604, 7606, 7608, 7609, 7611, 7613, 7615, 7617, 7619, 7621, 7623, 7625, 7627,
+        7629, 7631, 7633, 7635, 7637, 7639, 7641, 7643, 7645, 7647, 7649, 7651, 7653, 7655, 7657, 7659, 7661, 7663, 7665, 7667, 7669, 7671, 7674, 7676,
+        7678, 7680, 7682, 7684, 7686, 7688, 7690, 7692, 7694, 7696, 7699, 7701, 7703, 7705, 7707, 7709, 7711, 7713, 7715, 7717, 7719, 7721, 7723, 7725,
+        7727, 7729, 7731, 7733, 7735, 7737, 7739, 7741, 7743, 7745, 7747, 7749, 7751, 7753, 7755, 7757, 7759, 7761, 7763, 7765, 7767, 7769, 7771, 7773,
+        7775, 7777, 7779, 7781, 7783, 7785, 7787, 7789, 7791, 7793, 7795, 7797, 7799, 7801, 7803, 7805, 7807, 7809, 7811, 7813, 7815, 7817, 7819, 7821,
+        7823, 7825, 7827, 7829, 7831, 7833, 7835, 7837, 7839, 7841, 7843, 7845, 7847, 7849, 7851, 7853, 7855, 7857, 7859, 7861, 7863, 7865, 7867, 7869,
+        7871, 7873, 7875, 7877, 7879, 7881, 7883, 7885, 7887, 7889, 7891, 7893, 7896, 7898, 7900, 7902, 7904, 7906, 7908, 7910, 7912, 7914, 7916, 7918,
+        7920, 7922, 7924, 7926, 7929, 7931, 7933, 7935, 7937, 7939, 7941, 7943, 7945, 7947, 7949, 7951, 7953, 7955, 7957, 7959, 7961, 7963, 7965, 7967,
+        7969, 7971, 7973, 7975, 7977, 7979, 7981, 7982, 7984, 7986, 7988, 7990, 7992, 7994, 7996, 7998, 8000, 8002, 8004, 8006, 8008, 8010, 8012, 8014,
+        8016, 8018, 8019, 8021, 8023, 8025, 8027, 8029, 8031, 8033, 8035, 8037, 8039, 8041, 8043, 8045, 8047, 8049, 8051, 8053, 8055, 8057, 8059, 8061,
+        8063, 8065, 8067, 8069, 8071, 8073, 8075, 8077, 8079, 8081, 8083, 8085, 8087, 8089, 8091, 8093, 8095, 8097, 8100, 8102, 8104, 8106, 8108, 8110,
+        8112, 8114, 8116, 8118, 8120, 8122, 8124, 8126, 8128, 8130, 8132, 8134, 8136, 8138, 8140, 8142, 8144, 8146, 8148, 8150, 8152, 8154, 8156, 8158,
+        8160, 8162, 8164, 8166, 8168, 8170, 8172, 8174, 8176, 8178, 8180, 8182, 8184, 8186, 8188, 8190, 8192, 8194, 8197, 8199, 8201, 8203, 8205, 8207,
+        8209, 8211, 8213, 8215, 8217, 8219, 8221, 8223, 8225, 8227, 8229, 8231, 8233, 8235, 8237, 8239, 8241, 8243, 8245, 8247, 8249, 8251, 8253, 8255,
+        8257, 8259, 8261, 8263, 8265, 8267, 8269, 8271, 8273, 8275, 8277, 8279, 8281, 8283, 8285, 8287, 8289, 8291, 8293, 8295, 8297, 8299, 8301, 8303,
+        8305, 8307, 8309, 8311, 8313, 8315, 8317, 8319, 8321, 8323, 8325, 8327, 8329, 8331, 8333, 8335, 8337, 8339, 8341, 8343, 8345, 8347, 8349, 8351,
+        8353, 8355, 8357, 8359, 8361, 8363, 8365, 8367, 8369, 8371, 8373, 8375, 8377, 8379, 8381, 8383, 8385, 8387, 8389, 8391, 8393, 8395, 8397, 8399,
+        8401, 8403, 8405, 8407, 8409, 8412, 8414, 8416, 8418, 8420, 8422, 8424, 8426, 8428, 8430, 8432, 8434, 8436, 8438, 8440, 8442, 8444, 8446, 8448,
+        8450, 8452, 8454, 8456, 8458, 8460, 8462, 8464, 8466, 8468, 8470, 8472, 8474, 8476, 8478, 8480, 8482, 8484, 8486, 8488, 8490, 8492, 8494, 8496,
+        8498, 8500, 8502, 8504, 8506, 8508, 8510, 8512, 8514, 8516, 8518, 8520, 8522, 8524, 8526, 8528, 8530, 8532, 8534, 8536, 8538, 8540, 8542, 8544,
+        8546, 8548, 8550, 8552, 8554, 8556, 8558, 8560, 8562, 8564, 8567, 8569, 8571, 8573, 8575, 8577, 8579, 8581, 8583, 8585, 8587, 8589, 8591, 8593,
+        8595, 8597, 8599, 8601, 8603, 8605, 8607, 8609, 8611, 8613, 8615, 8617, 8619, 8621, 8623, 8625, 8627, 8629, 8631, 8633, 8635, 8637, 8639, 8641,
+        8643, 8645, 8647, 8649, 8651, 8653, 8655, 8657, 8659, 8661, 8663, 8665, 8667, 8669, 8671, 8673, 8675, 8677, 8679, 8681, 8683, 8685, 8687, 8689,
+        8691, 8694, 8696, 8698, 8700, 8702, 8704, 8706, 8708, 8710, 8712, 8714, 8716, 8718, 8720, 8722, 8724, 8726, 8728, 8730, 8732, 8734, 8736, 8738,
+        8740, 8742, 8744, 8746, 8748, 8750, 8752, 8754, 8756, 8758, 8760, 8762, 8764, 8766, 8768, 8770, 8772, 8774, 8776, 8778, 8780, 8782, 8784, 8786,
+        8788, 8790, 8792, 8794, 8796, 8798, 8800, 8802, 8804, 8806, 8808, 8810, 8812, 8814, 8816, 8818, 8820, 8822, 8824, 8826, 8828, 8830, 8832, 8834,
+        8836, 8839, 8841, 8843, 8845, 8847, 8849, 8851, 8853, 8855, 8857, 8859, 8861, 8863, 8865, 8867, 8869, 8871, 8873, 8875, 8877, 8879, 8881, 8883,
+        8885, 8887, 8889, 8891, 8893, 8895, 8897, 8899, 8901, 8902, 8904, 8906, 8908, 8910, 8912, 8914, 8916, 8918, 8920, 8922, 8924, 8926, 8928, 8930,
+        8932, 8934, 8936, 8938, 8940, 8942, 8944, 8946, 8948, 8950, 8952, 8954, 8956, 8958, 8960, 8962, 8964, 8966, 8968, 8970, 8972, 8974, 8976, 8978,
+        8980, 8982, 8984, 8986, 8988, 8990, 8992, 8994, 8996, 8998, 9000, 9002, 9004, 9006, 9008, 9010, 9012, 9015, 9017, 9019, 9021, 9023, 9025, 9027,
+        9029, 9031, 9033, 9035, 9037, 9039, 9041, 9043, 9045, 9047, 9049, 9051, 9053, 9055, 9057, 9059, 9061, 9063, 9065, 9067, 9069, 9071, 9073, 9074,
+        9076, 9078, 9080, 9082, 9084, 9086, 9088, 9090, 9092, 9094, 9096, 9098, 9100, 9102, 9104, 9106, 9108, 9110, 9112, 9114, 9116, 9118, 9120, 9122,
+        9124, 9126, 9128, 9130, 9132, 9134, 9136, 9138, 9140, 9142, 9144, 9146, 9148, 9150, 9152, 9154, 9156, 9158, 9160, 9162, 9164, 9166, 9168, 9170,
+        9172, 9174, 9176, 9178, 9180, 9182, 9184, 9186, 9188, 9190, 9192, 9194, 9196, 9198, 9200, 9202, 9204, 9206, 9208, 9210, 9212, 9214, 9216, 9218,
+        9220, 9222, 9224, 9226, 9228, 9230, 9232, 9234, 9236, 9238, 9240, 9242, 9244, 9246, 9248, 9251, 9253, 9255, 9257, 9259, 9261, 9263, 9265, 9267,
+        9269, 9271, 9273, 9275, 9277, 9279, 9281, 9283, 9285, 9287, 9289, 9291, 9293, 9295, 9297, 9299, 9301, 9303, 9305, 9307, 9309, 9311, 9313, 9315,
+        9317, 9319, 9321, 9323, 9325, 9327, 9329, 9331, 9333, 9335, 9337, 9339, 9341, 9343, 9345, 9347, 9349, 9351, 9353, 9355, 9357, 9359, 9361, 9363,
+        9365, 9367, 9369, 9371, 9373, 9375, 9377, 9379, 9381, 9383, 9385, 9387, 9389, 9391, 9393, 9395, 9397, 9399, 9401, 9403, 9405, 9407, 9408, 9410,
+        9412, 9414, 9416, 9417, 9419, 9421, 9423, 9425, 9427, 9429, 9431, 9433, 9435, 9437, 9439, 9441, 9443, 9445, 9447, 9449, 9451, 9453, 9455, 9457,
+        9460, 9462, 9464, 9466, 9468, 9470, 9472, 9474, 9476, 9478, 9480, 9482, 9484, 9486, 9488, 9490, 9492, 9494, 9496, 9498, 9500, 9502, 9504, 9506,
+        9508, 9510, 9512, 9514, 9516, 9518, 9520, 9522, 9524, 9526, 9528, 9530, 9532, 9534, 9536, 9538, 9540, 9542, 9544, 9546, 9548, 9550, 9552, 9554,
+        9556, 9558, 9560, 9562, 9564, 9566, 9568, 9570, 9572, 9574, 9576, 9578, 9580, 9582, 9584, 9586, 9588, 9590, 9592, 9593, 9595, 9597, 9599, 9601,
+        9603, 9605, 9607, 9609, 9611, 9613, 9615, 9617, 9619, 9621, 9623, 9625, 9627, 9629, 9631, 9633, 9635, 9637, 9639, 9641, 9643, 9645, 9647, 9649,
+        9651, 9653, 9655, 9657, 9659, 9661, 9663, 9665, 9667, 9669, 9671, 9673, 9675, 9677, 9679, 9681, 9683, 9685, 9687, 9689, 9691, 9693, 9695, 9698,
+        9700, 9702, 9704, 9706, 9708, 9710, 9712, 9714, 9716, 9718, 9720, 9722, 9724, 9726, 9728, 9730, 9732, 9734, 9736, 9738, 9740, 9742, 9744, 9746,
+        9748, 9750, 9752, 9754, 9756, 9758, 9760, 9762, 9764, 9766, 9768, 9770, 9772, 9774, 9776, 9778, 9780, 9782, 9784, 9786, 9788, 9790, 9792, 9794,
+        9796, 9798, 9800, 9802, 9804, 9806, 9808, 9810, 9812, 9814, 9816, 9818, 9820, 9822, 9824, 9826, 9828, 9830, 9832, 9834, 9836, 9838, 9840, 9842,
+        9844, 9846, 9848, 9850, 9852, 9854, 9856, 9858, 9860, 9862, 9864, 9866, 9868, 9870, 9872, 9874, 9876, 9878, 9880, 9882, 9884, 9886, 9888, 9890,
+        9892, 9894, 9896, 9898, 9900, 9902, 9904, 9906, 9908, 9910, 9912, 9914, 9916, 9918, 9920, 9922, 9924, 9926, 9928, 9930, 9932, 9934, 9936, 9938,
+        9940, 9942, 9944, 9946, 9948, 9950, 9952, 9954, 9956, 9958, 9960, 9962, 9964, 9966, 9968, 9970, 9972, 9974, 9976, 9978, 9980, 9982, 9984, 9986,
+        9988, 9990, 9992, 9994, 9996, 9998, 9999, 10001, 10003, 10005, 10007, 10009, 10011, 10013, 10015, 10017, 10019, 10021, 10023, 10025, 10027, 10029, 10031, 10033,
+        10035, 10037, 10039, 10041, 10043, 10045, 10047, 10049, 10051, 10053, 10055, 10056, 10058, 10060, 10062, 10064, 10066, 10068, 10070, 10072, 10074, 10076, 10078, 10080,
+        10082, 10084, 10086, 10088, 10090, 10092, 10094, 10096, 10098, 10100, 10102, 10104, 10106, 10108, 10110, 10112, 10114, 10116, 10118, 10120, 10122, 10124, 10125, 10127,
+        10129, 10131, 10133, 10135, 10137, 10139, 10141, 10143, 10145, 10147, 10149, 10151, 10153, 10155, 10157, 10159, 10161, 10163, 10165, 10167, 10169, 10171, 10173, 10175,
+        10177, 10179, 10181, 10183, 10185, 10187, 10189, 10191, 10193, 10195, 10197, 10199, 10201, 10203, 10205, 10207, 10209, 10211, 10213, 10215, 10217, 10219, 10221, 10223,
+        10225, 10227, 10229, 10231, 10233, 10235, 10237, 10239, 10241, 10243, 10245, 10247, 10249, 10251, 10253, 10255, 10257, 10259, 10261, 10263, 10265, 10267, 10269, 10271,
+        10272, 10274, 10276, 10278, 10280, 10282, 10284, 10286, 10288, 10290, 10292, 10294, 10296, 10298, 10300, 10302, 10304, 10306, 10308, 10310, 10312, 10314, 10316, 10318,
+        10320, 10322, 10324, 10326, 10328, 10330, 10332, 10334, 10336, 10338, 10340, 10342, 10344, 10346, 10348, 10350, 10352, 10354, 10356, 10358, 10359, 10361, 10363, 10365,
+        10367, 10369, 10371, 10373, 10375, 10377, 10379, 10381, 10383, 10385, 10387, 10389, 10391, 10393, 10395, 10397, 10399, 10400, 10402, 10404, 10406, 10408, 10410, 10412,
+        10414, 10416, 10418, 10420, 10422, 10424, 10426, 10428, 10430, 10432, 10434, 10436, 10438, 10440, 10442, 10444, 10446, 10448, 10450, 10452, 10454, 10456, 10458, 10460,
+        10462, 10464, 10466, 10468, 10470, 10472, 10474, 10476, 10478, 10480, 10482, 10484, 10486, 10488, 10490, 10492, 10494, 10496, 10498, 10500, 10502, 10504, 10506, 10508,
+        10510, 10512, 10514, 10516, 10518, 10520, 10522, 10524, 10526, 10528, 10529, 10531, 10533, 10535, 10537, 10539, 10541, 10543, 10545, 10547, 10549, 10551, 10553, 10555,
+        10557, 10559, 10561, 10563, 10565, 10567, 10569, 10571, 10573, 10575, 10577, 10579, 10581, 10583, 10585, 10587, 10589, 10591, 10593, 10595, 10597, 10599, 10601, 10603,
+        10605, 10607, 10609, 10611, 10613, 10615, 10617, 10619, 10621, 10623, 10625, 10627, 10629, 10631, 10633, 10635, 10637, 10639, 10641, 10643, 10645, 10647, 10649, 10651,
+        10653, 10655, 10657, 10659, 10661, 10662, 10664, 10666, 10668, 10670, 10672, 10674, 10676, 10678, 10680, 10682, 10684, 10686, 10688, 10690, 10692, 10694, 10696, 10698,
+        10700, 10702, 10704, 10706, 10708, 10710, 10712, 10714, 10716, 10718, 10720, 10722, 10724, 10726, 10728, 10730, 10731, 10732, 10734, 10736, 10738, 10740, 10742, 10744,
+        10746, 10747, 10749, 10750, 10752, 10754, 10756, 10758, 10760, 10762, 10764, 10766, 10768, 10770, 10772, 10774, 10776, 10778, 10779, 10781, 10783, 10785, 10787, 10789,
+        10791, 10793, 10795, 10797, 10799, 10801, 10803, 10805, 10807, 10809, 10811, 10813, 10815, 10817, 10819, 10821, 10823, 10824, 10826, 10828, 10830, 10832, 10834, 10836,
+        10838, 10840, 10842, 10844, 10846, 10848, 10850, 10852, 10853, 10855, 10857, 10859, 10860, 10862, 10864, 10866, 10868, 10870, 10872, 10874, 10876, 10878, 10880, 10882,
+        10884, 10886, 10888, 10890, 10892, 10894, 10896, 10897, 10899, 10901, 10902, 10904, 10906, 10908, 10910, 10912, 10914, 10916, 10918, 10920, 10922, 10924, 10926, 10928,
+        10930, 10932, 10934, 10936, 10938, 10940, 10942, 10944, 10946, 10948, 10950, 10952, 10954, 10955, 10957, 10959, 10961, 10963, 10965, 10967, 10969, 10971, 10973, 10975,
+        10977, 10979, 10981, 10983, 10985, 10987, 10989, 10991, 10993, 10995, 10997, 10999, 11001, 11003, 11004, 11006, 11008, 11010, 11012, 11014, 11016, 11018, 11020, 11022,
+        11024, 11026, 11028, 11030, 11032, 11034, 11036, 11038, 11040, 11042, 11044, 11046, 11048, 11050, 11052, 11054, 11056, 11058, 11060, 11062, 11064, 11066, 11068, 11070,
+        11072, 11074, 11076, 11078, 11080, 11082, 11084, 11086, 11088, 11090, 11092, 11094, 11096, 11098, 11100, 11102, 11104, 11106, 11108, 11110, 11112, 11114, 11116, 11118,
+        11120, 11122, 11124, 11126, 11128, 11130, 11132, 11134, 11136, 11138, 11140, 11142, 11144, 11146, 11148, 11150, 11152, 11154, 11156, 11158, 11160, 11162, 11164, 11166,
+        11168, 11170, 11172, 11174, 11176, 11178, 11180, 11182, 11184, 11186, 11188, 11190, 11192, 11194, 11196, 11198, 11200, 11202, 11204, 11206, 11208, 11210, 11212, 11214,
+        11216, 11218, 11220, 11222, 11224, 11226, 11228, 11230, 11232, 11234, 11236, 11238, 11240, 11242, 11244, 11246, 11248, 11250, 11252, 11254, 11256, 11258, 11260, 11262,
+        11264, 11266, 11268, 11270, 11272, 11274, 11276, 11278, 11280, 11282, 11284, 11286, 11288, 11290, 11292, 11294, 11296, 11298, 11300, 11302, 11304, 11306, 11308, 11310,
+        11312, 11314, 11316, 11318, 11320, 11322, 11324, 11326, 11328, 11330, 11332, 11334, 11336, 11338, 11340, 11342, 11344, 11346, 11348, 11350, 11352, 11354, 11356, 11358,
+        11360, 11362, 11364, 11365, 11367, 11369, 11371, 11373, 11375, 11377, 11379, 11381
+    ]),
+    fidx: new Int32Array([
+        101, 137, 54, 137, 54, 105, 22, 456, 69, 137, 54, 213, 32, 456, 22, 334, 54, 125, 85, 171, 32, 334, 69, 125,
+        137, 396, 105, 396, 56, 137, 60, 137, 60, 105, 83, 137, 80, 137, 80, 105, 56, 272, 19, 438, 60, 213, 83, 272,
+        22, 701, 80, 213, 56, 171, 56, 125, 60, 125, 83, 171, 83, 125, 80, 125, 32, 569, 125, 226, 71, 529, 54, 346,
+        101, 196, 54, 196, 22, 563, 22, 137, 79, 438, 22, 105, 54, 211, 101, 342, 54, 342, 22, 501, 95, 438, 54, 340,
+        85, 364, 22, 272, 52, 229, 22, 213, 69, 211, 47, 105, 22, 461, 22, 568, 54, 288, 32, 501, 52, 287, 69, 340,
+        32, 272, 32, 353, 22, 125, 55, 125, 47, 213, 32, 461, 52, 341, 69, 288, 52, 436, 69, 382, 32, 171, 85, 322,
+        32, 125, 53, 334, 47, 125, 77, 137, 77, 105, 77, 272, 77, 213, 107, 272, 77, 125, 107, 171, 107, 125, 137, 221,
+        22, 365, 22, 513, 22, 405, 47, 365, 32, 513, 125, 221, 47, 405, 137, 367, 105, 367, 63, 423, 108, 324, 128, 171,
+        19, 423, 191, 655, 22, 450, 49, 66, 110, 86, 303, 36, 714, 22, 761, 25, 582, 356, 645, 238, 303, 19, 582, 122,
+        137, 105, 122, 272, 336, 122, 213, 250, 343, 402, 609, 373, 437, 171, 336, 125, 336, 250, 378, 18, 871, 22, 596, 105,
+        157, 71, 595, 97, 137, 97, 105, 56, 196, 40, 529, 60, 196, 25, 300, 56, 364, 94, 137, 43, 229, 54, 592, 60,
+        211, 74, 137, 74, 105, 234, 343, 137, 489, 324, 828, 124, 137, 105, 124, 83, 196, 80, 196, 56, 470, 76, 137, 43,
+        287, 22, 653, 60, 340, 56, 258, 56, 189, 69, 592, 60, 189, 54, 401, 74, 272, 74, 213, 234, 378, 164, 343, 164,
+        437, 112, 631, 112, 402, 132, 437, 83, 342, 80, 342, 56, 400, 68, 287, 60, 288, 12, 456, 83, 189, 22, 729, 80,
+        189, 54, 590, 13, 756, 32, 505, 13, 334, 82, 125, 69, 401, 74, 171, 74, 125, 164, 378, 125, 489, 112, 703, 132,
+        447, 83, 400, 68, 341, 80, 288, 83, 382, 80, 382, 76, 171, 70, 436, 12, 334, 125, 126, 69, 590, 32, 321, 53,
+        569, 69, 243, 40, 77, 104, 148, 300, 101, 289, 54, 289, 101, 145, 54, 145, 37, 456, 69, 289, 27, 456, 69, 145,
+        85, 348, 37, 334, 85, 293, 27, 334, 107, 321, 67, 807, 67, 648, 138, 438, 60, 403, 22, 601, 80, 403, 56, 265,
+        67, 689, 60, 270, 83, 265, 67, 701, 80, 270, 85, 268, 31, 334, 69, 199, 54, 242, 104, 368, 60, 369, 22, 659,
+        104, 407, 80, 369, 85, 599, 52, 368, 69, 441, 32, 659, 52, 407, 52, 661, 162, 655, 25, 839, 156, 618, 43, 412,
+        150, 618, 131, 150, 351, 356, 303, 751, 47, 440, 22, 479, 43, 610, 60, 280, 83, 762, 68, 610, 80, 280, 330, 378,
+        330, 447, 327, 621, 109, 595, 109, 438, 60, 245, 136, 343, 153, 402, 153, 324, 56, 474, 119, 689, 60, 509, 299, 343,
+        296, 402, 296, 324, 56, 482, 43, 738, 206, 620, 136, 378, 136, 447, 52, 491, 83, 482, 68, 738, 52, 255, 118, 300,
+        44, 529, 54, 325, 71, 695, 71, 604, 101, 115, 22, 346, 54, 115, 26, 563, 26, 137, 79, 410, 26, 105, 22, 364,
+        46, 229, 84, 137, 22, 211, 55, 211, 25, 204, 33, 529, 54, 231, 22, 454, 54, 209, 101, 502, 104, 317, 54, 442,
+        56, 664, 101, 383, 60, 769, 71, 759, 101, 291, 54, 291, 26, 501, 34, 137, 95, 410, 34, 105, 22, 470, 46, 287,
+        22, 340, 55, 340, 32, 364, 32, 236, 22, 258, 19, 229, 55, 189, 19, 204, 47, 211, 22, 492, 54, 173, 32, 454,
+        69, 209, 142, 187, 101, 207, 61, 772, 56, 301, 69, 383, 142, 273, 101, 328, 81, 772, 112, 224, 132, 227, 101, 135,
+        54, 135, 26, 461, 26, 568, 22, 400, 46, 341, 22, 288, 55, 288, 32, 470, 46, 436, 19, 287, 55, 382, 47, 340,
+        32, 258, 32, 189, 53, 353, 69, 223, 47, 189, 54, 646, 32, 492, 69, 173, 85, 614, 74, 321, 52, 187, 69, 207,
+        85, 420, 164, 398, 112, 337, 132, 589, 112, 314, 132, 398, 34, 461, 34, 568, 68, 892, 38, 80, 95, 32, 400, 70,
+        892, 19, 341, 69, 218, 47, 288, 19, 436, 52, 616, 80, 243, 7, 756, 32, 322, 53, 506, 7, 334, 53, 125, 69,
+        646, 77, 346, 77, 196, 105, 106, 56, 289, 22, 572, 60, 289, 54, 409, 137, 239, 105, 239, 56, 145, 60, 145, 56,
+        348, 77, 258, 19, 451, 54, 357, 83, 145, 80, 145, 56, 293, 19, 543, 32, 457, 107, 189, 69, 357, 83, 293, 27,
+        701, 27, 569, 32, 504, 107, 322, 64, 334, 595, 790, 196, 221, 26, 365, 56, 390, 67, 137, 120, 229, 67, 105, 221,
+        342, 34, 365, 287, 791, 120, 287, 56, 268, 22, 265, 19, 413, 67, 213, 60, 199, 83, 424, 120, 341, 83, 268, 31,
+        701, 80, 199, 32, 265, 31, 569, 67, 125, 127, 621, 47, 270, 105, 520, 60, 242, 43, 368, 54, 212, 60, 441, 83,
+        242, 80, 242, 83, 599, 80, 441, 24, 456, 20, 423, 69, 212, 108, 332, 47, 369, 83, 844, 68, 407, 38, 423, 85,
+        205, 70, 661, 52, 108, 22, 768, 191, 538, 26, 450, 156, 692, 22, 473, 43, 499, 25, 412, 191, 418, 34, 450, 150,
+        692, 16, 855, 32, 626, 110, 618, 45, 303, 19, 412, 47, 449, 17, 846, 43, 698, 43, 778, 22, 280, 60, 381, 66,
+        603, 36, 603, 83, 633, 68, 778, 80, 381, 356, 518, 90, 703, 19, 610, 90, 621, 47, 280, 393, 648, 122, 196, 43,
+        43, 140, 22, 245, 122, 211, 22, 560, 22, 551, 56, 220, 60, 217, 119, 272, 56, 632, 22, 509, 60, 632, 47, 245,
+        22, 623, 22, 550, 56, 567, 43, 777, 60, 494, 147, 343, 43, 255, 206, 402, 96, 620, 206, 324, 83, 220, 68, 385,
+        19, 460, 119, 171, 70, 491, 119, 125, 83, 567, 68, 777, 68, 255, 147, 378, 70, 255, 147, 447, 71, 279, 26, 596,
+        44, 438, 118, 204, 60, 325, 97, 346, 97, 196, 71, 300, 56, 115, 40, 604, 60, 115, 94, 196, 20, 410, 22, 481,
+        54, 593, 94, 364, 56, 113, 13, 137, 79, 229, 60, 113, 13, 105, 33, 595, 33, 438, 60, 231, 56, 209, 118, 308,
+        60, 209, 54, 345, 208, 317, 158, 317, 56, 502, 43, 317, 60, 442, 101, 234, 56, 383, 41, 529, 60, 383, 54, 370,
+        124, 346, 97, 342, 83, 115, 40, 759, 80, 115, 76, 196, 26, 702, 26, 653, 76, 364, 83, 113, 12, 137, 79, 287,
+        80, 113, 12, 105, 56, 223, 13, 353, 82, 189, 13, 213, 55, 401, 22, 548, 80, 231, 56, 173, 60, 173, 171, 260,
+        74, 258, 74, 189, 54, 271, 78, 631, 78, 402, 78, 324, 43, 187, 61, 620, 85, 234, 179, 378, 22, 301, 164, 414,
+        54, 164, 99, 631, 99, 402, 99, 324, 43, 273, 81, 620, 112, 142, 112, 571, 101, 132, 132, 414, 51, 772, 124, 342,
+        83, 291, 80, 291, 76, 342, 34, 702, 34, 653, 56, 363, 83, 350, 95, 287, 80, 350, 12, 272, 12, 353, 82, 382,
+        12, 213, 55, 590, 13, 171, 32, 320, 53, 505, 13, 125, 55, 243, 47, 401, 83, 173, 80, 173, 32, 676, 125, 361,
+        32, 386, 74, 322, 69, 271, 68, 187, 61, 770, 70, 187, 207, 226, 32, 301, 164, 694, 69, 164, 68, 273, 81, 770,
+        112, 617, 132, 671, 52, 112, 103, 829, 69, 132, 83, 135, 80, 135, 68, 677, 83, 363, 83, 218, 95, 341, 80, 218,
+        52, 728, 126, 382, 80, 530, 12, 171, 76, 322, 70, 616, 12, 125, 69, 366, 47, 590, 32, 243, 53, 321, 47, 243,
+        77, 572, 77, 457, 107, 457, 107, 504, 77, 403, 77, 265, 19, 854, 107, 265, 67, 787, 77, 369, 306, 842, 24, 69,
+        77, 24, 85, 107, 77, 473, 389, 618, 203, 412, 77, 280, 66, 203, 518, 203, 610, 77, 245, 119, 753, 77, 509, 77,
+        482, 14, 77, 206, 107, 474, 107, 482, 77, 576, 190, 695, 77, 847, 101, 266, 77, 481, 54, 266, 37, 563, 37, 137,
+        79, 451, 37, 105, 77, 577, 77, 664, 77, 769, 104, 743, 101, 129, 54, 129, 27, 563, 27, 137, 79, 543, 27, 105,
+        37, 272, 37, 353, 37, 213, 74, 457, 234, 635, 77, 301, 112, 511, 132, 719, 101, 170, 54, 170, 27, 501, 95, 543,
+        27, 272, 27, 353, 27, 213, 37, 171, 107, 320, 37, 125, 107, 386, 107, 301, 112, 573, 27, 461, 27, 568, 52, 484,
+        27, 171, 27, 506, 27, 125, 107, 243, 62, 529, 22, 561, 54, 237, 32, 561, 69, 237, 47, 47, 524, 374, 655, 35,
+        39, 303, 35, 840, 67, 884, 138, 423, 67, 755, 270, 367, 54, 731, 87, 456, 69, 731, 54, 558, 101, 507, 104, 490,
+        54, 302, 87, 756, 87, 334, 69, 558, 52, 490, 69, 302, 122, 403, 67, 713, 122, 270, 67, 596, 71, 859, 97, 403,
+        138, 410, 22, 487, 60, 411, 31, 563, 22, 390, 79, 413, 13, 365, 74, 403, 157, 270, 128, 827, 109, 877, 245, 367,
+        124, 403, 26, 601, 80, 411, 31, 501, 22, 424, 95, 413, 12, 365, 56, 274, 31, 353, 13, 405, 55, 199, 74, 265,
+        74, 270, 128, 474, 119, 755, 15, 915, 34, 601, 80, 679, 31, 461, 31, 568, 12, 513, 52, 488, 12, 405, 80, 434,
+        31, 171, 31, 506, 31, 125, 69, 216, 47, 199, 157, 369, 101, 783, 104, 318, 54, 602, 54, 292, 79, 773, 48, 105,
+        46, 368, 60, 212, 60, 323, 118, 842, 74, 369, 85, 783, 52, 318, 54, 508, 128, 664, 14, 101, 264, 101, 178, 54,
+        178, 48, 501, 95, 773, 83, 212, 46, 407, 80, 212, 80, 323, 56, 205, 46, 661, 43, 108, 108, 284, 47, 441, 205,
+        643, 52, 613, 128, 301, 48, 461, 48, 568, 114, 407, 83, 205, 114, 661, 68, 108, 70, 108, 118, 412, 158, 745, 162,
+        538, 351, 538, 22, 565, 26, 440, 56, 219, 156, 191, 43, 375, 13, 450, 74, 473, 36, 58, 131, 162, 418, 351, 418,
+        34, 440, 83, 219, 150, 191, 68, 375, 12, 450, 110, 692, 52, 121, 19, 499, 47, 652, 157, 280, 166, 893, 49, 747,
+        26, 479, 43, 666, 25, 698, 90, 224, 43, 464, 90, 316, 74, 762, 74, 280, 749, 882, 303, 749, 28, 840, 39, 904,
+        34, 479, 83, 540, 68, 666, 150, 645, 90, 337, 6, 855, 80, 525, 32, 633, 90, 314, 92, 303, 90, 720, 47, 381,
+        109, 279, 97, 245, 109, 410, 105, 393, 65, 556, 122, 592, 60, 700, 74, 827, 74, 245, 118, 738, 206, 657, 546, 631,
+        14, 166, 518, 15, 802, 329, 396, 158, 233, 26, 663, 26, 605, 22, 220, 88, 224, 22, 217, 88, 316, 56, 537, 46,
+        491, 43, 360, 55, 632, 122, 401, 253, 396, 158, 215, 56, 253, 43, 215, 22, 567, 144, 224, 22, 494, 144, 316, 56,
+        250, 46, 255, 43, 609, 55, 754, 60, 373, 74, 474, 74, 482, 546, 703, 34, 663, 34, 605, 88, 337, 32, 220, 88,
+        314, 21, 303, 19, 491, 83, 253, 68, 215, 144, 337, 83, 250, 114, 255, 68, 609, 19, 255, 157, 576, 175, 300, 44,
+        604, 40, 279, 44, 556, 22, 325, 60, 455, 115, 285, 115, 160, 26, 346, 22, 115, 55, 115, 40, 300, 26, 364, 26,
+        236, 84, 196, 26, 211, 94, 592, 20, 229, 22, 278, 55, 113, 54, 176, 74, 576, 101, 597, 54, 597, 33, 695, 33,
+        604, 33, 556, 22, 231, 60, 448, 32, 497, 22, 209, 55, 209, 47, 325, 142, 782, 101, 404, 54, 404, 101, 387, 54,
+        387, 142, 267, 104, 267, 63, 317, 57, 556, 25, 317, 57, 908, 56, 234, 56, 331, 22, 383, 55, 383, 60, 370, 34,
+        71, 181, 115, 467, 34, 346, 34, 196, 55, 291, 26, 470, 34, 236, 84, 342, 26, 340, 76, 592, 20, 287, 55, 350,
+        54, 286, 85, 176, 32, 113, 22, 223, 53, 236, 69, 176, 47, 113, 7, 105, 74, 577, 234, 643, 69, 597, 101, 793,
+        132, 799, 33, 759, 76, 887, 60, 417, 32, 416, 22, 173, 55, 173, 47, 231, 32, 209, 74, 320, 47, 209, 72, 456,
+        69, 404, 101, 533, 104, 660, 78, 813, 104, 154, 78, 224, 78, 316, 63, 187, 46, 187, 22, 207, 55, 207, 61, 324,
+        56, 164, 164, 225, 60, 164, 116, 142, 104, 116, 99, 224, 99, 316, 63, 273, 46, 273, 22, 328, 55, 328, 81, 324,
+        43, 112, 132, 225, 51, 620, 135, 285, 135, 160, 22, 135, 55, 135, 26, 400, 46, 677, 26, 288, 22, 363, 20, 341,
+        55, 218, 54, 172, 13, 883, 20, 436, 46, 616, 69, 286, 80, 244, 32, 223, 7, 353, 53, 189, 7, 213, 55, 646,
+        74, 386, 74, 301, 132, 643, 76, 548, 80, 417, 76, 676, 69, 252, 32, 173, 53, 492, 47, 173, 102, 171, 102, 506,
+        74, 243, 72, 334, 52, 660, 78, 337, 80, 399, 114, 187, 169, 207, 19, 187, 52, 630, 61, 621, 32, 420, 195, 420,
+        41, 815, 99, 337, 80, 727, 114, 273, 169, 328, 68, 112, 132, 587, 51, 770, 70, 112, 112, 606, 132, 226, 135, 467,
+        135, 169, 34, 400, 114, 677, 34, 288, 38, 341, 169, 218, 32, 363, 38, 436, 114, 616, 69, 172, 80, 366, 12, 321,
+        53, 382, 47, 530, 7, 171, 85, 151, 53, 322, 7, 125, 69, 151, 47, 646, 77, 665, 77, 289, 77, 145, 37, 753,
+        27, 753, 107, 348, 107, 293, 77, 487, 221, 289, 145, 221, 27, 365, 37, 513, 37, 405, 27, 513, 27, 405, 107, 268,
+        31, 787, 48, 636, 37, 884, 128, 145, 145, 367, 128, 348, 108, 183, 128, 293, 77, 565, 191, 891, 191, 742, 27, 450,
+        389, 692, 203, 499, 148, 698, 37, 761, 238, 485, 27, 761, 107, 633, 203, 778, 393, 636, 122, 289, 77, 220, 77, 217,
+        336, 348, 37, 713, 77, 567, 77, 494, 250, 554, 183, 609, 107, 220, 250, 744, 190, 279, 37, 596, 106, 346, 77, 115,
+        190, 300, 56, 266, 26, 572, 60, 266, 94, 289, 20, 451, 77, 278, 54, 241, 27, 596, 74, 289, 77, 502, 77, 442,
+        234, 554, 183, 828, 158, 743, 97, 145, 56, 129, 40, 862, 60, 129, 94, 145, 20, 543, 54, 471, 85, 241, 107, 113,
+        77, 223, 69, 241, 64, 105, 74, 145, 74, 348, 187, 306, 77, 207, 164, 554, 273, 306, 77, 328, 112, 183, 124, 145,
+        83, 129, 80, 129, 76, 145, 27, 702, 54, 228, 85, 471, 27, 505, 69, 471, 32, 357, 64, 353, 64, 213, 74, 293,
+        107, 614, 187, 203, 107, 420, 112, 541, 112, 512, 83, 170, 80, 170, 68, 484, 76, 293, 70, 484, 69, 228, 27, 321,
+        64, 171, 151, 635, 64, 125, 62, 595, 62, 438, 22, 781, 80, 371, 56, 237, 60, 237, 83, 237, 80, 237, 32, 909,
+        62, 815, 47, 894, 22, 763, 156, 764, 150, 764, 12, 35, 380, 31, 513, 31, 405, 736, 765, 120, 368, 221, 844, 120,
+        407, 128, 268, 31, 755, 15, 853, 87, 648, 60, 731, 100, 343, 100, 437, 87, 880, 87, 689, 60, 558, 128, 242, 182,
+        437, 56, 507, 43, 490, 60, 302, 100, 378, 100, 447, 47, 622, 87, 569, 243, 771, 68, 490, 80, 302, 226, 507, 226,
+        302, 89, 846, 43, 785, 120, 385, 31, 713, 122, 199, 279, 790, 22, 658, 97, 487, 115, 221, 67, 346, 56, 214, 67,
+        196, 60, 214, 138, 229, 20, 413, 22, 307, 67, 211, 22, 475, 74, 390, 120, 421, 242, 336, 122, 242, 336, 599, 368,
+        800, 122, 441, 124, 487, 221, 291, 83, 214, 67, 342, 80, 214, 138, 287, 31, 702, 67, 340, 85, 472, 31, 505, 22,
+        274, 69, 472, 127, 332, 7, 365, 173, 221, 47, 475, 74, 268, 74, 199, 128, 220, 14, 24, 385, 217, 367, 65, 423,
+        108, 688, 135, 221, 83, 251, 80, 251, 138, 341, 68, 488, 67, 288, 76, 268, 70, 488, 31, 729, 127, 452, 32, 274,
+        52, 127, 216, 226, 7, 405, 47, 434, 24, 25, 235, 208, 318, 158, 318, 56, 783, 43, 318, 60, 602, 60, 292, 20,
+        773, 54, 527, 113, 128, 79, 368, 113, 367, 24, 105, 177, 402, 177, 324, 44, 423, 108, 235, 133, 631, 133, 402, 133,
+        324, 56, 508, 60, 508, 128, 502, 57, 877, 128, 383, 124, 242, 83, 292, 80, 292, 76, 242, 48, 653, 24, 501, 128,
+        350, 95, 368, 152, 452, 63, 108, 46, 108, 108, 262, 25, 108, 47, 323, 33, 423, 205, 795, 133, 703, 70, 613, 128,
+        207, 128, 420, 83, 178, 80, 178, 68, 682, 24, 461, 128, 218, 95, 407, 52, 534, 24, 171, 24, 506, 19, 108, 157,
+        565, 86, 515, 26, 768, 538, 903, 25, 745, 26, 626, 26, 473, 26, 449, 156, 351, 43, 121, 22, 277, 13, 440, 86,
+        297, 74, 545, 16, 58, 380, 34, 768, 418, 903, 34, 626, 117, 418, 34, 449, 150, 351, 68, 121, 12, 440, 32, 219,
+        70, 121, 110, 191, 19, 375, 121, 476, 7, 450, 44, 582, 66, 544, 166, 298, 56, 66, 358, 156, 866, 26, 539, 43,
+        202, 13, 479, 90, 571, 43, 327, 90, 332, 25, 464, 238, 297, 33, 582, 74, 633, 74, 381, 66, 66, 134, 49, 49,
+        134, 122, 217, 356, 445, 19, 36, 445, 59, 904, 34, 858, 34, 539, 39, 603, 68, 202, 12, 479, 83, 330, 90, 617,
+        68, 327, 90, 452, 110, 645, 52, 90, 103, 914, 19, 464, 47, 525, 122, 325, 115, 122, 65, 410, 26, 245, 56, 188,
+        109, 229, 60, 188, 105, 140, 118, 385, 157, 217, 209, 336, 122, 209, 118, 777, 157, 494, 250, 427, 373, 427, 63, 838,
+        123, 655, 123, 736, 66, 874, 36, 874, 186, 396, 26, 560, 26, 551, 22, 329, 25, 233, 56, 136, 20, 460, 43, 153,
+        88, 332, 63, 360, 13, 52, 65, 82, 632, 25, 360, 47, 700, 352, 396, 26, 623, 26, 550, 22, 253, 43, 185, 25,
+        215, 56, 299, 144, 571, 43, 296, 144, 332, 22, 250, 96, 224, 82, 754, 22, 373, 96, 316, 74, 220, 4, 65, 171,
+        18, 870, 255, 516, 18, 895, 249, 378, 34, 560, 34, 551, 34, 879, 83, 136, 38, 460, 68, 153, 52, 88, 140, 171,
+        65, 836, 19, 360, 34, 623, 34, 550, 68, 185, 83, 299, 144, 617, 68, 296, 96, 337, 32, 250, 96, 314, 871, 44,
+        279, 115, 157, 44, 410, 175, 204, 56, 333, 22, 455, 60, 333, 3, 279, 97, 115, 115, 143, 94, 115, 97, 113, 26,
+        481, 13, 196, 55, 593, 40, 204, 56, 176, 13, 236, 22, 426, 82, 113, 60, 176, 33, 279, 74, 325, 118, 317, 57,
+        279, 184, 343, 184, 437, 97, 231, 33, 410, 33, 300, 56, 163, 22, 448, 60, 163, 13, 454, 74, 113, 74, 278, 79,
+        421, 208, 782, 72, 807, 72, 648, 56, 404, 60, 404, 282, 317, 208, 267, 97, 442, 101, 453, 43, 267, 57, 300, 222,
+        313, 56, 354, 79, 317, 60, 354, 22, 234, 94, 383, 113, 489, 22, 370, 60, 555, 97, 291, 143, 291, 76, 115, 113,
+        124, 34, 481, 12, 196, 26, 654, 56, 286, 12, 236, 22, 591, 82, 350, 12, 211, 13, 258, 13, 189, 55, 244, 54,
+        194, 74, 231, 74, 209, 118, 187, 61, 657, 184, 378, 74, 383, 118, 273, 81, 657, 112, 691, 132, 427, 124, 231, 26,
+        548, 83, 163, 22, 417, 80, 163, 13, 492, 82, 173, 47, 448, 32, 384, 102, 505, 74, 223, 55, 271, 47, 345, 139,
+        343, 139, 437, 72, 880, 72, 689, 18, 748, 15, 748, 56, 533, 43, 660, 154, 208, 154, 158, 26, 612, 78, 142, 78,
+        571, 78, 104, 78, 332, 61, 224, 82, 207, 61, 316, 32, 234, 32, 331, 179, 694, 22, 164, 55, 164, 47, 370, 116,
+        208, 116, 158, 43, 116, 99, 142, 99, 571, 99, 104, 99, 332, 81, 224, 82, 328, 81, 316, 63, 112, 46, 112, 112,
+        262, 22, 132, 55, 132, 51, 324, 97, 135, 135, 143, 76, 291, 82, 135, 12, 342, 34, 654, 56, 172, 46, 728, 82,
+        218, 60, 172, 12, 258, 12, 189, 55, 366, 54, 429, 85, 194, 32, 244, 53, 320, 69, 194, 47, 244, 74, 173, 74,
+        614, 74, 207, 74, 420, 132, 611, 112, 721, 34, 548, 83, 252, 80, 252, 12, 492, 126, 173, 47, 417, 85, 263, 53,
+        676, 69, 263, 32, 271, 102, 321, 47, 271, 139, 447, 72, 569, 14, 672, 226, 533, 34, 612, 78, 617, 78, 452, 61,
+        337, 126, 207, 80, 435, 61, 314, 187, 338, 69, 650, 32, 164, 53, 301, 47, 164, 68, 116, 99, 617, 99, 452, 81,
+        337, 126, 328, 80, 726, 112, 114, 112, 496, 132, 169, 829, 52, 629, 51, 621, 124, 135, 76, 135, 126, 135, 95, 677,
+        83, 172, 76, 218, 126, 218, 80, 172, 12, 382, 169, 366, 7, 883, 12, 322, 98, 616, 69, 429, 80, 151, 7, 321,
+        53, 243, 47, 477, 190, 872, 106, 572, 101, 495, 77, 409, 77, 848, 101, 542, 85, 495, 77, 357, 101, 246, 85, 542,
+        107, 357, 85, 246, 107, 881, 71, 854, 77, 411, 138, 451, 77, 307, 8, 852, 138, 543, 60, 668, 85, 547, 77, 274,
+        69, 547, 64, 365, 27, 601, 80, 668, 85, 161, 69, 161, 107, 274, 127, 573, 64, 405, 54, 767, 227, 598, 24, 636,
+        101, 247, 54, 247, 197, 313, 197, 227, 108, 306, 108, 256, 108, 148, 27, 659, 107, 205, 148, 745, 106, 473, 351, 891,
+        77, 277, 162, 742, 351, 742, 27, 440, 107, 219, 191, 389, 203, 375, 64, 450, 37, 479, 183, 327, 148, 464, 618, 667,
+        27, 479, 330, 744, 327, 541, 389, 645, 90, 573, 203, 464, 106, 245, 109, 451, 140, 636, 77, 329, 148, 233, 136, 554,
+        153, 183, 306, 360, 52, 553, 148, 360, 77, 253, 148, 215, 299, 554, 183, 296, 77, 250, 96, 715, 77, 373, 27, 663,
+        107, 537, 299, 744, 107, 250, 175, 562, 37, 44, 104, 91, 279, 106, 847, 115, 521, 106, 481, 37, 196, 55, 266, 91,
+        300, 56, 241, 37, 236, 84, 289, 37, 211, 4, 27, 300, 44, 862, 37, 454, 74, 409, 77, 897, 57, 872, 142, 615,
+        104, 615, 77, 234, 37, 41, 224, 77, 370, 129, 285, 115, 433, 27, 346, 22, 129, 55, 129, 27, 364, 27, 236, 84,
+        145, 27, 211, 37, 258, 37, 189, 54, 210, 104, 326, 27, 454, 107, 384, 74, 357, 78, 511, 77, 399, 61, 715, 107,
+        234, 107, 331, 77, 164, 99, 511, 77, 727, 81, 715, 112, 306, 112, 256, 77, 132, 170, 285, 129, 467, 34, 145, 55,
+        170, 56, 228, 46, 484, 60, 228, 27, 258, 27, 189, 54, 394, 85, 210, 107, 244, 69, 210, 52, 326, 27, 705, 107,
+        271, 207, 433, 61, 788, 107, 164, 328, 433, 112, 483, 112, 203, 135, 433, 169, 170, 83, 228, 114, 484, 80, 228, 27,
+        382, 85, 394, 27, 322, 69, 394, 64, 321, 62, 695, 62, 604, 62, 556, 22, 371, 104, 678, 43, 62, 76, 60, 458,
+        32, 498, 22, 237, 55, 237, 47, 371, 76, 781, 80, 458, 76, 909, 69, 349, 32, 237, 53, 561, 47, 237, 15, 856,
+        158, 863, 374, 538, 138, 413, 22, 549, 374, 418, 31, 601, 80, 670, 85, 167, 110, 764, 69, 167, 35, 714, 60, 628,
+        146, 227, 24, 365, 39, 68, 765, 80, 628, 31, 659, 146, 589, 108, 791, 146, 398, 108, 120, 367, 434, 54, 739, 79,
+        899, 87, 105, 101, 269, 54, 269, 100, 313, 100, 227, 87, 272, 87, 353, 87, 213, 55, 558, 101, 200, 54, 200, 182,
+        313, 182, 227, 93, 343, 46, 490, 22, 302, 55, 302, 18, 913, 100, 589, 100, 398, 362, 622, 87, 171, 87, 506, 87,
+        125, 69, 500, 47, 558, 182, 589, 114, 490, 169, 302, 195, 507, 93, 447, 69, 462, 47, 302, 122, 411, 109, 413, 25,
+        785, 67, 551, 31, 605, 52, 446, 19, 785, 65, 723, 157, 411, 43, 44, 67, 279, 789, 97, 411, 115, 584, 26, 487,
+        26, 390, 55, 214, 67, 481, 31, 364, 31, 236, 13, 403, 31, 211, 33, 859, 67, 887, 31, 454, 74, 307, 44, 723,
+        242, 806, 158, 559, 56, 834, 43, 559, 212, 336, 198, 224, 122, 212, 198, 316, 97, 679, 160, 251, 34, 487, 26, 424,
+        55, 251, 31, 470, 46, 488, 12, 403, 31, 340, 13, 265, 31, 189, 55, 216, 13, 270, 67, 548, 52, 376, 149, 199,
+        31, 705, 74, 274, 102, 876, 47, 58, 120, 48, 663, 48, 605, 480, 814, 367, 825, 205, 336, 198, 314, 108, 800, 198,
+        720, 122, 841, 124, 679, 135, 584, 34, 424, 169, 251, 31, 400, 114, 488, 31, 288, 12, 265, 31, 382, 169, 216, 12,
+        270, 85, 465, 70, 127, 195, 216, 69, 465, 127, 476, 24, 44, 316, 101, 570, 54, 570, 142, 347, 104, 347, 63, 318,
+        73, 556, 25, 318, 73, 908, 55, 292, 48, 236, 48, 211, 43, 152, 82, 323, 13, 369, 104, 674, 177, 224, 149, 441,
+        205, 710, 74, 212, 74, 323, 157, 841, 133, 813, 104, 304, 133, 224, 133, 316, 63, 613, 46, 613, 19, 318, 55, 508,
+        47, 602, 142, 201, 104, 201, 224, 600, 128, 234, 128, 331, 212, 489, 178, 285, 160, 178, 22, 178, 55, 178, 48, 470,
+        46, 682, 48, 340, 76, 212, 68, 152, 126, 323, 12, 369, 85, 526, 70, 152, 24, 53, 225, 69, 526, 152, 476, 177,
+        337, 177, 314, 74, 205, 552, 814, 133, 314, 32, 508, 583, 612, 128, 860, 41, 423, 135, 718, 169, 178, 48, 400, 114,
+        682, 48, 288, 38, 407, 76, 205, 70, 534, 24, 729, 24, 321, 175, 412, 344, 427, 157, 277, 97, 486, 97, 219, 26,
+        565, 26, 545, 121, 181, 59, 656, 56, 276, 46, 121, 117, 156, 13, 449, 33, 839, 297, 751, 74, 219, 74, 277, 375,
+        578, 124, 486, 124, 219, 34, 565, 34, 545, 121, 468, 12, 626, 114, 121, 117, 150, 12, 449, 110, 351, 19, 121, 53,
+        652, 7, 440, 235, 327, 39, 811, 158, 607, 232, 893, 30, 890, 66, 708, 43, 865, 86, 166, 181, 202, 46, 202, 13,
+        539, 43, 90, 90, 284, 13, 280, 17, 30, 297, 330, 611, 327, 415, 90, 711, 74, 801, 69, 796, 58, 582, 119, 560,
+        109, 776, 65, 845, 153, 688, 358, 882, 85, 248, 110, 866, 69, 248, 28, 714, 124, 746, 124, 540, 17, 34, 191, 202,
+        468, 12, 858, 114, 202, 12, 539, 150, 518, 68, 90, 126, 525, 12, 280, 32, 330, 70, 90, 90, 606, 19, 327, 90,
+        476, 60, 900, 65, 651, 26, 627, 122, 593, 65, 229, 55, 188, 13, 245, 118, 233, 136, 427, 153, 235, 85, 624, 22,
+        74, 140, 69, 624, 122, 345, 118, 215, 299, 427, 235, 296, 240, 255, 118, 609, 227, 797, 157, 373, 208, 478, 396, 531,
+        43, 478, 60, 531, 63, 66, 193, 249, 313, 166, 238, 227, 249, 193, 736, 233, 282, 97, 329, 22, 186, 181, 254, 26,
+        220, 46, 254, 26, 217, 22, 136, 43, 88, 88, 284, 25, 153, 13, 474, 32, 188, 53, 627, 13, 509, 47, 188, 215,
+        282, 97, 253, 22, 352, 181, 185, 56, 335, 46, 185, 13, 550, 22, 299, 43, 144, 144, 284, 25, 296, 56, 147, 20,
+        255, 103, 901, 43, 206, 96, 332, 136, 611, 88, 711, 74, 537, 299, 611, 255, 311, 74, 250, 57, 845, 460, 717, 193,
+        356, 124, 329, 254, 468, 34, 220, 34, 861, 34, 217, 68, 88, 32, 136, 70, 88, 19, 153, 52, 395, 124, 253, 185,
+        468, 12, 623, 114, 185, 12, 550, 68, 144, 83, 147, 38, 255, 68, 206, 52, 96, 54, 690, 44, 651, 26, 497, 26,
+        325, 44, 229, 55, 333, 44, 204, 26, 115, 84, 115, 94, 593, 26, 113, 26, 278, 22, 176, 55, 176, 3, 204, 54,
+        673, 69, 690, 58, 279, 453, 799, 101, 422, 54, 422, 184, 313, 22, 597, 184, 227, 41, 279, 115, 149, 26, 416, 26,
+        231, 33, 229, 55, 163, 33, 204, 32, 333, 102, 236, 44, 308, 47, 333, 72, 208, 312, 104, 459, 101, 372, 54, 372,
+        63, 782, 72, 563, 72, 137, 79, 898, 72, 105, 285, 387, 160, 387, 71, 317, 57, 651, 63, 267, 46, 267, 25, 267,
+        101, 222, 57, 229, 55, 354, 57, 204, 165, 313, 56, 179, 82, 331, 22, 555, 60, 179, 34, 115, 84, 291, 76, 593,
+        34, 113, 34, 278, 22, 286, 55, 286, 32, 176, 7, 236, 3, 308, 53, 113, 47, 176, 54, 379, 69, 673, 74, 384,
+        74, 345, 101, 579, 54, 579, 187, 240, 227, 310, 74, 234, 74, 331, 74, 370, 101, 712, 54, 712, 240, 273, 227, 580,
+        112, 118, 132, 710, 51, 657, 149, 291, 34, 416, 34, 231, 33, 287, 55, 252, 32, 163, 53, 416, 33, 308, 47, 163,
+        7, 454, 74, 244, 111, 421, 101, 444, 54, 444, 139, 313, 139, 227, 72, 272, 72, 353, 72, 213, 101, 294, 54, 294,
+        295, 313, 227, 295, 130, 343, 46, 660, 130, 437, 154, 585, 154, 181, 78, 208, 46, 154, 25, 154, 43, 78, 78, 284,
+        61, 142, 20, 187, 46, 630, 61, 104, 61, 332, 13, 301, 82, 164, 47, 555, 116, 585, 116, 181, 63, 116, 46, 116,
+        25, 116, 43, 99, 99, 284, 81, 142, 20, 273, 46, 784, 81, 104, 81, 332, 51, 224, 82, 132, 51, 316, 26, 135,
+        84, 135, 26, 363, 34, 350, 22, 172, 55, 172, 32, 286, 12, 320, 53, 350, 47, 286, 7, 258, 7, 189, 55, 151,
+        54, 141, 69, 379, 102, 492, 102, 705, 74, 271, 149, 207, 310, 398, 420, 798, 74, 164, 149, 328, 33, 132, 159, 195,
+        793, 74, 132, 135, 149, 34, 830, 33, 341, 149, 218, 33, 436, 53, 830, 80, 263, 7, 492, 53, 173, 47, 889, 85,
+        230, 102, 322, 69, 230, 11, 878, 139, 398, 72, 506, 72, 125, 399, 489, 159, 672, 195, 533, 130, 447, 154, 468, 34,
+        741, 68, 78, 126, 399, 38, 187, 114, 630, 61, 452, 52, 61, 19, 630, 47, 435, 85, 319, 53, 420, 69, 319, 116,
+        468, 114, 116, 68, 99, 126, 727, 38, 273, 114, 784, 81, 452, 51, 337, 126, 132, 80, 469, 51, 314, 112, 338, 51,
+        720, 34, 135, 34, 363, 34, 218, 95, 728, 32, 172, 76, 366, 53, 218, 47, 172, 12, 243, 151, 169, 85, 141, 32,
+        151, 53, 439, 69, 141, 47, 151, 106, 665, 77, 266, 190, 562, 56, 495, 37, 572, 148, 743, 77, 129, 56, 542, 27,
+        572, 37, 457, 145, 239, 56, 246, 27, 457, 37, 504, 83, 246, 27, 504, 106, 487, 221, 266, 67, 665, 56, 547, 67,
+        289, 1, 158, 443, 129, 221, 56, 161, 852, 60, 161, 37, 265, 19, 31, 174, 37, 270, 170, 221, 83, 161, 80, 161,
+        27, 265, 161, 226, 27, 270, 31, 504, 127, 512, 64, 876, 60, 767, 152, 183, 37, 369, 145, 520, 56, 247, 60, 247,
+        101, 197, 152, 541, 54, 197, 85, 598, 152, 512, 69, 598, 83, 247, 85, 197, 106, 565, 106, 545, 59, 832, 37, 626,
+        37, 473, 298, 443, 16, 902, 45, 485, 27, 473, 27, 449, 351, 389, 121, 203, 64, 440, 37, 539, 90, 183, 37, 280,
+        17, 902, 155, 485, 27, 539, 27, 762, 90, 541, 27, 280, 107, 330, 90, 512, 203, 327, 122, 266, 65, 451, 37, 245,
+        77, 186, 106, 220, 106, 217, 77, 136, 88, 183, 148, 153, 119, 348, 107, 188, 37, 509, 77, 352, 37, 623, 37, 550,
+        77, 299, 144, 183, 148, 296, 37, 482, 174, 255, 183, 206, 50, 485, 107, 136, 42, 485, 27, 482, 157, 266, 44, 451,
+        37, 576, 106, 115, 26, 704, 94, 266, 106, 113, 26, 409, 22, 241, 55, 241, 91, 204, 129, 157, 44, 543, 27, 576,
+        260, 348, 37, 577, 77, 387, 106, 502, 106, 442, 222, 719, 57, 451, 57, 562, 37, 664, 179, 554, 37, 769, 97, 129,
+        129, 143, 94, 129, 113, 239, 27, 481, 13, 145, 55, 471, 32, 241, 64, 236, 91, 308, 47, 241, 158, 326, 43, 326,
+        260, 293, 27, 577, 37, 386, 18, 873, 148, 154, 78, 183, 61, 511, 174, 187, 77, 435, 37, 301, 116, 306, 116, 148,
+        99, 183, 81, 511, 174, 273, 77, 726, 132, 521, 97, 170, 143, 170, 76, 129, 82, 170, 12, 145, 55, 228, 13, 293,
+        27, 320, 27, 401, 64, 258, 64, 189, 54, 281, 68, 326, 70, 326, 27, 386, 230, 635, 78, 541, 187, 283, 61, 573,
+        319, 635, 99, 541, 273, 283, 132, 433, 51, 788, 124, 170, 76, 170, 126, 170, 95, 484, 32, 228, 98, 484, 47, 228,
+        27, 243, 85, 281, 107, 151, 69, 281, 97, 371, 62, 410, 62, 300, 56, 305, 22, 566, 124, 371, 26, 781, 83, 305,
+        22, 458, 80, 305, 13, 561, 82, 237, 47, 566, 68, 678, 83, 349, 80, 349, 12, 561, 126, 237, 47, 458, 85, 290,
+        70, 693, 69, 290, 53, 894, 26, 763, 214, 221, 25, 863, 56, 167, 35, 43, 117, 34, 763, 221, 251, 83, 167, 150,
+        374, 80, 167, 31, 265, 167, 226, 67, 199, 60, 377, 146, 414, 67, 441, 418, 765, 83, 377, 80, 377, 138, 407, 146,
+        671, 80, 843, 85, 146, 128, 216, 69, 146, 15, 737, 60, 739, 20, 899, 54, 594, 269, 396, 18, 857, 26, 622, 100,
+        101, 100, 414, 54, 100, 85, 594, 87, 505, 69, 594, 244, 771, 200, 396, 56, 200, 60, 200, 101, 182, 14, 48, 152,
+        54, 182, 93, 313, 82, 507, 93, 227, 82, 302, 18, 758, 34, 622, 100, 671, 85, 100, 100, 694, 69, 100, 53, 622,
+        87, 321, 226, 500, 362, 558, 80, 200, 182, 671, 126, 507, 93, 589, 126, 302, 93, 398, 226, 462, 302, 362, 122, 214,
+        65, 413, 13, 837, 31, 551, 31, 879, 67, 217, 70, 446, 31, 509, 127, 688, 26, 658, 44, 413, 67, 325, 97, 214,
+        67, 115, 94, 214, 113, 647, 26, 307, 13, 390, 55, 472, 67, 278, 26, 475, 43, 376, 67, 231, 260, 268, 67, 209,
+        199, 260, 242, 810, 292, 336, 122, 292, 119, 242, 57, 413, 48, 245, 119, 599, 128, 188, 109, 368, 152, 688, 97, 251,
+        67, 291, 76, 214, 82, 251, 34, 307, 12, 390, 31, 654, 13, 268, 46, 127, 67, 223, 82, 216, 13, 199, 34, 475,
+        68, 376, 70, 376, 67, 173, 127, 415, 31, 386, 74, 216, 58, 723, 48, 560, 48, 551, 31, 612, 128, 136, 128, 819,
+        24, 605, 367, 819, 52, 198, 103, 911, 47, 821, 124, 251, 67, 135, 76, 251, 126, 251, 12, 424, 95, 488, 12, 268,
+        98, 488, 126, 216, 12, 199, 7, 265, 19, 127, 53, 434, 7, 270, 152, 235, 282, 318, 208, 347, 97, 602, 101, 684,
+        43, 347, 73, 300, 259, 313, 56, 388, 79, 318, 60, 388, 113, 520, 55, 527, 46, 152, 82, 662, 24, 211, 158, 674,
+        43, 674, 128, 163, 104, 177, 152, 415, 24, 454, 74, 662, 11, 24, 421, 208, 304, 158, 304, 14, 26, 133, 133, 142,
+        133, 571, 104, 133, 133, 332, 52, 730, 82, 508, 47, 73, 79, 201, 208, 158, 201, 43, 201, 142, 600, 128, 354, 104,
+        600, 224, 264, 97, 178, 143, 178, 76, 292, 12, 242, 48, 654, 24, 470, 46, 534, 126, 662, 24, 340, 24, 258, 20,
+        108, 53, 323, 54, 261, 48, 548, 128, 252, 52, 177, 24, 705, 14, 681, 18, 817, 52, 133, 73, 836, 14, 680, 128,
+        722, 207, 583, 264, 314, 124, 178, 76, 178, 126, 178, 95, 682, 24, 400, 114, 534, 24, 288, 38, 108, 85, 261, 24,
+        322, 69, 261, 175, 499, 45, 515, 44, 412, 97, 557, 26, 486, 26, 219, 121, 466, 26, 277, 156, 641, 79, 121, 2,
+        656, 16, 886, 45, 297, 33, 412, 121, 516, 74, 344, 121, 578, 124, 557, 34, 486, 34, 219, 121, 397, 34, 277, 150,
+        641, 95, 121, 32, 276, 98, 121, 110, 117, 121, 338, 7, 449, 90, 235, 59, 811, 66, 760, 232, 298, 39, 544, 16,
+        890, 25, 607, 56, 683, 56, 248, 43, 732, 202, 466, 79, 202, 46, 90, 90, 262, 13, 381, 17, 886, 155, 297, 18,
+        888, 33, 610, 90, 415, 74, 330, 90, 721, 327, 578, 186, 336, 122, 186, 65, 776, 119, 220, 18, 535, 109, 385, 15,
+        535, 19, 865, 226, 248, 47, 669, 124, 740, 34, 746, 34, 540, 202, 397, 2, 603, 95, 202, 12, 633, 90, 114, 90,
+        496, 12, 381, 110, 518, 914, 53, 525, 7, 280, 60, 624, 97, 188, 26, 700, 13, 627, 82, 188, 122, 176, 157, 186,
+        175, 385, 44, 460, 118, 153, 88, 235, 119, 209, 74, 188, 109, 421, 157, 352, 42, 515, 144, 691, 118, 296, 144, 235,
+        147, 427, 260, 754, 206, 235, 208, 532, 158, 532, 123, 538, 63, 478, 56, 406, 22, 531, 60, 406, 43, 546, 249, 414,
+        60, 750, 97, 186, 71, 233, 26, 329, 22, 359, 88, 181, 56, 192, 46, 88, 88, 262, 13, 217, 119, 223, 13, 632,
+        65, 835, 7, 245, 97, 352, 71, 215, 26, 253, 185, 466, 22, 335, 79, 185, 56, 425, 46, 144, 144, 262, 13, 494,
+        22, 147, 43, 96, 96, 284, 25, 206, 50, 297, 33, 460, 74, 136, 85, 780, 42, 297, 18, 851, 147, 611, 96, 711,
+        57, 776, 57, 460, 136, 489, 85, 249, 124, 186, 34, 329, 254, 397, 88, 468, 12, 220, 88, 114, 12, 217, 19, 88,
+        7, 474, 23, 491, 7, 509, 124, 352, 34, 253, 185, 397, 95, 185, 12, 567, 114, 144, 12, 494, 68, 96, 32, 147,
+        70, 96, 19, 206, 60, 690, 115, 260, 26, 455, 13, 497, 113, 260, 13, 325, 13, 115, 26, 426, 94, 176, 13, 113,
+        13, 278, 60, 673, 74, 333, 54, 774, 157, 387, 118, 267, 56, 422, 118, 696, 60, 422, 101, 184, 179, 427, 54, 184,
+        97, 163, 26, 448, 13, 416, 82, 163, 13, 231, 13, 209, 55, 355, 58, 204, 208, 459, 158, 459, 97, 404, 142, 419,
+        56, 372, 104, 419, 60, 372, 94, 404, 20, 898, 54, 528, 97, 387, 849, 160, 453, 97, 354, 40, 317, 79, 267, 56,
+        222, 46, 826, 82, 354, 13, 442, 101, 165, 41, 229, 55, 179, 54, 165, 12, 115, 26, 591, 76, 176, 12, 113, 12,
+        278, 13, 223, 55, 194, 60, 379, 74, 163, 54, 675, 260, 614, 69, 774, 118, 154, 78, 691, 78, 235, 101, 310, 207,
+        260, 54, 310, 85, 184, 179, 795, 69, 184, 116, 118, 99, 691, 99, 235, 101, 580, 260, 328, 54, 580, 112, 240, 112,
+        392, 227, 309, 124, 163, 26, 417, 12, 416, 82, 252, 12, 231, 13, 173, 55, 263, 32, 355, 102, 320, 58, 308, 47,
+        355, 50, 808, 18, 735, 15, 735, 101, 139, 139, 414, 54, 139, 85, 528, 72, 505, 69, 528, 42, 808, 56, 294, 60,
+        294, 101, 295, 295, 414, 54, 295, 130, 313, 82, 533, 130, 227, 154, 282, 154, 312, 154, 466, 78, 181, 63, 78, 46,
+        78, 78, 262, 25, 78, 43, 61, 61, 284, 85, 165, 32, 179, 53, 331, 69, 165, 47, 179, 116, 282, 116, 312, 116,
+        466, 79, 116, 63, 99, 46, 99, 99, 262, 25, 99, 43, 81, 81, 284, 51, 142, 20, 112, 46, 629, 51, 104, 51,
+        332, 12, 291, 34, 591, 76, 286, 12, 350, 12, 223, 55, 429, 32, 194, 7, 320, 53, 244, 47, 194, 80, 379, 173,
+        361, 102, 676, 69, 675, 102, 386, 78, 415, 207, 361, 187, 517, 69, 310, 102, 301, 99, 415, 328, 361, 112, 493, 132,
+        149, 309, 398, 135, 361, 34, 417, 76, 252, 126, 252, 12, 173, 149, 366, 32, 263, 53, 757, 47, 263, 7, 386, 74,
+        151, 47, 503, 15, 734, 10, 878, 139, 694, 69, 139, 72, 321, 15, 733, 489, 722, 18, 779, 11, 672, 130, 398, 154,
+        397, 34, 399, 78, 114, 78, 496, 61, 68, 126, 435, 61, 70, 61, 606, 61, 476, 7, 301, 53, 164, 47, 687, 116,
+        397, 95, 116, 99, 114, 99, 496, 68, 81, 126, 726, 38, 112, 114, 629, 51, 452, 51, 52, 19, 629, 47, 469, 12,
+        135, 76, 172, 12, 218, 12, 530, 32, 429, 76, 151, 53, 366, 47, 429, 7, 243, 151, 362, 106, 704, 160, 495, 106,
+        409, 37, 289, 91, 562, 106, 848, 129, 521, 27, 665, 37, 145, 37, 348, 91, 912, 246, 285, 129, 433, 27, 145, 37,
+        293, 64, 457, 170, 433, 32, 246, 64, 504, 106, 411, 160, 547, 106, 307, 37, 390, 67, 409, 97, 668, 129, 584, 180,
+        443, 27, 390, 55, 161, 37, 268, 127, 256, 67, 357, 37, 199, 124, 668, 161, 467, 27, 424, 161, 169, 32, 161, 161,
+        195, 47, 161, 64, 265, 127, 203, 64, 270, 55, 767, 152, 256, 37, 441, 247, 285, 129, 718, 48, 145, 55, 247, 56,
+        197, 197, 225, 60, 197, 24, 457, 108, 174, 64, 369, 170, 718, 83, 197, 24, 504, 106, 486, 106, 219, 106, 277, 37,
+        545, 2, 832, 239, 486, 219, 239, 86, 443, 27, 545, 121, 339, 107, 276, 121, 574, 117, 389, 64, 449, 202, 315, 90,
+        256, 37, 381, 239, 746, 239, 540, 191, 667, 202, 339, 92, 485, 90, 483, 27, 381, 389, 518, 90, 203, 64, 280, 181,
+        553, 46, 553, 122, 241, 233, 634, 106, 329, 77, 359, 106, 825, 37, 220, 88, 256, 37, 217, 119, 357, 19, 553, 64,
+        245, 215, 634, 106, 253, 77, 335, 185, 315, 37, 567, 144, 256, 37, 494, 77, 147, 96, 183, 148, 206, 239, 329, 27,
+        220, 64, 474, 239, 253, 75, 485, 107, 147, 37, 869, 37, 497, 37, 325, 37, 115, 84, 266, 94, 241, 37, 113, 37,
+        278, 11, 44, 129, 27, 497, 27, 325, 37, 209, 58, 562, 0, 849, 106, 897, 77, 453, 181, 615, 37, 502, 46, 615,
+        37, 442, 165, 719, 37, 383, 41, 562, 27, 115, 84, 129, 94, 471, 27, 113, 27, 278, 37, 223, 55, 210, 129, 149,
+        46, 326, 27, 231, 27, 209, 107, 355, 58, 912, 154, 716, 106, 399, 78, 306, 78, 256, 78, 148, 61, 183, 85, 685,
+        107, 179, 69, 685, 116, 716, 116, 315, 99, 306, 99, 256, 99, 148, 81, 183, 51, 511, 112, 174, 77, 469, 34, 129,
+        84, 170, 76, 471, 27, 350, 27, 223, 55, 394, 32, 210, 64, 320, 47, 210, 149, 170, 114, 326, 27, 173, 102, 293,
+        64, 386, 154, 339, 78, 483, 27, 207, 61, 512, 64, 301, 116, 339, 99, 483, 27, 328, 112, 283, 51, 573, 27, 135,
+        76, 228, 27, 218, 27, 530, 7, 293, 27, 439, 47, 394, 64, 243, 115, 524, 26, 498, 26, 371, 62, 229, 62, 204,
+        181, 678, 34, 498, 34, 371, 62, 287, 55, 349, 32, 305, 53, 498, 62, 308, 47, 305, 135, 524, 114, 678, 62, 341,
+        169, 349, 62, 436, 114, 693, 80, 290, 7, 561, 53, 237, 53, 53, 524, 47, 62, 111, 97, 670, 160, 167, 26, 549,
+        31, 390, 35, 656, 124, 670, 167, 467, 34, 549, 31, 424, 167, 169, 32, 167, 167, 195, 110, 374, 47, 167, 55, 377,
+        146, 225, 60, 146, 124, 628, 178, 584, 35, 603, 169, 377, 83, 146, 146, 587, 80, 146, 108, 138, 108, 588, 146, 725,
+        24, 270, 55, 739, 87, 236, 87, 211, 269, 285, 160, 269, 22, 269, 55, 269, 56, 100, 100, 225, 60, 100, 87, 258,
+        87, 189, 55, 500, 54, 431, 200, 285, 160, 200, 22, 200, 55, 200, 56, 182, 182, 225, 60, 182, 93, 101, 93, 414,
+        55, 462, 54, 93, 269, 467, 11, 100, 397, 83, 100, 100, 587, 80, 100, 100, 226, 100, 725, 85, 431, 87, 322, 195,
+        500, 69, 431, 151, 771, 169, 200, 182, 587, 80, 182, 38, 490, 169, 462, 53, 507, 195, 462, 69, 93, 53, 302, 181,
+        446, 46, 446, 122, 472, 254, 724, 31, 861, 31, 217, 19, 446, 11, 885, 7, 837, 31, 869, 31, 497, 13, 658, 31,
+        115, 13, 411, 94, 472, 31, 113, 13, 307, 149, 214, 46, 376, 13, 475, 31, 209, 102, 875, 67, 345, 282, 559, 97,
+        834, 242, 393, 181, 752, 48, 56, 140, 46, 752, 122, 527, 119, 212, 43, 198, 198, 284, 24, 245, 34, 214, 12, 411,
+        76, 472, 31, 350, 12, 307, 13, 274, 55, 465, 149, 251, 114, 376, 12, 475, 31, 173, 149, 216, 102, 268, 216, 798,
+        67, 271, 102, 199, 329, 520, 154, 724, 48, 220, 31, 741, 48, 217, 14, 480, 103, 823, 119, 205, 70, 198, 198, 606,
+        915, 198, 476, 31, 135, 12, 679, 31, 363, 31, 218, 12, 274, 95, 127, 7, 268, 98, 127, 53, 216, 7, 199, 152,
+        428, 285, 570, 160, 570, 71, 318, 73, 651, 63, 347, 46, 347, 25, 347, 101, 259, 73, 229, 55, 388, 73, 204, 48,
+        113, 13, 323, 149, 292, 48, 416, 48, 231, 43, 177, 177, 284, 152, 516, 24, 46, 517, 24, 577, 152, 578, 304, 585,
+        181, 304, 133, 208, 46, 304, 25, 304, 43, 133, 133, 284, 85, 259, 32, 388, 46, 53, 73, 69, 259, 47, 388, 201,
+        585, 181, 201, 63, 201, 46, 201, 25, 201, 57, 368, 142, 264, 128, 179, 104, 264, 26, 178, 84, 178, 76, 527, 48,
+        350, 12, 212, 12, 323, 13, 205, 24, 320, 53, 662, 24, 401, 149, 178, 114, 674, 68, 177, 70, 177, 24, 386, 50,
+        824, 159, 681, 14, 552, 70, 133, 52, 430, 42, 824, 159, 680, 24, 612, 128, 650, 52, 264, 48, 135, 48, 363, 48,
+        218, 95, 534, 12, 205, 98, 534, 24, 590, 23, 108, 175, 375, 121, 240, 44, 499, 26, 557, 26, 344, 13, 219, 20,
+        121, 13, 277, 375, 432, 121, 311, 33, 499, 74, 276, 102, 652, 58, 412, 34, 557, 34, 344, 12, 219, 38, 121, 12,
+        277, 110, 641, 111, 121, 90, 428, 282, 607, 749, 907, 59, 544, 97, 669, 66, 639, 160, 248, 86, 232, 39, 708, 156,
+        445, 28, 656, 20, 202, 79, 90, 432, 666, 202, 311, 33, 698, 92, 297, 90, 523, 90, 516, 195, 796, 74, 581, 90,
+        578, 186, 806, 65, 809, 140, 560, 9, 775, 86, 644, 65, 385, 535, 586, 32, 683, 32, 248, 195, 248, 28, 30, 110,
+        47, 248, 34, 740, 34, 833, 12, 540, 38, 202, 150, 706, 90, 95, 32, 463, 90, 98, 90, 338, 7, 381, 55, 624,
+        26, 188, 13, 700, 175, 233, 4, 88, 160, 157, 359, 21, 515, 88, 428, 44, 491, 102, 627, 74, 642, 65, 421, 175,
+        215, 185, 240, 157, 335, 75, 515, 144, 428, 44, 255, 225, 797, 118, 206, 96, 235, 282, 478, 97, 531, 40, 838, 160,
+        406, 25, 532, 123, 156, 55, 406, 63, 546, 56, 249, 225, 249, 802, 60, 249, 26, 186, 40, 233, 26, 136, 20, 254,
+        22, 192, 79, 88, 13, 537, 46, 395, 53, 188, 122, 194, 26, 352, 40, 215, 13, 253, 20, 185, 22, 425, 79, 144,
+        56, 275, 901, 96, 262, 13, 373, 233, 432, 254, 311, 21, 297, 88, 516, 119, 271, 215, 432, 185, 311, 75, 297, 33,
+        255, 74, 147, 57, 809, 9, 766, 57, 385, 41, 460, 19, 546, 34, 186, 34, 136, 88, 397, 88, 95, 32, 192, 88,
+        98, 7, 217, 19, 395, 34, 352, 12, 253, 38, 185, 95, 144, 12, 250, 96, 114, 12, 373, 19, 96, 55, 690, 26,
+        333, 13, 455, 26, 176, 13, 426, 55, 673, 4, 58, 236, 44, 421, 175, 850, 160, 422, 157, 453, 44, 317, 55, 422,
+        56, 184, 179, 710, 84, 597, 60, 184, 26, 163, 13, 448, 7, 497, 102, 113, 7, 325, 459, 585, 181, 459, 208, 419,
+        9, 831, 72, 346, 72, 196, 55, 372, 142, 575, 72, 364, 72, 236, 84, 404, 72, 211, 71, 267, 143, 453, 160, 222,
+        20, 267, 22, 222, 79, 826, 56, 165, 13, 331, 82, 179, 13, 370, 26, 286, 12, 426, 94, 194, 7, 113, 7, 278,
+        55, 379, 102, 416, 33, 421, 74, 355, 54, 697, 4, 143, 154, 160, 579, 78, 118, 78, 428, 44, 187, 225, 310, 61,
+        235, 165, 643, 74, 179, 54, 619, 143, 794, 116, 240, 99, 118, 99, 428, 44, 273, 225, 580, 81, 235, 101, 309, 132,
+        260, 54, 309, 34, 163, 12, 448, 7, 416, 53, 163, 7, 231, 7, 209, 55, 230, 285, 444, 160, 444, 50, 166, 55,
+        444, 56, 139, 139, 225, 60, 139, 72, 258, 72, 189, 54, 519, 285, 294, 160, 294, 42, 166, 55, 294, 56, 295, 225,
+        295, 60, 295, 101, 130, 130, 414, 54, 130, 71, 154, 78, 312, 20, 154, 78, 79, 61, 63, 46, 61, 61, 262, 25,
+        61, 13, 164, 55, 319, 71, 116, 116, 391, 20, 116, 79, 99, 63, 81, 46, 81, 81, 262, 25, 81, 43, 51, 51,
+        284, 26, 172, 84, 172, 76, 194, 12, 244, 7, 223, 55, 141, 149, 252, 195, 379, 47, 379, 74, 263, 102, 614, 69,
+        697, 78, 523, 311, 630, 61, 415, 74, 650, 102, 420, 69, 619, 99, 523, 311, 784, 81, 415, 132, 361, 112, 517, 69,
+        309, 34, 252, 12, 417, 76, 263, 53, 252, 7, 173, 149, 151, 32, 230, 102, 439, 47, 230, 586, 734, 9, 910, 15,
+        536, 139, 226, 72, 322, 69, 519, 586, 733, 78, 103, 717, 15, 896, 10, 672, 53, 533, 69, 130, 78, 397, 78, 95,
+        61, 114, 61, 496, 19, 61, 53, 435, 32, 319, 53, 686, 47, 319, 38, 116, 95, 99, 81, 114, 81, 496, 51, 68,
+        126, 469, 51, 70, 51, 606, 51, 476, 34, 172, 7, 363, 12, 366, 7, 530, 32, 141, 7, 439, 53, 151, 47, 141,
+        106, 266, 37, 704, 94, 495, 37, 409, 106, 129, 27, 704, 94, 542, 27, 409, 37, 357, 97, 246, 143, 246, 94, 246,
+        27, 357, 64, 348, 124, 246, 76, 246, 64, 293, 106, 214, 67, 266, 94, 547, 37, 307, 97, 161, 67, 129, 94, 161,
+        82, 161, 27, 307, 37, 274, 64, 875, 124, 161, 67, 170, 76, 161, 126, 161, 27, 274, 127, 339, 64, 268, 127, 574,
+        64, 199, 48, 786, 37, 323, 97, 247, 143, 247, 94, 247, 82, 247, 24, 145, 55, 197, 37, 205, 23, 24, 256, 47,
+        598, 124, 247, 76, 247, 32, 197, 106, 557, 106, 344, 37, 219, 37, 277, 239, 557, 27, 486, 27, 219, 121, 283, 27,
+        277, 389, 641, 64, 652, 174, 202, 90, 315, 239, 740, 162, 667, 27, 540, 202, 283, 27, 801, 90, 339, 107, 463, 90,
+        574, 64, 381, 106, 188, 79, 553, 106, 186, 190, 233, 106, 136, 174, 254, 77, 192, 88, 315, 140, 348, 64, 627, 122,
+        210, 106, 352, 190, 215, 37, 253, 174, 185, 77, 425, 144, 315, 37, 250, 96, 256, 37, 373, 186, 239, 27, 329, 107,
+        192, 239, 352, 27, 253, 27, 250, 37, 868, 37, 455, 26, 241, 37, 426, 129, 260, 27, 455, 37, 384, 37, 345, 106,
+        387, 190, 850, 57, 91, 160, 106, 354, 77, 222, 79, 615, 37, 234, 37, 331, 37, 370, 13, 129, 27, 426, 94, 210,
+        64, 113, 64, 278, 163, 239, 79, 326, 27, 384, 27, 345, 37, 271, 154, 634, 78, 716, 154, 174, 78, 315, 61, 306,
+        61, 256, 61, 148, 37, 164, 116, 634, 116, 522, 116, 174, 99, 315, 81, 306, 81, 256, 81, 148, 37, 132, 12, 129,
+        84, 228, 94, 394, 27, 244, 64, 223, 55, 281, 170, 361, 95, 326, 98, 326, 27, 271, 107, 230, 154, 283, 78, 339,
+        61, 483, 61, 203, 107, 319, 116, 283, 99, 339, 81, 483, 27, 132, 51, 512, 12, 170, 76, 394, 27, 366, 27, 477,
+        32, 281, 64, 439, 47, 281, 97, 305, 26, 566, 13, 498, 13, 371, 124, 305, 26, 458, 12, 498, 82, 349, 12, 371,
+        13, 237, 55, 290, 10, 62, 135, 34, 458, 76, 349, 126, 349, 12, 237, 169, 290, 32, 290, 98, 693, 338, 693, 47,
+        290, 97, 167, 67, 214, 94, 167, 13, 549, 124, 167, 67, 251, 76, 167, 126, 167, 12, 549, 31, 274, 31, 434, 82,
+        377, 55, 146, 124, 377, 34, 628, 76, 377, 126, 377, 24, 424, 146, 169, 32, 146, 146, 195, 103, 737, 853, 87, 805,
+        55, 594, 97, 269, 143, 269, 100, 160, 82, 269, 22, 100, 55, 100, 32, 594, 87, 320, 82, 500, 87, 401, 97, 200,
+        143, 200, 94, 200, 82, 200, 22, 182, 55, 182, 56, 93, 93, 225, 82, 462, 60, 93, 124, 269, 100, 467, 103, 758,
+        100, 169, 32, 100, 100, 195, 103, 905, 47, 100, 87, 243, 362, 500, 126, 200, 169, 182, 93, 587, 126, 462, 80, 93,
+        93, 226, 93, 725, 188, 647, 79, 446, 254, 588, 88, 724, 98, 446, 10, 885, 122, 465, 31, 868, 31, 455, 13, 214,
+        67, 176, 163, 647, 79, 376, 31, 384, 216, 260, 7, 658, 48, 97, 393, 71, 559, 119, 292, 354, 647, 140, 242, 79,
+        752, 140, 599, 46, 198, 198, 262, 122, 526, 12, 214, 67, 286, 94, 465, 20, 127, 7, 307, 251, 361, 95, 376, 98,
+        376, 216, 361, 7, 475, 31, 271, 102, 434, 186, 520, 48, 329, 154, 588, 31, 399, 24, 220, 159, 480, 103, 816, 24,
+        217, 911, 53, 821, 12, 251, 67, 172, 76, 465, 38, 127, 7, 274, 111, 127, 152, 392, 97, 570, 143, 570, 160, 684,
+        97, 388, 40, 318, 79, 347, 56, 259, 46, 730, 82, 388, 13, 602, 24, 113, 163, 520, 48, 448, 46, 177, 177, 262,
+        25, 177, 44, 108, 102, 323, 282, 304, 304, 312, 304, 466, 133, 181, 63, 133, 46, 133, 133, 262, 25, 133, 13, 508,
+        73, 835, 201, 282, 201, 312, 201, 466, 79, 201, 24, 502, 46, 600, 24, 442, 43, 264, 12, 292, 48, 591, 76, 526,
+        38, 152, 3, 108, 55, 261, 178, 361, 48, 417, 114, 177, 33, 108, 102, 205, 50, 818, 11, 681, 159, 552, 19, 133,
+        23, 613, 42, 818, 11, 680, 24, 741, 24, 207, 70, 264, 12, 178, 24, 363, 24, 218, 24, 530, 7, 205, 24, 439,
+        47, 261, 121, 175, 44, 375, 26, 276, 13, 344, 121, 432, 33, 375, 121, 649, 121, 517, 58, 499, 34, 276, 12, 344,
+        7, 219, 23, 121, 7, 277, 90, 392, 28, 59, 907, 71, 607, 39, 760, 97, 248, 2, 544, 232, 751, 56, 640, 94,
+        248, 13, 867, 20, 90, 202, 432, 33, 666, 90, 311, 90, 493, 33, 464, 74, 463, 102, 525, 186, 810, 119, 186, 8,
+        775, 65, 233, 66, 792, 9, 535, 103, 535, 86, 134, 110, 445, 248, 362, 34, 707, 12, 833, 12, 330, 38, 90, 110,
+        706, 90, 111, 65, 514, 13, 188, 175, 254, 153, 175, 88, 240, 88, 392, 157, 192, 44, 360, 55, 780, 175, 185, 44,
+        215, 144, 240, 144, 392, 157, 425, 29, 515, 96, 428, 282, 532, 71, 478, 97, 406, 26, 531, 63, 638, 94, 406, 82,
+        406, 25, 638, 156, 193, 55, 249, 26, 359, 40, 153, 13, 136, 20, 88, 3, 360, 79, 395, 26, 335, 3, 215, 13,
+        299, 20, 144, 22, 275, 79, 96, 254, 432, 33, 233, 88, 311, 74, 192, 58, 491, 185, 432, 33, 215, 144, 311, 870,
+        96, 516, 8, 766, 57, 233, 9, 906, 895, 32, 249, 34, 359, 12, 136, 38, 88, 88, 111, 7, 537, 98, 395, 122,
+        141, 34, 335, 12, 299, 38, 144, 95, 96, 32, 275, 96, 98, 7, 373, 44, 514, 13, 333, 13, 176, 33, 514, 55,
+        774, 4, 57, 115, 175, 696, 94, 422, 57, 514, 157, 222, 22, 184, 55, 184, 13, 163, 7, 455, 282, 459, 312, 459,
+        97, 372, 143, 372, 63, 419, 94, 372, 72, 805, 25, 419, 13, 404, 55, 528, 40, 267, 84, 453, 94, 222, 13, 354,
+        22, 165, 13, 555, 12, 176, 7, 426, 82, 379, 55, 675, 102, 384, 58, 421, 154, 175, 143, 579, 78, 240, 78, 392,
+        61, 118, 55, 310, 32, 184, 102, 331, 47, 184, 116, 175, 84, 794, 99, 240, 99, 392, 81, 118, 81, 428, 44, 112,
+        225, 309, 51, 235, 12, 163, 7, 448, 7, 384, 102, 244, 7, 345, 97, 444, 143, 444, 139, 160, 82, 444, 22, 139,
+        55, 139, 32, 528, 72, 320, 72, 401, 97, 294, 143, 294, 94, 294, 82, 294, 748, 55, 295, 56, 130, 130, 225, 60,
+        130, 40, 154, 78, 391, 20, 78, 61, 79, 32, 165, 7, 331, 53, 179, 7, 370, 40, 116, 99, 391, 20, 99, 79,
+        81, 51, 63, 46, 51, 51, 262, 25, 51, 13, 172, 84, 429, 94, 141, 7, 244, 126, 379, 149, 263, 102, 757, 47,
+        675, 74, 230, 78, 493, 61, 523, 195, 310, 47, 310, 74, 319, 99, 493, 81, 523, 311, 629, 51, 415, 51, 721, 12,
+        252, 7, 417, 7, 757, 53, 263, 7, 271, 58, 820, 103, 734, 536, 586, 139, 195, 47, 139, 72, 243, 103, 733, 10,
+        41, 399, 9, 779, 15, 408, 130, 226, 38, 78, 61, 95, 61, 98, 61, 338, 7, 164, 41, 820, 38, 99, 81, 95,
+        51, 114, 51, 496, 19, 51, 53, 469, 12, 172, 76, 141, 12, 151, 7, 477, 37, 266, 84, 495, 37, 129, 84, 542,
+        168, 495, 64, 409, 27, 129, 84, 246, 168, 542, 64, 357, 27, 170, 168, 246, 64, 881, 37, 214, 67, 241, 31, 129,
+        67, 471, 168, 547, 127, 174, 64, 307, 34, 161, 67, 228, 161, 168, 53, 161, 64, 274, 64, 434, 24, 786, 48, 129,
+        84, 247, 94, 197, 82, 197, 91, 108, 64, 323, 48, 170, 76, 197, 64, 205, 106, 276, 37, 344, 45, 443, 27, 344,
+        64, 219, 121, 510, 64, 277, 90, 174, 155, 443, 117, 667, 27, 330, 90, 283, 389, 706, 64, 525, 37, 188, 106, 359,
+        153, 190, 37, 136, 88, 174, 91, 360, 111, 553, 106, 335, 91, 215, 37, 299, 144, 174, 77, 275, 96, 315, 27, 186,
+        27, 136, 64, 537, 27, 352, 27, 299, 107, 275, 37, 333, 37, 176, 27, 333, 37, 625, 106, 453, 190, 696, 222, 521,
+        37, 354, 77, 165, 37, 555, 27, 176, 84, 210, 27, 163, 27, 625, 64, 384, 64, 345, 154, 190, 78, 522, 78, 174,
+        61, 315, 32, 685, 64, 331, 64, 370, 116, 190, 99, 522, 99, 174, 81, 315, 51, 306, 51, 256, 51, 148, 13, 228,
+        84, 394, 141, 521, 64, 244, 27, 252, 111, 326, 27, 564, 64, 271, 78, 283, 61, 339, 61, 574, 64, 164, 99, 283,
+        81, 339, 51, 483, 51, 203, 27, 172, 141, 433, 27, 151, 64, 477, 26, 305, 13, 566, 34, 305, 12, 566, 7, 498,
+        53, 305, 7, 371, 34, 349, 12, 458, 76, 290, 53, 349, 7, 237, 856, 26, 167, 67, 472, 34, 167, 12, 670, 167,
+        168, 53, 167, 7, 549, 82, 146, 31, 178, 12, 628, 76, 146, 126, 146, 108, 789, 24, 434, 87, 113, 26, 269, 100,
+        143, 94, 100, 82, 100, 87, 223, 55, 431, 26, 200, 84, 200, 94, 182, 82, 182, 22, 93, 55, 93, 34, 269, 913,
+        100, 126, 100, 362, 32, 431, 87, 439, 53, 500, 47, 431, 126, 182, 93, 169, 93, 195, 53, 462, 47, 93, 31, 188,
+        88, 588, 111, 446, 31, 333, 31, 176, 31, 163, 31, 625, 292, 393, 40, 559, 119, 527, 31, 354, 140, 212, 79, 198,
+        31, 286, 67, 194, 31, 252, 111, 376, 31, 564, 102, 216, 120, 803, 48, 186, 48, 136, 78, 588, 823, 140, 205, 98,
+        198, 198, 338, 122, 261, 31, 172, 67, 429, 141, 584, 23, 127, 71, 347, 143, 684, 160, 259, 20, 347, 22, 259, 79,
+        730, 48, 163, 79, 177, 24, 384, 152, 517, 24, 345, 71, 304, 133, 312, 20, 304, 79, 133, 32, 259, 46, 430, 53,
+        388, 25, 430, 71, 201, 201, 391, 20, 201, 79, 600, 24, 234, 46, 264, 25, 264, 48, 286, 24, 591, 94, 261, 23,
+        152, 48, 252, 95, 177, 98, 177, 58, 108, 10, 681, 11, 552, 98, 133, 19, 430, 10, 680, 24, 399, 24, 860, 41,
+        108, 48, 172, 76, 261, 24, 366, 24, 477, 44, 121, 13, 276, 33, 121, 58, 375, 12, 276, 7, 344, 59, 760, 40,
+        607, 39, 639, 45, 232, 2, 708, 13, 669, 33, 202, 33, 327, 90, 649, 90, 517, 58, 464, 186, 393, 119, 359, 775,
+        65, 153, 32, 640, 168, 248, 53, 248, 7, 867, 12, 707, 12, 581, 7, 330, 23, 90, 88, 175, 44, 153, 168, 624,
+        102, 188, 140, 345, 44, 185, 44, 296, 96, 240, 96, 392, 157, 275, 71, 532, 40, 478, 26, 406, 13, 531, 63, 709,
+        94, 249, 82, 249, 25, 709, 26, 192, 3, 153, 119, 194, 7, 188, 13, 335, 3, 296, 13, 147, 20, 96, 33, 254,
+        33, 153, 88, 649, 58, 360, 33, 185, 33, 296, 96, 311, 74, 275, 766, 57, 153, 88, 717, 110, 193, 34, 192, 7,
+        136, 23, 88, 111, 395, 12, 335, 12, 147, 38, 96, 96, 111, 58, 514, 44, 267, 84, 422, 94, 184, 41, 514, 157,
+        165, 7, 333, 71, 459, 312, 419, 831, 84, 372, 63, 575, 94, 528, 72, 113, 72, 278, 26, 222, 84, 222, 94, 165,
+        13, 179, 7, 176, 102, 163, 55, 697, 78, 175, 84, 579, 61, 240, 82, 310, 74, 165, 55, 619, 44, 116, 84, 712,
+        81, 240, 81, 392, 51, 118, 55, 309, 7, 163, 7, 625, 50, 232, 139, 143, 94, 139, 82, 139, 72, 223, 55, 519,
+        42, 232, 84, 294, 94, 295, 82, 295, 22, 130, 55, 130, 40, 78, 61, 391, 20, 61, 7, 555, 3, 116, 81, 391,
+        20, 81, 51, 79, 12, 194, 84, 141, 53, 379, 149, 230, 102, 564, 47, 697, 61, 493, 102, 435, 102, 686, 47, 619,
+        81, 493, 51, 523, 195, 309, 47, 309, 12, 263, 7, 889, 7, 564, 102, 151, 910, 139, 362, 72, 439, 47, 519, 103,
+        896, 408, 586, 130, 195, 47, 130, 38, 61, 61, 111, 7, 686, 53, 319, 38, 81, 51, 95, 51, 98, 51, 338, 7,
+        172, 141, 168, 7, 151, 37, 241, 27, 241, 37, 699, 13, 246, 27, 699, 37, 608, 27, 228, 27, 608, 31, 241, 13,
+        161, 67, 210, 12, 161, 67, 394, 31, 608, 127, 510, 13, 247, 84, 197, 168, 598, 152, 510, 48, 228, 168, 197, 37,
+        276, 27, 276, 64, 344, 27, 707, 27, 581, 64, 330, 90, 510, 106, 192, 91, 153, 119, 210, 64, 188, 37, 335, 91,
+        296, 37, 147, 96, 174, 27, 359, 64, 136, 27, 335, 27, 147, 37, 355, 91, 267, 91, 696, 165, 521, 37, 179, 37,
+        194, 27, 355, 37, 503, 873, 61, 522, 61, 174, 37, 687, 91, 116, 81, 522, 81, 174, 51, 315, 27, 194, 84, 281,
+        27, 263, 27, 503, 64, 564, 61, 283, 64, 435, 64, 686, 81, 283, 51, 339, 51, 574, 7, 228, 64, 812, 64, 151,
+        13, 305, 12, 305, 7, 566, 12, 349, 7, 458, 98, 804, 53, 290, 13, 167, 12, 167, 67, 465, 12, 377, 12, 843,
+        146, 168, 737, 857, 84, 100, 94, 431, 87, 244, 13, 200, 84, 182, 93, 94, 82, 93, 758, 100, 168, 905, 87, 477,
+        93, 126, 93, 362, 65, 127, 31, 355, 140, 292, 3, 559, 119, 526, 65, 152, 31, 194, 33, 127, 31, 503, 48, 359,
+        24, 136, 816, 111, 198, 31, 429, 67, 141, 40, 347, 84, 684, 94, 259, 13, 388, 33, 152, 24, 625, 40, 304, 133,
+        391, 20, 133, 79, 430, 40, 201, 222, 583, 57, 152, 79, 264, 24, 286, 84, 261, 38, 177, 111, 177, 24, 564, 817,
+        111, 133, 98, 430, 24, 722, 24, 435, 98, 264, 24, 172, 141, 583, 24, 151, 58, 121, 7, 276, 59, 639, 40, 732,
+        13, 683, 13, 248, 888, 58, 327, 140, 186, 119, 192, 535, 7, 669, 12, 463, 7, 581, 44, 88, 7, 900, 44, 144,
+        44, 206, 40, 532, 3, 478, 13, 406, 13, 750, 13, 192, 7, 642, 13, 425, 3, 206, 33, 88, 58, 153, 168, 780,
+        851, 33, 206, 96, 649, 906, 41, 153, 168, 249, 12, 192, 119, 141, 23, 395, 12, 425, 7, 147, 23, 96, 13, 422,
+        84, 184, 71, 419, 312, 575, 13, 372, 72, 426, 13, 222, 84, 165, 102, 355, 44, 78, 84, 310, 168, 184, 102, 179,
+        44, 99, 84, 580, 51, 240, 82, 309, 7, 355, 735, 84, 139, 94, 519, 72, 244, 13, 294, 84, 295, 94, 130, 82,
+        130, 3, 78, 165, 168, 7, 179, 3, 99, 51, 391, 20, 51, 13, 141, 102, 263, 58, 822, 53, 310, 41, 822, 51,
+        493, 102, 469, 7, 263, 7, 503, 53, 139, 72, 477, 779, 130, 362, 23, 61, 7, 687, 38, 51, 51, 111, 12, 141,
+        37, 210, 27, 210, 64, 699, 7, 246, 64, 608, 31, 210, 7, 161, 67, 281, 13, 197, 24, 699, 12, 197, 24, 608,
+        64, 276, 27, 463, 64, 581, 37, 192, 64, 642, 37, 425, 91, 206, 27, 192, 119, 281, 27, 425, 64, 147, 37, 222,
+        84, 685, 64, 355, 78, 91, 9, 864, 64, 179, 91, 99, 51, 522, 51, 174, 37, 141, 27, 230, 64, 503, 61, 510,
+        64, 687, 51, 283, 64, 469, 27, 141, 7, 305, 12, 290, 111, 804, 7, 167, 12, 146, 67, 261, 13, 100, 84, 431,
+        13, 182, 84, 93, 12, 100, 87, 812, 87, 151, 53, 93, 140, 527, 24, 642, 58, 127, 48, 192, 119, 261, 23, 198,
+        31, 141, 26, 259, 84, 259, 58, 152, 40, 133, 168, 259, 7, 388, 3, 201, 165, 583, 41, 152, 24, 194, 23, 177,
+        24, 503, 23, 133, 111, 430, 24, 650, 111, 264, 12, 261, 2, 639, 3, 732, 58, 90, 140, 359, 7, 683, 7, 248,
+        7, 463, 44, 395, 44, 96, 40, 638, 3, 546, 13, 249, 140, 194, 13, 275, 58, 88, 109, 803, 33, 96, 58, 206,
+        41, 88, 7, 750, 7, 192, 12, 275, 13, 184, 40, 419, 391, 575, 72, 176, 13, 165, 44, 61, 84, 619, 44, 81,
+        84, 309, 13, 139, 84, 519, 13, 295, 84, 130, 3, 61, 3, 81, 102, 230, 102, 319, 53, 309, 7, 230, 72, 151,
+        53, 130, 7, 319, 23, 51, 7, 141, 64, 210, 27, 281, 31, 281, 24, 210, 7, 197, 64, 463, 140, 210, 37, 275,
+        64, 192, 27, 275, 37, 165, 61, 91, 81, 91, 64, 230, 64, 319, 51, 510, 64, 141, 7, 290, 7, 146, 87, 194,
+        13, 93, 7, 100, 140, 526, 24, 192, 13, 259, 3, 133, 24, 222, 24, 230, 23, 430, 23, 264, 24, 141, 13, 640,
+        2, 792, 3, 638, 58, 395, 58, 96, 7, 249, 140, 141, 7, 275, 3, 419, 7, 184, 44, 51, 72, 194, 13, 130,
+        7, 165, 3, 51, 64, 281, 64, 261, 140, 281, 64, 275, 864, 51, 91, 87, 141, 140, 261, 7, 259, 24, 165, 7,
+        640, 3, 709, 3, 575
+    ]),
+    ostart: new Int32Array([
+        0, 12, 34, 75, 193, 383, 670, 1153, 1791, 2589, 3421, 4211, 4842, 5260, 5492, 5616, 5662, 5675
+    ])
+};
+/**
+ * type I, A of degree 3, B of degree 3 (degree 16 in `s`, 5675 terms)
+ * (returned coefficients in descending powers of `s`)
+ * (5675 terms; multiplications: 50660 without sharing,
+ * 12284 with 904 shared products)
+ */
+function resI_A3B3(ax, ay, bx, by) {
+    const o = evalProgram(resI_A3B3_P, [ax[0], ax[1], ax[2], ax[3], ay[0], ay[1], ay[2], ay[3], bx[2], bx[3], by[2], by[3]]);
+    return Array.from(o);
+}
+
+//# sourceMappingURL=resI_A3B3.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/resMAEI_A1B2.js
+// GENERATED by gen-resultants.py - do not edit
+/**
+ * MA endpoint/interior, A of degree 1, B of degree 2 (degree 3 in `s`, 11 terms)
+ * (returned coefficients in descending powers of `s`)
+ * (11 terms; multiplications: 33 without sharing,
+ * 24 with 4 shared products)
+ */
+function resMAEI_A1B2(ax, ay, bx, by) {
+    const x0 = ax[0];
+    const x1 = ax[1];
+    const x2 = ay[0];
+    const x3 = ay[1];
+    const x4 = bx[2];
+    const x5 = by[2];
+    const x6 = x1 * x4;
+    const x7 = x3 * x5;
+    const x8 = x5 * x5;
+    const x9 = x4 * x4;
+    const o = new Float64Array(4);
+    o[0] = -2 * x6 * x9 - 2 * x6 * x8 - 2 * x7 * x9 - 2 * x7 * x8;
+    o[1] = -5 * x4 * x6 - 3 * x1 * x8 - 2 * x4 * x7;
+    o[2] = -4 * x6;
+    o[3] = -2 * x0 * x7 + 2 * x1 * x2 * x5 - x1;
+    return Array.from(o);
+}
+
+//# sourceMappingURL=resMAEI_A1B2.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/resMAEI_A1B3.js
+// GENERATED by gen-resultants.py - do not edit
+/**
+ * MA endpoint/interior, A of degree 1, B of degree 3 (degree 6 in `s`, 41 terms)
+ * (returned coefficients in descending powers of `s`)
+ * (41 terms; multiplications: 138 without sharing,
+ * 87 with 13 shared products)
+ */
+function resMAEI_A1B3(ax, ay, bx, by) {
+    const x0 = ax[0];
+    const x1 = ax[1];
+    const x2 = ay[0];
+    const x3 = ay[1];
+    const x4 = bx[2];
+    const x5 = bx[3];
+    const x6 = by[2];
+    const x7 = by[3];
+    const x8 = x1 * x4;
+    const x9 = x3 * x6;
+    const x10 = x3 * x7;
+    const x11 = x1 * x5;
+    const x12 = x7 * x7;
+    const x13 = x5 * x5;
+    const x14 = x6 * x6;
+    const x15 = x6 * x7;
+    const x16 = x4 * x4;
+    const x17 = x4 * x5;
+    const x18 = x0 * x9;
+    const x19 = x0 * x10;
+    const x20 = x1 * x2;
+    const o = new Float64Array(7);
+    o[0] = -3 * x11 * x13 - 3 * x11 * x12 - 3 * x10 * x13 - 3 * x10 * x12;
+    o[1] = -8 * x8 * x13 - 4 * x8 * x12 - 4 * x11 * x15 - 4 * x10 * x17 - 4 * x9 * x13 - 8 * x9 * x12;
+    o[2] = -7 * x8 * x17 - 6 * x8 * x15 - 7 * x5 * x11 - x11 * x14 - 5 * x1 * x12 - x10 * x16 - 6 * x9 * x17 - 2 * x5 * x10 - 7 * x9 * x15;
+    o[3] = -2 * x8 * x16 - 12 * x5 * x8 - 2 * x8 * x14 - 8 * x1 * x15 - 2 * x9 * x16 - 4 * x5 * x9 - 2 * x9 * x14;
+    o[4] = -2 * x4 * x19 + 2 * x5 * x18 + 2 * x2 * x7 * x8 - 2 * x2 * x6 * x11 - 5 * x4 * x8 - 5 * x11 - 3 * x1 * x14 - 2 * x4 * x9 + x10;
+    o[5] = -4 * x19 + 4 * x7 * x20 - 4 * x8;
+    o[6] = -2 * x18 + 2 * x6 * x20 - x1;
+    return Array.from(o);
+}
+
+//# sourceMappingURL=resMAEI_A1B3.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/resMAEI_A2B2.js
+// GENERATED by gen-resultants.py - do not edit
+/**
+ * MA endpoint/interior, A of degree 2, B of degree 2 (degree 6 in `s`, 75 terms)
+ * (returned coefficients in descending powers of `s`)
+ * (75 terms; multiplications: 462 without sharing,
+ * 178 with 34 shared products)
+ */
+function resMAEI_A2B2(ax, ay, bx, by) {
+    const x0 = ax[0];
+    const x1 = ax[1];
+    const x2 = ax[2];
+    const x3 = ay[0];
+    const x4 = ay[1];
+    const x5 = ay[2];
+    const x6 = bx[2];
+    const x7 = by[2];
+    const x8 = x7 * x7;
+    const x9 = x2 * x6;
+    const x10 = x5 * x8;
+    const x11 = x6 * x9;
+    const x12 = x2 * x8;
+    const x13 = x5 * x7;
+    const x14 = x6 * x6;
+    const x15 = x1 * x4;
+    const x16 = x7 * x10;
+    const x17 = x8 * x9;
+    const x18 = x1 * x1;
+    const x19 = x0 * x10;
+    const x20 = x3 * x7;
+    const x21 = x6 * x11;
+    const x22 = x7 * x15;
+    const x23 = x10 * x14;
+    const x24 = x0 * x13;
+    const x25 = x3 * x10;
+    const x26 = x4 * x4;
+    const x27 = x9 * x20;
+    const x28 = x18 * x13;
+    const x29 = x2 * x12;
+    const x30 = x5 * x19;
+    const x31 = x5 * x23;
+    const x32 = x11 * x11;
+    const x33 = x0 * x16;
+    const x34 = x2 * x2;
+    const x35 = x6 * x10;
+    const x36 = x6 * x28;
+    const x37 = x8 * x26;
+    const x38 = x8 * x10;
+    const x39 = x18 * x16;
+    const x40 = x21 * x13;
+    const x41 = x11 * x13;
+    const o = new Float64Array(7);
+    o[0] = 4 * x14 * x32 + 8 * x8 * x32 + 4 * x17 * x17 + 8 * x14 * x40 + 16 * x16 * x21 + 8 * x16 * x17 + 4 * x14 * x31 + 8 * x10 * x23 + 4 * x10 * x38;
+    o[1] = 20 * x11 * x21 + 32 * x11 * x17 + 12 * x12 * x17 + 28 * x14 * x41 + 40 * x11 * x16 + 12 * x12 * x16 + 8 * x6 * x31 + 8 * x10 * x35;
+    o[2] = 41 * x32 + 46 * x9 * x17 + 9 * x12 * x12 + 36 * x40 + 28 * x9 * x16 + 4 * x31;
+    o[3] = 8 * x21 * x24 + 8 * x9 * x33 + 8 * x14 * x30 + 8 * x10 * x19 - 4 * x14 * x36 - 4 * x6 * x39 + 4 * x21 * x22 + 4 * x17 * x22 - 4 * x15 * x23 - 4 * x15 * x38 - 8 * x11 * x27 - 8 * x12 * x27 + 44 * x9 * x11 + 28 * x9 * x12 - 8 * x11 * x25 - 8 * x12 * x25 + 4 * x11 * x37 + 4 * x12 * x37 + 20 * x41 + 4 * x2 * x16;
+    o[4] = 20 * x11 * x24 + 12 * x2 * x33 + 8 * x6 * x30 - 10 * x14 * x28 - 6 * x39 + 10 * x11 * x22 + 6 * x12 * x22 - 4 * x15 * x35 - 20 * x9 * x27 - 12 * x20 * x29 + 26 * x9 * x9 + 6 * x29 - 8 * x9 * x25 + 4 * x17 * x26 + 4 * x9 * x13;
+    o[5] = 16 * x9 * x24 - 8 * x36 + 8 * x9 * x22 - 16 * x2 * x27 + 8 * x2 * x9;
+    o[6] = 4 * x0 * x30 - 4 * x15 * x19 - 8 * x2 * x3 * x19 + 4 * x0 * x12 * x26 + 4 * x2 * x24 + 4 * x18 * x25 - 2 * x28 - 4 * x3 * x12 * x15 + 2 * x2 * x22 + 4 * x3 * x3 * x29 - 4 * x20 * x34 + x34;
+    return Array.from(o);
+}
+
+//# sourceMappingURL=resMAEI_A2B2.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/resMAEI_A2B3.js
+// GENERATED by gen-resultants.py - do not edit
+/**
+ * MA endpoint/interior, A of degree 2, B of degree 3 (degree 12 in `s`, 692 terms)
+ * (returned coefficients in descending powers of `s`)
+ * (692 terms; multiplications: 4814 without sharing,
+ * 1478 with 174 shared products)
+ */
+function resMAEI_A2B3(ax, ay, bx, by) {
+    const x0 = ax[0];
+    const x1 = ax[1];
+    const x2 = ax[2];
+    const x3 = ay[0];
+    const x4 = ay[1];
+    const x5 = ay[2];
+    const x6 = bx[2];
+    const x7 = bx[3];
+    const x8 = by[2];
+    const x9 = by[3];
+    const x10 = x5 * x9;
+    const x11 = x2 * x8;
+    const x12 = x6 * x7;
+    const x13 = x2 * x9;
+    const x14 = x5 * x8;
+    const x15 = x6 * x6;
+    const x16 = x7 * x7;
+    const x17 = x8 * x10;
+    const x18 = x1 * x4;
+    const x19 = x9 * x11;
+    const x20 = x9 * x10;
+    const x21 = x8 * x11;
+    const x22 = x1 * x1;
+    const x23 = x3 * x11;
+    const x24 = x0 * x10;
+    const x25 = x3 * x13;
+    const x26 = x8 * x14;
+    const x27 = x2 * x12;
+    const x28 = x4 * x4;
+    const x29 = x9 * x13;
+    const x30 = x11 * x12;
+    const x31 = x7 * x16;
+    const x32 = x6 * x15;
+    const x33 = x10 * x12;
+    const x34 = x12 * x14;
+    const x35 = x0 * x14;
+    const x36 = x6 * x17;
+    const x37 = x7 * x17;
+    const x38 = x28 * x19;
+    const x39 = x9 * x18;
+    const x40 = x12 * x18;
+    const x41 = x5 * x11;
+    const x42 = x9 * x20;
+    const x43 = x2 * x15;
+    const x44 = x5 * x30;
+    const x45 = x2 * x16;
+    const x46 = x20 * x13;
+    const x47 = x13 * x13;
+    const x48 = x7 * x21;
+    const x49 = x8 * x18;
+    const x50 = x10 * x15;
+    const x51 = x28 * x29;
+    const x52 = x6 * x19;
+    const x53 = x8 * x26;
+    const x54 = x10 * x16;
+    const x55 = x7 * x19;
+    const x56 = x8 * x17;
+    const x57 = x0 * x17;
+    const x58 = x14 * x15;
+    const x59 = x3 * x22;
+    const x60 = x6 * x24;
+    const x61 = x11 * x16;
+    const x62 = x14 * x16;
+    const x63 = x6 * x21;
+    const x64 = x6 * x25;
+    const x65 = x7 * x10;
+    const x66 = x9 * x17;
+    const x67 = x10 * x32;
+    const x68 = x11 * x15;
+    const x69 = x20 * x18;
+    const x70 = x0 * x41;
+    const x71 = x7 * x23;
+    const x72 = x10 * x31;
+    const x73 = x13 * x18;
+    const x74 = x15 * x19;
+    const x75 = x16 * x19;
+    const x76 = x0 * x26;
+    const x77 = x20 * x20;
+    const x78 = x0 * x6;
+    const x79 = x2 * x31;
+    const x80 = x2 * x32;
+    const x81 = x3 * x21;
+    const x82 = x3 * x19;
+    const x83 = x6 * x10;
+    const x84 = x8 * x38;
+    const x85 = x21 * x28;
+    const x86 = x22 * x33;
+    const x87 = x22 * x34;
+    const x88 = x25 * x15;
+    const x89 = x27 * x27;
+    const x90 = x29 * x29;
+    const x91 = x12 * x47;
+    const x92 = x30 * x13;
+    const x93 = x31 * x14;
+    const x94 = x13 * x40;
+    const x95 = x0 * x44;
+    const x96 = x6 * x23;
+    const x97 = x7 * x24;
+    const x98 = x7 * x26;
+    const x99 = x8 * x36;
+    const x100 = x8 * x37;
+    const x101 = x9 * x9;
+    const x102 = x11 * x11;
+    const x103 = x11 * x13;
+    const x104 = x11 * x18;
+    const x105 = x22 * x42;
+    const x106 = x22 * x53;
+    const x107 = x23 * x12;
+    const x108 = x23 * x16;
+    const x109 = x29 * x39;
+    const x110 = x30 * x18;
+    const x111 = x17 * x18;
+    const x112 = x0 * x46;
+    const x113 = x6 * x12;
+    const x114 = x6 * x14;
+    const x115 = x7 * x25;
+    const x116 = x7 * x14;
+    const x117 = x20 * x17;
+    const x118 = x21 * x21;
+    const x119 = x22 * x56;
+    const x120 = x24 * x27;
+    const x121 = x26 * x26;
+    const x122 = x26 * x17;
+    const x123 = x28 * x48;
+    const x124 = x32 * x14;
+    const x125 = x17 * x17;
+    const x126 = x0 * x36;
+    const x127 = x0 * x37;
+    const x128 = x0 * x38;
+    const x129 = x2 * x2;
+    const x130 = x2 * x27;
+    const x131 = x3 * x18;
+    const x132 = x7 * x12;
+    const x133 = x8 * x84;
+    const x134 = x9 * x36;
+    const x135 = x9 * x37;
+    const x136 = x9 * x84;
+    const x137 = x11 * x30;
+    const x138 = x11 * x17;
+    const x139 = x20 * x40;
+    const x140 = x20 * x59;
+    const x141 = x22 * x66;
+    const x142 = x25 * x27;
+    const x143 = x26 * x18;
+    const x144 = x27 * x33;
+    const x145 = x29 * x42;
+    const x146 = x12 * x19;
+    const x147 = x34 * x35;
+    const x148 = x35 * x35;
+    const x149 = x38 * x101;
+    const x150 = x41 * x15;
+    const x151 = x41 * x16;
+    const x152 = x43 * x15;
+    const x153 = x16 * x18;
+    const x154 = x0 * x34;
+    const x155 = x0 * x51;
+    const x156 = x0 * x69;
+    const x157 = x0 * x85;
+    const x158 = x3 * x20;
+    const x159 = x6 * x51;
+    const x160 = x8 * x8;
+    const x161 = x8 * x40;
+    const x162 = x21 * x35;
+    const x163 = x21 * x49;
+    const x164 = x22 * x50;
+    const x165 = x22 * x62;
+    const x166 = x23 * x27;
+    const x167 = x24 * x24;
+    const x168 = x25 * x29;
+    const x169 = x26 * x40;
+    const x170 = x26 * x59;
+    const x171 = x27 * x45;
+    const x172 = x28 * x63;
+    const x173 = x39 * x42;
+    const x174 = x13 * x61;
+    const x175 = x13 * x68;
+    const x176 = x45 * x45;
+    const x177 = x47 * x15;
+    const x178 = x47 * x16;
+    const x179 = x49 * x53;
+    const x180 = x59 * x17;
+    const x181 = x15 * x73;
+    const x182 = x16 * x70;
+    const x183 = x76 * x18;
+    const o = new Float64Array(13);
+    o[0] = 9 * x16 * x176 + 18 * x16 * x178 + 9 * x16 * x90 + 18 * x45 * x72 + 36 * x31 * x46 + 18 * x7 * x145 + 9 * x54 * x54 + 18 * x16 * x77 + 9 * x42 * x42;
+    o[1] = 48 * x16 * x171 + 72 * x16 * x91 + 24 * x12 * x90 + 24 * x16 * x174 + 24 * x29 * x75 + 72 * x27 * x72 + 96 * x46 * x132 + 24 * x6 * x145 + 24 * x31 * x151 + 96 * x19 * x72 + 72 * x42 * x55 + 24 * x33 * x54 + 24 * x12 * x77 + 24 * x54 * x62 + 72 * x16 * x117 + 48 * x42 * x66;
+    o[2] = 106 * x16 * x89 + 106 * x12 * x91 + 16 * x15 * x90 + 100 * x16 * x92 + 68 * x29 * x146 + 42 * x45 * x79 + 6 * x61 * x61 + 72 * x31 * x47 + 22 * x19 * x75 + 30 * x7 * x90 + 112 * x7 * x144 + 80 * x46 * x113 + 100 * x31 * x44 + 264 * x33 * x55 + 100 * x42 * x52 + 54 * x45 * x54 + 80 * x31 * x138 + 84 * x16 * x46 + 112 * x19 * x135 + 30 * x145 + 22 * x33 * x33 + 6 * x15 * x77 + 68 * x33 * x62 + 100 * x12 * x117 + 16 * x62 * x62 + 12 * x10 * x72 + 106 * x16 * x125 + 12 * x7 * x77 + 106 * x66 * x66;
+    o[3] = 124 * x12 * x89 + 68 * x15 * x91 + 152 * x12 * x92 + 48 * x29 * x74 + 184 * x27 * x79 + 28 * x30 * x61 + 208 * x7 * x91 + 68 * x19 * x146 + 40 * x6 * x90 + 104 * x31 * x103 + 8 * x21 * x75 + 88 * x29 * x55 + 84 * x6 * x144 + 20 * x32 * x46 + 164 * x44 * x132 + 228 * x33 * x52 + 160 * x27 * x54 + 228 * x30 * x37 + 128 * x12 * x46 + 164 * x19 * x134 + 80 * x16 * x151 + 20 * x21 * x93 + 240 * x19 * x54 + 84 * x19 * x100 + 128 * x19 * x42 + 8 * x33 * x50 + 68 * x33 * x34 + 28 * x15 * x117 + 48 * x34 * x62 + 16 * x33 * x65 + 152 * x12 * x125 + 40 * x14 * x72 + 68 * x16 * x122 + 56 * x20 * x37 + 124 * x56 * x66;
+    o[4] = 12 * x16 * x120 + 12 * x12 * x112 - 12 * x16 * x182 - 12 * x24 * x75 + 12 * x33 * x97 + 12 * x77 * x78 - 12 * x24 * x93 - 12 * x20 * x127 - 6 * x16 * x86 - 6 * x12 * x105 + 6 * x16 * x165 + 6 * x16 * x141 + 6 * x16 * x94 + 6 * x12 * x109 - 6 * x61 * x153 - 6 * x39 * x75 - 6 * x7 * x139 - 6 * x6 * x173 + 6 * x31 * x111 + 6 * x39 * x135 - 12 * x16 * x142 - 12 * x12 * x168 + 12 * x45 * x108 + 12 * x25 * x75 + 81 * x15 * x89 + 16 * x15 * x177 + 100 * x15 * x92 + 320 * x7 * x89 + 46 * x30 * x30 + 196 * x6 * x91 + 52 * x19 * x74 + 308 * x7 * x92 + 28 * x21 * x146 + 124 * x29 * x52 + 79 * x176 + 32 * x31 * x102 + x16 * x118 + 100 * x178 + 92 * x19 * x55 + 25 * x90 - 12 * x33 * x115 - 12 * x42 * x64 + 12 * x23 * x72 + 12 * x55 * x158 + 6 * x51 * x132 + 6 * x101 * x159 - 6 * x31 * x38 - 6 * x7 * x149 + 30 * x27 * x67 + 132 * x44 * x113 + 60 * x19 * x67 + 168 * x144 + 204 * x30 * x36 + 40 * x15 * x46 + 256 * x16 * x44 + 60 * x34 * x48 + 384 * x19 * x33 + 132 * x19 * x99 + 52 * x2 * x72 + 216 * x17 * x61 + 30 * x21 * x100 + 44 * x7 * x46 + 216 * x19 * x66 + x50 * x50 + 28 * x33 * x58 + 52 * x34 * x34 + 4 * x33 * x83 + 46 * x15 * x125 + 68 * x33 * x116 + 100 * x12 * x122 + 12 * x20 * x36 + 32 * x14 * x93 + 16 * x16 * x121 - 2 * x10 * x54 + 92 * x17 * x37 + 81 * x56 * x56 - 6 * x77;
+    o[5] = 32 * x12 * x120 + 16 * x15 * x112 - 32 * x16 * x95 + 24 * x24 * x79 - 16 * x57 * x61 + 24 * x7 * x112 + 16 * x33 * x60 + 32 * x20 * x126 - 16 * x35 * x93 + 24 * x24 * x54 - 32 * x37 * x57 + 24 * x0 * x77 - 16 * x12 * x86 - 8 * x15 * x105 + 16 * x16 * x87 - 12 * x22 * x72 + 8 * x16 * x119 - 12 * x7 * x105 + 16 * x12 * x94 + 8 * x15 * x109 - 16 * x16 * x110 + 12 * x31 * x73 - 8 * x49 * x75 + 12 * x7 * x109 - 8 * x6 * x139 - 16 * x39 * x134 + 8 * x31 * x143 - 12 * x16 * x69 + 16 * x39 * x100 - 12 * x173 - 32 * x12 * x142 - 16 * x29 * x88 + 32 * x27 * x108 - 24 * x25 * x79 + 16 * x23 * x75 - 24 * x29 * x115 + 28 * x27 * x152 + 24 * x15 * x175 + 276 * x6 * x89 + 32 * x30 * x68 + 60 * x32 * x47 + 296 * x6 * x92 + 24 * x21 * x74 + 272 * x171 + 100 * x7 * x137 + 4 * x12 * x118 + 184 * x91 + 140 * x19 * x52 + 152 * x174 + 40 * x19 * x48 + 80 * x19 * x29 - 16 * x33 * x64 - 32 * x52 * x158 + 16 * x23 * x93 - 24 * x25 * x54 + 32 * x37 * x82 - 24 * x25 * x42 + 8 * x51 * x113 + 16 * x6 * x149 - 8 * x31 * x85 + 12 * x16 * x51 - 16 * x7 * x136 + 12 * x51 * x101 + 4 * x43 * x67 + 52 * x32 * x44 + 72 * x27 * x50 + 56 * x32 * x138 + 300 * x12 * x44 + 56 * x34 * x63 + 132 * x19 * x50 + 96 * x27 * x65 + 360 * x17 * x30 + 52 * x21 * x99 + 16 * x6 * x46 + 96 * x31 * x41 + 60 * x21 * x62 + 4 * x48 * x53 + 144 * x10 * x55 + 180 * x19 * x56 + 4 * x50 * x58 + 24 * x34 * x58 + 32 * x33 * x114 + 32 * x15 * x122 + 64 * x34 * x116 + 24 * x12 * x121 - 8 * x10 * x33 + 32 * x17 * x36 + 8 * x14 * x54 + 64 * x26 * x37 + 28 * x53 * x56 - 16 * x117;
+    o[6] = 28 * x15 * x120 - 28 * x12 * x95 + 24 * x24 * x74 + 92 * x27 * x97 - 20 * x30 * x57 + 52 * x46 * x78 - 16 * x31 * x70 - 4 * x16 * x162 + 24 * x24 * x55 + 4 * x24 * x67 + 20 * x34 * x60 - 24 * x7 * x147 + 40 * x24 * x33 + 28 * x36 * x57 + 36 * x24 * x62 - 28 * x37 * x76 + 76 * x20 * x57 - 14 * x15 * x86 + 14 * x12 * x87 - 12 * x15 * x141 - 46 * x7 * x86 + 10 * x12 * x119 - 26 * x6 * x105 + 8 * x22 * x93 + 2 * x16 * x106 - 12 * x22 * x135 + 14 * x15 * x94 - 14 * x30 * x40 + 12 * x39 * x74 + 46 * x7 * x94 - 10 * x19 * x161 + 26 * x6 * x109 - 8 * x31 * x104 - 2 * x16 * x163 + 12 * x39 * x55 - 2 * x32 * x69 - 10 * x36 * x40 + 12 * x40 * x98 - 20 * x139 - 14 * x39 * x99 - 18 * x16 * x111 + 14 * x49 * x100 - 38 * x39 * x66 - 28 * x27 * x88 + 28 * x27 * x107 - 24 * x25 * x74 - 92 * x27 * x115 + 20 * x19 * x107 - 52 * x29 * x64 + 16 * x23 * x79 + 4 * x21 * x108 - 24 * x25 * x55 + 4 * x43 * x152 + 118 * x27 * x80 + 8 * x68 * x68 + 92 * x32 * x103 + 348 * x89 + 100 * x6 * x137 + 4 * x15 * x118 + 82 * x177 + 284 * x92 + 68 * x21 * x52 + 76 * x2 * x79 + 52 * x11 * x61 + 6 * x21 * x48 + 56 * x7 * x47 + 94 * x19 * x19 - 4 * x25 * x67 - 20 * x33 * x96 + 24 * x34 * x71 - 40 * x25 * x33 - 28 * x36 * x82 - 36 * x23 * x54 + 28 * x37 * x81 - 76 * x20 * x82 + 2 * x32 * x51 + 10 * x38 * x113 - 12 * x12 * x123 + 20 * x12 * x51 + 14 * x6 * x136 + 18 * x16 * x38 - 14 * x7 * x133 + 38 * x149 + 8 * x32 * x150 + 10 * x43 * x50 + 152 * x15 * x44 + 16 * x21 * x124 + 48 * x27 * x83 + 132 * x17 * x68 + 216 * x7 * x44 + 104 * x21 * x34 + 8 * x53 * x63 + 72 * x10 * x52 + 12 * x10 * x45 + 144 * x11 * x37 + 74 * x21 * x56 - 4 * x46 + 4 * x58 * x58 + 4 * x14 * x67 + 40 * x34 * x114 + 8 * x15 * x121 - 2 * x10 * x50 - 4 * x14 * x33 + 28 * x26 * x36 + 16 * x14 * x62 + 16 * x26 * x98 - 4 * x10 * x65 + 4 * x53 * x53 - 14 * x125;
+    o[7] = 8 * x24 * x152 - 8 * x15 * x95 + 104 * x27 * x60 + 8 * x57 * x68 - 16 * x7 * x95 - 8 * x21 * x154 + 96 * x24 * x52 + 56 * x24 * x45 - 8 * x11 * x127 + 40 * x112 + 8 * x24 * x124 - 8 * x6 * x147 + 8 * x24 * x50 + 80 * x24 * x34 + 8 * x36 * x76 - 8 * x76 * x98 + 16 * x24 * x65 + 88 * x17 * x57 - 4 * x15 * x164 + 4 * x15 * x87 - 52 * x6 * x86 - 4 * x15 * x119 + 8 * x7 * x87 + 4 * x12 * x106 - 48 * x22 * x134 - 28 * x22 * x54 + 4 * x22 * x100 - 20 * x105 + 4 * x15 * x181 - 4 * x15 * x110 + 52 * x6 * x94 + 4 * x49 * x74 - 8 * x7 * x110 - 4 * x21 * x161 + 48 * x39 * x52 + 28 * x16 * x73 - 4 * x49 * x55 + 20 * x109 - 4 * x32 * x111 + 4 * x6 * x169 - 4 * x15 * x69 - 40 * x17 * x40 - 4 * x49 * x99 + 4 * x7 * x179 - 8 * x7 * x69 - 44 * x39 * x56 - 8 * x43 * x88 + 8 * x15 * x166 - 104 * x27 * x64 - 8 * x23 * x74 + 16 * x27 * x71 + 8 * x21 * x107 - 96 * x25 * x52 - 56 * x25 * x45 + 8 * x23 * x55 - 40 * x168 + 20 * x43 * x80 + 196 * x27 * x43 + 32 * x32 * x102 + 128 * x175 + 192 * x7 * x130 + 100 * x137 + 12 * x21 * x63 + 48 * x6 * x47 + 88 * x7 * x103 + 48 * x19 * x21 - 8 * x23 * x67 + 8 * x34 * x96 - 8 * x25 * x50 - 80 * x23 * x33 - 8 * x36 * x81 + 8 * x3 * x26 * x48 - 16 * x25 * x65 - 88 * x17 * x82 + 4 * x32 * x38 - 4 * x12 * x172 + 4 * x15 * x51 + 40 * x12 * x38 + 4 * x6 * x133 - 4 * x123 * x160 + 8 * x7 * x51 + 44 * x136 + 28 * x15 * x150 + 4 * x2 * x67 + 156 * x6 * x44 + 40 * x21 * x58 + 84 * x11 * x36 + 48 * x151 + 44 * x14 * x48 + 12 * x21 * x53 + 8 * x14 * x124 - 4 * x14 * x50 + 16 * x14 * x34 + 8 * x6 * x121 - 8 * x14 * x65 - 4 * x122;
+    o[8] = 4 * x15 * x167 - 8 * x24 * x154 + 4 * x16 * x148 - 4 * x15 * x156 + 8 * x40 * x57 - 4 * x76 * x153 - 8 * x24 * x88 + 16 * x24 * x107 - 8 * x35 * x108 + 4 * x15 * x155 - 8 * x12 * x128 + 4 * x16 * x157 + 36 * x24 * x80 + 8 * x44 * x78 + 116 * x120 + 52 * x11 * x126 + 8 * x182 - 8 * x35 * x48 + 84 * x19 * x24 + 28 * x24 * x58 + 16 * x147 - 4 * x10 * x60 + 44 * x14 * x97 + 44 * x26 * x57 + 4 * x15 * x140 - 8 * x12 * x180 + 4 * x16 * x170 - 18 * x22 * x67 - 4 * x6 * x87 - 58 * x86 - 26 * x22 * x99 - 4 * x165 + 4 * x7 * x106 - 42 * x141 - 4 * x39 * x88 + 8 * x40 * x82 - 4 * x81 * x153 + 18 * x32 * x73 + 4 * x6 * x110 + 58 * x94 + 26 * x49 * x52 + 4 * x18 * x61 - 4 * x48 * x49 + 42 * x19 * x39 - 14 * x15 * x111 - 8 * x169 + 2 * x6 * x69 - 22 * x18 * x37 - 22 * x49 * x56 + 4 * x25 * x88 - 8 * x25 * x107 + 4 * x23 * x108 - 36 * x25 * x80 - 8 * x27 * x96 - 116 * x142 - 52 * x23 * x52 - 8 * x23 * x45 + 8 * x23 * x48 - 84 * x19 * x25 + 41 * x43 * x43 + 160 * x6 * x130 + 46 * x11 * x68 + 76 * x6 * x103 + 39 * x2 * x45 + 32 * x7 * x102 + 9 * x118 + 10 * x47 - 28 * x23 * x50 - 16 * x23 * x34 + 4 * x10 * x64 - 44 * x23 * x65 - 44 * x17 * x81 + 14 * x15 * x38 + 8 * x12 * x85 - 2 * x159 + 22 * x7 * x38 + 22 * x133 + 36 * x32 * x41 - 8 * x10 * x43 + 64 * x44 + 28 * x14 * x63 - 6 * x2 * x65 + 8 * x138 + 4 * x14 * x58 - 4 * x14 * x83 + x10 * x10;
+    o[9] = 16 * x24 * x60 - 16 * x35 * x97 - 16 * x69 * x78 + 16 * x18 * x127 - 32 * x25 * x60 + 32 * x24 * x71 + 16 * x51 * x78 - 16 * x7 * x128 + 8 * x32 * x70 + 56 * x24 * x43 + 32 * x95 + 8 * x35 * x63 + 40 * x2 * x97 + 56 * x11 * x57 + 8 * x35 * x58 + 16 * x14 * x60 + 16 * x35 * x116 + 8 * x26 * x76 - 8 * x10 * x24 + 16 * x6 * x140 - 16 * x37 * x59 - 4 * x22 * x124 - 28 * x164 - 16 * x87 - 4 * x6 * x106 - 20 * x22 * x65 - 28 * x119 - 16 * x39 * x64 + 16 * x55 * x131 + 4 * x32 * x104 + 28 * x181 + 16 * x110 + 4 * x49 * x63 + 20 * x7 * x73 + 28 * x19 * x49 - 4 * x15 * x143 - 8 * x18 * x36 - 8 * x18 * x98 - 4 * x179 + 4 * x69 + 16 * x25 * x64 - 16 * x25 * x71 - 8 * x23 * x80 - 56 * x25 * x43 - 32 * x166 - 8 * x23 * x63 - 40 * x2 * x115 - 56 * x19 * x23 + 44 * x2 * x80 + 64 * x130 + 28 * x6 * x102 + 16 * x103 - 8 * x23 * x58 - 16 * x23 * x83 - 16 * x14 * x71 - 8 * x26 * x81 + 8 * x10 * x25 + 4 * x15 * x85 + 8 * x6 * x38 + 8 * x123 + 4 * x85 * x160 - 4 * x51 + 20 * x150 - 8 * x2 * x83 + 8 * x7 * x41 + 4 * x14 * x21;
+    o[10] = 8 * x35 * x60 - 8 * x7 * x148 + 16 * x167 - 8 * x18 * x126 + 8 * x7 * x183 - 16 * x156 - 16 * x23 * x60 + 16 * x35 * x71 - 32 * x24 * x25 + 8 * x38 * x78 - 8 * x0 * x123 + 16 * x155 + 20 * x15 * x70 + 36 * x2 * x60 + 16 * x7 * x70 + 12 * x162 + 8 * x35 * x114 - 4 * x14 * x24 + 8 * x36 * x59 - 8 * x59 * x98 + 16 * x140 - 10 * x22 * x58 - 18 * x22 * x83 - 8 * x22 * x116 - 6 * x106 - 8 * x52 * x131 + 8 * x48 * x131 - 16 * x25 * x39 + 10 * x18 * x68 + 18 * x6 * x73 + 8 * x7 * x104 + 6 * x163 - 4 * x6 * x143 + 2 * x111 + 8 * x23 * x64 - 8 * x23 * x71 + 16 * x25 * x25 - 20 * x23 * x43 - 36 * x2 * x64 - 16 * x2 * x71 - 12 * x21 * x23 + 26 * x2 * x43 + 10 * x7 * x129 + 6 * x102 - 8 * x14 * x96 + 4 * x10 * x23 + 4 * x172 - 2 * x38 + 4 * x6 * x41 - 2 * x2 * x10;
+    o[11] = 16 * x24 * x35 - 16 * x18 * x57 - 32 * x23 * x24 + 16 * x128 + 16 * x6 * x70 + 8 * x2 * x24 + 16 * x180 - 8 * x22 * x114 - 4 * x10 * x22 - 16 * x18 * x82 + 8 * x6 * x104 + 4 * x73 + 16 * x23 * x25 - 16 * x2 * x96 - 8 * x2 * x25 + 8 * x6 * x129;
+    o[12] = 4 * x148 - 4 * x183 - 8 * x23 * x35 + 4 * x157 + 4 * x70 + 4 * x170 - 2 * x14 * x22 - 4 * x18 * x81 + 2 * x104 + 4 * x23 * x23 - 4 * x2 * x23 + x129;
+    return Array.from(o);
+}
+
+//# sourceMappingURL=resMAEI_A2B3.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/resMAEI_A3B2.js
+// GENERATED by gen-resultants.py - do not edit
+/**
+ * MA endpoint/interior, A of degree 3, B of degree 2 (degree 9 in `s`, 536 terms)
+ * (returned coefficients in descending powers of `s`)
+ * (536 terms; multiplications: 4948 without sharing,
+ * 1260 with 188 shared products)
+ */
+function resMAEI_A3B2(ax, ay, bx, by) {
+    const x0 = ax[0];
+    const x1 = ax[1];
+    const x2 = ax[2];
+    const x3 = ax[3];
+    const x4 = ay[0];
+    const x5 = ay[1];
+    const x6 = ay[2];
+    const x7 = ay[3];
+    const x8 = bx[2];
+    const x9 = by[2];
+    const x10 = x9 * x9;
+    const x11 = x3 * x8;
+    const x12 = x7 * x10;
+    const x13 = x8 * x8;
+    const x14 = x10 * x11;
+    const x15 = x9 * x12;
+    const x16 = x3 * x10;
+    const x17 = x2 * x6;
+    const x18 = x11 * x13;
+    const x19 = x2 * x12;
+    const x20 = x1 * x6;
+    const x21 = x8 * x11;
+    const x22 = x0 * x15;
+    const x23 = x2 * x5;
+    const x24 = x7 * x13;
+    const x25 = x3 * x4;
+    const x26 = x6 * x14;
+    const x27 = x0 * x12;
+    const x28 = x1 * x5;
+    const x29 = x10 * x17;
+    const x30 = x9 * x11;
+    const x31 = x9 * x16;
+    const x32 = x1 * x19;
+    const x33 = x4 * x15;
+    const x34 = x2 * x9;
+    const x35 = x13 * x17;
+    const x36 = x2 * x2;
+    const x37 = x1 * x12;
+    const x38 = x5 * x19;
+    const x39 = x0 * x7;
+    const x40 = x8 * x15;
+    const x41 = x4 * x14;
+    const x42 = x5 * x26;
+    const x43 = x5 * x6;
+    const x44 = x20 * x14;
+    const x45 = x12 * x12;
+    const x46 = x1 * x2;
+    const x47 = x7 * x8;
+    const x48 = x8 * x17;
+    const x49 = x13 * x15;
+    const x50 = x1 * x37;
+    const x51 = x4 * x11;
+    const x52 = x9 * x18;
+    const x53 = x16 * x16;
+    const x54 = x5 * x28;
+    const x55 = x8 * x32;
+    const x56 = x20 * x12;
+    const x57 = x3 * x3;
+    const x58 = x6 * x6;
+    const x59 = x8 * x19;
+    const x60 = x2 * x36;
+    const x61 = x3 * x14;
+    const x62 = x4 * x31;
+    const x63 = x9 * x26;
+    const x64 = x5 * x5;
+    const x65 = x6 * x29;
+    const x66 = x25 * x16;
+    const x67 = x12 * x18;
+    const x68 = x34 * x18;
+    const x69 = x14 * x14;
+    const x70 = x1 * x7;
+    const x71 = x10 * x15;
+    const x72 = x11 * x11;
+    const x73 = x11 * x27;
+    const x74 = x11 * x30;
+    const x75 = x21 * x30;
+    const x76 = x22 * x24;
+    const x77 = x28 * x37;
+    const x78 = x34 * x36;
+    const x79 = x58 * x63;
+    const x80 = x0 * x31;
+    const x81 = x0 * x38;
+    const x82 = x2 * x17;
+    const x83 = x4 * x36;
+    const x84 = x10 * x16;
+    const x85 = x11 * x15;
+    const x86 = x24 * x13;
+    const x87 = x25 * x14;
+    const x88 = x34 * x14;
+    const x89 = x52 * x18;
+    const x90 = x0 * x17;
+    const x91 = x1 * x24;
+    const x92 = x3 * x27;
+    const x93 = x3 * x30;
+    const x94 = x7 * x21;
+    const x95 = x11 * x22;
+    const x96 = x11 * x33;
+    const x97 = x11 * x41;
+    const x98 = x20 * x16;
+    const x99 = x21 * x14;
+    const x100 = x22 * x25;
+    const x101 = x24 * x40;
+    const x102 = x26 * x29;
+    const x103 = x27 * x18;
+    const x104 = x28 * x17;
+    const x105 = x30 * x18;
+    const x106 = x46 * x15;
+    const x107 = x18 * x18;
+    const x108 = x0 * x42;
+    const x109 = x2 * x29;
+    const x110 = x3 * x16;
+    const x111 = x4 * x53;
+    const x112 = x5 * x64;
+    const x113 = x6 * x35;
+    const x114 = x8 * x35;
+    const x115 = x8 * x79;
+    const x116 = x8 * x18;
+    const x117 = x9 * x23;
+    const x118 = x9 * x25;
+    const x119 = x20 * x21;
+    const x120 = x20 * x44;
+    const x121 = x21 * x12;
+    const x122 = x22 * x39;
+    const x123 = x23 * x23;
+    const x124 = x24 * x49;
+    const x125 = x24 * x15;
+    const x126 = x28 * x15;
+    const x127 = x29 * x59;
+    const x128 = x29 * x19;
+    const x129 = x12 * x44;
+    const x130 = x33 * x46;
+    const x131 = x38 * x14;
+    const x132 = x45 * x14;
+    const x133 = x0 * x35;
+    const x134 = x0 * x43;
+    const x135 = x3 * x31;
+    const x136 = x4 * x22;
+    const x137 = x4 * x32;
+    const x138 = x6 * x58;
+    const x139 = x6 * x90;
+    const x140 = x8 * x50;
+    const x141 = x9 * x20;
+    const x142 = x9 * x44;
+    const x143 = x21 * x23;
+    const x144 = x21 * x15;
+    const x145 = x22 * x47;
+    const x146 = x23 * x32;
+    const x147 = x23 * x14;
+    const x148 = x23 * x55;
+    const x149 = x23 * x16;
+    const x150 = x25 * x62;
+    const x151 = x28 * x14;
+    const x152 = x12 * x32;
+    const x153 = x12 * x55;
+    const x154 = x12 * x16;
+    const x155 = x35 * x13;
+    const x156 = x13 * x18;
+    const x157 = x40 * x60;
+    const x158 = x43 * x16;
+    const x159 = x49 * x60;
+    const x160 = x59 * x83;
+    const x161 = x78 * x86;
+    const x162 = x83 * x19;
+    const x163 = x0 * x24;
+    const x164 = x0 * x48;
+    const x165 = x1 * x1;
+    const x166 = x1 * x47;
+    const x167 = x2 * x33;
+    const x168 = x2 * x41;
+    const x169 = x3 * x22;
+    const x170 = x3 * x34;
+    const x171 = x4 * x63;
+    const x172 = x4 * x16;
+    const x173 = x7 * x22;
+    const x174 = x7 * x46;
+    const x175 = x8 * x24;
+    const x176 = x8 * x42;
+    const x177 = x9 * x14;
+    const x178 = x10 * x138;
+    const x179 = x10 * x31;
+    const x180 = x11 * x12;
+    const x181 = x11 * x14;
+    const x182 = x20 * x20;
+    const x183 = x20 * x43;
+    const x184 = x21 * x27;
+    const x185 = x21 * x34;
+    const x186 = x165 * x33;
+    const x187 = x177 * x64;
+    const x188 = x28 * x70;
+    const x189 = x29 * x88;
+    const x190 = x33 * x18;
+    const x191 = x40 * x46;
+    const x192 = x43 * x53;
+    const x193 = x43 * x18;
+    const x194 = x14 * x15;
+    const x195 = x54 * x16;
+    const x196 = x65 * x16;
+    const x197 = x68 * x91;
+    const o = new Float64Array(10);
+    o[0] = -8 * x18 * x107 - 24 * x14 * x107 - 24 * x18 * x69 - 8 * x14 * x69 - 24 * x24 * x89 - 72 * x15 * x107 - 72 * x18 * x194 - 24 * x15 * x69 - 24 * x67 * x86 - 72 * x45 * x156 - 72 * x13 * x132 - 24 * x10 * x132 - 8 * x24 * x124 - 24 * x12 * x124 - 24 * x45 * x49 - 8 * x45 * x71;
+    o[1] = -60 * x21 * x107 - 156 * x18 * x99 - 132 * x21 * x69 - 36 * x16 * x69 - 144 * x47 * x89 - 360 * x18 * x144 - 288 * x15 * x99 - 72 * x16 * x194 - 108 * x67 * x175 - 252 * x45 * x116 - 180 * x8 * x132 - 36 * x45 * x84 - 24 * x24 * x101 - 48 * x12 * x101 - 24 * x40 * x45;
+    o[2] = -198 * x11 * x107 - 426 * x18 * x181 - 282 * x11 * x69 - 54 * x14 * x53 - 366 * x7 * x89 - 714 * x18 * x85 - 402 * x14 * x85 - 54 * x15 * x53 - 192 * x24 * x67 - 312 * x18 * x45 - 120 * x132 - 24 * x24 * x125 - 24 * x12 * x125;
+    o[3] = -24 * x39 * x89 - 48 * x18 * x95 - 24 * x14 * x95 - 48 * x24 * x103 - 96 * x27 * x67 - 48 * x12 * x14 * x27 - 24 * x24 * x76 - 48 * x12 * x76 - 24 * x22 * x45 + 24 * x8 * x197 + 48 * x18 * x191 + 24 * x14 * x191 + 24 * x55 * x86 + 48 * x13 * x153 + 24 * x10 * x153 - 16 * x20 * x89 - 32 * x44 * x52 - 16 * x14 * x142 - 8 * x56 * x156 - 16 * x13 * x129 - 8 * x10 * x129 + 8 * x20 * x124 + 16 * x49 * x56 + 8 * x56 * x71 - 8 * x13 * x161 - 16 * x13 * x159 - 8 * x10 * x159 + 8 * x68 * x114 + 16 * x88 * x114 + 8 * x8 * x189 - 16 * x59 * x155 - 32 * x13 * x127 - 16 * x10 * x127 - 8 * x23 * x89 - 16 * x52 * x147 - 8 * x69 * x117 + 8 * x38 * x156 + 16 * x13 * x131 + 8 * x10 * x131 + 16 * x26 * x155 + 32 * x13 * x102 + 16 * x10 * x102 + 16 * x23 * x124 + 32 * x38 * x49 + 16 * x38 * x71 - 8 * x49 * x113 - 16 * x49 * x65 - 8 * x65 * x71 + 24 * x4 * x18 * x75 + 48 * x41 * x75 + 24 * x69 * x118 - 377 * x11 * x18 * x21 - 633 * x11 * x99 - 291 * x14 * x61 - 27 * x16 * x53 + 48 * x4 * x21 * x67 + 96 * x41 * x121 + 48 * x41 * x154 - 24 * x42 * x116 - 48 * x14 * x176 - 24 * x42 * x84 - 510 * x52 * x94 - 708 * x21 * x85 - 222 * x15 * x61 + 24 * x47 * x190 + 48 * x33 * x121 + 24 * x33 * x154 - 24 * x40 * x193 - 48 * x40 * x42 - 24 * x71 * x158 + 8 * x13 * x115 + 16 * x10 * x115 + 8 * x178 * x179 - 168 * x47 * x67 - 156 * x21 * x45 - 12 * x16 * x45 - 8 * x7 * x101;
+    o[4] = -120 * x21 * x39 * x52 - 192 * x21 * x95 - 72 * x22 * x61 - 168 * x47 * x103 - 240 * x27 * x121 - 72 * x27 * x154 - 48 * x47 * x76 - 48 * x12 * x145 + 120 * x197 + 192 * x18 * x106 + 72 * x14 * x106 + 84 * x32 * x86 + 120 * x13 * x152 + 36 * x10 * x152 - 80 * x52 * x119 - 128 * x21 * x142 - 48 * x31 * x44 - 28 * x56 * x116 - 40 * x8 * x129 - 12 * x56 * x84 + 16 * x20 * x101 + 16 * x40 * x56 - 40 * x8 * x161 - 64 * x13 * x157 - 24 * x10 * x157 + 40 * x35 * x68 + 64 * x35 * x88 + 24 * x189 - 56 * x19 * x155 - 80 * x13 * x128 - 24 * x10 * x128 - 40 * x52 * x143 - 64 * x99 * x117 - 24 * x31 * x147 + 28 * x38 * x116 + 40 * x8 * x131 + 12 * x38 * x84 + 56 * x26 * x114 + 80 * x8 * x102 + 24 * x65 * x84 + 32 * x23 * x101 + 32 * x38 * x40 - 16 * x40 * x113 - 16 * x40 * x65 + 120 * x51 * x105 + 192 * x41 * x74 + 72 * x31 * x87 - 456 * x18 * x72 - 552 * x14 * x72 - 144 * x16 * x61 + 168 * x51 * x67 + 240 * x12 * x97 + 72 * x12 * x111 - 84 * x18 * x42 - 120 * x14 * x42 - 36 * x10 * x192 - 420 * x7 * x105 - 360 * x15 * x72 - 36 * x15 * x110 + 48 * x7 * x190 + 48 * x12 * x96 - 48 * x15 * x193 - 48 * x15 * x42 + 16 * x13 * x79 + 16 * x10 * x79 - 72 * x7 * x67 - 24 * x11 * x45;
+    o[5] = -246 * x39 * x105 - 276 * x22 * x72 - 54 * x22 * x110 - 216 * x7 * x103 - 168 * x12 * x73 - 24 * x7 * x76 + 246 * x68 * x166 + 276 * x21 * x106 + 54 * x16 * x106 + 108 * x24 * x55 + 84 * x153 - 164 * x20 * x105 - 184 * x30 * x44 - 36 * x31 * x98 - 36 * x18 * x56 - 28 * x129 + 8 * x20 * x125 - 82 * x161 - 92 * x159 - 18 * x60 * x71 + 82 * x48 * x68 + 92 * x48 * x88 + 18 * x31 * x109 - 72 * x35 * x59 - 56 * x127 - 82 * x23 * x105 - 92 * x30 * x147 - 18 * x31 * x149 + 36 * x18 * x38 + 28 * x131 + 72 * x26 * x35 + 56 * x102 + 16 * x23 * x125 - 8 * x15 * x113 + 246 * x51 * x75 + 276 * x30 * x87 + 54 * x31 * x66 - 363 * x21 * x72 - 282 * x11 * x61 - 27 * x3 * x53 + 216 * x51 * x121 + 168 * x12 * x87 - 108 * x21 * x42 - 84 * x16 * x42 - 204 * x7 * x75 - 84 * x3 * x85 + 24 * x33 * x94 - 24 * x43 * x144 + 8 * x115 - 12 * x12 * x94;
+    o[6] = -24 * x39 * x103 - 24 * x27 * x73 - 24 * x39 * x76 - 24 * x27 * x173 + 24 * x55 * x163 + 24 * x27 * x55 - 8 * x20 * x103 - 8 * x27 * x44 + 16 * x20 * x76 + 16 * x22 * x56 - 16 * x59 * x133 - 16 * x0 * x127 + 8 * x18 * x81 + 8 * x14 * x81 + 16 * x26 * x133 + 16 * x0 * x102 + 32 * x23 * x76 + 32 * x22 * x38 - 16 * x22 * x113 - 16 * x22 * x65 + 48 * x51 * x184 + 48 * x27 * x87 - 24 * x21 * x108 - 24 * x16 * x108 - 264 * x39 * x75 - 168 * x3 * x95 + 48 * x94 * x136 + 48 * x12 * x100 - 48 * x21 * x22 * x43 - 48 * x22 * x158 + 16 * x0 * x115 + 16 * x80 * x178 - 120 * x27 * x94 - 24 * x12 * x92 - 8 * x91 * x140 - 8 * x37 * x140 + 8 * x50 * x114 + 8 * x29 * x140 + 16 * x18 * x77 + 16 * x14 * x77 - 8 * x13 * x120 - 8 * x10 * x120 - 8 * x91 * x126 - 8 * x15 * x77 - 8 * x13 * x148 - 8 * x10 * x148 - 48 * x18 * x137 - 48 * x32 * x41 + 8 * x35 * x151 + 8 * x29 * x151 + 264 * x68 * x70 + 168 * x46 * x85 - 24 * x24 * x130 - 24 * x32 * x33 + 8 * x35 * x126 + 8 * x29 * x126 + 60 * x24 * x32 + 12 * x152 + 32 * x41 * x119 + 32 * x41 * x98 - 8 * x54 * x99 - 8 * x14 * x195 - 176 * x20 * x75 - 112 * x3 * x142 + 8 * x33 * x119 + 8 * x33 * x98 + 16 * x54 * x144 + 16 * x15 * x195 - 8 * x141 * x176 - 8 * x179 * x183 - 20 * x21 * x56 - 4 * x16 * x56 + 16 * x13 * x160 + 16 * x10 * x160 - 88 * x78 * x175 - 56 * x157 - 16 * x35 * x168 - 16 * x41 * x109 + 88 * x17 * x68 + 56 * x17 * x88 + 16 * x35 * x167 + 16 * x33 * x109 - 8 * x49 * x123 - 8 * x71 * x123 - 40 * x19 * x35 - 8 * x128 + 16 * x41 * x143 + 16 * x41 * x149 - 88 * x23 * x75 - 56 * x61 * x117 - 8 * x33 * x143 - 8 * x33 * x149 - 16 * x48 * x171 - 16 * x62 * x65 + 8 * x48 * x187 + 8 * x29 * x31 * x64 + 20 * x21 * x38 + 4 * x16 * x38 + 40 * x26 * x48 + 8 * x196 - 24 * x51 * x97 - 24 * x41 * x66 + 264 * x51 * x74 + 168 * x61 * x118 - 190 * x11 * x72 - 78 * x14 * x57 - 24 * x51 * x96 - 24 * x33 * x66 + 24 * x4 * x30 * x42 + 24 * x62 * x158 + 120 * x51 * x180 + 24 * x12 * x66 - 8 * x14 * x30 * x112 - 8 * x16 * x31 * x112 - 60 * x11 * x42 - 12 * x192 - 54 * x7 * x74 - 6 * x15 * x57;
+    o[7] = -60 * x39 * x184 - 36 * x27 * x92 - 24 * x47 * x122 + 60 * x32 * x163 + 36 * x27 * x32 - 20 * x27 * x119 - 12 * x27 * x98 + 16 * x20 * x145 - 40 * x19 * x133 - 24 * x0 * x128 + 20 * x21 * x81 + 12 * x16 * x81 + 40 * x26 * x164 + 24 * x0 * x196 + 32 * x23 * x145 - 16 * x6 * x22 * x48 + 120 * x51 * x73 + 72 * x27 * x66 - 60 * x11 * x108 - 36 * x53 * x134 - 156 * x39 * x74 - 36 * x22 * x57 + 48 * x51 * x173 - 48 * x43 * x95 + 16 * x0 * x79 - 24 * x7 * x73 - 20 * x50 * x91 - 12 * x37 * x50 + 20 * x35 * x50 + 12 * x29 * x50 + 40 * x21 * x77 + 24 * x16 * x77 - 20 * x8 * x120 - 12 * x84 * x182 - 8 * x40 * x188 - 20 * x13 * x146 - 12 * x10 * x146 - 120 * x21 * x137 - 72 * x16 * x137 + 20 * x48 * x151 + 12 * x16 * x28 * x29 + 156 * x70 * x185 + 36 * x3 * x106 - 24 * x47 * x130 + 8 * x40 * x104 + 12 * x32 * x47 + 80 * x20 * x97 + 48 * x20 * x111 - 20 * x54 * x181 - 12 * x53 * x54 - 104 * x20 * x74 - 24 * x20 * x135 + 8 * x20 * x96 + 16 * x54 * x85 - 8 * x42 * x141 - 4 * x11 * x56 + 40 * x13 * x162 + 24 * x10 * x162 - 52 * x24 * x78 - 12 * x15 * x60 - 40 * x48 * x168 - 24 * x109 * x172 + 52 * x17 * x185 + 12 * x31 * x82 + 16 * x48 * x167 - 8 * x40 * x123 - 8 * x19 * x48 + 40 * x23 * x97 + 24 * x23 * x111 - 52 * x23 * x74 - 12 * x23 * x135 - 8 * x23 * x96 - 16 * x17 * x171 + 8 * x17 * x187 + 4 * x11 * x38 + 8 * x17 * x26 - 60 * x25 * x97 - 36 * x25 * x111 + 156 * x25 * x74 + 36 * x25 * x135 - 63 * x3 * x72 - 9 * x16 * x57 - 24 * x25 * x96 + 24 * x42 * x118 + 24 * x25 * x180 - 8 * x9 * x61 * x112 - 12 * x3 * x42 - 6 * x7 * x93;
+    o[8] = -48 * x39 * x73 + 48 * x39 * x55 - 16 * x20 * x73 - 32 * x19 * x164 + 16 * x11 * x81 + 32 * x26 * x90 + 96 * x25 * x73 - 48 * x3 * x108 - 48 * x39 * x93 - 16 * x50 * x166 + 16 * x48 * x50 + 32 * x11 * x77 - 16 * x120 - 16 * x148 - 96 * x32 * x51 + 16 * x14 * x104 + 48 * x30 * x174 + 64 * x25 * x44 - 16 * x54 * x61 - 32 * x20 * x93 + 32 * x160 - 16 * x47 * x78 - 32 * x41 * x82 + 16 * x30 * x82 + 32 * x23 * x87 - 16 * x23 * x93 - 48 * x25 * x87 + 48 * x25 * x93 - 12 * x11 * x57;
+    o[9] = -8 * x39 * x122 + 8 * x20 * x122 + 16 * x23 * x122 - 8 * x22 * x139 + 24 * x39 * x100 - 24 * x134 * x169 + 8 * x0 * x80 * x138 - 12 * x39 * x92 - 8 * x22 * x188 - 24 * x136 * x174 + 8 * x22 * x104 + 12 * x32 * x39 + 8 * x20 * x100 + 16 * x54 * x169 - 8 * x80 * x183 - 4 * x20 * x92 + 16 * x82 * x136 - 8 * x22 * x123 - 8 * x19 * x90 - 8 * x23 * x100 - 16 * x62 * x139 + 8 * x17 * x64 * x80 + 4 * x3 * x81 + 8 * x16 * x139 - 24 * x25 * x100 + 24 * x25 * x43 * x80 + 24 * x25 * x92 - 8 * x3 * x80 * x112 - 12 * x110 * x134 - 6 * x9 * x39 * x57 + 8 * x70 * x186 - 4 * x50 * x70 - 8 * x17 * x186 + 4 * x17 * x50 - 16 * x1 * x25 * x126 + 8 * x62 * x182 + 8 * x3 * x77 - 4 * x20 * x98 + 8 * x23 * x130 - 4 * x146 + 24 * x25 * x130 - 8 * x62 * x104 - 24 * x25 * x32 + 4 * x16 * x104 + 6 * x70 * x170 - 16 * x20 * x150 + 8 * x25 * x31 * x54 + 16 * x20 * x66 - 4 * x54 * x110 - 4 * x57 * x141 - 8 * x4 * x33 * x60 + 8 * x162 - 2 * x7 * x78 + 8 * x4 * x62 * x82 - 8 * x82 * x172 + 2 * x17 * x170 - 8 * x23 * x150 + 8 * x23 * x66 - 2 * x57 * x117 + 8 * x25 * x150 - 12 * x25 * x66 + 6 * x57 * x118 - x3 * x57;
+    return Array.from(o);
+}
+
+//# sourceMappingURL=resMAEI_A3B2.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/resMAEI_A3B3.js
+// GENERATED by gen-resultants.py - do not edit
+
+const resMAEI_A3B3_P = {
+    nIn: 12,
+    pairs: new Int32Array([
+        9, 10, 8, 11, 7, 11, 3, 13, 10, 10, 3, 12, 7, 8, 9, 9, 11, 11, 2, 12, 1, 6, 2, 13,
+        8, 8, 5, 15, 7, 12, 0, 14, 3, 16, 6, 6, 4, 15, 7, 13, 11, 14, 5, 17, 3, 20, 4, 17,
+        10, 16, 9, 19, 8, 18, 2, 6, 1, 14, 3, 24, 7, 16, 0, 18, 6, 25, 14, 20, 2, 10, 5, 21,
+        12, 22, 3, 19, 1, 18, 10, 15, 9, 15, 2, 4, 29, 21, 13, 22, 0, 7, 6, 29, 6, 33, 1, 5,
+        2, 16, 0, 26, 15, 19, 3, 11, 14, 14, 4, 10, 9, 17, 5, 23, 10, 17, 2, 19, 5, 28, 1, 21,
+        6, 21, 13, 18, 15, 16, 12, 18, 17, 19, 0, 31, 2, 20, 24, 18, 5, 34, 23, 29, 23, 23, 1, 1,
+        16, 18, 2, 36, 11, 22, 4, 28, 14, 16, 25, 21, 8, 17, 10, 27, 39, 21, 37, 15, 12, 26, 14, 19,
+        10, 30, 40, 21, 9, 14, 11, 17, 13, 31, 8, 41, 2, 24, 72, 21, 0, 57, 1, 23, 7, 36, 33, 21,
+        23, 25, 24, 15, 2, 37, 16, 17, 0, 44, 4, 34, 26, 26, 23, 39, 0, 38, 11, 27, 50, 21, 9, 32,
+        5, 25, 22, 20, 3, 3, 10, 28, 8, 22, 11, 34, 37, 17, 13, 15, 6, 82, 23, 72, 31, 31, 12, 12,
+        23, 40, 9, 30, 1, 25, 36, 15, 24, 17, 10, 35, 12, 27, 15, 20, 42, 16, 6, 70, 0, 42, 4, 46,
+        13, 14, 10, 47, 2, 9, 32, 20, 0, 29, 9, 26, 36, 18, 5, 33, 23, 50, 22, 24, 3, 65, 7, 19,
+        8, 28, 0, 54, 6, 80, 22, 32, 21, 21, 0, 58, 3, 37, 14, 36, 57, 20, 13, 27, 17, 17, 10, 26,
+        11, 44, 25, 59, 1, 59, 15, 15, 2, 5, 9, 31, 11, 39, 13, 64, 10, 32, 22, 16, 4, 63, 10, 38,
+        41, 41, 2, 2, 12, 14, 13, 44, 26, 27, 9, 35, 10, 31, 26, 71, 49, 49, 1, 33, 13, 40, 29, 60,
+        34, 34, 39, 20, 3, 8, 24, 46, 27, 31, 26, 31, 33, 59, 39, 60, 1, 38, 1, 83, 31, 71, 1, 32,
+        12, 54, 23, 53, 30, 30, 14, 37, 10, 44, 11, 28, 22, 28, 22, 34, 27, 27, 29, 78, 22, 36, 25, 83,
+        31, 105, 2, 21, 5, 10, 12, 44, 13, 54, 30, 15, 38, 16, 64, 19, 13, 50, 24, 28, 25, 46, 4, 32,
+        5, 60, 7, 37, 12, 57, 30, 17, 35, 35, 40, 59, 17, 20, 5, 46, 8, 30, 10, 43, 12, 104, 26, 43,
+        29, 46, 0, 81, 12, 40, 12, 58, 22, 45, 32, 45, 49, 19, 2, 23, 2, 25, 7, 65, 8, 35, 22, 30,
+        27, 32, 32, 16, 58, 20, 1, 7, 10, 14, 11, 15, 25, 53, 30, 35, 39, 102, 15, 52, 48, 17, 5, 85,
+        11, 30, 12, 64, 13, 81, 22, 27, 22, 35, 28, 43, 33, 46, 33, 53, 36, 56, 39, 53, 16, 64, 3, 63,
+        11, 35, 134, 25, 27, 34, 28, 28, 14, 32, 35, 17, 15, 51, 8, 15, 11, 51, 32, 19, 39, 69, 42, 42,
+        44, 20, 16, 58, 8, 24, 9, 38, 10, 22, 12, 43, 25, 69, 27, 30, 28, 17, 40, 83, 3, 4, 4, 89,
+        4, 97, 7, 9, 9, 45, 11, 33, 120, 25, 27, 17, 30, 32, 44, 16, 54, 20, 5, 40, 11, 52, 12, 50,
+        22, 26, 22, 14, 22, 61, 27, 14, 28, 15, 29, 85, 30, 51, 32, 48, 33, 69, 36, 44, 15, 17, 50, 60,
+        51, 17, 2, 39, 9, 34, 10, 45, 10, 18, 22, 41, 14, 45, 33, 83, 16, 54, 56, 61, 2, 33, 4, 103,
+        8, 52, 11, 68, 13, 51, 131, 57, 134, 33, 148, 46, 27, 35, 189, 33, 32, 34, 34, 35, 38, 41, 15, 48,
+        45, 45, 49, 62, 1, 42, 3, 22, 3, 32, 3, 41, 7, 71, 9, 27, 25, 78, 26, 30, 26, 19, 28, 30,
+        30, 52, 32, 47, 35, 66, 36, 42, 39, 78, 40, 78, 41, 43, 43, 75, 50, 83, 17, 68, 67, 67, 20, 104,
+        0, 104, 2, 70, 4, 132, 4, 42, 9, 125, 13, 43, 22, 86, 122, 65, 25, 60, 26, 17, 160, 53, 27, 47,
+        28, 79, 29, 69, 30, 34, 30, 19, 31, 47, 205, 21, 39, 46, 15, 62, 49, 76, 53, 82, 59, 70, 61, 61,
+        0, 141, 1, 40, 4, 107, 4, 108, 7, 14, 10, 120, 10, 34, 10, 77, 11, 49, 11, 62, 12, 32, 13, 98,
+        22, 31, 22, 51, 131, 64, 24, 44, 24, 58, 25, 85, 25, 102, 25, 110, 26, 47, 164, 20, 28, 35, 30, 16,
+        30, 66, 31, 43, 14, 94, 32, 55, 36, 64, 38, 71, 38, 75, 38, 102, 40, 69, 41, 18, 41, 101, 16, 57,
+        53, 70, 53, 21, 18, 75, 73, 73, 2, 40, 2, 53, 5, 80, 8, 109, 9, 18, 10, 151, 11, 66, 22, 48,
+        22, 68, 122, 37, 24, 54, 26, 35, 26, 16, 27, 15, 28, 38, 30, 31, 30, 42, 30, 48, 32, 35, 33, 110,
+        35, 49, 37, 63, 37, 64, 40, 53, 15, 49, 43, 51, 43, 16, 43, 61, 43, 73, 53, 80, 55, 67, 69, 69,
+        75, 75, 81, 20, 0, 158, 4, 128, 4, 129, 5, 63, 7, 23, 8, 49, 8, 66, 12, 97, 22, 77, 26, 48,
+        26, 18, 160, 21, 27, 42, 27, 52, 30, 49, 31, 19, 33, 60, 33, 78, 33, 85, 34, 63, 35, 48, 36, 58,
+        40, 46, 41, 79, 15, 55, 42, 47, 44, 19, 45, 17, 47, 47, 48, 52, 49, 17, 50, 102, 51, 55, 16, 81,
+        16, 88, 58, 19, 59, 82, 19, 95, 82, 21, 20, 92, 3, 9, 3, 56, 5, 70, 7, 26, 7, 105, 8, 51,
+        9, 117, 9, 47, 10, 48, 10, 61, 12, 38, 13, 175, 13, 57, 22, 135, 22, 101, 120, 16, 24, 38, 24, 92,
+        25, 143, 146, 45, 150, 18, 26, 56, 155, 19, 27, 45, 27, 16, 27, 19, 166, 20, 28, 51, 28, 68, 30, 68,
+        31, 16, 32, 67, 36, 54, 36, 17, 39, 85, 15, 74, 42, 67, 43, 68, 46, 70, 48, 66, 52, 55, 52, 17,
+        54, 19, 56, 65, 56, 77, 59, 80, 17, 66, 63, 65, 65, 18, 77, 77, 84, 84, 3, 116, 3, 27, 3, 14,
+        3, 38, 3, 43, 3, 18, 3, 101, 4, 92, 5, 69, 8, 62, 8, 74, 9, 63, 9, 94, 10, 116, 10, 56,
+        11, 127, 11, 48, 12, 112, 13, 97, 22, 37, 22, 65, 113, 63, 118, 24, 23, 160, 23, 82, 143, 33, 148, 78,
+        151, 16, 28, 32, 28, 42, 30, 38, 30, 55, 195, 39, 31, 55, 31, 67, 31, 18, 14, 65, 14, 100, 32, 37,
+        32, 46, 213, 20, 33, 102, 34, 45, 34, 19, 240, 20, 35, 42, 35, 68, 35, 19, 40, 397, 40, 110, 47, 16,
+        47, 55, 47, 19, 48, 51, 48, 18, 2, 148, 2, 29, 3, 7, 4, 115, 5, 78, 7, 10, 9, 114, 9, 100,
+        10, 73, 11, 74, 12, 175, 13, 132, 22, 19, 116, 41, 23, 21, 24, 41, 134, 40, 25, 146, 144, 26, 146, 33,
+        26, 55, 27, 66, 162, 49, 168, 20, 189, 40, 30, 43, 31, 56, 203, 53, 14, 60, 35, 38, 35, 16, 36, 38,
+        37, 56, 38, 48, 41, 90, 43, 48, 43, 19, 43, 106, 47, 48, 47, 67, 49, 93, 16, 55, 55, 19, 56, 19,
+        60, 70, 17, 75, 18, 73, 18, 19, 73, 75, 3, 124, 3, 34, 4, 187, 4, 14, 4, 71, 7, 31, 7, 85,
+        9, 22, 9, 121, 9, 130, 10, 50, 10, 63, 10, 79, 10, 86, 11, 91, 12, 33, 13, 112, 13, 114, 13, 38,
+        22, 67, 115, 20, 126, 49, 24, 52, 24, 90, 143, 40, 27, 48, 27, 55, 27, 67, 28, 16, 29, 53, 30, 56,
+        30, 18, 200, 60, 14, 69, 32, 51, 32, 65, 32, 78, 214, 17, 34, 37, 35, 56, 39, 110, 40, 60, 15, 93,
+        42, 61, 42, 77, 45, 19, 55, 18, 61, 77, 17, 86, 62, 19, 79, 84, 0, 218, 2, 50, 2, 59, 2, 80,
+        3, 10, 4, 202, 7, 30, 7, 35, 8, 122, 8, 123, 8, 76, 9, 73, 10, 75, 10, 100, 11, 139, 11, 93,
+        12, 157, 12, 171, 12, 98, 13, 26, 13, 52, 22, 150, 22, 63, 22, 88, 113, 298, 115, 24, 119, 78, 121, 34,
+        123, 28, 131, 17, 24, 152, 24, 43, 24, 57, 24, 66, 135, 15, 138, 14, 143, 70, 144, 27, 148, 60, 26, 37,
+        26, 42, 153, 41, 27, 56, 27, 71, 170, 100, 28, 65, 28, 84, 174, 35, 181, 21, 190, 59, 190, 83, 193, 46,
+        193, 53, 200, 102, 31, 37, 203, 46, 14, 34, 14, 106, 32, 36, 32, 88, 224, 83, 34, 86, 34, 20, 35, 18,
+        36, 81, 37, 49, 263, 18, 38, 46, 38, 55, 38, 60, 38, 65, 38, 73, 298, 87, 43, 55, 45, 16, 45, 88,
+        46, 50, 46, 79, 47, 105, 48, 68, 56, 56, 56, 106, 60, 18, 61, 17, 1, 159, 2, 200, 2, 203, 2, 255,
+        2, 45, 2, 350, 3, 178, 3, 90, 4, 100, 7, 27, 8, 127, 8, 48, 9, 113, 9, 116, 9, 120, 9, 165,
+        9, 43, 9, 48, 9, 56, 9, 79, 9, 20, 10, 144, 10, 41, 10, 55, 10, 94, 10, 101, 11, 304, 11, 47,
+        12, 161, 12, 164, 12, 166, 13, 32, 13, 239, 13, 104, 22, 113, 22, 47, 22, 106, 120, 20, 23, 181, 124, 28,
+        125, 19, 127, 14, 127, 32, 24, 180, 24, 208, 24, 81, 135, 14, 135, 17, 143, 39, 144, 91, 146, 40, 149, 61,
+        26, 36, 26, 94, 154, 28, 154, 87, 155, 62, 155, 76, 27, 172, 27, 49, 27, 105, 174, 30, 29, 195, 191, 20,
+        195, 50, 200, 46, 31, 42, 14, 17, 14, 110, 32, 95, 32, 110, 218, 70, 34, 17, 35, 41, 35, 43, 35, 63,
+        36, 43, 36, 57, 255, 46, 37, 18, 37, 90, 37, 92, 38, 51, 38, 19, 40, 85, 41, 17, 42, 88, 42, 106,
+        43, 77, 45, 95, 45, 98, 350, 53, 46, 80, 47, 71, 50, 59, 16, 67, 16, 90, 17, 69, 17, 99, 67, 19,
+        18, 85, 76, 19, 81, 19, 0, 120, 0, 151, 0, 238, 1, 9, 2, 14, 3, 156, 4, 7, 4, 216, 4, 105,
+        7, 46, 8, 44, 8, 68, 9, 138, 9, 151, 9, 55, 9, 61, 9, 67, 9, 86, 9, 101, 10, 141, 10, 194,
+        10, 304, 11, 135, 11, 76, 12, 118, 13, 169, 13, 230, 13, 522, 22, 55, 22, 80, 114, 201, 117, 34, 118, 75,
+        120, 19, 124, 89, 124, 107, 124, 108, 125, 34, 127, 15, 130, 201, 131, 14, 131, 50, 131, 54, 131, 104, 24, 199,
+        134, 224, 134, 311, 135, 18, 25, 195, 143, 14, 148, 85, 150, 17, 151, 20, 26, 51, 153, 90, 154, 30, 27, 51,
+        28, 56, 28, 18, 28, 90, 172, 45, 174, 438, 180, 41, 182, 91, 189, 311, 190, 309, 30, 63, 195, 33, 197, 201,
+        31, 36, 203, 78, 208, 20, 32, 69, 33, 401, 33, 441, 34, 65, 242, 309, 247, 79, 255, 85, 38, 43, 39, 525,
+        39, 588, 15, 100, 15, 109, 43, 100, 46, 18, 48, 16, 48, 19, 385, 20, 50, 53, 50, 85, 16, 61, 55, 73,
+        56, 67, 467, 21, 61, 19, 62, 69, 69, 76, 73, 19, 1, 53, 2, 98, 3, 119, 3, 227, 4, 122, 4, 94,
+        7, 28, 7, 67, 8, 135, 8, 277, 8, 340, 8, 343, 8, 55, 8, 58, 8, 93, 10, 67, 11, 277, 11, 55,
+        11, 70, 12, 168, 12, 304, 13, 304, 22, 71, 113, 32, 115, 37, 116, 28, 117, 172, 119, 71, 23, 427, 23, 467,
+        124, 30, 124, 48, 131, 58, 24, 156, 24, 104, 134, 190, 139, 15, 141, 20, 145, 47, 146, 217, 151, 19, 26, 177,
+        26, 61, 26, 65, 153, 28, 154, 35, 158, 20, 27, 28, 27, 63, 162, 30, 170, 61, 28, 36, 172, 32, 173, 77,
+        174, 46, 174, 512, 181, 45, 181, 85, 29, 102, 29, 110, 30, 105, 193, 78, 201, 31, 31, 51, 31, 65, 209, 16,
+        14, 217, 14, 42, 32, 60, 32, 68, 217, 69, 217, 110, 224, 59, 225, 41, 34, 99, 38, 293, 38, 67, 38, 68,
+        290, 52, 290, 66, 293, 43, 309, 80, 42, 56, 42, 60, 350, 60, 48, 73, 48, 75, 16, 73, 16, 92, 52, 20,
+        427, 21, 17, 88, 17, 110, 65, 92, 66, 20, 67, 18, 67, 73, 69, 110, 70, 102, 0, 473, 1, 224, 2, 174,
+        2, 85, 3, 35, 4, 12, 4, 242, 4, 474, 5, 275, 5, 50, 7, 201, 7, 247, 8, 133, 8, 47, 8, 87,
+        9, 122, 9, 24, 9, 153, 9, 75, 9, 77, 10, 12, 10, 130, 10, 147, 10, 153, 10, 242, 11, 113, 11, 58,
+        11, 80, 12, 169, 12, 198, 13, 157, 13, 215, 22, 263, 22, 62, 22, 76, 22, 90, 22, 105, 113, 113, 114, 75,
+        115, 227, 115, 236, 115, 65, 119, 34, 119, 298, 120, 36, 120, 70, 121, 45, 121, 86, 123, 290, 124, 55, 125, 37,
+        127, 43, 130, 77, 131, 44, 24, 260, 24, 286, 24, 748, 133, 30, 133, 31, 134, 303, 138, 15, 140, 31, 143, 80,
+        146, 39, 146, 80, 148, 34, 151, 36, 151, 70, 26, 165, 26, 201, 26, 73, 26, 75, 26, 84, 156, 16, 27, 473,
+        27, 61, 162, 35, 167, 71, 170, 32, 170, 36, 28, 200, 28, 63, 172, 263, 174, 401, 174, 441, 174, 78, 176, 14,
+        176, 45, 177, 90, 181, 53, 181, 59, 182, 45, 186, 71, 188, 41, 189, 303, 190, 190, 190, 242, 30, 71, 196, 77,
+        31, 214, 31, 100, 14, 85, 217, 45, 218, 40, 1204, 40, 218, 80, 229, 62, 230, 51, 230, 68, 230, 99, 34, 52,
+        233, 94, 233, 100, 238, 51, 238, 68, 238, 99, 35, 71, 242, 83, 247, 38, 247, 18, 36, 50, 36, 90, 36, 99,
+        38, 47, 38, 105, 272, 17, 309, 70, 15, 94, 15, 106, 43, 71, 43, 94, 338, 57, 368, 94, 368, 100, 50, 944,
+        51, 18, 16, 74, 16, 84, 16, 111, 53, 53, 55, 105, 56, 62, 56, 71, 60, 798, 17, 106, 62, 18, 68, 18,
+        75, 79, 79, 102, 19, 86, 19, 92, 87, 87, 1, 2, 1, 69, 2, 78, 3, 5, 3, 438, 3, 17, 4, 113,
+        4, 118, 4, 1108, 4, 201, 4, 404, 4, 87, 4, 909, 5, 352, 6, 275, 6, 91, 7, 207, 7, 95, 8, 188,
+        8, 54, 8, 67, 8, 680, 9, 118, 9, 41, 9, 609, 10, 114, 10, 158, 10, 159, 11, 133, 11, 141, 11, 188,
+        11, 92, 12, 119, 12, 291, 12, 322, 12, 425, 13, 118, 13, 127, 13, 241, 13, 277, 113, 49, 113, 87, 114, 27,
+        115, 36, 115, 51, 116, 293, 118, 73, 119, 132, 119, 172, 119, 97, 120, 224, 120, 63, 1099, 18, 1110, 16, 23, 59,
+        123, 35, 123, 346, 124, 153, 125, 44, 125, 58, 125, 69, 125, 694, 126, 69, 130, 27, 131, 15, 24, 141, 24, 191,
+        24, 431, 24, 675, 132, 144, 132, 155, 135, 43, 1249, 146, 136, 41, 136, 69, 1256, 176, 141, 41, 141, 86, 142, 172,
+        142, 15, 143, 909, 144, 167, 144, 37, 144, 97, 148, 53, 148, 99, 148, 102, 149, 47, 150, 38, 150, 42, 151, 63,
+        26, 170, 26, 100, 152, 377, 152, 73, 153, 79, 153, 101, 155, 97, 158, 178, 27, 178, 27, 68, 27, 91, 167, 201,
+        170, 31, 170, 94, 28, 225, 28, 249, 173, 47, 173, 105, 174, 49, 174, 53, 177, 31, 180, 631, 180, 101, 182, 37,
+        182, 97, 185, 92, 186, 77, 188, 101, 190, 397, 191, 99, 194, 35, 195, 41, 199, 79, 31, 272, 31, 73, 203, 60,
+        205, 32, 205, 42, 209, 58, 209, 694, 14, 227, 14, 228, 14, 235, 14, 263, 14, 46, 14, 62, 32, 233, 32, 235,
+        32, 98, 213, 99, 217, 98, 218, 224, 218, 512, 224, 906, 225, 38, 229, 76, 34, 49, 34, 66, 235, 45, 246, 76,
+        36, 92, 256, 100, 257, 48, 38, 52, 279, 41, 39, 716, 39, 871, 290, 92, 291, 71, 40, 401, 40, 441, 294, 41,
+        41, 320, 303, 66, 43, 377, 43, 67, 338, 104, 45, 46, 46, 427, 46, 474, 358, 76, 47, 56, 47, 18, 385, 99,
+        404, 58, 406, 71, 53, 433, 53, 59, 438, 473, 57, 74, 57, 840, 58, 577, 474, 85, 59, 675, 60, 785, 62, 110,
+        69, 701, 73, 79, 79, 79, 81, 96
+    ]),
+    coef: new Float64Array([
+        -27, -81, -81, -27, -81, -243, -243, -81,
+        -81, -243, -243, -81, -27, -81, -81, -27,
+        -216, -540, -432, -108, -108, -216, -108, -540,
+        -1296, -972, -216, -108, -648, -972, -432, -432,
+        -972, -648, -108, -216, -972, -1296, -540, -108,
+        -216, -108, -108, -432, -540, -216, -765, -1530,
+        -909, -144, -738, -1188, -450, -189, -27, -513,
+        -198, -459, -171, -135, -1557, -2826, -1413, -144,
+        -738, -3528, -3978, -1188, -432, -531, -1134, -1494,
+        -972, -963, -270, -963, -1494, -531, -1188, -3978,
+        -3528, -738, -144, -297, -1413, -729, -2826, -567,
+        -1557, -135, -171, -198, -27, -450, -1188, -738,
+        -144, -54, -909, -108, -1530, -54, -765, -1574,
+        -2388, -942, -64, -2136, -2568, -624, -1332, -198,
+        -2880, -1140, -1908, -750, -360, -720, -72, -1296,
+        -136, -576, -2532, -3216, -876, -2190, -7860, -5910,
+        -816, -2448, -2964, -4824, -6288, -2736, -2748, -360,
+        -612, -126, -3168, -1092, -4068, -1158, -1512, -1158,
+        -1092, -126, -2748, -6288, -2964, -816, -1260, -5910,
+        -2088, -7860, -828, -2190, -864, -876, -3096, -3216,
+        -3168, -2532, -936, -136, -72, -750, -1140, -198,
+        -624, -144, -2568, -144, -2136, -64, -252, -942,
+        -648, -2388, -396, -1574, -54, -108, -54, 54,
+        108, 54, -108, -216, -108, 108, 216, 108,
+        -54, -108, -54, 54, 108, 54, 54, 108,
+        54, -54, -108, -54, 54, 108, 54, -54,
+        -108, -54, -36, -72, -36, 36, 72, 36,
+        -18, -36, -18, 18, 36, 18, 18, 36,
+        18, -18, -36, -18, -18, -36, -18, 18,
+        36, 18, 18, 36, 18, -18, -36, -18,
+        -36, -72, -36, 36, 72, 36, -18, -36,
+        -18, 18, 36, 18, 18, 36, 18, -18,
+        -36, -18, 36, 72, 36, -36, -72, -36,
+        36, 72, 36, -36, -72, -36, -18, -36,
+        -18, 18, 36, 18, 54, 108, 54, -54,
+        -108, -54, -2073, -2217, -480, -3396, -2724, -288,
+        -4089, -606, -6678, -2562, -2925, -1092, -240, -4116,
+        -444, -5520, -636, -1596, -576, -207, -9, -1341,
+        -1290, -57, -990, -987, -225, 108, 216, 108,
+        -108, -216, -108, -54, -108, -54, 54, 108,
+        54, -2535, -2007, -192, -3684, -9156, -3744, -5850,
+        -6762, -7992, -9582, -2430, -1956, -3594, -732, -13800,
+        -4764, -11706, -3456, -2076, -936, -2742, -375, -1989,
+        -6600, -807, -1278, -3570, -225, 54, 108, 54,
+        -54, -108, -54, -54, -108, -54, 54, 108,
+        54, 18, 36, 18, -18, -36, -18, -807,
+        -375, -3456, -4764, -732, -1956, -2133, -9582, -2070,
+        -6762, -225, -3864, -3744, -9240, -9156, -4800, -3684,
+        -624, -192, -369, -4755, -2007, -630, -7242, -2535,
+        -261, -2823, -57, -9, -636, -444, -1092, -132,
+        -2562, -36, -606, -288, -750, -2724, -996, -3396,
+        -54, -384, -480, -9, -1500, -2217, 18, -1212,
+        -2073, 27, -288, -432, -144, 288, 288, -108,
+        144, -216, 144, -108, -432, -576, -144, 288,
+        -288, 144, -216, 576, -432, 432, -216, -144,
+        -144, -288, -288, 144, -108, 432, -216, 288,
+        -108, 288, 432, 144, -288, -288, 108, -144,
+        216, -144, 108, 216, 288, 72, -144, 144,
+        -72, 108, -288, 216, -216, 108, -192, -288,
+        -96, 192, 192, -72, 96, -144, 96, -72,
+        -72, -96, -24, 48, -48, 24, -36, 96,
+        -72, 72, -36, 48, 48, 96, 96, -48,
+        36, -144, 72, -96, 36, -96, -144, -48,
+        96, 96, -36, 48, -72, 48, -36, 96,
+        144, 48, -96, -96, 36, -48, 72, -48,
+        36, -144, -192, -48, 96, -96, 48, -72,
+        192, -144, 144, -72, -96, -144, -48, 96,
+        96, -36, 48, -72, 48, -36, 72, 96,
+        24, -48, 48, -24, 36, -96, 72, -72,
+        36, 144, 192, 48, -96, 96, -48, 72,
+        -192, 144, -144, 72, 96, 96, 192, 192,
+        -96, 72, -288, 144, -192, 72, -48, -48,
+        -96, -96, 48, -36, 144, -72, 96, -36,
+        288, 432, 144, -288, -288, 108, -144, 216,
+        -144, 108, -1812, -1224, -96, -3204, -1416, -7140,
+        -1008, -8184, -2808, -1956, -528, -9696, -1056, -8640,
+        -984, -1104, -3516, -1236, -60, -6156, -5688, -288,
+        -2988, -2868, -300, -1956, -528, -12, -2928, -864,
+        -1020, 432, 576, 144, -288, 288, -144, 216,
+        -576, 432, -432, 216, -216, -288, -72, 144,
+        -144, 72, -108, 288, -216, 216, -108, -1596,
+        -648, -3840, -5868, -840, -7620, -8064, -6408, -6216,
+        -660, -8964, -1728, -23496, -7488, -10644, -2568, -4356,
+        -12228, -1716, -6336, -19464, -2544, -2124, -5076, -1452,
+        -708, -48, -5880, -5160, -324, -5604, -4596, -1320,
+        144, 144, 288, 288, -144, 108, -432, 216,
+        -288, 108, -144, -144, -288, -288, 144, -108,
+        432, -216, 288, -108, 48, 48, 96, 96,
+        -48, 36, -144, 72, -96, 36, -324, -48,
+        -2544, -1716, -2568, -1824, -7488, -816, -1728, -6996,
+        -6216, -9720, -8064, -1428, -2928, -840, -1116, -14688,
+        -5868, -1008, -11328, -3840, -36, -1272, -3108, -648,
+        -3048, -8664, -1596, -1632, -4836, -12, -288, -60,
+        -984, -48, -1056, -528, -816, -2808, -384, -1008,
+        -1248, -1416, 24, -2544, -3204, 72, -288, -192,
+        -96, -120, -1680, -1224, -24, -2016, -1812, 144,
+        -636, -636, -96, 636, 36, -312, -828, 564,
+        -1296, 276, -468, 198, 36, 36, 132, -162,
+        -672, -480, 72, -1104, -600, 600, -1188, 1104,
+        -1656, -72, -468, -72, 480, -864, 672, -792,
+        -132, -36, -276, -564, 312, -360, -36, -360,
+        -636, 96, -270, 636, -900, 636, -630, 636,
+        636, 96, -636, -36, 312, 828, -564, 1296,
+        -276, 468, -198, -36, -36, -132, 162, 336,
+        240, -36, 552, 300, -300, 594, -552, 828,
+        36, 234, 36, -240, 432, -336, 396, -424,
+        -424, -64, 424, 24, -208, -552, 376, -864,
+        184, -312, 132, 24, 24, 88, -108, -112,
+        -80, 12, -184, -100, 100, -198, 184, -276,
+        -12, -78, -12, 80, -144, 112, -132, 44,
+        12, 92, 188, -104, 120, 12, 120, 212,
+        -32, 90, -212, 300, -212, 210, -212, -212,
+        -32, 212, 12, -104, -276, 188, -432, 92,
+        -156, 66, 12, 12, 44, -54, 212, 212,
+        32, -212, -12, 104, 276, -188, 432, -92,
+        156, -66, -12, -12, -44, 54, -224, -160,
+        24, -368, -200, 200, -396, 368, -552, -24,
+        -156, -24, 160, -288, 224, -264, -212, -212,
+        -32, 212, 12, -104, -276, 188, -432, 92,
+        -156, 66, 12, 12, 44, -54, 112, 80,
+        -12, 184, 100, -100, 198, -184, 276, 12,
+        78, 12, -80, 144, -112, 132, 224, 160,
+        -24, 368, 200, -200, 396, -368, 552, 24,
+        156, 24, -160, 288, -224, 264, 88, 24,
+        184, 376, -208, 240, 24, 240, 424, -64,
+        180, -424, 600, -424, 420, -44, -12, -92,
+        -188, 104, -120, -12, -120, -212, 32, -90,
+        212, -300, 212, -210, 636, 636, 96, -636,
+        -36, 312, 828, -564, 1296, -276, 468, -198,
+        -36, -36, -132, 162, -1051, -372, -1794, -288,
+        -7755, -987, -5589, -1500, -480, -12048, -1212, -5880,
+        -504, -9153, -3018, -153, -11196, -9162, -480, -2943,
+        -2076, -9102, -2448, -66, -9000, -2664, -1410, -1000,
+        -615, -75, -1869, -1, -3108, -405, -1002, -1881,
+        -125, 672, 480, -72, 1104, 600, -600, 1188,
+        -1104, 1656, 72, 468, 72, -480, 864, -672,
+        792, -336, -240, 36, -552, -300, 300, -594,
+        552, -828, -36, -234, -36, 240, -432, 336,
+        -396, -615, -84, -2538, -1956, -5820, -5295, -2466,
+        -1428, -12300, -2124, -19476, -4992, -2976, -8235, -21336,
+        -2805, -7236, -18132, -1992, -765, -7146, -3252, -234,
+        -19392, -15660, -1092, -9582, -6816, -1032, -5373, -1932,
+        -1572, -69, -9564, -3474, -564, -3291, 132, 36,
+        276, 564, -312, 360, 36, 360, 636, -96,
+        270, -636, 900, -636, 630, -132, -36, -276,
+        -564, 312, -360, -36, -360, -636, 96, -270,
+        636, -900, 636, -630, 44, 12, 92, 188,
+        -104, 120, 12, 120, 212, -32, 90, -212,
+        300, -212, 210, -69, -1092, -234, -1992, -819,
+        -2805, -105, -6528, -4992, -4200, -2124, -5628, -1428,
+        -1206, -16182, -5295, -378, -3606, -4332, -9888, -1956,
+        -5580, -13944, -2538, -456, -1056, -720, -129, -84,
+        -5178, -5715, -42, -615, -4086, -5145, 63, -1,
+        -66, -480, -6, -153, -504, -396, -1212, -36,
+        -1536, -1500, 54, -1212, -987, 18, -672, -288,
+        -132, -3060, -1794, 228, -636, -288, -912, 28,
+        -372, -294, -1974, 36, -1051, 318, -744, -408,
+        744, -504, -288, -2376, 744, -2520, -120, -432,
+        816, 168, -1008, 360, -1248, -504, 408, 48,
+        -864, 120, -360, -504, -120, -480, -1248, 984,
+        -2304, -1728, -984, -1152, 1248, -4416, 480, -2112,
+        336, 120, -648, -96, 504, -1008, -1008, -360,
+        -48, -360, -168, 120, -360, -744, -72, 288,
+        -1104, 504, -1680, -744, -96, 408, -144, -1368,
+        744, -144, -1560, 744, 408, -744, 504, 288,
+        2376, -744, 2520, 120, 432, -816, -168, 1008,
+        -360, 1248, 504, -408, -48, 864, -120, 360,
+        252, 60, 240, 624, -492, 1152, 864, 492,
+        576, -624, 2208, -240, 1056, -168, -60, 324,
+        48, -252, 504, 504, 180, -496, -272, 496,
+        -336, -192, -1584, 496, -1680, -80, -288, 544,
+        112, -672, 240, -832, -336, 272, 32, -576,
+        80, -240, -84, -20, -80, -208, 164, -384,
+        -288, -164, -192, 208, -736, 80, -352, 56,
+        20, -108, -16, 84, -168, -168, -60, 16,
+        120, 56, -40, 120, 248, 24, -96, 368,
+        -168, 560, 248, 32, -136, 48, 456, -248,
+        48, 520, -248, -136, 248, -168, -96, -792,
+        248, -840, -40, -144, 272, 56, -336, 120,
+        -416, -168, 136, 16, -288, 40, -120, 248,
+        136, -248, 168, 96, 792, -248, 840, 40,
+        144, -272, -56, 336, -120, 416, 168, -136,
+        -16, 288, -40, 120, -168, -40, -160, -416,
+        328, -768, -576, -328, -384, 416, -1472, 160,
+        -704, 112, 40, -216, -32, 168, -336, -336,
+        -120, -248, -136, 248, -168, -96, -792, 248,
+        -840, -40, -144, 272, 56, -336, 120, -416,
+        -168, 136, 16, -288, 40, -120, 84, 20,
+        80, 208, -164, 384, 288, 164, 192, -208,
+        736, -80, 352, -56, -20, 108, 16, -84,
+        168, 168, 60, 168, 40, 160, 416, -328,
+        768, 576, 328, 384, -416, 1472, -160, 704,
+        -112, -40, 216, 32, -168, 336, 336, 120,
+        32, 240, 112, -80, 240, 496, 48, -192,
+        736, -336, 1120, 496, 64, -272, 96, 912,
+        -496, 96, 1040, -16, -120, -56, 40, -120,
+        -248, -24, 96, -368, 168, -560, -248, -32,
+        136, -48, -456, 248, -48, -520, 744, 408,
+        -744, 504, 288, 2376, -744, 2520, 120, 432,
+        -816, -168, 1008, -360, 1248, 504, -408, -48,
+        864, -120, 360, -390, -48, -552, -5364, -570,
+        -2016, -312, -8328, -672, -1464, -13170, -3864, -186,
+        -10080, -6384, -264, -942, -16752, -4104, -120, -9000,
+        -2040, -5172, -2946, -372, -6720, -6, -9792, -1344,
+        -1932, -2718, -2808, -1392, -96, -3072, -1800, -600,
+        504, 120, 480, 1248, -984, 2304, 1728, 984,
+        1152, -1248, 4416, -480, 2112, -336, -120, 648,
+        96, -504, 1008, 1008, 360, -252, -60, -240,
+        -624, 492, -1152, -864, -492, -576, 624, -2208,
+        240, -1056, 168, 60, -324, -48, 252, -504,
+        -504, -180, -132, -1038, -264, -2592, -1812, -360,
+        -10020, -1434, -7824, -1176, -8040, -18168, -1932, -3456,
+        -5208, -14490, -5832, -402, -23184, -14976, -912, -3606,
+        -3720, -18216, -6072, -3312, -252, -16800, -5424, -312,
+        -1860, -1482, -276, -5088, -6, -7920, -1536, -2652,
+        -4518, 48, 360, 168, -120, 360, 744, 72,
+        -288, 1104, -504, 1680, 744, 96, -408, 144,
+        1368, -744, 144, 1560, -48, -360, -168, 120,
+        -360, -744, -72, 288, -1104, 504, -1680, -744,
+        -96, 408, -144, -1368, 744, -144, -1560, 16,
+        120, 56, -40, 120, 248, 24, -96, 368,
+        -168, 560, 248, 32, -136, 48, 456, -248,
+        48, 520, -6, -252, -912, -180, -402, -3288,
+        -1932, -624, -5664, -1176, -540, -7464, -1434, -12,
+        -5592, -11304, -1812, -2880, -4680, -3936, -2352, -120,
+        -264, -10332, -9444, 168, -1038, -1548, -768, -3672,
+        -1968, -672, -132, -5280, -3480, 240, -6, -120,
+        -264, -84, -186, -888, -672, 24, -168, -912,
+        -312, 36, -1656, -570, 84, -576, -1752, 48,
+        -552, 120, -744, -192, -192, 72, -48, -540,
+        -1140, 168, -390, 372, -36, -36, 72, 72,
+        -36, -36, -36, -36, 72, 72, -36, -36,
+        36, 36, -72, -72, 36, 36, -12, -12,
+        24, 24, -12, -12, 24, 24, -48, -48,
+        24, 24, -24, -24, 48, 48, -24, -24,
+        12, 12, -24, -24, 12, 12, 24, 24,
+        -48, -48, 24, 24, 48, 48, -96, -96,
+        48, 48, -24, -24, 48, 48, -24, -24,
+        72, 72, -144, -144, 72, 72, -36, -36,
+        72, 72, -36, -36, -486, -96, 486, -504,
+        -3408, 324, -1992, -312, 1284, 276, -3132, 144,
+        -1416, -2682, 720, 162, -3096, -1032, -630, 222,
+        156, 6, -1080, 324, -1086, 72, 72, -144,
+        -144, 72, 72, -72, -72, 144, 144, -72,
+        -72, 24, 24, -48, -48, 24, 24, -180,
+        -612, -360, 792, -2016, -864, -480, -3168, 864,
+        -5280, -792, 936, 360, -2232, -3312, 612, -1800,
+        -3864, -972, 576, 180, -3120, -384, -1716, -6,
+        -162, -144, -120, -276, 312, -1332, -324, -444,
+        -768, 504, -180, -2904, -486, 36, 96, 96,
+        -564, -900, 486, -780, -2124, -12, -12, 24,
+        24, -12, -12, 12, 12, -24, -24, 12,
+        12, 24, 24, -48, -48, 24, 24, -12,
+        -12, 24, 24, -12, -12, -12, -12, 24,
+        24, -12, -12, -12, -12, 24, 24, -12,
+        -12, -72, -72, 144, 144, -72, -72, 12,
+        12, -24, -24, 12, 12, 486, 96, -486,
+        504, 3408, -324, 1992, 312, -1284, -276, 3132,
+        -144, 1416, 2682, -720, -162, 3096, 1032, 630,
+        -222, -156, -6, 1080, -324, 1086, -36, -36,
+        72, 72, -36, -36, 12, 12, -24, -24,
+        12, 12, 90, 306, 180, -396, 1008, 432,
+        240, 1584, -432, 2640, 396, -468, -180, 1116,
+        1656, -306, 900, 1932, 486, -288, -90, 1560,
+        192, 858, 48, 48, -96, -96, 48, 48,
+        -12, -12, 24, 24, -12, -12, -324, -64,
+        324, -336, -2272, 216, -1328, -208, 856, 184,
+        -2088, 96, -944, -1788, 480, 108, -2064, -688,
+        -420, 148, 104, 4, -720, 216, -724, 12,
+        12, -24, -24, 12, 12, 24, 24, -48,
+        -48, 24, 24, -12, -12, 24, 24, -12,
+        -12, -30, -102, -60, 132, -336, -144, -80,
+        -528, 144, -880, -132, 156, 60, -372, -552,
+        102, -300, -644, -162, 96, 30, -520, -64,
+        -286, 2, 54, 48, 40, 92, -104, 444,
+        108, 148, 256, -168, 60, 968, 162, -12,
+        -32, -32, 188, 300, -162, 260, 708, 24,
+        24, -48, -48, 24, 24, -162, -32, 162,
+        -168, -1136, 108, -664, -104, 428, 92, -1044,
+        48, -472, -894, 240, 54, -1032, -344, -210,
+        74, 52, 2, -360, 108, -362, -24, -24,
+        48, 48, -24, -24, 162, 32, -162, 168,
+        1136, -108, 664, 104, -428, -92, 1044, -48,
+        472, 894, -240, -54, 1032, 344, 210, -74,
+        -52, -2, 360, -108, 362, 24, 24, -48,
+        -48, 24, 24, -12, -12, 24, 24, -12,
+        -12, -60, -204, -120, 264, -672, -288, -160,
+        -1056, 288, -1760, -264, 312, 120, -744, -1104,
+        204, -600, -1288, -324, 192, 60, -1040, -128,
+        -572, 24, 24, -48, -48, 24, 24, -162,
+        -32, 162, -168, -1136, 108, -664, -104, 428,
+        92, -1044, 48, -472, -894, 240, 54, -1032,
+        -344, -210, 74, 52, 2, -360, 108, -362,
+        -12, -12, 24, 24, -12, -12, -24, -24,
+        48, 48, -24, -24, 12, 12, -24, -24,
+        12, 12, 30, 102, 60, -132, 336, 144,
+        80, 528, -144, 880, 132, -156, -60, 372,
+        552, -102, 300, 644, 162, -96, -30, 520,
+        64, 286, 60, 204, 120, -264, 672, 288,
+        160, 1056, -288, 1760, 264, -312, -120, 744,
+        1104, -204, 600, 1288, 324, -192, -60, 1040,
+        128, 572, 4, 108, 96, 80, 184, -208,
+        888, 216, 296, 512, -336, 120, 1936, 324,
+        -24, -64, -64, 376, 600, -324, 520, 1416,
+        -2, -54, -48, -40, -92, 104, -444, -108,
+        -148, -256, 168, -60, -968, -162, 12, 32,
+        32, -188, -300, 162, -260, -708, -36, -36,
+        72, 72, -36, -36, 486, 96, -486, 504,
+        3408, -324, 1992, 312, -1284, -276, 3132, -144,
+        1416, 2682, -720, -162, 3096, 1032, 630, -222,
+        -156, -6, 1080, -324, 1086, -84, -72, -2307,
+        -180, -300, -3036, -144, -11310, -2739, -108, -4491,
+        -1620, -15240, -2952, -72, -2916, -11085, -5556, -657,
+        -8964, -12, -9990, -1104, -903, -10200, -4536, -348,
+        -6000, -2748, -1086, -939, -222, -1491, -9, -3420,
+        -939, -465, -1185, -36, -36, 72, 72, -36,
+        -36, 36, 36, -72, -72, 36, 36, 180,
+        612, 360, -792, 2016, 864, 480, 3168, -864,
+        5280, 792, -936, -360, 2232, 3312, -612, 1800,
+        3864, 972, -576, -180, 3120, 384, 1716, -12,
+        -12, 24, 24, -12, -12, -90, -306, -180,
+        396, -1008, -432, -240, -1584, 432, -2640, -396,
+        468, 180, -1116, -1656, 306, -900, -1932, -486,
+        288, 90, -1560, -192, -858, -12, -240, -618,
+        -252, -4842, -504, -1212, -4230, -7530, -468, -567,
+        -15480, -5100, -288, -11820, -4416, -5100, -22500, -5982,
+        -2088, -228, -6558, -7410, -5160, -906, -11520, -24,
+        -14292, -2556, -1614, -570, -4980, -3174, -477, -366,
+        -4824, -3687, -15, 6, 162, 144, 120, 276,
+        -312, 1332, 324, 444, 768, -504, 180, 2904,
+        486, -36, -96, -96, 564, 900, -486, 780,
+        2124, -6, -162, -144, -120, -276, 312, -1332,
+        -324, -444, -768, 504, -180, -2904, -486, 36,
+        96, 96, -564, -900, 486, -780, -2124, 2,
+        54, 48, 40, 92, -104, 444, 108, 148,
+        256, -168, 60, 968, 162, -12, -32, -32,
+        188, 300, -162, 260, 708, -24, -228, -15,
+        -840, -288, -3144, -468, -81, -1215, -3360, -5472,
+        -504, -396, -5736, -2772, 126, -252, -6210, -3309,
+        102, -1680, -7776, -3336, -120, -240, -2388, -864,
+        -912, 69, -276, -1710, -12, -3729, 105, -1461,
+        330, -12, -72, -6, -240, -108, 3, -600,
+        -144, 60, -276, -360, -1032, 12, -180, 102,
+        -480, -384, 180, -72, -252, -486, 36, -384,
+        3, -360, 276, -84, 243, -9, -96, -48,
+        192, 48, -96, -144, 48, -144, 144, -48,
+        144, -48, 48, -96, 48, -144, 192, -144,
+        -48, 144, -96, 144, 96, 48, -192, -48,
+        96, 144, -48, 144, -144, 48, -144, -32,
+        -16, 64, 16, -32, -48, 16, -48, 48,
+        -16, 48, 32, -32, 64, -32, 96, -128,
+        96, 32, -96, 64, -96, -64, -32, 128,
+        32, -64, -96, 32, -96, 96, -32, 96,
+        32, 16, -64, -16, 32, 48, -16, 48,
+        -48, 16, -48, 64, 32, -128, -32, 64,
+        96, -32, 96, -96, 32, -96, 64, -64,
+        128, -64, 192, -256, 192, 64, -192, 128,
+        -192, -32, 32, -64, 32, -96, 128, -96,
+        -32, 96, -64, 96, 192, 96, -384, -96,
+        192, 288, -96, 288, -288, 96, -288, -96,
+        -48, 192, 48, -96, -144, 48, -144, 144,
+        -48, 144, -168, 168, -144, -2628, -48, -552,
+        912, 192, -3024, -144, -5472, -288, 120, -3456,
+        -1752, 528, 432, 24, -4752, -144, -2208, -948,
+        -96, 180, -1200, -1152, -300, 96, -96, 192,
+        -96, 288, -384, 288, 96, -288, 192, -288,
+        -96, 96, -192, 96, -288, 384, -288, -96,
+        288, -192, 288, 32, -32, 64, -32, 96,
+        -128, 96, 32, -96, 64, -96, -24, -288,
+        312, -792, -336, -3456, -1632, 816, 336, -2592,
+        -5184, -312, -576, -4032, -288, 288, -6144, -3648,
+        96, 240, -624, 24, -3168, 216, -528, -3360,
+        -24, -120, -12, 144, -576, -192, -1224, 48,
+        -912, 96, 144, -1008, -2304, -168, -48, -576,
+        -216, 24, 168, -1536, -1716, 72, -32, -16,
+        64, 16, -32, -48, 16, -48, 48, -16,
+        48, 32, 16, -64, -16, 32, 48, -16,
+        48, -48, 16, -48, 64, 32, -128, -32,
+        64, 96, -32, 96, -96, 32, -96, -32,
+        -16, 64, 16, -32, -48, 16, -48, 48,
+        -16, 48, -16, 16, -32, 16, -48, 64,
+        -48, -16, 48, -32, 48, -32, -16, 64,
+        16, -32, -48, 16, -48, 48, -16, 48,
+        -192, -96, 384, 96, -192, -288, 96, -288,
+        288, -96, 288, 32, 16, -64, -16, 32,
+        48, -16, 48, -48, 16, -48, 168, -168,
+        144, 2628, 48, 552, -912, -192, 3024, 144,
+        5472, 288, -120, 3456, 1752, -528, -432, -24,
+        4752, 144, 2208, 948, 96, -180, 1200, 1152,
+        300, -48, 48, -96, 48, -144, 192, -144,
+        -48, 144, -96, 144, 16, -16, 32, -16,
+        48, -64, 48, 16, -48, 32, -48, 12,
+        144, -156, 396, 168, 1728, 816, -408, -168,
+        1296, 2592, 156, 288, 2016, 144, -144, 3072,
+        1824, -48, -120, 312, -12, 1584, -108, 264,
+        1680, 128, 64, -256, -64, 128, 192, -64,
+        192, -192, 64, -192, -32, -16, 64, 16,
+        -32, -48, 16, -48, 48, -16, 48, -112,
+        112, -96, -1752, -32, -368, 608, 128, -2016,
+        -96, -3648, -192, 80, -2304, -1168, 352, 288,
+        16, -3168, -96, -1472, -632, -64, 120, -800,
+        -768, -200, 16, -16, 32, -16, 48, -64,
+        48, 16, -48, 32, -48, 32, -32, 64,
+        -32, 96, -128, 96, 32, -96, 64, -96,
+        -16, 16, -32, 16, -48, 64, -48, -16,
+        48, -32, 48, -4, -48, 52, -132, -56,
+        -576, -272, 136, 56, -432, -864, -52, -96,
+        -672, -48, 48, -1024, -608, 16, 40, -104,
+        4, -528, 36, -88, -560, 8, 40, 4,
+        -48, 192, 64, 408, -16, 304, -32, -48,
+        336, 768, 56, 16, 192, 72, -8, -56,
+        512, 572, -24, 64, 32, -128, -32, 64,
+        96, -32, 96, -96, 32, -96, -56, 56,
+        -48, -876, -16, -184, 304, 64, -1008, -48,
+        -1824, -96, 40, -1152, -584, 176, 144, 8,
+        -1584, -48, -736, -316, -32, 60, -400, -384,
+        -100, -64, -32, 128, 32, -64, -96, 32,
+        -96, 96, -32, 96, 56, -56, 48, 876,
+        16, 184, -304, -64, 1008, 48, 1824, 96,
+        -40, 1152, 584, -176, -144, -8, 1584, 48,
+        736, 316, 32, -60, 400, 384, 100, 32,
+        -32, 64, -32, 96, -128, 96, 32, -96,
+        64, -96, -16, 16, -32, 16, -48, 64,
+        -48, -16, 48, -32, 48, -8, -96, 104,
+        -264, -112, -1152, -544, 272, 112, -864, -1728,
+        -104, -192, -1344, -96, 96, -2048, -1216, 32,
+        80, -208, 8, -1056, 72, -176, -1120, 64,
+        32, -128, -32, 64, 96, -32, 96, -96,
+        32, -96, -56, 56, -48, -876, -16, -184,
+        304, 64, -1008, -48, -1824, -96, 40, -1152,
+        -584, 176, 144, 8, -1584, -48, -736, -316,
+        -32, 60, -400, -384, -100, -16, 16, -32,
+        16, -48, 64, -48, -16, 48, -32, 48,
+        -32, 32, -64, 32, -96, 128, -96, -32,
+        96, -64, 96, 16, -16, 32, -16, 48,
+        -64, 48, 16, -48, 32, -48, 4, 48,
+        -52, 132, 56, 576, 272, -136, -56, 432,
+        864, 52, 96, 672, 48, -48, 1024, 608,
+        -16, -40, 104, -4, 528, -36, 88, 560,
+        8, 96, -104, 264, 112, 1152, 544, -272,
+        -112, 864, 1728, 104, 192, 1344, 96, -96,
+        2048, 1216, -32, -80, 208, -8, 1056, -72,
+        176, 1120, 16, 80, 8, -96, 384, 128,
+        816, -32, 608, -64, -96, 672, 1536, 112,
+        32, 384, 144, -16, -112, 1024, 1144, -48,
+        -8, -40, -4, 48, -192, -64, -408, 16,
+        -304, 32, 48, -336, -768, -56, -16, -192,
+        -72, 8, 56, -512, -572, 24, -96, -48,
+        192, 48, -96, -144, 48, -144, 144, -48,
+        144, 168, -168, 144, 2628, 48, 552, -912,
+        -192, 3024, 144, 5472, 288, -120, 3456, 1752,
+        -528, -432, -24, 4752, 144, 2208, 948, 96,
+        -180, 1200, 1152, 300, -8, -564, -24, -456,
+        -5796, -1020, -24, -792, -6852, -768, -12600, -5160,
+        -492, -5256, -8, -3288, -13728, -4752, -312, -2832,
+        -4620, -3480, -756, -3924, -36, -6792, -1536, -420,
+        -2292, -1632, -252, -1464, -1232, -48, 48, -96,
+        48, -144, 192, -144, -48, 144, -96, 144,
+        48, -48, 96, -48, 144, -192, 144, 48,
+        -144, 96, -144, 24, 288, -312, 792, 336,
+        3456, 1632, -816, -336, 2592, 5184, 312, 576,
+        4032, 288, -288, 6144, 3648, -96, -240, 624,
+        -24, 3168, -216, 528, 3360, -16, 16, -32,
+        16, -48, 64, -48, -16, 48, -32, 48,
+        -12, -144, 156, -396, -168, -1728, -816, 408,
+        168, -1296, -2592, -156, -288, -2016, -144, 144,
+        -3072, -1824, 48, 120, -312, 12, -1584, 108,
+        -264, -1680, -24, -60, -1284, -72, -1116, -1212,
+        -9180, -2172, -72, -2148, -3240, -11952, -1812, -360,
+        -11640, -6552, -924, -8184, -24, -5760, -1380, -11784,
+        -5892, -432, -660, -3144, -1380, -1464, -492, -1944,
+        -36, -4248, -1788, -144, 24, 120, 12, -144,
+        576, 192, 1224, -48, 912, -96, -144, 1008,
+        2304, 168, 48, 576, 216, -24, -168, 1536,
+        1716, -72, -24, -120, -12, 144, -576, -192,
+        -1224, 48, -912, 96, 144, -1008, -2304, -168,
+        -48, -576, -216, 24, 168, -1536, -1716, 72,
+        8, 40, 4, -48, 192, 64, 408, -16,
+        304, -32, -48, 336, 768, 56, 16, 192,
+        72, -8, -56, 512, 572, -24, -24, -84,
+        -912, -72, -912, -948, -4080, -1392, 144, -72,
+        -1128, -1128, -5112, -1212, 168, -2400, -2016, 216,
+        -480, -1392, -24, -1896, 60, -72, -1512, -1368,
+        276, -348, 168, -8, -24, -192, -24, 12,
+        -72, -192, -432, -240, 96, -24, 96, -312,
+        -12, -168, 96, -64, -96, 36, -48, 192,
+        -8, 84, -24, -84, 168, -72, -84, -468,
+        132, -252, 480, -48, 48, -12, -12, -144,
+        204, -144, -12, -48, 132, -216, -84, -72,
+        -24, 168, -456, 240, -84, -144, 456, -144,
+        84, -168, 72, 84, 468, -132, 252, -480,
+        48, -48, 12, 12, 144, -204, 144, -28,
+        56, -24, -28, -156, 44, -84, 160, -16,
+        16, -4, -4, -48, 68, -48, 8, 32,
+        -88, 144, 56, 48, 16, -112, 304, -160,
+        56, 96, -304, 96, -56, 112, -48, -56,
+        -312, 88, -168, 320, -32, 32, -8, -8,
+        -96, 136, -96, 28, -56, 24, 28, 156,
+        -44, 84, -160, 16, -16, 4, 4, 48,
+        -68, 48, 56, -112, 48, 56, 312, -88,
+        168, -320, 32, -32, 8, 8, 96, -136,
+        96, 16, 64, -176, 288, 112, 96, 32,
+        -224, 608, -320, 112, 192, -608, 192, -8,
+        -32, 88, -144, -56, -48, -16, 112, -304,
+        160, -56, -96, 304, -96, 168, -336, 144,
+        168, 936, -264, 504, -960, 96, -96, 24,
+        24, 288, -408, 288, -84, 168, -72, -84,
+        -468, 132, -252, 480, -48, 48, -12, -12,
+        -144, 204, -144, -24, 24, -1044, -48, 222,
+        48, -936, -5400, -1032, -24, -1212, 168, 324,
+        24, -5940, -1008, -3720, -1656, 156, -2544, -2988,
+        -18, 120, 30, -2088, -468, -1110, 24, 96,
+        -264, 432, 168, 144, 48, -336, 912, -480,
+        168, 288, -912, 288, -24, -96, 264, -432,
+        -168, -144, -48, 336, -912, 480, -168, -288,
+        912, -288, 8, 32, -88, 144, 56, 48,
+        16, -112, 304, -160, 56, 96, -304, 96,
+        -48, 48, -108, -1656, -96, 120, 96, -1152,
+        -1824, -5616, -1728, -48, -2256, -240, 264, -1224,
+        48, -7056, -1860, -168, -1392, -1152, 216, -2016,
+        -3456, -24, 24, -78, -672, -48, 12, -72,
+        48, -396, -828, -1296, -816, 120, -24, -372,
+        -96, -108, 24, -1404, -822, 228, -28, 56,
+        -24, -28, -156, 44, -84, 160, -16, 16,
+        -4, -4, -48, 68, -48, 28, -56, 24,
+        28, 156, -44, 84, -160, 16, -16, 4,
+        4, 48, -68, 48, 56, -112, 48, 56,
+        312, -88, 168, -320, 32, -32, 8, 8,
+        96, -136, 96, -28, 56, -24, -28, -156,
+        44, -84, 160, -16, 16, -4, -4, -48,
+        68, -48, -4, -16, 44, -72, -28, -24,
+        -8, 56, -152, 80, -28, -48, 152, -48,
+        -28, 56, -24, -28, -156, 44, -84, 160,
+        -16, 16, -4, -4, -48, 68, -48, -168,
+        336, -144, -168, -936, 264, -504, 960, -96,
+        96, -24, -24, -288, 408, -288, 28, -56,
+        24, 28, 156, -44, 84, -160, 16, -16,
+        4, 4, 48, -68, 48, 24, -24, 1044,
+        48, -222, -48, 936, 5400, 1032, 24, 1212,
+        -168, -324, -24, 5940, 1008, 3720, 1656, -156,
+        2544, 2988, 18, -120, -30, 2088, 468, 1110,
+        -12, -48, 132, -216, -84, -72, -24, 168,
+        -456, 240, -84, -144, 456, -144, 4, 16,
+        -44, 72, 28, 24, 8, -56, 152, -80,
+        28, 48, -152, 48, 24, -24, 54, 828,
+        48, -60, -48, 576, 912, 2808, 864, 24,
+        1128, 120, -132, 612, -24, 3528, 930, 84,
+        696, 576, -108, 1008, 1728, 112, -224, 96,
+        112, 624, -176, 336, -640, 64, -64, 16,
+        16, 192, -272, 192, -28, 56, -24, -28,
+        -156, 44, -84, 160, -16, 16, -4, -4,
+        -48, 68, -48, -16, 16, -696, -32, 148,
+        32, -624, -3600, -688, -16, -808, 112, 216,
+        16, -3960, -672, -2480, -1104, 104, -1696, -1992,
+        -12, 80, 20, -1392, -312, -740, 4, 16,
+        -44, 72, 28, 24, 8, -56, 152, -80,
+        28, 48, -152, 48, 8, 32, -88, 144,
+        56, 48, 16, -112, 304, -160, 56, 96,
+        -304, 96, -4, -16, 44, -72, -28, -24,
+        -8, 56, -152, 80, -28, -48, 152, -48,
+        -8, 8, -18, -276, -16, 20, 16, -192,
+        -304, -936, -288, -8, -376, -40, 44, -204,
+        8, -1176, -310, -28, -232, -192, 36, -336,
+        -576, 8, -8, 26, 224, 16, -4, 24,
+        -16, 132, 276, 432, 272, -40, 8, 124,
+        32, 36, -8, 468, 274, -76, 56, -112,
+        48, 56, 312, -88, 168, -320, 32, -32,
+        8, 8, 96, -136, 96, -8, 8, -348,
+        -16, 74, 16, -312, -1800, -344, -8, -404,
+        56, 108, 8, -1980, -336, -1240, -552, 52,
+        -848, -996, -6, 40, 10, -696, -156, -370,
+        -56, 112, -48, -56, -312, 88, -168, 320,
+        -32, 32, -8, -8, -96, 136, -96, 8,
+        -8, 348, 16, -74, -16, 312, 1800, 344,
+        8, 404, -56, -108, -8, 1980, 336, 1240,
+        552, -52, 848, 996, 6, -40, -10, 696,
+        156, 370, 8, 32, -88, 144, 56, 48,
+        16, -112, 304, -160, 56, 96, -304, 96,
+        -4, -16, 44, -72, -28, -24, -8, 56,
+        -152, 80, -28, -48, 152, -48, -16, 16,
+        -36, -552, -32, 40, 32, -384, -608, -1872,
+        -576, -16, -752, -80, 88, -408, 16, -2352,
+        -620, -56, -464, -384, 72, -672, -1152, 56,
+        -112, 48, 56, 312, -88, 168, -320, 32,
+        -32, 8, 8, 96, -136, 96, -8, 8,
+        -348, -16, 74, 16, -312, -1800, -344, -8,
+        -404, 56, 108, 8, -1980, -336, -1240, -552,
+        52, -848, -996, -6, 40, 10, -696, -156,
+        -370, -4, -16, 44, -72, -28, -24, -8,
+        56, -152, 80, -28, -48, 152, -48, -8,
+        -32, 88, -144, -56, -48, -16, 112, -304,
+        160, -56, -96, 304, -96, 4, 16, -44,
+        72, 28, 24, 8, -56, 152, -80, 28,
+        48, -152, 48, 8, -8, 18, 276, 16,
+        -20, -16, 192, 304, 936, 288, 8, 376,
+        40, -44, 204, -8, 1176, 310, 28, 232,
+        192, -36, 336, 576, 16, -16, 36, 552,
+        32, -40, -32, 384, 608, 1872, 576, 16,
+        752, 80, -88, 408, -16, 2352, 620, 56,
+        464, 384, -72, 672, 1152, 16, -16, 52,
+        448, 32, -8, 48, -32, 264, 552, 864,
+        544, -80, 16, 248, 64, 72, -16, 936,
+        548, -152, -8, 8, -26, -224, -16, 4,
+        -24, 16, -132, -276, -432, -272, 40, -8,
+        -124, -32, -36, 8, -468, -274, 76, -84,
+        168, -72, -84, -468, 132, -252, 480, -48,
+        48, -12, -12, -144, 204, -144, 24, -24,
+        1044, 48, -222, -48, 936, 5400, 1032, 24,
+        1212, -168, -324, -24, 5940, 1008, 3720, 1656,
+        -156, 2544, 2988, 18, -120, -30, 2088, 468,
+        1110, -60, -1641, -156, -1218, -8010, -2361, -132,
+        -1143, -8112, -1596, -7815, -4764, -819, -3402, -36,
+        -3246, -6078, -3312, -450, -1332, -762, -801, -282,
+        -675, -27, -1686, -711, -75, -12, -48, 132,
+        -216, -84, -72, -24, 168, -456, 240, -84,
+        -144, 456, -144, 12, 48, -132, 216, 84,
+        72, 24, -168, 456, -240, 84, 144, -456,
+        144, 48, -48, 108, 1656, 96, -120, -96,
+        1152, 1824, 5616, 1728, 48, 2256, 240, -264,
+        1224, -48, 7056, 1860, 168, 1392, 1152, -216,
+        2016, 3456, -4, -16, 44, -72, -28, -24,
+        -8, 56, -152, 80, -28, -48, 152, -48,
+        -24, 24, -54, -828, -48, 60, 48, -576,
+        -912, -2808, -864, -24, -1128, -120, 132, -612,
+        24, -3528, -930, -84, -696, -576, 108, -1008,
+        -1728, -144, -111, -2862, -360, -900, -2295, -9000,
+        -3588, -288, -1788, -1035, -8904, -2445, -18, -4230,
+        -3576, -942, -2424, -72, -2916, -96, -2157, -1812,
+        18, -477, -366, 24, -24, 78, 672, 48,
+        -12, 72, -48, 396, 828, 1296, 816, -120,
+        24, 372, 96, 108, -24, 1404, 822, -228,
+        -24, 24, -78, -672, -48, 12, -72, 48,
+        -396, -828, -1296, -816, 120, -24, -372, -96,
+        -108, 24, -1404, -822, 228, 8, -8, 26,
+        224, 16, -4, 24, -16, 132, 276, 432,
+        272, -40, 8, 124, 32, 36, -8, 468,
+        274, -76, -108, -84, -1416, -252, 27, -192,
+        -1056, -2424, -1404, 153, -180, -186, 132, -1632,
+        -756, 198, -336, -432, 45, -204, 159, -36,
+        -21, 3, -24, -168, -48, 12, 96, -60,
+        -3, -96, -96, 6, -24, 84, 48, 48,
+        -6, 12, -21, -24, 48, -24, -480, -24,
+        432, 48, -480, 48, -24, -720, 432, -432,
+        192, 48, -96, -24, 48, -48, -24, -384,
+        -24, 384, 48, -288, -528, 48, -24, -240,
+        528, -528, 24, -48, 24, 480, 24, -432,
+        -48, 480, -48, 24, 720, -432, 432, -192,
+        -48, 96, -8, 16, -8, -160, -8, 144,
+        16, -160, 16, -8, -240, 144, -144, 64,
+        16, -32, 16, -32, 32, 16, 256, 16,
+        -256, -32, 192, 352, -32, 16, 160, -352,
+        352, -16, 32, -16, -320, -16, 288, 32,
+        -320, 32, -16, -480, 288, -288, 128, 32,
+        -64, 8, -16, 8, 160, 8, -144, -16,
+        160, -16, 8, 240, -144, 144, -64, -16,
+        32, 16, -32, 16, 320, 16, -288, -32,
+        320, -32, 16, 480, -288, 288, -128, -32,
+        64, 32, -64, 64, 32, 512, 32, -512,
+        -64, 384, 704, -64, 32, 320, -704, 704,
+        -16, 32, -32, -16, -256, -16, 256, 32,
+        -192, -352, 32, -16, -160, 352, -352, 48,
+        -96, 48, 960, 48, -864, -96, 960, -96,
+        48, 1440, -864, 864, -384, -96, 192, -24,
+        48, -24, -480, -24, 432, 48, -480, 48,
+        -24, -720, 432, -432, 192, 48, -96, -168,
+        -48, -2592, -432, -480, -2232, -5328, -2808, -264,
+        -1272, -480, 48, -4752, -1944, -912, -1008, -24,
+        -672, -1608, 48, -96, 96, 48, 768, 48,
+        -768, -96, 576, 1056, -96, 48, 480, -1056,
+        1056, -48, 96, -96, -48, -768, -48, 768,
+        96, -576, -1056, 96, -48, -480, 1056, -1056,
+        16, -32, 32, 16, 256, 16, -256, -32,
+        192, 352, -32, 16, 160, -352, 352, -288,
+        -144, -144, -3168, -768, -864, -96, -576, -2880,
+        -3456, -3168, -480, -960, -288, -96, -144, 48,
+        -2592, -1968, 48, -120, -96, -24, -792, -336,
+        24, -288, -96, 144, -504, -288, -600, 48,
+        -216, 264, -8, 16, -8, -160, -8, 144,
+        16, -160, 16, -8, -240, 144, -144, 64,
+        16, -32, 8, -16, 8, 160, 8, -144,
+        -16, 160, -16, 8, 240, -144, 144, -64,
+        -16, 32, 16, -32, 16, 320, 16, -288,
+        -32, 320, -32, 16, 480, -288, 288, -128,
+        -32, 64, -8, 16, -8, -160, -8, 144,
+        16, -160, 16, -8, -240, 144, -144, 64,
+        16, -32, -8, 16, -16, -8, -128, -8,
+        128, 16, -96, -176, 16, -8, -80, 176,
+        -176, -8, 16, -8, -160, -8, 144, 16,
+        -160, 16, -8, -240, 144, -144, 64, 16,
+        -32, -48, 96, -48, -960, -48, 864, 96,
+        -960, 96, -48, -1440, 864, -864, 384, 96,
+        -192, 8, -16, 8, 160, 8, -144, -16,
+        160, -16, 8, 240, -144, 144, -64, -16,
+        32, 168, 48, 2592, 432, 480, 2232, 5328,
+        2808, 264, 1272, 480, -48, 4752, 1944, 912,
+        1008, 24, 672, 1608, -24, 48, -48, -24,
+        -384, -24, 384, 48, -288, -528, 48, -24,
+        -240, 528, -528, 8, -16, 16, 8, 128,
+        8, -128, -16, 96, 176, -16, 8, 80,
+        -176, 176, 144, 72, 72, 1584, 384, 432,
+        48, 288, 1440, 1728, 1584, 240, 480, 144,
+        48, 72, -24, 1296, 984, -24, 32, -64,
+        32, 640, 32, -576, -64, 640, -64, 32,
+        960, -576, 576, -256, -64, 128, -8, 16,
+        -8, -160, -8, 144, 16, -160, 16, -8,
+        -240, 144, -144, 64, 16, -32, -112, -32,
+        -1728, -288, -320, -1488, -3552, -1872, -176, -848,
+        -320, 32, -3168, -1296, -608, -672, -16, -448,
+        -1072, 8, -16, 16, 8, 128, 8, -128,
+        -16, 96, 176, -16, 8, 80, -176, 176,
+        16, -32, 32, 16, 256, 16, -256, -32,
+        192, 352, -32, 16, 160, -352, 352, -8,
+        16, -16, -8, -128, -8, 128, 16, -96,
+        -176, 16, -8, -80, 176, -176, -48, -24,
+        -24, -528, -128, -144, -16, -96, -480, -576,
+        -528, -80, -160, -48, -16, -24, 8, -432,
+        -328, 8, 40, 32, 8, 264, 112, -8,
+        96, 32, -48, 168, 96, 200, -16, 72,
+        -88, 16, -32, 16, 320, 16, -288, -32,
+        320, -32, 16, 480, -288, 288, -128, -32,
+        64, -56, -16, -864, -144, -160, -744, -1776,
+        -936, -88, -424, -160, 16, -1584, -648, -304,
+        -336, -8, -224, -536, -16, 32, -16, -320,
+        -16, 288, 32, -320, 32, -16, -480, 288,
+        -288, 128, 32, -64, 56, 16, 864, 144,
+        160, 744, 1776, 936, 88, 424, 160, -16,
+        1584, 648, 304, 336, 8, 224, 536, 16,
+        -32, 32, 16, 256, 16, -256, -32, 192,
+        352, -32, 16, 160, -352, 352, -8, 16,
+        -16, -8, -128, -8, 128, 16, -96, -176,
+        16, -8, -80, 176, -176, -96, -48, -48,
+        -1056, -256, -288, -32, -192, -960, -1152, -1056,
+        -160, -320, -96, -32, -48, 16, -864, -656,
+        16, 16, -32, 16, 320, 16, -288, -32,
+        320, -32, 16, 480, -288, 288, -128, -32,
+        64, -56, -16, -864, -144, -160, -744, -1776,
+        -936, -88, -424, -160, 16, -1584, -648, -304,
+        -336, -8, -224, -536, -8, 16, -16, -8,
+        -128, -8, 128, 16, -96, -176, 16, -8,
+        -80, 176, -176, -16, 32, -32, -16, -256,
+        -16, 256, 32, -192, -352, 32, -16, -160,
+        352, -352, 8, -16, 16, 8, 128, 8,
+        -128, -16, 96, 176, -16, 8, 80, -176,
+        176, 48, 24, 24, 528, 128, 144, 16,
+        96, 480, 576, 528, 80, 160, 48, 16,
+        24, -8, 432, 328, -8, 96, 48, 48,
+        1056, 256, 288, 32, 192, 960, 1152, 1056,
+        160, 320, 96, 32, 48, -16, 864, 656,
+        -16, 80, 64, 16, 528, 224, -16, 192,
+        64, -96, 336, 192, 400, -32, 144, -176,
+        -40, -32, -8, -264, -112, 8, -96, -32,
+        48, -168, -96, -200, 16, -72, 88, -24,
+        48, -24, -480, -24, 432, 48, -480, 48,
+        -24, -720, 432, -432, 192, 48, -96, 168,
+        48, 2592, 432, 480, 2232, 5328, 2808, 264,
+        1272, 480, -48, 4752, 1944, 912, 1008, 24,
+        672, 1608, -198, -2700, -426, -1776, -6570, -2856,
+        -282, -972, -5304, -1608, -2556, -2154, -588, -1152,
+        -54, -1548, -1056, -840, -216, -240, -24, 48,
+        -48, -24, -384, -24, 384, 48, -288, -528,
+        48, -24, -240, 528, -528, 24, -48, 48,
+        24, 384, 24, -384, -48, 288, 528, -48,
+        24, 240, -528, 528, 288, 144, 144, 3168,
+        768, 864, 96, 576, 2880, 3456, 3168, 480,
+        960, 288, 96, 144, -48, 2592, 1968, -48,
+        -8, 16, -16, -8, -128, -8, 128, 16,
+        -96, -176, 16, -8, -80, 176, -176, -144,
+        -72, -72, -1584, -384, -432, -48, -288, -1440,
+        -1728, -1584, -240, -480, -144, -48, -72, 24,
+        -1296, -984, 24, -366, -72, -3420, -714, -180,
+        -2136, -4770, -2808, -402, -636, -3012, -1296, 72,
+        -588, -690, -300, -192, -54, -396, 120, 96,
+        24, 792, 336, -24, 288, 96, -144, 504,
+        288, 600, -48, 216, -264, -120, -96, -24,
+        -792, -336, 24, -288, -96, 144, -504, -288,
+        -600, 48, -216, 264, 40, 32, 8, 264,
+        112, -8, 96, 32, -48, 168, 96, 200,
+        -16, 72, -88, -192, 24, -1056, -312, 18,
+        276, -408, -624, -528, 36, -120, 162, 96,
+        -60, -48, 24, -24, 24, -48, -24, -6,
+        48, 24, -12, -6, -8, 24, -24, 8,
+        8, -24, 24, -8, 16, -48, 48, -16,
+        -8, 24, -24, 8, 24, -72, 72, -24,
+        -24, 72, -72, 24, 8, -24, 24, -8,
+        -156, 48, 108, -972, -276, 144, 288, -984,
+        72, -12, -336, 228, -240, -144, 24, -36,
+        120, -744, -264, 24, 264, -96, -756, -8,
+        24, -24, 8, -24, 72, -72, 24, 8,
+        -24, 24, -8, 156, -48, -108, 972, 276,
+        -144, -288, 984, -72, 12, 336, -228, 240,
+        8, -24, 24, -8, 16, -48, 48, -16,
+        -8, 24, -24, 8, -52, 16, 36, -324,
+        -92, 48, 96, -328, 24, -4, -112, 76,
+        -80, 96, -16, 24, -80, 496, 176, -16,
+        -176, 64, 504, 16, -48, 48, -16, -8,
+        24, -24, 8, -104, 32, 72, -648, -184,
+        96, 192, -656, 48, -8, -224, 152, -160,
+        -8, 24, -24, 8, -16, 48, -48, 16,
+        8, -24, 24, -8, 52, -16, -36, 324,
+        92, -48, -96, 328, -24, 4, 112, -76,
+        80, 104, -32, -72, 648, 184, -96, -192,
+        656, -48, 8, 224, -152, 160, 192, -32,
+        48, -160, 992, 352, -32, -352, 128, 1008,
+        -96, 16, -24, 80, -496, -176, 16, 176,
+        -64, -504, -24, 72, -72, 24, 24, -72,
+        72, -24, 312, -96, -216, 1944, 552, -288,
+        -576, 1968, -144, 24, 672, -456, 480, -8,
+        24, -24, 8, -156, 48, 108, -972, -276,
+        144, 288, -984, 72, -12, -336, 228, -240,
+        -24, -486, -462, -48, -3312, -1212, -1128, -324,
+        -24, -2484, -2538, -2640, -606, -636, -222, -120,
+        18, -1332, -1140, 288, -48, 72, -240, 1488,
+        528, -48, -528, 192, 1512, -288, 48, -72,
+        240, -1488, -528, 48, 528, -192, -1512, 96,
+        -16, 24, -80, 496, 176, -16, -176, 64,
+        504, -48, -612, -696, -96, -2592, -1440, -912,
+        -456, 36, -48, -1488, -684, -1344, -588, 24,
+        -24, -144, -216, -48, 84, -192, -264, -6,
+        -96, -96, 126, -24, 132, 8, -24, 24,
+        -8, -52, 16, 36, -324, -92, 48, 96,
+        -328, 24, -4, -112, 76, -80, -8, 24,
+        -24, 8, 52, -16, -36, 324, 92, -48,
+        -96, 328, -24, 4, 112, -76, 80, -16,
+        48, -48, 16, 8, -24, 24, -8, 104,
+        -32, -72, 648, 184, -96, -192, 656, -48,
+        8, 224, -152, 160, -52, 16, 36, -324,
+        -92, 48, 96, -328, 24, -4, -112, 76,
+        -80, -48, 8, -12, 40, -248, -88, 8,
+        88, -32, -252, 8, -24, 24, -8, -52,
+        16, 36, -324, -92, 48, 96, -328, 24,
+        -4, -112, 76, -80, 24, -72, 72, -24,
+        -8, 24, -24, 8, -312, 96, 216, -1944,
+        -552, 288, 576, -1968, 144, -24, -672, 456,
+        -480, 52, -16, -36, 324, 92, -48, -96,
+        328, -24, 4, 112, -76, 80, 24, 486,
+        462, 48, 3312, 1212, 1128, 324, 24, 2484,
+        2538, 2640, 606, 636, 222, 120, -18, 1332,
+        1140, -144, 24, -36, 120, -744, -264, 24,
+        264, -96, -756, 48, -8, 12, -40, 248,
+        88, -8, -88, 32, 252, 24, 306, 348,
+        48, 1296, 720, 456, 228, -18, 24, 744,
+        342, 672, 294, -12, -16, 48, -48, 16,
+        8, -24, 24, -8, 208, -64, -144, 1296,
+        368, -192, -384, 1312, -96, 16, 448, -304,
+        320, -52, 16, 36, -324, -92, 48, 96,
+        -328, 24, -4, -112, 76, -80, -16, -324,
+        -308, -32, -2208, -808, -752, -216, -16, -1656,
+        -1692, -1760, -404, -424, -148, -80, 12, -888,
+        -760, 48, -8, 12, -40, 248, 88, -8,
+        -88, 32, 252, 96, -16, 24, -80, 496,
+        176, -16, -176, 64, 504, -48, 8, -12,
+        40, -248, -88, 8, 88, -32, -252, -8,
+        -102, -116, -16, -432, -240, -152, -76, 6,
+        -8, -248, -114, -224, -98, 4, 8, 48,
+        72, 16, -28, 64, 88, 2, 32, 32,
+        -42, 8, -44, -8, 24, -24, 8, 104,
+        -32, -72, 648, 184, -96, -192, 656, -48,
+        8, 224, -152, 160, -8, -162, -154, -16,
+        -1104, -404, -376, -108, -8, -828, -846, -880,
+        -202, -212, -74, -40, 6, -444, -380, 8,
+        -24, 24, -8, -104, 32, 72, -648, -184,
+        96, 192, -656, 48, -8, -224, 152, -160,
+        8, 162, 154, 16, 1104, 404, 376, 108,
+        8, 828, 846, 880, 202, 212, 74, 40,
+        -6, 444, 380, 96, -16, 24, -80, 496,
+        176, -16, -176, 64, 504, -48, 8, -12,
+        40, -248, -88, 8, 88, -32, -252, -16,
+        -204, -232, -32, -864, -480, -304, -152, 12,
+        -16, -496, -228, -448, -196, 8, -8, 24,
+        -24, 8, 104, -32, -72, 648, 184, -96,
+        -192, 656, -48, 8, 224, -152, 160, -8,
+        -162, -154, -16, -1104, -404, -376, -108, -8,
+        -828, -846, -880, -202, -212, -74, -40, 6,
+        -444, -380, -48, 8, -12, 40, -248, -88,
+        8, 88, -32, -252, -96, 16, -24, 80,
+        -496, -176, 16, 176, -64, -504, 48, -8,
+        12, -40, 248, 88, -8, -88, 32, 252,
+        8, 102, 116, 16, 432, 240, 152, 76,
+        -6, 8, 248, 114, 224, 98, -4, 16,
+        204, 232, 32, 864, 480, 304, 152, -12,
+        16, 496, 228, 448, 196, -8, 16, 96,
+        144, 32, -56, 128, 176, 4, 64, 64,
+        -84, 16, -88, -8, -48, -72, -16, 28,
+        -64, -88, -2, -32, -32, 42, -8, 44,
+        8, -24, 24, -8, -156, 48, 108, -972,
+        -276, 144, 288, -984, 72, -12, -336, 228,
+        -240, 24, 486, 462, 48, 3312, 1212, 1128,
+        324, 24, 2484, 2538, 2640, 606, 636, 222,
+        120, -18, 1332, 1140, -377, -2745, -633, -1524,
+        -3195, -1902, -291, -486, -1812, -780, -344, -381,
+        -153, -159, -27, -282, -144, 24, -36, 120,
+        -744, -264, 24, 264, -96, -756, 144, -24,
+        36, -120, 744, 264, -24, -264, 96, 756,
+        48, 612, 696, 96, 2592, 1440, 912, 456,
+        -36, 48, 1488, 684, 1344, 588, -24, -48,
+        8, -12, 40, -248, -88, 8, 88, -32,
+        -252, -24, -306, -348, -48, -1296, -720, -456,
+        -228, 18, -24, -744, -342, -672, -294, 12,
+        -510, 45, -2340, -708, 198, -978, -1278, -1020,
+        -222, -24, 48, -342, -195, 21, 24, 144,
+        216, 48, -84, 192, 264, 6, 96, 96,
+        -126, 24, -132, -24, -144, -216, -48, 84,
+        -192, -264, -6, -96, -96, 126, -24, 132,
+        8, 48, 72, 16, -28, 64, 88, 2,
+        32, 32, -42, 8, -44, -168, 96, -372,
+        -156, -9, 168, -48, -48, -3, -12, 33,
+        -8, 12, -6, 1, -48, 96, -48, 48,
+        -96, 48, 96, -192, 96, -48, 96, -48,
+        144, -288, 144, -144, 288, -144, 48, -96,
+        48, -48, 48, -384, -288, -48, 144, 48,
+        -816, -768, -96, 240, -624, -48, 48, -240,
+        -336, -48, 48, 48, 48, -336, -528, -48,
+        96, -48, -144, 288, -144, 48, -96, 48,
+        48, -48, 384, 288, 48, -144, -48, 816,
+        768, 96, -240, 624, 48, -96, 48, 96,
+        -192, 96, -48, 96, -48, -16, 16, -128,
+        -96, -16, 48, 16, -272, -256, -32, 80,
+        -208, 32, -32, 160, 224, 32, -32, -32,
+        -32, 224, 352, 96, -192, 96, -48, 96,
+        -48, -32, 32, -256, -192, -32, 96, 32,
+        -544, -512, -64, 160, -416, -48, 96, -48,
+        -96, 192, -96, 48, -96, 48, 16, -16,
+        128, 96, 16, -48, -16, 272, 256, 32,
+        -80, 208, 32, -32, 256, 192, 32, -96,
+        -32, 544, 512, 64, -160, 416, 64, -64,
+        320, 448, 64, -64, -64, -64, 448, 704,
+        -32, 32, -160, -224, -32, 32, 32, 32,
+        -224, -352, -144, 288, -144, 144, -288, 144,
+        96, -96, 768, 576, 96, -288, -96, 1632,
+        1536, 192, -480, 1248, -48, 96, -48, -48,
+        48, -384, -288, -48, 144, 48, -816, -768,
+        -96, 240, -624, -120, -756, -912, -192, -2304,
+        -1488, -768, -432, -72, -1296, -468, -816, -396,
+        -120, 96, -96, 480, 672, 96, -96, -96,
+        -96, 672, 1056, -96, 96, -480, -672, -96,
+        96, 96, 96, -672, -1056, 32, -32, 160,
+        224, 32, -32, -32, -32, 224, 352, -168,
+        -576, -816, -240, 144, -864, -864, -240, -240,
+        72, -72, -96, -48, -24, -96, -48, 48,
+        48, 24, -12, 48, -96, 48, -16, 16,
+        -128, -96, -16, 48, 16, -272, -256, -32,
+        80, -208, -48, 96, -48, 16, -16, 128,
+        96, 16, -48, -16, 272, 256, 32, -80,
+        208, -96, 192, -96, 48, -96, 48, 32,
+        -32, 256, 192, 32, -96, -32, 544, 512,
+        64, -160, 416, -16, 16, -128, -96, -16,
+        48, 16, -272, -256, -32, 80, -208, -16,
+        16, -80, -112, -16, 16, 16, 16, -112,
+        -176, 48, -96, 48, -16, 16, -128, -96,
+        -16, 48, 16, -272, -256, -32, 80, -208,
+        144, -288, 144, -48, 96, -48, -96, 96,
+        -768, -576, -96, 288, 96, -1632, -1536, -192,
+        480, -1248, 16, -16, 128, 96, 16, -48,
+        -16, 272, 256, 32, -80, 208, 120, 756,
+        912, 192, 2304, 1488, 768, 432, 72, 1296,
+        468, 816, 396, 120, -48, 48, -240, -336,
+        -48, 48, 48, 48, -336, -528, 16, -16,
+        80, 112, 16, -16, -16, -16, 112, 176,
+        84, 288, 408, 120, -72, 432, 432, 120,
+        120, -36, 36, 48, -96, 192, -96, 48,
+        -96, 48, 64, -64, 512, 384, 64, -192,
+        -64, 1088, 1024, 128, -320, 832, -16, 16,
+        -128, -96, -16, 48, 16, -272, -256, -32,
+        80, -208, -80, -504, -608, -128, -1536, -992,
+        -512, -288, -48, -864, -312, -544, -264, -80,
+        16, -16, 80, 112, 16, -16, -16, -16,
+        112, 176, 32, -32, 160, 224, 32, -32,
+        -32, -32, 224, 352, -16, 16, -80, -112,
+        -16, 16, 16, 16, -112, -176, -28, -96,
+        -136, -40, 24, -144, -144, -40, -40, 12,
+        -12, -16, 16, 8, 32, 16, -16, -16,
+        -8, 4, -48, 96, -48, 32, -32, 256,
+        192, 32, -96, -32, 544, 512, 64, -160,
+        416, -40, -252, -304, -64, -768, -496, -256,
+        -144, -24, -432, -156, -272, -132, -40, 48,
+        -96, 48, -32, 32, -256, -192, -32, 96,
+        32, -544, -512, -64, 160, -416, 40, 252,
+        304, 64, 768, 496, 256, 144, 24, 432,
+        156, 272, 132, 40, 32, -32, 160, 224,
+        32, -32, -32, -32, 224, 352, -16, 16,
+        -80, -112, -16, 16, 16, 16, -112, -176,
+        -56, -192, -272, -80, 48, -288, -288, -80,
+        -80, 24, -24, -32, -48, 96, -48, 32,
+        -32, 256, 192, 32, -96, -32, 544, 512,
+        64, -160, 416, -40, -252, -304, -64, -768,
+        -496, -256, -144, -24, -432, -156, -272, -132,
+        -40, -16, 16, -80, -112, -16, 16, 16,
+        16, -112, -176, -32, 32, -160, -224, -32,
+        32, 32, 32, -224, -352, 16, -16, 80,
+        112, 16, -16, -16, -16, 112, 176, 28,
+        96, 136, 40, -24, 144, 144, 40, 40,
+        -12, 12, 16, 56, 192, 272, 80, -48,
+        288, 288, 80, 80, -24, 24, 32, 32,
+        16, 64, 32, -32, -32, -16, 8, -16,
+        -8, -32, -16, 16, 16, 8, -4, 48,
+        -96, 48, -48, 48, -384, -288, -48, 144,
+        48, -816, -768, -96, 240, -624, 120, 756,
+        912, 192, 2304, 1488, 768, 432, 72, 1296,
+        468, 816, 396, 120, -456, -1764, -552, -768,
+        -852, -660, -144, -132, -252, -144, -48, 48,
+        -240, -336, -48, 48, 48, 48, -336, -528,
+        48, -48, 240, 336, 48, -48, -48, -48,
+        336, 528, 168, 576, 816, 240, -144, 864,
+        864, 240, 240, -72, 72, 96, -16, 16,
+        -80, -112, -16, 16, 16, 16, -112, -176,
+        -84, -288, -408, -120, 72, -432, -432, -120,
+        -120, 36, -36, -48, -420, 108, -900, -360,
+        132, -180, -132, -132, -36, 24, 48, 24,
+        96, 48, -48, -48, -24, 12, -48, -24,
+        -96, -48, 48, 48, 24, -12, 16, 8,
+        32, 16, -16, -16, -8, 4, -72, 60,
+        -48, -24, -12, 24, 12, -24, 48, -96,
+        -24, 96, 24, -48, 96, 24, -96, 48,
+        -96, 192, 48, -192, -24, 48, -96, -24,
+        96, 72, -144, 288, 72, -288, -72, 144,
+        -288, -72, 288, 24, -48, 96, 24, -96,
+        -216, 36, -444, -480, -240, 24, 60, -240,
+        -588, -156, -24, -72, -240, -180, 48, -24,
+        48, -96, -24, 96, -72, 144, -288, -72,
+        288, 24, -48, 96, 24, -96, 216, -36,
+        444, 480, 240, -24, -60, 240, 588, 24,
+        -48, 96, 24, -96, 48, -96, 192, 48,
+        -192, -24, 48, -96, -24, 96, -72, 12,
+        -148, -160, -80, 8, 20, -80, -196, 104,
+        16, 48, 160, 120, -32, 48, -96, 192,
+        48, -192, -24, 48, -96, -24, 96, -144,
+        24, -296, -320, -160, 16, 40, -160, -392,
+        -24, 48, -96, -24, 96, -48, 96, -192,
+        -48, 192, 24, -48, 96, 24, -96, 72,
+        -12, 148, 160, 80, -8, -20, 80, 196,
+        144, -24, 296, 320, 160, -16, -40, 160,
+        392, 208, 32, 96, 320, 240, -64, -104,
+        -16, -48, -160, -120, 32, -72, 144, -288,
+        -72, 288, 72, -144, 288, 72, -288, 432,
+        -72, 888, 960, 480, -48, -120, 480, 1176,
+        -24, 48, -96, -24, 96, -216, 36, -444,
+        -480, -240, 24, 60, -240, -588, -246, -684,
+        -804, -276, -828, -828, -174, -156, -54, -252,
+        312, 48, 144, 480, 360, -96, -312, -48,
+        -144, -480, -360, 96, 104, 16, 48, 160,
+        120, -32, -216, -216, -360, -168, 108, -72,
+        -96, -24, 24, -6, 24, -48, 96, 24,
+        -96, -72, 12, -148, -160, -80, 8, 20,
+        -80, -196, -24, 48, -96, -24, 96, 72,
+        -12, 148, 160, 80, -8, -20, 80, 196,
+        -48, 96, -192, -48, 192, 24, -48, 96,
+        24, -96, 144, -24, 296, 320, 160, -16,
+        -40, 160, 392, -72, 12, -148, -160, -80,
+        8, 20, -80, -196, -52, -8, -24, -80,
+        -60, 16, 24, -48, 96, 24, -96, -72,
+        12, -148, -160, -80, 8, 20, -80, -196,
+        72, -144, 288, 72, -288, -24, 48, -96,
+        -24, 96, -432, 72, -888, -960, -480, 48,
+        120, -480, -1176, 72, -12, 148, 160, 80,
+        -8, -20, 80, 196, 246, 684, 804, 276,
+        828, 828, 174, 156, 54, 252, -156, -24,
+        -72, -240, -180, 48, 52, 8, 24, 80,
+        60, -16, 108, 108, 180, 84, -54, 36,
+        48, -48, 96, -192, -48, 192, 24, -48,
+        96, 24, -96, 288, -48, 592, 640, 320,
+        -32, -80, 320, 784, -72, 12, -148, -160,
+        -80, 8, 20, -80, -196, -164, -456, -536,
+        -184, -552, -552, -116, -104, -36, -168, 52,
+        8, 24, 80, 60, -16, 104, 16, 48,
+        160, 120, -32, -52, -8, -24, -80, -60,
+        16, -36, -36, -60, -28, 18, -12, -16,
+        8, -8, 2, -24, 48, -96, -24, 96,
+        144, -24, 296, 320, 160, -16, -40, 160,
+        392, -82, -228, -268, -92, -276, -276, -58,
+        -52, -18, -84, 24, -48, 96, 24, -96,
+        -144, 24, -296, -320, -160, 16, 40, -160,
+        -392, 82, 228, 268, 92, 276, 276, 58,
+        52, 18, 84, 104, 16, 48, 160, 120,
+        -32, -52, -8, -24, -80, -60, 16, -72,
+        -72, -120, -56, 36, -24, -32, -24, 48,
+        -96, -24, 96, 144, -24, 296, 320, 160,
+        -16, -40, 160, 392, -82, -228, -268, -92,
+        -276, -276, -58, -52, -18, -84, -52, -8,
+        -24, -80, -60, 16, -104, -16, -48, -160,
+        -120, 32, 52, 8, 24, 80, 60, -16,
+        36, 36, 60, 28, -18, 12, 16, 72,
+        72, 120, 56, -36, 24, 32, 16, -16,
+        4, -8, 8, -2, 24, -48, 96, 24,
+        -96, -216, 36, -444, -480, -240, 24, 60,
+        -240, -588, 246, 684, 804, 276, 828, 828,
+        174, 156, 54, 252, -363, -699, -282, -210,
+        -96, -93, -27, -15, -156, -24, -72, -240,
+        -180, 48, 156, 24, 72, 240, 180, -48,
+        216, 216, 360, 168, -108, 72, 96, -52,
+        -8, -24, -80, -60, 16, -108, -108, -180,
+        -84, 54, -36, -48, -204, 75, -174, -84,
+        24, -3, 24, -24, 6, -24, 24, -6,
+        8, -8, 2, -12, 12, -3, -96, 96,
+        -64, 96, -96, 64, 192, -192, 128, -96,
+        96, -64, 288, -288, 192, -288, 288, -192,
+        96, -96, 64, -24, -336, -48, -24, -240,
+        -192, -240, -24, -96, -48, -24, 48, -96,
+        96, -64, -288, 288, -192, 96, -96, 64,
+        24, 336, 48, 24, 240, 192, 240, 96,
+        -96, 64, 192, -192, 128, -96, 96, -64,
+        -8, -112, -16, -8, -80, -64, -80, 16,
+        64, 32, 16, -32, 192, -192, 128, -96,
+        96, -64, -16, -224, -32, -16, -160, -128,
+        -160, -96, 96, -64, -192, 192, -128, 96,
+        -96, 64, 8, 112, 16, 8, 80, 64,
+        80, 16, 224, 32, 16, 160, 128, 160,
+        32, 128, 64, 32, -64, -16, -64, -32,
+        -16, 32, -288, 288, -192, 288, -288, 192,
+        48, 672, 96, 48, 480, 384, 480, -96,
+        96, -64, -24, -336, -48, -24, -240, -192,
+        -240, -264, -360, -336, -168, -120, -168, 48,
+        192, 96, 48, -96, -48, -192, -96, -48,
+        96, 16, 64, 32, 16, -32, -120, -48,
+        -24, 24, 96, -96, 64, -8, -112, -16,
+        -8, -80, -64, -80, -96, 96, -64, 8,
+        112, 16, 8, 80, 64, 80, -192, 192,
+        -128, 96, -96, 64, 16, 224, 32, 16,
+        160, 128, 160, -8, -112, -16, -8, -80,
+        -64, -80, -8, -32, -16, -8, 16, 96,
+        -96, 64, -8, -112, -16, -8, -80, -64,
+        -80, 288, -288, 192, -96, 96, -64, -48,
+        -672, -96, -48, -480, -384, -480, 8, 112,
+        16, 8, 80, 64, 80, 264, 360, 336,
+        168, 120, 168, -24, -96, -48, -24, 48,
+        8, 32, 16, 8, -16, 60, 24, 12,
+        -12, -192, 192, -128, 96, -96, 64, 32,
+        448, 64, 32, 320, 256, 320, -8, -112,
+        -16, -8, -80, -64, -80, -176, -240, -224,
+        -112, -80, -112, 8, 32, 16, 8, -16,
+        16, 64, 32, 16, -32, -8, -32, -16,
+        -8, 16, -20, -8, -4, 4, -96, 96,
+        -64, 16, 224, 32, 16, 160, 128, 160,
+        -88, -120, -112, -56, -40, -56, 96, -96,
+        64, -16, -224, -32, -16, -160, -128, -160,
+        88, 120, 112, 56, 40, 56, 16, 64,
+        32, 16, -32, -8, -32, -16, -8, 16,
+        -40, -16, -8, 8, -96, 96, -64, 16,
+        224, 32, 16, 160, 128, 160, -88, -120,
+        -112, -56, -40, -56, -8, -32, -16, -8,
+        16, -16, -64, -32, -16, 32, 8, 32,
+        16, 8, -16, 20, 8, 4, -4, 40,
+        16, 8, -8, 96, -96, 64, -24, -336,
+        -48, -24, -240, -192, -240, 264, 360, 336,
+        168, 120, 168, -190, -156, -78, -24, -24,
+        -96, -48, -24, 48, 24, 96, 48, 24,
+        -48, 120, 48, 24, -24, -8, -32, -16,
+        -8, 16, -60, -24, -12, 12, -54, 24,
+        -12, -6, -24, 24, -96, 24, -24, 96,
+        48, -48, 192, -24, 24, -96, 72, -72,
+        288, -72, 72, -288, 24, -24, 96, -60,
+        -216, -36, -36, -48, -24, 12, -24, 24,
+        -96, -72, 72, -288, 24, -24, 96, 60,
+        216, 36, 36, 48, 24, -24, 96, 48,
+        -48, 192, -24, 24, -96, -20, -72, -12,
+        -12, -16, 16, -8, 48, -48, 192, -24,
+        24, -96, -40, -144, -24, -24, -32, -24,
+        24, -96, -48, 48, -192, 24, -24, 96,
+        20, 72, 12, 12, 16, 40, 144, 24,
+        24, 32, 32, -16, -16, 8, -72, 72,
+        -288, 72, -72, 288, 120, 432, 72, 72,
+        96, -24, 24, -96, -60, -216, -36, -36,
+        -48, -156, -102, -54, -36, 48, -24, -48,
+        24, 16, -8, -24, 12, 24, -24, 96,
+        -20, -72, -12, -12, -16, -24, 24, -96,
+        20, 72, 12, 12, 16, -48, 48, -192,
+        24, -24, 96, 40, 144, 24, 24, 32,
+        -20, -72, -12, -12, -16, -8, 4, 24,
+        -24, 96, -20, -72, -12, -12, -16, 72,
+        -72, 288, -24, 24, -96, -120, -432, -72,
+        -72, -96, 20, 72, 12, 12, 16, 156,
+        102, 54, 36, -24, 12, 8, -4, 12,
+        -6, -48, 48, -192, 24, -24, 96, 80,
+        288, 48, 48, 64, -20, -72, -12, -12,
+        -16, -104, -68, -36, -24, 8, -4, 16,
+        -8, -8, 4, -4, 2, -24, 24, -96,
+        40, 144, 24, 24, 32, -52, -34, -18,
+        -12, 24, -24, 96, -40, -144, -24, -24,
+        -32, 52, 34, 18, 12, 16, -8, -8,
+        4, -8, 4, -24, 24, -96, 40, 144,
+        24, 24, 32, -52, -34, -18, -12, -8,
+        4, -16, 8, 8, -4, 4, -2, 8,
+        -4, 24, -24, 96, -60, -216, -36, -36,
+        -48, 156, 102, 54, 36, -63, -15, -9,
+        -24, 12, 24, -12, 24, -12, -8, 4,
+        -12, 6, -6, 3, -48, 48, 96, -48,
+        144, -144, 48, -48, -48, -48, -144, 48,
+        48, 48, 48, 96, -48, -16, -16, 96,
+        -48, -32, -32, -48, -96, 48, 16, 16,
+        32, 32, -144, 144, 96, 96, -48, -48,
+        -48, -48, -12, 48, -16, -16, -48, 16,
+        16, -96, 48, 32, 32, -16, -16, 48,
+        -16, -16, 144, -48, -96, -96, 16, 16,
+        48, 12, -96, 48, 64, 64, -16, -16,
+        -32, -8, -48, 32, 32, -16, -4, 48,
+        -32, -32, 16, 4, -48, 32, 32, -16,
+        -4, 48, -48, -48, 48, 12, -12, -8,
+        8, 16, -8, 24, -24, 8, -12, -8,
+        -24, 8, 12, 8, 16, -8, -4, 16,
+        -8, -8, -8, -16, 8, 4, 8, -24,
+        24, 24, -8, -12, -6, 8, -4, -8,
+        4, -16, 8, 8, -4, 8, -4, 24,
+        -8, -24, 4, 6, -16, 8, 16, -4,
+        -4, -8, 8, -2, 8, -8, 2, -8,
+        8, -2, 8, -12, 6, -1
+    ]),
+    fstart: new Int32Array([
+        0, 2, 4, 6, 8, 10, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47,
+        49, 51, 53, 55, 57, 59, 61, 63, 65, 67, 69, 71, 73, 75, 77, 79, 81, 83, 85, 87, 89, 91, 93, 95,
+        97, 99, 101, 103, 105, 107, 109, 111, 113, 115, 117, 119, 121, 123, 125, 127, 129, 131, 133, 135, 137, 139, 142, 144,
+        146, 148, 150, 152, 154, 156, 159, 161, 163, 165, 167, 169, 171, 173, 175, 177, 179, 181, 183, 185, 187, 189, 191, 193,
+        195, 197, 199, 201, 203, 205, 207, 209, 211, 213, 215, 217, 219, 221, 223, 225, 227, 229, 231, 233, 235, 237, 239, 241,
+        243, 245, 247, 249, 251, 253, 255, 257, 259, 261, 263, 265, 267, 269, 271, 273, 275, 277, 279, 281, 283, 285, 287, 289,
+        291, 293, 295, 297, 299, 301, 303, 305, 307, 309, 311, 313, 315, 317, 319, 321, 323, 325, 327, 329, 331, 333, 335, 337,
+        339, 341, 343, 345, 347, 349, 351, 353, 355, 357, 359, 361, 363, 365, 367, 369, 371, 373, 375, 377, 379, 381, 383, 385,
+        387, 389, 391, 393, 395, 397, 399, 401, 403, 405, 407, 409, 412, 414, 416, 418, 420, 422, 424, 426, 428, 430, 432, 434,
+        436, 438, 440, 442, 444, 446, 448, 450, 452, 454, 456, 458, 460, 462, 464, 466, 468, 470, 472, 474, 476, 478, 480, 482,
+        485, 487, 489, 491, 493, 495, 497, 499, 501, 503, 505, 507, 509, 511, 513, 515, 517, 519, 521, 523, 525, 527, 529, 531,
+        533, 535, 537, 539, 541, 543, 545, 547, 549, 551, 553, 555, 557, 559, 561, 563, 565, 567, 569, 571, 573, 575, 577, 579,
+        581, 583, 585, 587, 590, 592, 594, 596, 598, 600, 602, 604, 606, 608, 610, 612, 614, 616, 618, 620, 622, 624, 626, 628,
+        630, 632, 634, 636, 638, 640, 642, 644, 646, 648, 650, 652, 654, 656, 658, 660, 662, 664, 666, 668, 670, 672, 674, 676,
+        678, 680, 682, 684, 686, 688, 690, 692, 694, 696, 698, 700, 702, 704, 706, 708, 710, 712, 714, 716, 718, 720, 722, 724,
+        726, 728, 730, 732, 734, 736, 738, 740, 742, 744, 746, 748, 750, 752, 754, 756, 758, 760, 762, 764, 766, 768, 770, 772,
+        774, 776, 778, 780, 782, 784, 786, 788, 790, 792, 794, 796, 798, 800, 802, 804, 806, 808, 810, 812, 814, 816, 818, 820,
+        822, 824, 826, 828, 830, 832, 834, 836, 838, 840, 842, 844, 846, 848, 850, 852, 854, 856, 858, 860, 862, 864, 866, 868,
+        870, 872, 874, 876, 878, 880, 882, 884, 886, 888, 890, 892, 894, 896, 898, 900, 902, 904, 906, 908, 910, 912, 914, 916,
+        918, 920, 922, 924, 926, 928, 930, 932, 934, 936, 938, 940, 942, 944, 946, 948, 950, 953, 956, 958, 960, 962, 964, 967,
+        969, 971, 973, 975, 977, 979, 981, 983, 985, 987, 989, 991, 993, 995, 997, 999, 1001, 1003, 1005, 1007, 1009, 1011, 1013, 1015,
+        1017, 1019, 1021, 1023, 1025, 1027, 1029, 1032, 1034, 1036, 1038, 1040, 1042, 1045, 1047, 1049, 1051, 1053, 1055, 1057, 1059, 1061, 1063, 1065,
+        1067, 1069, 1071, 1073, 1075, 1077, 1079, 1081, 1083, 1085, 1087, 1089, 1092, 1094, 1096, 1098, 1100, 1102, 1104, 1106, 1108, 1111, 1113, 1115,
+        1117, 1119, 1121, 1123, 1125, 1127, 1129, 1131, 1133, 1135, 1137, 1139, 1141, 1143, 1145, 1147, 1149, 1151, 1153, 1155, 1157, 1159, 1161, 1163,
+        1165, 1167, 1169, 1171, 1173, 1175, 1177, 1179, 1181, 1183, 1185, 1187, 1189, 1191, 1193, 1195, 1197, 1199, 1201, 1203, 1205, 1207, 1209, 1211,
+        1213, 1215, 1217, 1219, 1221, 1223, 1225, 1227, 1229, 1231, 1233, 1235, 1237, 1239, 1241, 1243, 1245, 1247, 1249, 1251, 1253, 1255, 1257, 1259,
+        1261, 1263, 1265, 1267, 1269, 1271, 1273, 1275, 1277, 1279, 1281, 1283, 1285, 1287, 1289, 1291, 1293, 1295, 1297, 1299, 1301, 1303, 1305, 1307,
+        1309, 1311, 1313, 1315, 1317, 1319, 1321, 1323, 1325, 1327, 1329, 1331, 1333, 1335, 1337, 1339, 1341, 1343, 1345, 1347, 1349, 1351, 1353, 1355,
+        1357, 1359, 1361, 1363, 1365, 1367, 1369, 1371, 1373, 1375, 1377, 1379, 1381, 1383, 1386, 1389, 1391, 1393, 1395, 1397, 1399, 1401, 1403, 1405,
+        1407, 1409, 1411, 1413, 1415, 1417, 1420, 1422, 1424, 1426, 1428, 1430, 1432, 1434, 1436, 1438, 1440, 1442, 1444, 1446, 1448, 1450, 1452, 1454,
+        1456, 1458, 1460, 1462, 1464, 1466, 1468, 1470, 1472, 1474, 1476, 1478, 1480, 1482, 1484, 1486, 1488, 1490, 1492, 1494, 1496, 1498, 1500, 1502,
+        1504, 1506, 1508, 1510, 1512, 1514, 1516, 1518, 1520, 1522, 1524, 1526, 1528, 1530, 1532, 1534, 1536, 1538, 1540, 1542, 1544, 1546, 1548, 1550,
+        1552, 1554, 1556, 1558, 1560, 1562, 1564, 1566, 1568, 1570, 1572, 1574, 1576, 1578, 1580, 1582, 1584, 1586, 1588, 1590, 1592, 1594, 1596, 1598,
+        1600, 1602, 1604, 1606, 1608, 1610, 1612, 1614, 1616, 1618, 1620, 1622, 1624, 1626, 1628, 1630, 1632, 1634, 1636, 1638, 1640, 1642, 1644, 1646,
+        1648, 1650, 1652, 1654, 1656, 1658, 1660, 1662, 1664, 1666, 1668, 1670, 1672, 1674, 1676, 1678, 1680, 1682, 1684, 1686, 1688, 1690, 1692, 1694,
+        1696, 1698, 1700, 1702, 1704, 1706, 1708, 1710, 1712, 1714, 1716, 1718, 1720, 1722, 1724, 1726, 1728, 1730, 1732, 1734, 1736, 1738, 1740, 1742,
+        1744, 1746, 1748, 1750, 1752, 1754, 1756, 1758, 1760, 1762, 1764, 1766, 1768, 1770, 1772, 1774, 1776, 1778, 1780, 1782, 1784, 1786, 1788, 1790,
+        1792, 1794, 1796, 1798, 1800, 1802, 1804, 1806, 1808, 1810, 1812, 1814, 1816, 1818, 1820, 1822, 1824, 1826, 1829, 1831, 1833, 1835, 1837, 1839,
+        1841, 1843, 1845, 1847, 1849, 1851, 1853, 1855, 1857, 1859, 1861, 1863, 1865, 1867, 1869, 1871, 1873, 1875, 1877, 1879, 1881, 1883, 1885, 1887,
+        1889, 1891, 1893, 1895, 1897, 1899, 1901, 1903, 1905, 1907, 1909, 1911, 1913, 1915, 1917, 1919, 1921, 1923, 1925, 1927, 1929, 1931, 1933, 1935,
+        1937, 1939, 1941, 1943, 1945, 1947, 1949, 1951, 1953, 1955, 1957, 1959, 1961, 1963, 1965, 1967, 1969, 1971, 1973, 1975, 1977, 1979, 1981, 1983,
+        1985, 1987, 1989, 1991, 1993, 1995, 1997, 1999, 2001, 2003, 2005, 2007, 2009, 2011, 2013, 2015, 2017, 2019, 2021, 2023, 2025, 2027, 2029, 2031,
+        2033, 2035, 2037, 2039, 2041, 2043, 2045, 2047, 2049, 2051, 2053, 2055, 2057, 2060, 2062, 2064, 2066, 2068, 2070, 2072, 2074, 2076, 2078, 2080,
+        2082, 2084, 2086, 2088, 2090, 2092, 2095, 2097, 2099, 2101, 2103, 2105, 2107, 2109, 2111, 2113, 2115, 2117, 2119, 2121, 2123, 2125, 2127, 2129,
+        2131, 2133, 2135, 2137, 2139, 2141, 2143, 2145, 2147, 2149, 2151, 2153, 2155, 2157, 2159, 2161, 2163, 2165, 2167, 2169, 2171, 2173, 2175, 2177,
+        2179, 2181, 2183, 2185, 2187, 2189, 2191, 2193, 2195, 2197, 2199, 2201, 2203, 2205, 2207, 2209, 2211, 2213, 2215, 2217, 2219, 2221, 2223, 2225,
+        2227, 2229, 2231, 2233, 2235, 2237, 2239, 2241, 2243, 2245, 2247, 2249, 2251, 2253, 2255, 2257, 2259, 2261, 2263, 2265, 2268, 2270, 2272, 2274,
+        2276, 2278, 2280, 2282, 2284, 2286, 2288, 2290, 2292, 2294, 2296, 2298, 2300, 2302, 2304, 2306, 2308, 2310, 2312, 2314, 2316, 2318, 2320, 2322,
+        2324, 2326, 2328, 2330, 2332, 2334, 2336, 2338, 2340, 2342, 2344, 2346, 2348, 2350, 2352, 2354, 2356, 2358, 2360, 2362, 2364, 2366, 2368, 2370,
+        2372, 2374, 2376, 2378, 2380, 2382, 2384, 2386, 2388, 2390, 2392, 2394, 2396, 2398, 2400, 2402, 2404, 2406, 2408, 2410, 2412, 2414, 2416, 2418,
+        2420, 2422, 2424, 2426, 2428, 2430, 2432, 2434, 2436, 2438, 2440, 2442, 2444, 2446, 2448, 2450, 2452, 2454, 2456, 2458, 2460, 2462, 2464, 2466,
+        2468, 2470, 2472, 2474, 2476, 2478, 2480, 2482, 2484, 2486, 2488, 2490, 2492, 2494, 2496, 2498, 2500, 2502, 2504, 2506, 2508, 2510, 2512, 2514,
+        2516, 2518, 2520, 2522, 2524, 2526, 2528, 2530, 2532, 2534, 2536, 2538, 2540, 2542, 2544, 2546, 2548, 2550, 2552, 2554, 2556, 2558, 2560, 2562,
+        2564, 2566, 2568, 2570, 2572, 2574, 2576, 2578, 2580, 2582, 2584, 2586, 2588, 2590, 2592, 2594, 2596, 2598, 2600, 2602, 2604, 2606, 2608, 2610,
+        2612, 2614, 2616, 2618, 2620, 2622, 2624, 2626, 2628, 2630, 2632, 2634, 2636, 2638, 2640, 2642, 2644, 2646, 2648, 2650, 2652, 2654, 2656, 2658,
+        2660, 2662, 2664, 2666, 2668, 2670, 2672, 2674, 2676, 2678, 2680, 2682, 2684, 2686, 2688, 2690, 2692, 2694, 2696, 2698, 2700, 2702, 2704, 2706,
+        2708, 2710, 2712, 2714, 2716, 2718, 2720, 2722, 2724, 2726, 2728, 2730, 2732, 2734, 2736, 2738, 2740, 2742, 2744, 2746, 2748, 2750, 2752, 2754,
+        2756, 2758, 2760, 2762, 2764, 2767, 2769, 2771, 2773, 2775, 2777, 2779, 2781, 2783, 2785, 2787, 2789, 2791, 2793, 2795, 2797, 2799, 2801, 2803,
+        2805, 2807, 2809, 2811, 2813, 2815, 2817, 2819, 2821, 2823, 2825, 2827, 2829, 2831, 2833, 2835, 2837, 2839, 2841, 2843, 2845, 2848, 2850, 2852,
+        2854, 2856, 2858, 2860, 2862, 2864, 2866, 2868, 2870, 2872, 2874, 2876, 2878, 2880, 2882, 2884, 2886, 2888, 2891, 2893, 2895, 2897, 2899, 2901,
+        2903, 2905, 2907, 2909, 2911, 2913, 2915, 2917, 2919, 2921, 2923, 2925, 2927, 2929, 2931, 2933, 2935, 2937, 2939, 2941, 2943, 2945, 2947, 2949,
+        2951, 2953, 2955, 2957, 2959, 2961, 2963, 2965, 2967, 2969, 2971, 2973, 2975, 2977, 2979, 2981, 2983, 2985, 2987, 2989, 2991, 2993, 2995, 2997,
+        2999, 3001, 3003, 3005, 3007, 3009, 3011, 3013, 3015, 3018, 3020, 3022, 3025, 3027, 3029, 3031, 3033, 3035, 3037, 3039, 3041, 3043, 3045, 3047,
+        3049, 3051, 3053, 3055, 3057, 3059, 3062, 3064, 3066, 3068, 3070, 3072, 3074, 3076, 3078, 3080, 3082, 3084, 3086, 3088, 3090, 3092, 3094, 3096,
+        3098, 3100, 3102, 3104, 3106, 3108, 3110, 3112, 3114, 3116, 3118, 3120, 3122, 3124, 3126, 3128, 3130, 3132, 3134, 3136, 3138, 3140, 3142, 3145,
+        3147, 3149, 3151, 3153, 3155, 3157, 3159, 3161, 3163, 3165, 3167, 3169, 3171, 3173, 3175, 3177, 3179, 3181, 3183, 3185, 3187, 3189, 3191, 3193,
+        3195, 3197, 3199, 3201, 3203, 3205, 3207, 3209, 3211, 3213, 3215, 3217, 3219, 3221, 3223, 3225, 3227, 3229, 3231, 3233, 3235, 3237, 3239, 3241,
+        3243, 3245, 3247, 3249, 3251, 3253, 3254, 3256, 3258, 3260, 3262, 3264, 3266, 3268, 3270, 3272, 3274, 3276, 3278, 3280, 3282, 3284, 3286, 3288,
+        3290, 3292, 3294, 3296, 3298, 3300, 3302, 3304, 3306, 3308, 3310, 3312, 3314, 3316, 3318, 3320, 3322, 3324, 3326, 3328, 3330, 3332, 3334, 3336,
+        3338, 3340, 3342, 3344, 3346, 3348, 3350, 3352, 3354, 3356, 3358, 3360, 3362, 3364, 3366, 3368, 3370, 3372, 3374, 3376, 3378, 3380, 3382, 3384,
+        3386, 3388, 3390, 3392, 3394, 3396, 3398, 3400, 3402, 3404, 3406, 3408, 3410, 3412, 3414, 3416, 3418, 3420, 3422, 3424, 3426, 3428, 3430, 3432,
+        3434, 3436, 3438, 3440, 3442, 3444, 3446, 3448, 3450, 3452, 3454, 3456, 3458, 3460, 3462, 3464, 3466, 3468, 3470, 3472, 3474, 3476, 3478, 3480,
+        3482, 3485, 3487, 3489, 3491, 3493, 3495, 3497, 3499, 3501, 3503, 3505, 3507, 3509, 3511, 3513, 3515, 3517, 3520, 3522, 3524, 3526, 3528, 3530,
+        3532, 3534, 3536, 3538, 3540, 3542, 3544, 3546, 3548, 3550, 3552, 3554, 3556, 3558, 3560, 3562, 3564, 3566, 3568, 3570, 3572, 3574, 3576, 3578,
+        3580, 3582, 3584, 3586, 3588, 3590, 3592, 3594, 3596, 3598, 3600, 3602, 3604, 3606, 3608, 3611, 3613, 3615, 3617, 3619, 3621, 3623, 3625, 3627,
+        3629, 3631, 3633, 3635, 3637, 3639, 3641, 3643, 3645, 3647, 3649, 3651, 3653, 3655, 3657, 3659, 3661, 3663, 3665, 3667, 3669, 3671, 3673, 3675,
+        3677, 3679, 3681, 3683, 3685, 3687, 3689, 3691, 3693, 3695, 3697, 3699, 3701, 3703, 3705, 3707, 3709, 3711, 3713, 3715, 3717, 3719, 3721, 3723,
+        3725, 3727, 3729, 3731, 3733, 3735, 3737, 3739, 3741, 3743, 3745, 3747, 3749, 3751, 3753, 3755, 3757, 3759, 3761, 3763, 3765, 3767, 3769, 3771,
+        3773, 3775, 3777, 3779, 3781, 3783, 3785, 3787, 3789, 3791, 3793, 3795, 3797, 3799, 3801, 3803, 3805, 3807, 3809, 3811, 3813, 3815, 3817, 3819,
+        3821, 3823, 3825, 3827, 3829, 3831, 3833, 3835, 3837, 3839, 3841, 3843, 3845, 3847, 3849, 3851, 3853, 3855, 3857, 3859, 3861, 3863, 3865, 3867,
+        3869, 3871, 3873, 3875, 3877, 3879, 3881, 3883, 3885, 3887, 3889, 3891, 3893, 3895, 3897, 3899, 3901, 3903, 3905, 3907, 3909, 3911, 3913, 3915,
+        3917, 3919, 3921, 3923, 3925, 3927, 3929, 3931, 3933, 3935, 3937, 3939, 3941, 3943, 3945, 3947, 3949, 3951, 3953, 3955, 3957, 3959, 3961, 3963,
+        3965, 3967, 3969, 3971, 3973, 3975, 3977, 3979, 3981, 3983, 3985, 3987, 3989, 3991, 3993, 3995, 3997, 3999, 4001, 4003, 4005, 4007, 4009, 4011,
+        4013, 4015, 4017, 4019, 4021, 4023, 4025, 4027, 4029, 4031, 4033, 4035, 4037, 4039, 4041, 4043, 4045, 4047, 4049, 4051, 4053, 4055, 4057, 4059,
+        4061, 4063, 4065, 4067, 4069, 4071, 4073, 4075, 4077, 4079, 4081, 4083, 4085, 4087, 4089, 4091, 4093, 4095, 4097, 4099, 4101, 4103, 4105, 4107,
+        4109, 4111, 4113, 4115, 4117, 4119, 4121, 4123, 4125, 4127, 4129, 4131, 4133, 4135, 4137, 4139, 4141, 4143, 4145, 4147, 4149, 4151, 4153, 4155,
+        4157, 4159, 4161, 4163, 4165, 4167, 4169, 4171, 4173, 4175, 4177, 4179, 4181, 4183, 4185, 4187, 4189, 4191, 4193, 4195, 4197, 4199, 4201, 4203,
+        4205, 4207, 4209, 4212, 4214, 4216, 4218, 4220, 4222, 4224, 4226, 4228, 4230, 4232, 4234, 4236, 4238, 4240, 4242, 4243, 4245, 4247, 4249, 4251,
+        4252, 4254, 4256, 4258, 4260, 4262, 4264, 4266, 4268, 4270, 4272, 4274, 4276, 4278, 4280, 4282, 4284, 4286, 4288, 4290, 4292, 4294, 4296, 4298,
+        4300, 4302, 4304, 4306, 4308, 4310, 4312, 4314, 4316, 4318, 4320, 4322, 4324, 4326, 4328, 4330, 4332, 4334, 4336, 4338, 4340, 4342, 4344, 4346,
+        4348, 4350, 4352, 4354, 4356, 4358, 4360, 4362, 4364, 4366, 4368, 4370, 4372, 4374, 4376, 4378, 4380, 4382, 4384, 4386, 4388, 4390, 4392, 4394,
+        4396, 4398, 4400, 4402, 4404, 4406, 4408, 4410, 4412, 4414, 4416, 4418, 4420, 4422, 4424, 4426, 4428, 4430, 4432, 4434, 4436, 4438, 4440, 4442,
+        4444, 4446, 4448, 4450, 4452, 4454, 4456, 4458, 4460, 4462, 4464, 4466, 4468, 4470, 4472, 4474, 4476, 4478, 4480, 4482, 4484, 4486, 4488, 4490,
+        4492, 4494, 4496, 4498, 4500, 4502, 4504, 4506, 4508, 4510, 4512, 4514, 4516, 4518, 4520, 4522, 4524, 4526, 4528, 4530, 4532, 4534, 4536, 4538,
+        4540, 4542, 4544, 4546, 4548, 4550, 4552, 4554, 4556, 4558, 4560, 4562, 4564, 4566, 4568, 4570, 4572, 4574, 4576, 4578, 4580, 4582, 4584, 4586,
+        4588, 4590, 4592, 4594, 4596, 4598, 4600, 4602, 4604, 4606, 4608, 4610, 4612, 4614, 4616, 4618, 4620, 4622, 4624, 4626, 4628, 4630, 4632, 4634,
+        4636, 4638, 4640, 4642, 4644, 4646, 4648, 4650, 4652, 4654, 4656, 4658, 4660, 4662, 4664, 4666, 4668, 4670, 4672, 4674, 4676, 4678, 4680, 4682,
+        4684, 4686, 4688, 4690, 4692, 4694, 4696, 4698, 4700, 4702, 4704, 4706, 4708, 4710, 4712, 4714, 4716, 4718, 4720, 4722, 4724, 4726, 4728, 4730,
+        4732, 4734, 4736, 4738, 4740, 4742, 4744, 4746, 4748, 4750, 4752, 4754, 4756, 4758, 4760, 4762, 4764, 4766, 4768, 4770, 4772, 4774, 4776, 4778,
+        4780, 4782, 4784, 4786, 4788, 4790, 4792, 4794, 4796, 4798, 4800, 4802, 4804, 4806, 4808, 4810, 4812, 4814, 4816, 4818, 4820, 4822, 4824, 4826,
+        4828, 4830, 4832, 4834, 4836, 4838, 4840, 4842, 4844, 4846, 4848, 4850, 4852, 4854, 4856, 4858, 4860, 4862, 4864, 4866, 4868, 4870, 4872, 4874,
+        4876, 4878, 4880, 4882, 4884, 4886, 4888, 4890, 4892, 4894, 4896, 4898, 4900, 4902, 4904, 4906, 4908, 4910, 4912, 4914, 4916, 4918, 4920, 4922,
+        4924, 4926, 4928, 4930, 4932, 4934, 4936, 4938, 4940, 4942, 4944, 4946, 4948, 4950, 4952, 4954, 4956, 4958, 4960, 4962, 4964, 4966, 4968, 4970,
+        4972, 4974, 4976, 4978, 4980, 4982, 4984, 4986, 4988, 4990, 4992, 4994, 4996, 4998, 5000, 5002, 5004, 5006, 5008, 5010, 5012, 5014, 5016, 5018,
+        5020, 5022, 5024, 5026, 5028, 5030, 5031, 5033, 5035, 5037, 5039, 5041, 5043, 5045, 5047, 5049, 5051, 5053, 5055, 5057, 5059, 5061, 5063, 5065,
+        5067, 5069, 5071, 5073, 5075, 5077, 5079, 5081, 5083, 5085, 5087, 5089, 5091, 5093, 5095, 5097, 5099, 5101, 5103, 5105, 5107, 5109, 5111, 5113,
+        5115, 5117, 5119, 5121, 5123, 5125, 5127, 5129, 5131, 5133, 5135, 5137, 5139, 5141, 5143, 5145, 5147, 5149, 5151, 5153, 5155, 5157, 5159, 5161,
+        5163, 5165, 5167, 5169, 5171, 5173, 5175, 5177, 5179, 5181, 5183, 5185, 5187, 5189, 5191, 5193, 5195, 5197, 5199, 5201, 5203, 5205, 5207, 5209,
+        5211, 5213, 5215, 5217, 5219, 5221, 5223, 5225, 5227, 5229, 5231, 5233, 5235, 5237, 5239, 5241, 5243, 5245, 5247, 5249, 5251, 5253, 5255, 5257,
+        5259, 5261, 5263, 5265, 5267, 5269, 5271, 5273, 5275, 5277, 5279, 5281, 5283, 5285, 5287, 5289, 5291, 5293, 5295, 5297, 5299, 5301, 5303, 5305,
+        5307, 5309, 5311, 5313, 5315, 5317, 5319, 5321, 5323, 5325, 5327, 5329, 5331, 5333, 5335, 5337, 5339, 5341, 5343, 5345, 5347, 5349, 5351, 5353,
+        5355, 5357, 5359, 5361, 5363, 5365, 5367, 5369, 5371, 5373, 5375, 5377, 5379, 5381, 5383, 5385, 5387, 5389, 5391, 5393, 5395, 5397, 5399, 5401,
+        5403, 5405, 5407, 5409, 5411, 5413, 5415, 5417, 5419, 5421, 5423, 5425, 5427, 5429, 5431, 5433, 5435, 5437, 5439, 5441, 5443, 5445, 5447, 5449,
+        5451, 5453, 5455, 5457, 5459, 5461, 5463, 5465, 5467, 5469, 5471, 5473, 5475, 5477, 5479, 5481, 5483, 5485, 5487, 5489, 5491, 5493, 5495, 5497,
+        5499, 5501, 5503, 5505, 5507, 5509, 5511, 5513, 5515, 5516, 5518, 5520, 5522, 5524, 5526, 5528, 5530, 5532, 5534, 5537, 5539, 5541, 5543, 5545,
+        5548, 5550, 5552, 5554, 5556, 5558, 5560, 5562, 5564, 5566, 5568, 5570, 5572, 5574, 5576, 5578, 5580, 5582, 5584, 5586, 5588, 5590, 5592, 5594,
+        5596, 5598, 5600, 5602, 5604, 5606, 5608, 5610, 5612, 5614, 5616, 5618, 5620, 5622, 5624, 5626, 5628, 5630, 5632, 5634, 5637, 5639, 5641, 5643,
+        5645, 5647, 5649, 5651, 5653, 5655, 5657, 5659, 5661, 5663, 5665, 5667, 5669, 5671, 5673, 5675, 5677, 5679, 5681, 5683, 5685, 5687, 5689, 5691,
+        5693, 5695, 5697, 5699, 5701, 5703, 5705, 5707, 5709, 5711, 5713, 5715, 5717, 5719, 5721, 5723, 5725, 5727, 5729, 5731, 5733, 5735, 5737, 5739,
+        5741, 5743, 5745, 5747, 5749, 5751, 5753, 5755, 5757, 5759, 5761, 5763, 5765, 5767, 5769, 5771, 5773, 5775, 5777, 5779, 5781, 5783, 5785, 5787,
+        5789, 5791, 5793, 5795, 5797, 5799, 5801, 5803, 5805, 5807, 5809, 5811, 5813, 5815, 5817, 5819, 5821, 5823, 5825, 5827, 5829, 5831, 5833, 5835,
+        5837, 5839, 5841, 5843, 5845, 5847, 5849, 5851, 5853, 5855, 5857, 5859, 5861, 5863, 5865, 5867, 5869, 5871, 5873, 5875, 5877, 5879, 5881, 5883,
+        5885, 5887, 5889, 5892, 5894, 5896, 5898, 5900, 5902, 5904, 5906, 5908, 5910, 5912, 5914, 5916, 5918, 5920, 5922, 5924, 5926, 5928, 5930, 5932,
+        5934, 5936, 5938, 5940, 5942, 5944, 5946, 5948, 5950, 5952, 5954, 5956, 5958, 5960, 5962, 5964, 5966, 5968, 5970, 5972, 5974, 5976, 5978, 5980,
+        5982, 5984, 5986, 5988, 5990, 5992, 5994, 5996, 5998, 6000, 6002, 6004, 6006, 6008, 6010, 6012, 6014, 6016, 6018, 6020, 6022, 6024, 6026, 6028,
+        6030, 6032, 6034, 6036, 6038, 6040, 6042, 6044, 6046, 6048, 6050, 6052, 6054, 6056, 6058, 6060, 6062, 6064, 6066, 6068, 6070, 6072, 6074, 6076,
+        6078, 6080, 6082, 6084, 6086, 6088, 6090, 6092, 6094, 6097, 6099, 6101, 6103, 6105, 6107, 6109, 6111, 6114, 6116, 6118, 6120, 6122, 6125, 6127,
+        6129, 6131, 6133, 6135, 6137, 6139, 6141, 6143, 6145, 6147, 6149, 6151, 6153, 6155, 6157, 6159, 6161, 6163, 6165, 6167, 6169, 6171, 6173, 6175,
+        6177, 6179, 6181, 6183, 6185, 6187, 6189, 6191, 6193, 6195, 6197, 6199, 6201, 6203, 6205, 6207, 6209, 6211, 6213, 6215, 6217, 6219, 6221, 6223,
+        6225, 6227, 6229, 6231, 6233, 6235, 6237, 6239, 6241, 6243, 6245, 6247, 6249, 6251, 6253, 6255, 6257, 6259, 6261, 6263, 6265, 6267, 6269, 6271,
+        6273, 6275, 6277, 6279, 6281, 6283, 6285, 6287, 6289, 6291, 6293, 6295, 6297, 6299, 6301, 6303, 6305, 6307, 6309, 6311, 6313, 6315, 6317, 6319,
+        6321, 6323, 6325, 6327, 6328, 6330, 6332, 6334, 6335, 6337, 6339, 6341, 6343, 6345, 6346, 6348, 6350, 6352, 6354, 6356, 6358, 6360, 6363, 6365,
+        6367, 6369, 6371, 6373, 6375, 6377, 6379, 6381, 6383, 6385, 6387, 6389, 6391, 6393, 6395, 6397, 6399, 6401, 6404, 6406, 6408, 6410, 6412, 6414,
+        6416, 6418, 6420, 6422, 6424, 6426, 6428, 6430, 6432, 6434, 6436, 6438, 6440, 6442, 6444, 6446, 6448, 6450, 6452, 6454, 6456, 6458, 6460, 6462,
+        6464, 6466, 6468, 6470, 6472, 6474, 6476, 6478, 6480, 6482, 6484, 6486, 6488, 6490, 6492, 6494, 6496, 6498, 6500, 6502, 6504, 6506, 6508, 6510,
+        6512, 6514, 6516, 6518, 6520, 6522, 6524, 6526, 6528, 6530, 6532, 6534, 6536, 6538, 6540, 6542, 6544, 6546, 6548, 6550, 6552, 6554, 6556, 6558,
+        6560, 6562, 6564, 6566, 6568, 6570, 6572, 6574, 6576, 6578, 6580, 6582, 6584, 6586, 6588, 6590, 6592, 6594, 6596, 6598, 6600, 6602, 6604, 6606,
+        6609, 6611, 6613, 6615, 6617, 6619, 6621, 6623, 6625, 6627, 6629, 6631, 6633, 6635, 6637, 6639, 6641, 6643, 6645, 6647, 6649, 6651, 6653, 6655,
+        6657, 6659, 6661, 6663, 6665, 6667, 6669, 6671, 6673, 6675, 6677, 6679, 6681, 6683, 6685, 6687, 6689, 6691, 6693, 6695, 6697, 6699, 6701, 6703,
+        6705, 6707, 6709, 6711, 6713, 6715, 6717, 6719, 6721, 6723, 6725, 6727, 6729, 6731, 6733, 6735, 6737, 6739, 6741, 6743, 6745, 6747, 6749, 6751,
+        6753, 6755, 6757, 6759, 6761, 6763, 6765, 6767, 6769, 6771, 6773, 6775, 6777, 6779, 6781, 6783, 6785, 6787, 6789, 6791, 6793, 6795, 6797, 6799,
+        6801, 6803, 6805, 6807, 6809, 6811, 6813, 6815, 6817, 6819, 6821, 6823, 6825, 6827, 6829, 6831, 6833, 6835, 6837, 6839, 6841, 6843, 6845, 6847,
+        6849, 6851, 6853, 6855, 6857, 6859, 6861, 6863, 6865, 6867, 6869, 6871, 6873, 6875, 6877, 6879, 6881, 6883, 6885, 6887, 6889, 6891, 6893, 6895,
+        6897, 6899, 6901, 6903, 6905, 6907, 6909, 6911, 6913, 6915, 6917, 6919, 6921, 6923, 6925, 6927, 6929, 6931, 6933, 6935, 6937, 6939, 6941, 6943,
+        6945, 6947, 6949, 6951, 6953, 6955, 6957, 6959, 6961, 6963, 6965, 6967, 6969, 6971, 6973, 6975, 6977, 6979, 6981, 6983, 6985, 6987, 6989, 6991,
+        6993, 6995, 6997, 6999, 7001, 7003, 7005, 7007, 7009, 7011, 7013, 7015, 7017, 7019, 7021, 7023, 7025, 7027, 7029, 7031, 7033, 7035, 7037, 7039,
+        7041, 7043, 7045, 7047, 7049, 7051, 7053, 7055, 7057, 7059, 7061, 7063, 7065, 7067, 7069, 7071, 7073, 7075, 7077, 7079, 7081, 7083, 7085, 7087,
+        7089, 7091, 7093, 7095, 7097, 7099, 7101, 7103, 7105, 7107, 7109, 7111, 7113, 7115, 7117, 7119, 7121, 7123, 7125, 7127, 7129, 7131, 7133, 7135,
+        7137, 7139, 7141, 7143, 7145, 7147, 7149, 7151, 7153, 7155, 7157, 7159, 7161, 7163, 7165, 7167, 7169, 7171, 7173, 7175, 7177, 7179, 7181, 7183,
+        7185, 7187, 7189, 7191, 7193, 7195, 7197, 7199, 7201, 7203, 7205, 7207, 7209, 7211, 7213, 7215, 7217, 7219, 7221, 7223, 7225, 7227, 7229, 7231,
+        7233, 7235, 7237, 7239, 7241, 7243, 7245, 7247, 7249, 7251, 7253, 7255, 7257, 7259, 7261, 7263, 7265, 7267, 7269, 7271, 7273, 7275, 7277, 7279,
+        7281, 7283, 7285, 7287, 7289, 7291, 7293, 7295, 7297, 7299, 7301, 7303, 7305, 7307, 7309, 7311, 7313, 7315, 7317, 7319, 7321, 7323, 7325, 7327,
+        7329, 7331, 7333, 7335, 7337, 7339, 7341, 7343, 7345, 7347, 7349, 7351, 7353, 7355, 7357, 7359, 7361, 7363, 7365, 7367, 7369, 7371, 7373, 7375,
+        7377, 7379, 7381, 7383, 7385, 7387, 7389, 7391, 7393, 7395, 7397, 7399, 7401, 7403, 7405, 7407, 7409, 7411, 7413, 7415, 7417, 7419, 7421, 7423,
+        7425, 7427, 7429, 7431, 7433, 7435, 7437, 7439, 7441, 7443, 7445, 7447, 7449, 7451, 7453, 7455, 7457, 7459, 7461, 7463, 7465, 7467, 7469, 7471,
+        7473, 7475, 7477, 7479, 7481, 7483, 7485, 7487, 7489, 7491, 7493, 7495, 7497, 7499, 7501, 7503, 7505, 7507, 7509, 7511, 7513, 7515, 7517, 7519,
+        7521, 7523, 7525, 7527, 7529, 7531, 7533, 7535, 7537, 7539, 7541, 7543, 7545, 7547, 7549, 7551, 7553, 7555, 7557, 7559, 7561, 7563, 7565, 7567,
+        7569, 7571, 7573, 7575, 7577, 7579, 7581, 7583, 7585, 7587, 7589, 7591, 7593, 7595, 7597, 7599, 7601, 7603, 7605, 7607, 7609, 7611, 7613, 7615,
+        7617, 7619, 7621, 7623, 7625, 7627, 7629, 7631, 7633, 7635, 7637, 7639, 7641, 7643, 7645, 7647, 7649, 7651, 7653, 7655, 7657, 7659, 7661, 7663,
+        7665, 7667, 7669, 7671, 7673, 7675, 7677, 7679, 7681, 7683, 7685, 7687, 7689, 7691, 7693, 7695, 7697, 7699, 7700, 7702, 7704, 7706, 7708, 7710,
+        7712, 7714, 7716, 7718, 7720, 7722, 7724, 7726, 7728, 7730, 7732, 7734, 7736, 7738, 7740, 7742, 7744, 7746, 7748, 7750, 7752, 7754, 7756, 7759,
+        7761, 7763, 7765, 7767, 7769, 7771, 7773, 7775, 7777, 7779, 7781, 7783, 7785, 7787, 7789, 7791, 7793, 7795, 7797, 7799, 7801, 7803, 7805, 7807,
+        7809, 7811, 7813, 7815, 7817, 7819, 7821, 7823, 7825, 7827, 7829, 7831, 7833, 7835, 7837, 7839, 7841, 7843, 7845, 7847, 7849, 7851, 7853, 7855,
+        7857, 7859, 7861, 7863, 7865, 7867, 7869, 7871, 7873, 7875, 7877, 7879, 7881, 7883, 7885, 7887, 7889, 7891, 7893, 7895, 7897, 7899, 7901, 7903,
+        7905, 7907, 7909, 7911, 7913, 7915, 7917, 7919, 7921, 7923, 7925, 7927, 7929, 7931, 7933, 7935, 7937, 7939, 7941, 7943, 7945, 7947, 7949, 7951,
+        7953, 7955, 7957, 7959, 7961, 7963, 7965, 7967, 7969, 7971, 7973, 7975, 7977, 7979, 7981, 7983, 7985, 7987, 7989, 7991, 7993, 7995, 7997, 7999,
+        8001, 8003, 8005, 8007, 8009, 8011, 8013, 8015, 8017, 8019, 8021, 8023, 8025, 8027, 8029, 8031, 8033, 8035, 8037, 8039, 8041, 8043, 8045, 8047,
+        8049, 8051, 8053, 8055, 8057, 8059, 8061, 8063, 8065, 8067, 8069, 8071, 8073, 8075, 8077, 8079, 8081, 8083, 8085, 8087, 8089, 8091, 8093, 8095,
+        8097, 8099, 8101, 8103, 8105, 8107, 8109, 8111, 8113, 8115, 8117, 8119, 8121, 8123, 8125, 8127, 8129, 8131, 8133, 8135, 8137, 8139, 8141, 8143,
+        8145, 8147, 8149, 8151, 8153, 8155, 8157, 8159, 8161, 8163, 8165, 8167, 8169, 8171, 8173, 8175, 8177, 8179, 8181, 8183, 8185, 8187, 8189, 8191,
+        8193, 8195, 8197, 8199, 8201, 8203, 8205, 8207, 8209, 8211, 8213, 8215, 8217, 8219, 8221, 8223, 8225, 8227, 8229, 8231, 8233, 8235, 8237, 8239,
+        8241, 8243, 8245, 8247, 8249, 8251, 8253, 8255, 8257, 8259, 8261, 8263, 8265, 8267, 8269, 8271, 8273, 8275, 8277, 8279, 8281, 8283, 8285, 8287,
+        8289, 8291, 8293, 8295, 8297, 8299, 8301, 8303, 8305, 8307, 8309, 8311, 8313, 8315, 8317, 8319, 8321, 8323, 8325, 8327, 8329, 8331, 8333, 8335,
+        8337, 8340, 8342, 8344, 8346, 8348, 8350, 8352, 8354, 8356, 8358, 8360, 8362, 8364, 8366, 8367, 8369, 8371, 8373, 8375, 8377, 8379, 8381, 8383,
+        8385, 8387, 8389, 8391, 8393, 8395, 8397, 8399, 8401, 8404, 8406, 8408, 8410, 8412, 8414, 8417, 8419, 8421, 8423, 8425, 8427, 8429, 8431, 8433,
+        8435, 8437, 8439, 8441, 8443, 8445, 8447, 8449, 8451, 8453, 8455, 8457, 8460, 8462, 8464, 8466, 8468, 8470, 8472, 8474, 8476, 8478, 8480, 8482,
+        8484, 8486, 8488, 8490, 8492, 8494, 8496, 8498, 8500, 8502, 8504, 8506, 8508, 8510, 8512, 8514, 8516, 8518, 8520, 8522, 8524, 8526, 8528, 8530,
+        8533, 8535, 8537, 8539, 8541, 8543, 8545, 8548, 8550, 8552, 8554, 8556, 8558, 8560, 8562, 8564, 8566, 8568, 8570, 8572, 8574, 8576, 8578, 8580,
+        8582, 8584, 8586, 8588, 8590, 8592, 8594, 8596, 8598, 8600, 8602, 8604, 8606, 8608, 8610, 8612, 8614, 8616, 8618, 8620, 8622, 8624, 8626, 8628,
+        8630, 8632, 8634, 8636, 8638, 8641, 8643, 8645, 8647, 8649, 8651, 8653, 8655, 8657, 8659, 8661, 8663, 8665, 8667, 8669, 8671, 8673, 8675, 8677,
+        8679, 8681, 8683, 8685, 8687, 8689, 8691, 8693, 8695, 8697, 8699, 8701, 8703, 8705, 8707, 8709, 8711, 8713, 8715, 8717, 8719, 8721, 8723, 8725,
+        8727, 8729, 8731, 8733, 8735, 8737, 8739, 8741, 8743, 8745, 8747, 8749, 8751, 8753, 8755, 8757, 8759, 8761, 8763, 8765, 8767, 8769, 8771, 8773,
+        8775, 8777, 8779, 8781, 8782, 8784, 8786, 8788, 8790, 8791, 8793, 8795, 8797, 8799, 8801, 8803, 8805, 8807, 8809, 8811, 8813, 8815, 8817, 8819,
+        8821, 8823, 8825, 8827, 8829, 8831, 8833, 8835, 8837, 8839, 8841, 8843, 8845, 8847, 8849, 8851, 8853, 8855, 8857, 8859, 8861, 8863, 8865, 8867,
+        8869, 8871, 8873, 8875, 8877, 8879, 8881, 8883, 8885, 8887, 8889, 8891, 8893, 8895, 8897, 8899, 8901, 8903, 8905, 8907, 8909, 8911, 8913, 8915,
+        8917, 8919, 8921, 8923, 8925, 8927, 8929, 8931, 8933, 8935, 8937, 8939, 8941, 8943, 8945, 8947, 8949, 8951, 8953, 8955, 8957, 8959, 8961, 8963,
+        8965, 8967, 8969, 8971, 8973, 8975, 8977, 8979, 8981, 8983, 8985, 8987, 8989, 8991, 8993, 8995, 8997, 8999, 9001, 9003, 9005, 9007, 9009, 9011,
+        9013, 9015, 9017, 9019, 9021, 9023, 9025, 9027, 9029, 9031, 9033, 9035, 9037, 9039, 9041, 9043, 9045, 9047, 9049, 9051, 9053, 9055, 9057, 9059,
+        9061, 9063, 9065, 9067, 9069, 9071, 9073, 9075, 9077, 9079, 9081, 9083, 9085, 9087, 9089, 9091, 9093, 9095, 9097, 9099, 9101, 9103, 9105, 9107,
+        9109, 9111, 9113, 9115, 9117, 9119, 9121, 9123, 9125, 9127, 9129, 9131, 9133, 9135, 9137, 9139, 9141, 9143, 9145, 9147, 9149, 9151, 9153, 9155,
+        9157, 9159, 9161, 9163, 9165, 9167, 9169, 9171, 9173, 9175, 9177, 9179, 9181, 9183, 9185, 9187, 9189, 9191, 9193, 9195, 9197, 9199, 9201, 9203,
+        9205, 9207, 9209, 9211, 9213, 9215, 9217, 9219, 9221, 9223, 9225, 9227, 9229, 9231, 9233, 9235, 9237, 9239, 9241, 9243, 9245, 9247, 9249, 9251,
+        9253, 9256, 9258, 9260, 9262, 9264, 9266, 9268, 9270, 9272, 9274, 9276, 9278, 9280, 9282, 9284, 9286, 9288, 9290, 9292, 9294, 9296, 9298, 9300,
+        9302, 9304, 9306, 9308, 9310, 9312, 9314, 9316, 9318, 9320, 9322, 9324, 9326, 9328, 9330, 9332, 9334, 9336, 9338, 9340, 9342, 9344, 9346, 9348,
+        9350, 9352, 9354, 9356, 9358, 9360, 9362, 9364, 9366, 9368, 9370, 9372, 9374, 9376, 9378, 9380, 9382, 9384, 9386, 9388, 9390, 9392, 9394, 9396,
+        9398, 9400, 9402, 9404, 9406, 9408, 9409, 9411, 9413, 9415, 9416, 9418, 9420, 9422, 9424, 9426, 9428, 9430, 9432, 9434, 9436, 9438, 9440, 9442,
+        9444, 9446, 9448, 9450, 9452, 9454, 9456, 9458, 9460, 9462, 9464, 9466, 9468, 9470, 9472, 9474, 9476, 9478, 9480, 9482, 9484, 9486, 9488, 9490,
+        9492, 9495, 9497, 9499, 9501, 9503, 9505, 9507, 9509, 9511, 9513, 9515, 9517, 9519, 9521, 9523, 9525, 9527, 9529, 9531, 9533, 9535, 9537, 9539,
+        9541, 9543, 9545, 9547, 9549, 9551, 9553, 9555, 9557, 9559, 9561, 9563, 9565, 9567, 9569, 9571, 9573, 9575, 9577, 9579, 9581, 9583, 9585, 9587,
+        9589, 9591, 9593, 9595, 9597, 9599, 9601, 9603, 9605, 9607, 9609, 9611, 9613, 9615, 9617, 9619, 9621, 9622, 9624, 9626, 9627, 9629, 9631, 9633,
+        9635, 9637, 9639, 9641, 9643, 9645, 9647, 9649, 9651, 9653, 9655, 9657, 9659, 9661, 9663, 9665, 9667, 9669, 9671, 9673, 9675, 9677, 9679, 9681,
+        9683, 9685, 9687, 9689, 9691, 9693, 9695, 9697, 9699, 9701, 9703, 9705, 9707, 9709, 9711, 9713, 9715, 9717, 9719, 9721, 9723, 9725, 9727, 9729,
+        9731, 9733, 9735, 9737, 9739, 9741, 9743, 9745, 9747, 9749, 9751, 9753, 9755, 9757, 9759, 9761, 9763, 9765, 9767, 9769, 9771, 9773, 9775, 9777,
+        9779, 9781, 9783, 9785, 9787, 9789, 9791, 9793, 9795, 9797, 9798, 9800, 9802, 9804, 9806, 9808, 9810, 9812, 9814, 9816, 9818, 9820, 9822, 9824,
+        9826, 9828, 9830, 9832, 9834, 9836, 9838, 9840, 9842, 9844, 9846, 9848, 9850, 9852, 9854, 9856, 9858, 9860, 9862, 9864, 9866, 9868, 9870, 9872,
+        9874, 9876, 9878, 9880, 9882, 9884, 9886, 9888, 9890, 9892, 9894, 9896, 9898, 9900, 9902, 9904, 9906, 9908, 9910, 9912, 9914, 9916, 9918, 9920,
+        9922, 9924, 9926, 9928, 9930, 9932, 9934, 9936, 9938, 9940, 9942, 9944, 9946, 9948, 9950, 9952, 9954, 9956, 9959, 9961, 9963, 9965, 9967, 9969,
+        9971, 9973, 9975, 9977, 9979, 9981, 9984, 9986, 9988, 9990, 9992, 9994, 9996, 9998, 10000, 10002, 10004, 10006, 10008, 10010, 10012, 10014, 10016, 10018,
+        10020, 10022, 10024, 10026, 10027, 10028, 10030, 10032, 10033, 10035, 10037, 10039, 10041, 10043, 10045, 10047, 10049, 10051, 10053, 10055, 10057, 10059, 10061, 10063,
+        10065, 10067, 10069, 10071, 10073, 10075, 10077, 10079, 10081, 10083, 10085, 10087, 10089, 10091, 10093, 10095, 10097, 10099, 10101, 10103, 10105, 10107, 10109, 10111,
+        10113, 10115, 10117, 10119, 10121, 10123, 10125, 10127, 10129, 10131, 10133, 10135, 10137, 10139, 10141, 10143, 10145, 10147, 10149, 10151, 10153, 10155, 10157, 10159,
+        10161, 10163, 10165, 10167, 10169, 10171, 10173, 10175, 10177, 10179, 10181, 10183, 10185, 10187, 10189, 10191, 10193, 10195, 10197, 10199, 10201, 10203, 10205, 10207,
+        10209, 10211, 10213, 10215, 10217, 10219, 10221, 10223, 10225, 10227, 10229, 10231, 10233, 10235, 10237, 10239, 10241, 10243, 10245, 10247, 10249, 10251, 10253, 10255,
+        10257, 10259, 10261, 10263, 10265, 10267, 10269, 10271, 10273, 10275, 10277, 10279, 10281, 10283, 10285, 10287, 10289, 10291, 10293, 10295, 10297, 10299, 10301, 10303,
+        10305, 10307, 10309, 10311, 10313, 10315, 10317, 10319, 10321, 10323, 10325, 10327, 10329, 10331, 10333, 10335, 10337, 10339, 10341, 10343, 10345, 10347, 10349, 10351,
+        10353, 10355, 10357, 10359, 10361, 10363, 10365, 10367, 10369, 10371, 10373, 10375, 10377, 10379, 10381, 10383, 10385, 10387, 10389, 10391, 10393, 10395, 10397, 10399,
+        10401, 10403, 10405, 10407, 10409, 10411, 10413, 10415, 10417, 10419, 10421, 10423, 10425, 10427, 10429, 10431, 10433, 10435, 10437, 10439, 10441, 10443, 10445, 10447,
+        10449, 10451, 10453, 10455, 10457, 10459, 10461, 10463, 10465, 10467, 10469, 10471, 10473, 10475, 10477, 10479, 10481, 10483, 10485, 10487, 10489, 10491, 10493, 10495,
+        10497, 10499, 10501, 10503, 10505, 10507, 10509, 10511, 10513, 10515, 10517, 10519, 10521, 10523, 10525, 10527, 10529, 10531, 10533, 10535, 10537, 10539, 10541, 10543,
+        10545, 10547, 10549, 10551, 10553, 10555, 10557, 10559, 10561, 10563, 10565, 10567, 10569, 10571, 10573, 10575, 10577, 10579, 10581, 10583, 10585, 10587, 10589, 10591,
+        10593, 10595, 10597, 10599, 10601, 10603, 10605, 10607, 10609, 10611, 10613, 10615, 10617, 10619, 10621, 10623, 10625, 10627, 10629, 10631, 10633, 10635, 10637, 10639,
+        10641, 10643, 10645, 10647, 10649, 10651, 10653, 10655, 10657, 10659, 10661, 10663, 10665, 10667, 10669, 10671, 10673, 10675, 10677, 10679, 10681, 10683, 10685, 10687,
+        10689, 10691, 10693, 10695, 10697, 10699, 10701, 10703, 10705, 10707, 10709, 10711, 10713, 10715, 10717, 10719, 10721, 10723, 10725, 10727, 10729, 10731, 10733, 10735,
+        10737, 10739, 10741, 10743, 10745, 10747, 10749, 10751, 10753, 10755, 10757, 10759, 10761, 10763, 10765, 10767, 10769, 10771, 10773, 10775, 10777, 10779, 10782, 10784,
+        10786, 10788, 10790, 10792, 10794, 10796, 10798, 10800, 10802, 10804, 10806, 10808, 10810, 10812, 10814, 10816, 10818, 10820, 10822, 10824, 10826, 10828, 10830, 10832,
+        10834, 10836, 10838, 10840, 10842, 10844, 10846, 10848, 10850, 10851, 10853, 10855, 10857, 10859, 10860, 10862, 10864, 10866, 10868, 10870, 10872, 10875, 10877, 10879,
+        10881, 10883, 10885, 10887, 10889, 10891, 10893, 10895, 10897, 10899, 10901, 10903, 10905, 10907, 10909, 10911, 10913, 10915, 10917, 10919, 10921, 10923, 10925, 10927,
+        10929, 10931, 10933, 10935, 10937, 10939, 10941, 10943, 10945, 10947, 10949, 10951, 10953, 10955, 10957, 10959, 10961, 10963, 10965, 10967, 10969, 10971, 10973, 10975,
+        10977, 10979, 10981, 10983, 10985, 10987, 10989, 10991, 10993, 10995, 10997, 10999, 11001, 11003, 11005, 11007, 11009, 11011, 11013, 11015, 11017, 11019, 11021, 11023,
+        11025, 11027, 11029, 11031, 11033, 11035, 11037, 11039, 11041, 11043, 11045, 11047, 11049, 11051, 11053, 11055, 11057, 11059, 11061, 11063, 11065, 11067, 11069, 11071,
+        11073, 11075, 11077, 11079, 11081, 11083, 11085, 11087, 11089, 11091, 11093, 11095, 11097, 11099, 11101, 11103, 11105, 11107, 11109, 11111, 11113, 11115, 11117, 11119,
+        11121, 11123, 11125, 11127, 11129, 11131, 11133, 11135, 11137, 11139, 11141, 11143, 11145, 11147, 11149, 11151, 11153, 11155, 11157, 11159, 11161, 11163, 11165, 11167,
+        11169, 11171, 11173, 11175, 11177, 11179, 11181, 11183, 11185, 11187, 11189, 11191, 11193, 11195, 11197, 11199, 11201, 11203, 11205, 11207, 11209, 11211, 11213, 11215,
+        11217, 11219, 11221, 11223, 11225, 11226, 11227, 11229, 11230, 11232, 11234, 11236, 11238, 11240, 11242, 11244, 11246, 11248, 11250, 11252, 11254, 11256, 11258, 11260,
+        11262, 11264, 11266, 11268, 11270, 11272, 11274, 11276, 11278, 11280, 11282, 11284, 11286, 11288, 11290, 11292, 11294, 11296, 11298, 11300, 11302, 11304, 11306, 11308,
+        11310, 11312, 11314, 11316, 11318, 11320, 11322, 11324, 11326, 11328, 11330, 11332, 11334, 11336, 11338, 11340, 11342, 11344, 11346, 11348, 11350, 11352, 11354, 11356,
+        11358, 11360, 11362, 11364, 11366, 11368, 11370, 11372, 11374, 11376, 11378, 11380, 11382, 11384, 11386, 11388, 11390, 11392, 11394, 11396, 11398, 11400, 11402, 11404,
+        11406, 11408, 11410, 11412, 11414, 11416, 11418, 11420, 11422, 11424, 11426, 11428, 11430, 11432, 11434, 11436, 11438, 11440, 11442, 11444, 11446, 11448, 11450, 11452,
+        11454, 11456, 11458, 11460, 11462, 11464, 11466, 11468, 11470, 11472, 11474, 11476, 11478, 11480, 11482, 11484, 11486, 11488, 11490, 11492, 11494, 11496, 11498, 11500,
+        11502, 11504, 11506, 11508, 11510, 11512, 11514, 11516, 11518, 11520, 11522, 11524, 11526, 11528, 11530, 11532, 11534, 11536, 11538, 11540, 11542, 11544, 11546, 11548,
+        11550, 11552, 11554, 11556, 11558, 11560, 11562, 11564, 11566, 11568, 11570, 11572, 11574, 11576, 11578, 11580, 11582, 11584, 11586, 11588, 11590, 11592, 11594, 11596,
+        11598, 11600, 11602, 11604, 11607, 11609, 11611, 11613, 11615, 11617, 11619, 11621, 11623, 11625, 11627, 11629, 11631, 11633, 11635, 11637, 11639, 11641, 11643, 11645,
+        11647, 11649, 11652, 11654, 11656, 11658, 11660, 11662, 11664, 11666, 11668, 11670, 11672, 11674, 11676, 11678, 11680, 11682, 11684, 11686, 11688, 11690, 11692, 11694,
+        11696, 11698, 11700, 11702, 11704, 11706, 11708, 11710, 11712, 11714, 11716, 11718, 11720, 11722, 11724, 11726, 11728, 11730, 11732, 11734, 11736, 11738, 11740, 11742,
+        11744, 11746, 11748, 11750, 11752, 11754, 11756, 11758, 11760, 11762, 11764, 11766, 11768, 11770, 11772, 11774, 11776, 11778, 11780, 11782, 11784, 11786, 11788, 11790,
+        11792, 11794, 11796, 11798, 11800, 11802, 11804, 11806, 11808, 11810, 11812, 11814, 11816, 11818, 11820, 11822, 11824, 11826, 11828, 11830, 11832, 11834, 11836, 11838,
+        11840, 11842, 11844, 11846, 11848, 11850, 11852, 11854, 11856, 11858, 11860, 11862, 11864, 11866, 11868, 11870, 11872, 11874, 11876, 11878, 11880, 11882, 11884, 11886,
+        11888, 11890, 11892, 11894, 11896, 11898, 11900, 11902, 11904, 11906, 11908, 11910, 11912, 11914, 11916, 11918, 11920, 11922, 11924, 11926, 11928, 11930, 11932, 11934,
+        11936, 11938, 11940, 11942, 11944, 11946, 11948, 11950, 11952, 11954, 11956, 11958, 11960, 11962, 11964, 11966, 11968, 11970, 11972, 11974, 11976, 11978, 11980, 11982,
+        11984, 11986, 11988, 11990, 11992, 11994, 11996, 11998, 12000, 12002, 12004, 12006, 12008, 12010, 12012, 12014, 12016, 12018, 12020, 12022, 12024, 12026, 12028, 12030,
+        12032, 12034, 12036, 12038, 12040, 12042, 12044, 12046, 12048, 12050, 12052, 12054, 12056, 12058, 12060, 12062, 12064, 12066, 12068, 12070, 12072, 12074, 12076, 12078,
+        12080, 12082, 12084, 12086, 12088, 12090, 12092, 12094, 12096, 12098, 12100, 12102, 12104, 12106, 12108, 12110, 12112, 12114, 12116, 12118, 12120, 12122, 12124, 12126,
+        12128, 12130, 12132, 12133, 12135, 12137, 12139, 12141, 12143, 12145, 12147, 12149, 12151, 12153, 12155, 12157, 12159, 12161, 12163, 12165, 12167, 12169, 12171, 12173,
+        12175, 12177, 12179, 12181, 12183, 12185, 12187, 12189, 12191, 12193, 12195, 12197, 12199, 12201, 12203, 12205, 12207, 12209, 12211, 12213, 12215, 12217, 12219, 12221,
+        12223, 12225, 12227, 12229, 12231, 12233, 12235, 12237, 12239, 12241, 12243, 12245, 12247, 12249, 12251, 12253, 12255, 12257, 12259, 12261, 12263, 12265, 12267, 12269,
+        12271, 12273, 12275, 12276, 12278, 12279, 12281, 12283, 12285, 12287, 12289, 12291, 12293, 12295, 12297, 12299, 12301, 12303, 12305, 12307, 12309, 12311, 12313, 12315,
+        12317, 12319, 12321, 12323, 12325, 12327, 12329, 12331, 12333, 12335, 12337, 12339, 12341, 12343, 12345, 12346, 12348, 12350, 12352, 12354, 12356, 12358, 12360, 12362,
+        12364, 12366, 12368, 12370, 12372, 12374, 12376, 12378, 12380, 12382, 12384, 12386, 12388, 12390, 12392, 12394, 12396, 12398, 12400, 12402, 12404, 12406, 12408, 12410,
+        12412, 12414, 12416, 12418, 12420, 12422, 12424, 12426, 12428, 12430, 12432, 12434, 12436, 12438, 12440, 12442, 12444, 12446, 12448, 12450, 12452, 12454, 12456, 12457,
+        12459, 12461, 12463, 12465, 12467, 12469, 12471, 12473, 12475, 12477, 12479, 12481, 12483, 12485, 12487, 12489, 12491, 12493, 12495, 12497, 12499, 12501, 12503, 12505,
+        12507, 12509, 12511, 12513, 12515, 12517, 12519, 12521, 12523, 12525, 12527, 12529, 12531, 12533, 12535, 12537, 12539, 12541, 12543, 12545, 12547, 12549, 12551, 12553,
+        12555, 12557, 12559, 12561, 12563, 12565, 12567, 12569, 12571, 12573, 12575, 12577, 12579, 12581, 12583, 12585, 12587, 12589, 12591, 12593, 12595, 12597, 12599, 12601,
+        12602, 12604, 12606, 12608, 12610, 12612, 12614, 12616, 12618, 12620, 12622, 12624, 12626, 12628, 12630, 12632, 12634, 12636, 12638, 12640, 12641, 12643, 12645, 12647,
+        12649, 12651, 12653, 12655, 12657, 12659, 12661, 12663, 12665, 12667, 12669, 12671, 12673, 12675, 12677, 12679, 12681, 12683, 12685, 12687, 12689, 12691, 12693, 12695,
+        12697, 12699, 12701, 12703, 12705, 12707, 12709, 12711, 12713, 12715, 12717, 12719, 12721, 12723, 12725, 12727, 12729, 12731, 12733, 12735, 12737, 12739, 12741, 12743,
+        12745, 12747, 12749, 12751, 12753, 12755, 12757, 12759, 12761, 12763, 12765, 12767, 12769, 12771, 12773, 12775, 12777, 12779, 12781, 12783, 12785, 12787, 12789, 12791,
+        12793, 12795, 12797, 12799, 12801, 12803, 12805, 12807, 12809, 12811, 12813, 12815, 12817, 12819, 12821, 12823, 12825, 12827, 12829, 12831, 12833, 12835, 12837, 12839,
+        12841, 12843, 12845, 12847, 12849, 12851, 12853, 12855, 12857, 12859, 12861, 12863, 12865, 12867, 12869, 12871, 12873, 12875, 12877, 12879, 12881, 12883, 12885, 12887,
+        12889, 12891, 12893, 12895, 12897, 12899, 12901, 12903, 12905, 12907, 12909, 12911, 12913, 12915, 12917, 12919, 12921, 12923, 12925, 12927, 12929, 12931, 12933, 12935,
+        12937, 12939, 12941, 12943, 12945, 12947, 12949, 12951, 12953, 12955, 12957, 12959, 12961, 12963, 12965, 12967, 12969, 12971, 12973, 12975, 12977, 12979, 12981, 12983,
+        12985, 12987, 12989, 12991, 12993, 12995, 12997, 12999, 13001, 13003, 13005, 13007, 13009, 13011, 13013, 13015, 13017, 13019, 13021, 13023, 13025, 13027, 13029, 13031,
+        13033, 13035, 13037, 13039, 13041, 13043, 13045, 13047, 13049, 13051, 13053, 13055, 13057, 13059, 13060, 13062, 13064, 13066, 13068, 13070, 13072, 13074, 13076, 13078,
+        13080, 13082, 13084, 13086, 13088, 13090, 13092, 13094, 13096, 13098, 13100, 13102, 13104, 13106, 13108, 13110, 13112, 13114, 13116, 13118, 13120, 13122, 13124, 13126,
+        13128, 13130, 13132, 13134, 13136, 13138, 13140, 13142, 13144, 13146, 13148, 13150, 13152, 13154, 13156, 13158, 13160, 13162, 13164, 13166, 13168, 13170, 13172, 13174,
+        13176, 13178, 13180, 13182, 13184, 13186, 13188, 13190, 13192, 13195, 13197, 13199, 13201, 13203, 13205, 13207, 13209, 13211, 13213, 13215, 13217, 13219, 13221, 13223,
+        13225, 13227, 13229, 13231, 13233, 13235, 13237, 13239, 13241, 13243, 13245, 13247, 13249, 13251, 13253, 13255, 13257, 13259, 13261, 13263, 13264, 13266, 13268, 13270,
+        13271, 13273, 13275, 13277, 13280, 13282, 13284, 13286, 13288, 13290, 13292, 13294, 13296, 13298, 13300, 13302, 13304, 13306, 13308, 13310, 13312, 13314, 13316, 13318,
+        13320, 13322, 13324, 13326, 13328, 13330, 13332, 13334, 13336, 13338, 13340, 13342, 13344, 13346, 13348, 13350, 13352, 13354, 13356, 13358, 13360, 13362, 13364, 13366,
+        13368, 13370, 13372, 13374, 13376, 13378, 13380, 13382, 13384, 13386, 13388, 13390, 13392, 13394, 13396, 13398, 13400, 13402, 13404, 13406, 13408, 13410, 13412, 13414,
+        13416, 13418, 13420, 13422, 13424, 13426, 13428, 13430, 13432, 13434, 13436, 13438, 13440, 13442, 13444, 13446, 13448, 13450, 13452, 13454, 13457, 13459, 13461, 13463,
+        13465, 13467, 13469, 13471, 13473, 13475, 13477, 13479, 13481, 13483, 13485, 13487, 13489, 13491, 13493, 13495, 13497, 13499, 13501, 13503, 13505, 13507, 13509, 13511,
+        13513, 13515, 13517, 13519, 13521, 13523, 13525, 13527, 13529, 13531, 13533, 13535, 13537, 13539, 13541, 13543, 13545, 13547, 13549, 13551, 13553, 13555, 13557, 13559,
+        13561, 13563, 13565, 13567, 13569, 13571, 13573, 13575, 13577, 13579, 13581, 13583, 13585, 13587, 13589, 13591, 13593, 13595, 13597, 13599, 13601, 13603, 13605, 13607,
+        13609, 13611, 13613, 13615, 13617, 13619, 13621, 13623, 13625, 13627, 13629, 13631, 13633, 13635, 13637, 13639, 13641, 13643, 13645, 13647, 13648, 13650, 13652, 13654,
+        13656, 13658, 13660, 13662, 13664, 13666, 13668, 13670, 13672, 13674, 13676, 13678, 13680, 13682, 13684, 13686, 13688, 13690, 13692, 13694, 13696, 13698, 13700, 13702,
+        13704, 13706, 13708, 13710, 13712, 13714, 13716, 13718, 13720, 13722, 13724, 13726, 13728, 13730, 13732, 13734, 13736, 13738, 13740, 13742, 13744, 13746, 13748, 13750,
+        13752, 13754, 13756, 13758, 13760, 13762, 13764, 13766, 13768, 13770, 13772, 13774, 13776, 13778, 13780, 13782, 13784, 13786, 13788, 13790, 13792, 13794, 13796, 13798,
+        13800, 13802, 13804, 13806, 13807, 13809, 13811, 13813, 13815, 13817, 13819, 13821, 13823, 13825, 13827, 13829, 13831, 13833, 13834, 13836, 13838, 13840, 13842, 13844,
+        13846, 13848, 13850, 13852, 13854, 13856, 13858, 13860, 13862, 13864, 13866, 13868, 13870, 13872, 13874, 13876, 13878, 13880, 13882, 13884, 13886, 13888, 13891, 13893,
+        13895, 13897, 13899, 13901, 13903, 13905, 13907, 13909, 13911, 13913, 13915, 13917, 13919, 13921, 13923, 13925, 13927, 13929, 13931, 13933, 13935, 13937, 13939, 13941,
+        13943, 13945, 13947, 13949, 13951, 13953, 13955, 13957, 13960, 13962, 13964, 13966, 13968, 13970, 13972, 13974, 13977, 13979, 13981, 13983, 13985, 13987, 13989, 13991,
+        13993, 13995, 13997, 13999, 14001, 14003, 14005, 14007, 14009, 14011, 14013, 14015, 14017, 14019, 14021, 14023, 14025, 14027, 14029, 14031, 14033, 14035, 14037, 14039,
+        14041, 14043, 14045, 14047, 14049, 14051, 14053, 14055, 14057, 14059, 14061, 14063, 14065, 14067, 14069, 14071, 14073, 14075, 14077, 14079, 14081, 14083, 14085, 14087,
+        14089, 14091, 14093, 14095, 14097, 14099, 14101, 14103, 14105, 14107, 14109, 14111, 14112, 14114, 14116, 14118, 14120, 14122, 14124, 14126, 14128, 14130, 14132, 14134,
+        14136, 14138, 14140, 14142, 14144, 14146, 14148, 14150, 14152, 14154, 14156, 14158, 14160, 14162, 14164, 14166, 14168, 14170, 14172, 14174, 14176, 14178, 14180, 14182,
+        14184, 14186, 14188, 14190, 14192, 14194, 14196, 14198, 14200, 14202, 14204, 14206, 14208, 14210, 14212, 14214, 14216, 14218, 14220, 14222, 14224, 14226, 14228, 14230,
+        14232, 14234, 14236, 14238, 14240, 14241, 14243, 14245, 14247, 14249, 14251, 14252, 14254, 14256, 14258, 14260, 14262, 14264, 14266, 14268, 14270, 14272, 14274, 14276,
+        14278, 14280, 14282, 14284, 14286, 14288, 14290, 14292, 14294, 14296, 14298, 14300, 14302, 14304, 14306, 14308, 14310, 14312, 14314, 14316, 14318, 14320, 14322, 14324,
+        14326, 14329, 14331, 14333, 14335, 14337, 14339, 14341, 14343, 14345, 14346, 14348, 14350, 14352, 14354, 14356, 14358, 14360, 14362, 14364, 14366, 14368, 14370, 14372,
+        14374, 14376, 14378, 14380, 14382, 14384, 14385, 14387, 14389, 14391, 14393, 14395, 14397, 14399, 14401, 14403, 14405, 14407, 14409, 14411, 14413, 14415, 14417, 14419,
+        14421, 14423, 14425, 14427, 14429, 14431, 14433, 14435, 14437, 14439, 14441, 14443, 14445, 14447, 14449, 14451, 14453, 14455, 14457, 14459, 14461, 14463, 14465, 14467,
+        14469, 14471, 14473, 14475, 14477, 14478, 14479, 14481, 14483, 14484, 14486, 14488, 14490, 14492, 14494, 14496, 14498, 14500, 14502, 14504, 14506, 14508, 14510, 14512,
+        14514, 14516, 14518, 14520, 14522, 14524, 14526, 14528, 14530, 14532, 14534, 14536, 14538, 14540, 14542, 14544, 14546, 14548, 14550, 14552, 14554, 14556, 14558, 14560,
+        14562, 14564, 14566, 14568, 14570, 14572, 14574, 14576, 14578, 14580, 14582, 14584, 14586, 14588, 14590, 14592, 14594, 14596, 14598, 14600, 14602, 14604, 14606, 14608,
+        14610, 14612, 14614, 14616, 14618, 14620, 14622, 14624, 14626, 14629, 14631, 14633, 14635, 14637, 14639, 14641, 14643, 14645, 14647, 14649, 14651, 14653, 14655, 14657,
+        14659, 14661, 14663, 14665, 14667, 14669, 14671, 14673, 14675, 14677, 14679, 14681, 14683, 14685, 14687, 14689, 14691, 14693, 14695, 14697, 14699, 14701, 14703, 14705,
+        14707, 14709, 14711, 14713, 14715, 14717, 14719, 14721, 14723, 14725, 14727, 14729, 14731, 14733, 14735, 14737, 14739, 14741, 14743, 14745, 14747, 14749, 14751, 14753,
+        14755, 14757, 14759, 14761, 14764, 14766, 14768, 14770, 14772, 14774, 14776, 14778, 14780, 14782, 14784, 14786, 14788, 14790, 14792, 14794, 14797, 14799, 14801, 14803,
+        14805, 14807, 14809, 14811, 14813, 14815, 14817, 14819, 14822, 14824, 14826, 14828, 14830, 14832, 14834, 14836, 14838, 14840, 14842, 14844, 14846, 14848, 14850, 14852,
+        14854, 14856, 14858, 14860, 14862, 14864, 14866, 14868, 14870, 14872, 14874, 14876, 14878, 14880, 14882, 14884, 14886, 14888, 14890, 14892, 14894, 14896, 14898, 14900,
+        14902, 14904, 14906, 14908, 14910, 14912, 14914, 14916, 14918, 14920, 14922, 14924, 14926, 14928, 14930, 14932, 14934, 14936, 14938, 14940, 14942, 14944, 14946, 14948,
+        14950, 14952, 14954, 14956, 14958, 14960, 14962, 14964, 14966, 14968, 14970, 14972, 14974, 14976, 14978, 14980, 14982, 14984, 14986, 14988, 14990, 14992, 14994, 14996,
+        14997, 14998, 15000, 15002, 15003, 15005, 15007, 15009, 15011, 15013, 15015, 15017, 15019, 15021, 15023, 15025, 15027, 15029, 15031, 15033, 15035, 15037, 15039, 15041,
+        15043, 15045, 15047, 15049, 15051, 15054, 15056, 15058, 15061, 15062, 15064, 15066, 15067, 15069, 15071, 15073, 15075, 15077, 15079, 15081, 15083, 15085, 15087, 15089,
+        15091, 15093, 15095, 15097, 15099, 15101, 15103, 15105, 15107, 15109, 15111, 15113, 15115, 15117, 15119, 15121, 15123, 15125, 15126, 15127, 15129, 15130, 15132, 15134,
+        15136, 15138, 15140, 15142, 15144, 15146, 15148, 15150, 15152, 15154, 15156, 15158, 15160, 15162, 15164, 15166, 15168, 15170, 15172, 15174, 15176, 15177, 15179, 15181,
+        15182, 15185, 15187, 15189, 15191, 15193, 15195, 15197, 15199, 15201, 15203, 15205, 15207, 15209, 15211, 15213, 15215, 15217, 15219, 15221, 15223, 15225, 15227, 15229,
+        15231, 15233, 15235, 15237, 15239, 15241, 15243, 15245, 15247, 15249, 15251, 15253, 15255, 15256, 15257, 15259, 15260, 15262, 15264, 15266, 15268, 15270, 15272, 15274,
+        15276, 15278, 15280, 15282, 15284, 15286, 15288, 15290, 15292, 15294, 15296, 15298, 15300, 15303, 15305, 15307, 15309, 15311, 15313, 15315, 15317, 15319, 15321, 15323,
+        15325, 15327, 15329, 15331, 15333, 15335, 15337, 15339, 15341, 15343, 15345, 15347, 15349, 15351, 15353, 15355, 15357, 15359, 15361, 15364, 15366, 15368, 15370, 15372,
+        15374, 15376, 15378, 15380, 15382, 15384, 15386, 15388, 15390, 15392, 15394, 15396, 15398, 15400, 15402, 15404, 15406, 15407, 15408, 15410, 15411, 15413, 15415, 15417,
+        15419, 15421, 15423, 15425, 15427, 15429, 15431, 15433, 15435, 15437, 15439, 15441, 15443, 15445, 15447, 15449, 15451, 15453, 15455, 15457, 15459, 15461, 15463, 15465,
+        15467, 15469, 15471, 15473, 15475, 15477, 15479, 15481, 15483, 15485, 15487, 15489, 15491, 15493, 15495, 15497, 15499, 15501, 15503, 15505, 15507, 15509, 15511, 15513,
+        15515, 15517, 15519, 15521, 15523, 15525, 15527, 15529, 15531, 15533, 15535, 15537, 15539, 15541, 15543, 15545, 15547, 15549, 15551, 15553, 15555, 15557, 15559, 15561,
+        15563, 15565, 15567, 15569, 15571, 15573, 15575, 15577, 15579, 15581, 15584, 15586, 15588, 15590, 15592, 15594, 15596, 15598, 15600, 15602, 15604, 15606, 15609, 15611,
+        15613, 15615, 15617, 15619, 15621, 15622, 15624, 15626, 15628, 15630, 15632, 15634, 15636, 15638, 15640, 15642, 15644, 15646, 15648, 15650, 15652, 15654, 15656, 15658,
+        15660, 15662, 15664, 15667, 15669, 15671, 15673, 15675, 15677, 15679, 15680, 15682, 15684, 15686, 15688, 15690, 15692, 15694, 15696, 15698, 15700, 15702, 15704, 15706,
+        15708, 15710, 15712, 15714, 15716, 15718, 15720, 15722, 15724, 15726, 15728, 15730, 15732, 15734, 15736, 15738, 15740, 15742, 15744, 15746, 15748, 15750, 15752, 15754,
+        15756, 15758, 15760, 15762, 15764, 15766, 15768, 15770, 15772, 15774, 15776, 15778, 15780, 15782, 15785, 15787, 15789, 15791, 15793, 15795, 15797, 15799, 15801, 15803,
+        15805, 15807, 15809, 15811, 15813, 15815, 15816, 15818, 15820, 15822, 15824, 15826, 15828, 15830, 15832, 15834, 15836, 15838, 15840, 15842, 15844, 15846, 15848, 15850,
+        15852, 15854, 15856, 15858, 15860, 15862, 15864, 15866, 15868, 15870, 15872, 15874, 15876, 15878, 15880, 15882, 15884, 15886, 15888, 15890, 15892, 15895, 15897, 15899,
+        15901, 15903, 15905, 15907, 15909, 15911, 15913, 15915, 15917, 15919, 15921, 15923, 15925, 15927, 15929, 15931, 15933, 15935, 15937, 15939, 15941, 15943, 15945, 15947,
+        15949, 15951, 15953, 15955, 15957, 15959, 15961, 15963, 15965, 15967, 15969, 15971, 15973, 15975, 15977, 15979, 15981, 15983, 15985, 15987, 15989, 15991, 15993, 15995,
+        15997, 15999, 16001, 16003, 16005, 16007, 16009, 16011, 16013, 16015, 16017, 16019, 16021, 16023, 16025, 16027, 16029, 16031, 16033, 16035, 16037, 16039, 16041, 16043,
+        16045, 16047, 16049, 16051, 16053, 16055, 16057, 16059, 16061, 16063, 16065, 16067, 16069, 16071, 16073, 16075, 16077, 16078, 16079, 16081, 16083, 16084, 16086, 16088,
+        16090, 16092, 16094, 16096, 16098, 16100, 16102, 16104, 16106, 16108, 16110, 16112, 16114, 16116, 16118, 16120, 16122, 16124, 16126, 16128, 16130, 16132, 16134, 16136,
+        16138, 16140, 16143, 16145, 16147, 16149, 16151, 16153, 16155, 16157, 16159, 16161, 16163, 16165, 16167, 16169, 16171, 16173, 16175, 16177, 16179, 16181, 16183, 16185,
+        16187, 16189, 16191, 16193, 16195, 16197, 16199, 16201, 16203, 16205, 16207, 16209, 16211, 16213, 16215, 16217, 16219, 16221, 16223, 16225, 16227, 16229, 16231, 16233,
+        16235, 16237, 16239, 16241, 16243, 16245, 16247, 16249, 16251, 16253, 16255, 16257, 16259, 16261, 16263, 16265, 16267, 16269, 16271, 16273, 16275, 16277, 16279, 16281,
+        16283, 16285, 16287, 16289, 16291, 16293, 16295, 16297, 16299, 16301, 16303, 16305, 16307, 16309, 16311, 16313, 16315, 16317, 16320, 16322, 16324, 16326, 16328, 16330,
+        16332, 16334, 16336, 16338, 16340, 16342, 16344, 16346, 16348, 16350, 16352, 16354, 16356, 16358, 16360, 16362, 16364, 16366, 16368, 16370, 16372, 16374, 16376, 16378,
+        16380, 16382, 16384, 16386, 16388, 16390, 16392, 16394, 16396, 16398, 16400, 16402, 16404, 16406, 16408, 16410, 16412, 16414, 16416, 16418, 16420, 16422, 16424, 16426,
+        16428, 16430, 16432, 16434, 16436, 16438, 16440, 16442, 16444, 16446, 16448, 16450, 16452, 16454, 16456, 16458, 16460, 16462, 16464, 16466, 16468, 16470, 16472, 16474,
+        16476, 16478, 16480, 16482, 16484, 16486, 16488, 16490, 16492, 16494, 16496, 16498, 16500, 16502, 16504, 16506, 16508, 16510, 16512, 16514, 16516, 16519, 16521, 16523,
+        16525, 16527, 16529, 16531, 16533, 16535, 16537, 16539, 16541, 16543, 16545, 16547, 16549, 16551, 16553, 16555, 16557, 16559, 16561, 16563, 16565, 16567, 16569, 16571,
+        16573, 16575, 16577, 16579, 16581, 16583, 16585, 16587, 16589, 16591, 16593, 16595, 16597, 16599, 16601, 16603, 16605, 16607, 16609, 16611, 16613, 16615, 16617, 16619,
+        16621, 16623, 16625, 16627, 16629, 16631, 16633, 16635, 16637, 16639, 16641, 16643, 16645, 16647, 16649, 16651, 16653, 16655, 16657, 16659, 16661, 16663, 16665, 16667,
+        16669, 16671, 16673, 16675, 16677, 16679, 16681, 16683, 16685, 16687, 16689, 16692, 16693, 16694, 16696, 16697, 16699, 16700, 16702, 16704, 16706, 16708, 16710, 16712,
+        16714, 16716, 16718, 16720, 16722, 16724, 16726, 16729, 16731, 16733, 16735, 16737, 16739, 16741, 16743, 16745, 16747, 16749, 16751, 16753, 16755, 16757, 16759, 16761,
+        16763, 16765, 16767, 16769, 16771, 16773, 16775, 16777, 16779, 16781, 16783, 16785, 16787, 16789, 16791, 16793, 16795, 16797, 16798, 16800, 16802, 16804, 16806, 16808,
+        16810, 16812, 16814, 16816, 16818, 16820, 16822, 16824, 16826, 16828, 16830, 16832, 16834, 16836, 16838, 16840, 16842, 16844, 16846, 16848, 16850, 16852, 16854, 16856,
+        16858, 16860, 16862, 16864, 16866, 16868, 16870, 16872, 16874, 16876, 16878, 16880, 16883, 16885, 16887, 16889, 16891, 16893, 16895, 16897, 16899, 16901, 16903, 16905,
+        16907, 16909, 16911, 16913, 16915, 16917, 16919, 16921, 16923, 16925, 16927, 16929, 16931, 16933, 16935, 16937, 16939, 16941, 16943, 16945, 16947, 16949, 16951, 16953,
+        16955, 16957, 16959, 16961, 16963, 16965, 16967, 16969, 16971, 16973, 16975, 16977, 16979, 16981, 16983, 16984, 16985, 16987, 16988, 16990, 16992, 16994, 16996, 16998,
+        17000, 17002, 17004, 17006, 17008, 17010, 17012, 17014, 17016, 17018, 17020, 17022, 17024, 17026, 17028, 17030, 17031, 17032, 17034, 17035, 17037, 17039, 17041, 17043,
+        17045, 17047, 17049, 17051, 17053, 17055, 17057, 17059, 17061, 17063, 17065, 17067, 17069, 17072, 17074, 17076, 17078, 17080, 17082, 17084, 17086, 17088, 17090, 17092,
+        17094, 17096, 17098, 17100, 17102, 17104, 17106, 17108, 17110, 17112, 17114, 17116, 17118, 17120, 17122, 17124, 17126, 17128, 17130, 17132, 17134, 17136, 17138, 17140,
+        17142, 17144, 17146, 17148, 17150, 17152, 17154, 17156, 17158, 17160, 17162, 17164, 17166, 17168, 17170, 17172, 17174, 17176, 17178, 17180, 17182, 17184, 17186, 17188,
+        17189, 17191, 17193, 17195, 17197, 17199, 17201, 17203, 17205, 17207, 17209, 17211, 17213, 17215, 17217, 17219, 17221, 17223, 17225, 17227, 17229, 17231, 17233, 17235,
+        17237, 17239, 17241, 17243, 17245, 17247, 17249, 17251, 17253, 17255, 17257, 17259, 17261, 17263, 17265, 17267, 17269, 17271, 17272, 17274, 17276, 17277, 17278, 17280,
+        17281, 17283, 17285, 17287, 17289, 17291, 17293, 17295, 17297, 17299, 17301, 17303, 17305, 17307, 17309, 17311, 17313, 17315, 17317, 17319, 17321, 17323, 17325, 17327,
+        17329, 17331, 17333, 17335, 17337, 17339, 17341, 17343, 17345, 17347, 17349, 17351, 17353, 17355, 17357, 17359, 17361, 17363, 17365, 17367, 17369, 17371, 17373, 17375,
+        17377, 17379, 17381, 17383, 17385, 17387, 17389, 17391, 17393, 17395, 17397, 17399, 17401, 17403, 17405, 17407, 17408, 17410, 17412, 17414, 17416, 17418, 17420, 17422,
+        17424, 17426, 17428, 17430, 17432, 17433, 17435, 17437, 17439, 17441, 17443, 17445, 17447, 17449, 17451, 17453, 17455, 17457, 17459, 17461, 17463, 17465, 17467, 17469,
+        17471, 17473, 17474, 17476, 17478, 17481, 17483, 17485, 17487, 17489, 17491, 17493, 17495, 17497, 17499, 17501, 17503, 17505, 17507, 17509, 17511, 17513, 17515, 17517,
+        17519, 17521, 17523, 17525, 17527, 17529, 17531, 17533, 17535, 17537, 17539, 17541, 17543, 17545, 17547, 17549, 17551, 17553, 17555, 17557, 17559, 17561, 17563, 17565,
+        17567, 17569, 17571, 17573, 17575, 17577, 17579, 17581, 17583, 17585, 17587, 17589, 17591, 17593, 17595, 17597, 17599, 17601, 17603, 17605, 17607, 17609, 17611, 17613,
+        17615, 17617, 17619, 17621, 17623, 17625, 17627, 17629, 17631, 17633, 17635, 17637, 17639, 17641, 17643, 17645, 17647, 17649, 17651, 17653, 17655, 17657, 17659, 17661,
+        17663, 17665, 17667, 17669, 17671, 17673, 17675, 17677, 17679, 17681, 17683, 17685, 17687, 17689, 17691, 17693, 17695, 17697, 17699, 17701, 17703, 17705, 17707, 17709,
+        17711, 17713, 17715, 17717, 17719, 17721, 17723, 17725, 17727, 17729, 17731, 17733, 17735, 17737, 17739, 17741, 17743, 17745, 17747, 17749, 17751, 17753, 17755, 17757,
+        17759, 17761, 17763, 17765, 17767, 17769, 17771, 17773, 17775, 17777, 17779, 17781, 17783, 17785, 17787, 17789, 17791, 17793, 17795, 17797, 17799, 17801, 17803, 17805,
+        17808, 17810, 17812, 17814, 17816, 17818, 17820, 17822, 17824, 17826, 17828, 17830, 17832, 17834, 17836, 17838, 17840, 17842, 17844, 17846, 17848, 17850, 17852, 17854,
+        17856, 17858, 17860, 17862, 17864, 17866, 17868, 17870, 17872, 17873, 17874, 17876, 17878, 17880, 17882, 17884, 17886, 17888, 17890, 17892, 17894, 17896, 17898, 17899,
+        17901, 17903, 17906, 17908, 17910, 17912, 17914, 17916, 17918, 17920, 17922, 17924, 17926, 17928, 17930, 17932, 17934, 17936, 17938, 17940, 17942, 17944, 17946, 17948,
+        17950, 17952, 17954, 17956, 17958, 17960, 17962, 17964, 17966, 17968, 17970, 17972, 17974, 17976, 17978, 17980, 17982, 17984, 17986, 17988, 17990, 17992, 17994, 17996,
+        17998, 18000, 18002, 18004, 18006, 18008, 18010, 18012, 18014, 18016, 18018, 18020, 18022, 18024, 18026, 18028, 18030, 18032, 18034, 18036, 18038, 18040, 18042, 18044,
+        18046, 18048, 18050, 18052, 18054, 18056, 18058, 18060, 18062, 18064, 18066, 18068, 18070, 18072, 18074, 18076, 18078, 18080, 18082, 18084, 18086, 18088, 18090, 18092,
+        18094, 18097, 18100, 18102, 18104, 18106, 18108, 18110, 18112, 18114, 18116, 18118, 18120, 18122, 18124, 18126, 18128, 18130, 18132, 18134, 18136, 18138, 18140, 18142,
+        18144, 18146, 18148, 18150, 18152, 18154, 18156, 18158, 18160, 18162, 18164, 18166, 18168, 18170, 18172, 18174, 18176, 18178, 18180, 18182, 18184, 18186, 18188, 18190,
+        18192, 18194, 18196, 18198, 18200, 18202, 18204, 18206, 18208, 18210, 18212, 18214, 18216, 18218, 18220, 18222, 18224, 18226, 18228, 18230, 18232, 18234, 18236, 18238,
+        18239, 18240, 18243, 18245, 18247, 18249, 18251, 18253, 18255, 18257, 18259, 18261, 18263, 18265, 18267, 18269, 18271, 18273, 18275, 18277, 18279, 18281, 18283, 18285,
+        18287, 18289, 18291, 18293, 18295, 18297, 18299, 18301, 18303, 18305, 18307, 18309, 18311, 18313, 18315, 18317, 18319, 18321, 18323, 18325, 18327, 18329, 18331, 18332,
+        18333, 18335, 18337, 18338, 18340, 18342, 18344, 18346, 18348, 18350, 18352, 18354, 18356, 18358, 18360, 18362, 18364, 18366, 18368, 18370, 18372, 18374, 18376, 18378,
+        18380, 18382, 18384, 18386, 18388, 18390, 18392, 18394, 18396, 18398, 18400, 18402, 18404, 18406, 18408, 18410, 18412, 18414, 18417, 18419, 18421, 18423, 18425, 18428,
+        18430, 18432, 18434, 18436, 18438, 18440, 18442, 18444, 18446, 18448, 18451, 18453, 18455, 18457, 18459, 18461, 18463, 18465, 18467, 18469, 18471, 18473, 18475, 18477,
+        18479, 18481, 18483, 18485, 18487, 18489, 18491, 18493, 18495, 18497, 18499, 18501, 18503, 18505, 18507, 18509, 18511, 18513, 18515, 18517, 18519, 18521, 18523, 18525,
+        18527, 18529, 18531, 18534, 18536, 18538, 18540, 18542, 18544, 18546, 18548, 18550, 18552, 18554, 18556, 18558, 18560, 18562, 18564, 18566, 18568, 18570, 18572, 18574,
+        18576, 18578, 18580, 18582, 18584, 18586, 18588, 18590, 18592, 18594, 18596, 18598, 18600, 18602, 18604, 18606, 18608, 18612, 18614, 18616, 18618, 18619, 18621, 18623,
+        18625, 18627, 18629, 18631, 18633, 18635, 18637, 18639, 18641, 18643, 18645, 18647, 18649, 18651, 18653, 18655, 18657, 18659, 18661, 18663, 18665, 18667, 18669, 18671,
+        18673, 18675, 18677, 18679, 18681, 18683, 18685, 18687, 18689, 18691, 18694, 18696, 18698, 18700, 18702, 18704, 18706, 18708, 18710, 18712, 18714, 18716, 18718, 18720,
+        18722, 18724, 18726, 18728, 18730, 18732, 18734, 18736, 18738, 18740, 18742, 18744, 18746, 18748, 18750, 18752, 18754, 18756, 18758, 18760, 18762, 18764, 18766, 18768,
+        18770, 18772, 18774, 18776, 18778, 18780, 18782, 18784, 18786, 18787, 18789, 18790, 18792, 18794, 18796, 18798, 18800, 18802, 18804, 18806, 18808, 18810, 18812, 18814,
+        18816, 18818, 18820, 18822, 18824, 18826, 18828, 18830, 18832, 18834, 18836, 18838, 18840, 18842, 18844, 18846, 18848, 18850, 18852, 18854, 18856, 18858, 18860, 18862,
+        18864, 18866, 18868, 18870, 18872, 18874, 18876, 18878, 18880, 18882, 18884, 18885, 18887, 18888, 18890, 18892, 18894, 18896, 18898, 18900, 18902, 18904, 18906, 18908,
+        18910, 18912, 18914, 18916, 18918, 18920, 18922, 18924, 18926, 18928, 18930, 18933, 18935, 18937, 18939, 18941, 18943, 18945, 18947, 18949, 18951, 18953, 18955, 18957,
+        18959, 18961, 18963, 18965, 18967, 18969, 18971, 18973, 18975, 18977, 18979, 18981, 18983, 18985, 18987, 18989, 18991, 18993, 18995, 18997, 18999, 19001, 19003, 19005,
+        19007, 19009, 19011, 19013, 19015, 19017, 19019, 19021, 19023, 19025, 19027, 19029, 19031, 19033, 19035, 19037, 19039, 19041, 19043, 19045, 19047, 19049, 19051, 19053,
+        19055, 19057, 19059, 19061, 19063, 19065, 19067, 19069, 19071, 19073, 19075, 19078, 19080, 19082, 19084, 19086, 19089, 19092, 19094, 19096, 19098, 19100, 19102, 19104,
+        19106, 19108, 19110, 19112, 19114, 19116, 19118, 19120, 19122, 19124, 19126, 19128, 19130, 19132, 19134, 19136, 19138, 19140, 19142, 19144, 19146, 19148, 19150, 19152,
+        19154, 19156, 19158, 19160, 19162, 19164, 19166, 19168, 19170, 19172, 19174, 19176, 19178, 19180, 19182, 19184, 19186, 19188, 19190, 19193, 19195, 19197, 19200, 19202,
+        19204, 19206, 19208, 19210, 19212, 19214, 19216, 19218, 19221, 19223, 19226, 19228, 19230, 19232, 19234, 19236, 19238, 19240, 19242, 19244, 19246, 19248, 19250, 19252,
+        19254, 19256, 19258, 19260, 19262, 19264, 19266
+    ]),
+    fidx: new Int32Array([
+        188, 781, 188, 703, 192, 781, 192, 703, 188, 507, 34, 95, 246, 192, 507, 192, 710, 223, 781, 223, 703, 207, 603, 302,
+        603, 223, 507, 223, 710, 95, 348, 45, 348, 246, 1271, 188, 405, 125, 349, 62, 940, 188, 926, 125, 392, 76, 940, 229,
+        349, 32, 656, 93, 344, 147, 1211, 229, 392, 32, 686, 126, 344, 147, 1401, 95, 856, 62, 869, 62, 245, 139, 245, 95,
+        857, 76, 869, 76, 245, 147, 497, 223, 770, 175, 599, 245, 407, 223, 755, 265, 599, 245, 734, 176, 348, 37, 1194, 93,
+        460, 34, 707, 139, 1211, 93, 500, 93, 872, 234, 1211, 188, 246, 126, 500, 188, 604, 126, 872, 192, 246, 234, 1401, 192,
+        604, 246, 1246, 62, 1389, 45, 391, 45, 1038, 18, 1403, 76, 1389, 62, 497, 139, 497, 188, 207, 14, 76, 76, 207, 1400,
+        76, 497, 192, 207, 45, 536, 192, 302, 31, 1207, 93, 175, 45, 52, 144, 26, 1207, 93, 265, 52, 1192, 51, 348, 26,
+        1399, 223, 246, 126, 265, 223, 604, 66, 1192, 95, 603, 68, 348, 34, 348, 130, 507, 95, 521, 45, 521, 197, 507, 95,
+        626, 45, 626, 114, 507, 95, 458, 95, 410, 45, 458, 45, 410, 98, 348, 88, 348, 19, 1371, 283, 349, 171, 405, 171,
+        730, 90, 349, 99, 391, 99, 1038, 162, 1271, 90, 392, 63, 656, 62, 898, 93, 489, 139, 898, 52, 940, 63, 686, 76,
+        898, 126, 489, 99, 536, 66, 940, 38, 656, 31, 707, 52, 842, 38, 686, 26, 707, 261, 406, 139, 699, 155, 349, 93,
+        381, 32, 349, 406, 551, 62, 344, 147, 324, 139, 344, 155, 392, 126, 381, 32, 392, 406, 556, 76, 344, 147, 369, 147,
+        872, 485, 1246, 62, 598, 144, 842, 358, 1246, 62, 634, 182, 842, 18, 1424, 62, 1269, 62, 422, 93, 280, 280, 1317, 52,
+        245, 74, 245, 76, 1269, 76, 422, 126, 280, 280, 745, 66, 245, 111, 245, 176, 603, 130, 770, 175, 623, 130, 755, 149,
+        521, 176, 521, 114, 770, 223, 485, 175, 573, 175, 285, 176, 626, 114, 755, 223, 358, 265, 573, 223, 406, 176, 410, 182,
+        245, 163, 245, 246, 1242, 117, 349, 62, 934, 56, 1403, 117, 392, 76, 934, 27, 1207, 93, 252, 147, 483, 27, 1399, 126,
+        252, 147, 637, 196, 507, 165, 869, 165, 245, 184, 507, 138, 869, 138, 245, 856, 1254, 203, 999, 62, 973, 857, 1254, 203,
+        1000, 1, 147, 897, 37, 1323, 132, 599, 20, 1300, 37, 1350, 97, 599, 20, 1302, 246, 1134, 211, 714, 62, 743, 246, 1135,
+        211, 901, 76, 743, 207, 1134, 93, 244, 52, 1147, 207, 1135, 126, 244, 66, 1147, 223, 658, 55, 889, 55, 348, 223, 990,
+        48, 889, 48, 348, 155, 1031, 32, 1031, 23, 1440, 155, 997, 32, 997, 21, 1440, 286, 714, 193, 999, 62, 1063, 286, 901,
+        193, 1000, 69, 193, 234, 95, 1026, 45, 1026, 302, 685, 95, 881, 45, 881, 302, 509, 246, 294, 294, 604, 294, 778, 246,
+        320, 320, 604, 320, 778, 207, 294, 45, 415, 302, 356, 207, 320, 45, 455, 302, 487, 405, 1061, 213, 731, 310, 601, 37,
+        1427, 37, 1393, 442, 601, 223, 899, 67, 889, 67, 348, 223, 613, 47, 889, 47, 348, 285, 902, 147, 902, 147, 469, 285,
+        552, 147, 552, 147, 308, 188, 387, 246, 386, 192, 387, 188, 608, 246, 345, 192, 608, 180, 781, 41, 707, 127, 261, 93,
+        885, 52, 733, 139, 282, 19, 1194, 126, 885, 15, 349, 12, 17, 261, 34, 391, 139, 324, 34, 1038, 17, 349, 52, 830,
+        62, 872, 51, 536, 139, 872, 162, 188, 17, 392, 66, 830, 34, 638, 76, 872, 68, 536, 162, 192, 34, 536, 192, 326,
+        207, 484, 207, 386, 133, 603, 207, 456, 207, 345, 185, 603, 168, 781, 44, 1151, 288, 376, 37, 1428, 58, 1151, 254, 376,
+        429, 714, 73, 391, 127, 841, 429, 901, 75, 391, 182, 941, 18, 656, 62, 661, 14, 707, 171, 943, 45, 261, 45, 545,
+        18, 686, 76, 661, 93, 867, 322, 943, 52, 497, 74, 497, 51, 603, 95, 188, 126, 867, 166, 943, 95, 1400, 66, 497,
+        111, 497, 95, 192, 68, 603, 45, 192, 223, 387, 30, 889, 30, 348, 223, 608, 35, 889, 35, 348, 285, 496, 147, 496,
+        147, 288, 285, 505, 147, 505, 147, 254, 164, 714, 62, 417, 139, 417, 164, 901, 76, 417, 234, 417, 93, 662, 52, 1201,
+        93, 434, 52, 1345, 175, 338, 126, 434, 31, 856, 52, 682, 62, 175, 51, 626, 127, 330, 26, 856, 52, 853, 62, 265,
+        51, 410, 15, 1192, 135, 330, 26, 857, 66, 853, 49, 458, 76, 265, 68, 410, 34, 458, 182, 497, 163, 497, 98, 603,
+        28, 348, 130, 1001, 100, 598, 197, 1001, 100, 634, 114, 1001, 130, 207, 144, 682, 175, 407, 88, 521, 19, 1139, 197, 207,
+        94, 634, 98, 626, 88, 626, 175, 327, 114, 207, 94, 422, 95, 223, 98, 410, 88, 410, 45, 223, 265, 327, 274, 790,
+        45, 330, 43, 656, 93, 449, 139, 483, 43, 686, 93, 305, 188, 535, 126, 305, 246, 278, 234, 637, 192, 535, 485, 1242,
+        62, 753, 127, 533, 358, 1242, 45, 1161, 56, 1424, 207, 859, 76, 751, 207, 278, 138, 497, 278, 302, 37, 1316, 175, 815,
+        175, 915, 45, 849, 37, 1295, 223, 535, 355, 410, 95, 533, 45, 966, 27, 348, 50, 1439, 93, 132, 132, 1091, 50, 1315,
+        93, 97, 246, 428, 97, 126, 428, 604, 97, 1096, 428, 778, 216, 532, 95, 627, 45, 627, 202, 532, 45, 579, 187, 532,
+        207, 428, 95, 477, 45, 610, 45, 477, 302, 365, 124, 656, 86, 707, 52, 86, 139, 49, 90, 580, 93, 713, 188, 1250,
+        126, 713, 246, 777, 66, 86, 234, 192, 1250, 408, 714, 62, 423, 139, 423, 312, 714, 139, 319, 312, 901, 159, 781, 76,
+        319, 159, 703, 147, 262, 119, 743, 207, 594, 407, 423, 319, 407, 55, 1188, 207, 479, 159, 507, 319, 734, 159, 710, 48,
+        1188, 121, 245, 23, 1305, 82, 868, 82, 529, 21, 1305, 630, 868, 467, 698, 160, 868, 467, 804, 160, 529, 69, 78, 804,
+        570, 705, 115, 731, 310, 685, 286, 880, 92, 731, 69, 174, 246, 99, 881, 286, 840, 442, 509, 193, 1313, 128, 532, 128,
+        285, 128, 147, 129, 532, 129, 147, 103, 532, 286, 599, 103, 285, 364, 599, 103, 147, 193, 742, 415, 475, 248, 731, 310,
+        356, 455, 475, 99, 415, 569, 1283, 99, 455, 69, 80, 404, 78, 1417, 80, 1313, 108, 532, 108, 285, 108, 147, 89, 532,
+        89, 147, 107, 532, 5, 49, 870, 107, 285, 80, 870, 107, 147, 80, 742, 81, 714, 62, 469, 139, 469, 62, 552, 139,
+        308, 76, 552, 385, 703, 76, 308, 213, 703, 234, 308, 326, 601, 207, 595, 407, 541, 361, 407, 67, 1188, 207, 416, 569,
+        869, 361, 734, 245, 569, 145, 245, 245, 620, 81, 1335, 266, 302, 220, 302, 327, 469, 54, 1367, 385, 710, 204, 302, 45,
+        991, 308, 327, 45, 601, 236, 638, 93, 969, 125, 360, 250, 638, 126, 969, 188, 1263, 126, 875, 188, 1126, 125, 362, 125,
+        1293, 246, 430, 101, 391, 171, 810, 62, 650, 283, 733, 101, 638, 76, 650, 194, 707, 90, 733, 171, 310, 171, 625, 93,
+        807, 90, 1287, 99, 261, 99, 545, 125, 282, 188, 475, 126, 807, 90, 830, 188, 257, 99, 551, 74, 898, 125, 460, 51,
+        1076, 15, 940, 99, 188, 99, 556, 111, 898, 49, 1076, 68, 1076, 99, 192, 30, 856, 62, 306, 139, 306, 30, 857, 147,
+        231, 35, 857, 227, 638, 76, 454, 162, 1025, 147, 281, 113, 1143, 62, 496, 62, 288, 139, 288, 76, 496, 234, 288, 76,
+        505, 158, 781, 76, 254, 158, 703, 234, 254, 326, 1048, 93, 346, 127, 1407, 126, 346, 261, 520, 100, 282, 38, 349, 520,
+        551, 31, 391, 127, 956, 15, 842, 38, 392, 520, 556, 26, 391, 94, 282, 171, 406, 32, 750, 7, 656, 62, 381, 94,
+        324, 93, 352, 322, 406, 32, 847, 52, 344, 139, 589, 7, 686, 76, 381, 94, 369, 126, 352, 166, 406, 166, 774, 66,
+        344, 147, 296, 176, 192, 207, 451, 306, 407, 306, 734, 96, 245, 207, 447, 49, 95, 227, 35, 98, 406, 113, 869, 137,
+        245, 113, 245, 44, 1335, 183, 302, 219, 302, 45, 974, 58, 1367, 158, 507, 243, 302, 158, 710, 254, 327, 45, 1048, 522,
+        731, 13, 164, 310, 310, 829, 284, 417, 37, 1210, 19, 1434, 442, 829, 164, 840, 337, 417, 125, 417, 62, 787, 73, 985,
+        62, 426, 127, 1171, 76, 426, 93, 596, 73, 1228, 52, 598, 74, 598, 93, 480, 75, 1228, 52, 634, 74, 634, 144, 699,
+        126, 480, 94, 661, 62, 1270, 52, 422, 74, 422, 62, 280, 182, 699, 74, 775, 15, 245, 76, 1270, 66, 422, 94, 1093,
+        76, 280, 182, 1071, 111, 775, 17, 245, 123, 245, 173, 435, 149, 435, 130, 729, 149, 664, 130, 485, 167, 1201, 149, 468,
+        130, 358, 114, 729, 26, 521, 100, 424, 114, 485, 167, 682, 31, 458, 94, 175, 175, 852, 119, 175, 175, 253, 114, 358,
+        114, 824, 26, 458, 94, 265, 94, 424, 119, 265, 253, 265, 253, 424, 176, 330, 116, 349, 77, 391, 117, 941, 116, 392,
+        61, 391, 117, 733, 56, 656, 62, 799, 93, 1050, 99, 1161, 52, 934, 56, 686, 76, 799, 126, 1050, 138, 898, 66, 934,
+        93, 421, 100, 483, 93, 239, 52, 1169, 165, 699, 126, 239, 27, 856, 94, 483, 62, 252, 138, 699, 139, 252, 27, 857,
+        94, 637, 76, 252, 138, 1071, 147, 305, 19, 1153, 100, 753, 130, 998, 165, 634, 197, 998, 196, 207, 94, 753, 165, 1392,
+        165, 775, 114, 998, 184, 207, 138, 422, 138, 1392, 138, 775, 91, 245, 200, 999, 62, 216, 105, 842, 200, 1000, 62, 202,
+        71, 842, 255, 1439, 62, 187, 93, 802, 15, 1429, 52, 973, 255, 1315, 76, 187, 203, 1094, 17, 1429, 66, 973, 152, 770,
+        132, 623, 118, 770, 97, 623, 176, 627, 118, 755, 132, 532, 149, 579, 132, 285, 176, 579, 132, 147, 97, 532, 97, 573,
+        97, 285, 176, 477, 97, 147, 329, 714, 55, 391, 139, 494, 329, 901, 62, 347, 139, 347, 22, 656, 62, 262, 93, 211,
+        139, 262, 52, 743, 22, 686, 76, 262, 126, 211, 48, 536, 66, 743, 93, 711, 144, 550, 93, 615, 144, 499, 45, 502,
+        126, 615, 95, 1134, 182, 499, 62, 244, 45, 614, 15, 1147, 95, 1135, 182, 549, 76, 244, 45, 795, 121, 497, 130, 658,
+        55, 521, 197, 658, 48, 521, 114, 658, 55, 458, 48, 626, 55, 890, 55, 791, 114, 990, 48, 458, 48, 410, 48, 890,
+        48, 791, 244, 327, 38, 1031, 155, 585, 32, 585, 38, 997, 155, 508, 32, 508, 474, 1099, 155, 584, 247, 870, 32, 584,
+        247, 742, 7, 21, 1099, 155, 481, 217, 870, 32, 481, 217, 742, 62, 1156, 62, 128, 128, 139, 76, 1156, 62, 129, 129,
+        139, 62, 705, 62, 103, 93, 364, 103, 139, 52, 1063, 126, 286, 76, 103, 126, 364, 103, 234, 66, 1063, 128, 879, 128,
+        407, 129, 879, 129, 407, 128, 327, 103, 879, 115, 507, 103, 407, 115, 710, 129, 327, 45, 685, 92, 507, 103, 734, 92,
+        710, 103, 327, 45, 509, 19, 1415, 62, 108, 108, 139, 19, 1416, 62, 89, 89, 139, 49, 415, 76, 89, 34, 415, 89,
+        234, 326, 356, 49, 455, 76, 107, 34, 455, 107, 234, 326, 487, 108, 879, 108, 407, 89, 879, 89, 407, 108, 327, 107,
+        879, 95, 294, 89, 734, 45, 294, 89, 327, 45, 356, 95, 320, 107, 734, 45, 320, 107, 327, 45, 487, 81, 1016, 266,
+        310, 54, 1016, 220, 310, 284, 469, 54, 880, 385, 405, 204, 310, 213, 405, 284, 308, 213, 730, 385, 926, 204, 442, 99,
+        991, 308, 337, 99, 601, 130, 899, 67, 521, 130, 613, 47, 521, 197, 613, 67, 458, 47, 626, 67, 890, 67, 791, 114,
+        613, 47, 458, 47, 410, 47, 890, 47, 791, 235, 348, 100, 902, 266, 831, 100, 552, 220, 831, 220, 358, 81, 599, 204,
+        831, 119, 469, 147, 503, 94, 552, 54, 599, 32, 945, 119, 308, 147, 332, 147, 605, 30, 41, 246, 62, 221, 139, 221,
+        246, 873, 62, 231, 139, 231, 162, 484, 76, 231, 162, 386, 30, 536, 133, 192, 162, 456, 76, 281, 162, 345, 35, 536,
+        185, 192, 37, 965, 41, 52, 109, 52, 1326, 109, 282, 180, 246, 66, 1326, 41, 391, 109, 324, 127, 171, 62, 885, 136,
+        324, 15, 733, 135, 171, 41, 638, 76, 885, 136, 369, 3, 707, 17, 733, 135, 322, 34, 261, 139, 316, 93, 1258, 15,
+        830, 135, 166, 34, 551, 139, 296, 51, 192, 49, 188, 126, 1258, 17, 830, 34, 188, 166, 543, 34, 556, 28, 536, 49,
+        192, 68, 192, 34, 192, 93, 696, 144, 360, 126, 696, 182, 360, 45, 318, 126, 779, 95, 484, 182, 420, 95, 386, 45,
+        539, 45, 386, 95, 456, 182, 362, 95, 345, 45, 607, 45, 345, 93, 913, 168, 736, 44, 880, 52, 1021, 51, 639, 58,
+        880, 168, 246, 66, 1021, 125, 496, 68, 639, 125, 288, 246, 1127, 243, 442, 125, 505, 254, 337, 125, 254, 62, 493, 73,
+        986, 76, 493, 75, 986, 93, 429, 109, 661, 73, 261, 73, 545, 126, 429, 136, 661, 75, 261, 75, 545, 51, 841, 18,
+        349, 75, 551, 74, 661, 14, 391, 182, 282, 14, 74, 74, 45, 171, 18, 392, 75, 556, 111, 661, 62, 867, 182, 324,
+        74, 1093, 45, 322, 45, 537, 14, 638, 76, 867, 182, 369, 162, 772, 111, 1093, 45, 166, 45, 538, 98, 192, 28, 603,
+        130, 387, 30, 521, 197, 387, 30, 626, 114, 387, 30, 458, 30, 410, 30, 890, 30, 791, 114, 608, 35, 458, 35, 410,
+        35, 890, 35, 791, 330, 978, 100, 496, 183, 831, 183, 358, 183, 406, 94, 496, 44, 599, 32, 1154, 119, 288, 147, 307,
+        94, 505, 58, 599, 32, 1034, 119, 254, 147, 289, 158, 1123, 62, 930, 164, 1290, 62, 929, 127, 829, 62, 339, 93, 164,
+        139, 339, 52, 417, 74, 417, 76, 339, 126, 164, 164, 745, 66, 417, 111, 417, 402, 417, 52, 1441, 52, 1248, 51, 435,
+        66, 1248, 62, 662, 51, 664, 31, 985, 62, 434, 51, 468, 26, 985, 130, 135, 76, 434, 68, 468, 93, 670, 114, 127,
+        135, 197, 52, 175, 74, 175, 93, 513, 15, 853, 114, 135, 52, 265, 74, 265, 74, 424, 51, 330, 126, 513, 94, 381,
+        49, 223, 114, 543, 66, 265, 111, 265, 34, 223, 111, 424, 68, 330, 28, 791, 34, 330, 73, 435, 75, 435, 73, 468,
+        73, 674, 130, 1089, 75, 468, 149, 1378, 197, 1089, 186, 598, 73, 622, 114, 1089, 95, 130, 167, 598, 130, 504, 144, 175,
+        75, 622, 16, 1139, 95, 197, 114, 821, 197, 504, 144, 265, 144, 424, 95, 114, 167, 422, 64, 207, 114, 504, 14, 410,
+        163, 265, 64, 302, 274, 504, 45, 274, 93, 366, 52, 1152, 126, 366, 261, 293, 127, 959, 43, 349, 293, 551, 27, 391,
+        138, 282, 139, 449, 43, 392, 293, 556, 62, 305, 138, 324, 139, 305, 27, 638, 76, 305, 138, 369, 162, 278, 27, 536,
+        192, 355, 62, 464, 77, 985, 62, 367, 61, 985, 76, 367, 93, 642, 144, 483, 74, 753, 93, 531, 61, 1228, 52, 751,
+        74, 751, 51, 533, 126, 531, 94, 799, 95, 859, 66, 751, 138, 1093, 95, 278, 68, 533, 45, 278, 173, 987, 149, 987,
+        91, 1201, 377, 622, 130, 535, 91, 1345, 165, 175, 149, 1231, 184, 485, 91, 682, 138, 175, 165, 424, 114, 535, 91, 853,
+        27, 458, 27, 410, 138, 424, 98, 533, 88, 533, 93, 501, 152, 736, 126, 501, 118, 736, 132, 338, 50, 999, 52, 927,
+        62, 132, 97, 338, 132, 139, 50, 1000, 66, 927, 62, 97, 51, 477, 97, 139, 49, 610, 76, 97, 68, 477, 34, 610,
+        97, 234, 326, 365, 152, 1001, 100, 216, 118, 1001, 100, 202, 19, 935, 216, 229, 132, 407, 88, 627, 202, 229, 71, 682,
+        97, 407, 88, 579, 132, 327, 187, 229, 94, 187, 95, 428, 98, 477, 88, 477, 45, 428, 97, 327, 45, 365, 93, 524,
+        261, 1014, 329, 880, 261, 811, 257, 502, 124, 349, 90, 499, 86, 391, 257, 614, 86, 1038, 124, 392, 90, 549, 62, 713,
+        99, 614, 139, 713, 22, 49, 457, 76, 713, 99, 795, 211, 457, 86, 536, 192, 920, 62, 784, 100, 494, 62, 649, 127,
+        636, 76, 649, 93, 408, 52, 423, 74, 423, 93, 312, 94, 347, 52, 319, 74, 319, 121, 699, 126, 312, 94, 262, 159,
+        246, 66, 319, 111, 319, 159, 604, 121, 1071, 121, 344, 173, 995, 149, 995, 55, 1405, 149, 1087, 95, 594, 55, 1334, 144,
+        423, 149, 1088, 95, 636, 48, 1334, 144, 319, 163, 423, 95, 479, 48, 94, 256, 159, 207, 182, 319, 163, 319, 119, 244,
+        159, 790, 110, 980, 440, 585, 79, 1073, 440, 508, 256, 585, 18, 1031, 440, 584, 82, 698, 256, 508, 82, 804, 18, 997,
+        440, 481, 630, 698, 256, 584, 23, 1203, 2, 110, 698, 160, 698, 256, 481, 110, 1058, 160, 804, 529, 1255, 260, 1016, 128,
+        336, 260, 880, 129, 336, 128, 284, 286, 570, 103, 336, 115, 405, 129, 284, 115, 730, 286, 726, 103, 476, 92, 405, 103,
+        284, 92, 730, 110, 1362, 92, 926, 103, 337, 125, 705, 99, 509, 364, 376, 128, 883, 100, 128, 129, 883, 100, 129, 103,
+        883, 128, 229, 119, 128, 128, 253, 129, 229, 103, 735, 119, 129, 129, 253, 115, 1123, 103, 229, 94, 103, 285, 286, 103,
+        119, 103, 253, 147, 286, 92, 1123, 147, 364, 101, 415, 108, 336, 101, 455, 89, 336, 108, 284, 294, 475, 89, 476, 248,
+        405, 89, 284, 257, 356, 320, 475, 107, 476, 99, 294, 89, 337, 99, 356, 49, 110, 473, 99, 320, 107, 337, 63, 80,
+        110, 99, 487, 125, 1165, 108, 883, 100, 108, 89, 883, 89, 100, 107, 883, 108, 229, 108, 119, 108, 253, 89, 229, 89,
+        94, 89, 119, 89, 253, 147, 226, 107, 229, 94, 107, 32, 49, 569, 107, 119, 107, 253, 80, 975, 147, 270, 80, 701,
+        62, 845, 127, 266, 62, 446, 127, 220, 76, 446, 81, 93, 52, 469, 74, 469, 54, 93, 15, 945, 52, 308, 74, 308,
+        139, 605, 54, 126, 54, 745, 385, 604, 66, 308, 111, 308, 385, 778, 234, 605, 34, 601, 173, 1098, 73, 1360, 67, 1405,
+        73, 1340, 95, 595, 145, 598, 144, 541, 75, 1340, 95, 388, 145, 634, 144, 361, 163, 541, 95, 416, 145, 422, 5, 110,
+        280, 182, 361, 163, 361, 119, 963, 228, 245, 266, 727, 220, 727, 266, 821, 204, 727, 95, 266, 220, 821, 45, 266, 204,
+        1119, 95, 220, 204, 821, 45, 220, 45, 780, 95, 204, 256, 945, 45, 1061, 45, 204, 45, 542, 213, 302, 45, 863, 101,
+        1051, 221, 336, 101, 1177, 90, 360, 221, 284, 188, 236, 90, 420, 221, 404, 99, 318, 125, 221, 188, 250, 90, 362, 99,
+        484, 99, 539, 99, 386, 178, 638, 99, 456, 99, 607, 162, 582, 99, 345, 326, 582, 19, 1366, 101, 986, 109, 650, 162,
+        430, 136, 650, 101, 261, 156, 986, 52, 650, 109, 962, 171, 515, 1371, 66, 650, 136, 962, 171, 475, 90, 282, 156, 545,
+        171, 257, 90, 460, 90, 324, 74, 962, 99, 171, 209, 282, 445, 475, 90, 500, 90, 369, 93, 275, 111, 962, 99, 322,
+        99, 537, 52, 489, 125, 316, 126, 275, 99, 166, 99, 538, 66, 489, 28, 1076, 192, 676, 62, 591, 100, 221, 76, 591,
+        127, 357, 76, 645, 93, 722, 52, 306, 74, 306, 126, 722, 94, 231, 66, 306, 111, 306, 96, 344, 126, 723, 94, 281,
+        188, 227, 32, 362, 111, 454, 49, 1025, 137, 344, 113, 344, 62, 411, 127, 183, 76, 411, 127, 219, 76, 412, 44, 93,
+        52, 288, 74, 288, 44, 126, 44, 745, 66, 288, 111, 288, 208, 778, 58, 126, 58, 745, 158, 246, 66, 254, 111, 254,
+        158, 604, 254, 402, 158, 778, 346, 687, 346, 749, 109, 882, 62, 346, 136, 882, 38, 941, 76, 346, 136, 1079, 171, 520,
+        38, 750, 93, 564, 322, 520, 38, 847, 31, 261, 31, 545, 126, 564, 166, 520, 166, 647, 26, 261, 26, 545, 42, 750,
+        32, 282, 7, 349, 52, 381, 74, 381, 32, 460, 42, 847, 32, 324, 74, 589, 15, 344, 7, 392, 66, 381, 111, 381,
+        32, 500, 166, 363, 32, 369, 111, 589, 17, 344, 123, 344, 73, 1159, 133, 1171, 96, 598, 133, 1172, 95, 451, 96, 634,
+        144, 306, 35, 75, 149, 95, 357, 96, 422, 182, 306, 163, 306, 95, 447, 137, 422, 162, 1384, 182, 454, 163, 454, 98,
+        1025, 87, 245, 183, 727, 219, 727, 183, 821, 219, 1119, 95, 183, 12, 144, 208, 45, 183, 243, 1119, 95, 219, 208, 943,
+        45, 219, 45, 321, 95, 243, 256, 1034, 158, 207, 45, 243, 45, 491, 158, 302, 45, 1039, 336, 930, 336, 929, 284, 930,
+        336, 339, 405, 522, 284, 929, 164, 576, 339, 476, 230, 405, 284, 339, 230, 730, 164, 925, 230, 926, 337, 339, 57, 1151,
+        99, 829, 164, 1223, 164, 376, 209, 417, 109, 787, 109, 426, 136, 426, 52, 787, 74, 787, 52, 426, 74, 426, 73, 1065,
+        66, 426, 111, 426, 62, 596, 73, 956, 31, 74, 84, 15, 598, 62, 480, 75, 956, 74, 1173, 26, 841, 31, 846, 76,
+        480, 68, 1172, 93, 400, 111, 1173, 15, 422, 26, 846, 52, 280, 74, 886, 74, 280, 126, 400, 17, 422, 163, 381, 66,
+        280, 111, 886, 17, 775, 163, 589, 176, 772, 179, 435, 179, 664, 179, 468, 26, 435, 150, 1378, 26, 664, 150, 1171, 130,
+        173, 130, 540, 26, 468, 150, 1172, 130, 149, 130, 448, 130, 363, 64, 729, 114, 173, 114, 540, 31, 223, 197, 363, 167,
+        175, 274, 540, 114, 149, 114, 448, 26, 223, 114, 363, 64, 824, 274, 448, 32, 265, 140, 424, 32, 424, 93, 554, 165,
+        483, 93, 333, 138, 483, 126, 333, 138, 637, 19, 1199, 165, 753, 196, 998, 138, 753, 184, 998, 212, 943, 216, 648, 132,
+        815, 202, 648, 97, 815, 187, 648, 97, 915, 93, 478, 117, 550, 93, 314, 117, 499, 126, 314, 117, 549, 196, 658, 165,
+        423, 184, 658, 165, 319, 184, 990, 138, 319, 128, 648, 128, 516, 129, 648, 129, 516, 103, 648, 103, 516, 108, 648, 108,
+        516, 89, 648, 89, 516, 107, 648, 107, 516, 93, 241, 241, 1091, 93, 157, 157, 1091, 126, 157, 157, 1096, 196, 899, 165,
+        541, 196, 613, 165, 361, 184, 613, 138, 361, 165, 902, 165, 469, 165, 552, 165, 308, 138, 552, 138, 308, 93, 695, 117,
+        360, 126, 695, 117, 420, 126, 704, 117, 362, 93, 112, 112, 1091, 112, 126, 112, 1096, 126, 161, 161, 1096, 62, 629, 116,
+        941, 76, 629, 116, 733, 93, 561, 116, 1287, 77, 261, 77, 545, 126, 561, 116, 830, 61, 261, 61, 545, 117, 282, 56,
+        349, 61, 551, 74, 799, 117, 460, 99, 959, 15, 934, 56, 392, 61, 556, 111, 799, 99, 859, 99, 1353, 99, 278, 196,
+        387, 165, 306, 184, 387, 138, 306, 184, 608, 138, 454, 165, 496, 165, 288, 138, 496, 138, 288, 138, 505, 138, 254, 405,
+        833, 371, 576, 238, 405, 238, 730, 238, 926, 20, 1216, 377, 1407, 52, 1077, 100, 461, 66, 1077, 62, 421, 239, 338, 100,
+        449, 62, 239, 94, 461, 127, 184, 135, 196, 76, 239, 94, 547, 93, 809, 94, 449, 135, 184, 52, 252, 74, 252, 126,
+        809, 94, 305, 184, 543, 66, 252, 111, 252, 91, 344, 100, 464, 73, 832, 94, 464, 77, 674, 16, 1153, 94, 367, 61,
+        674, 130, 994, 91, 598, 31, 851, 197, 994, 95, 196, 91, 634, 196, 504, 144, 252, 61, 622, 114, 994, 95, 184, 91,
+        422, 184, 504, 138, 280, 163, 252, 37, 942, 906, 1196, 37, 971, 906, 1197, 37, 933, 131, 1277, 216, 580, 119, 1241, 202,
+        580, 55, 1029, 187, 580, 48, 1029, 215, 770, 119, 1132, 215, 755, 215, 1285, 331, 755, 331, 1285, 93, 931, 121, 550, 93,
+        443, 121, 499, 126, 443, 121, 549, 19, 1213, 765, 831, 358, 765, 406, 765, 19, 1212, 131, 1390, 229, 506, 119, 506, 229,
+        794, 119, 794, 229, 893, 119, 893, 229, 1062, 119, 1062, 229, 1198, 30, 1029, 229, 1217, 35, 1029, 108, 580, 108, 673, 89,
+        580, 89, 673, 107, 580, 107, 673, 62, 769, 127, 1225, 200, 1327, 127, 425, 93, 801, 15, 1288, 52, 216, 74, 216, 200,
+        1094, 17, 1288, 52, 202, 74, 202, 105, 699, 255, 999, 52, 187, 74, 187, 62, 802, 71, 699, 15, 973, 255, 1000, 66,
+        187, 111, 187, 203, 897, 71, 1071, 17, 973, 374, 485, 227, 627, 300, 485, 227, 579, 300, 358, 227, 477, 95, 466, 45,
+        466, 95, 612, 45, 612, 95, 654, 45, 654, 13, 152, 291, 291, 1289, 152, 729, 291, 927, 152, 485, 118, 729, 100, 132,
+        118, 485, 167, 1289, 97, 100, 132, 972, 118, 358, 118, 824, 132, 229, 26, 579, 97, 972, 1300, 132, 253, 97, 229, 94,
+        97, 97, 852, 1302, 97, 253, 147, 492, 93, 251, 121, 360, 126, 251, 121, 420, 126, 268, 121, 362, 37, 277, 277, 820,
+        37, 340, 340, 820, 37, 343, 343, 820, 62, 757, 109, 494, 76, 757, 109, 347, 93, 329, 109, 262, 55, 261, 74, 494,
+        126, 329, 136, 262, 48, 261, 74, 347, 121, 282, 22, 349, 52, 262, 74, 262, 62, 211, 121, 324, 15, 743, 22, 392,
+        66, 262, 111, 262, 76, 211, 121, 369, 17, 743, 95, 592, 45, 592, 95, 453, 45, 453, 95, 490, 45, 490, 190, 936,
+        190, 837, 242, 936, 242, 837, 242, 1042, 242, 955, 168, 658, 55, 639, 168, 990, 48, 639, 505, 577, 254, 577, 79, 550,
+        79, 499, 73, 502, 79, 549, 62, 711, 73, 614, 55, 841, 62, 615, 75, 614, 48, 841, 55, 846, 76, 615, 75, 795,
+        93, 313, 182, 347, 48, 846, 52, 244, 74, 244, 126, 313, 182, 262, 163, 262, 66, 244, 111, 244, 211, 327, 55, 435,
+        48, 435, 48, 664, 55, 674, 130, 657, 48, 468, 149, 594, 197, 657, 175, 823, 55, 622, 114, 657, 55, 223, 175, 518,
+        274, 657, 55, 330, 48, 622, 114, 989, 48, 223, 265, 518, 274, 989, 48, 330, 163, 244, 229, 393, 119, 393, 229, 389,
+        119, 389, 229, 382, 119, 382, 69, 1030, 38, 585, 69, 1092, 38, 508, 110, 1219, 38, 584, 301, 585, 42, 585, 38, 1073,
+        38, 481, 301, 508, 42, 508, 82, 600, 467, 474, 301, 584, 42, 584, 247, 975, 600, 630, 247, 701, 7, 997, 301, 481,
+        42, 481, 217, 975, 160, 600, 217, 701, 30, 1026, 133, 685, 30, 881, 133, 509, 35, 881, 185, 509, 62, 1155, 109, 128,
+        136, 1156, 109, 129, 93, 260, 103, 109, 52, 128, 74, 128, 126, 260, 103, 136, 52, 129, 74, 129, 51, 685, 62, 286,
+        52, 103, 74, 103, 62, 364, 51, 509, 139, 364, 76, 286, 66, 103, 103, 111, 193, 897, 68, 509, 17, 1063, 95, 471,
+        45, 471, 95, 472, 45, 472, 95, 335, 45, 335, 95, 370, 45, 370, 95, 655, 45, 655, 95, 498, 45, 498, 128, 819,
+        129, 819, 128, 624, 103, 819, 128, 663, 129, 624, 128, 144, 129, 663, 103, 624, 129, 144, 128, 163, 103, 663, 103, 728,
+        115, 207, 103, 144, 129, 163, 115, 302, 115, 790, 92, 207, 103, 182, 103, 163, 92, 302, 92, 790, 45, 767, 30, 415,
+        133, 356, 35, 415, 185, 356, 35, 455, 185, 487, 294, 631, 108, 109, 320, 631, 89, 109, 41, 415, 89, 136, 52, 108,
+        74, 108, 41, 455, 107, 136, 52, 89, 74, 89, 139, 226, 49, 294, 66, 89, 89, 111, 34, 294, 226, 234, 34, 356,
+        49, 320, 66, 107, 107, 111, 34, 320, 234, 270, 34, 487, 95, 399, 45, 399, 95, 299, 45, 299, 95, 398, 45, 398,
+        264, 902, 264, 469, 264, 552, 264, 308, 276, 552, 276, 308, 168, 899, 67, 639, 168, 613, 47, 639, 505, 827, 254, 827,
+        108, 819, 89, 819, 108, 624, 107, 819, 108, 663, 89, 624, 108, 144, 89, 663, 89, 728, 89, 144, 108, 163, 107, 663,
+        107, 728, 14, 415, 89, 182, 89, 163, 25, 529, 45, 380, 14, 455, 107, 182, 107, 163, 33, 529, 45, 486, 45, 892,
+        81, 1080, 54, 1080, 266, 515, 54, 1081, 81, 570, 220, 515, 81, 576, 54, 570, 204, 515, 54, 576, 81, 925, 54, 726,
+        204, 914, 617, 731, 204, 257, 54, 925, 213, 310, 191, 730, 99, 1061, 99, 204, 99, 542, 213, 442, 99, 863, 125, 605,
+        67, 435, 47, 435, 47, 664, 67, 674, 130, 895, 47, 468, 130, 517, 130, 611, 175, 1017, 149, 388, 197, 611, 67, 223,
+        145, 175, 274, 895, 67, 330, 114, 517, 114, 611, 47, 223, 145, 265, 274, 611, 47, 330, 263, 330, 266, 683, 220, 683,
+        204, 683, 81, 623, 100, 503, 38, 945, 54, 623, 100, 332, 176, 266, 149, 220, 220, 448, 81, 285, 176, 220, 253, 503,
+        81, 147, 54, 573, 94, 332, 54, 285, 176, 204, 253, 332, 54, 147, 213, 774, 162, 206, 133, 386, 162, 259, 133, 345,
+        162, 232, 185, 345, 180, 387, 109, 221, 180, 608, 109, 231, 41, 1051, 136, 231, 52, 221, 74, 221, 162, 873, 136, 281,
+        52, 231, 74, 231, 34, 318, 30, 188, 66, 231, 111, 231, 49, 386, 68, 386, 30, 192, 35, 188, 66, 281, 111, 281,
+        49, 345, 68, 345, 35, 192, 9, 1365, 51, 843, 19, 965, 68, 843, 41, 986, 109, 885, 51, 1075, 162, 180, 136, 885,
+        68, 1075, 41, 261, 109, 316, 41, 551, 109, 296, 225, 537, 51, 171, 1194, 41, 556, 136, 296, 49, 171, 225, 538, 17,
+        282, 74, 316, 34, 171, 49, 322, 51, 166, 74, 296, 34, 322, 34, 537, 49, 445, 49, 166, 68, 166, 34, 445, 111,
+        296, 34, 166, 34, 538, 192, 510, 28, 192, 95, 206, 45, 206, 95, 259, 45, 259, 95, 232, 45, 232, 168, 387, 30,
+        639, 168, 608, 35, 639, 276, 505, 254, 276, 79, 360, 79, 420, 73, 318, 79, 362, 62, 696, 75, 318, 30, 841, 76,
+        696, 75, 539, 182, 221, 30, 846, 76, 779, 75, 607, 14, 1051, 182, 231, 163, 231, 98, 386, 45, 359, 14, 1177, 182,
+        281, 163, 281, 98, 345, 45, 418, 192, 597, 19, 826, 20, 826, 303, 936, 303, 837, 303, 1042, 303, 955, 44, 1080, 44,
+        1081, 183, 515, 58, 1081, 44, 570, 219, 515, 127, 168, 44, 726, 219, 914, 15, 1021, 135, 168, 58, 726, 243, 914, 44,
+        457, 99, 219, 99, 321, 44, 376, 28, 639, 58, 457, 99, 243, 99, 491, 58, 376, 209, 254, 125, 1279, 109, 493, 136,
+        493, 52, 493, 109, 384, 66, 493, 136, 384, 79, 282, 62, 429, 79, 324, 74, 384, 73, 171, 76, 429, 79, 369, 111,
+        384, 75, 171, 18, 750, 93, 566, 75, 322, 18, 847, 14, 261, 74, 762, 14, 545, 126, 566, 75, 166, 150, 166, 14,
+        551, 111, 762, 74, 867, 28, 846, 51, 772, 14, 188, 14, 556, 88, 166, 49, 772, 163, 296, 68, 772, 45, 279, 14,
+        192, 30, 435, 30, 664, 30, 468, 130, 133, 130, 419, 35, 468, 133, 197, 197, 419, 96, 175, 114, 133, 114, 419, 30,
+        223, 96, 265, 274, 419, 30, 330, 114, 185, 114, 646, 35, 223, 137, 265, 274, 646, 35, 330, 330, 761, 183, 683, 183,
+        520, 38, 1154, 44, 623, 100, 307, 38, 1034, 149, 183, 183, 448, 176, 183, 44, 573, 94, 307, 44, 285, 176, 219, 253,
+        307, 44, 147, 58, 573, 94, 289, 58, 285, 176, 243, 253, 289, 58, 147, 147, 922, 109, 930, 109, 929, 109, 339, 522,
+        736, 74, 930, 136, 339, 230, 736, 74, 929, 164, 338, 52, 339, 74, 339, 62, 164, 51, 829, 164, 1237, 139, 164, 66,
+        339, 111, 339, 76, 164, 68, 829, 164, 1239, 164, 234, 123, 417, 51, 1442, 68, 1442, 15, 1441, 15, 1248, 79, 950, 79,
+        661, 79, 954, 52, 662, 74, 662, 52, 434, 74, 434, 74, 530, 51, 130, 66, 434, 84, 661, 62, 670, 84, 954, 51,
+        197, 74, 866, 64, 127, 62, 513, 51, 114, 74, 756, 15, 265, 135, 287, 64, 135, 76, 513, 68, 114, 64, 162, 111,
+        756, 17, 265, 287, 543, 17, 424, 64, 326, 274, 693, 28, 330, 73, 715, 75, 715, 328, 435, 328, 664, 73, 560, 73,
+        130, 328, 468, 75, 560, 73, 197, 130, 150, 73, 114, 150, 197, 98, 130, 84, 1162, 88, 130, 1139, 114, 150, 98, 197,
+        140, 1173, 88, 197, 163, 866, 64, 821, 88, 114, 64, 95, 163, 756, 10, 64, 182, 140, 886, 88, 274, 45, 64, 62,
+        888, 27, 77, 127, 62, 463, 127, 1176, 76, 463, 93, 758, 61, 1161, 117, 483, 126, 758, 138, 799, 117, 637, 173, 559,
+        173, 712, 100, 1354, 173, 395, 196, 535, 91, 1169, 165, 252, 149, 395, 184, 535, 94, 1354, 138, 252, 216, 652, 100, 860,
+        202, 652, 100, 759, 187, 652, 229, 860, 165, 187, 119, 860, 229, 759, 94, 759, 119, 759, 62, 789, 127, 691, 62, 651,
+        127, 690, 76, 651, 93, 267, 138, 347, 121, 483, 126, 267, 138, 262, 121, 637, 55, 1055, 55, 61, 173, 55, 849, 55,
+        851, 95, 691, 48, 849, 55, 533, 48, 851, 95, 690, 48, 966, 48, 533, 128, 652, 128, 165, 129, 652, 129, 165, 103,
+        652, 27, 1026, 103, 165, 355, 685, 27, 881, 103, 138, 355, 509, 108, 652, 108, 165, 89, 652, 89, 165, 107, 652, 27,
+        415, 89, 138, 355, 356, 27, 455, 107, 138, 355, 487, 241, 570, 241, 576, 157, 570, 157, 576, 157, 726, 616, 731, 257,
+        732, 310, 587, 110, 1338, 99, 732, 442, 587, 67, 1055, 47, 1055, 67, 849, 61, 1360, 95, 692, 47, 849, 67, 533, 47,
+        851, 95, 383, 47, 966, 45, 383, 266, 1120, 220, 1120, 266, 679, 220, 918, 117, 902, 220, 679, 117, 469, 204, 918, 117,
+        552, 204, 679, 117, 308, 62, 641, 127, 295, 76, 641, 138, 221, 76, 874, 162, 295, 138, 231, 133, 278, 162, 342, 138,
+        281, 185, 278, 112, 570, 112, 576, 112, 726, 257, 578, 161, 726, 112, 457, 99, 578, 112, 376, 161, 457, 99, 828, 161,
+        376, 366, 687, 366, 749, 109, 461, 62, 366, 136, 461, 43, 941, 76, 366, 136, 547, 171, 293, 43, 750, 93, 565, 293,
+        322, 43, 847, 27, 261, 74, 449, 126, 565, 166, 293, 166, 876, 52, 305, 74, 305, 51, 278, 27, 188, 66, 305, 111,
+        305, 49, 278, 68, 278, 27, 192, 77, 1159, 61, 1159, 30, 849, 133, 1044, 95, 295, 30, 966, 45, 295, 35, 851, 95,
+        342, 35, 966, 45, 342, 183, 1120, 183, 918, 13, 91, 168, 219, 918, 117, 496, 91, 1021, 117, 288, 243, 918, 117, 505,
+        243, 679, 117, 254, 736, 833, 238, 736, 338, 371, 52, 946, 62, 371, 20, 1214, 139, 371, 66, 946, 76, 371, 20, 1215,
+        234, 371, 109, 464, 109, 367, 136, 367, 52, 464, 74, 464, 52, 367, 77, 1065, 66, 367, 111, 367, 62, 642, 61, 1065,
+        74, 709, 127, 315, 62, 531, 61, 956, 74, 708, 15, 751, 135, 315, 76, 531, 68, 1044, 162, 315, 111, 708, 17, 751,
+        163, 305, 98, 278, 28, 533, 237, 435, 237, 664, 100, 421, 237, 468, 100, 239, 130, 876, 114, 377, 197, 876, 130, 534,
+        94, 239, 114, 876, 149, 196, 184, 540, 196, 363, 91, 175, 114, 355, 114, 534, 27, 223, 184, 363, 91, 265, 274, 534,
+        45, 315, 19, 1234, 100, 766, 358, 776, 735, 766, 19, 1233, 297, 770, 94, 766, 119, 766, 297, 755, 94, 1218, 119, 1218,
+        152, 658, 55, 627, 118, 658, 55, 579, 118, 990, 132, 580, 48, 579, 132, 673, 97, 580, 48, 477, 97, 673, 19, 948,
+        13, 1037, 19, 949, 12, 1037, 19, 967, 37, 632, 131, 632, 632, 820, 37, 640, 131, 640, 640, 820, 62, 1150, 55, 55,
+        257, 62, 1033, 55, 1406, 76, 1033, 93, 378, 48, 1406, 52, 1148, 126, 378, 48, 48, 99, 66, 1148, 173, 760, 149, 760,
+        218, 1196, 13, 170, 622, 19, 968, 218, 1197, 20, 968, 149, 1357, 19, 979, 131, 1205, 20, 979, 152, 899, 67, 627, 152,
+        613, 47, 627, 118, 613, 67, 610, 47, 579, 365, 919, 47, 610, 47, 477, 365, 517, 152, 387, 30, 627, 118, 387, 30,
+        579, 118, 608, 30, 610, 30, 477, 133, 365, 35, 610, 35, 477, 185, 365, 19, 939, 108, 1019, 19, 937, 89, 1019, 19,
+        938, 86, 415, 89, 577, 356, 920, 86, 455, 107, 577, 487, 920, 501, 687, 501, 749, 51, 746, 62, 501, 51, 583, 127,
+        152, 50, 1327, 68, 583, 118, 127, 135, 152, 93, 717, 15, 927, 118, 135, 52, 132, 74, 132, 50, 1094, 17, 927, 118,
+        543, 52, 97, 74, 97, 139, 492, 49, 428, 66, 97, 97, 111, 34, 428, 234, 492, 34, 365, 674, 911, 669, 674, 65,
+        1322, 149, 721, 95, 374, 65, 1336, 45, 374, 622, 669, 95, 300, 65, 1368, 45, 300, 173, 466, 173, 612, 176, 466, 149,
+        612, 159, 899, 145, 423, 121, 541, 149, 654, 159, 613, 145, 319, 121, 361, 73, 746, 73, 583, 75, 583, 152, 727, 152,
+        1089, 118, 727, 105, 1122, 9, 935, 16, 935, 155, 216, 71, 1122, 140, 216, 1322, 155, 202, 167, 202, 140, 202, 1336, 132,
+        163, 155, 187, 71, 1278, 14, 610, 140, 187, 1368, 97, 163, 40, 529, 45, 706, 62, 1032, 221, 1019, 76, 1032, 221, 577,
+        35, 76, 124, 251, 457, 99, 453, 133, 777, 268, 457, 99, 490, 185, 777, 19, 1011, 13, 1018, 19, 1012, 12, 1018, 19,
+        1013, 169, 457, 12, 1160, 169, 376, 198, 457, 12, 1195, 198, 376, 52, 1349, 66, 1349, 51, 109, 124, 62, 524, 51, 957,
+        171, 1014, 76, 524, 68, 957, 171, 811, 124, 750, 93, 665, 90, 347, 90, 523, 86, 261, 86, 545, 162, 1136, 90, 262,
+        90, 702, 86, 551, 74, 713, 51, 777, 86, 188, 86, 556, 111, 713, 49, 777, 68, 777, 86, 192, 133, 594, 133, 636,
+        96, 423, 133, 479, 159, 387, 96, 319, 121, 306, 149, 490, 159, 608, 137, 319, 121, 454, 169, 623, 149, 928, 176, 928,
+        169, 573, 169, 285, 176, 1129, 147, 169, 198, 573, 198, 285, 176, 1130, 147, 198, 183, 917, 183, 817, 55, 974, 219, 817,
+        121, 496, 48, 974, 121, 288, 243, 817, 121, 505, 254, 518, 121, 254, 109, 784, 109, 649, 136, 649, 38, 550, 74, 784,
+        38, 499, 31, 502, 38, 549, 111, 649, 62, 408, 26, 502, 74, 1364, 15, 423, 62, 312, 51, 479, 74, 1043, 15, 319,
+        135, 159, 76, 312, 68, 479, 159, 162, 111, 1043, 32, 262, 159, 543, 119, 211, 121, 589, 179, 995, 179, 1087, 73, 594,
+        179, 1088, 73, 636, 150, 594, 73, 479, 150, 636, 88, 594, 75, 479, 150, 479, 98, 636, 88, 636, 88, 1200, 55, 1187,
+        98, 479, 88, 479, 95, 159, 26, 88, 214, 48, 1187, 159, 504, 45, 159, 393, 663, 585, 668, 389, 663, 508, 668, 382,
+        663, 205, 868, 584, 668, 205, 529, 433, 868, 481, 668, 433, 529, 23, 1325, 21, 1325, 82, 793, 69, 980, 630, 793, 18,
+        585, 79, 1072, 160, 793, 18, 508, 82, 900, 110, 1220, 18, 584, 630, 900, 82, 1003, 82, 644, 18, 1073, 18, 481, 160,
+        900, 23, 1394, 630, 644, 247, 1421, 467, 907, 160, 1003, 160, 644, 69, 1058, 46, 1203, 78, 1058, 19, 1141, 128, 264, 236,
+        1251, 129, 264, 250, 1251, 110, 861, 103, 264, 133, 1186, 110, 763, 103, 276, 185, 1186, 260, 1080, 260, 1081, 290, 1297, 260,
+        570, 51, 1411, 128, 283, 286, 688, 68, 1411, 129, 283, 115, 1010, 325, 1016, 103, 283, 92, 1010, 115, 310, 115, 625, 90,
+        705, 90, 103, 92, 1222, 92, 310, 92, 625, 139, 1056, 69, 1362, 92, 442, 99, 1090, 125, 286, 99, 767, 125, 364, 173,
+        471, 173, 472, 128, 700, 173, 335, 19, 1140, 129, 700, 147, 619, 149, 335, 227, 1251, 103, 700, 147, 568, 173, 370, 173,
+        655, 176, 370, 173, 498, 541, 569, 145, 541, 541, 620, 149, 498, 361, 569, 145, 361, 361, 620, 128, 526, 129, 526, 103,
+        526, 128, 291, 128, 222, 129, 291, 128, 186, 103, 291, 103, 222, 128, 155, 129, 186, 128, 140, 32, 128, 129, 155, 103,
+        186, 129, 140, 32, 129, 115, 774, 103, 155, 103, 167, 32, 705, 103, 140, 32, 103, 92, 774, 119, 364, 147, 199, 236,
+        294, 108, 264, 250, 294, 89, 264, 250, 320, 258, 457, 89, 276, 258, 376, 271, 457, 107, 276, 271, 376, 414, 921, 602,
+        921, 226, 439, 101, 294, 90, 951, 108, 283, 101, 320, 90, 970, 89, 283, 283, 413, 194, 415, 89, 90, 90, 413, 248,
+        310, 257, 380, 194, 455, 90, 107, 90, 488, 248, 442, 99, 380, 125, 226, 172, 1283, 2, 1417, 99, 486, 404, 719, 125,
+        270, 125, 719, 173, 399, 173, 299, 108, 700, 149, 299, 258, 285, 89, 700, 147, 258, 149, 398, 271, 285, 107, 700, 147,
+        271, 133, 266, 133, 220, 96, 469, 133, 204, 30, 991, 96, 308, 30, 601, 185, 204, 35, 991, 137, 308, 35, 601, 183,
+        919, 183, 517, 67, 974, 219, 517, 193, 936, 145, 288, 193, 837, 243, 517, 193, 1042, 145, 254, 193, 955, 108, 526, 89,
+        526, 107, 526, 108, 291, 108, 222, 89, 291, 108, 186, 107, 291, 107, 222, 108, 155, 89, 186, 108, 140, 32, 108, 89,
+        155, 89, 167, 89, 140, 32, 89, 32, 413, 107, 155, 107, 167, 110, 1266, 107, 140, 32, 107, 32, 488, 119, 719, 70,
+        701, 109, 845, 109, 446, 136, 446, 81, 687, 74, 845, 52, 446, 51, 266, 66, 446, 111, 446, 62, 81, 51, 220, 74,
+        503, 81, 139, 54, 62, 51, 204, 74, 332, 54, 139, 135, 213, 54, 76, 68, 204, 34, 1061, 111, 332, 54, 234, 213,
+        543, 213, 326, 28, 601, 179, 1098, 145, 787, 73, 595, 145, 426, 73, 388, 150, 595, 73, 416, 150, 388, 88, 595, 75,
+        416, 150, 416, 98, 388, 88, 388, 163, 546, 67, 1187, 98, 416, 88, 416, 280, 569, 163, 495, 145, 280, 228, 775, 172,
+        245, 624, 845, 446, 624, 73, 266, 446, 728, 73, 220, 73, 780, 73, 204, 73, 542, 88, 266, 75, 204, 75, 542, 98,
+        220, 88, 220, 88, 780, 81, 327, 98, 204, 88, 204, 45, 385, 88, 542, 54, 327, 191, 790, 45, 213, 206, 475, 206,
+        257, 236, 456, 99, 206, 232, 475, 178, 1051, 99, 259, 133, 582, 178, 1177, 99, 232, 185, 582, 133, 430, 185, 430, 101,
+        318, 101, 484, 101, 539, 171, 236, 101, 456, 101, 607, 90, 221, 156, 318, 236, 445, 90, 231, 156, 539, 63, 360, 209,
+        221, 250, 445, 90, 281, 156, 607, 63, 420, 99, 359, 96, 489, 178, 188, 63, 362, 99, 418, 49, 582, 137, 489, 113,
+        489, 101, 843, 180, 921, 225, 430, 51, 430, 49, 430, 68, 430, 101, 1358, 101, 171, 15, 650, 101, 537, 101, 445, 17,
+        650, 101, 538, 194, 261, 156, 1358, 156, 171, 52, 807, 90, 316, 156, 537, 63, 282, 188, 194, 66, 807, 90, 296, 63,
+        460, 156, 538, 63, 324, 209, 316, 15, 489, 63, 500, 63, 369, 99, 279, 17, 489, 123, 489, 133, 451, 133, 357, 96,
+        306, 133, 447, 227, 484, 96, 454, 113, 306, 149, 232, 227, 456, 137, 454, 113, 454, 133, 183, 133, 219, 96, 288, 185,
+        219, 113, 496, 137, 288, 113, 288, 185, 243, 113, 505, 137, 254, 113, 254, 109, 591, 136, 591, 136, 645, 38, 360, 74,
+        591, 38, 420, 31, 318, 38, 362, 111, 645, 62, 722, 26, 318, 74, 452, 32, 221, 76, 722, 68, 357, 111, 452, 32,
+        231, 96, 589, 76, 723, 68, 447, 227, 445, 111, 606, 32, 281, 123, 454, 113, 1004, 87, 344, 9, 1023, 9, 1022, 20,
+        924, 680, 814, 80, 936, 20, 976, 80, 837, 680, 916, 80, 1042, 20, 977, 80, 955, 109, 411, 136, 411, 136, 412, 52,
+        411, 74, 411, 66, 411, 51, 183, 66, 412, 111, 412, 44, 62, 51, 219, 74, 307, 44, 139, 44, 76, 68, 219, 111,
+        307, 44, 234, 123, 288, 58, 76, 68, 243, 158, 162, 111, 289, 58, 234, 123, 254, 158, 326, 141, 778, 179, 843, 109,
+        346, 136, 346, 24, 1309, 52, 346, 109, 450, 66, 346, 136, 450, 123, 1398, 38, 282, 38, 460, 38, 324, 74, 450, 31,
+        171, 38, 500, 38, 369, 111, 450, 26, 171, 279, 647, 106, 171, 93, 618, 26, 322, 106, 322, 52, 352, 74, 590, 32,
+        316, 126, 618, 26, 166, 106, 166, 66, 352, 111, 590, 32, 296, 123, 589, 176, 666, 96, 787, 96, 426, 73, 451, 137,
+        426, 73, 357, 150, 451, 75, 357, 150, 357, 88, 451, 75, 447, 150, 447, 98, 357, 88, 357, 163, 452, 96, 280, 98,
+        447, 88, 447, 49, 1384, 163, 606, 137, 280, 87, 775, 113, 280, 73, 844, 75, 844, 73, 183, 412, 728, 73, 219, 73,
+        321, 75, 219, 75, 321, 88, 183, 75, 243, 75, 491, 98, 219, 88, 219, 88, 321, 45, 208, 98, 243, 88, 243, 95,
+        158, 88, 491, 58, 327, 141, 790, 45, 158, 290, 1232, 290, 1208, 522, 810, 290, 1209, 230, 810, 810, 877, 283, 339, 230,
+        1010, 522, 625, 90, 339, 230, 1222, 230, 310, 230, 625, 625, 877, 164, 284, 230, 442, 16, 1210, 1434, 431, 1223, 164, 337,
+        164, 1067, 125, 164, 79, 1398, 79, 882, 79, 1079, 222, 384, 15, 426, 38, 950, 17, 426, 38, 954, 52, 596, 222, 762,
+        74, 596, 52, 480, 74, 480, 42, 950, 14, 1065, 66, 480, 84, 381, 62, 400, 42, 954, 14, 956, 140, 762, 74, 1069,
+        15, 280, 76, 400, 14, 26, 68, 17, 886, 17, 280, 163, 590, 123, 280, 79, 1341, 84, 787, 84, 426, 84, 1341, 186,
+        662, 167, 662, 31, 560, 167, 434, 26, 560, 26, 130, 84, 1342, 31, 114, 106, 197, 64, 173, 140, 866, 31, 274, 26,
+        114, 106, 114, 64, 149, 140, 756, 26, 274, 287, 363, 64, 363, 64, 176, 52, 1418, 52, 1082, 51, 559, 66, 1082, 62,
+        554, 51, 712, 127, 212, 62, 333, 51, 395, 138, 449, 76, 333, 68, 395, 162, 212, 138, 305, 212, 326, 100, 888, 100,
+        463, 61, 832, 27, 1055, 16, 1199, 94, 463, 173, 1176, 196, 994, 91, 753, 27, 851, 184, 994, 95, 212, 91, 751, 45,
+        212, 9, 1346, 377, 1275, 105, 1370, 293, 1275, 216, 659, 77, 1193, 132, 165, 202, 659, 61, 1193, 97, 165, 187, 659, 61,
+        1178, 27, 610, 97, 138, 355, 365, 116, 550, 116, 499, 77, 502, 116, 549, 62, 478, 61, 502, 117, 494, 62, 314, 61,
+        614, 117, 347, 76, 314, 61, 795, 267, 457, 99, 690, 278, 920, 100, 789, 55, 832, 48, 832, 173, 691, 196, 657, 94,
+        651, 149, 691, 184, 657, 91, 423, 149, 690, 184, 989, 159, 535, 91, 319, 121, 252, 128, 813, 129, 813, 128, 403, 103,
+        813, 128, 659, 129, 403, 117, 128, 129, 659, 103, 403, 117, 129, 103, 659, 103, 519, 117, 705, 103, 117, 364, 516, 108,
+        813, 89, 813, 108, 403, 107, 813, 108, 659, 89, 403, 108, 117, 89, 659, 89, 519, 89, 117, 107, 659, 107, 519, 110,
+        1175, 107, 117, 117, 1165, 241, 687, 157, 687, 241, 338, 157, 749, 62, 241, 157, 338, 139, 241, 62, 157, 51, 732, 139,
+        157, 76, 157, 68, 732, 110, 1166, 157, 234, 326, 587, 67, 987, 47, 987, 47, 832, 173, 692, 196, 895, 47, 1231, 173,
+        383, 196, 611, 91, 541, 149, 383, 184, 611, 252, 569, 91, 361, 252, 620, 266, 377, 220, 377, 204, 377, 81, 815, 165,
+        503, 43, 945, 54, 815, 165, 332, 91, 469, 54, 915, 138, 332, 27, 991, 91, 308, 27, 601, 116, 360, 116, 420, 77,
+        318, 116, 362, 62, 695, 61, 318, 117, 221, 76, 695, 61, 539, 99, 295, 76, 704, 61, 607, 162, 1352, 99, 342, 355,
+        582, 112, 687, 112, 749, 112, 338, 161, 749, 62, 112, 51, 578, 112, 139, 76, 112, 68, 578, 112, 234, 76, 161, 68,
+        828, 162, 470, 161, 234, 326, 470, 109, 629, 136, 629, 52, 629, 109, 1027, 66, 629, 136, 1027, 116, 282, 116, 460, 116,
+        324, 74, 1027, 77, 171, 116, 500, 116, 369, 111, 1027, 61, 171, 56, 750, 93, 511, 61, 322, 56, 847, 63, 483, 117,
+        316, 126, 511, 61, 166, 166, 272, 63, 637, 99, 1049, 91, 489, 100, 641, 30, 832, 94, 641, 133, 196, 196, 419, 94,
+        874, 133, 184, 184, 419, 91, 306, 149, 342, 184, 646, 227, 859, 91, 454, 113, 252, 183, 377, 183, 293, 43, 1154, 44,
+        815, 165, 307, 43, 1034, 44, 915, 138, 307, 91, 288, 58, 915, 138, 289, 158, 535, 91, 254, 27, 1048, 810, 833, 238,
+        810, 283, 946, 310, 833, 625, 833, 90, 946, 238, 310, 238, 625, 284, 371, 238, 442, 16, 1216, 104, 840, 337, 371, 125,
+        371, 461, 526, 526, 547, 127, 982, 15, 1077, 135, 982, 17, 1077, 543, 982, 52, 421, 74, 421, 52, 239, 74, 239, 42,
+        1324, 51, 196, 66, 239, 111, 239, 62, 809, 17, 43, 363, 51, 184, 74, 482, 15, 252, 76, 809, 68, 184, 111, 482,
+        17, 252, 91, 589, 222, 464, 222, 367, 186, 464, 167, 464, 421, 1238, 1153, 167, 367, 239, 1238, 61, 130, 130, 272, 61,
+        197, 197, 272, 98, 196, 140, 709, 88, 196, 61, 114, 98, 184, 140, 708, 88, 184, 163, 482, 91, 280, 224, 1397, 311,
+        1397, 100, 186, 201, 906, 1235, 19, 942, 100, 1355, 1, 1196, 19, 971, 10, 201, 682, 1, 1197, 19, 933, 94, 1355, 37,
+        609, 131, 609, 609, 820, 291, 1241, 55, 1412, 186, 1241, 48, 1412, 216, 628, 55, 1193, 105, 423, 202, 628, 55, 1178, 71,
+        423, 187, 628, 48, 1178, 110, 800, 71, 319, 1, 22, 742, 291, 1132, 215, 1286, 215, 729, 331, 1286, 215, 485, 167, 1132,
+        215, 831, 215, 358, 215, 824, 215, 406, 331, 358, 331, 824, 162, 1179, 331, 406, 170, 1143, 153, 550, 153, 499, 55, 502,
+        153, 549, 62, 931, 48, 502, 121, 494, 62, 443, 48, 614, 121, 347, 76, 443, 48, 795, 211, 580, 121, 262, 211, 673,
+        100, 1074, 735, 1074, 94, 1074, 233, 623, 16, 1213, 59, 94, 311, 149, 765, 448, 765, 176, 765, 233, 573, 16, 1212, 233,
+        285, 12, 176, 233, 147, 233, 291, 506, 291, 794, 186, 506, 291, 893, 155, 506, 145, 216, 32, 506, 155, 794, 145, 202,
+        105, 361, 155, 893, 145, 187, 718, 870, 71, 361, 718, 742, 133, 1225, 133, 425, 96, 216, 185, 425, 155, 1062, 96, 202,
+        105, 306, 155, 1198, 96, 187, 71, 306, 155, 1217, 137, 187, 162, 643, 71, 454, 1002, 1143, 108, 1118, 89, 1118, 108, 823,
+        107, 1118, 108, 628, 89, 823, 108, 121, 89, 628, 89, 518, 89, 121, 107, 628, 107, 518, 110, 932, 107, 121, 78, 80,
+        672, 109, 769, 136, 769, 52, 769, 109, 697, 66, 769, 136, 697, 105, 882, 62, 801, 51, 425, 74, 697, 15, 216, 200,
+        897, 68, 425, 111, 697, 15, 202, 105, 1229, 93, 803, 15, 187, 71, 1229, 52, 802, 15, 1379, 255, 1094, 17, 187, 71,
+        1245, 66, 802, 17, 1379, 34, 771, 152, 808, 118, 808, 735, 1260, 173, 374, 374, 540, 118, 1007, 173, 300, 300, 540, 132,
+        700, 149, 300, 300, 448, 285, 459, 97, 700, 147, 459, 73, 466, 73, 612, 73, 654, 98, 466, 88, 466, 75, 654, 98,
+        612, 88, 612, 244, 1017, 98, 654, 88, 654, 244, 569, 145, 244, 244, 620, 179, 746, 179, 583, 152, 683, 118, 683, 152,
+        647, 118, 520, 118, 647, 152, 173, 152, 540, 118, 173, 118, 540, 152, 363, 132, 186, 118, 149, 118, 448, 1323, 118, 363,
+        97, 186, 132, 140, 32, 132, 1350, 97, 167, 97, 140, 32, 97, 32, 884, 153, 360, 153, 420, 55, 318, 153, 362, 62,
+        251, 48, 318, 121, 221, 76, 251, 68, 453, 121, 231, 76, 268, 68, 490, 162, 834, 121, 281, 211, 812, 277, 1117, 340,
+        1117, 10, 1292, 343, 1117, 19, 277, 277, 1121, 20, 277, 19, 340, 340, 1121, 20, 340, 19, 343, 343, 1121, 162, 555, 20,
+        343, 326, 555, 109, 757, 136, 757, 52, 757, 109, 1046, 66, 757, 136, 1046, 109, 409, 62, 329, 136, 409, 74, 1046, 55,
+        171, 76, 329, 136, 444, 111, 1046, 48, 171, 15, 523, 93, 351, 15, 262, 17, 523, 52, 211, 121, 316, 126, 351, 48,
+        166, 166, 214, 66, 211, 121, 296, 192, 292, 73, 592, 73, 453, 75, 453, 98, 592, 88, 592, 75, 490, 98, 453, 88,
+        453, 96, 244, 98, 490, 88, 490, 95, 834, 137, 244, 113, 244, 13, 1303, 12, 1303, 120, 944, 190, 814, 190, 525, 151,
+        944, 242, 814, 242, 525, 20, 1413, 242, 916, 242, 588, 19, 1083, 20, 1414, 20, 1083, 183, 1014, 183, 811, 219, 811, 168,
+        917, 168, 657, 243, 811, 168, 817, 168, 989, 86, 974, 9, 1435, 289, 577, 158, 1250, 254, 678, 86, 1048, 51, 1348, 68,
+        1348, 79, 494, 79, 347, 79, 523, 79, 262, 79, 702, 18, 550, 74, 711, 18, 499, 74, 615, 74, 737, 14, 502, 18,
+        549, 84, 262, 62, 313, 84, 702, 14, 614, 74, 739, 15, 244, 76, 313, 14, 795, 111, 739, 17, 244, 123, 244, 55,
+        715, 48, 715, 328, 995, 328, 1087, 55, 560, 55, 130, 328, 1088, 48, 560, 55, 197, 130, 214, 55, 114, 197, 214, 64,
+        917, 177, 1162, 55, 274, 48, 114, 64, 817, 140, 1043, 48, 274, 177, 424, 244, 256, 291, 393, 291, 389, 249, 585, 291,
+        382, 155, 393, 249, 508, 32, 393, 155, 389, 249, 584, 32, 389, 155, 382, 249, 481, 437, 870, 32, 382, 437, 742, 102,
+        1030, 102, 1092, 146, 1030, 60, 1030, 146, 1092, 60, 1092, 82, 783, 69, 1219, 630, 783, 23, 1438, 82, 474, 38, 1072, 160,
+        783, 21, 1438, 7, 508, 82, 671, 110, 1112, 160, 474, 21, 1436, 119, 838, 247, 1070, 7, 1073, 7, 481, 160, 671, 119,
+        764, 217, 1070, 600, 1255, 133, 741, 133, 527, 96, 128, 185, 527, 115, 387, 96, 129, 30, 685, 92, 387, 96, 103, 30,
+        509, 92, 608, 103, 137, 273, 703, 35, 509, 326, 768, 109, 1155, 136, 1155, 260, 687, 109, 947, 260, 749, 136, 947, 51,
+        741, 62, 260, 51, 527, 74, 947, 15, 128, 136, 286, 68, 527, 111, 947, 15, 129, 115, 135, 93, 325, 15, 103, 92,
+        135, 52, 364, 139, 199, 17, 705, 17, 103, 92, 543, 66, 364, 17, 60, 193, 34, 767, 73, 471, 73, 472, 73, 335,
+        98, 471, 88, 471, 75, 335, 98, 472, 88, 472, 45, 1142, 98, 335, 88, 335, 273, 710, 45, 1095, 45, 768, 73, 370,
+        73, 655, 73, 498, 98, 370, 88, 370, 75, 498, 98, 655, 88, 655, 67, 1402, 98, 498, 88, 498, 569, 963, 47, 1402,
+        620, 963, 677, 741, 527, 677, 79, 128, 79, 129, 79, 1296, 79, 103, 79, 1404, 128, 440, 84, 128, 129, 440, 84, 129,
+        84, 1296, 128, 256, 103, 440, 84, 103, 95, 115, 84, 1404, 129, 256, 115, 504, 45, 115, 92, 95, 103, 256, 92, 504,
+        45, 92, 45, 544, 133, 414, 185, 414, 96, 108, 185, 602, 30, 294, 89, 96, 30, 356, 35, 294, 89, 137, 35, 356,
+        35, 320, 107, 137, 162, 465, 35, 487, 326, 465, 414, 631, 602, 631, 414, 1276, 225, 414, 602, 1276, 225, 602, 109, 226,
+        1415, 136, 226, 225, 380, 15, 108, 1416, 136, 270, 225, 486, 15, 89, 15, 413, 3, 415, 17, 89, 17, 413, 34, 633,
+        28, 356, 3, 455, 17, 107, 17, 488, 34, 635, 28, 487, 34, 892, 73, 399, 73, 299, 75, 299, 98, 399, 88, 399,
+        75, 398, 98, 299, 88, 299, 45, 528, 98, 398, 88, 398, 95, 465, 45, 586, 45, 465, 236, 266, 220, 236, 204, 236,
+        81, 1281, 264, 503, 204, 250, 54, 1281, 264, 332, 264, 605, 11, 54, 185, 276, 332, 694, 840, 276, 605, 20, 1314, 183,
+        1273, 183, 1114, 219, 1114, 168, 919, 168, 895, 243, 1114, 168, 517, 168, 611, 20, 1184, 517, 1127, 289, 827, 19, 964, 20,
+        1185, 20, 964, 79, 951, 79, 970, 79, 108, 79, 89, 79, 413, 79, 107, 79, 488, 108, 440, 84, 108, 89, 440, 84,
+        89, 150, 380, 108, 256, 107, 440, 84, 107, 14, 294, 150, 486, 89, 256, 88, 380, 45, 248, 14, 320, 107, 256, 88,
+        486, 45, 334, 45, 548, 439, 862, 688, 862, 81, 439, 54, 439, 317, 439, 90, 446, 317, 688, 81, 336, 81, 571, 54,
+        336, 54, 571, 191, 1010, 81, 284, 54, 476, 90, 332, 405, 617, 191, 1222, 54, 284, 191, 625, 213, 257, 1427, 54, 337,
+        16, 1373, 1393, 209, 605, 67, 715, 47, 715, 328, 1098, 145, 662, 67, 560, 67, 130, 145, 434, 47, 560, 47, 130, 106,
+        595, 47, 197, 106, 388, 64, 919, 140, 546, 67, 274, 47, 114, 64, 517, 140, 495, 47, 274, 228, 424, 235, 330, 222,
+        845, 222, 446, 179, 266, 179, 220, 222, 503, 81, 100, 179, 204, 222, 332, 54, 100, 31, 780, 26, 220, 31, 542, 81,
+        119, 140, 503, 81, 253, 54, 94, 54, 119, 140, 332, 54, 253, 191, 774, 147, 240, 41, 1158, 133, 873, 51, 206, 185,
+        873, 49, 206, 68, 206, 34, 206, 49, 259, 68, 259, 34, 259, 49, 232, 68, 232, 445, 1259, 34, 232, 510, 1138, 30,
+        843, 35, 843, 133, 180, 30, 1075, 180, 185, 225, 873, 41, 318, 41, 484, 41, 539, 225, 359, 30, 171, 41, 456, 41,
+        607, 225, 418, 17, 221, 28, 318, 30, 445, 30, 166, 68, 359, 133, 666, 34, 359, 35, 445, 35, 166, 68, 418, 185,
+        666, 28, 345, 154, 192, 1365, 9, 965, 180, 225, 51, 180, 49, 180, 68, 180, 28, 1075, 41, 171, 41, 322, 41, 537,
+        41, 445, 41, 166, 41, 538, 3, 261, 225, 279, 28, 171, 3, 551, 15, 296, 51, 279, 51, 666, 3, 188, 3, 556,
+        28, 166, 49, 666, 68, 279, 68, 666, 34, 279, 3, 192, 73, 206, 75, 206, 75, 259, 98, 206, 88, 206, 75, 232,
+        98, 259, 88, 259, 386, 597, 98, 232, 88, 232, 668, 1293, 345, 597, 14, 1138, 183, 236, 219, 236, 219, 250, 133, 168,
+        168, 419, 243, 250, 168, 185, 168, 646, 65, 1311, 185, 1127, 276, 289, 158, 1263, 65, 1312, 158, 1126, 96, 493, 137, 493,
+        79, 221, 79, 231, 96, 384, 79, 281, 79, 1308, 18, 360, 74, 696, 18, 420, 84, 231, 150, 359, 14, 318, 18, 362,
+        84, 281, 14, 484, 150, 418, 14, 539, 88, 359, 14, 386, 14, 456, 14, 607, 88, 418, 14, 345, 28, 34, 597, 8,
+        1023, 8, 1022, 120, 1274, 9, 826, 16, 826, 151, 1274, 303, 814, 303, 525, 401, 1128, 303, 916, 303, 588, 5, 404, 438,
+        441, 1128, 438, 1128, 101, 844, 412, 825, 44, 439, 90, 411, 44, 1149, 90, 412, 58, 1149, 44, 336, 44, 571, 44, 476,
+        90, 307, 156, 321, 51, 168, 58, 476, 90, 289, 49, 168, 156, 491, 68, 168, 168, 693, 1311, 1428, 58, 337, 209, 289,
+        1312, 125, 922, 180, 677, 15, 493, 17, 493, 123, 493, 52, 429, 79, 316, 66, 429, 79, 296, 123, 384, 18, 282, 18,
+        460, 18, 324, 74, 961, 14, 171, 18, 500, 18, 369, 84, 296, 14, 322, 150, 279, 14, 537, 122, 207, 14, 166, 14,
+        538, 98, 666, 88, 279, 28, 772, 30, 715, 35, 715, 96, 662, 96, 434, 30, 560, 30, 130, 137, 434, 35, 560, 30,
+        197, 106, 451, 30, 114, 106, 357, 64, 133, 140, 452, 30, 274, 35, 114, 64, 185, 140, 606, 35, 274, 87, 424, 64,
+        978, 222, 411, 222, 412, 179, 183, 179, 219, 222, 307, 44, 100, 179, 243, 222, 289, 26, 183, 31, 321, 44, 94, 26,
+        321, 44, 119, 140, 307, 44, 253, 58, 94, 58, 119, 140, 289, 58, 253, 141, 774, 158, 176, 74, 1157, 111, 1157, 338,
+        748, 24, 1208, 74, 1320, 127, 522, 24, 1209, 111, 1320, 127, 230, 127, 877, 15, 339, 135, 230, 52, 164, 431, 1237, 74,
+        164, 17, 339, 66, 164, 431, 1239, 111, 164, 164, 1053, 164, 402, 79, 384, 79, 1236, 79, 1247, 84, 384, 15, 662, 15,
+        434, 18, 950, 17, 434, 17, 530, 52, 670, 28, 560, 15, 866, 52, 513, 15, 756, 15, 887, 51, 64, 66, 513, 42,
+        381, 49, 64, 17, 887, 64, 68, 140, 590, 28, 274, 34, 64, 79, 530, 84, 434, 84, 530, 130, 328, 167, 596, 84,
+        866, 14, 130, 114, 328, 84, 756, 14, 197, 150, 287, 31, 773, 14, 114, 26, 773, 64, 98, 88, 287, 64, 88, 116,
+        1152, 15, 1298, 17, 1298, 52, 888, 74, 888, 52, 463, 74, 463, 77, 959, 66, 463, 111, 463, 62, 758, 61, 959, 117,
+        449, 76, 758, 68, 1176, 99, 212, 237, 987, 167, 1418, 31, 559, 237, 1231, 31, 712, 77, 1377, 31, 395, 61, 1377, 173,
+        212, 196, 534, 26, 395, 272, 1044, 149, 212, 184, 534, 91, 252, 377, 1225, 377, 425, 293, 425, 43, 1361, 216, 462, 173,
+        1230, 202, 462, 91, 216, 149, 1230, 187, 462, 155, 860, 91, 202, 105, 252, 155, 759, 91, 187, 71, 252, 109, 789, 109,
+        651, 136, 651, 43, 550, 74, 789, 43, 499, 74, 651, 27, 502, 43, 549, 111, 651, 62, 267, 27, 614, 121, 449, 76,
+        267, 68, 690, 121, 305, 237, 995, 237, 1087, 77, 594, 237, 1088, 61, 594, 77, 1200, 61, 636, 61, 1200, 98, 691, 88,
+        691, 61, 479, 214, 1044, 98, 690, 88, 690, 91, 244, 128, 747, 129, 747, 103, 747, 128, 816, 128, 462, 129, 816, 129,
+        462, 91, 128, 103, 816, 103, 462, 115, 535, 91, 129, 27, 685, 92, 535, 91, 103, 27, 509, 108, 747, 89, 747, 107,
+        747, 108, 816, 108, 462, 89, 816, 89, 462, 91, 108, 107, 816, 107, 462, 27, 294, 89, 91, 27, 356, 27, 320, 91,
+        107, 27, 487, 241, 439, 157, 439, 157, 688, 241, 336, 241, 571, 157, 336, 157, 571, 241, 284, 157, 476, 157, 896, 405,
+        616, 157, 284, 257, 587, 69, 1338, 157, 337, 99, 587, 237, 1098, 145, 464, 77, 595, 145, 367, 77, 388, 272, 595, 61,
+        388, 272, 388, 98, 692, 88, 692, 61, 416, 272, 416, 98, 383, 88, 383, 235, 533, 266, 574, 220, 574, 77, 266, 204,
+        574, 77, 220, 77, 780, 61, 220, 77, 542, 81, 516, 117, 503, 61, 204, 61, 542, 54, 516, 117, 332, 117, 605, 109,
+        641, 136, 641, 136, 874, 43, 360, 74, 641, 43, 420, 111, 641, 51, 295, 43, 362, 111, 874, 49, 295, 68, 295, 30,
+        278, 49, 342, 68, 342, 35, 278, 112, 439, 112, 688, 161, 688, 112, 336, 112, 571, 112, 476, 112, 896, 112, 284, 161,
+        476, 161, 896, 112, 404, 112, 337, 112, 125, 161, 404, 161, 337, 125, 161, 109, 366, 136, 366, 52, 366, 109, 269, 66,
+        366, 43, 282, 43, 460, 43, 324, 74, 269, 27, 171, 43, 500, 111, 269, 15, 305, 27, 537, 27, 445, 27, 166, 27,
+        538, 278, 510, 28, 278, 96, 464, 96, 367, 77, 451, 137, 367, 61, 451, 272, 451, 61, 357, 272, 357, 98, 295, 88,
+        295, 61, 447, 272, 447, 98, 342, 88, 342, 278, 597, 179, 681, 179, 578, 77, 183, 243, 574, 61, 183, 77, 321, 61,
+        219, 61, 321, 44, 516, 117, 307, 61, 243, 61, 491, 58, 516, 117, 289, 158, 679, 338, 1036, 24, 1214, 127, 833, 24,
+        1215, 127, 238, 36, 104, 127, 15, 946, 135, 238, 52, 371, 74, 371, 104, 745, 238, 543, 66, 371, 111, 371, 371, 402,
+        79, 461, 79, 547, 15, 464, 15, 367, 43, 950, 17, 367, 43, 954, 52, 642, 15, 709, 52, 531, 15, 708, 135, 1084,
+        51, 315, 66, 531, 17, 708, 49, 315, 42, 1226, 68, 315, 88, 1049, 14, 278, 84, 464, 84, 367, 130, 237, 167, 421,
+        140, 421, 1316, 114, 237, 140, 239, 31, 184, 106, 196, 1295, 106, 184, 64, 355, 140, 482, 27, 274, 683, 776, 520, 776,
+        38, 131, 368, 368, 623, 16, 1234, 149, 776, 448, 776, 297, 729, 368, 573, 16, 1233, 297, 485, 167, 766, 32, 766, 297,
+        358, 297, 824, 32, 1218, 55, 746, 55, 583, 48, 583, 152, 917, 152, 657, 118, 917, 118, 657, 132, 823, 118, 817, 118,
+        989, 132, 628, 97, 823, 121, 132, 97, 628, 97, 518, 97, 121, 24, 948, 24, 949, 24, 967, 9, 948, 16, 948, 9,
+        949, 16, 949, 10, 1037, 9, 967, 16, 967, 19, 632, 134, 1125, 20, 632, 19, 640, 189, 1125, 20, 640, 109, 1150, 109,
+        1033, 48, 957, 124, 550, 74, 1150, 124, 499, 74, 1033, 86, 502, 124, 549, 48, 1189, 62, 378, 86, 614, 15, 1148, 76,
+        378, 86, 795, 121, 713, 224, 1395, 311, 1395, 31, 760, 218, 1235, 26, 760, 130, 1180, 170, 682, 197, 1180, 9, 968, 16,
+        968, 170, 853, 114, 1180, 9, 979, 16, 979, 20, 1205, 67, 746, 47, 746, 47, 583, 152, 919, 152, 895, 152, 517, 152,
+        611, 132, 1017, 118, 517, 118, 611, 67, 428, 132, 145, 67, 365, 47, 428, 97, 145, 47, 365, 30, 746, 30, 583, 35,
+        583, 133, 152, 152, 419, 118, 133, 118, 419, 96, 132, 118, 185, 118, 646, 30, 428, 96, 97, 30, 365, 35, 428, 97,
+        137, 35, 365, 24, 939, 24, 937, 24, 938, 9, 939, 16, 939, 9, 937, 16, 937, 108, 678, 9, 938, 16, 938, 86,
+        294, 89, 678, 86, 356, 86, 320, 107, 678, 86, 487, 109, 501, 136, 501, 52, 501, 109, 323, 66, 501, 51, 152, 62,
+        717, 51, 118, 74, 323, 15, 132, 50, 897, 111, 323, 15, 97, 15, 884, 3, 610, 17, 97, 17, 884, 34, 850, 28,
+        365, 65, 1347, 65, 1299, 130, 911, 65, 935, 130, 669, 106, 910, 31, 667, 106, 721, 98, 374, 88, 374, 114, 669, 106,
+        667, 98, 300, 88, 300, 45, 689, 179, 466, 145, 784, 31, 466, 145, 649, 55, 388, 214, 595, 55, 416, 214, 388, 119,
+        684, 159, 895, 48, 416, 214, 416, 119, 835, 159, 611, 121, 1391, 152, 677, 118, 677, 1347, 1299, 150, 152, 935, 118, 150,
+        173, 514, 42, 216, 173, 354, 42, 202, 105, 887, 132, 256, 149, 354, 42, 187, 14, 428, 71, 887, 97, 256, 88, 706,
+        45, 436, 109, 1032, 30, 957, 35, 957, 124, 360, 74, 1032, 124, 420, 30, 1189, 86, 318, 124, 362, 35, 1189, 86, 484,
+        86, 539, 86, 386, 86, 456, 86, 607, 86, 345, 277, 290, 290, 340, 290, 343, 9, 1011, 16, 1011, 9, 1012, 16, 1012,
+        10, 1018, 9, 1013, 16, 1013, 169, 404, 10, 1160, 125, 169, 198, 404, 10, 1195, 125, 198, 109, 524, 153, 650, 52, 524,
+        109, 839, 66, 524, 124, 282, 124, 460, 90, 409, 74, 839, 86, 171, 49, 1136, 177, 962, 86, 322, 86, 537, 162, 738,
+        86, 166, 86, 538, 211, 572, 28, 777, 96, 784, 96, 649, 55, 451, 137, 649, 55, 357, 214, 451, 48, 357, 214, 357,
+        119, 251, 159, 419, 48, 447, 214, 447, 119, 268, 159, 646, 159, 978, 179, 928, 179, 1129, 100, 169, 179, 1130, 169, 735,
+        169, 972, 94, 169, 169, 852, 119, 169, 169, 253, 94, 198, 198, 852, 119, 198, 198, 253, 176, 555, 55, 844, 48, 844,
+        55, 183, 412, 518, 48, 183, 55, 321, 48, 219, 48, 321, 44, 673, 121, 307, 48, 243, 48, 491, 58, 673, 121, 289,
+        121, 1279, 153, 882, 153, 1079, 38, 494, 38, 347, 38, 523, 38, 262, 38, 702, 52, 408, 74, 408, 52, 312, 74, 312,
+        42, 523, 51, 159, 66, 312, 111, 312, 49, 159, 42, 702, 68, 159, 159, 693, 34, 159, 84, 784, 84, 649, 186, 711,
+        167, 711, 84, 1364, 14, 594, 167, 615, 84, 1043, 14, 636, 163, 408, 14, 479, 163, 312, 98, 159, 140, 739, 88, 159,
+        79, 393, 79, 389, 79, 382, 393, 440, 84, 393, 389, 440, 84, 389, 82, 952, 382, 440, 84, 382, 205, 698, 630, 952,
+        205, 804, 433, 698, 160, 952, 53, 1203, 102, 980, 217, 1249, 146, 980, 60, 980, 79, 1041, 82, 988, 69, 1220, 630, 988,
+        23, 1244, 82, 907, 18, 1072, 21, 1244, 23, 1068, 247, 1202, 181, 868, 160, 907, 85, 1068, 181, 529, 60, 1058, 236, 741,
+        236, 527, 250, 527, 115, 1113, 16, 1141, 92, 1113, 236, 1090, 11, 96, 115, 8, 1369, 250, 1090, 69, 861, 96, 1284, 78,
+        861, 69, 763, 137, 1284, 78, 763, 260, 439, 260, 688, 260, 336, 199, 439, 260, 476, 115, 515, 325, 570, 92, 515, 199,
+        571, 115, 257, 90, 286, 199, 896, 92, 257, 15, 85, 174, 63, 705, 92, 99, 99, 544, 125, 1164, 28, 1186, 128, 786,
+        129, 786, 31, 471, 103, 786, 31, 472, 106, 471, 31, 335, 106, 472, 119, 619, 16, 1140, 26, 335, 106, 335, 119, 568,
+        227, 1090, 147, 848, 179, 370, 145, 1078, 31, 370, 38, 1040, 67, 388, 106, 370, 47, 388, 106, 655, 67, 1301, 228, 541,
+        47, 416, 106, 498, 47, 1301, 228, 361, 620, 1391, 179, 741, 179, 527, 38, 128, 38, 129, 115, 647, 38, 103, 92, 647,
+        128, 301, 42, 128, 129, 301, 42, 129, 115, 363, 115, 176, 103, 301, 42, 103, 32, 286, 92, 363, 92, 176, 199, 253,
+        32, 364, 236, 414, 250, 414, 250, 602, 248, 1113, 236, 380, 250, 633, 250, 380, 226, 264, 250, 635, 250, 486, 258, 404,
+        226, 276, 125, 258, 271, 404, 270, 276, 125, 271, 101, 414, 101, 602, 101, 633, 156, 414, 101, 635, 226, 283, 248, 475,
+        90, 226, 156, 380, 248, 257, 334, 475, 156, 486, 99, 248, 209, 226, 110, 1109, 99, 334, 209, 270, 63, 1165, 125, 373,
+        108, 786, 89, 786, 31, 399, 107, 786, 31, 299, 106, 399, 26, 299, 106, 299, 119, 258, 253, 258, 26, 398, 106, 398,
+        119, 271, 253, 271, 32, 1163, 96, 845, 96, 446, 30, 266, 137, 446, 30, 220, 30, 780, 30, 204, 30, 542, 133, 213,
+        30, 863, 35, 204, 35, 542, 185, 213, 35, 863, 113, 605, 67, 844, 145, 411, 67, 183, 145, 412, 47, 183, 67, 321,
+        47, 219, 47, 321, 193, 814, 193, 525, 47, 243, 47, 491, 193, 916, 193, 588, 193, 1206, 38, 951, 38, 970, 38, 108,
+        38, 89, 38, 413, 38, 107, 38, 488, 108, 301, 42, 108, 89, 301, 42, 89, 42, 413, 32, 226, 107, 301, 42, 107,
+        49, 1054, 42, 488, 32, 270, 32, 660, 32, 719, 109, 862, 136, 862, 81, 109, 54, 109, 109, 317, 54, 136, 136, 317,
+        52, 81, 74, 81, 52, 54, 54, 74, 135, 191, 139, 240, 54, 66, 54, 111, 34, 385, 191, 543, 234, 240, 28, 863,
+        34, 213, 84, 1078, 84, 1224, 186, 1097, 145, 596, 84, 546, 14, 595, 145, 480, 84, 495, 14, 388, 67, 773, 14, 416,
+        47, 773, 98, 1054, 228, 886, 228, 280, 79, 503, 79, 332, 81, 624, 54, 624, 84, 503, 81, 144, 54, 728, 84, 332,
+        54, 144, 81, 163, 54, 182, 54, 163, 29, 529, 191, 504, 45, 191, 101, 206, 101, 259, 101, 232, 194, 1158, 156, 206,
+        133, 1374, 156, 259, 96, 969, 185, 1374, 156, 232, 178, 484, 96, 875, 30, 582, 178, 456, 137, 875, 35, 582, 30, 430,
+        35, 430, 133, 567, 101, 359, 185, 567, 194, 318, 194, 484, 194, 539, 156, 359, 63, 221, 194, 456, 156, 418, 63, 231,
+        96, 1182, 178, 445, 63, 281, 123, 875, 275, 812, 87, 489, 1366, 353, 921, 28, 430, 51, 567, 49, 567, 68, 567, 101,
+        279, 171, 194, 15, 807, 51, 908, 162, 724, 17, 807, 68, 908, 52, 275, 156, 279, 63, 316, 66, 275, 63, 296, 63,
+        744, 275, 402, 96, 591, 96, 645, 31, 206, 137, 645, 26, 206, 106, 206, 26, 259, 106, 259, 30, 1144, 87, 306, 26,
+        232, 106, 232, 35, 1144, 87, 454, 154, 1025, 96, 411, 137, 411, 30, 183, 137, 412, 30, 219, 30, 321, 35, 219, 35,
+        321, 44, 812, 87, 288, 35, 243, 35, 491, 58, 812, 87, 254, 158, 978, 96, 346, 137, 346, 38, 221, 38, 231, 96,
+        450, 38, 281, 123, 645, 7, 360, 42, 221, 7, 420, 42, 231, 106, 359, 96, 352, 7, 362, 42, 281, 49, 1005, 106,
+        418, 137, 352, 87, 589, 113, 352, 24, 924, 24, 976, 1023, 24, 977, 1022, 36, 304, 120, 680, 33, 1145, 80, 814, 70,
+        837, 151, 680, 33, 1167, 80, 916, 70, 955, 80, 1206, 208, 631, 412, 822, 44, 109, 44, 136, 123, 411, 58, 136, 123,
+        412, 44, 52, 44, 74, 44, 66, 44, 111, 28, 321, 34, 208, 58, 66, 58, 111, 49, 158, 28, 491, 58, 402, 28,
+        1039, 34, 158, 179, 180, 15, 346, 17, 346, 1309, 52, 564, 38, 316, 66, 564, 38, 296, 123, 450, 7, 282, 7, 324,
+        42, 316, 15, 352, 7, 500, 7, 369, 42, 296, 17, 352, 106, 279, 123, 352, 84, 591, 84, 645, 96, 596, 96, 480,
+        84, 452, 14, 451, 137, 480, 84, 606, 14, 357, 30, 773, 14, 447, 35, 773, 98, 1005, 87, 886, 87, 280, 79, 307,
+        79, 289, 73, 208, 75, 208, 84, 307, 44, 144, 58, 728, 84, 289, 44, 182, 44, 163, 58, 182, 58, 163, 98, 158,
+        141, 504, 45, 141, 290, 1433, 431, 688, 8, 1232, 230, 515, 431, 571, 57, 576, 230, 914, 431, 896, 230, 257, 57, 925,
+        1210, 99, 877, 57, 376, 431, 1067, 164, 209, 38, 384, 18, 882, 18, 1079, 84, 450, 15, 596, 15, 480, 18, 1229, 18,
+        381, 18, 1245, 52, 400, 84, 590, 15, 1069, 66, 400, 42, 867, 28, 773, 176, 563, 38, 530, 84, 596, 84, 480, 42,
+        530, 130, 621, 167, 670, 31, 287, 26, 64, 64, 106, 77, 559, 61, 559, 77, 395, 61, 395, 55, 559, 55, 712, 55,
+        395, 48, 395, 67, 559, 47, 559, 47, 712, 47, 395, 77, 1291, 77, 1131, 61, 1131, 61, 732, 30, 559, 30, 712, 30,
+        395, 35, 395, 77, 681, 61, 681, 61, 578, 61, 828, 372, 1290, 127, 905, 372, 1317, 372, 745, 43, 1152, 15, 1082, 17,
+        1082, 52, 554, 77, 1332, 52, 333, 61, 1332, 51, 212, 66, 333, 142, 799, 49, 212, 68, 212, 34, 212, 186, 888, 186,
+        463, 1199, 167, 463, 61, 196, 196, 272, 61, 184, 184, 272, 98, 212, 88, 212, 77, 760, 61, 760, 735, 1052, 94, 1052,
+        77, 910, 77, 721, 61, 721, 61, 667, 77, 466, 77, 612, 61, 612, 61, 654, 1346, 118, 377, 118, 293, 56, 1361, 105,
+        709, 173, 1243, 71, 709, 91, 132, 149, 1243, 71, 708, 27, 428, 91, 97, 27, 365, 77, 592, 61, 592, 61, 453, 61,
+        490, 77, 928, 61, 928, 61, 1129, 61, 1130, 55, 681, 48, 681, 48, 578, 48, 828, 116, 494, 116, 347, 116, 262, 52,
+        478, 74, 478, 52, 314, 74, 314, 86, 959, 66, 314, 111, 314, 86, 859, 86, 1353, 86, 278, 186, 789, 167, 789, 55,
+        196, 167, 651, 55, 184, 196, 214, 48, 184, 184, 214, 119, 267, 159, 534, 77, 471, 77, 472, 77, 335, 61, 335, 77,
+        370, 77, 655, 77, 498, 61, 498, 116, 128, 116, 129, 103, 116, 128, 818, 128, 142, 129, 818, 129, 142, 115, 679, 103,
+        818, 103, 142, 117, 286, 92, 679, 117, 364, 77, 399, 77, 299, 61, 299, 61, 398, 30, 1291, 30, 1131, 30, 732, 35,
+        732, 67, 681, 47, 681, 47, 578, 47, 828, 108, 116, 89, 116, 107, 116, 108, 818, 108, 142, 89, 818, 89, 142, 117,
+        226, 107, 818, 107, 142, 49, 1028, 117, 270, 117, 719, 109, 241, 109, 157, 136, 157, 52, 241, 74, 241, 52, 157, 74,
+        157, 139, 341, 66, 157, 111, 157, 69, 1166, 234, 341, 34, 587, 186, 1419, 145, 421, 67, 196, 145, 239, 47, 196, 106,
+        692, 47, 184, 106, 383, 119, 858, 228, 252, 237, 266, 220, 237, 81, 165, 204, 237, 54, 165, 27, 780, 54, 138, 27,
+        542, 213, 355, 27, 863, 77, 206, 61, 206, 61, 259, 61, 232, 30, 681, 30, 578, 35, 578, 35, 828, 116, 221, 116,
+        231, 116, 281, 56, 360, 142, 221, 56, 420, 142, 231, 91, 969, 56, 362, 142, 281, 178, 859, 91, 875, 27, 582, 0,
+        1023, 0, 1022, 680, 903, 680, 904, 109, 112, 112, 136, 136, 161, 52, 112, 74, 112, 66, 112, 111, 112, 112, 402, 66,
+        161, 111, 161, 49, 470, 161, 402, 34, 470, 180, 574, 15, 629, 17, 629, 123, 629, 52, 561, 116, 316, 66, 561, 116,
+        296, 116, 744, 56, 282, 56, 460, 56, 324, 142, 316, 63, 449, 56, 500, 56, 369, 142, 296, 63, 305, 91, 1182, 96,
+        421, 96, 239, 30, 196, 137, 239, 30, 184, 106, 295, 35, 184, 106, 342, 27, 1144, 87, 252, 183, 237, 208, 293, 44,
+        165, 237, 243, 44, 138, 27, 321, 58, 138, 27, 491, 158, 355, 27, 1039, 8, 1420, 238, 515, 104, 576, 238, 914, 238,
+        257, 104, 925, 1216, 104, 1223, 104, 376, 209, 371, 225, 982, 38, 461, 38, 547, 222, 269, 15, 239, 15, 653, 17, 239,
+        17, 653, 7, 483, 140, 269, 42, 449, 7, 637, 42, 305, 106, 1049, 91, 352, 150, 982, 84, 421, 84, 239, 43, 1342,
+        130, 575, 167, 642, 77, 287, 14, 196, 114, 575, 61, 287, 14, 184, 272, 287, 106, 315, 808, 1064, 808, 1170, 682, 1262,
+        853, 1262, 224, 1102, 311, 1102, 1, 1235, 201, 674, 16, 942, 149, 1064, 16, 971, 10, 1372, 201, 622, 16, 933, 19, 609,
+        397, 1125, 20, 609, 55, 910, 55, 721, 55, 667, 48, 667, 105, 784, 55, 425, 48, 425, 173, 1137, 177, 216, 173, 1024,
+        177, 202, 105, 1280, 149, 1024, 177, 187, 69, 800, 71, 1280, 78, 800, 215, 808, 4, 215, 735, 215, 1007, 331, 1007, 55,
+        592, 55, 453, 48, 453, 48, 490, 215, 683, 215, 520, 331, 520, 173, 215, 215, 540, 149, 215, 215, 448, 176, 215, 149,
+        331, 331, 448, 49, 1179, 176, 331, 170, 344, 109, 931, 109, 443, 136, 443, 22, 550, 74, 931, 52, 443, 74, 443, 121,
+        409, 66, 443, 111, 443, 211, 628, 121, 444, 121, 211, 100, 1437, 167, 1074, 1213, 94, 1437, 26, 765, 233, 972, 1212, 233,
+        852, 119, 233, 233, 253, 4, 31, 506, 47, 910, 47, 721, 47, 667, 38, 506, 38, 794, 47, 425, 301, 506, 42, 506,
+        301, 794, 105, 495, 600, 1307, 301, 893, 71, 495, 718, 975, 47, 771, 701, 718, 30, 910, 30, 721, 30, 667, 35, 667,
+        55, 399, 55, 299, 48, 299, 48, 398, 105, 591, 30, 425, 35, 425, 133, 514, 105, 452, 133, 354, 71, 452, 30, 771,
+        185, 354, 71, 606, 49, 643, 35, 771, 34, 643, 108, 153, 89, 153, 107, 153, 108, 672, 108, 177, 89, 672, 89, 177,
+        121, 226, 107, 672, 107, 177, 69, 932, 121, 270, 78, 932, 200, 1375, 15, 769, 17, 769, 195, 1181, 52, 801, 15, 697,
+        66, 801, 17, 697, 85, 1181, 51, 514, 62, 803, 51, 354, 15, 1086, 15, 802, 255, 897, 68, 354, 17, 1086, 17, 802,
+        28, 771, 152, 1066, 118, 1066, 31, 374, 118, 1045, 31, 300, 106, 374, 26, 300, 106, 300, 119, 459, 253, 459, 328, 466,
+        145, 711, 14, 466, 145, 615, 14, 612, 163, 684, 14, 654, 163, 835, 5, 146, 244, 228, 244, 323, 526, 152, 179, 118,
+        179, 222, 323, 31, 118, 106, 152, 26, 118, 106, 118, 132, 301, 140, 323, 42, 132, 97, 301, 42, 97, 42, 884, 32,
+        492, 55, 206, 48, 206, 48, 259, 48, 232, 4, 1292, 277, 1106, 340, 1106, 343, 1106, 109, 251, 136, 251, 136, 268, 52,
+        251, 74, 251, 66, 251, 111, 251, 96, 211, 66, 268, 111, 268, 49, 834, 137, 211, 113, 211, 24, 277, 24, 340, 24,
+        343, 9, 277, 16, 277, 9, 340, 16, 340, 169, 402, 9, 343, 16, 343, 49, 555, 198, 402, 34, 555, 180, 1124, 109,
+        329, 136, 329, 123, 757, 52, 329, 109, 210, 66, 329, 136, 210, 153, 744, 22, 282, 22, 460, 22, 324, 74, 210, 15,
+        211, 22, 500, 22, 369, 111, 210, 17, 211, 123, 211, 96, 711, 96, 615, 14, 592, 137, 615, 14, 453, 163, 251, 14,
+        490, 163, 268, 98, 834, 87, 244, 224, 401, 311, 401, 120, 190, 311, 441, 120, 242, 40, 1145, 151, 242, 40, 1167, 9,
+        1083, 20, 1227, 208, 1014, 208, 811, 55, 168, 518, 1015, 48, 168, 86, 321, 1435, 86, 491, 158, 920, 86, 1039, 153, 384,
+        79, 409, 79, 444, 177, 384, 18, 347, 18, 523, 18, 262, 17, 737, 52, 313, 177, 762, 74, 313, 66, 313, 17, 739,
+        163, 210, 211, 256, 79, 737, 84, 711, 84, 615, 84, 737, 130, 292, 167, 408, 140, 408, 55, 64, 114, 292, 140, 312,
+        48, 64, 214, 287, 64, 214, 82, 1261, 508, 1265, 160, 1261, 481, 1265, 38, 393, 38, 389, 38, 382, 301, 393, 42, 393,
+        301, 389, 42, 389, 205, 600, 301, 382, 42, 382, 437, 975, 433, 600, 437, 701, 102, 1422, 247, 427, 217, 427, 427, 1104,
+        146, 1219, 247, 785, 38, 1041, 217, 785, 785, 1104, 82, 912, 69, 1112, 21, 1423, 247, 1085, 32, 838, 7, 1072, 160, 912,
+        217, 1085, 32, 764, 32, 1059, 30, 471, 30, 472, 30, 335, 35, 335, 30, 741, 30, 527, 35, 527, 115, 133, 115, 419,
+        92, 133, 92, 419, 30, 767, 1369, 92, 646, 273, 604, 35, 767, 34, 768, 593, 631, 109, 260, 136, 260, 225, 593, 52,
+        260, 109, 199, 66, 260, 136, 199, 225, 544, 1297, 62, 325, 51, 92, 74, 199, 15, 364, 17, 286, 68, 92, 111, 199,
+        17, 364, 28, 767, 128, 558, 129, 558, 14, 471, 103, 558, 14, 472, 163, 619, 14, 335, 163, 568, 273, 302, 273, 790,
+        328, 370, 145, 1097, 14, 370, 18, 1040, 14, 655, 67, 1387, 14, 498, 47, 1387, 5, 172, 529, 228, 963, 79, 947, 115,
+        677, 92, 677, 16, 1376, 18, 129, 115, 150, 18, 103, 92, 150, 98, 115, 199, 1238, 88, 115, 92, 98, 88, 92, 163,
+        199, 45, 390, 30, 399, 30, 299, 35, 299, 35, 398, 30, 414, 35, 414, 35, 602, 133, 248, 30, 380, 35, 633, 35,
+        380, 113, 226, 35, 635, 35, 486, 49, 465, 113, 270, 34, 465, 5, 180, 195, 41, 414, 41, 602, 70, 1375, 41, 633,
+        28, 414, 41, 635, 28, 602, 28, 70, 195, 15, 226, 49, 248, 17, 226, 28, 380, 34, 248, 49, 334, 17, 270, 28,
+        486, 34, 334, 34, 548, 108, 558, 89, 558, 14, 399, 107, 558, 14, 299, 163, 258, 14, 398, 163, 271, 98, 465, 45,
+        432, 8, 1443, 96, 1272, 81, 264, 137, 1272, 54, 264, 264, 317, 54, 276, 276, 317, 376, 694, 20, 1383, 208, 1273, 145,
+        913, 67, 168, 145, 1015, 47, 168, 174, 1145, 58, 827, 174, 1167, 9, 964, 20, 1057, 79, 1100, 79, 226, 79, 270, 79,
+        660, 18, 89, 18, 413, 18, 107, 18, 488, 98, 248, 84, 660, 14, 380, 98, 334, 14, 486, 70, 1202, 14, 892, 1035,
+        1060, 240, 439, 90, 862, 191, 1035, 54, 283, 283, 317, 54, 90, 90, 317, 310, 617, 191, 1174, 191, 257, 442, 617, 1373,
+        209, 317, 125, 240, 79, 782, 84, 1097, 84, 1426, 228, 530, 186, 1009, 145, 670, 67, 287, 64, 67, 145, 513, 47, 287,
+        47, 64, 263, 287, 64, 263, 317, 526, 81, 222, 54, 222, 191, 647, 81, 186, 54, 186, 81, 140, 32, 81, 54, 167,
+        54, 140, 32, 54, 191, 363, 32, 317, 30, 206, 35, 206, 30, 232, 35, 232, 41, 206, 41, 259, 41, 232, 3, 1158,
+        28, 206, 133, 1105, 28, 259, 154, 386, 185, 1105, 28, 232, 49, 740, 154, 345, 3, 1138, 65, 965, 30, 180, 35, 180,
+        180, 761, 133, 353, 41, 359, 185, 353, 41, 418, 65, 1408, 3, 318, 3, 484, 3, 539, 30, 279, 3, 386, 3, 456,
+        3, 607, 35, 279, 3, 345, 34, 854, 965, 180, 510, 28, 180, 51, 353, 49, 353, 68, 353, 1408, 3, 171, 3, 322,
+        3, 537, 122, 162, 3, 166, 3, 538, 122, 326, 28, 279, 28, 666, 96, 696, 96, 779, 14, 206, 137, 779, 14, 259,
+        359, 597, 14, 232, 418, 597, 98, 740, 14, 1294, 96, 913, 137, 913, 30, 168, 137, 1015, 35, 168, 168, 761, 58, 276,
+        65, 1382, 9, 1351, 141, 1126, 87, 493, 96, 429, 137, 429, 87, 384, 18, 231, 96, 961, 18, 281, 123, 779, 3, 30,
+        98, 87, 762, 14, 359, 98, 1105, 14, 418, 279, 597, 154, 772, 8, 924, 8, 976, 826, 8, 977, 120, 303, 401, 1020,
+        151, 303, 441, 1020, 9, 1432, 438, 1020, 101, 1318, 101, 208, 58, 825, 141, 1035, 44, 90, 44, 725, 58, 90, 58, 725,
+        44, 572, 141, 1174, 28, 168, 58, 572, 1382, 123, 1282, 158, 676, 180, 328, 15, 429, 17, 429, 123, 429, 52, 566, 18,
+        316, 66, 566, 18, 296, 18, 744, 51, 563, 49, 563, 68, 563, 14, 279, 34, 563, 384, 558, 84, 696, 84, 779, 87,
+        530, 96, 670, 96, 513, 30, 287, 30, 64, 137, 513, 35, 287, 35, 64, 87, 887, 64, 761, 179, 1318, 44, 222, 58,
+        222, 141, 647, 44, 186, 44, 167, 44, 140, 32, 44, 58, 167, 58, 140, 32, 58, 141, 363, 141, 176, 123, 1157, 74,
+        748, 111, 748, 225, 877, 1232, 1208, 74, 431, 57, 139, 1209, 111, 431, 17, 164, 431, 1053, 123, 164, 18, 384, 18, 1236,
+        18, 1247, 18, 762, 15, 670, 15, 513, 7, 381, 7, 1245, 64, 510, 28, 287, 28, 64, 18, 530, 42, 596, 186, 400,
+        14, 64, 27, 559, 27, 712, 27, 395, 77, 691, 61, 691, 61, 690, 77, 692, 77, 383, 61, 383, 165, 241, 157, 165,
+        138, 157, 77, 295, 61, 295, 61, 342, 112, 165, 112, 138, 138, 161, 372, 576, 257, 905, 99, 905, 116, 461, 116, 547,
+        15, 888, 15, 463, 56, 1324, 17, 463, 43, 1226, 56, 483, 142, 449, 56, 637, 142, 305, 91, 1050, 421, 462, 239, 462,
+        186, 554, 186, 333, 142, 709, 27, 196, 167, 333, 142, 708, 27, 184, 106, 212, 27, 760, 170, 1169, 27, 1357, 196, 911,
+        196, 669, 184, 669, 27, 466, 55, 383, 48, 383, 43, 105, 179, 179, 1230, 43, 216, 43, 202, 105, 653, 43, 187, 71,
+        653, 301, 860, 105, 482, 301, 759, 71, 482, 27, 771, 55, 295, 48, 295, 48, 342, 165, 169, 138, 169, 138, 198, 112,
+        1019, 112, 577, 161, 577, 153, 461, 153, 547, 43, 494, 43, 347, 43, 523, 43, 262, 43, 702, 52, 267, 74, 267, 66,
+        267, 111, 267, 91, 211, 84, 789, 84, 651, 186, 478, 186, 314, 140, 478, 55, 315, 167, 314, 140, 314, 48, 315, 163,
+        267, 27, 471, 27, 472, 27, 335, 27, 370, 67, 383, 47, 383, 237, 741, 237, 527, 43, 128, 43, 129, 115, 876, 43,
+        103, 92, 876, 115, 355, 115, 534, 92, 355, 92, 534, 27, 767, 27, 399, 27, 299, 27, 398, 241, 264, 157, 264, 157,
+        276, 11, 67, 112, 112, 827, 161, 827, 43, 951, 43, 970, 43, 108, 43, 89, 43, 413, 43, 107, 43, 488, 27, 633,
+        27, 380, 27, 635, 27, 486, 27, 892, 341, 439, 90, 148, 195, 241, 283, 157, 283, 283, 953, 90, 157, 90, 953, 310,
+        616, 257, 754, 442, 616, 99, 754, 125, 341, 84, 1419, 43, 47, 84, 186, 996, 145, 642, 142, 546, 67, 315, 145, 531,
+        142, 495, 47, 315, 263, 315, 116, 503, 116, 332, 81, 403, 54, 403, 140, 241, 81, 117, 54, 519, 140, 157, 54, 117,
+        117, 317, 27, 206, 27, 259, 27, 232, 112, 264, 112, 276, 161, 276, 96, 366, 137, 366, 43, 221, 43, 231, 96, 269,
+        43, 281, 123, 874, 133, 562, 28, 295, 185, 562, 28, 342, 154, 278, 0, 826, 303, 903, 303, 904, 112, 825, 161, 825,
+        112, 283, 90, 112, 112, 725, 90, 161, 161, 725, 112, 572, 112, 209, 161, 572, 161, 209, 470, 676, 180, 237, 15, 366,
+        17, 366, 123, 366, 52, 565, 15, 269, 66, 565, 17, 269, 123, 269, 51, 562, 49, 562, 68, 562, 27, 279, 3, 278,
+        84, 641, 84, 874, 96, 642, 96, 531, 142, 452, 14, 295, 137, 531, 142, 606, 35, 315, 315, 761, 112, 222, 116, 289,
+        77, 208, 61, 208, 112, 140, 44, 117, 58, 519, 140, 161, 58, 117, 141, 679, 74, 1036, 111, 1036, 1420, 1214, 104, 1237,
+        104, 139, 1215, 104, 1239, 104, 234, 123, 371, 79, 269, 18, 461, 18, 547, 84, 269, 15, 642, 15, 531, 15, 797, 56,
+        381, 17, 797, 98, 562, 142, 590, 28, 315, 43, 530, 42, 421, 42, 239, 42, 653, 91, 670, 91, 513, 27, 287, 27,
+        64, 297, 808, 4, 26, 766, 297, 1007, 179, 776, 83, 179, 311, 1234, 26, 776, 368, 972, 1233, 368, 852, 173, 297, 297,
+        540, 149, 297, 297, 448, 176, 297, 55, 374, 55, 300, 48, 300, 152, 1124, 118, 1124, 55, 152, 55, 118, 152, 214, 48,
+        118, 118, 214, 132, 672, 132, 177, 97, 672, 97, 177, 121, 492, 4, 1037, 134, 1107, 189, 1107, 86, 592, 86, 453, 86,
+        490, 134, 1321, 189, 1321, 948, 949, 134, 1221, 967, 189, 1221, 9, 632, 16, 632, 9, 640, 16, 640, 233, 402, 51, 1310,
+        68, 1310, 124, 494, 124, 347, 124, 523, 90, 443, 214, 1136, 52, 378, 74, 378, 66, 378, 111, 378, 211, 678, 224, 1306,
+        311, 1306, 170, 1122, 167, 1356, 170, 1162, 968, 170, 1278, 140, 1344, 979, 36, 40, 309, 67, 374, 47, 374, 47, 300, 67,
+        864, 47, 864, 67, 152, 47, 152, 67, 993, 47, 118, 47, 993, 67, 850, 67, 706, 47, 850, 47, 706, 235, 365, 30,
+        374, 30, 300, 35, 300, 86, 399, 86, 299, 86, 398, 30, 864, 35, 864, 30, 152, 30, 118, 30, 993, 35, 118, 35,
+        993, 133, 436, 30, 706, 35, 850, 35, 706, 113, 492, 124, 951, 124, 970, 939, 937, 124, 413, 938, 124, 488, 86, 633,
+        86, 380, 86, 635, 86, 486, 86, 892, 41, 864, 15, 501, 17, 501, 28, 864, 52, 717, 15, 323, 66, 717, 17, 323,
+        28, 993, 15, 492, 49, 436, 17, 492, 28, 706, 34, 436, 4, 84, 152, 84, 1260, 216, 249, 202, 249, 287, 911, 14,
+        374, 187, 249, 287, 669, 14, 300, 163, 459, 177, 1078, 177, 1224, 186, 684, 145, 408, 140, 684, 67, 159, 145, 312, 140,
+        835, 47, 159, 159, 263, 79, 323, 152, 328, 118, 328, 84, 323, 7, 216, 7, 202, 106, 514, 7, 187, 106, 354, 98,
+        436, 1, 60, 287, 40, 644, 86, 206, 86, 259, 86, 232, 4, 1018, 4, 1160, 4, 1195, 96, 524, 137, 524, 124, 221,
+        90, 251, 96, 839, 90, 268, 124, 1308, 133, 738, 86, 359, 185, 738, 86, 418, 211, 557, 169, 825, 198, 825, 1011, 1012,
+        169, 725, 1013, 198, 725, 169, 572, 169, 209, 198, 572, 198, 209, 555, 676, 292, 430, 15, 524, 90, 329, 123, 524, 52,
+        665, 124, 316, 66, 665, 90, 210, 124, 744, 63, 409, 49, 738, 63, 444, 86, 279, 63, 211, 177, 591, 177, 645, 96,
+        408, 96, 312, 140, 251, 30, 159, 137, 312, 140, 268, 35, 159, 159, 761, 169, 222, 198, 222, 169, 186, 167, 169, 140,
+        169, 32, 169, 167, 198, 140, 198, 32, 198, 176, 394, 153, 307, 153, 289, 55, 208, 48, 208, 177, 307, 44, 121, 58,
+        518, 177, 289, 58, 121, 121, 922, 153, 450, 38, 409, 38, 444, 177, 450, 15, 408, 15, 312, 15, 836, 17, 312, 17,
+        836, 119, 351, 140, 210, 28, 159, 38, 737, 84, 408, 84, 312, 42, 737, 186, 313, 167, 313, 42, 739, 14, 159, 393,
+        668, 389, 668, 382, 668, 205, 793, 433, 793, 18, 393, 18, 389, 205, 900, 18, 382, 433, 900, 205, 1003, 205, 644, 53,
+        1394, 433, 644, 437, 1421, 2, 102, 793, 79, 838, 79, 764, 79, 1059, 146, 1220, 247, 798, 18, 1041, 217, 798, 798, 1104,
+        247, 1388, 181, 698, 46, 1068, 2, 60, 644, 181, 804, 264, 619, 264, 568, 276, 568, 236, 593, 250, 593, 1141, 92, 236,
+        236, 544, 92, 250, 250, 544, 133, 1103, 60, 861, 146, 763, 60, 763, 113, 1056, 101, 593, 260, 283, 90, 260, 156, 593,
+        325, 336, 199, 283, 325, 476, 90, 199, 156, 544, 15, 1056, 49, 1103, 99, 390, 28, 60, 174, 125, 325, 222, 619, 222,
+        568, 128, 249, 129, 249, 140, 619, 1140, 103, 249, 140, 568, 92, 227, 273, 774, 228, 1078, 228, 1224, 370, 621, 145, 1009,
+        228, 546, 172, 541, 7, 1040, 228, 495, 172, 361, 263, 1054, 199, 526, 115, 179, 92, 179, 199, 222, 7, 128, 7, 129,
+        106, 115, 7, 103, 92, 106, 119, 325, 140, 199, 32, 199, 258, 264, 258, 276, 271, 276, 101, 528, 101, 586, 236, 248,
+        248, 250, 226, 1115, 250, 334, 270, 1115, 258, 572, 209, 258, 271, 572, 209, 271, 63, 1163, 235, 430, 101, 248, 101, 334,
+        101, 548, 194, 633, 156, 248, 194, 635, 156, 334, 156, 548, 63, 226, 49, 63, 172, 63, 270, 209, 373, 63, 719, 222,
+        258, 222, 271, 108, 249, 89, 249, 140, 258, 32, 258, 107, 249, 140, 271, 32, 271, 32, 752, 30, 1319, 35, 1319, 1443,
+        54, 96, 191, 419, 30, 213, 54, 137, 191, 646, 35, 213, 87, 605, 24, 983, 24, 984, 67, 208, 44, 145, 16, 983,
+        120, 193, 58, 145, 16, 984, 151, 193, 193, 871, 70, 427, 38, 226, 38, 270, 38, 660, 7, 108, 7, 89, 7, 413,
+        7, 107, 7, 488, 172, 1004, 42, 660, 32, 373, 225, 1060, 109, 240, 136, 240, 191, 225, 15, 81, 15, 54, 15, 317,
+        17, 54, 17, 317, 29, 34, 146, 191, 693, 28, 213, 38, 782, 18, 546, 18, 495, 42, 782, 256, 1009, 145, 400, 228,
+        1069, 172, 280, 79, 317, 81, 84, 54, 84, 150, 191, 81, 256, 54, 256, 88, 191, 45, 617, 178, 206, 178, 259, 178,
+        232, 101, 958, 101, 1047, 194, 206, 194, 259, 156, 958, 194, 232, 156, 1047, 133, 806, 87, 969, 185, 806, 87, 875, 154,
+        582, 154, 430, 30, 567, 35, 567, 101, 854, 133, 724, 30, 908, 185, 724, 35, 908, 156, 854, 96, 275, 49, 806, 137,
+        275, 87, 1182, 113, 275, 101, 353, 122, 921, 28, 567, 122, 515, 122, 475, 68, 724, 28, 908, 15, 275, 17, 275, 123,
+        275, 87, 591, 87, 645, 96, 722, 96, 723, 87, 452, 30, 1005, 137, 723, 87, 606, 35, 1005, 32, 855, 87, 411, 87,
+        412, 44, 96, 44, 137, 87, 307, 44, 113, 58, 137, 87, 289, 58, 113, 141, 978, 87, 346, 96, 564, 137, 564, 87,
+        450, 7, 221, 7, 231, 96, 1008, 7, 281, 123, 723, 119, 1006, 87, 590, 87, 352, 24, 1146, 24, 1168, 924, 976, 70,
+        525, 80, 120, 977, 70, 588, 80, 151, 80, 871, 141, 631, 41, 208, 58, 822, 141, 225, 15, 44, 17, 44, 44, 123,
+        17, 58, 58, 123, 158, 510, 141, 693, 34, 141, 179, 353, 15, 564, 17, 564, 123, 564, 52, 618, 7, 316, 66, 618,
+        7, 296, 7, 744, 122, 176, 450, 558, 18, 452, 18, 606, 18, 87, 106, 96, 400, 137, 400, 87, 1069, 227, 563, 141,
+        677, 44, 84, 58, 84, 141, 150, 14, 208, 58, 256, 88, 141, 14, 158, 57, 1149, 57, 571, 90, 431, 156, 877, 57,
+        284, 57, 337, 209, 431, 57, 125, 18, 450, 7, 1236, 7, 1247, 18, 590, 15, 400, 17, 400, 123, 400, 403, 554, 333,
+        403, 77, 212, 333, 519, 61, 212, 292, 559, 292, 712, 55, 212, 292, 395, 48, 212, 403, 996, 145, 554, 67, 212, 145,
+        333, 47, 212, 241, 403, 157, 403, 117, 241, 157, 519, 117, 157, 96, 554, 96, 333, 30, 212, 137, 333, 35, 212, 112,
+        403, 112, 519, 112, 117, 161, 519, 117, 161, 338, 372, 51, 905, 139, 372, 68, 905, 234, 372, 43, 461, 43, 547, 15,
+        554, 15, 333, 135, 796, 17, 333, 56, 1226, 212, 510, 28, 212, 43, 709, 42, 463, 91, 642, 91, 531, 142, 482, 14,
+        212, 170, 1370, 186, 1052, 165, 233, 167, 1052, 138, 233, 216, 553, 202, 553, 27, 374, 187, 553, 27, 300, 67, 77, 292,
+        145, 478, 86, 692, 145, 314, 86, 383, 152, 237, 118, 237, 56, 216, 56, 202, 105, 797, 56, 187, 71, 797, 27, 850,
+        27, 706, 96, 478, 96, 314, 86, 295, 137, 314, 86, 342, 169, 403, 169, 519, 117, 169, 198, 519, 117, 198, 112, 823,
+        112, 518, 112, 121, 161, 518, 121, 161, 116, 409, 116, 444, 15, 478, 15, 314, 56, 523, 17, 314, 56, 702, 267, 572,
+        86, 1049, 177, 421, 177, 239, 91, 408, 91, 312, 140, 267, 27, 159, 128, 553, 129, 553, 117, 619, 103, 553, 117, 568,
+        370, 575, 145, 996, 67, 1028, 56, 1040, 47, 1028, 115, 574, 92, 574, 56, 128, 56, 129, 115, 272, 56, 103, 92, 272,
+        117, 1164, 117, 199, 108, 553, 89, 553, 117, 258, 107, 553, 117, 271, 96, 241, 96, 157, 30, 587, 137, 157, 35, 587,
+        112, 1017, 112, 145, 193, 903, 145, 161, 193, 904, 116, 226, 116, 270, 56, 108, 56, 89, 56, 413, 56, 107, 56, 488,
+        146, 1175, 117, 373, 109, 341, 136, 341, 15, 241, 15, 157, 15, 953, 17, 157, 17, 953, 146, 1166, 28, 587, 43, 546,
+        43, 495, 91, 1009, 7, 47, 91, 228, 482, 172, 252, 81, 462, 43, 332, 81, 91, 54, 91, 191, 534, 27, 213, 96,
+        695, 96, 704, 178, 295, 137, 704, 178, 342, 96, 112, 112, 137, 112, 113, 137, 161, 113, 161, 96, 561, 137, 561, 56,
+        221, 56, 231, 96, 960, 56, 281, 123, 704, 355, 806, 87, 1050, 0, 924, 0, 976, 80, 903, 0, 977, 80, 904, 112,
+        822, 161, 822, 15, 112, 17, 112, 112, 123, 17, 161, 123, 161, 470, 510, 34, 396, 353, 574, 15, 561, 17, 561, 123,
+        561, 52, 511, 56, 316, 66, 511, 56, 296, 56, 744, 91, 275, 43, 452, 43, 606, 91, 722, 91, 723, 87, 482, 227,
+        562, 43, 307, 43, 289, 44, 91, 58, 91, 141, 534, 27, 158, 104, 571, 104, 896, 104, 284, 104, 337, 104, 1067, 104,
+        125, 38, 269, 7, 461, 7, 547, 42, 269, 7, 449, 7, 305, 91, 1008, 18, 653, 42, 642, 91, 400, 65, 942, 65,
+        971, 4, 1372, 65, 933, 397, 1107, 675, 1102, 1, 311, 675, 942, 971, 106, 1064, 933, 106, 1170, 1277, 16, 609, 216, 581,
+        202, 581, 159, 911, 187, 581, 159, 669, 179, 1137, 179, 1024, 22, 216, 22, 202, 105, 836, 22, 187, 71, 836, 22, 119,
+        1253, 60, 800, 215, 1066, 215, 1045, 215, 227, 331, 1045, 227, 331, 96, 931, 96, 443, 121, 251, 137, 443, 121, 268, 179,
+        215, 179, 331, 31, 215, 26, 215, 106, 215, 26, 331, 106, 331, 170, 1004, 170, 589, 153, 409, 153, 444, 22, 494, 22,
+        347, 22, 523, 22, 262, 22, 702, 211, 672, 121, 210, 540, 894, 448, 894, 186, 233, 167, 233, 140, 233, 1390, 249, 506,
+        249, 794, 59, 1380, 249, 893, 47, 643, 783, 1307, 47, 865, 7, 506, 47, 514, 59, 1436, 47, 354, 47, 981, 119, 1191,
+        718, 1070, 249, 1062, 249, 1198, 30, 643, 249, 1217, 35, 643, 108, 581, 89, 581, 121, 258, 107, 581, 121, 271, 30, 865,
+        35, 865, 30, 514, 30, 354, 30, 981, 35, 354, 35, 981, 1002, 1004, 28, 643, 153, 226, 153, 270, 22, 108, 22, 89,
+        22, 413, 22, 107, 22, 488, 146, 932, 22, 70, 78, 41, 865, 15, 801, 17, 801, 28, 865, 52, 803, 15, 805, 66,
+        803, 17, 805, 28, 981, 3, 771, 152, 375, 118, 375, 132, 249, 97, 249, 140, 459, 32, 459, 84, 684, 84, 835, 256,
+        684, 145, 313, 228, 739, 172, 244, 38, 323, 152, 621, 118, 621, 42, 323, 7, 132, 7, 97, 40, 671, 96, 251, 96,
+        268, 113, 251, 137, 268, 113, 268, 65, 277, 65, 340, 113, 169, 65, 343, 113, 198, 96, 329, 137, 329, 22, 221, 22,
+        231, 96, 210, 17, 268, 123, 268, 351, 812, 87, 211, 169, 822, 198, 822, 277, 340, 123, 169, 343, 123, 198, 510, 555,
+        34, 394, 180, 292, 15, 329, 17, 329, 123, 329, 52, 351, 15, 210, 66, 351, 17, 210, 123, 210, 211, 720, 84, 251,
+        84, 268, 96, 313, 137, 313, 87, 739, 113, 313, 50, 525, 50, 588, 1413, 1414, 16, 1227, 1083, 124, 307, 124, 289, 86,
+        208, 58, 678, 16, 1330, 86, 158, 79, 210, 18, 409, 18, 444, 84, 210, 15, 313, 17, 313, 123, 313, 22, 530, 42,
+        408, 64, 292, 82, 1333, 21, 143, 1108, 53, 1380, 160, 1333, 32, 1430, 205, 783, 433, 783, 7, 393, 7, 389, 205, 671,
+        7, 382, 433, 671, 119, 1190, 437, 1070, 2, 1422, 38, 838, 38, 764, 38, 1059, 146, 1112, 42, 838, 7, 1041, 42, 764,
+        42, 1059, 181, 600, 30, 1142, 30, 1095, 30, 768, 35, 1095, 35, 768, 30, 593, 35, 593, 30, 115, 30, 92, 30, 544,
+        35, 92, 35, 544, 273, 326, 28, 768, 41, 593, 15, 260, 17, 260, 28, 593, 52, 325, 15, 199, 66, 325, 17, 199,
+        28, 544, 34, 390, 84, 619, 84, 568, 115, 597, 92, 597, 273, 504, 45, 273, 228, 1097, 228, 1426, 67, 1386, 47, 1386,
+        228, 1385, 172, 963, 1376, 115, 328, 92, 328, 84, 199, 14, 115, 14, 92, 14, 544, 30, 528, 35, 528, 113, 258, 35,
+        586, 113, 271, 41, 528, 41, 586, 30, 248, 35, 248, 87, 226, 35, 334, 87, 270, 465, 510, 34, 432, 180, 235, 41,
+        248, 41, 334, 41, 548, 3, 633, 28, 248, 3, 635, 28, 334, 28, 548, 3, 892, 84, 258, 84, 271, 14, 528, 14,
+        586, 88, 432, 14, 465, 191, 236, 191, 250, 240, 264, 240, 276, 694, 1067, 1314, 8, 983, 8, 984, 1184, 1185, 16, 1057,
+        964, 79, 373, 18, 226, 18, 270, 18, 660, 14, 248, 14, 334, 14, 548, 156, 1060, 240, 283, 90, 240, 156, 191, 257,
+        617, 99, 617, 209, 240, 18, 782, 7, 546, 64, 235, 38, 317, 42, 81, 32, 240, 154, 206, 154, 259, 30, 740, 154,
+        232, 35, 740, 41, 958, 154, 873, 3, 206, 3, 259, 154, 359, 3, 232, 154, 418, 812, 1006, 3, 1294, 154, 180, 30,
+        353, 35, 353, 41, 854, 122, 133, 3, 359, 122, 185, 3, 418, 154, 279, 34, 379, 3, 180, 41, 1116, 28, 353, 51,
+        122, 49, 122, 68, 122, 3, 279, 34, 122, 87, 696, 87, 779, 14, 958, 14, 1047, 14, 1252, 14, 740, 87, 913, 87,
+        1015, 44, 557, 58, 557, 87, 1282, 1351, 87, 429, 96, 566, 137, 566, 87, 961, 30, 563, 35, 563, 14, 854, 8, 1146,
+        8, 1168, 218, 1304, 218, 1343, 512, 1020, 1432, 101, 141, 194, 208, 58, 923, 141, 156, 44, 63, 58, 63, 141, 676, 328,
+        353, 15, 566, 17, 566, 123, 566, 98, 122, 28, 563, 558, 961, 7, 452, 64, 154, 141, 179, 42, 44, 6, 1328, 123,
+        748, 1433, 57, 402, 18, 961, 7, 7, 51, 3, 64, 91, 554, 91, 333, 27, 212, 91, 478, 91, 314, 86, 212, 91,
+        996, 91, 1425, 117, 858, 91, 241, 91, 157, 27, 587, 91, 695, 91, 704, 178, 212, 91, 112, 91, 161, 27, 470, 284,
+        372, 337, 372, 125, 372, 116, 269, 56, 461, 56, 547, 142, 269, 56, 449, 56, 305, 91, 960, 43, 653, 42, 554, 42,
+        333, 272, 1084, 91, 809, 91, 1356, 91, 1344, 170, 252, 249, 860, 249, 759, 27, 643, 91, 684, 91, 835, 267, 620, 43,
+        697, 237, 514, 237, 354, 43, 1086, 27, 514, 27, 354, 27, 981, 91, 251, 91, 268, 113, 267, 91, 169, 91, 198, 27,
+        555, 112, 678, 161, 678, 86, 470, 153, 269, 43, 409, 43, 444, 177, 269, 15, 267, 17, 267, 91, 210, 43, 737, 42,
+        478, 42, 314, 214, 1084, 91, 313, 27, 1142, 27, 1095, 27, 768, 235, 692, 235, 383, 620, 858, 199, 747, 115, 237, 92,
+        237, 199, 462, 27, 115, 27, 92, 27, 544, 27, 528, 27, 586, 27, 465, 264, 341, 276, 341, 125, 1337, 0, 1184, 0,
+        1185, 0, 964, 43, 1100, 43, 226, 43, 270, 43, 660, 27, 248, 27, 334, 27, 548, 156, 1339, 283, 341, 90, 341, 156,
+        754, 257, 616, 99, 616, 209, 341, 43, 782, 56, 546, 56, 495, 263, 1084, 235, 315, 116, 317, 81, 142, 54, 142, 142,
+        317, 117, 240, 154, 295, 154, 342, 27, 740, 112, 557, 161, 557, 178, 470, 87, 366, 96, 565, 137, 565, 87, 269, 3,
+        295, 3, 342, 27, 854, 716, 1304, 716, 1343, 438, 1101, 101, 396, 112, 923, 161, 923, 156, 396, 63, 112, 63, 161, 396,
+        676, 237, 353, 15, 565, 17, 565, 123, 565, 122, 355, 28, 562, 269, 558, 56, 452, 56, 606, 87, 797, 154, 315, 141,
+        574, 42, 112, 58, 142, 141, 272, 473, 1268, 123, 1036, 74, 104, 104, 111, 104, 1053, 104, 402, 18, 269, 7, 56, 68,
+        56, 590, 3, 315, 297, 1066, 297, 1045, 227, 297, 222, 368, 186, 368, 167, 368, 140, 368, 31, 297, 26, 297, 106, 297,
+        132, 581, 97, 581, 121, 459, 153, 323, 152, 292, 118, 292, 177, 323, 22, 132, 22, 97, 22, 884, 65, 632, 65, 640,
+        113, 233, 96, 378, 137, 378, 113, 378, 225, 894, 134, 675, 189, 675, 693, 894, 632, 640, 123, 233, 153, 839, 124, 409,
+        124, 444, 177, 839, 15, 378, 17, 378, 123, 378, 1110, 1221, 170, 866, 170, 756, 170, 887, 1205, 67, 689, 47, 689, 53,
+        78, 309, 228, 501, 67, 792, 47, 792, 228, 323, 67, 436, 47, 436, 172, 884, 30, 689, 35, 689, 113, 459, 86, 528,
+        86, 586, 86, 465, 225, 992, 30, 792, 35, 792, 693, 992, 30, 436, 35, 436, 87, 492, 124, 1100, 124, 226, 124, 270,
+        124, 660, 86, 248, 86, 334, 86, 548, 41, 792, 15, 717, 17, 717, 28, 792, 3, 850, 28, 436, 150, 992, 375, 514,
+        354, 375, 106, 891, 14, 689, 38, 1133, 22, 546, 22, 495, 42, 1133, 159, 235, 18, 323, 354, 621, 287, 1253, 14, 436,
+        251, 557, 268, 557, 178, 834, 169, 557, 198, 557, 178, 555, 87, 524, 96, 665, 137, 665, 87, 839, 63, 251, 63, 268,
+        210, 557, 101, 394, 169, 923, 198, 923, 156, 394, 63, 169, 63, 198, 394, 676, 292, 567, 15, 665, 90, 351, 123, 665,
+        275, 672, 63, 210, 210, 786, 42, 251, 42, 268, 87, 836, 154, 159, 179, 394, 42, 169, 42, 198, 106, 394, 59, 1328,
+        153, 922, 44, 177, 58, 177, 141, 214, 158, 292, 38, 210, 7, 444, 42, 210, 3, 159, 205, 952, 433, 952, 45, 53,
+        437, 60, 79, 437, 205, 988, 433, 988, 53, 1244, 205, 907, 53, 1068, 437, 1202, 181, 793, 18, 838, 18, 764, 181, 900,
+        181, 1003, 181, 644, 143, 861, 143, 763, 113, 1363, 273, 1035, 236, 390, 250, 390, 273, 1174, 2, 861, 2, 763, 87, 1056,
+        101, 390, 283, 325, 90, 325, 156, 390, 63, 1164, 28, 1103, 273, 647, 115, 375, 92, 375, 273, 363, 32, 848, 38, 1183,
+        172, 546, 172, 495, 42, 1183, 235, 1054, 38, 199, 92, 621, 42, 199, 32, 325, 178, 528, 178, 586, 178, 465, 101, 432,
+        194, 528, 194, 586, 156, 432, 63, 258, 63, 271, 63, 752, 235, 567, 194, 248, 194, 334, 194, 548, 146, 1109, 63, 373,
+        38, 752, 42, 258, 42, 271, 106, 432, 143, 1266, 87, 862, 30, 191, 35, 191, 694, 1053, 113, 240, 24, 1410, 983, 984,
+        36, 39, 512, 39, 1206, 38, 373, 7, 270, 42, 373, 172, 352, 28, 1060, 17, 240, 28, 191, 34, 617, 178, 958, 178,
+        1047, 178, 740, 101, 788, 236, 379, 250, 379, 194, 1252, 30, 806, 35, 806, 63, 855, 101, 379, 122, 236, 122, 250, 156,
+        379, 178, 1116, 87, 275, 101, 122, 194, 1116, 122, 156, 122, 676, 38, 855, 87, 722, 87, 723, 87, 1359, 227, 379, 65,
+        1329, 44, 87, 58, 87, 141, 761, 154, 158, 87, 564, 137, 618, 87, 1008, 122, 227, 41, 1396, 1146, 1168, 70, 871, 218,
+        1257, 1329, 58, 720, 28, 141, 3, 158, 122, 179, 15, 618, 17, 618, 123, 618, 142, 554, 142, 333, 91, 758, 142, 478,
+        142, 314, 91, 267, 142, 996, 142, 1425, 212, 235, 142, 241, 142, 157, 117, 341, 142, 695, 142, 704, 154, 212, 112, 142,
+        142, 161, 1101, 1268, 74, 372, 111, 372, 372, 402, 43, 269, 51, 796, 68, 796, 142, 960, 3, 212, 56, 653, 56, 482,
+        170, 709, 170, 708, 91, 233, 56, 105, 375, 375, 1243, 27, 689, 142, 684, 142, 835, 27, 86, 235, 43, 323, 514, 575,
+        354, 575, 142, 805, 27, 436, 142, 251, 142, 268, 267, 557, 142, 169, 142, 198, 59, 91, 473, 112, 177, 161, 177, 292,
+        470, 116, 210, 56, 409, 56, 444, 142, 210, 63, 267, 22, 653, 42, 267, 142, 619, 142, 568, 117, 848, 67, 1331, 47,
+        1331, 235, 1028, 116, 199, 115, 575, 92, 575, 142, 199, 117, 325, 142, 258, 142, 271, 143, 1175, 30, 754, 35, 754, 113,
+        341, 0, 983, 0, 984, 80, 1409, 116, 373, 56, 226, 56, 270, 142, 373, 63, 858, 28, 1339, 15, 341, 17, 341, 28,
+        754, 34, 616, 7, 43, 263, 172, 482, 43, 317, 27, 191, 87, 695, 87, 704, 154, 1352, 87, 112, 87, 161, 154, 470,
+        87, 561, 96, 511, 137, 511, 87, 960, 178, 562, 70, 903, 70, 904, 716, 1257, 41, 396, 112, 720, 161, 720, 28, 396,
+        3, 470, 122, 574, 15, 511, 17, 511, 123, 511, 249, 269, 87, 809, 141, 237, 27, 141, 104, 725, 104, 209, 7, 269,
+        91, 618, 375, 1064, 375, 1170, 65, 609, 1, 16, 50, 50, 186, 1111, 167, 1111, 201, 287, 609, 375, 1137, 375, 1024, 143,
+        800, 22, 697, 292, 514, 292, 354, 22, 1086, 2, 800, 215, 375, 331, 375, 154, 1179, 177, 251, 177, 268, 211, 581, 170,
+        450, 215, 621, 331, 621, 170, 590, 170, 352, 153, 210, 22, 409, 22, 444, 177, 210, 22, 211, 106, 894, 42, 233, 59,
+        1381, 47, 891, 600, 1431, 718, 785, 59, 1423, 47, 878, 718, 1085, 32, 1191, 30, 891, 35, 891, 143, 203, 298, 177, 258,
+        177, 271, 143, 932, 53, 1181, 30, 878, 35, 878, 28, 891, 3, 643, 22, 1100, 22, 226, 22, 270, 22, 660, 22, 719,
+        3, 865, 15, 803, 17, 803, 28, 878, 106, 992, 42, 459, 22, 782, 228, 313, 42, 717, 7, 492, 87, 251, 87, 268,
+        154, 834, 87, 169, 87, 198, 154, 555, 87, 329, 96, 351, 137, 351, 87, 210, 113, 351, 41, 394, 169, 720, 198, 720,
+        28, 394, 3, 555, 292, 353, 15, 351, 17, 351, 123, 351, 210, 558, 87, 313, 50, 871, 1227, 124, 922, 1330, 18, 210,
+        256, 351, 53, 1381, 42, 1430, 600, 1240, 437, 785, 205, 912, 433, 912, 437, 1085, 32, 1190, 181, 783, 181, 474, 7, 764,
+        181, 671, 273, 419, 273, 646, 113, 848, 225, 273, 30, 390, 35, 390, 273, 693, 34, 273, 41, 390, 15, 325, 17, 325,
+        28, 390, 150, 273, 88, 273, 172, 782, 172, 1385, 18, 199, 14, 390, 87, 258, 87, 271, 298, 1163, 41, 432, 3, 528,
+        3, 586, 28, 432, 3, 465, 235, 353, 3, 248, 3, 334, 3, 548, 18, 752, 14, 432, 240, 1115, 1383, 8, 1410, 1057,
+        18, 373, 235, 563, 156, 617, 63, 240, 30, 788, 35, 788, 379, 1259, 41, 788, 30, 379, 35, 379, 3, 1252, 113, 1006,
+        41, 379, 30, 122, 35, 122, 28, 379, 41, 122, 122, 510, 28, 122, 18, 855, 14, 788, 8, 141, 154, 141, 178, 87,
+        566, 14, 379, 194, 1396, 473, 512, 141, 194, 218, 1267, 122, 328, 14, 122, 142, 758, 142, 267, 142, 858, 27, 754, 87,
+        758, 27, 396, 209, 372, 56, 269, 91, 511, 170, 482, 27, 891, 228, 267, 43, 805, 27, 878, 87, 267, 27, 394, 86,
+        396, 43, 210, 91, 351, 273, 534, 228, 858, 43, 199, 27, 390, 27, 432, 209, 1337, 0, 1057, 43, 373, 235, 562, 156,
+        616, 63, 341, 27, 788, 178, 396, 87, 565, 27, 379, 512, 1101, 194, 396, 716, 1267, 122, 237, 27, 122, 297, 375, 42,
+        368, 297, 621, 177, 459, 22, 323, 22, 492, 87, 233, 87, 378, 28, 894, 233, 720, 124, 210, 292, 738, 228, 459, 172,
+        323, 172, 492, 87, 459, 86, 432, 28, 992, 3, 689, 124, 373, 235, 738, 3, 792, 3, 436, 22, 87, 178, 178, 394,
+        87, 665, 154, 738, 194, 394, 59, 218, 275, 10, 122, 124, 22, 275, 644, 1240, 437, 798, 437, 1388, 181, 988, 181, 907,
+        87, 1363, 156, 273, 63, 848, 194, 390, 63, 325, 178, 432, 194, 432, 143, 1109, 235, 724, 172, 275, 178, 788, 724, 1264,
+        178, 379, 154, 724, 122, 178, 122, 194, 272, 796, 214, 796, 263, 796, 56, 953, 553, 960, 396, 575, 123, 372, 28, 796,
+        170, 797, 797, 1002, 56, 1133, 56, 805, 210, 553, 394, 575, 292, 396, 56, 210, 272, 273, 56, 1183, 142, 325, 56, 752,
+        87, 341, 70, 1409, 56, 373, 28, 616, 56, 855, 154, 396, 87, 511, 3, 512, 716, 3, 396, 122, 575, 106, 201, 909,
+        42, 1111, 836, 1002, 22, 805, 170, 1359, 210, 581, 170, 1008, 22, 210, 671, 1431, 42, 1191, 87, 143, 255, 22, 752, 28,
+        53, 255, 22, 373, 3, 878, 22, 855, 154, 394, 87, 351, 3, 394, 122, 292, 671, 1240, 42, 1190, 181, 912, 87, 848,
+        28, 273, 3, 390, 298, 752, 3, 432, 122, 235, 379, 1264, 87, 1006, 122, 154, 3, 122
+    ]),
+    ostart: new Int32Array([
+        0, 16, 46, 103, 180, 418, 768, 1254, 1844, 2758, 3891, 5131, 6244, 7252, 8093, 8742, 9178, 9476, 9567, 9630
+    ])
+};
+/**
+ * MA endpoint/interior, A of degree 3, B of degree 3 (degree 18 in `s`, 9630 terms)
+ * (returned coefficients in descending powers of `s`)
+ * (9630 terms; multiplications: 101227 without sharing,
+ * 20694 with 1432 shared products)
+ */
+function resMAEI_A3B3(ax, ay, bx, by) {
+    const o = evalProgram(resMAEI_A3B3_P, [ax[0], ax[1], ax[2], ax[3], ay[0], ay[1], ay[2], ay[3], bx[2], bx[3], by[2], by[3]]);
+    return Array.from(o);
+}
+
+//# sourceMappingURL=resMAEI_A3B3.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/index.js
+// GENERATED by gen-resultants.py - do not edit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const resI = {
+    '12': resI_A1B2,
+    '13': resI_A1B3,
+    '21': resI_A2B1,
+    '22': resI_A2B2,
+    '23': resI_A2B3,
+    '31': resI_A3B1,
+    '32': resI_A3B2,
+    '33': resI_A3B3,
+};
+const resMAEI = {
+    '12': resMAEI_A1B2,
+    '13': resMAEI_A1B3,
+    '22': resMAEI_A2B2,
+    '23': resMAEI_A2B3,
+    '32': resMAEI_A3B2,
+    '33': resMAEI_A3B3,
+};
+const maiG = {
+    '12': maiG_A1B2,
+    '13': maiG_A1B3,
+    '22': maiG_A2B2,
+    '23': maiG_A2B3,
+    '32': maiG_A3B2,
+    '33': maiG_A3B3,
+};
+
+//# sourceMappingURL=index.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/maF_B3.js
+// GENERATED by gen-resultants.py - do not edit
+/** MA two interior footpoints, cubic B: F(σ,π), σ = s1 + s2, π = s1·s2 (`c[i][j]` the coefficient of `σ^i π^j`, 43 terms); multiplications: 141 without sharing, 70 with 23 shared products */
+function maF_B3(bx, by) {
+    const bx2 = bx[2];
+    const bx3 = bx[3];
+    const by2 = by[2];
+    const by3 = by[3];
+    const t0 = bx3 * by2;
+    const t1 = bx2 * by3;
+    const t2 = by3 * by3;
+    const t3 = by2 * by3;
+    const t4 = bx3 * t1;
+    const t5 = bx3 * t0;
+    const t6 = bx3 * by3;
+    const t7 = by2 * by2;
+    const t8 = bx2 * t1;
+    const t9 = bx2 * t0;
+    const t10 = t1 * t3;
+    const t11 = t1 * t2;
+    const t12 = t0 * t3;
+    const t13 = t0 * t2;
+    const t14 = by3 * t2;
+    const t15 = by2 * t3;
+    const t16 = by2 * t2;
+    const t17 = bx3 * t6;
+    const t18 = bx3 * t5;
+    const t19 = bx3 * t4;
+    const t20 = bx2 * t5;
+    const t21 = bx2 * t4;
+    const t22 = bx2 * by2;
+    return [
+        [2 * t22 - by3, 2 * t8 - 4 * t9 + 4 * t6 - 2 * t15, -2 * t21 + 2 * t20 - 2 * t10 - 3 * t17 + 2 * t12 - 3 * t14],
+        [2 * bx2 * t22 + 4 * t0 + 2 * by2 * t7, 2 * bx2 * t8 - 2 * bx2 * t9 + 8 * t4 + 2 * t1 * t7 - 10 * t5 - 2 * t0 * t7 - 2 * t16, -6 * t19 - 6 * t11 + 6 * t18 + 6 * t13],
+        [t8 + 6 * t9 + 2 * t6 + 7 * t15, 8 * t21 - 8 * t20 + 8 * t10 - 8 * t12, 0],
+        [4 * t4 + 4 * t5 + 8 * t16, 6 * t19 + 6 * t11 - 6 * t18 - 6 * t13, 0],
+        [3 * t17 + 3 * t14, 0, 0],
+    ];
+}
+
+//# sourceMappingURL=maF_B3.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/maN_B3.js
+// GENERATED by gen-resultants.py - do not edit
+/**
+ * MA two interior footpoints, cubic B: the intersection of the normals of `B`
+ * at `s1` and `s2` is `(Nx/D, Ny/D)`; returns `[Nx, Ny, D]` in terms of
+ * `σ = s1 + s2`, `π = s1·s2`, each as `c[i][j]`, the coefficient of `σ^i π^j`
+ * (58 terms; multiplications: 140 without sharing,
+ * 87 with 19 shared products)
+ */
+function maN_B3(bx, by) {
+    const x0 = bx[2];
+    const x1 = bx[3];
+    const x2 = by[2];
+    const x3 = by[3];
+    const x4 = x1 * x1;
+    const x5 = x3 * x3;
+    const x6 = x0 * x0;
+    const x7 = x2 * x2;
+    const x8 = x0 * x1;
+    const x9 = x2 * x3;
+    const x10 = x0 * x4;
+    const x11 = x0 * x5;
+    const x12 = x0 * x9;
+    const x13 = x1 * x2;
+    const x14 = x1 * x4;
+    const x15 = x1 * x5;
+    const x16 = x1 * x6;
+    const x17 = x2 * x4;
+    const x18 = x2 * x5;
+    const x19 = x2 * x8;
+    const x20 = x3 * x4;
+    const x21 = x3 * x5;
+    const x22 = x3 * x7;
+    const x23 = x0 * x2;
+    const x24 = x3 * x6;
+    const x25 = x1 * x3;
+    const x26 = x2 * x6;
+    const x27 = x2 * x7;
+    const x28 = x3 * x8;
+    const x29 = x1 * x7;
+    const x30 = x0 * x6;
+    const x31 = x0 * x7;
+    const x32 = x1 * x9;
+    const x33 = x0 * x3;
+    const o = new Float64Array(40);
+    o[0] = 0;
+    o[1] = 6 * x23 - 3 * x3;
+    o[2] = 6 * x24 - 10 * x19 + 12 * x25 - 4 * x22;
+    o[3] = -9 * x20 - 9 * x21;
+    o[4] = 0;
+    o[5] = 4 * x26 + 8 * x13 + 4 * x27;
+    o[6] = 15 * x28 - 12 * x17 + 3 * x18;
+    o[7] = 0;
+    o[8] = 0;
+    o[9] = 10 * x19 + 10 * x22;
+    o[10] = 9 * x20 + 9 * x21;
+    o[11] = 0;
+    o[12] = 0;
+    o[13] = 6 * x17 + 6 * x18;
+    o[14] = 0;
+    o[15] = 0;
+    o[16] = -1;
+    o[17] = -4 * x6 + 7 * x1 + 2 * x7;
+    o[18] = 4 * x16 + 10 * x12 - 15 * x4 - 6 * x29 - 3 * x5;
+    o[19] = 9 * x14 + 9 * x15;
+    o[20] = -3 * x0;
+    o[21] = -4 * x30 + 2 * x8 - 4 * x31 + 10 * x9;
+    o[22] = -3 * x10 + 12 * x11 - 15 * x32;
+    o[23] = 0;
+    o[24] = -2 * x6 - 4 * x1 - 2 * x7;
+    o[25] = -10 * x16 - 10 * x12 + 9 * x4 + 9 * x5;
+    o[26] = -9 * x14 - 9 * x15;
+    o[27] = 0;
+    o[28] = -5 * x8 - 5 * x9;
+    o[29] = -6 * x10 - 6 * x11;
+    o[30] = 0;
+    o[31] = 0;
+    o[32] = -3 * x4 - 3 * x5;
+    o[33] = 0;
+    o[34] = 0;
+    o[35] = 0;
+    o[36] = -2 * x2;
+    o[37] = -6 * x33 + 6 * x13;
+    o[38] = -3 * x3;
+    o[39] = 0;
+    const out = [];
+    let k = 0;
+    {
+        const m = [];
+        for (let i = 0; i < 4; i++) {
+            m.push(Array.from(o.subarray(k, k += 4)));
+        }
+        out.push(m);
+    }
+    {
+        const m = [];
+        for (let i = 0; i < 5; i++) {
+            m.push(Array.from(o.subarray(k, k += 4)));
+        }
+        out.push(m);
+    }
+    {
+        const m = [];
+        for (let i = 0; i < 2; i++) {
+            m.push(Array.from(o.subarray(k, k += 2)));
+        }
+        out.push(m);
+    }
+    return out;
+}
+
+//# sourceMappingURL=maN_B3.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/generated/maN_B2.js
+// GENERATED by gen-resultants.py - do not edit
+/**
+ * MA two interior footpoints, B of degree 2: the intersection of the normals of `B`
+ * at `s1` and `s2` is `(Nx/D, Ny/D)`; returns `[Nx, Ny, D]` in terms of
+ * `σ = s1 + s2`, `π = s1·s2`, each as `c[i][j]`, the coefficient of `σ^i π^j`
+ * (12 terms; multiplications: 24 without sharing,
+ * 18 with 2 shared products)
+ */
+function maN_B2(bx, by) {
+    const x0 = bx[2];
+    const x1 = by[2];
+    const x2 = x0 * x0;
+    const x3 = x1 * x1;
+    const x4 = x0 * x1;
+    const x5 = x1 * x2;
+    const x6 = x1 * x3;
+    const x7 = x0 * x2;
+    const x8 = x0 * x3;
+    const o = new Float64Array(11);
+    o[0] = 0;
+    o[1] = 6 * x4;
+    o[2] = 0;
+    o[3] = 4 * x5 + 4 * x6;
+    o[4] = -1;
+    o[5] = -4 * x2 + 2 * x3;
+    o[6] = -3 * x0;
+    o[7] = -4 * x7 - 4 * x8;
+    o[8] = -2 * x2 - 2 * x3;
+    o[9] = 0;
+    o[10] = -2 * x1;
+    const out = [];
+    let k = 0;
+    {
+        const m = [];
+        for (let i = 0; i < 2; i++) {
+            m.push(Array.from(o.subarray(k, k += 2)));
+        }
+        out.push(m);
+    }
+    {
+        const m = [];
+        for (let i = 0; i < 3; i++) {
+            m.push(Array.from(o.subarray(k, k += 2)));
+        }
+        out.push(m);
+    }
+    {
+        const m = [];
+        for (let i = 0; i < 1; i++) {
+            m.push(Array.from(o.subarray(k, k += 1)));
+        }
+        out.push(m);
+    }
+    return out;
+}
+
+//# sourceMappingURL=maN_B2.js.map
+;// ./node/simultaneous-properties/hausdorff-distance-direct/hausdorff-distance-direct.js
+
+
+
+
+
+
+
+
+/** @internal */
+const { abs: hausdorff_distance_direct_abs, max: hausdorff_distance_direct_max, min: hausdorff_distance_direct_min, sqrt: hausdorff_distance_direct_sqrt } = Math;
+/** Power basis coefficients in *ascending* order. */
+function asc(ps) {
+    const [x, y] = toPowerBasis(ps);
+    return [x.slice().reverse(), y.slice().reverse()];
+}
+/**
+ * `S[Q](s) = ((Q(s) - Q(0))/s - Q′(s))/s`, i.e. `Σ (1-k)·qₖ·s^(k-2)` (`k ≥ 2`)
+ */
+function sOp(q) {
+    const r = [];
+    for (let k = 2; k < q.length; k++) {
+        r.push((1 - k) * q[k]);
+    }
+    return r.length ? r : [0];
+}
+/**
+ * Returns `A` and `B` mapped by the similarity transform taking `B(0)` to the
+ * origin and `B′(0)` to `(1,0)` (as assumed by the precomputed resultants);
+ * the candidate `t` values are invariant under it.
+ */
+function normalize(A, B) {
+    const [bx, by] = asc(B);
+    const [wx, wy] = [bx[1], by[1]]; // B′(0)
+    const d = wx * wx + wy * wy;
+    const [ox, oy] = B[0];
+    // complex division (p - B(0)) / B′(0)
+    const f = ([x, y]) => {
+        const X = x - ox, Y = y - oy;
+        return [(X * wx + Y * wy) / d, (Y * wx - X * wy) / d];
+    };
+    return { An: A.map(f), Bn: B.map(f) };
+}
+/**
+ * Returns the implicit form coefficients of `A` in the order used by the
+ * generated resultants.
+ */
+function implicitCoeffs(A) {
+    if (A.length === 4) {
+        const { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = getImplicitForm3(A);
+        return [vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v];
+    }
+    if (A.length === 3) {
+        const { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = getImplicitForm2(A);
+        return [vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v];
+    }
+    const { vₓ, vᵧ, v } = getImplicitForm1(A);
+    return [vₓ, vᵧ, v];
+}
+/** Univariate polynomial helpers (ascending coefficients). */
+const padd = (p, q) => Array.from({ length: hausdorff_distance_direct_max(p.length, q.length) }, (_, i) => (p[i] ?? 0) + (q[i] ?? 0));
+const pscale = (p, c) => p.map(x => x * c);
+function pmul(p, q) {
+    const r = new Array(p.length + q.length - 1).fill(0);
+    for (let i = 0; i < p.length; i++) {
+        for (let j = 0; j < q.length; j++) {
+            r[i + j] += p[i] * q[j];
+        }
+    }
+    return r;
+}
+/** Horner evaluation of ascending coefficients `p` at `x`. */
+function horner(p, x) {
+    let r = 0;
+    for (let i = p.length - 1; i >= 0; i--) {
+        r = r * x + p[i];
+    }
+    return r;
+}
+/**
+ * `Res_π(F, G)(σ)` from the coefficients of `G` in `π` (`c`, modified in
+ * place) and `F = f₂π² + f₁π + f₀` at a single `σ`: `G` is reduced modulo the
+ * monic `π² + pπ + q` to `απ + β`, then
+ * `Res = f₂^m·(β² - pαβ + qα²)` (`m` the degree of `G` in `π`) - all plain
+ * numbers, so no cancellation from expanding polynomial products.
+ */
+function resultantAt(c, F0, F1, F2) {
+    const m = c.length - 1;
+    const p = F1 / F2, q = F0 / F2;
+    for (let j = m; j >= 2; j--) {
+        const cj = c[j];
+        c[j - 1] -= p * cj;
+        c[j - 2] -= q * cj;
+    }
+    const α = c[1], β = c[0];
+    let s = 1;
+    for (let k = 0; k < m; k++) {
+        s *= F2;
+    }
+    return s * (β * β - p * α * β + q * α * α);
+}
+/**
+ * `resultantAt` (`S = Res_π(F,G) = f₂^m·R`) together with its derivative
+ * w.r.t. `σ`: `c`, `d` are `G`'s coefficients in `π` and their
+ * `σ`-derivatives (both modified in place), `F*` and `D*` the coefficients of
+ * `F` and their `σ`-derivatives (forward mode through the same reduction).
+ * Returns `S` into `out[0]` and `S′` into `out[1]`.
+ */
+function resultantAtD(c, d, F0, F1, F2, D0, D1, D2, out) {
+    const m = c.length - 1;
+    const p = F1 / F2, q = F0 / F2;
+    const pd = (D1 * F2 - F1 * D2) / (F2 * F2), qd = (D0 * F2 - F0 * D2) / (F2 * F2);
+    for (let j = m; j >= 2; j--) {
+        const cj = c[j], dj = d[j];
+        c[j - 1] -= p * cj;
+        d[j - 1] -= pd * cj + p * dj;
+        c[j - 2] -= q * cj;
+        d[j - 2] -= qd * cj + q * dj;
+    }
+    const α = c[1], β = c[0], αd = d[1], βd = d[0];
+    const R = β * β - p * α * β + q * α * α;
+    const Rd = 2 * β * βd - (pd * α * β + p * αd * β + p * α * βd) + (qd * α * α + 2 * q * α * αd);
+    let s = 1;
+    for (let k = 0; k < m - 1; k++) {
+        s *= F2;
+    }
+    // S = F2^m·R, S′ = m·F2^(m-1)·F2′·R + F2^m·R′
+    out[0] = s * F2 * R;
+    out[1] = m * s * D2 * R + s * F2 * Rd;
+}
+/**
+ * Roots of the continuous `f` on a grid of `n` intervals of `[lb,ub]` given
+ * the values `fs` and derivatives `ds` at the grid points: on each cell the
+ * extrema of the cubic Hermite interpolant split the cell (where `f` is then
+ * evaluated exactly); sign changes are bisected, and extrema where `|f|` dips
+ * below both cell ends without a sign change are returned as test points
+ * (near double roots - polished and checked by the caller). A close pair of
+ * roots inside one cell is found as long as `f` is roughly quadratic there,
+ * however close the two roots are.
+ */
+function hermiteRoots(f, lb, ub, n, fs, ds) {
+    const h = (ub - lb) / n;
+    const roots = [];
+    const xs = [], vs = [];
+    for (let i = 0; i < n; i++) {
+        const x0 = lb + h * i, x1 = x0 + h;
+        const f0 = fs[i], f1 = fs[i + 1];
+        if (!(f0 === f0) || !(f1 === f1)) {
+            continue;
+        } // NaN (a pole on the grid)
+        if (f0 === 0) {
+            roots.push(x0);
+        }
+        const m0 = ds[i] * h, m1 = ds[i + 1] * h;
+        // H′(u) = a u² + b u + c on u ∈ [0,1]
+        const a = 6 * f0 + 3 * m0 - 6 * f1 + 3 * m1;
+        const b = -6 * f0 - 4 * m0 + 6 * f1 - 2 * m1;
+        const c = m0;
+        xs.length = 0;
+        vs.length = 0;
+        xs.push(x0);
+        vs.push(f0);
+        const us = [];
+        if (a === 0) {
+            if (b !== 0) {
+                us.push(-c / b);
+            }
+        }
+        else {
+            const D = b * b - 4 * a * c;
+            if (D >= 0) {
+                const qq = -(b + (b >= 0 ? 1 : -1) * hausdorff_distance_direct_sqrt(D)) / 2;
+                us.push(qq / a);
+                if (qq !== 0) {
+                    us.push(c / qq);
+                }
+            }
+        }
+        us.sort((u, v) => u - v);
+        for (const u of us) {
+            if (u > 0 && u < 1) {
+                const x = x0 + u * h;
+                xs.push(x);
+                vs.push(f(x));
+            }
+        }
+        xs.push(x1);
+        vs.push(f1);
+        for (let k = 1; k < xs.length; k++) {
+            const va = vs[k - 1], vb = vs[k];
+            if (va * vb < 0) {
+                roots.push(bisectF(f, xs[k - 1], xs[k], va));
+            }
+        }
+        // interior extrema dipping towards zero without a sign change
+        for (let k = 1; k < xs.length - 1; k++) {
+            const v = vs[k];
+            if (v === 0) {
+                roots.push(xs[k]);
+                continue;
+            }
+            if (hausdorff_distance_direct_abs(v) < hausdorff_distance_direct_abs(f0) && hausdorff_distance_direct_abs(v) < hausdorff_distance_direct_abs(f1) && v * vs[k - 1] > 0 && v * vs[k + 1] > 0) {
+                roots.push(xs[k]);
+            }
+        }
+    }
+    if (fs[n] === 0) {
+        roots.push(ub);
+    }
+    return roots;
+}
+function bisectF(f, a, b, fa) {
+    for (let k = 0; k < 40; k++) {
+        const m = (a + b) / 2, fm = f(m);
+        if (fm === 0) {
+            return m;
+        }
+        if ((fa < 0) !== (fm < 0)) {
+            b = m;
+        }
+        else {
+            a = m;
+            fa = fm;
+        }
+    }
+    return (a + b) / 2;
+}
+/**
+ * The MA-interiors candidate `t` values for a cubic `B`, entirely from
+ * precomputed pieces in `σ = s1 + s2`, `π = s1·s2`: the resultant w.r.t. `π`
+ * of `F` and `G` (`maiG`) is evaluated pointwise in `σ` (`resultantAt`), with
+ * its derivative (`resultantAtD`), on a grid; its roots on `[0,2]` are found
+ * per cell with the help of the Hermite cubic (`hermiteRoots`: close pairs of
+ * roots and near double roots inside a cell are caught too), each `σ`
+ * back-substituted into `F(σ,π) = 0` (quadratic in `π`). Test points are
+ * added at the singular points of the σ-projection (roots of `f₂` and folds
+ * `f₁² - 4f₂f₀ = 0`, depending on `B` only), where the resultant is flattened
+ * into round-off. Each pair is polished with Newton and mapped to the medial
+ * axis point `(Nx,Ny)/D` (`maN_B3`) whose closest point on `A` gives `t`
+ * (exact double roots need no candidate: the distance has no kink there).
+ */
+function maiTs(A, B) {
+    const { An, nbx: bx, nby: by } = prep(A, B);
+    const g = maiG[`${A.length - 1}3`](implicitCoeffs(An), bx, by); // g[j]: σ-coefficients of π^j
+    const Fc = maF_B3(bx, by); // Fc[i][j]: coefficient of σ^i π^j
+    const [f0, f1, f2] = [0, 1, 2].map(j => Fc.map(row => row[j] ?? 0));
+    const m = g.length - 1;
+    const c = new Float64Array(m + 1);
+    const res = (σ) => {
+        for (let j = 0; j <= m; j++) {
+            c[j] = horner(g[j], σ);
+        }
+        return resultantAt(c, horner(f0, σ), horner(f1, σ), horner(f2, σ));
+    };
+    // values and derivatives on the grid (each polynomial evaluated at all
+    // points first): the Hermite cubic per cell reveals close pairs of roots
+    // (and near double roots) inside a cell
+    const Gs = g.map(onGrid), Gd = g.map(p => onGrid(pder(p)));
+    const F0 = onGrid(f0), F1 = onGrid(f1), F2 = onGrid(f2);
+    const D0 = onGrid(pder(f0)), D1 = onGrid(pder(f1)), D2 = onGrid(pder(f2));
+    const grid = new Float64Array(GRID + 1), gridD = new Float64Array(GRID + 1);
+    const d = new Float64Array(m + 1), out = new Float64Array(2);
+    for (let i = 0; i <= GRID; i++) {
+        for (let j = 0; j <= m; j++) {
+            c[j] = Gs[j][i];
+            d[j] = Gd[j][i];
+        }
+        resultantAtD(c, d, F0[i], F1[i], F2[i], D0[i], D1[i], D2[i], out);
+        grid[i] = out[0];
+        gridD[i] = out[1];
+    }
+    const σs = hermiteRoots(res, 0, 2, GRID, grid, gridD);
+    const pairs = [];
+    for (const σ of σs) {
+        // F(σ,π) as a polynomial in π (descending)
+        const pc = [2, 1, 0].map(j => Fc.reduceRight((acc, row) => acc * σ + (row[j] ?? 0), 0));
+        if (pc.every(x => x === 0)) {
+            continue;
+        }
+        // both s1, s2 real and in [0,1]: σ - 1 ≤ π ≤ σ²/4
+        for (const π of rootsSmallDesc(pc, hausdorff_distance_direct_max(0, σ - 1), σ * σ / 4)) {
+            pairs.push([σ, π]);
+        }
+    }
+    // test points at the singular points of the σ-projection (depending on
+    // `B` only): at a root of `f₂` (a pole: one branch of `F = 0` escapes to
+    // infinity) `F` is linear in `π`; at a fold (`f₁² - 4f₂f₀ = 0`) the two
+    // branches meet. Solutions close to these are flattened into round-off in
+    // the resultant, so Newton (below) is simply started from them as well
+    {
+        for (const σ of roots01asc(f2, 0, 2)) {
+            const F1 = horner(f1, σ);
+            if (F1 !== 0) {
+                pairs.push([σ, -horner(f0, σ) / F1]);
+            }
+            // if `f₁` and `f₀` (nearly) vanish here too, `F = 0` (nearly)
+            // contains the line `σ = const` (`s1 + s2` constant along the
+            // medial axis, as for a parabola): the solutions there come from
+            // `G(σ,π) = 0` alone, univariate in `π`
+            const gp = g.map(row => horner(row, σ)).reverse(); // descending in π
+            for (const π of rootsSmallDesc(gp, hausdorff_distance_direct_max(0, σ - 1), σ * σ / 4)) {
+                pairs.push([σ, π]);
+            }
+        }
+        const disc = padd(pmul(f1, f1), pscale(pmul(f2, f0), -4));
+        for (const σ of roots01asc(disc, 0, 2)) {
+            const F2 = horner(f2, σ);
+            if (F2 !== 0) {
+                pairs.push([σ, -horner(f1, σ) / (2 * F2)]);
+            }
+        }
+    }
+    // the resultant's roots are only accurate to its precision and
+    // `(X,Y) = (Nx,Ny)/D` can be sensitive to that, so polish with Newton on
+    // `F(σ,π) = G(σ,π) = 0` (coefficient arrays `[σ power][π power]`)
+    const Gm = Array.from({ length: g[0].length }, (_, i) => g.map(row => row[i]));
+    const [Nx, Ny, D] = maN_B3(bx, by);
+    const ts = [];
+    for (let [σ, π] of pairs) {
+        // (near-double roots make the Jacobian nearly singular and Newton
+        // converge only linearly, hence the generous iteration count)
+        for (let k = 0; k < 40; k++) {
+            const [fv, fσ, fπ] = eval2(Fc, σ, π);
+            const [gv, gσ, gπ] = eval2(Gm, σ, π);
+            const det = fσ * gπ - fπ * gσ;
+            if (det === 0) {
+                break;
+            }
+            const dσ = (fv * gπ - fπ * gv) / det, dπ = (fσ * gv - fv * gσ) / det;
+            σ -= dσ;
+            π -= dπ;
+            if (hausdorff_distance_direct_abs(dσ) <= 1e-16 && hausdorff_distance_direct_abs(dπ) <= 1e-16) {
+                break;
+            }
+        }
+        const w = eval2(D, σ, π)[0];
+        if (w === 0) {
+            continue;
+        }
+        // the point on the medial axis (in the normalized frame, so use `An`)
+        const C = [eval2(Nx, σ, π)[0] / w, eval2(Ny, σ, π)[0] / w];
+        ts.push(fastClosest(An, C).t);
+    }
+    return ts;
+}
+/**
+ * Value and partial derivatives of `Σ M[i][j] x^i y^j` at `(x,y)`.
+ */
+function eval2(M, x, y) {
+    let v = 0, vx = 0, vy = 0;
+    for (let i = M.length - 1; i >= 0; i--) {
+        const row = M[i];
+        let r = 0, ry = 0;
+        for (let j = row.length - 1; j >= 0; j--) {
+            ry = ry * y + r;
+            r = r * y + row[j];
+        }
+        vx = vx * x + v;
+        v = v * x + r;
+        vy = vy * x + ry;
+    }
+    return [v, vx, vy];
+}
+/**
+ * The MA-interiors candidate `t` values for a quadratic `B` from precomputed
+ * pieces in `σ = s1 + s2`, `π = s1·s2`: the footpoints are symmetric about the
+ * vertex, i.e. `F = 0` is `σ = c = -p₃/(2p₄)` (`pᵢ` the coefficients of `|B|²`),
+ * so `G(c,π)` (`maiG`) is univariate in `π`; each root gives the medial axis
+ * point `(Nx,Ny)/D` (`maN_B2`) whose closest point on `A` gives `t`.
+ */
+function maiTsQuad(A, B) {
+    const { An, nbx: bx, nby: by } = prep(A, B);
+    const p = padd(pmul(bx, bx), pmul(by, by));
+    if (p[4] === 0) {
+        return [];
+    }
+    const c = -p[3] / (2 * p[4]);
+    if (!(c >= 0 && c <= 2)) {
+        return [];
+    }
+    const g = maiG[`${A.length - 1}2`](implicitCoeffs(An), bx, by); // g[j][i]: σ^i π^j
+    const πPoly = g.map(row => horner(row, c));
+    const [Nx, Ny, D] = maN_B2(bx, by);
+    const ts = [];
+    // both s1, s2 real and in [0,1]: c - 1 ≤ π ≤ c²/4
+    for (const π of roots01asc(πPoly, hausdorff_distance_direct_max(0, c - 1), c * c / 4)) {
+        const w = eval2(D, c, π)[0];
+        if (w === 0) {
+            continue;
+        }
+        const C = [eval2(Nx, c, π)[0] / w, eval2(Ny, c, π)[0] / w];
+        ts.push(fastClosest(An, C).t);
+    }
+    return ts;
+}
+/** The number of sample points (minus 1) of `B` used for upper bounds when scoring candidates. */
+const SAMPLES = 16;
+/**
+ * The number of grid intervals on `σ ∈ [0,2]` for the MA-interiors roots
+ * (cubic `B`): no misses in 10800 random tests at 250 or 500, a few at 100.
+ */
+const GRID = 500;
+const gridXs = Float64Array.from({ length: GRID + 1 }, (_, i) => 2 * i / GRID);
+/** `p` (ascending coefficients) evaluated at all grid points (`gridXs`). */
+function onGrid(p) {
+    const out = new Float64Array(GRID + 1);
+    const n = p.length - 1;
+    for (let g = 0; g <= GRID; g++) {
+        const x = gridXs[g];
+        let r = 0;
+        for (let i = n; i >= 0; i--) {
+            r = r * x + p[i];
+        }
+        out[g] = r;
+    }
+    return out;
+}
+const prepCache = new WeakMap();
+/** `Prep` for the curves (memoized by array identity) */
+function prep(A, B) {
+    let m = prepCache.get(A);
+    if (m === undefined) {
+        m = new WeakMap();
+        prepCache.set(A, m);
+    }
+    let r = m.get(B);
+    if (r === undefined) {
+        const { An, Bn } = normalize(A, B);
+        const [nax, nay] = asc(An), [nbx, nby] = asc(Bn);
+        const [ax, ay] = asc(A), [bx, by] = asc(B);
+        r = { An, Bn, nax, nay, nbx, nby, ax, ay, bx, by };
+        m.set(B, r);
+    }
+    return r;
+}
+const derivsCache = new WeakMap();
+/** derivative arrays etc. used by `twoVarTs` (memoized per curve pair) */
+function derivs(A, B, ax, ay, bx, by, withS) {
+    let m = derivsCache.get(A);
+    if (m === undefined) {
+        m = new WeakMap();
+        derivsCache.set(A, m);
+    }
+    let r = m.get(B);
+    if (r === undefined || (withS && r.svx.length === 0)) {
+        const adx = pder(ax), ady = pder(ay);
+        const bdx = pder(bx), bdy = pder(by);
+        const h = padd(pmul(bx, bdx), pmul(by, bdy));
+        r = {
+            adx, ady, addx: pder(adx), addy: pder(ady),
+            bdx, bdy, bddx: pder(bdx), bddy: pder(bdy), h, hd: pder(h),
+            svx: [], svy: [], sp: [], svdx: [], svdy: [], spd: []
+        };
+        if (withS) {
+            r.svx = sOp(bx);
+            r.svy = sOp(by);
+            r.sp = sOp(padd(pmul(bx, bx), pmul(by, by)));
+            r.svdx = pder(r.svx);
+            r.svdy = pder(r.svy);
+            r.spd = pder(r.sp);
+        }
+        m.set(B, r);
+    }
+    return r;
+}
+const pder = (p) => p.length > 1 ? p.slice(1).map((c, i) => (i + 1) * c) : [0];
+/**
+ * The candidate `t` values of the 2-variable systems in `(t,s)` from their
+ * precomputed resultants (w.r.t. `t`, polynomials in `s`), without building any
+ * multivariate polynomials: for fixed `s` both equations are univariate in `t`
+ * with coefficients that are dot/cross products of `A`'s coefficients with
+ * `B′(s)` etc., and so are all the partial derivatives needed for Newton.
+ *
+ * * `'I'`: `e1 = (A - B)·B′ = A·B′ - h` (`h = B·B′`) and `e2 = A′ × B′`
+ * * `'MAEI'`: `e1` and `G = -2A·S[B] + S[|B|²]` (endpoint `B(0)`)
+ */
+function twoVarTs(kind, A, B) {
+    const table = kind === 'I' ? resI : resMAEI;
+    const { nax, nay, nbx, nby, ax, ay, bx, by } = prep(A, B);
+    const coeffs = table[`${A.length - 1}${B.length - 1}`](nax, nay, nbx, nby);
+    const deg = coeffs.length - 1;
+    // (`coeffs` descending; strip leading zeros)
+    let lead = 0;
+    while (lead < deg && coeffs[lead] === 0) {
+        lead++;
+    }
+    if (coeffs.every(c => c === 0)) {
+        return [];
+    }
+    const sRoots = bernsteinRoots01(coeffs.slice(lead));
+    if (sRoots.length === 0) {
+        return [];
+    }
+    const d = derivs(A, B, ax, ay, bx, by, kind === 'MAEI');
+    const { adx, ady, addx, addy, bdx, bdy, bddx, bddy, h, hd, svx, svy, sp, svdx, svdy, spd } = d;
+    const ts = [];
+    for (const s0 of sRoots) {
+        const Vdx0 = horner(bdx, s0), Vdy0 = horner(bdy, s0);
+        // back-substitution (ascending coefficients in `t`): into `e2 = A′ × B′`
+        // for 'I' unless `A` is a line, else into `e1 = A·B′ - h`
+        const tPoly = kind === 'I' && A.length > 2
+            ? adx.map((c, i) => c * Vdy0 - ady[i] * Vdx0)
+            : ax.map((c, i) => c * Vdx0 + ay[i] * Vdy0 - (i === 0 ? horner(h, s0) : 0));
+        for (const t0 of roots01asc(tPoly)) {
+            // polish with Newton on (f, g) (the resultant's roots are only as
+            // accurate as its values); no allocations in the loop
+            let t = t0, s = s0;
+            for (let k = 0; k < 12; k++) {
+                const Ax = horner(ax, t), Ay = horner(ay, t);
+                const Adx = horner(adx, t), Ady = horner(ady, t);
+                const Vdx = horner(bdx, s), Vdy = horner(bdy, s);
+                const Vddx = horner(bddx, s), Vddy = horner(bddy, s);
+                const f = Ax * Vdx + Ay * Vdy - horner(h, s);
+                const ft = Adx * Vdx + Ady * Vdy;
+                const fs = Ax * Vddx + Ay * Vddy - horner(hd, s);
+                let g, gt, gs;
+                if (kind === 'I') {
+                    g = Adx * Vdy - Ady * Vdx;
+                    gt = horner(addx, t) * Vdy - horner(addy, t) * Vdx;
+                    gs = Adx * Vddy - Ady * Vddx;
+                }
+                else {
+                    const SVx = horner(svx, s), SVy = horner(svy, s);
+                    g = -2 * (Ax * SVx + Ay * SVy) + horner(sp, s);
+                    gt = -2 * (Adx * SVx + Ady * SVy);
+                    gs = -2 * (Ax * horner(svdx, s) + Ay * horner(svdy, s)) + horner(spd, s);
+                }
+                const det = ft * gs - fs * gt;
+                if (det === 0) {
+                    break;
+                }
+                const dt = (f * gs - fs * g) / det, ds = (ft * g - f * gt) / det;
+                t -= dt;
+                s -= ds;
+                if (hausdorff_distance_direct_abs(dt) <= 1e-15 && hausdorff_distance_direct_abs(ds) <= 1e-15) {
+                    break;
+                }
+            }
+            ts.push(t >= -1e-9 && t <= 1 + 1e-9 && s >= -1e-9 && s <= 1 + 1e-9
+                ? hausdorff_distance_direct_min(1, hausdorff_distance_direct_max(0, t)) : t0);
+        }
+    }
+    return ts;
+}
+/**
+ * `rootsSmall` for descending coefficients that may have leading zeros (and
+ * may be the zero polynomial).
+ */
+function rootsSmallDesc(p, lb, ub) {
+    let i = 0;
+    while (i < p.length - 1 && p[i] === 0) {
+        i++;
+    }
+    return p.length - i < 2 || !(lb <= ub) ? [] : rootsSmall(p.slice(i), lb, ub);
+}
+/** Roots in `[lb,ub]` (default `[0,1]`) of a univariate polynomial (ascending coefficients). */
+function roots01asc(p, lb = 0, ub = 1) {
+    let n = p.length - 1;
+    while (n >= 0 && p[n] === 0) {
+        n--;
+    }
+    if (n < 1 || !(lb <= ub)) {
+        return [];
+    }
+    return rootsSmall(p.slice(0, n + 1).reverse(), lb, ub);
+}
+/**
+ * Roots in `[lb,ub]` of a polynomial (descending coefficients, nonzero
+ * leading coefficient): closed form for degree ≤ 2 (numerically stable
+ * quadratic formula), else Bernstein subdivision (`bernsteinRoots01` on the
+ * interval mapped to `[0,1]`). Plain double precision.
+ */
+function rootsSmall(p, lb, ub) {
+    const n = p.length - 1;
+    if (n === 1) {
+        const x = -p[1] / p[0];
+        return x >= lb && x <= ub ? [x] : [];
+    }
+    if (n === 2) {
+        const [a, b, c] = p;
+        const D = b * b - 4 * a * c;
+        if (D < 0) {
+            return [];
+        }
+        const q = -(b + (b >= 0 ? 1 : -1) * hausdorff_distance_direct_sqrt(D)) / 2;
+        const xs = q === 0 ? [0] : [q / a, c / q];
+        return xs.filter(x => x >= lb && x <= ub).sort((x, y) => x - y);
+    }
+    if (lb === 0 && ub === 1) {
+        return bernsteinRoots01(p);
+    }
+    // x = lb + (ub - lb)·u: Taylor shift and scale, then [0,1]
+    const w = ub - lb;
+    const a = p.slice().reverse(); // ascending
+    // shift to lb (synthetic division repeated)
+    for (let k = 0; k < n; k++) {
+        for (let i = n - 1; i >= k; i--) {
+            a[i] += lb * a[i + 1];
+        }
+    }
+    let s = 1;
+    for (let i = 0; i <= n; i++) {
+        a[i] *= s;
+        s *= w;
+    }
+    return bernsteinRoots01(a.reverse()).map(u => lb + w * u);
+}
+/**
+ * The closest point on `B` to `p` (distance, parameter and point) from the
+ * footpoint polynomial with plain (uncertified) root finding - the distance
+ * is insensitive to small errors in the parameter (it is stationary there).
+ */
+function fastClosest(B, p) {
+    const poly = B.length === 1 ? [0] : getFootpointPoly(B, p);
+    let n0 = 0;
+    while (n0 < poly.length - 1 && poly[n0] === 0) {
+        n0++;
+    }
+    const ts = poly.length - n0 > 1 ? rootsSmall(poly.slice(n0), 0, 1) : [];
+    ts.push(0, 1);
+    let best = Infinity, bt = 0, bp = B[0];
+    for (const t of ts) {
+        const q = evalDeCasteljau(B, t);
+        const dx = q[0] - p[0], dy = q[1] - p[1];
+        const d2 = dx * dx + dy * dy;
+        if (d2 < best) {
+            best = d2;
+            bt = t;
+            bp = q;
+        }
+    }
+    return { d: hausdorff_distance_direct_sqrt(best), t: bt, p: bp };
+}
+/**
+ * Returns the one-sided Hausdorff distance `h(A,B) = max_t min_s |A(t) - B(s)|`
+ * (and where it is attained) directly, i.e. by evaluating `min_s |A(t) - B(s)|`
+ * at a (small) superset of the parameter values `t` where the maximum can be
+ * attained, as opposed to the iterative bounding approach of `hausdorffDistance`.
+ *
+ * Implementation details:
+ * * curves of order 0 to 3 (points, lines, quadratics and cubics)
+ * * the candidate `t` values are of the following kinds (Kim & McLean):
+ *   * `EA`: the endpoints of `A`
+ *   * `EB`: points on `A` closest to an endpoint of `B`
+ *   * `I`: intersections of `A` and `B`
+ *   * `MA-ends`: points on `A` equidistant from both endpoints of `B`
+ *   * `MA-end-interior`: points on `A` equidistant from an endpoint of `B` and
+ *     a footpoint in the interior of `B`
+ *   * `MA-interiors`: points on `A` equidistant from two footpoints in the
+ *     interior of `B` (points of the medial axis of `B`)
+ * * `B` is first normalized by a similarity transform (`B(0) = 0`,
+ *   `B'(0) = (1,0)`) so that the systems' coefficients are polynomials in few
+ *   variables
+ * * the resultants eliminating `s` (for `I` and `MA-end-interior`) are
+ *   precomputed exactly (sympy, fraction-free Bareiss) by
+ *   `experiments/hausdorff/gen-resultants.py` and evaluated as generated
+ *   straight-line code (with common subexpressions eliminated) or as compact
+ *   data programs for the larger ones
+ * * univariate roots are found in the Bernstein basis on `[0,1]` and polished
+ *   by Newton's method
+ * * `MA-interiors` for cubic `B` is solved in the symmetric variables
+ *   `σ = s1 + s2`, `π = s1*s2` (removing the trivial solutions `s1 = s2`):
+ *   `π` is eliminated pointwise (no global resultant), the resulting function
+ *   of `σ` (and its derivative) is evaluated on a grid of `GRID` cells and its
+ *   roots are found via Hermite cubics per cell (revealing close pairs of
+ *   roots); test points are added at the roots of the leading coefficient and
+ *   at folds of the projection where the `σ` projection degenerates; each
+ *   solution is Newton-polished in `(σ,π)` and the medial axis point is then
+ *   mapped to its closest point on `A`
+ * * `MA-interiors` for quadratic `B` is solved directly since then `σ` is a
+ *   constant
+ * * candidates are scored by an upper bound (distance to 17 samples of `B`)
+ *   first so that most need no exact closest point; closest points are found
+ *   by the roots of the footpoint polynomial
+ * * since `min_s |A(t) - B(s)|` has a kink at a medial axis maximum, a winning
+ *   medial axis candidate is refined by a golden-section search in
+ *   `t ± 1e-4`
+ * * plain double precision; no error bounds; in tests the error is typically
+ *   around `1e-15` and at worst around `1e-12` (relative to the curves' size)
+ * * a few times faster than `hausdorffDistance` (e.g. about `45μs` for two
+ *   quadratics and under `1ms` for two cubics)
+ *
+ * @param A the curve from which the distance is measured, given as an array
+ * of its control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param B the curve to which the distance is measured
+ */
+function hausdorffDistanceOneSidedDirect(A, B) {
+    const cands = [];
+    const push = (ts, kind) => {
+        for (const t of ts) {
+            cands.push({ t, kind });
+        }
+    };
+    push([0, 1], 'EA');
+    if (A.length > 1) {
+        // (univariate, so plain coefficient arrays - ascending)
+        const [ax, ay] = asc(A);
+        const dax = ax.slice(1).map((c, i) => (i + 1) * c);
+        const day = ay.slice(1).map((c, i) => (i + 1) * c);
+        // EB: stationary distance from an endpoint E of B, (A - E)·A′ = 0
+        for (const E of [B[0], B[B.length - 1]]) {
+            const ex = ax.slice(), ey = ay.slice();
+            ex[0] -= E[0];
+            ey[0] -= E[1];
+            push(roots01asc(padd(pmul(ex, dax), pmul(ey, day))), 'EB');
+        }
+        if (B.length > 1) {
+            // MA-ends: |A - B₀|² = |A - B₁|², i.e. -2A·(B₀ - B₁) + |B₀|² - |B₁|² = 0
+            const [b0x, b0y] = B[0];
+            const [b1x, b1y] = B[B.length - 1];
+            const wx = b0x - b1x, wy = b0y - b1y;
+            const e = ax.map((c, i) => -2 * (c * wx + ay[i] * wy));
+            e[0] += b0x * b0x + b0y * b0y - b1x * b1x - b1y * b1y;
+            push(roots01asc(e), 'MA-ends');
+        }
+        if (B.length > 1 && !(A.length === 2 && B.length === 2)) {
+            // I: (A - B)·B′ = 0 and A′ × B′ = 0
+            push(twoVarTs('I', A, B), 'I');
+        }
+        if (B.length > 2) {
+            // MA-end-interior: |A - B(s)|² = |A - E|² and (A - B)·B′ = 0, with
+            // the trivial solution `s = 0` divided out (E = B(0); repeat with
+            // `B` reversed for `E = B(1)`)
+            for (const Bs of [B, B.slice().reverse()]) {
+                push(twoVarTs('MAEI', A, Bs), 'MA-end-interior');
+            }
+            // MA-interiors: two interior footpoints s1 ≠ s2 at equal distance.
+            // All three equations are linear in the point `A(t) = (X,Y)`:
+            // the two footpoint equations (normal lines of `B` at `s1` and
+            // `s2`) give `(X,Y) = (Nx,Ny)/D`; substituting into the third
+            // (equal distance, `s1 = s2` divided out) leaves `F(s1,s2) = 0`,
+            // and `t` is eliminated by requiring `(X,Y)` to lie on `A`
+            // (its implicit form). A 2-variable system in `(s1,s2)` remains.
+            if (B.length === 4) {
+                // cubic: everything precomputed in `σ = s1 + s2`, `π = s1·s2`
+                push(maiTs(A, B), 'MA-interiors');
+            }
+            else {
+                // quadratic: likewise; `F = 0` fixes `σ`, leaving `G` univariate in `π`
+                push(maiTsQuad(A, B), 'MA-interiors');
+            }
+        }
+    }
+    let best;
+    // cheap upper bounds first: the distance from `A(t)` to the nearest of a
+    // few sample points of `B` can only exceed the true distance, so the
+    // candidates are scored in order of decreasing bound until no remaining
+    // bound can beat the best exact distance found
+    const samples = Array.from({ length: SAMPLES + 1 }, (_, i) => evalDeCasteljau(B, i / SAMPLES));
+    const bounded = cands.map(({ t, kind }) => {
+        const pA = evalDeCasteljau(A, t);
+        let ub = Infinity;
+        for (const q of samples) {
+            const dx = pA[0] - q[0], dy = pA[1] - q[1];
+            const d2 = dx * dx + dy * dy;
+            if (d2 < ub) {
+                ub = d2;
+            }
+        }
+        return { t, kind, pA, ub: hausdorff_distance_direct_sqrt(ub) };
+    }).sort((a, b) => b.ub - a.ub);
+    for (const { t, kind, pA, ub } of bounded) {
+        if (best !== undefined && ub <= best.d) {
+            break;
+        }
+        const cp = fastClosest(B, pA);
+        if (best === undefined || cp.d > best.d) {
+            best = { d: cp.d, tA: t, pA, tB: cp.t, pB: cp.p, kind };
+        }
+    }
+    // final local refinement of a winner at a kink (MA types) by maximizing the
+    // true distance: some are ill-conditioned (e.g. near-double roots) with `t`
+    // only roughly accurate, and at a kink that error shows linearly in the
+    // distance; at smooth maxima (I, EB) it shows only quadratically
+    if (best.kind.startsWith('MA')) {
+        const g = (t) => fastClosest(B, evalDeCasteljau(A, t)).d;
+        const r = 0.6180339887498949;
+        // (a window of ±1e-4: a candidate from a near-double root can be
+        // that far off; 35 steps bring it down to ~1e-11)
+        let a = hausdorff_distance_direct_max(0, best.tA - 1e-4), b = hausdorff_distance_direct_min(1, best.tA + 1e-4);
+        let m1 = b - r * (b - a), m2 = a + r * (b - a);
+        let g1 = g(m1), g2 = g(m2);
+        for (let k = 0; k < 35; k++) {
+            if (g1 > g2) {
+                b = m2;
+                m2 = m1;
+                g2 = g1;
+                m1 = b - r * (b - a);
+                g1 = g(m1);
+            }
+            else {
+                a = m1;
+                m1 = m2;
+                g1 = g2;
+                m2 = a + r * (b - a);
+                g2 = g(m2);
+            }
+        }
+        const t = (a + b) / 2;
+        const pA = evalDeCasteljau(A, t);
+        const cp = fastClosest(B, pA);
+        if (cp.d > best.d) {
+            best = { ...best, d: cp.d, tA: t, pA, tB: cp.t, pB: cp.p };
+        }
+    }
+    return best;
+}
+/**
+ * Returns the (two-sided) Hausdorff distance `max(h(A,B), h(B,A))` between the
+ * given bezier curves directly, together with the parameter values and points
+ * on both curves where it is attained (see `hausdorffDistanceOneSidedDirect`
+ * for the one-sided version and its implementation details).
+ *
+ * Implementation details:
+ * * curves of order 0 to 3 (points, lines, quadratics and cubics)
+ * * two calls to `hausdorffDistanceOneSidedDirect` (candidate enumeration
+ *   with precomputed resultants and medial-axis root finding)
+ * * plain double precision; no error bounds; in tests the error is typically
+ *   around `1e-15` and at worst around `1e-12` (relative to the curves' size)
+ *
+ * @param A a bezier curve given as an array of its control points, e.g.
+ * `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param B another bezier curve
+ */
+function hausdorffDistanceDirect(A, B) {
+    const ab = hausdorffDistanceOneSidedDirect(A, B);
+    const ba = hausdorffDistanceOneSidedDirect(B, A);
+    if (ab.d >= ba.d) {
+        return { ...ab, side: 'ab' };
+    }
+    // `ba` was computed as h(B,A), so its `tA`/`pA` lie on `B` and `tB`/`pB` on `A`
+    return { d: ba.d, side: 'ba', tA: ba.tB, pA: ba.pB, tB: ba.tA, pB: ba.pA, kind: ba.kind };
+}
+
+//# sourceMappingURL=hausdorff-distance-direct.js.map
 ;// ./node/transformation/split/split-by-length.js
 
 
@@ -25520,6 +33596,35 @@ function splitByLength(ps, maxLength) {
 }
 
 //# sourceMappingURL=split-by-length.js.map
+;// ./node_modules/flo-poly/node/calculus/double/differentiate.js
+/**
+ * Returns the result of differentiating the given polynomial in double
+ * precision.
+ *
+ * @param p a polynomial with coefficients given densely as an array of double
+ * floating point numbers from highest to lowest power, e.g. `[5,-3,0]`
+ * represents the polynomial `5x^2 - 3x`
+ *
+ * @example
+ * ```typescript
+ * differentiate([5, 4, 3, 2, 1]); //=> [20, 12, 6, 2]
+ * ```
+ *
+ * @doc
+ */
+function differentiate(p) {
+    const d = p.length - 1;
+    if (d <= 0) {
+        return [];
+    }
+    const result = new Array(d);
+    for (let i = 0; i < d; i++) {
+        result[i] = (d - i) * p[i];
+    }
+    return result;
+}
+
+//# sourceMappingURL=differentiate.js.map
 ;// ./node/get-curvature-extrema/double/get-abs-curvature-extrema-polys.js
 
 /**
@@ -25722,8 +33827,8 @@ function ddDifferentiate(p) {
 
 
 const get_abs_curvature_extrema_polys_dd_qm2 = ddMultBy2;
-const get_abs_curvature_extrema_polys_dd_qmd = dd_mult_double_ddMultDouble2;
-const get_abs_curvature_extrema_polys_dd_qmq = dd_mult_dd_ddMultDd;
+const get_abs_curvature_extrema_polys_dd_qmd = ddMultDouble2;
+const get_abs_curvature_extrema_polys_dd_qmq = ddMultDd;
 const get_abs_curvature_extrema_polys_dd_qaq = ddAddDd;
 const get_abs_curvature_extrema_polys_dd_qdq = ddDiffDd;
 const get_abs_curvature_extrema_polys_dd_qno = ddNegativeOf;
@@ -25797,7 +33902,7 @@ function getAbsCurvatureExtremaPolysDd(ps) {
 ;// ./node/get-curvature-extrema/double-double/get-curvature-extrema-quadratic-poly-dd.js
 
 const get_curvature_extrema_quadratic_poly_dd_td = twoDiff;
-const get_curvature_extrema_quadratic_poly_dd_qmq = dd_mult_dd_ddMultDd;
+const get_curvature_extrema_quadratic_poly_dd_qmq = ddMultDd;
 const get_curvature_extrema_quadratic_poly_dd_qaq = ddAddDd;
 const get_curvature_extrema_quadratic_poly_dd_qdq = ddDiffDd;
 /**
@@ -26677,8 +34782,8 @@ const get_coeffs_dd_qaq = ddAddDd;
 const get_coeffs_dd_qm2 = ddMultBy2;
 const get_coeffs_dd_qmn2 = ddMultByNeg2;
 const get_coeffs_dd_qdifq = ddDiffDd;
-const get_coeffs_dd_qmq = dd_mult_dd_ddMultDd;
-const get_coeffs_dd_qmd = dd_mult_double_ddMultDouble2;
+const get_coeffs_dd_qmq = ddMultDd;
+const get_coeffs_dd_qmd = ddMultDouble2;
 /**
  * @param circle a circle
  * @param ps a cubic bezier curve
@@ -26748,9 +34853,62 @@ function getCoeffsLinearDd(circle, ps) {
 }
 
 //# sourceMappingURL=get-coeffs-dd.js.map
+;// ./node_modules/big-float-ts/node/double-expansion/e-product.js
+/* unused harmony import specifier */ var e_product_eCompress;
+
+
+
+
+/**
+ * Return the result of multiplying together an array of floating point
+ * expansions.
+ *
+ * * The result is exact in the form of a non-overlapping floating point
+ * expansion.
+ *
+ * * see [Shewchuk](https://people.eecs.berkeley.edu/~jrs/papers/robustr.pdf)
+ *
+ * @param term an array of multiplicands
+ */
+function eProduct(term) {
+    return e_product_eCompress(eProductUncompressed(term));
+}
+/**
+ * Returns the same as `eProduct` but without compressing the result.
+ *
+ * * not exported from the package - used by `eCalculate` (which sums the
+ * products before compression is useful)
+ *
+ * @param term an array of multiplicands
+ */
+function eProductUncompressed(term) {
+    // the empty product is 1
+    if (term.length === 0) {
+        return [1];
+    }
+    let product = term[0];
+    for (let j = 1; j < term.length; j++) {
+        const multiplicant = term[j];
+        if (multiplicant.length == 1) {
+            if (product.length === 1) {
+                product = two_product_twoProduct(product[0], multiplicant[0]);
+            }
+            else {
+                product = scaleExpansion(product, multiplicant[0]);
+            }
+        }
+        else if (product.length === 1) {
+            product = scaleExpansion(multiplicant, product[0]);
+        }
+        else {
+            product = expansionProduct(multiplicant, product);
+        }
+    }
+    return product;
+}
+
+//# sourceMappingURL=e-product.js.map
 ;// ./node_modules/big-float-ts/node/double-expansion/e-calculate.js
-
-
 
 
 
@@ -26768,46 +34926,24 @@ function getCoeffsLinearDd(circle, ps) {
  * @param terms An array of terms to be summed; A term consists of an
  * array of floating point expansions to be multiplied together.
  */
-// The terms parameter were chosen to always be expansions in order to keep the 
+// The terms parameter were chosen to always be expansions in order to keep the
 // function monomorhic, but whether it's really worth it I am not sure.
 function eCalculate(terms) {
+    // Each product is added to the total immediately rather than collecting
+    // the products and calling `eSum` - the latter is up to ~20% slower for
+    // small terms.
     let total = [0];
     for (let i = 0; i < terms.length; i++) {
-        const term = terms[i];
-        let product = term[0];
-        for (let j = 1; j < term.length; j++) {
-            const multiplicant = term[j];
-            if (multiplicant.length == 1) {
-                if (product.length === 1) {
-                    product = two_product_twoProduct(product[0], multiplicant[0]);
-                }
-                else {
-                    product = scaleExpansion(product, multiplicant[0]);
-                }
-            }
-            else if (product.length === 1) {
-                product = scaleExpansion(multiplicant, product[0]);
-            }
-            else {
-                product = expansionProduct(multiplicant, product);
-            }
-        }
-        // add
+        const product = eProductUncompressed(terms[i]);
         if (product.length === 1) {
-            if (total.length === 1) {
-                total = two_sum_twoSum(total[0], product[0]);
-            }
-            else {
-                total = growExpansion(total, product[0]);
-            }
+            total = total.length === 1
+                ? two_sum_twoSum(total[0], product[0])
+                : growExpansion(total, product[0]);
         }
         else {
-            if (total.length === 1) {
-                total = growExpansion(product, total[0]);
-            }
-            else {
-                total = fastExpansionSum(total, product);
-            }
+            total = total.length === 1
+                ? growExpansion(product, total[0])
+                : fastExpansionSum(total, product);
         }
     }
     return total;
@@ -27807,38 +35943,6 @@ function getFootpointPolyExact(ps, p) {
 }
 
 //# sourceMappingURL=get-footpoint-poly-exact.js.map
-;// ./node/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly.js
-
-
-
-/**
- * Returns a polynomial in 1 variable whose roots are the parameter values of
- * the foot points on the given bezier curve of the given point.
- *
- * The returned polynomial coefficients are given densely as an array of
- * double precision floating point numbers from highest to lowest power,
- * e.g. `[[0,5],[0,-3],[0,0]]` represents the polynomial `5x^2 - 3x`.
- *
- * * intermediate calculations are done in double precision
- *
- * @param ps an order 1,2 or 3 bezier curve given as an ordered array of its
- * control points, e.g. `[[1,2],[3,4],[5,7],[0,0]]`
- * @param p
- */
-function getFootpointPoly(ps, p) {
-    if (ps.length === 4) {
-        return getFootpointPoly3(ps, p);
-    }
-    if (ps.length === 3) {
-        return getFootpointPoly2(ps, p);
-    }
-    if (ps.length === 2) {
-        return getFootpointPoly1(ps, p);
-    }
-    throw new Error('The given bezier curve must be of order 1,2 or 3');
-}
-
-//# sourceMappingURL=get-footpoint-poly.js.map
 ;// ./node/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double-double/get-footpoint-poly-dd.js
 
 
@@ -29677,9 +37781,9 @@ function ddDiffDouble(x, y) {
 ;// ./node/get-medial-points/double-double/dd-get-medial-point-coeffs-bez2.js
 
 
-const dd_get_medial_point_coeffs_bez2_qmd = dd_mult_double_ddMultDouble2;
+const dd_get_medial_point_coeffs_bez2_qmd = ddMultDouble2;
 const dd_get_medial_point_coeffs_bez2_qaq = ddAddDd;
-const dd_get_medial_point_coeffs_bez2_qmq = dd_mult_dd_ddMultDd;
+const dd_get_medial_point_coeffs_bez2_qmq = ddMultDd;
 const dd_get_medial_point_coeffs_bez2_qno = ddNegativeOf;
 const dd_get_medial_point_coeffs_bez2_qmn2 = ddMultByNeg2;
 const dd_get_medial_point_coeffs_bez2_qm2 = ddMultBy2;
@@ -29802,7 +37906,7 @@ function ddGetMedialPointCoeffsBez2(p, v, ps) {
 
 const dd_get_medial_point_coeffs_bez1_td = twoDiff;
 const dd_get_medial_point_coeffs_bez1_qaq = ddAddDd;
-const dd_get_medial_point_coeffs_bez1_qmq = dd_mult_dd_ddMultDd;
+const dd_get_medial_point_coeffs_bez1_qmq = ddMultDd;
 const dd_get_medial_point_coeffs_bez1_qno = ddNegativeOf;
 const dd_get_medial_point_coeffs_bez1_qmn2 = ddMultByNeg2;
 const dd_get_medial_point_coeffs_bez1_qm2 = ddMultBy2;
@@ -29899,9 +38003,9 @@ function ddGetMedialPointCoeffsBez1(p, v, ps) {
 ;// ./node/get-medial-points/double-double/dd-get-medial-point-coeffs-bez3.js
 
 
-const dd_get_medial_point_coeffs_bez3_qmd = dd_mult_double_ddMultDouble2;
+const dd_get_medial_point_coeffs_bez3_qmd = ddMultDouble2;
 const dd_get_medial_point_coeffs_bez3_qaq = ddAddDd;
-const dd_get_medial_point_coeffs_bez3_qmq = dd_mult_dd_ddMultDd;
+const dd_get_medial_point_coeffs_bez3_qmq = ddMultDd;
 const dd_get_medial_point_coeffs_bez3_qno = ddNegativeOf;
 const dd_get_medial_point_coeffs_bez3_qmn2 = ddMultByNeg2;
 const dd_get_medial_point_coeffs_bez3_qm2 = ddMultBy2;
@@ -30055,7 +38159,7 @@ function ddGetMedialPointCoeffsBez3(p, v, ps) {
 ;// ./node/get-medial-points/double-double/dd-get-medial-point-coeffs-bez0.js
 
 const dd_get_medial_point_coeffs_bez0_qaq = ddAddDd;
-const dd_get_medial_point_coeffs_bez0_qmq = dd_mult_dd_ddMultDd;
+const dd_get_medial_point_coeffs_bez0_qmq = ddMultDd;
 const dd_get_medial_point_coeffs_bez0_qm2 = ddMultBy2;
 const dd_get_medial_point_coeffs_bez0_qdd = ddDiffDouble;
 /**
@@ -30145,9 +38249,9 @@ function ddGetMedialPointCoeffs(p, v, ps) {
 ;// ./node/get-medial-points/double-double/dd-get-medial-point-coeffs-bez2-same-curve.js
 
 
-const dd_get_medial_point_coeffs_bez2_same_curve_qmd = dd_mult_double_ddMultDouble2;
+const dd_get_medial_point_coeffs_bez2_same_curve_qmd = ddMultDouble2;
 const dd_get_medial_point_coeffs_bez2_same_curve_qaq = ddAddDd;
-const dd_get_medial_point_coeffs_bez2_same_curve_qmq = dd_mult_dd_ddMultDd;
+const dd_get_medial_point_coeffs_bez2_same_curve_qmq = ddMultDd;
 const dd_get_medial_point_coeffs_bez2_same_curve_qno = ddNegativeOf;
 const dd_get_medial_point_coeffs_bez2_same_curve_qm2 = ddMultBy2;
 /**
@@ -30255,9 +38359,9 @@ function ddGetMedialPointCoeffsBez2_SameCurve(t, v, ps) {
 ;// ./node/get-medial-points/double-double/dd-get-medial-point-coeffs-bez3-same-curve.js
 
 
-const dd_get_medial_point_coeffs_bez3_same_curve_qmd = dd_mult_double_ddMultDouble2;
+const dd_get_medial_point_coeffs_bez3_same_curve_qmd = ddMultDouble2;
 const dd_get_medial_point_coeffs_bez3_same_curve_qaq = ddAddDd;
-const dd_get_medial_point_coeffs_bez3_same_curve_qmq = dd_mult_dd_ddMultDd;
+const dd_get_medial_point_coeffs_bez3_same_curve_qmq = ddMultDd;
 const dd_get_medial_point_coeffs_bez3_same_curve_qno = ddNegativeOf;
 const dd_get_medial_point_coeffs_bez3_same_curve_qmn2 = ddMultByNeg2;
 const dd_get_medial_point_coeffs_bez3_same_curve_qm2 = ddMultBy2;
@@ -31110,7 +39214,7 @@ function getCoeffsYFromX_WithRunningErr(ps, x) {
 
 
 
-const dd_get_coeffs_y_from_x_qmd = dd_mult_double_ddMultDouble2;
+const dd_get_coeffs_y_from_x_qmd = ddMultDouble2;
 const dd_get_coeffs_y_from_x_qaq = ddAddDd;
 /**
  * Returns a polynomial whose roots are the `y` coordinates given the `x`
@@ -31181,7 +39285,7 @@ function ddGetCoeffsYFromX(ps, x) {
 
 
 
-const dd_get_coeffs_y_from_x_with_running_err_qmd = dd_mult_double_ddMultDouble2;
+const dd_get_coeffs_y_from_x_with_running_err_qmd = ddMultDouble2;
 const dd_get_coeffs_y_from_x_with_running_err_qaq = ddAddDd;
 const { abs: dd_get_coeffs_y_from_x_with_running_err_abs } = Math;
 /**
@@ -31865,5 +39969,6 @@ function splitByDeviationFromStraightLine(ps, maxD) {
 
 
 
+
 //# sourceMappingURL=index.js.map
-export { areBoxesIntersecting, area_area as area, bezierBezierIntersection, bezierBezierIntersectionBoundless, bezierBezierIntersectionBoundlessBoth, bezierPieceToBezier, bezierSelfIntersection, calcQuadOffsetCurveXPoint, circleBezierIntersection, classification, classifications, classify, clone, closestPointOnBezier, closestPointOnBezierCertified, closestPointsBetweenBeziers, controlPointLinesLength, cubicFromAnglesAndSpeeds, cubicThroughPointGiven013, cubicToAnglesAndSpeeds, cubicToHybridQuadratic, cubicToQuadratic, curvature, curvatureND, curviness, ddCurvature, ddCurvatureND, ddGetCoeffsXFromY, ddGetCoeffsXFromY_WithRunningErr, ddGetCoeffsYFromX, ddGetCoeffsYFromX_WithRunningErr, ddGetImplicitForm1_WithRunningError, ddGetImplicitForm2_WithRunningError, ddGetImplicitForm3_WithRunningError, ddGetMedialPointCoeffs, ddGetMedialPointCoeffsBez0, ddGetMedialPointCoeffsBez1, ddGetMedialPointCoeffsBez2, ddGetMedialPointCoeffsBez2_SameCurve, ddGetMedialPointCoeffsBez3, ddGetMedialPointCoeffsBez3_SameCurve, ddNormal, ddNormalAt0, ddNormalAt1, ddRadiusOfCurvature, ddTangent, ddTangentAt0, ddTangentAt1, eCurvature, eGetCoeffsXFromY, eGetCoeffsYFromX, eGetImplicitForm1, eGetImplicitForm2, eGetImplicitForm3, eNormal, eTangent, eTangentAt0, eTangentAt1, elevateDegree, equal, evalDeCasteljau, evalDeCasteljauDd, evalDeCasteljauError, evalDeCasteljauWithErr, evalDeCasteljauWithErrDd, evaluate, evaluate1stDerivative, evaluate1stDerivativeExact, evaluate2ndDerivative, evaluate2ndDerivativeAt0, evaluate2ndDerivativeAt0Exact, evaluate2ndDerivativeAt1, evaluate2ndDerivativeAt1Exact, evaluate2ndDerivativeExact, evaluateExact, evaluateImplicit1, evaluateImplicit2, evaluateImplicit3, fitQuadsToCubic, fitQuadsToCubicHausdorff, flipAbout, flipHorizontally, flipVertically, fromPowerBasis, fromTo, fromToInclErrorBound, furthestPointOnBezier, generateArcFromCubics, generateArcFromQuads, generateCuspAtHalf3, generateQuarterCircle, generateSelfIntersecting, getAbsAreaBetween, getBendingEnergy, getBezierPieceLength, getBoundingBox, getBoundingBoxTight, getBoundingHull, getBounds, getCoeffsBezBez, getCoeffsXFromY, getCoeffsXFromY_WithRunningErr, getCoeffsYFromX, getCoeffsYFromX_WithRunningErr, getControlPointBox, getCubicSpeeds, getCurvatureExtrema, getCurvatureExtremaDd, getCurvatureExtremaE, getEndpointIntersections, getFootPointsOnBezierCertified, getFootPointsOnBezierPolysCertified, getFootpointPoly, getFootpointPolyDd, getFootpointPolyExact, getHodograph, getImplicitForm1, getImplicitForm1Dd, getImplicitForm1DdWithRunningError, getImplicitForm1ErrorCounters, getImplicitForm1Exact, getImplicitForm1WithRunningError, getImplicitForm2, getImplicitForm2Dd, getImplicitForm2DdWithRunningError, getImplicitForm2ErrorCounters, getImplicitForm2Exact, getImplicitForm2WithRunningError, getImplicitForm3, getImplicitForm3Dd, getImplicitForm3DdWithRunningError, getImplicitForm3ErrorCounters, getImplicitForm3Exact, getImplicitForm3WithRunningError, getInflections, getInterfaceRotation, getIntervalBox, getIntervalBoxDd, getMedialPointCoeffs, getMedialPointCoeffsBez0, getMedialPointCoeffsBez1, getMedialPointCoeffsBez2, getMedialPointCoeffsBez2_SameCurve, getMedialPointCoeffsBez3, getMedialPointCoeffsBez3_SameCurve, getMedialPoints, getTAtLength, getXBoundsTight, getYBoundsTight, hausdorffDistance, hausdorffDistanceExtra, hausdorffDistanceOneSided, hausdorffDistanceOneSidedExtra, intersectBoxes, isBezierPieceZeroLength, isCollinear, isCubicReallyLine, isCubicReallyQuad, isHorizontal, isPointOnBezierExtension, isQuadObtuse, isQuadReallyLine, isReallyPoint, isSelfOverlapping, isVertical, length_length as length, lineToCubic, lineToQuadratic, maxAbsCoordinate, normal, normal2, quadraticToCubic, quadraticToPolyline, radiusOfCurvature, reduceOrderIfPossible, reverse, rotate_rotate as rotate, rotate90, rotate90About, rotateAbout, rotateNeg90, rotateNeg90About, scale_scale as scale, setCubicSpeeds, splitByCurvature, splitByCurvatureAndLength, splitByDeviationFromStraightLine, splitByDeviationFromStraightLine_Cubic, splitByDeviationFromStraightLine_Quad, splitByLength, tFromXY, tangent, tangentAt0, tangentAt0Exact, tangentAt1, tangentAt1Exact, tangentExact, toCubic, toPowerBasis, toPowerBasis0Exact, toPowerBasis1DdWithRunningError, toPowerBasis1Exact, toPowerBasis2DdWithRunningError, toPowerBasis2Exact, toPowerBasis3DdWithRunningError, toPowerBasis3Exact, toPowerBasisDd, toPowerBasisDdWithRunningError, toPowerBasisErrorCounters, toPowerBasisExact, toPowerBasisWithRunningError, toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeDd, toPowerBasis_1stDerivativeErrorCounters, toPowerBasis_1stDerivativeExact, toPowerBasis_2ndDerivative, toPowerBasis_2ndDerivativeDd, toPowerBasis_2ndDerivativeExact, toPowerBasis_3rdDerivative, toPowerBasis_3rdDerivativeDd, toPowerBasis_3rdDerivativeExact, to_string_toString as toString, totalAbsoluteCurvature, totalCurvature, totalLength, transform, translate_translate as translate, unitNormal, unitTangent, γ, γγ, κ };
+export { areBoxesIntersecting, area_area as area, bezierBezierIntersection, bezierBezierIntersectionBoundless, bezierBezierIntersectionBoundlessBoth, bezierPieceToBezier, bezierSelfIntersection, calcQuadOffsetCurveXPoint, circleBezierIntersection, classification, classifications, classify, clone, closestPointOnBezier, closestPointOnBezierCertified, closestPointsBetweenBeziers, controlPointLinesLength, cubicFromAnglesAndSpeeds, cubicThroughPointGiven013, cubicToAnglesAndSpeeds, cubicToHybridQuadratic, cubicToQuadratic, curvature, curvatureND, curviness, ddCurvature, ddCurvatureND, ddGetCoeffsXFromY, ddGetCoeffsXFromY_WithRunningErr, ddGetCoeffsYFromX, ddGetCoeffsYFromX_WithRunningErr, ddGetImplicitForm1_WithRunningError, ddGetImplicitForm2_WithRunningError, ddGetImplicitForm3_WithRunningError, ddGetMedialPointCoeffs, ddGetMedialPointCoeffsBez0, ddGetMedialPointCoeffsBez1, ddGetMedialPointCoeffsBez2, ddGetMedialPointCoeffsBez2_SameCurve, ddGetMedialPointCoeffsBez3, ddGetMedialPointCoeffsBez3_SameCurve, ddNormal, ddNormalAt0, ddNormalAt1, ddRadiusOfCurvature, ddTangent, ddTangentAt0, ddTangentAt1, eCurvature, eGetCoeffsXFromY, eGetCoeffsYFromX, eGetImplicitForm1, eGetImplicitForm2, eGetImplicitForm3, eNormal, eTangent, eTangentAt0, eTangentAt1, elevateDegree, equal, evalDeCasteljau, evalDeCasteljauDd, evalDeCasteljauError, evalDeCasteljauWithErr, evalDeCasteljauWithErrDd, evaluate, evaluate1stDerivative, evaluate1stDerivativeExact, evaluate2ndDerivative, evaluate2ndDerivativeAt0, evaluate2ndDerivativeAt0Exact, evaluate2ndDerivativeAt1, evaluate2ndDerivativeAt1Exact, evaluate2ndDerivativeExact, evaluateExact, evaluateImplicit1, evaluateImplicit2, evaluateImplicit3, fitQuadsToCubic, fitQuadsToCubicHausdorff, flipAbout, flipHorizontally, flipVertically, fromPowerBasis, fromTo, fromToInclErrorBound, furthestPointOnBezier, generateArcFromCubics, generateArcFromQuads, generateCuspAtHalf3, generateQuarterCircle, generateSelfIntersecting, getAbsAreaBetween, getBendingEnergy, getBezierPieceLength, getBoundingBox, getBoundingBoxTight, getBoundingHull, getBounds, getCoeffsBezBez, getCoeffsXFromY, getCoeffsXFromY_WithRunningErr, getCoeffsYFromX, getCoeffsYFromX_WithRunningErr, getControlPointBox, getCubicSpeeds, getCurvatureExtrema, getCurvatureExtremaDd, getCurvatureExtremaE, getEndpointIntersections, getFootPointsOnBezierCertified, getFootPointsOnBezierPolysCertified, getFootpointPoly, getFootpointPolyDd, getFootpointPolyExact, getHodograph, getImplicitForm1, getImplicitForm1Dd, getImplicitForm1DdWithRunningError, getImplicitForm1ErrorCounters, getImplicitForm1Exact, getImplicitForm1WithRunningError, getImplicitForm2, getImplicitForm2Dd, getImplicitForm2DdWithRunningError, getImplicitForm2ErrorCounters, getImplicitForm2Exact, getImplicitForm2WithRunningError, getImplicitForm3, getImplicitForm3Dd, getImplicitForm3DdWithRunningError, getImplicitForm3ErrorCounters, getImplicitForm3Exact, getImplicitForm3WithRunningError, getInflections, getInterfaceRotation, getIntervalBox, getIntervalBoxDd, getMedialPointCoeffs, getMedialPointCoeffsBez0, getMedialPointCoeffsBez1, getMedialPointCoeffsBez2, getMedialPointCoeffsBez2_SameCurve, getMedialPointCoeffsBez3, getMedialPointCoeffsBez3_SameCurve, getMedialPoints, getTAtLength, getXBoundsTight, getYBoundsTight, hausdorffDistance, hausdorffDistanceDirect, hausdorffDistanceExtra, hausdorffDistanceOneSided, hausdorffDistanceOneSidedDirect, hausdorffDistanceOneSidedExtra, intersectBoxes, isBezierPieceZeroLength, isCollinear, isCubicReallyLine, isCubicReallyQuad, isHorizontal, isPointOnBezierExtension, isQuadObtuse, isQuadReallyLine, isReallyPoint, isSelfOverlapping, isVertical, length_length as length, lineToCubic, lineToQuadratic, maxAbsCoordinate, normal, normal2, quadraticToCubic, quadraticToPolyline, radiusOfCurvature, reduceOrderIfPossible, reverse, rotate_rotate as rotate, rotate90, rotate90About, rotateAbout, rotateNeg90, rotateNeg90About, scale_scale as scale, setCubicSpeeds, splitByCurvature, splitByCurvatureAndLength, splitByDeviationFromStraightLine, splitByDeviationFromStraightLine_Cubic, splitByDeviationFromStraightLine_Quad, splitByLength, tFromXY, tangent, tangentAt0, tangentAt0Exact, tangentAt1, tangentAt1Exact, tangentExact, toCubic, toPowerBasis, toPowerBasis0Exact, toPowerBasis1DdWithRunningError, toPowerBasis1Exact, toPowerBasis2DdWithRunningError, toPowerBasis2Exact, toPowerBasis3DdWithRunningError, toPowerBasis3Exact, toPowerBasisDd, toPowerBasisDdWithRunningError, toPowerBasisErrorCounters, toPowerBasisExact, toPowerBasisWithRunningError, toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeDd, toPowerBasis_1stDerivativeErrorCounters, toPowerBasis_1stDerivativeExact, toPowerBasis_2ndDerivative, toPowerBasis_2ndDerivativeDd, toPowerBasis_2ndDerivativeExact, toPowerBasis_3rdDerivative, toPowerBasis_3rdDerivativeDd, toPowerBasis_3rdDerivativeExact, to_string_toString as toString, totalAbsoluteCurvature, totalCurvature, totalLength, transform, translate_translate as translate, unitNormal, unitTangent, γ, γγ, κ };

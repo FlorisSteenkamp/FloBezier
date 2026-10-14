@@ -1,19 +1,4 @@
-/**
- * The one-sided Hausdorff distance from `A` to `B` together with the parameter
- * values and points at which the distance is (approximately) achieved.
- */
-interface HausdorffDistanceOneSidedExtra {
-    /** the (approximate) one-sided Hausdorff distance `h(A,B)` */
-    readonly d: number;
-    /** the parameter on `A` where the supremum is (approximately) achieved */
-    readonly tA: number;
-    /** the point on `A` at parameter `tA` */
-    readonly pA: number[];
-    /** the parameter on `B` of the closest point on `B` to `pA` */
-    readonly tB: number;
-    /** the closest point on `B` to `pA` */
-    readonly pB: number[];
-}
+import type { HausdorffDistanceOneSidedExtra } from './hausdorff-distance-types.js';
 /**
  * Calculates and returns an accurate approximation to the one-sided Hausdorff
  * distance from the bezier curve `A` to the bezier curve `B`, together with the
@@ -43,4 +28,3 @@ interface HausdorffDistanceOneSidedExtra {
  */
 declare function hausdorffDistanceOneSidedExtra(A: number[][], B: number[][], tolerance?: number, maxIterations?: number): HausdorffDistanceOneSidedExtra;
 export { hausdorffDistanceOneSidedExtra };
-export type { HausdorffDistanceOneSidedExtra };

@@ -1,6 +1,6 @@
 /**
- * * this function deprecated due to being the same as JavaScript's
- *   new Array.toReversed() function.
+ * * this function is deprecated due to being the same as JavaScript's
+ *   new `Array.toReversed()` function.
  *
  * Returns the given points (e.g. bezier curve) in reverse order.
  *
