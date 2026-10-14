@@ -1,15 +1,17 @@
 import { roots } from 'flo-poly';
-import {
-    toPowerBasis, evalDeCasteljau, closestPointOnBezier, reverse, getFootpointPoly,
-    getImplicitForm1, getImplicitForm2, getImplicitForm3
-} from '../../src/index.js';
+import { toPowerBasis } from '../../to-power-basis/to-power-basis/double/to-power-basis.js';
+import { evalDeCasteljau } from '../../local-properties-at-t/evaluate/double/eval-de-casteljau.js';
+import { reverse } from '../../transformation/reverse.js';
+import { getFootpointPoly } from '../closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly.js';
+import { getImplicitForm1 } from '../../implicit-form/double/get-implicit-form1.js';
+import { getImplicitForm2 } from '../../implicit-form/double/get-implicit-form2.js';
+import { getImplicitForm3 } from '../../implicit-form/double/get-implicit-form3.js';
 import {
     type TPoly, univariate, constant, add, sub, scale, mul, derivative, zero, strides, evaluate
 } from './tensor-poly.js';
-import { solveSystem, polisher } from './solve-system.js';
+import { solveSystem } from './solve-system.js';
 import { bernsteinRoots01 } from './bernstein-roots.js';
-import { adaptiveRoots } from './adaptive-roots.js';
-import { resI, resMAEI, maiAB, maiG, maF_B3, maN_B3, maN_B2 } from './generated/index.js';
+import { resI, resMAEI, maiG, maF_B3, maN_B3, maN_B2 } from './generated/index.js';
 
 
 /** @internal */
@@ -29,35 +31,39 @@ const { abs, max, min, sqrt } = Math;
  */
 type Kind = 'EA' | 'EB' | 'I' | 'MA-ends' | 'MA-end-interior' | 'MA-interiors';
 
-interface HausdorffCandidates {
+/**
+ * The one-sided Hausdorff distance from `A` to `B` together with where it is
+ * attained (see `hausdorffDistanceOneSidedDirect`).
+ */
+interface HausdorffDistanceOneSidedDirect {
     /** the one-sided Hausdorff distance `h(A,B)` */
     readonly d: number;
+    /** the parameter on `A` where the maximum is attained */
     readonly tA: number;
+    /** the point on `A` at `tA` */
     readonly pA: number[];
+    /** the parameter on `B` of the closest point on `B` to `pA` */
     readonly tB: number;
+    /** the closest point on `B` to `pA` */
     readonly pB: number[];
     /** the candidate type that attained the maximum */
     readonly kind: Kind;
-    /** the number of candidate `t` values evaluated */
-    readonly candidates: number;
-    /** `true` if a subdivision solve hit its box cap (degenerate input) */
+    /**
+     * only for `method === 'subdivision'`: `true` if a subdivision solve hit its
+     * box cap (degenerate input such as overlapping curves)
+     */
     readonly capped: boolean;
-    /** the highest (precomputed) resultant degree used (`method === 'resultant'`) */
-    readonly maxDeg: number;
 }
 
 /**
- * How the 2-variable candidate systems (`I` and `MA-end-interior`) are solved:
- * via resultants precomputed by `gen-resultants.py` (`'resultant'`) or by
- * subdivision; `MA-interiors` (3 variables) always uses subdivision.
+ * How the candidate systems are solved: via resultants and other pieces
+ * precomputed by `experiments/hausdorff/gen-resultants.py` (`'resultant'`, the
+ * default) or by Bernstein subdivision (`'subdivision'`, slower, kept as a
+ * reference).
  */
 type Method = 'resultant' | 'subdivision';
 
 type Vec = [TPoly, TPoly];
-
-
-/** Accumulated time (ms) per candidate type plus `evaluate` (for profiling). */
-const timing: Partial<Record<Kind | 'evaluate', number>> = {};
 
 
 /** Power basis coefficients in *ascending* order. */
@@ -210,22 +216,6 @@ function normalize(A: number[][], B: number[][]): { An: number[][]; Bn: number[]
 
 
 /**
- * Returns the coefficients (descending) of `p(t,s)` as a polynomial in `t`
- * (variable 0) for a fixed `s` (variable 1).
- */
-function coeffsInTAt(p: TPoly, s: number): number[] {
-    const [dt, ds] = p.deg;
-    const out: number[] = [];
-    for (let i=dt; i>=0; i--) {
-        let c = 0;
-        for (let j=ds; j>=0; j--) { c = c*s + p.c[i*(ds + 1) + j]; }
-        out.push(c);
-    }
-    return out;
-}
-
-
-/**
  * Returns `p(s1, c - s1)` (ascending coefficients in `s1`) for a polynomial
  * `p` in the 2 variables `s1`, `s2`.
  */
@@ -282,80 +272,6 @@ function horner(p: number[], x: number): number {
     let r = 0;
     for (let i=p.length-1; i>=0; i--) { r = r*x + p[i]; }
     return r;
-}
-
-
-/**
- * Candidate roots in `[lb,ub]` of the continuous function `f`: sign changes on
- * a grid of `n` intervals (refined by bisection) plus local minima of `|f|`
- * (refined by golden section search) to catch (near) double roots, which have
- * no sign change. Spurious candidates are harmless for our purposes and the
- * results are polished afterwards, so only moderate refinement is done.
- */
-function signChangeRoots(
-        f: (x: number) => number, lb: number, ub: number, n: number,
-        fsGrid?: Float64Array): number[] {
-
-    const h = (ub - lb)/n;
-    let fs = fsGrid;
-    if (fs === undefined) {
-        fs = new Float64Array(n + 1);
-        for (let i=0; i<=n; i++) { fs[i] = f(lb + h*i); }
-    }
-    // first a tight scan collecting grid indices only (refining inside this
-    // loop made V8 run it ~20x slower)
-    const { exact, changes, minima } = scanGrid(fs, n);
-    const roots: number[] = exact.map(i => lb + h*i);
-    for (const i of changes) { roots.push(bisect(f, lb + h*(i-1), lb + h*i, fs[i-1])); }
-    // (filtering these by how close to zero they get rejects genuine
-    // near-double roots, whose minima are blurred by round-off)
-    for (const i of minima) { roots.push(goldenMinAbs(f, lb + h*(i-1), lb + h*(i+1))); }
-    return roots;
-}
-
-
-/**
- * Grid indices `i` with `f(xᵢ) = 0` (`exact`), with a sign change on
- * `[xᵢ₋₁,xᵢ]` (`changes`) and with a local minimum of `|f|` at `xᵢ` without a
- * sign change (`minima`).
- */
-function scanGrid(fs: Float64Array, n: number) {
-    const exact: number[] = [], changes: number[] = [], minima: number[] = [];
-    for (let i=0; i<=n; i++) {
-        const f1 = fs[i];
-        if (f1 === 0) { exact.push(i); continue; }
-        if (i === 0) { continue; }
-        const f0 = fs[i-1];
-        if (f0*f1 < 0) { changes.push(i); continue; }
-        if (i < n) {
-            const f2 = fs[i+1];
-            const a1 = abs(f1);
-            if (a1 < abs(f0) && a1 <= abs(f2) && f1*f2 > 0) { minima.push(i); }
-        }
-    }
-    return { exact, changes, minima };
-}
-
-
-/** Bisection on `[a,b]` given a sign change (`fa = f(a)`). */
-function bisect(f: (x: number) => number, a: number, b: number, fa: number): number {
-    for (let k=0; k<16; k++) {
-        const m = (a + b)/2;
-        const fm = f(m);
-        if (fm === 0) { return m; }
-        if (fa*fm < 0) { b = m; } else { a = m; fa = fm; }
-    }
-    return (a + b)/2;
-}
-
-
-/** Golden section search for a minimum of `|f|` on `[a,b]`. */
-function goldenMinAbs(f: (x: number) => number, a: number, b: number): number {
-    for (let k=0; k<16; k++) {
-        const m1 = a + (b - a)*0.381966, m2 = a + (b - a)*0.618034;
-        if (abs(f(m1)) < abs(f(m2))) { b = m2; } else { a = m1; }
-    }
-    return (a + b)/2;
 }
 
 
@@ -514,37 +430,20 @@ function maiTs(A: number[][], B: number[][]): number[] {
         for (let j=0; j<=m; j++) { c[j] = horner(g[j], σ); }
         return resultantAt(c, horner(f0, σ), horner(f1, σ), horner(f2, σ));
     };
-    let σs: number[];
-    if (MAI_ROOTS === 'adaptive') {
-        // cells discarded only when interval bounds prove them root free
-        σs = adaptiveRoots(g, [f0, f1, f2], 0, 2);
-    } else {
-        // on the grid: each polynomial evaluated at all points first
-        const Gs = g.map(onGrid);
-        const F0 = onGrid(f0), F1 = onGrid(f1), F2 = onGrid(f2);
-        const grid = new Float64Array(GRID + 1);
-        if (MAI_ROOTS === 'hermite') {
-            // values and derivatives: the Hermite cubic per cell reveals close
-            // pairs of roots (and near double roots) inside a cell
-            const Gd = g.map(p => onGrid(pder(p)));
-            const D0 = onGrid(pder(f0)), D1 = onGrid(pder(f1)), D2 = onGrid(pder(f2));
-            const gridD = new Float64Array(GRID + 1);
-            const d = new Float64Array(m + 1), out = new Float64Array(2);
-            for (let i=0; i<=GRID; i++) {
-                for (let j=0; j<=m; j++) { c[j] = Gs[j][i]; d[j] = Gd[j][i]; }
-                resultantAtD(c, d, F0[i], F1[i], F2[i], D0[i], D1[i], D2[i], out);
-                grid[i] = out[0]; gridD[i] = out[1];
-            }
-            σs = hermiteRoots(res, 0, 2, GRID, grid, gridD);
-        } else {
-            for (let i=0; i<=GRID; i++) {
-                for (let j=0; j<=m; j++) { c[j] = Gs[j][i]; }
-                grid[i] = resultantAt(c, F0[i], F1[i], F2[i]);
-            }
-            // a fine grid: close clusters of roots must not cancel each other's sign changes
-            σs = signChangeRoots(res, 0, 2, GRID, grid);
-        }
+    // values and derivatives on the grid (each polynomial evaluated at all
+    // points first): the Hermite cubic per cell reveals close pairs of roots
+    // (and near double roots) inside a cell
+    const Gs = g.map(onGrid), Gd = g.map(p => onGrid(pder(p)));
+    const F0 = onGrid(f0), F1 = onGrid(f1), F2 = onGrid(f2);
+    const D0 = onGrid(pder(f0)), D1 = onGrid(pder(f1)), D2 = onGrid(pder(f2));
+    const grid = new Float64Array(GRID + 1), gridD = new Float64Array(GRID + 1);
+    const d = new Float64Array(m + 1), out = new Float64Array(2);
+    for (let i=0; i<=GRID; i++) {
+        for (let j=0; j<=m; j++) { c[j] = Gs[j][i]; d[j] = Gd[j][i]; }
+        resultantAtD(c, d, F0[i], F1[i], F2[i], D0[i], D1[i], D2[i], out);
+        grid[i] = out[0]; gridD[i] = out[1];
     }
+    const σs = hermiteRoots(res, 0, 2, GRID, grid, gridD);
     const pairs: number[][] = [];
     for (const σ of σs) {
         // F(σ,π) as a polynomial in π (descending)
@@ -559,7 +458,7 @@ function maiTs(A: number[][], B: number[][]): number[] {
     // infinity) `F` is linear in `π`; at a fold (`f₁² - 4f₂f₀ = 0`) the two
     // branches meet. Solutions close to these are flattened into round-off in
     // the resultant, so Newton (below) is simply started from them as well
-    if (MAI_ROOTS === 'hermite') {
+    {
         for (const σ of roots01asc(f2, 0, 2)) {
             const F1 = horner(f1, σ);
             if (F1 !== 0) { pairs.push([σ, -horner(f0, σ)/F1]); }
@@ -655,21 +554,10 @@ const SAMPLES = 16;
 
 
 /**
- * How the MA-interiors resultant's roots (cubic `B`) are found: `'hermite'`
- * (values and derivatives on a grid, see `hermiteRoots`), `'grid'` (sign
- * changes and local minima of the values on a fixed grid of `GRID` intervals)
- * or `'adaptive'` (interval bounds, see adaptive-roots.ts - it does not pay
- * off).
+ * The number of grid intervals on `σ ∈ [0,2]` for the MA-interiors roots
+ * (cubic `B`): no misses in 10800 random tests at 250 or 500, a few at 100.
  */
-const MAI_ROOTS = 'hermite' as 'hermite' | 'grid' | 'adaptive';
-
-
-/**
- * The number of grid intervals on `σ ∈ [0,2]` for the MA-interiors roots: 500
- * for `'hermite'` (no misses in 10800 random cubic-B tests at 250 or 500, a
- * few at 100), 2000 for `'grid'`.
- */
-const GRID = MAI_ROOTS === 'hermite' ? 500 : 2000;
+const GRID = 500;
 const gridXs = Float64Array.from({ length: GRID + 1 }, (_, i) => 2*i/GRID);
 
 
@@ -684,82 +572,6 @@ function onGrid(p: number[]): Float64Array {
         out[g] = r;
     }
     return out;
-}
-
-
-/** `(f₂b² - f₁ab + f₀a²)/f₂^e` at all grid points (see `maiRoots`). */
-function resOnGrid(
-        a: number[], b: number[],
-        f0: number[], f1: number[], f2: number[],
-        e: number): Float64Array {
-
-    const A = onGrid(a), B = onGrid(b);
-    const F0 = onGrid(f0), F1 = onGrid(f1), F2 = onGrid(f2);
-    const out = new Float64Array(GRID + 1);
-    for (let g=0; g<=GRID; g++) {
-        let p = 1;
-        for (let k=0; k<e; k++) { p *= F2[g]; }
-        out[g] = (F2[g]*B[g]*B[g] - F1[g]*A[g]*B[g] + F0[g]*A[g]*A[g])/p;
-    }
-    return out;
-}
-
-
-/**
- * The `[s1,s2]` (`s1 ≤ s2`) solutions of the MA-interiors system for a cubic
- * `B`, from the resultant in `σ = s1 + s2` and back-substitution into
- * `F(σ,π) = 0` (quadratic in `π = s1·s2`).
- *
- * The resultant is assembled from precomputed pieces: with
- * `F = f₂π² + f₁π + f₀` and `f₂^eₖ·Gₖ ≡ aₖπ + bₖ (mod F)` (`maiAB`),
- * `a = Σ vₖf₂^(e-eₖ)aₖ`, `b = Σ vₖf₂^(e-eₖ)bₖ` (`vₖ` the implicit form
- * coefficients of `A`) `f₂b² - f₁ab + f₀a² = f₂^e·Res_π(F,G)`. It is
- * evaluated pointwise (never expanded into coefficients) and its roots in
- * `σ ∈ [0,2]` found as sign changes.
- */
-function maiRootsAB(A: number[][], B: number[][]): number[][] {
-    const { An, Bn } = normalize(A, B);
-    const [bx, by] = asc(Bn);
-    const [as, bs, es] = maiAB[`${A.length - 1}3`](bx, by);
-    const v = implicitCoeffs(An);
-    const Fc = maF_B3(bx, by);   // Fc[i][j]: coefficient of σ^i π^j
-    const [f0, f1, f2] = [0, 1, 2].map(j => Fc.map(row => row[j] ?? 0));
-    const e = max(...es);
-
-    // `a(σ)` and `b(σ)` as coefficients (accurate enough), but the resultant
-    // itself evaluated pointwise: expanding `f₂b² - f₁ab + f₀a²` into power
-    // basis coefficients loses all precision (catastrophic cancellation)
-    const f2pow = [[1]];
-    for (let k=1; k<=e; k++) { f2pow.push(pmul(f2pow[k-1], f2)); }
-    let a = [0], b = [0];
-    for (let k=0; k<v.length; k++) {
-        const w = pscale(f2pow[e - es[k]], v[k]);
-        a = padd(a, pmul(w, as[k]));
-        b = padd(b, pmul(w, bs[k]));
-    }
-    // divided by `f₂^e` pointwise: without it the values near roots of `f₂`
-    // are flattened into round-off noise, hiding (double) roots there
-    const res = (σ: number) => {
-        const A_ = horner(a, σ), B_ = horner(b, σ);
-        const F2 = horner(f2, σ);
-        return (F2*B_*B_ - horner(f1, σ)*A_*B_ + horner(f0, σ)*A_*A_)/F2**e;
-    };
-
-    // a fine grid: close clusters of roots must not cancel each other's sign changes
-    const grid = resOnGrid(a, b, f0, f1, f2, e);
-    const σs = signChangeRoots(res, 0, 2, GRID, grid);
-    const roots: number[][] = [];
-    for (const σ of σs) {
-        // F(σ,π) as a polynomial in π (descending)
-        const pc = [2, 1, 0].map(j => Fc.reduceRight((acc, row) => acc*σ + (row[j] ?? 0), 0));
-        if (pc.every(c => c === 0)) { continue; }
-        // both s1, s2 real and in [0,1]: σ - 1 ≤ π ≤ σ²/4
-        for (const π of rootsIn(pc, max(0, σ - 1), σ*σ/4)) {
-            const r = sqrt(max(0, σ*σ - 4*π));
-            roots.push([(σ - r)/2, (σ + r)/2]);
-        }
-    }
-    return roots;
 }
 
 
@@ -993,63 +805,77 @@ function roots01(p: TPoly): number[] {
 
 /**
  * Returns the one-sided Hausdorff distance `h(A,B) = max_t min_s |A(t) - B(s)|`
- * by evaluating `min_s |A(t) - B(s)|` at a superset of the parameter values
- * where the maximum can be attained.
+ * (and where it is attained) directly, i.e. by evaluating `min_s |A(t) - B(s)|`
+ * at a (small) superset of the parameter values `t` where the maximum can be
+ * attained, as opposed to the iterative bounding approach of `hausdorffDistance`.
  *
- * * curves of order 0 to 3
- * * plain double precision; no error bounds
+ * Implementation details:
+ * * curves of order 0 to 3 (points, lines, quadratics and cubics)
+ * * the candidate `t` values are of the following kinds (Kim & McLean):
+ *   * `EA`: the endpoints of `A`
+ *   * `EB`: points on `A` closest to an endpoint of `B`
+ *   * `I`: intersections of `A` and `B`
+ *   * `MA-ends`: points on `A` equidistant from both endpoints of `B`
+ *   * `MA-end-interior`: points on `A` equidistant from an endpoint of `B` and
+ *     a footpoint in the interior of `B`
+ *   * `MA-interiors`: points on `A` equidistant from two footpoints in the
+ *     interior of `B` (points of the medial axis of `B`)
+ * * `B` is first normalized by a similarity transform (`B(0) = 0`,
+ *   `B'(0) = (1,0)`) so that the systems' coefficients are polynomials in few
+ *   variables
+ * * the resultants eliminating `s` (for `I` and `MA-end-interior`) are
+ *   precomputed exactly (sympy, fraction-free Bareiss) by
+ *   `experiments/hausdorff/gen-resultants.py` and evaluated as generated
+ *   straight-line code (with common subexpressions eliminated) or as compact
+ *   data programs for the larger ones
+ * * univariate roots are found in the Bernstein basis on `[0,1]` and polished
+ *   by Newton's method
+ * * `MA-interiors` for cubic `B` is solved in the symmetric variables
+ *   `σ = s1 + s2`, `π = s1*s2` (removing the trivial solutions `s1 = s2`):
+ *   `π` is eliminated pointwise (no global resultant), the resulting function
+ *   of `σ` (and its derivative) is evaluated on a grid of `GRID` cells and its
+ *   roots are found via Hermite cubics per cell (revealing close pairs of
+ *   roots); test points are added at the roots of the leading coefficient and
+ *   at folds of the projection where the `σ` projection degenerates; each
+ *   solution is Newton-polished in `(σ,π)` and the medial axis point is then
+ *   mapped to its closest point on `A`
+ * * `MA-interiors` for quadratic `B` is solved directly since then `σ` is a
+ *   constant
+ * * candidates are scored by an upper bound (distance to 17 samples of `B`)
+ *   first so that most need no exact closest point; closest points are found
+ *   by the roots of the footpoint polynomial
+ * * since `min_s |A(t) - B(s)|` has a kink at a medial axis maximum, a winning
+ *   medial axis candidate is refined by a golden-section search in
+ *   `t ± 1e-4`
+ * * plain double precision; no error bounds; in tests the error is typically
+ *   around `1e-15` and at worst around `1e-12` (relative to the curves' size)
+ * * a few times faster than `hausdorffDistance` (e.g. about `45μs` for two
+ *   quadratics and under `1ms` for two cubics)
  *
+ * @param A the curve from which the distance is measured, given as an array
+ * of its control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param B the curve to which the distance is measured
  * @param method optional; defaults to `'resultant'`; see [[Method]]
  */
-function hausdorffDistanceOneSidedCandidates(
+function hausdorffDistanceOneSidedDirect(
         A: number[][],
         B: number[][],
-        method: Method = 'resultant'): HausdorffCandidates {
+        method: Method = 'resultant'): HausdorffDistanceOneSidedDirect {
 
     /**
-     * The `t` values of the solutions of a 2x2 system `f = g = 0` in `(t,s)`,
-     * either via the precomputed resultant (w.r.t. `t`) from `table` - whose
-     * roots `s` are back-substituted into `back(t,s) = 0` - or by subdivision.
-     *
-     * @param Bs the curve `B` as used in the system (possibly reversed)
+     * The `t` values of the solutions of a 2x2 system `f = g = 0` in `(t,s)` by
+     * subdivision (`method === 'subdivision'`).
      */
-    const solve2 = (
-            f: TPoly, g: TPoly,
-            table: typeof resI, Bs: number[][], back: TPoly): number[] => {
-
-        if (method === 'resultant') {
-            const { An, Bn } = normalize(A, Bs);
-            const [ax, ay] = asc(An);
-            const [bx, by] = asc(Bn);
-            const coeffs = table[`${A.length - 1}${Bs.length - 1}`](ax, ay, bx, by);
-            maxDeg = max(maxDeg, coeffs.length - 1);
-            if (coeffs.every(c => c === 0)) { return []; }
-            const ts: number[] = [];
-            const polish = polisher([f, g]);
-            for (const s of rootsIn(coeffs, 0, 1)) {
-                const tPoly = coeffsInTAt(back, s);
-                if (tPoly.every(c => c === 0)) { continue; }
-                for (const t of rootsIn(tPoly, 0, 1)) {
-                    // polish (the resultant's roots are only as accurate as its values)
-                    ts.push(polish([t, s])[0]);
-                }
-            }
-            return ts;
-        }
+    const solve2 = (f: TPoly, g: TPoly): number[] => {
         const r = solveSystem([f, g]);
         capped ||= r.capped;
         return r.roots.map(x => x[0]);
     };
-    let maxDeg = 0;
 
     const cands: { t: number; kind: Kind; }[] = [];
     let capped = false;
-    let tLast = performance.now();
     const push = (ts: number[], kind: Kind) => {
         for (const t of ts) { cands.push({ t, kind }); }
-        const now = performance.now();
-        timing[kind] = (timing[kind] ?? 0) + now - tLast;
-        tLast = now;
     };
 
     push([0, 1], 'EA');
@@ -1086,8 +912,7 @@ function hausdorffDistanceOneSidedCandidates(
             const V = curve(B, 1, 2);
             const e1 = footpointEq(A2, V, 1);
             const e2 = cross(deriv(A2, 0), deriv(V, 1));
-            // back-substitute into `e2` unless it does not depend on `t` (`A` a line)
-            push(solve2(e1, e2, resI, B, A.length > 2 ? e2 : e1), 'I');
+            push(solve2(e1, e2), 'I');
         }
 
         if (B.length > 2) {
@@ -1106,7 +931,7 @@ function hausdorffDistanceOneSidedCandidates(
                 const SP = univariate(sOp(squaredNormCoeffs(Bs)), 1, 2);
                 const G = add(scale(dot(A2, SV), -2), SP);
                 const e1 = footpointEq(A2, V, 1);
-                push(solve2(e1, G, resMAEI, Bs, e1), 'MA-end-interior');
+                push(solve2(e1, G), 'MA-end-interior');
             }
 
             // MA-interiors: two interior footpoints s1 ≠ s2 at equal distance.
@@ -1172,8 +997,7 @@ function hausdorffDistanceOneSidedCandidates(
         }
     }
 
-    let best: HausdorffCandidates | undefined;
-    const tEval = performance.now();
+    let best: HausdorffDistanceOneSidedDirect | undefined;
     // cheap upper bounds first: the distance from `A(t)` to the nearest of a
     // few sample points of `B` can only exceed the true distance, so the
     // candidates are scored in order of decreasing bound until no remaining
@@ -1193,7 +1017,7 @@ function hausdorffDistanceOneSidedCandidates(
         if (best !== undefined && ub <= best.d) { break; }
         const cp = fastClosest(B, pA);
         if (best === undefined || cp.d > best.d) {
-            best = { d: cp.d, tA: t, pA, tB: cp.t, pB: cp.p, kind, candidates: 0, capped, maxDeg: 0 };
+            best = { d: cp.d, tA: t, pA, tB: cp.t, pB: cp.p, kind, capped };
         }
     }
 
@@ -1221,24 +1045,38 @@ function hausdorffDistanceOneSidedCandidates(
         }
     }
 
-    timing['evaluate'] = (timing['evaluate'] ?? 0) + performance.now() - tEval;
-
-    return { ...best!, candidates: cands.length, capped, maxDeg };
+    return { ...best!, capped };
 }
 
 
-/** The (two-sided) Hausdorff distance `max(h(A,B), h(B,A))`. */
-function hausdorffDistanceCandidates(
+/**
+ * Returns the (two-sided) Hausdorff distance `max(h(A,B), h(B,A))` between the
+ * given bezier curves directly (see `hausdorffDistanceOneSidedDirect` for the
+ * one-sided version and its implementation details).
+ *
+ * Implementation details:
+ * * curves of order 0 to 3 (points, lines, quadratics and cubics)
+ * * two calls to `hausdorffDistanceOneSidedDirect` (candidate enumeration
+ *   with precomputed resultants and medial-axis root finding)
+ * * plain double precision; no error bounds; in tests the error is typically
+ *   around `1e-15` and at worst around `1e-12` (relative to the curves' size)
+ *
+ * @param A a bezier curve given as an array of its control points, e.g.
+ * `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param B another bezier curve
+ * @param method optional; defaults to `'resultant'`; see [[Method]]
+ */
+function hausdorffDistanceDirect(
         A: number[][],
         B: number[][],
         method: Method = 'resultant'): number {
 
     return max(
-        hausdorffDistanceOneSidedCandidates(A, B, method).d,
-        hausdorffDistanceOneSidedCandidates(B, A, method).d
+        hausdorffDistanceOneSidedDirect(A, B, method).d,
+        hausdorffDistanceOneSidedDirect(B, A, method).d
     );
 }
 
 
-export { hausdorffDistanceOneSidedCandidates, hausdorffDistanceCandidates, uOp, sOp, timing, signChangeRoots }
-export type { HausdorffCandidates, Kind, Method }
+export { hausdorffDistanceOneSidedDirect, hausdorffDistanceDirect, uOp, sOp }
+export type { HausdorffDistanceOneSidedDirect, Kind as HausdorffDirectKind, Method as HausdorffDirectMethod }

@@ -1,7 +1,7 @@
 import { it } from '@jest/globals';
 import { writeFileSync } from 'fs';
 import { hausdorffDistanceOneSided, closestPointOnBezier, evalDeCasteljau } from '../../../src/index.js';
-import { hausdorffDistanceOneSidedCandidates } from '../hausdorff-candidates.js';
+import { hausdorffDistanceOneSidedDirect } from '../../../src/index.js';
 
 function rng(seed: number) {
     return () => {
@@ -39,7 +39,7 @@ it('measures accuracy against the library (set HAUSDORFF_OUT to save the table)'
         const ms = { ours: 0, libDefault: 0, libTight: 0 };
         for (let i=0; i<N; i++) {
             const A = rand(nA), B = rand(nB);
-            let t0 = performance.now(); const ours = hausdorffDistanceOneSidedCandidates(A, B).d; ms.ours += performance.now() - t0;
+            let t0 = performance.now(); const ours = hausdorffDistanceOneSidedDirect(A, B).d; ms.ours += performance.now() - t0;
             t0 = performance.now(); const libD = hausdorffDistanceOneSided(A, B); ms.libDefault += performance.now() - t0;
             t0 = performance.now(); const libT = hausdorffDistanceOneSided(A, B, 1e-12, 200); ms.libTight += performance.now() - t0;
             let truth = Math.max(ours, libD, libT);

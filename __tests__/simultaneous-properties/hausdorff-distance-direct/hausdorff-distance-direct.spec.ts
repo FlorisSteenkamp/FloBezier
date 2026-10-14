@@ -1,9 +1,9 @@
 import { expect, describe, it } from '@jest/globals';
 import { writeFileSync } from 'fs';
 import { hausdorffDistanceOneSided, closestPointOnBezier, evalDeCasteljau } from '../../../src/index.js';
-import { hausdorffDistanceOneSidedCandidates, uOp, sOp, type Kind } from '../hausdorff-candidates.js';
-import { evaluate, univariate, add } from '../tensor-poly.js';
-import { solveSystem } from '../solve-system.js';
+import { hausdorffDistanceOneSidedDirect, uOp, sOp, type HausdorffDirectKind as Kind } from '../../../src/simultaneous-properties/hausdorff-distance-direct/hausdorff-distance-direct.js';
+import { evaluate, univariate, add } from '../../../src/simultaneous-properties/hausdorff-distance-direct/tensor-poly.js';
+import { solveSystem } from '../../../src/simultaneous-properties/hausdorff-distance-direct/solve-system.js';
 
 
 const OUT = process.env['HAUSDORFF_OUT'];
@@ -79,7 +79,7 @@ describe('candidate based one-sided Hausdorff distance', function() {
         let worstSub = 0;
         for (const nA of [2, 3, 4]) {
             for (const nB of [2, 3, 4]) {
-                let errSub = 0, errRes = 0, missRes = 0, libLow = 0, capped = 0, maxDeg = 0;
+                let errSub = 0, errRes = 0, missRes = 0, libLow = 0, capped = 0;
                 let tSub = 0, tRes = 0, tLib = 0;
                 const resTimes: number[] = [];
                 const kinds: Partial<Record<Kind, number>> = {};
@@ -87,11 +87,11 @@ describe('candidate based one-sided Hausdorff distance', function() {
                     const A = rand(nA), B = rand(nB);
 
                     let t0 = performance.now();
-                    const sub = hausdorffDistanceOneSidedCandidates(A, B, 'subdivision');
+                    const sub = hausdorffDistanceOneSidedDirect(A, B, 'subdivision');
                     tSub += performance.now() - t0;
 
                     t0 = performance.now();
-                    const res = hausdorffDistanceOneSidedCandidates(A, B, 'resultant');
+                    const res = hausdorffDistanceOneSidedDirect(A, B, 'resultant');
                     tRes += performance.now() - t0;
                     resTimes.push(performance.now() - t0);
 
@@ -110,14 +110,13 @@ describe('candidate based one-sided Hausdorff distance', function() {
                     errSub = Math.max(errSub, truth - sub.d);
                     errRes = Math.max(errRes, truth - res.d);
                     if (truth - res.d > 1e-8) { missRes++; }
-                    maxDeg = Math.max(maxDeg, res.maxDeg);
                     kinds[res.kind] = (kinds[res.kind] ?? 0) + 1;
                     if (sub.capped || res.capped) { capped++; }
                 }
                 worstSub = Math.max(worstSub, errSub);
                 rows.push({
                     A: nA - 1, B: nB - 1, n: N,
-                    errSub, errRes, missRes, libLow, maxDeg,
+                    errSub, errRes, missRes, libLow,
                     msSub: +(tSub/N).toFixed(2), msRes: +(tRes/N).toFixed(2), msLib: +(tLib/N).toFixed(2),
                     msResMedian: +resTimes.sort((a, b) => a - b)[N >> 1].toFixed(2),
                     msResMax: +resTimes[N - 1].toFixed(2),

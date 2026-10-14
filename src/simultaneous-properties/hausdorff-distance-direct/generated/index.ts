@@ -3,9 +3,6 @@
 import { maF_B3 } from './maF_B3.js';
 import { maN_B2 } from './maN_B2.js';
 import { maN_B3 } from './maN_B3.js';
-import { maiAB_A1B3 } from './maiAB_A1B3.js';
-import { maiAB_A2B3 } from './maiAB_A2B3.js';
-import { maiAB_A3B3 } from './maiAB_A3B3.js';
 import { maiG_A1B2 } from './maiG_A1B2.js';
 import { maiG_A1B3 } from './maiG_A1B3.js';
 import { maiG_A2B2 } from './maiG_A2B2.js';
@@ -45,13 +42,6 @@ const resMAEI: { [key: string]: (ax: number[], ay: number[], bx: number[], by: n
     '32': resMAEI_A3B2,
     '33': resMAEI_A3B3,
 };
-const resMAI: { [key: string]: (v: number[], bx: number[], by: number[]) => number[] } = {
-};
-const maiAB: { [key: string]: (bx: number[], by: number[]) => [number[][], number[][], number[]] } = {
-    '13': maiAB_A1B3,
-    '23': maiAB_A2B3,
-    '33': maiAB_A3B3,
-};
 const maiG: { [key: string]: (v: number[], bx: number[], by: number[]) => number[][] } = {
     '12': maiG_A1B2,
     '13': maiG_A1B3,
@@ -61,4 +51,4 @@ const maiG: { [key: string]: (v: number[], bx: number[], by: number[]) => number
     '33': maiG_A3B3,
 };
 
-export { resI, resMAEI, resMAI, maiAB, maiG, maF_B3, maN_B3, maN_B2 }
+export { resI, resMAEI, maiG, maF_B3, maN_B3, maN_B2 }
