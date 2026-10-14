@@ -6,6 +6,9 @@
 [2]: https://www.npmjs.com/package/flo-bezier3 "FloBezier, npm link"
 [3]: https://img.shields.io/npm/dm/flo-bezier3 "FloBezier downloads, badge"
 
+## [Demo](https://florissteenkamp.github.io/FloBezier/demo/)
+Try FloBezier live in your browser with the [interactive demo](https://florissteenkamp.github.io/FloBezier/demo/).
+
 ## Overview
 
 The focus is to provide a portable, practical, easy-to-use, robust and fast bezier curve
@@ -87,9 +90,6 @@ to clog your short term memory by worrying about state of any kind.
 
 ## [Documentation](https://florissteenkamp.github.io/FloBezier)
 For in-depth interactive documentation please [read the docs!](https://florissteenkamp.github.io/FloBezier).
-
-## [Demo](https://florissteenkamp.github.io/FloBezier/demo/)
-Try FloBezier live in your browser with the [interactive demo](https://florissteenkamp.github.io/FloBezier/demo/).
 
 ## Installation
 
