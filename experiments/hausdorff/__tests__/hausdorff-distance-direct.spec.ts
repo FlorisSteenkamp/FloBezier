@@ -1,11 +1,12 @@
 import { expect, describe, it } from '@jest/globals';
 import { writeFileSync } from 'fs';
 import {
-    hausdorffDistanceOneSided, hausdorffDistanceOneSidedDirect, hausdorffDistanceDirect,
+    hausdorffDistanceOneSided,
     closestPointOnBezier,
-    evalDeCasteljau, type HausdorffDirectKind as Kind
+    evalDeCasteljau
 } from '../../../src/index.js';
-import { bernsteinRoots01 } from '../../../src/simultaneous-properties/hausdorff-distance-direct/bernstein-roots.js';
+import { hausdorffDistanceOneSidedDirect, hausdorffDistanceDirect, type HausdorffDirectKind as Kind } from '../hausdorff-distance-direct.js';
+import { bernsteinRoots01 } from '../bernstein-roots.js';
 
 const OUT = process.env['HAUSDORFF_OUT'];
 

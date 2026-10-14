@@ -1,5 +1,5 @@
 import { it } from '@jest/globals';
-import { hausdorffDistanceOneSidedDirect } from '../../../src/index.js';
+import { hausdorffDistanceOneSidedDirect } from '../hausdorff-distance-direct.js';
 import { hausdorffDistanceOneSided } from '../../../src/index.js';
 it('benchmarks the quadratic/quadratic case against the library (warm, median of 7 runs)', () => {
     let seed = 11;

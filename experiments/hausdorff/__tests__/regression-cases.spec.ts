@@ -1,5 +1,5 @@
 import { expect, describe, it } from '@jest/globals';
-import { hausdorffDistanceOneSidedDirect } from '../../../src/simultaneous-properties/hausdorff-distance-direct/hausdorff-distance-direct.js';
+import { hausdorffDistanceOneSidedDirect } from '../hausdorff-distance-direct.js';
 
 
 /**
@@ -40,5 +40,20 @@ describe('regression cases (MA-interiors, cubic B)', function() {
         expect(r.kind).toBe('MA-interiors');
         expect(Math.abs(r.d - 0.17203397550690386)).toBeLessThan(1e-9);
         expect(Math.abs(r.tA - 0.6172512358574567)).toBeLessThan(1e-6);
+    });
+});
+
+
+describe('regression cases (degenerate B)', function() {
+    it('B with a control point on an endpoint (B\'(0) = 0 or B\'(1) = 0)', function() {
+        // flo-bezier3 9.0.1 returned 1.414 for both (it normalized `B` using `B'(0)`)
+        const A = [[0,0],[1,1],[2,0]];
+        const d = Math.sqrt(0.4);  // 0.632...
+
+        const r1 = hausdorffDistanceOneSidedDirect(A, [[0,0],[0,0],[3,1]]);
+        expect(r1.d).toBeCloseTo(d, 12);
+
+        const r2 = hausdorffDistanceOneSidedDirect(A, [[3,1],[0,0],[0,0]]);
+        expect(r2.d).toBeCloseTo(d, 12);
     });
 });

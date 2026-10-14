@@ -1,7 +1,7 @@
 import { it } from '@jest/globals';
 import { writeFileSync } from 'fs';
 import { hausdorffDistanceOneSided, closestPointOnBezier, evalDeCasteljau } from '../../../src/index.js';
-import { hausdorffDistanceOneSidedDirect } from '../../../src/index.js';
+import { hausdorffDistanceOneSidedDirect } from '../hausdorff-distance-direct.js';
 
 function rng(seed: number) {
     return () => {

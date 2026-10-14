@@ -29,6 +29,9 @@ import { hausdorffDistanceOneSidedExtra } from "./hausdorff-distance-one-sided-e
  * 
  * * to also obtain the parameter values and points at which the distance is
  * achieved, use `hausdorffDistanceOneSidedExtra`
+ * * to obtain guaranteed lower and upper bounds, to stop early once the
+ * distance is known to be above or below some thresholds, or for a piecewise
+ * `B`, use `hausdorffDistanceOneSidedBounds`
  * * partially based off [Computing the Hausdorff distance between two sets of parametric curves](https://www.semanticscholar.org/paper/COMPUTING-THE-HAUSDORFF-DISTANCE-BETWEEN-TWO-SETS-Kim-McLean/d2bd6529c4b118e389e1db209d8f1bf7467f9016)
  * 
  * @param A a bezier curve (the 'from' curve) given by an ordered array of its

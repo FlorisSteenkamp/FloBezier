@@ -1,12 +1,12 @@
-import { toPowerBasis } from '../../to-power-basis/to-power-basis/double/to-power-basis.js';
-import { evalDeCasteljau } from '../../local-properties-at-t/evaluate/double/eval-de-casteljau.js';
-import { getFootpointPoly } from '../closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly.js';
-import { getImplicitForm1 } from '../../implicit-form/double/get-implicit-form1.js';
-import { getImplicitForm2 } from '../../implicit-form/double/get-implicit-form2.js';
-import { getImplicitForm3 } from '../../implicit-form/double/get-implicit-form3.js';
-import type { HausdorffDistanceOneSidedExtra, HausdorffDistanceExtra } from '../hausdorff-distance/hausdorff-distance-types.js';
-import { hausdorffDistanceOneSidedExtra } from '../hausdorff-distance/hausdorff-distance-one-sided-extra.js';
-import { maxAbsCoordinate } from '../../error-analysis/max-abs-coordinate.js';
+import { toPowerBasis } from '../../src/to-power-basis/to-power-basis/double/to-power-basis.js';
+import { evalDeCasteljau } from '../../src/local-properties-at-t/evaluate/double/eval-de-casteljau.js';
+import { getFootpointPoly } from '../../src/simultaneous-properties/closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly.js';
+import { getImplicitForm1 } from '../../src/implicit-form/double/get-implicit-form1.js';
+import { getImplicitForm2 } from '../../src/implicit-form/double/get-implicit-form2.js';
+import { getImplicitForm3 } from '../../src/implicit-form/double/get-implicit-form3.js';
+import type { HausdorffDistanceOneSidedExtra, HausdorffDistanceExtra } from '../../src/simultaneous-properties/hausdorff-distance/hausdorff-distance-types.js';
+import { hausdorffDistanceOneSidedExtra } from '../../src/simultaneous-properties/hausdorff-distance/hausdorff-distance-one-sided-extra.js';
+import { maxAbsCoordinate } from '../../src/error-analysis/max-abs-coordinate.js';
 import { bernsteinRoots01 } from './bernstein-roots.js';
 import { resI, resMAEI, maiG, maF_B3, maN_B3, maN_B2 } from './generated/index.js';
 

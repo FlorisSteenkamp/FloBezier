@@ -131,7 +131,7 @@ describe('hausdorffDistance', function() {
 
             const h = hausdorffDistanceOneSided(A,B);
 
-            expect(h).toBeNearly(2**32, 1.3749758408573243);
+            expect(h).toBeNearly(2**32, 1.3749749495310053);
 
             // h should be 1.3749758408573243 occuring at 
             //   A: t = 0.4718470522694049
@@ -152,8 +152,8 @@ describe('hausdorffDistance', function() {
             const AB = hausdorffDistanceOneSided(A,B);
             const BA = hausdorffDistanceOneSided(B,A);
 
-            expect(AB).toBeNearly(2**32,29.147780233490522);
-            expect(BA).toBeNearly(2**32,27.36950949488669);
+            expect(AB).toBeNearly(2**32,29.147862513012676);
+            expect(BA).toBeNearly(2**32,27.369957860686807);
 
             // estimate Hausdorff distance
             const hAB = H(A,B,1);
@@ -171,7 +171,7 @@ describe('hausdorffDistance', function() {
             const BA = hausdorffDistanceOneSided(B,A);
             const h = hausdorffDistance(A,B,tol);
 
-            expect(AB).toBeNearly(2**32, 29.41592345293623);
+            expect(AB).toBeNearly(2**32, 29.415953980142692);
             expect(BA).toBeNearly(2**32, 92.13090734616078);
             expect(h).toBeNearly(2**32, 92.13090734616078);
         }

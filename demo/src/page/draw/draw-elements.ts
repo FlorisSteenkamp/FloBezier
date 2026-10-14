@@ -16,7 +16,7 @@ import type { ToDraw } from '../../state/to-draw.js';
 import { deleteSvgs } from './delete-svgs.js';
 import { getIntersections } from '../../../sweep-line/get-intersections.js';
 import { drawFs } from 'flo-draw';
-import { hausdorffDistanceDirect, hausdorffDistanceOneSidedDirect } from '../../../../src/simultaneous-properties/hausdorff-distance-direct/hausdorff-distance-direct.js';
+import { hausdorffDistanceDirect, hausdorffDistanceOneSidedDirect } from '../../../../experiments/hausdorff/hausdorff-distance-direct.js';
 
 
 function drawElements(
