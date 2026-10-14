@@ -382,13 +382,125 @@ function resultantAt(c: Float64Array, F0: number, F1: number, F2: number): numbe
 
 
 /**
+ * `resultantAt` (`S = Res_π(F,G) = f₂^m·R`) together with its derivative
+ * w.r.t. `σ`: `c`, `d` are `G`'s coefficients in `π` and their
+ * `σ`-derivatives (both modified in place), `F*` and `D*` the coefficients of
+ * `F` and their `σ`-derivatives (forward mode through the same reduction).
+ * Returns `S` into `out[0]` and `S′` into `out[1]`.
+ */
+function resultantAtD(
+        c: Float64Array, d: Float64Array,
+        F0: number, F1: number, F2: number,
+        D0: number, D1: number, D2: number,
+        out: Float64Array) {
+
+    const m = c.length - 1;
+    const p = F1/F2, q = F0/F2;
+    const pd = (D1*F2 - F1*D2)/(F2*F2), qd = (D0*F2 - F0*D2)/(F2*F2);
+    for (let j=m; j>=2; j--) {
+        const cj = c[j], dj = d[j];
+        c[j-1] -= p*cj; d[j-1] -= pd*cj + p*dj;
+        c[j-2] -= q*cj; d[j-2] -= qd*cj + q*dj;
+    }
+    const α = c[1], β = c[0], αd = d[1], βd = d[0];
+    const R = β*β - p*α*β + q*α*α;
+    const Rd = 2*β*βd - (pd*α*β + p*αd*β + p*α*βd) + (qd*α*α + 2*q*α*αd);
+    let s = 1;
+    for (let k=0; k<m-1; k++) { s *= F2; }
+    // S = F2^m·R, S′ = m·F2^(m-1)·F2′·R + F2^m·R′
+    out[0] = s*F2*R;
+    out[1] = m*s*D2*R + s*F2*Rd;
+}
+
+
+
+/**
+ * Roots of the continuous `f` on a grid of `n` intervals of `[lb,ub]` given
+ * the values `fs` and derivatives `ds` at the grid points: on each cell the
+ * extrema of the cubic Hermite interpolant split the cell (where `f` is then
+ * evaluated exactly); sign changes are bisected, and extrema where `|f|` dips
+ * below both cell ends without a sign change are returned as test points
+ * (near double roots - polished and checked by the caller). A close pair of
+ * roots inside one cell is found as long as `f` is roughly quadratic there,
+ * however close the two roots are.
+ */
+function hermiteRoots(
+        f: (x: number) => number,
+        lb: number, ub: number, n: number,
+        fs: Float64Array, ds: Float64Array): number[] {
+
+    const h = (ub - lb)/n;
+    const roots: number[] = [];
+    const xs: number[] = [], vs: number[] = [];
+    for (let i=0; i<n; i++) {
+        const x0 = lb + h*i, x1 = x0 + h;
+        const f0 = fs[i], f1 = fs[i+1];
+        if (!(f0 === f0) || !(f1 === f1)) { continue; }   // NaN (a pole on the grid)
+        if (f0 === 0) { roots.push(x0); }
+        const m0 = ds[i]*h, m1 = ds[i+1]*h;
+        // H′(u) = a u² + b u + c on u ∈ [0,1]
+        const a = 6*f0 + 3*m0 - 6*f1 + 3*m1;
+        const b = -6*f0 - 4*m0 + 6*f1 - 2*m1;
+        const c = m0;
+        xs.length = 0; vs.length = 0;
+        xs.push(x0); vs.push(f0);
+        const us: number[] = [];
+        if (a === 0) {
+            if (b !== 0) { us.push(-c/b); }
+        } else {
+            const D = b*b - 4*a*c;
+            if (D >= 0) {
+                const qq = -(b + (b >= 0 ? 1 : -1)*sqrt(D))/2;
+                us.push(qq/a);
+                if (qq !== 0) { us.push(c/qq); }
+            }
+        }
+        us.sort((u, v) => u - v);
+        for (const u of us) {
+            if (u > 0 && u < 1) { const x = x0 + u*h; xs.push(x); vs.push(f(x)); }
+        }
+        xs.push(x1); vs.push(f1);
+        for (let k=1; k<xs.length; k++) {
+            const va = vs[k-1], vb = vs[k];
+            if (va*vb < 0) { roots.push(bisectF(f, xs[k-1], xs[k], va)); }
+        }
+        // interior extrema dipping towards zero without a sign change
+        for (let k=1; k<xs.length-1; k++) {
+            const v = vs[k];
+            if (v === 0) { roots.push(xs[k]); continue; }
+            if (abs(v) < abs(f0) && abs(v) < abs(f1) && v*vs[k-1] > 0 && v*vs[k+1] > 0) {
+                roots.push(xs[k]);
+            }
+        }
+    }
+    if (fs[n] === 0) { roots.push(ub); }
+    return roots;
+}
+
+
+function bisectF(f: (x: number) => number, a: number, b: number, fa: number): number {
+    for (let k=0; k<40; k++) {
+        const m = (a + b)/2, fm = f(m);
+        if (fm === 0) { return m; }
+        if ((fa < 0) !== (fm < 0)) { b = m; } else { a = m; fa = fm; }
+    }
+    return (a + b)/2;
+}
+
+
+/**
  * The MA-interiors candidate `t` values for a cubic `B`, entirely from
  * precomputed pieces in `σ = s1 + s2`, `π = s1·s2`: the resultant w.r.t. `π`
- * of `F` and `G` (`maiG`) is evaluated pointwise in `σ` (`resultantAt`), its
- * roots on `[0,2]` found as sign changes / near-double roots on a fine grid,
- * each `σ` back-substituted into `F(σ,π) = 0` (quadratic in `π`), the pair
- * polished with Newton and mapped to the medial axis point `(Nx,Ny)/D`
- * (`maN_B3`) whose closest point on `A` gives `t`.
+ * of `F` and `G` (`maiG`) is evaluated pointwise in `σ` (`resultantAt`), with
+ * its derivative (`resultantAtD`), on a grid; its roots on `[0,2]` are found
+ * per cell with the help of the Hermite cubic (`hermiteRoots`: close pairs of
+ * roots and near double roots inside a cell are caught too), each `σ`
+ * back-substituted into `F(σ,π) = 0` (quadratic in `π`). Test points are
+ * added at the singular points of the σ-projection (roots of `f₂` and folds
+ * `f₁² - 4f₂f₀ = 0`, depending on `B` only), where the resultant is flattened
+ * into round-off. Each pair is polished with Newton and mapped to the medial
+ * axis point `(Nx,Ny)/D` (`maN_B3`) whose closest point on `A` gives `t`
+ * (exact double roots need no candidate: the distance has no kink there).
  */
 function maiTs(A: number[][], B: number[][]): number[] {
     const { An, nbx: bx, nby: by } = prep(A, B);
@@ -411,12 +523,27 @@ function maiTs(A: number[][], B: number[][]): number[] {
         const Gs = g.map(onGrid);
         const F0 = onGrid(f0), F1 = onGrid(f1), F2 = onGrid(f2);
         const grid = new Float64Array(GRID + 1);
-        for (let i=0; i<=GRID; i++) {
-            for (let j=0; j<=m; j++) { c[j] = Gs[j][i]; }
-            grid[i] = resultantAt(c, F0[i], F1[i], F2[i]);
+        if (MAI_ROOTS === 'hermite') {
+            // values and derivatives: the Hermite cubic per cell reveals close
+            // pairs of roots (and near double roots) inside a cell
+            const Gd = g.map(p => onGrid(pder(p)));
+            const D0 = onGrid(pder(f0)), D1 = onGrid(pder(f1)), D2 = onGrid(pder(f2));
+            const gridD = new Float64Array(GRID + 1);
+            const d = new Float64Array(m + 1), out = new Float64Array(2);
+            for (let i=0; i<=GRID; i++) {
+                for (let j=0; j<=m; j++) { c[j] = Gs[j][i]; d[j] = Gd[j][i]; }
+                resultantAtD(c, d, F0[i], F1[i], F2[i], D0[i], D1[i], D2[i], out);
+                grid[i] = out[0]; gridD[i] = out[1];
+            }
+            σs = hermiteRoots(res, 0, 2, GRID, grid, gridD);
+        } else {
+            for (let i=0; i<=GRID; i++) {
+                for (let j=0; j<=m; j++) { c[j] = Gs[j][i]; }
+                grid[i] = resultantAt(c, F0[i], F1[i], F2[i]);
+            }
+            // a fine grid: close clusters of roots must not cancel each other's sign changes
+            σs = signChangeRoots(res, 0, 2, GRID, grid);
         }
-        // a fine grid: close clusters of roots must not cancel each other's sign changes
-        σs = signChangeRoots(res, 0, 2, GRID, grid);
     }
     const pairs: number[][] = [];
     for (const σ of σs) {
@@ -425,6 +552,29 @@ function maiTs(A: number[][], B: number[][]): number[] {
         if (pc.every(x => x === 0)) { continue; }
         // both s1, s2 real and in [0,1]: σ - 1 ≤ π ≤ σ²/4
         for (const π of rootsSmallDesc(pc, max(0, σ - 1), σ*σ/4)) { pairs.push([σ, π]); }
+    }
+
+    // test points at the singular points of the σ-projection (depending on
+    // `B` only): at a root of `f₂` (a pole: one branch of `F = 0` escapes to
+    // infinity) `F` is linear in `π`; at a fold (`f₁² - 4f₂f₀ = 0`) the two
+    // branches meet. Solutions close to these are flattened into round-off in
+    // the resultant, so Newton (below) is simply started from them as well
+    if (MAI_ROOTS === 'hermite') {
+        for (const σ of roots01asc(f2, 0, 2)) {
+            const F1 = horner(f1, σ);
+            if (F1 !== 0) { pairs.push([σ, -horner(f0, σ)/F1]); }
+            // if `f₁` and `f₀` (nearly) vanish here too, `F = 0` (nearly)
+            // contains the line `σ = const` (`s1 + s2` constant along the
+            // medial axis, as for a parabola): the solutions there come from
+            // `G(σ,π) = 0` alone, univariate in `π`
+            const gp = g.map(row => horner(row, σ)).reverse();   // descending in π
+            for (const π of rootsSmallDesc(gp, max(0, σ - 1), σ*σ/4)) { pairs.push([σ, π]); }
+        }
+        const disc = padd(pmul(f1, f1), pscale(pmul(f2, f0), -4));
+        for (const σ of roots01asc(disc, 0, 2)) {
+            const F2 = horner(f2, σ);
+            if (F2 !== 0) { pairs.push([σ, -horner(f1, σ)/(2*F2)]); }
+        }
     }
 
     // the resultant's roots are only accurate to its precision and
@@ -505,15 +655,21 @@ const SAMPLES = 16;
 
 
 /**
- * How the MA-interiors resultant's roots (cubic `B`) are found: `'grid'` (sign
- * changes and local minima on a fixed grid of `GRID` intervals) or
- * `'adaptive'` (interval bounds, see adaptive-roots.ts - it does not pay off).
+ * How the MA-interiors resultant's roots (cubic `B`) are found: `'hermite'`
+ * (values and derivatives on a grid, see `hermiteRoots`), `'grid'` (sign
+ * changes and local minima of the values on a fixed grid of `GRID` intervals)
+ * or `'adaptive'` (interval bounds, see adaptive-roots.ts - it does not pay
+ * off).
  */
-const MAI_ROOTS: 'adaptive' | 'grid' = 'grid';
+const MAI_ROOTS = 'hermite' as 'hermite' | 'grid' | 'adaptive';
 
 
-/** The number of grid intervals on `σ ∈ [0,2]` for the MA-interiors roots. */
-const GRID = 2000;
+/**
+ * The number of grid intervals on `σ ∈ [0,2]` for the MA-interiors roots: 500
+ * for `'hermite'` (no misses in 10800 random cubic-B tests at 250 or 500, a
+ * few at 100), 2000 for `'grid'`.
+ */
+const GRID = MAI_ROOTS === 'hermite' ? 500 : 2000;
 const gridXs = Float64Array.from({ length: GRID + 1 }, (_, i) => 2*i/GRID);
 
 
@@ -1043,15 +1199,17 @@ function hausdorffDistanceOneSidedCandidates(
 
     // final local refinement of a winner at a kink (MA types) by maximizing the
     // true distance: some are ill-conditioned (e.g. near-double roots) with `t`
-    // only accurate to ~√ε, and at a kink that error shows linearly in the
-    // distance (~1e-9); at smooth maxima (I, EB) it shows only quadratically
+    // only roughly accurate, and at a kink that error shows linearly in the
+    // distance; at smooth maxima (I, EB) it shows only quadratically
     if (best!.kind.startsWith('MA')) {
         const g = (t: number) => fastClosest(B, evalDeCasteljau(A, t)).d;
         const r = 0.6180339887498949;
-        let a = max(0, best!.tA - 1e-6), b = min(1, best!.tA + 1e-6);
+        // (a window of ±1e-4: a candidate from a near-double root can be
+        // that far off; 35 steps bring it down to ~1e-11)
+        let a = max(0, best!.tA - 1e-4), b = min(1, best!.tA + 1e-4);
         let m1 = b - r*(b - a), m2 = a + r*(b - a);
         let g1 = g(m1), g2 = g(m2);
-        for (let k=0; k<25; k++) {
+        for (let k=0; k<35; k++) {
             if (g1 > g2) { b = m2; m2 = m1; g2 = g1; m1 = b - r*(b - a); g1 = g(m1); }
             else { a = m1; m1 = m2; g1 = g2; m2 = a + r*(b - a); g2 = g(m2); }
         }
