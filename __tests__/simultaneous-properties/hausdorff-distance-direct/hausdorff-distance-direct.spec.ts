@@ -5,6 +5,7 @@ import {
     closestPointOnBezier,
     evalDeCasteljau, type HausdorffDirectKind as Kind
 } from '../../../src/index.js';
+import { bernsteinRoots01 } from '../../../src/simultaneous-properties/hausdorff-distance-direct/bernstein-roots.js';
 
 const OUT = process.env['HAUSDORFF_OUT'];
 
@@ -110,6 +111,55 @@ describe('candidate based one-sided Hausdorff distance', function() {
             expect(Math.hypot(h.pA[0] - h.pB[0], h.pA[1] - h.pB[1])).toBeCloseTo(h.d, 12);
         }
         expect(sides.size).toBe(2);
+    });
+
+    it('finds interior roots next to (exact or rounded) roots at the end points', function() {
+        const sorted = (p: number[]) => bernsteinRoots01(p).sort((a, b) => a - b);
+        // s(s - 0.3)(s - 0.7), (s - 0.5)(s - 1), 10s³ - 6s
+        const r1 = sorted([1, -1, 0.21, 0]);
+        expect(r1.length).toBe(3);
+        [0, 0.3, 0.7].forEach((x, i) => expect(r1[i]).toBeCloseTo(x, 14));
+        const r2 = sorted([1, -1.5, 0.5]);
+        expect(r2.length).toBe(2);
+        [0.5, 1].forEach((x, i) => expect(r2[i]).toBeCloseTo(x, 14));
+        const r3 = sorted([10, 0, -6, 0]);
+        expect(r3.length).toBe(2);
+        [0, Math.sqrt(0.6)].forEach((x, i) => expect(r3[i]).toBeCloseTo(x, 14));
+        // a root at 1 rounded to opposite signs in the power and Bernstein
+        // forms (just outside `[0,1]` in the latter): the interior root
+        const r4 = sorted([
+            544.8637862662966, -1651.621517489302, 1666.8791399728693,
+            -625.4165824159363, 69.71274385818279, -4.417570192110393
+        ]);
+        expect(r4.length).toBe(1);
+        expect(r4[0]).toBeCloseTo(0.58632, 4);
+    });
+
+    it('handles a zero derivative of B at an end point', function() {
+        // the reported case: a quadratic with a doubled control point
+        const A = [[0,0],[1,1],[2,0]];
+        expect(hausdorffDistanceOneSidedDirect(A, [[0,0],[0,0],[3,1]]).d).toBeCloseTo(2/Math.sqrt(10), 14);
+        expect(hausdorffDistanceOneSidedDirect(A, [[0,0],[3,1],[3,1]]).d).toBeCloseTo(2/Math.sqrt(10), 14);
+        // a line and a quadratic that are a single point
+        expect(hausdorffDistanceOneSidedDirect(A, [[1,0],[1,0]]).d).toBeCloseTo(1, 14);
+        expect(hausdorffDistanceOneSidedDirect(A, [[1,0],[1,0],[1,0]]).d).toBeCloseTo(1, 14);
+
+        const r = rng(4242);
+        const P = () => [r(), r()];
+        for (let i=0; i<24; i++) {
+            const A = Array.from({ length: 2 + (i % 3) }, P);
+            const p = P(), q = P();
+            const B = [
+                [p, p, q], [p, q, q],
+                [p, p, P(), P()], [P(), P(), q, q]
+            ][i % 4];
+            const res = hausdorffDistanceOneSidedDirect(A, B);
+            expect(res.kind === 'iterative').toBe(B.length === 4);
+            expect(Math.abs(res.d - brute(A, B))).toBeLessThan(1e-10);
+            // `tB` is a parameter of `B` itself (not of the reduced curve)
+            const pB = evalDeCasteljau(B, res.tB);
+            expect(Math.hypot(pB[0] - res.pB[0], pB[1] - res.pB[1])).toBeLessThan(1e-10);
+        }
     });
 
 });
