@@ -10,6 +10,7 @@ interface ToDraw {
     readonly curvature: boolean;
     readonly normal: boolean;
     readonly tangent: boolean;
+    readonly closestPoint: boolean;
     readonly hausdorff: boolean;
     readonly intersection: boolean;
     readonly looseBoundingBox: boolean;

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { StateControl } from '../state-control/state-control.js';
 import type { ToDraw } from '../state/to-draw.js';
-import type { PageState } from '../state/page-state.js';
+import type { PageState, HausdorffMode } from '../state/page-state.js';
 // import type { ClickFor } from '../state/click-for.js';
 import { useRef, useEffect, useState } from 'react';
 import { toViewBoxStr } from './viewbox/viewbox.js';
@@ -72,6 +72,11 @@ function Page(props: Props) {
         }
     }
 
+    function onHausdorffModeChanged(hausdorffMode: HausdorffMode) {
+        upd(pageState, { hausdorffMode });
+        drawElements(stateControl, refSvg, stateControl.state.appState.pageState.toDraw);
+    }
+
     function onSelectControlPoint(cpIdx: number) {
         upd(pageState, { selectedControlPointIdx: cpIdx });
         drawElements(stateControl, refSvg, stateControl.state.appState.pageState.toDraw);
@@ -86,6 +91,19 @@ function Page(props: Props) {
                 : ps.map((c, j) => j !== cpIdx ? c : (axis === 0 ? [value, c[1]] : [c[0], value]))
         );
         upd(pageState, { beziers: newBeziers });
+        drawElements(stateControl, refSvg, stateControl.state.appState.pageState.toDraw);
+    }
+
+    function onControlPointsReplace(ps: number[][]) {
+        const bezIdx = pageState.selectedBezierIdx;
+        if (bezIdx === undefined) { return; }
+        const newBeziers = pageState.beziers.map((ps_, i) => i !== bezIdx ? ps_ : ps);
+        const cpIdx = pageState.selectedControlPointIdx;
+        upd(pageState, {
+            beziers: newBeziers,
+            // the order may have changed
+            selectedControlPointIdx: cpIdx !== undefined && cpIdx < ps.length ? cpIdx : undefined
+        });
         drawElements(stateControl, refSvg, stateControl.state.appState.pageState.toDraw);
     }
 
@@ -125,6 +143,7 @@ function Page(props: Props) {
                 selectedControlPointIdx={pageState.selectedControlPointIdx}
                 onSelectControlPoint={onSelectControlPoint}
                 onControlPointChange={onControlPointChange}
+                onControlPointsReplace={onControlPointsReplace}
             />
         </div>
         <div
@@ -200,6 +219,33 @@ function Page(props: Props) {
                             </SimpleButton>
                         </div>
                     </div>
+                    <div
+                        style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start' }}
+                        title="the Hausdorff distance drawn between the selected bezier A and each other bezier B: A ⟷ B, the two-sided H(A,B); A ⟶ B, the one-sided h(A,B) (from the point on A furthest from B); A ⟵ B, the one-sided h(B,A)"
+                    >
+                        <span style={{ fontSize: '12px', color: '#556', marginBottom: '3px', userSelect: 'none' }}>
+                            hausdorff
+                        </span>
+                        <div style={{ display: 'inline-flex' }}>
+                            {([['A-B', 'A ⟷ B'], ['A->B', 'A ⟶ B'], ['B->A', 'A ⟵ B']] as const)
+                                .map(([mode, label], i) => (
+                                    <SimpleButton
+                                        key={mode}
+                                        onClick={() => onHausdorffModeChanged(mode)}
+                                        style={{
+                                            borderRadius: i === 0 ? '4px 0 0 4px' : i === 2 ? '0 4px 4px 0' : 0,
+                                            ...(i > 0 ? { borderLeft: 'none' } : {}),
+                                            // (no `fontWeight`: it conflicts with the button's `font` shorthand)
+                                            ...(pageState.hausdorffMode === mode
+                                                ? { background: '#91be91' }
+                                                : {})
+                                        }}
+                                    >
+                                        {label}
+                                    </SimpleButton>
+                                ))}
+                        </div>
+                    </div>
                     <div style={{ position: 'relative', display: 'inline-block' }}>
                         <SimpleButton onClick={() => setSpecialOpen(o => !o)}>
                             add special{pageState.addSpecial ? '… (click center, start, end)' : ''}
@@ -239,6 +285,7 @@ function Page(props: Props) {
             </div>
             <span id="x-coord" ref={refX} style={{ userSelect: 'none', position: 'fixed', bottom: '13px', left: '380px', zIndex: 1 }} />
             <span id="y-coord" ref={refY} style={{ userSelect: 'none', position: 'fixed', bottom: '13px', left: '450px', zIndex: 1 }} />
+            <span id="closest-info" style={{ userSelect: 'none', position: 'fixed', bottom: '13px', left: '530px', zIndex: 1 }} />
             <div style={{ flex: 1, overflow: 'hidden', minHeight: 0 }}>
                 <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                     <svg 

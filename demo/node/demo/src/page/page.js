@@ -55,6 +55,10 @@ function Page(props) {
             drawElements(stateControl, refSvg, stateControl.state.appState.pageState.toDraw);
         };
     }
+    function onHausdorffModeChanged(hausdorffMode) {
+        upd(pageState, { hausdorffMode });
+        drawElements(stateControl, refSvg, stateControl.state.appState.pageState.toDraw);
+    }
     function onSelectControlPoint(cpIdx) {
         upd(pageState, { selectedControlPointIdx: cpIdx });
         drawElements(stateControl, refSvg, stateControl.state.appState.pageState.toDraw);
@@ -68,6 +72,20 @@ function Page(props) {
             ? ps
             : ps.map((c, j) => j !== cpIdx ? c : (axis === 0 ? [value, c[1]] : [c[0], value])));
         upd(pageState, { beziers: newBeziers });
+        drawElements(stateControl, refSvg, stateControl.state.appState.pageState.toDraw);
+    }
+    function onControlPointsReplace(ps) {
+        const bezIdx = pageState.selectedBezierIdx;
+        if (bezIdx === undefined) {
+            return;
+        }
+        const newBeziers = pageState.beziers.map((ps_, i) => i !== bezIdx ? ps_ : ps);
+        const cpIdx = pageState.selectedControlPointIdx;
+        upd(pageState, {
+            beziers: newBeziers,
+            // the order may have changed
+            selectedControlPointIdx: cpIdx !== undefined && cpIdx < ps.length ? cpIdx : undefined
+        });
         drawElements(stateControl, refSvg, stateControl.state.appState.pageState.toDraw);
     }
     // function onClickForChanged(clickFor: ClickFor | 'spacer'): void {
@@ -89,7 +107,7 @@ function Page(props) {
             React.createElement("label", { style: { display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#445', cursor: 'pointer', flexShrink: 0, marginBottom: '6px' } },
                 React.createElement("input", { type: "checkbox", checked: !!pageState.liveUpdate, onChange: e => upd(pageState, { liveUpdate: e.target.checked }) }),
                 "live update while dragging"),
-            React.createElement(BezierDetails, { beziers: pageState.beziers, selectedBezierIdx: pageState.selectedBezierIdx, selectedControlPointIdx: pageState.selectedControlPointIdx, onSelectControlPoint: onSelectControlPoint, onControlPointChange: onControlPointChange })),
+            React.createElement(BezierDetails, { beziers: pageState.beziers, selectedBezierIdx: pageState.selectedBezierIdx, selectedControlPointIdx: pageState.selectedControlPointIdx, onSelectControlPoint: onSelectControlPoint, onControlPointChange: onControlPointChange, onControlPointsReplace: onControlPointsReplace })),
         React.createElement("div", { style: {
                 height: 'calc(100vh - 52px)',
                 boxSizing: 'border-box',
@@ -115,6 +133,17 @@ function Page(props) {
                             React.createElement(SimpleButton, { onClick: () => onAddBezierClicked(stateControl, refSvg, 1), style: { borderRadius: '4px 0 0 4px' } }, "line"),
                             React.createElement(SimpleButton, { onClick: () => onAddBezierClicked(stateControl, refSvg, 2), style: { borderRadius: 0, borderLeft: 'none' } }, "quadratic"),
                             React.createElement(SimpleButton, { onClick: () => onAddBezierClicked(stateControl, refSvg, 3), style: { borderRadius: '0 4px 4px 0', borderLeft: 'none' } }, "cubic"))),
+                    React.createElement("div", { style: { display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start' }, title: "the Hausdorff distance drawn between the selected bezier A and each other bezier B: A \u27F7 B, the two-sided H(A,B); A \u27F6 B, the one-sided h(A,B) (from the point on A furthest from B); A \u27F5 B, the one-sided h(B,A)" },
+                        React.createElement("span", { style: { fontSize: '12px', color: '#556', marginBottom: '3px', userSelect: 'none' } }, "hausdorff"),
+                        React.createElement("div", { style: { display: 'inline-flex' } }, [['A-B', 'A ⟷ B'], ['A->B', 'A ⟶ B'], ['B->A', 'A ⟵ B']]
+                            .map(([mode, label], i) => (React.createElement(SimpleButton, { key: mode, onClick: () => onHausdorffModeChanged(mode), style: {
+                                borderRadius: i === 0 ? '4px 0 0 4px' : i === 2 ? '0 4px 4px 0' : 0,
+                                ...(i > 0 ? { borderLeft: 'none' } : {}),
+                                // (no `fontWeight`: it conflicts with the button's `font` shorthand)
+                                ...(pageState.hausdorffMode === mode
+                                    ? { background: '#91be91' }
+                                    : {})
+                            } }, label))))),
                     React.createElement("div", { style: { position: 'relative', display: 'inline-block' } },
                         React.createElement(SimpleButton, { onClick: () => setSpecialOpen(o => !o) },
                             "add special",
@@ -135,6 +164,7 @@ function Page(props) {
                     React.createElement(SimpleButton, { onClick: () => onClearBeziersClicked(stateControl, refSvg) }, "clear"))),
             React.createElement("span", { id: "x-coord", ref: refX, style: { userSelect: 'none', position: 'fixed', bottom: '13px', left: '380px', zIndex: 1 } }),
             React.createElement("span", { id: "y-coord", ref: refY, style: { userSelect: 'none', position: 'fixed', bottom: '13px', left: '450px', zIndex: 1 } }),
+            React.createElement("span", { id: "closest-info", style: { userSelect: 'none', position: 'fixed', bottom: '13px', left: '530px', zIndex: 1 } }),
             React.createElement("div", { style: { flex: 1, overflow: 'hidden', minHeight: 0 } },
                 React.createElement("div", { style: { position: 'relative', width: '100%', height: '100%' } },
                     React.createElement("svg", { id: "svg", ref: refSvg, xmlns: "http://www.w3.org/2000/svg", version: "1.1", x: "0px", y: "0px", viewBox: toViewBoxStr(pageState.viewbox), style: { userSelect: 'none', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }, onMouseDown: onMouseDown(stateControl, refSvg), onMouseUp: onMouseUp(stateControl, refSvg), onMouseMove: onMouseMove(stateControl, refSvg, refX, refY), onClick: onClick(stateControl, refSvg) },

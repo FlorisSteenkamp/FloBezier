@@ -10,6 +10,7 @@ function createEmptyGeneratedSvgs() {
         curvature: [],
         normal: [],
         tangent: [],
+        closestPoint: [],
         hausdorff: [],
         looseBoundingBox: [],
         tightBoundingBox: [],

@@ -13,6 +13,7 @@ function createEmptyGeneratedSvgs(): { [T in keyof ToDraw]: SVGElement[][] }  {
         curvature: [],
         normal: [],
         tangent: [],
+        closestPoint: [],
         hausdorff: [],
         looseBoundingBox: [],
         tightBoundingBox: [],

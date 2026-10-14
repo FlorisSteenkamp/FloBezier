@@ -9,28 +9,11 @@ import { getMaxHausdorff } from './get-max-hausdorff.js';
 import { hausdorffCompare } from './hausdorff-compare.js';
 import { Heap } from '../heap.js';
 import { fromTo } from '../../transformation/split/from-to.js';
+import type { HausdorffDistanceOneSidedExtra } from './hausdorff-distance-types.js';
 
 
 /** @internal */
 const { max } = Math;
-
-
-/**
- * The one-sided Hausdorff distance from `A` to `B` together with the parameter
- * values and points at which the distance is (approximately) achieved.
- */
-interface HausdorffDistanceOneSidedExtra {
-    /** the (approximate) one-sided Hausdorff distance `h(A,B)` */
-    readonly d: number;
-    /** the parameter on `A` where the supremum is (approximately) achieved */
-    readonly tA: number;
-    /** the point on `A` at parameter `tA` */
-    readonly pA: number[];
-    /** the parameter on `B` of the closest point on `B` to `pA` */
-    readonly tB: number;
-    /** the closest point on `B` to `pA` */
-    readonly pB: number[];
-}
 
 
 /**
@@ -185,4 +168,3 @@ function calcHErrorBound(
 
 
 export { hausdorffDistanceOneSidedExtra }
-export type { HausdorffDistanceOneSidedExtra }

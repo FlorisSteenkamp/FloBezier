@@ -9,8 +9,8 @@
     "dependencies": {
         "flo-draw": "2.0.5",
         "ramda": "^0.32.0",
-        "react": "^19.3.0",
-        "react-dom": "^19.3.0"
+        "react": "^19.3.1",
+        "react-dom": "^19.3.1"
     },
     "devDependencies": {
         "@types/ramda": "^0.32.0",

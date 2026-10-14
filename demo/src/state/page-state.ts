@@ -3,6 +3,14 @@ import type { DeducedState } from './deduced-state.js';
 // import { ClickFor } from './click-for.js';
 
 
+/**
+ * Which Hausdorff distance to draw between the selected bezier `A` and each
+ * other bezier `B`: the two-sided `H(A,B)`, or the one-sided `h(A,B)` or
+ * `h(B,A)`.
+ */
+type HausdorffMode = 'A-B' | 'A->B' | 'B->A';
+
+
 interface PageState {
     /** Won't be save to localstorage */
     readonly deduced: DeducedState | undefined;
@@ -15,6 +23,8 @@ interface PageState {
     readonly selectedBezierIdx: number | undefined;
     /** Index of the selected control point within the selected bezier, if any. */
     readonly selectedControlPointIdx: number | undefined;
+    /** Which Hausdorff distance to draw (see `HausdorffMode`). */
+    readonly hausdorffMode: HausdorffMode;
     /** When `true`, the side panel refreshes live while dragging. */
     readonly liveUpdate: boolean;
     /**
@@ -29,4 +39,4 @@ interface PageState {
 
 
 
-export type { PageState }
+export type { PageState, HausdorffMode }

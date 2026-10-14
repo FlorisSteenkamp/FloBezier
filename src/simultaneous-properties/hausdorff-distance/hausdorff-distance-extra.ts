@@ -1,25 +1,5 @@
 import { hausdorffDistanceOneSidedExtra } from "./hausdorff-distance-one-sided-extra.js";
-
-
-/**
- * The (two-sided) Hausdorff distance between two bezier curves together with the
- * parameter values and points on both curves where the distance is
- * (approximately) achieved.
- */
-interface HausdorffDistanceExtra {
-    /** the (approximate) two-sided Hausdorff distance `H(A,B)` */
-    readonly d: number;
-    /** which one-sided distance achieved the maximum: `'ab'` = `h(A,B)`, `'ba'` = `h(B,A)` */
-    readonly side: 'ab' | 'ba';
-    /** the parameter on curve `A` at the furthest-apart location */
-    readonly tA: number;
-    /** the point on curve `A` */
-    readonly pA: number[];
-    /** the parameter on curve `B` at the furthest-apart location */
-    readonly tB: number;
-    /** the point on curve `B` */
-    readonly pB: number[];
-}
+import type { HausdorffDistanceExtra } from './hausdorff-distance-types.js';
 
 
 /**
@@ -65,4 +45,3 @@ function hausdorffDistanceExtra(
 
 
 export { hausdorffDistanceExtra }
-export type { HausdorffDistanceExtra }

@@ -1,7 +1,8 @@
 import { expect, describe, it } from '@jest/globals';
 import { writeFileSync } from 'fs';
 import {
-    hausdorffDistanceOneSided, hausdorffDistanceOneSidedDirect, closestPointOnBezier,
+    hausdorffDistanceOneSided, hausdorffDistanceOneSidedDirect, hausdorffDistanceDirect,
+    closestPointOnBezier,
     evalDeCasteljau, type HausdorffDirectKind as Kind
 } from '../../../src/index.js';
 
@@ -87,6 +88,28 @@ describe('candidate based one-sided Hausdorff distance', function() {
         if (OUT) { writeFileSync(OUT, JSON.stringify(rows, null, 1)); }
         expect(misses).toBe(0);
         expect(worst).toBeLessThan(1e-10);
+    });
+
+    it('returns the larger one-sided result, with the roles of A and B swapped if it is h(B,A)', function() {
+        const r = rng(777);
+        const rand = (n: number) => Array.from({ length: n }, () => [r(), r()]);
+        const sides = new Set<string>();
+        for (let i=0; i<40; i++) {
+            const A = rand(2 + (i % 3)), B = rand(2 + ((i >> 1) % 3));
+            const ab = hausdorffDistanceOneSidedDirect(A, B);
+            const ba = hausdorffDistanceOneSidedDirect(B, A);
+            const h = hausdorffDistanceDirect(A, B);
+            sides.add(h.side);
+            expect(h.d).toBe(Math.max(ab.d, ba.d));
+            const [tA, tB] = h.side === 'ab' ? [ab.tA, ab.tB] : [ba.tB, ba.tA];
+            expect(h.tA).toBe(tA);
+            expect(h.tB).toBe(tB);
+            // `pA` lies on `A`, `pB` on `B` and they are `d` apart
+            expect(h.pA).toEqual(evalDeCasteljau(A, h.tA));
+            expect(h.pB).toEqual(evalDeCasteljau(B, h.tB));
+            expect(Math.hypot(h.pA[0] - h.pB[0], h.pA[1] - h.pB[1])).toBeCloseTo(h.d, 12);
+        }
+        expect(sides.size).toBe(2);
     });
 
 });

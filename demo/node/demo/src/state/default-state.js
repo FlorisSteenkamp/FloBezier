@@ -20,6 +20,7 @@ const defaultToDraw = {
     curvature: false,
     normal: false,
     tangent: false,
+    closestPoint: false,
     hausdorff: true,
     boundingHull: false,
     intersection: false,
@@ -42,11 +43,12 @@ const defaultPageState = {
     ],
     selectedBezierIdx: 0,
     selectedControlPointIdx: 0,
+    hausdorffMode: 'A-B',
     liveUpdate: true
 };
 const defaultAppState = {
     version: 1,
     pageState: defaultPageState
 };
-export { defaultAppState, defaultPageState, defaultTransientState, defaultDeduced };
+export { defaultAppState, defaultPageState, defaultToDraw, defaultTransientState, defaultDeduced };
 //# sourceMappingURL=default-state.js.map

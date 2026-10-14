@@ -1,5 +1,5 @@
 import { AppState } from "./app-state.js";
-import { defaultAppState, defaultTransientState, defaultDeduced } from "./default-state.js";
+import { defaultAppState, defaultPageState, defaultTransientState, defaultDeduced, defaultToDraw } from "./default-state.js";
 
 
 function getInitialState(): AppState {
@@ -15,7 +15,10 @@ function getInitialState(): AppState {
         ...storedState, 
         pageState: { 
             ...storedState.pageState, 
-            deduced: defaultDeduced
+            deduced: defaultDeduced,
+            hausdorffMode: storedState.pageState.hausdorffMode ?? defaultPageState.hausdorffMode,
+            // so newly added toggles also show up for stored states
+            toDraw: { ...defaultToDraw, ...storedState.pageState.toDraw }
         } 
     };
 }

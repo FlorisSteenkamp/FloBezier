@@ -4,6 +4,7 @@ import { getFootpointPoly } from '../closest-and-furthest-point-on-bezier/get-co
 import { getImplicitForm1 } from '../../implicit-form/double/get-implicit-form1.js';
 import { getImplicitForm2 } from '../../implicit-form/double/get-implicit-form2.js';
 import { getImplicitForm3 } from '../../implicit-form/double/get-implicit-form3.js';
+import type { HausdorffDistanceOneSidedExtra, HausdorffDistanceExtra } from '../hausdorff-distance/hausdorff-distance-types.js';
 import { bernsteinRoots01 } from './bernstein-roots.js';
 import { resI, resMAEI, maiG, maF_B3, maN_B3, maN_B2 } from './generated/index.js';
 
@@ -29,18 +30,21 @@ type Kind = 'EA' | 'EB' | 'I' | 'MA-ends' | 'MA-end-interior' | 'MA-interiors';
  * The one-sided Hausdorff distance from `A` to `B` together with where it is
  * attained (see `hausdorffDistanceOneSidedDirect`).
  */
-interface HausdorffDistanceOneSidedDirect {
-    /** the one-sided Hausdorff distance `h(A,B)` */
-    readonly d: number;
-    /** the parameter on `A` where the maximum is attained */
-    readonly tA: number;
-    /** the point on `A` at `tA` */
-    readonly pA: number[];
-    /** the parameter on `B` of the closest point on `B` to `pA` */
-    readonly tB: number;
-    /** the closest point on `B` to `pA` */
-    readonly pB: number[];
+interface HausdorffDistanceOneSidedDirect extends HausdorffDistanceOneSidedExtra {
     /** the candidate type that attained the maximum */
+    readonly kind: Kind;
+}
+
+
+/**
+ * The (two-sided) Hausdorff distance between two bezier curves together with
+ * where it is attained (see `hausdorffDistanceDirect`).
+ */
+interface HausdorffDistanceDirect extends HausdorffDistanceExtra {
+    /**
+     * the candidate type that attained the maximum (of the one-sided distance
+     * given by `side`)
+     */
     readonly kind: Kind;
 }
 
@@ -724,7 +728,7 @@ function hausdorffDistanceOneSidedDirect(
             // MA-end-interior: |A - B(s)|² = |A - E|² and (A - B)·B′ = 0, with
             // the trivial solution `s = 0` divided out (E = B(0); repeat with
             // `B` reversed for `E = B(1)`)
-            for (const Bs of [B, B.toReversed()]) {
+            for (const Bs of [B, B.slice().reverse()]) {
                 push(twoVarTs('MAEI', A, Bs), 'MA-end-interior');
             }
 
@@ -799,8 +803,9 @@ function hausdorffDistanceOneSidedDirect(
 
 /**
  * Returns the (two-sided) Hausdorff distance `max(h(A,B), h(B,A))` between the
- * given bezier curves directly (see `hausdorffDistanceOneSidedDirect` for the
- * one-sided version and its implementation details).
+ * given bezier curves directly, together with the parameter values and points
+ * on both curves where it is attained (see `hausdorffDistanceOneSidedDirect`
+ * for the one-sided version and its implementation details).
  *
  * Implementation details:
  * * curves of order 0 to 3 (points, lines, quadratics and cubics)
@@ -815,14 +820,19 @@ function hausdorffDistanceOneSidedDirect(
  */
 function hausdorffDistanceDirect(
         A: number[][],
-        B: number[][]): number {
+        B: number[][]): HausdorffDistanceDirect {
 
-    return max(
-        hausdorffDistanceOneSidedDirect(A, B).d,
-        hausdorffDistanceOneSidedDirect(B, A).d
-    );
+    const ab = hausdorffDistanceOneSidedDirect(A, B);
+    const ba = hausdorffDistanceOneSidedDirect(B, A);
+
+    if (ab.d >= ba.d) {
+        return { ...ab, side: 'ab' };
+    }
+
+    // `ba` was computed as h(B,A), so its `tA`/`pA` lie on `B` and `tB`/`pB` on `A`
+    return { d: ba.d, side: 'ba', tA: ba.tB, pA: ba.pB, tB: ba.tA, pB: ba.pA, kind: ba.kind };
 }
 
 
 export { hausdorffDistanceOneSidedDirect, hausdorffDistanceDirect }
-export type { HausdorffDistanceOneSidedDirect, Kind as HausdorffDirectKind }
+export type { HausdorffDistanceOneSidedDirect, HausdorffDistanceDirect, Kind as HausdorffDirectKind }

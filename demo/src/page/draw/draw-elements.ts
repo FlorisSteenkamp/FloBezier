@@ -16,6 +16,7 @@ import type { ToDraw } from '../../state/to-draw.js';
 import { deleteSvgs } from './delete-svgs.js';
 import { getIntersections } from '../../../sweep-line/get-intersections.js';
 import { drawFs } from 'flo-draw';
+import { hausdorffDistanceDirect, hausdorffDistanceOneSidedDirect } from '../../../../src/simultaneous-properties/hausdorff-distance-direct/hausdorff-distance-direct.js';
 
 
 function drawElements(
@@ -26,7 +27,7 @@ function drawElements(
     const { transientState, state } = stateControl;
     const { $svgs } = transientState;
     const { pageState } = state.appState;
-    const { beziers, selectedBezierIdx, selectedControlPointIdx, viewbox } = pageState;
+    const { beziers, selectedBezierIdx, selectedControlPointIdx, viewbox, hausdorffMode } = pageState;
 
     const svg$ = ref.current!;
     const g = svg$.getElementsByTagName('g')[0];
@@ -41,6 +42,7 @@ function drawElements(
     deleteSvgs($svgs.curvature);
     deleteSvgs($svgs.normal);
     deleteSvgs($svgs.tangent);
+    deleteSvgs($svgs.closestPoint);
     deleteSvgs($svgs.hausdorff);
     deleteSvgs($svgs.looseBoundingBox);
     deleteSvgs($svgs.tightBoundingBox);
@@ -117,7 +119,10 @@ function drawElements(
         });
     }
 
-    if ((toDraws.normal || toDraws.tangent) && transientState.mouseXY && beziers.length) {
+    const closestInfo$ = document.getElementById('closest-info');
+    if (closestInfo$) { closestInfo$.textContent = ''; }
+
+    if ((toDraws.normal || toDraws.tangent || toDraws.closestPoint) && transientState.mouseXY && beziers.length) {
         const w = viewbox[1][0] - viewbox[0][0];
         const h = viewbox[1][1] - viewbox[0][1];
         const len = Math.min(w, h) * 0.15;
@@ -125,9 +130,18 @@ function drawElements(
         const p = transientState.mouseXY;
         let best: { ps: number[][]; t: number; at: number[] } | undefined;
         let minD = Infinity;
+        const r = controlPointRadius(viewbox) * 0.8;
         for (const ps of beziers) {
             const cp = closestPointOnBezier(ps, p);
             if (cp.d < minD) { minD = cp.d; best = { ps, t: cp.t, at: cp.p }; }
+            if (toDraws.closestPoint) {
+                // a cross on the closest point of every bezier
+                const [px, py] = cp.p;
+                $svgs.closestPoint.push([
+                    ...drawFs.line(g, [[px - r, py - r], [px + r, py + r]], 'black thin5'),
+                    ...drawFs.line(g, [[px - r, py + r], [px + r, py - r]], 'black thin5'),
+                ]);
+            }
         }
 
         if (best) {
@@ -139,6 +153,13 @@ function drawElements(
                 const v = scaleTo(normal(best.ps, best.t), len);
                 $svgs.normal.push(drawArrow(g, best.at, [best.at[0] + v[0], best.at[1] + v[1]], 'purple thin20'));
             }
+            if (toDraws.closestPoint) {
+                // (the info is for the overall closest point)
+                const [px, py] = best.at;
+                if (closestInfo$) {
+                    closestInfo$.textContent = `t: ${best.t.toFixed(6)} (${px.toFixed(3)}, ${py.toFixed(3)})`;
+                }
+            }
         }
     }
 
@@ -146,8 +167,15 @@ function drawElements(
         const sel = beziers[selectedBezierIdx];
         beziers.forEach((ps, i) => {
             if (i === selectedBezierIdx) { return; }
-            const { pA, pB } = hausdorffDistanceExtra(sel, ps);
+            // const { pA, pB } = hausdorffDistanceExtra(sel, ps);
+            // `A` is the selected bezier and `B` the other one
+            const { pA, pB, tA, tB, kind, d } =
+                hausdorffMode === 'A->B' ? hausdorffDistanceOneSidedDirect(sel, ps) :
+                hausdorffMode === 'B->A' ? hausdorffDistanceOneSidedDirect(ps, sel) :
+                hausdorffDistanceDirect(sel, ps);
             $svgs.hausdorff.push(drawFs.line(g, [pA, pB], 'orange thin10'));
+            // console.log(tA,tB,kind);
+            // console.log(d);
         });
     }
 

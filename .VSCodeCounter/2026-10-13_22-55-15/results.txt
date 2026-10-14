@@ -1,0 +1,71 @@
+Date : 2026-10-13 22:55:15
+Directory : c:\projects\bezier\experiments\hausdorff
+Total : 41 files,  245412 codes, 790 comments, 1213 blanks, all 247415 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| TypeScript |         39 |    244,540 |        646 |      1,099 |    246,285 |
+| Python     |          2 |        872 |        144 |        114 |      1,130 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                   |         41 |    245,412 |        790 |      1,213 |    247,415 |
+| . (Files)                                                                           |          8 |      2,214 |        547 |        362 |      3,123 |
+| __tests__                                                                           |          4 |        205 |          9 |         23 |        237 |
+| generated                                                                           |         29 |    242,993 |        234 |        828 |    244,055 |
+| generated (Files)                                                                   |         27 |     58,709 |        192 |        148 |     59,049 |
+| generated\expanded                                                                  |          2 |    184,284 |         42 |        680 |    185,006 |
++-------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                            | language   | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\projects\bezier\experiments\hausdorff\__tests__\accuracy.spec.ts                 | TypeScript |         54 |          0 |          3 |         57 |
+| c:\projects\bezier\experiments\hausdorff\__tests__\benchmark-2-2.spec.ts            | TypeScript |         21 |          0 |          1 |         22 |
+| c:\projects\bezier\experiments\hausdorff\__tests__\hausdorff-candidates.spec.ts     | TypeScript |        108 |          9 |         18 |        135 |
+| c:\projects\bezier\experiments\hausdorff\__tests__\resultant-vs-subdivision.spec.ts | TypeScript |         22 |          0 |          1 |         23 |
+| c:\projects\bezier\experiments\hausdorff\adaptive-roots.ts                          | TypeScript |        150 |         47 |         29 |        226 |
+| c:\projects\bezier\experiments\hausdorff\bernstein-roots.ts                         | TypeScript |         92 |         24 |         16 |        132 |
+| c:\projects\bezier\experiments\hausdorff\cse.py                                     | Python     |        101 |         23 |         16 |        140 |
+| c:\projects\bezier\experiments\hausdorff\eval-program.ts                            | TypeScript |         59 |         28 |         12 |         99 |
+| c:\projects\bezier\experiments\hausdorff\gen-resultants.py                          | Python     |        771 |        121 |         98 |        990 |
+| c:\projects\bezier\experiments\hausdorff\generated\expanded\resMAI_A1B3.ts          | TypeScript |      3,633 |         15 |         20 |      3,668 |
+| c:\projects\bezier\experiments\hausdorff\generated\expanded\resMAI_A2B3.ts          | TypeScript |    180,651 |         27 |        660 |    181,338 |
+| c:\projects\bezier\experiments\hausdorff\generated\index.ts                         | TypeScript |         60 |          1 |          4 |         65 |
+| c:\projects\bezier\experiments\hausdorff\generated\maF_B3.ts                        | TypeScript |         37 |          2 |          4 |         43 |
+| c:\projects\bezier\experiments\hausdorff\generated\maN_B2.ts                        | TypeScript |         30 |          8 |          5 |         43 |
+| c:\projects\bezier\experiments\hausdorff\generated\maN_B3.ts                        | TypeScript |         84 |          8 |          5 |         97 |
+| c:\projects\bezier\experiments\hausdorff\generated\maiAB_A1B3.ts                    | TypeScript |        656 |          9 |          5 |        670 |
+| c:\projects\bezier\experiments\hausdorff\generated\maiAB_A2B3.ts                    | TypeScript |      5,645 |          9 |          8 |      5,662 |
+| c:\projects\bezier\experiments\hausdorff\generated\maiAB_A3B3.ts                    | TypeScript |     45,018 |          9 |          8 |     45,035 |
+| c:\projects\bezier\experiments\hausdorff\generated\maiG_A1B2.ts                     | TypeScript |         29 |          8 |          5 |         42 |
+| c:\projects\bezier\experiments\hausdorff\generated\maiG_A1B3.ts                     | TypeScript |         75 |          8 |          5 |         88 |
+| c:\projects\bezier\experiments\hausdorff\generated\maiG_A2B2.ts                     | TypeScript |         82 |          8 |          5 |         95 |
+| c:\projects\bezier\experiments\hausdorff\generated\maiG_A2B3.ts                     | TypeScript |        505 |          8 |          5 |        518 |
+| c:\projects\bezier\experiments\hausdorff\generated\maiG_A3B2.ts                     | TypeScript |        188 |          8 |          5 |        201 |
+| c:\projects\bezier\experiments\hausdorff\generated\maiG_A3B3.ts                     | TypeScript |      1,249 |          8 |          8 |      1,265 |
+| c:\projects\bezier\experiments\hausdorff\generated\resI_A1B2.ts                     | TypeScript |         13 |          7 |          5 |         25 |
+| c:\projects\bezier\experiments\hausdorff\generated\resI_A1B3.ts                     | TypeScript |         16 |          7 |          5 |         28 |
+| c:\projects\bezier\experiments\hausdorff\generated\resI_A2B1.ts                     | TypeScript |         14 |          7 |          5 |         26 |
+| c:\projects\bezier\experiments\hausdorff\generated\resI_A2B2.ts                     | TypeScript |         41 |          7 |          5 |         53 |
+| c:\projects\bezier\experiments\hausdorff\generated\resI_A2B3.ts                     | TypeScript |         78 |          7 |          5 |         90 |
+| c:\projects\bezier\experiments\hausdorff\generated\resI_A3B1.ts                     | TypeScript |         30 |          7 |          5 |         42 |
+| c:\projects\bezier\experiments\hausdorff\generated\resI_A3B2.ts                     | TypeScript |        271 |          7 |          5 |        283 |
+| c:\projects\bezier\experiments\hausdorff\generated\resI_A3B3.ts                     | TypeScript |      1,518 |          7 |          8 |      1,533 |
+| c:\projects\bezier\experiments\hausdorff\generated\resMAEI_A1B2.ts                  | TypeScript |         19 |          7 |          5 |         31 |
+| c:\projects\bezier\experiments\hausdorff\generated\resMAEI_A1B3.ts                  | TypeScript |         33 |          7 |          5 |         45 |
+| c:\projects\bezier\experiments\hausdorff\generated\resMAEI_A2B2.ts                  | TypeScript |         54 |          7 |          5 |         66 |
+| c:\projects\bezier\experiments\hausdorff\generated\resMAEI_A2B3.ts                  | TypeScript |        202 |          7 |          5 |        214 |
+| c:\projects\bezier\experiments\hausdorff\generated\resMAEI_A3B2.ts                  | TypeScript |        213 |          7 |          5 |        225 |
+| c:\projects\bezier\experiments\hausdorff\generated\resMAEI_A3B3.ts                  | TypeScript |      2,549 |          7 |          8 |      2,564 |
+| c:\projects\bezier\experiments\hausdorff\hausdorff-candidates.ts                    | TypeScript |        724 |        240 |        123 |      1,087 |
+| c:\projects\bezier\experiments\hausdorff\solve-system.ts                            | TypeScript |        109 |         33 |         26 |        168 |
+| c:\projects\bezier\experiments\hausdorff\tensor-poly.ts                             | TypeScript |        208 |         31 |         42 |        281 |
+| Total                                                                               |            |    245,412 |        790 |      1,213 |    247,415 |
++-------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

@@ -12,6 +12,7 @@ const toDrawKeyToText: { [P in keyof ToDraw]?: string } = {
     curvature: "curvature",
     normal: "normal",
     tangent: "tangent",
+    closestPoint: "closest point",
     hausdorff: "hausdorff distance",
     boundingHull: "hulls",
     looseBoundingBox: "loose bbs",

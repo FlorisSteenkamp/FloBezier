@@ -39,7 +39,7 @@ const eps2 = 2 * eps;
  * smooth join of consecutive segments of a path)
  *
  * * each intersection in the returned array of intersections is an object with
- * the following properties (see the type [[X]]`):
+ * the following properties (see the type `X`):
  *      * `p`: point of intersection (calculated from the guaranteed root interval)
  *      * `t1`: first bezier curve's parameter `t` value (calculated from the guaranteed root interval)
  *      * `t2`: second bezier curve's parameter `t` value (calculated from the guaranteed root interval)

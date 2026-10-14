@@ -56,7 +56,7 @@ function onMouseMove(stateControl, ref, refX, refY) {
                 }
                 svg$.style.cursor = cp ? 'pointer' : 'default';
             }
-            if (hoverChanged || toDraw.normal || toDraw.tangent) {
+            if (hoverChanged || toDraw.normal || toDraw.tangent || toDraw.closestPoint) {
                 drawElements(stateControl, ref, toDraw);
             }
             return;

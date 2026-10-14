@@ -29,6 +29,7 @@ const defaultToDraw: { [T in keyof ToDraw]: boolean } = {
     curvature: false,
     normal: false,
     tangent: false,
+    closestPoint: false,
     hausdorff: true,
     boundingHull: false,
     intersection: false,
@@ -54,6 +55,7 @@ const defaultPageState: PageState = {
     ],
     selectedBezierIdx: 0,
     selectedControlPointIdx: 0,
+    hausdorffMode: 'A-B',
     liveUpdate: true
 };
 
@@ -67,6 +69,7 @@ const defaultAppState: AppState = {
 export { 
     defaultAppState, 
     defaultPageState, 
+    defaultToDraw, 
     defaultTransientState, 
     defaultDeduced 
 }
