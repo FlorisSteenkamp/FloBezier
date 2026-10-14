@@ -62,17 +62,29 @@ function hornerF(a, n, x) {
     return r;
 }
 /**
- * The single root in `[x0,x1]` (a sign change is assumed, endpoints may be
- * roots) by the Illinois variant of regula falsi (bracketing, superlinear),
- * falling back to bisection steps if it stalls.
+ * The single root in `(x0,x1)` (exactly one sign change of the Bernstein
+ * coefficients `c` on `[x0,x1]`, zeros ignored) by the Illinois variant of
+ * regula falsi (bracketing, superlinear), falling back to bisection steps if
+ * it stalls.
+ *
+ * The bracket's signs are those of the nearest nonzero end coefficients of
+ * `c` wherever the power form is zero or disagrees with them at an end point:
+ * an exact (or rounded) root there is not the interior root counted.
  */
-function illinois(a, n, x0, x1) {
+function illinois(a, n, c, x0, x1) {
     let f0 = hornerF(a, n, x0), f1 = hornerF(a, n, x1);
-    if (f0 === 0) {
-        return x0;
+    let k0 = 0, k1 = n;
+    while (c[k0] === 0) {
+        k0++;
     }
-    if (f1 === 0) {
-        return x1;
+    while (c[k1] === 0) {
+        k1--;
+    }
+    if (f0 === 0 || (f0 < 0) !== (c[k0] < 0)) {
+        f0 = c[k0];
+    }
+    if (f1 === 0 || (f1 < 0) !== (c[k1] < 0)) {
+        f1 = c[k1];
     }
     let side = 0;
     for (let k = 0; k < 100; k++) {
@@ -118,18 +130,17 @@ function rec(a, n, c, lo, hi, tol, roots) {
             prev = s;
         }
     }
-    if (v === 0) {
-        // an exact zero at an end point
+    if (v <= 1) {
+        // an exact zero at an end point (not counted by `v`)
         if (c[0] === 0 && lo === 0) {
             roots.push(0);
+        }
+        if (v === 1) {
+            roots.push(illinois(a, n, c, lo, hi));
         }
         if (c[n] === 0) {
             roots.push(hi);
         }
-        return;
-    }
-    if (v === 1) {
-        roots.push(illinois(a, n, lo, hi));
         return;
     }
     if (hi - lo < tol) {

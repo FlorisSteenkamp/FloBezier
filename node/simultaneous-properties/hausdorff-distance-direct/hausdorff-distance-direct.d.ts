@@ -9,8 +9,10 @@ import type { HausdorffDistanceOneSidedExtra, HausdorffDistanceExtra } from '../
  * * `MA-ends` - `A(t)` is equidistant to both endpoints of `B`
  * * `MA-end-interior` - equidistant to an endpoint and an interior footpoint
  * * `MA-interiors` - equidistant to two interior footpoints
+ * * `iterative` - not a candidate: `B` is a cubic with a zero derivative at an
+ *   end point, for which `hausdorffDistanceOneSidedExtra` was used instead
  */
-type Kind = 'EA' | 'EB' | 'I' | 'MA-ends' | 'MA-end-interior' | 'MA-interiors';
+type Kind = 'EA' | 'EB' | 'I' | 'MA-ends' | 'MA-end-interior' | 'MA-interiors' | 'iterative';
 /**
  * The one-sided Hausdorff distance from `A` to `B` together with where it is
  * attained (see `hausdorffDistanceOneSidedDirect`).
@@ -49,7 +51,10 @@ interface HausdorffDistanceDirect extends HausdorffDistanceExtra {
  *     interior of `B` (points of the medial axis of `B`)
  * * `B` is first normalized by a similarity transform (`B(0) = 0`,
  *   `B'(0) = (1,0)`) so that the systems' coefficients are polynomials in few
- *   variables
+ *   variables; if `B′` is zero at an end point a line or quadratic `B` is
+ *   replaced by the lower order curve with the same points, and for a cubic
+ *   `B` the iterative `hausdorffDistanceOneSidedExtra` is used instead (with
+ *   `kind` `'iterative'`)
  * * the resultants eliminating `s` (for `I` and `MA-end-interior`) are
  *   precomputed exactly (sympy, fraction-free Bareiss) by
  *   `experiments/hausdorff/gen-resultants.py` and evaluated as generated

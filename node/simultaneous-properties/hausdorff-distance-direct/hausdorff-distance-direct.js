@@ -4,6 +4,8 @@ import { getFootpointPoly } from '../closest-and-furthest-point-on-bezier/get-co
 import { getImplicitForm1 } from '../../implicit-form/double/get-implicit-form1.js';
 import { getImplicitForm2 } from '../../implicit-form/double/get-implicit-form2.js';
 import { getImplicitForm3 } from '../../implicit-form/double/get-implicit-form3.js';
+import { hausdorffDistanceOneSidedExtra } from '../hausdorff-distance/hausdorff-distance-one-sided-extra.js';
+import { maxAbsCoordinate } from '../../error-analysis/max-abs-coordinate.js';
 import { bernsteinRoots01 } from './bernstein-roots.js';
 import { resI, resMAEI, maiG, maF_B3, maN_B3, maN_B2 } from './generated/index.js';
 /** @internal */
@@ -400,6 +402,13 @@ const SAMPLES = 16;
  */
 const GRID = 500;
 const gridXs = Float64Array.from({ length: GRID + 1 }, (_, i) => 2 * i / GRID);
+/**
+ * The tolerance (relative to the curves' size) and maximum number of
+ * iterations of the iterative fallback (`hausdorffDistanceOneSidedExtra`) for
+ * a cubic `B` with a zero derivative at an end point.
+ */
+const FALLBACK_TOL = 1e-12;
+const FALLBACK_ITERATIONS = 200;
 /** `p` (ascending coefficients) evaluated at all grid points (`gridXs`). */
 function onGrid(p) {
     const out = new Float64Array(GRID + 1);
@@ -631,6 +640,40 @@ function fastClosest(B, p) {
     return { d: sqrt(best), t: bt, p: bp };
 }
 /**
+ * `best` refined by a golden-section search maximizing the true distance
+ * `min_s |A(t) - B(s)|` in the window `best.tA ± w` (`steps` steps); `best`
+ * itself unless the search finds a larger distance.
+ */
+function refineMax(A, B, best, w, steps) {
+    const g = (t) => fastClosest(B, evalDeCasteljau(A, t)).d;
+    const r = 0.6180339887498949;
+    let a = max(0, best.tA - w), b = min(1, best.tA + w);
+    let m1 = b - r * (b - a), m2 = a + r * (b - a);
+    let g1 = g(m1), g2 = g(m2);
+    for (let k = 0; k < steps; k++) {
+        if (g1 > g2) {
+            b = m2;
+            m2 = m1;
+            g2 = g1;
+            m1 = b - r * (b - a);
+            g1 = g(m1);
+        }
+        else {
+            a = m1;
+            m1 = m2;
+            g1 = g2;
+            m2 = a + r * (b - a);
+            g2 = g(m2);
+        }
+    }
+    const t = (a + b) / 2;
+    const pA = evalDeCasteljau(A, t);
+    const cp = fastClosest(B, pA);
+    return cp.d > best.d
+        ? { ...best, d: cp.d, tA: t, pA, tB: cp.t, pB: cp.p }
+        : best;
+}
+/**
  * Returns the one-sided Hausdorff distance `h(A,B) = max_t min_s |A(t) - B(s)|`
  * (and where it is attained) directly, i.e. by evaluating `min_s |A(t) - B(s)|`
  * at a (small) superset of the parameter values `t` where the maximum can be
@@ -649,7 +692,10 @@ function fastClosest(B, p) {
  *     interior of `B` (points of the medial axis of `B`)
  * * `B` is first normalized by a similarity transform (`B(0) = 0`,
  *   `B'(0) = (1,0)`) so that the systems' coefficients are polynomials in few
- *   variables
+ *   variables; if `B′` is zero at an end point a line or quadratic `B` is
+ *   replaced by the lower order curve with the same points, and for a cubic
+ *   `B` the iterative `hausdorffDistanceOneSidedExtra` is used instead (with
+ *   `kind` `'iterative'`)
  * * the resultants eliminating `s` (for `I` and `MA-end-interior`) are
  *   precomputed exactly (sympy, fraction-free Bareiss) by
  *   `experiments/hausdorff/gen-resultants.py` and evaluated as generated
@@ -684,6 +730,28 @@ function fastClosest(B, p) {
  * @param B the curve to which the distance is measured
  */
 function hausdorffDistanceOneSidedDirect(A, B) {
+    // `B′ = 0` at an end point, where the precomputed resultants assume
+    // `B′(0) = (1,0)` after normalization (`MA-end-interior` also normalizes
+    // `B` reversed, so either end): degenerate lines and quadratics are the
+    // same point set as a lower order curve (only `tB` is reparametrized);
+    // cubics fall back to the iterative method
+    const eq = (p, q) => p[0] === q[0] && p[1] === q[1];
+    if (B.length === 2 && eq(B[0], B[1])) {
+        return hausdorffDistanceOneSidedDirect(A, [B[0]]);
+    }
+    if (B.length === 3 && (eq(B[0], B[1]) || eq(B[1], B[2]))) {
+        // `B(s) = B₀ + s²(B₂ - B₀)` or `B₂ + (1-s)²(B₀ - B₂)`
+        const r = hausdorffDistanceOneSidedDirect(A, [B[0], B[2]]);
+        const tB = eq(B[0], B[1]) ? sqrt(r.tB) : 1 - sqrt(1 - r.tB);
+        return { ...r, tB };
+    }
+    if (B.length === 4 && (eq(B[0], B[1]) || eq(B[2], B[3]))) {
+        const l = max(maxAbsCoordinate(A), maxAbsCoordinate(B));
+        const r = hausdorffDistanceOneSidedExtra(A, B, l * FALLBACK_TOL, FALLBACK_ITERATIONS);
+        // (its `d` is a lower bound and `tA` only roughly accurate (~1e-3);
+        // 45 steps bring a window of ±1e-3 down to ~1e-12)
+        return refineMax(A, B, { ...r, kind: 'iterative' }, 1e-3, 45);
+    }
     const cands = [];
     const push = (ts, kind) => {
         for (const t of ts) {
@@ -771,36 +839,10 @@ function hausdorffDistanceOneSidedDirect(A, B) {
     // true distance: some are ill-conditioned (e.g. near-double roots) with `t`
     // only roughly accurate, and at a kink that error shows linearly in the
     // distance; at smooth maxima (I, EB) it shows only quadratically
+    // (a window of ±1e-4: a candidate from a near-double root can be that far
+    // off; 35 steps bring it down to ~1e-11)
     if (best.kind.startsWith('MA')) {
-        const g = (t) => fastClosest(B, evalDeCasteljau(A, t)).d;
-        const r = 0.6180339887498949;
-        // (a window of ±1e-4: a candidate from a near-double root can be
-        // that far off; 35 steps bring it down to ~1e-11)
-        let a = max(0, best.tA - 1e-4), b = min(1, best.tA + 1e-4);
-        let m1 = b - r * (b - a), m2 = a + r * (b - a);
-        let g1 = g(m1), g2 = g(m2);
-        for (let k = 0; k < 35; k++) {
-            if (g1 > g2) {
-                b = m2;
-                m2 = m1;
-                g2 = g1;
-                m1 = b - r * (b - a);
-                g1 = g(m1);
-            }
-            else {
-                a = m1;
-                m1 = m2;
-                g1 = g2;
-                m2 = a + r * (b - a);
-                g2 = g(m2);
-            }
-        }
-        const t = (a + b) / 2;
-        const pA = evalDeCasteljau(A, t);
-        const cp = fastClosest(B, pA);
-        if (cp.d > best.d) {
-            best = { ...best, d: cp.d, tA: t, pA, tB: cp.t, pB: cp.p };
-        }
+        best = refineMax(A, B, best, 1e-4, 35);
     }
     return best;
 }
