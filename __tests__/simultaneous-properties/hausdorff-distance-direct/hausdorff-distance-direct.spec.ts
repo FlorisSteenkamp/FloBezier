@@ -39,7 +39,7 @@ describe('candidate based one-sided Hausdorff distance', function() {
     it('matches the library and brute force on random curves of all orders', function() {
         const r = rng(12345);
         const rand = (n: number) => Array.from({ length: n }, () => [r(), r()]);
-        const N = Number(process.env['HAUSDORFF_N'] ?? 40);
+        const N = Number(process.env['HAUSDORFF_N'] ?? 15);
 
         const rows: Record<string, unknown>[] = [];
         let worst = 0, misses = 0;

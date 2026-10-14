@@ -17,6 +17,9 @@ const config: Config = {
     resolver: "jest-ts-webcompat-resolver",
     setupFilesAfterEnv: ['<rootDir>/__tests__/helpers/jest.setup.ts'],
     testMatch: [ "**/__tests__/**/*.spec.ts"],
+    // `experiments` holds slow accuracy/benchmark specs; run them explicitly with
+    // `npx jest experiments --testPathIgnorePatterns=/node_modules/`
+    testPathIgnorePatterns: ['/node_modules/', '<rootDir>/experiments/'],
     // collectCoverage: true,
     collectCoverage: false,
     // coverageProvider: 'v8',
