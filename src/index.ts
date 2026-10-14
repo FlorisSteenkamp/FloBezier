@@ -131,7 +131,7 @@ export { hausdorffDistance } from './simultaneous-properties/hausdorff-distance/
 export { hausdorffDistanceExtra } from './simultaneous-properties/hausdorff-distance/hausdorff-distance-extra.js';
 export type { HausdorffDistanceExtra } from './simultaneous-properties/hausdorff-distance/hausdorff-distance-extra.js';
 export { hausdorffDistanceDirect, hausdorffDistanceOneSidedDirect } from './simultaneous-properties/hausdorff-distance-direct/hausdorff-distance-direct.js';
-export type { HausdorffDistanceOneSidedDirect, HausdorffDirectKind, HausdorffDirectMethod } from './simultaneous-properties/hausdorff-distance-direct/hausdorff-distance-direct.js';
+export type { HausdorffDistanceOneSidedDirect, HausdorffDirectKind } from './simultaneous-properties/hausdorff-distance-direct/hausdorff-distance-direct.js';
 export { controlPointLinesLength } from './global-properties/length/control-point-lines-length.js';
 export { splitByLength } from './transformation/split/split-by-length.js';
 export { getCurvatureExtrema } from './get-curvature-extrema/double/get-curvature-extrema.js';

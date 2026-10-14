@@ -1,15 +1,9 @@
-import { roots } from 'flo-poly';
 import { toPowerBasis } from '../../to-power-basis/to-power-basis/double/to-power-basis.js';
 import { evalDeCasteljau } from '../../local-properties-at-t/evaluate/double/eval-de-casteljau.js';
-import { reverse } from '../../transformation/reverse.js';
 import { getFootpointPoly } from '../closest-and-furthest-point-on-bezier/get-coeffs/double/get-footpoint-poly.js';
 import { getImplicitForm1 } from '../../implicit-form/double/get-implicit-form1.js';
 import { getImplicitForm2 } from '../../implicit-form/double/get-implicit-form2.js';
 import { getImplicitForm3 } from '../../implicit-form/double/get-implicit-form3.js';
-import {
-    type TPoly, univariate, constant, add, sub, scale, mul, derivative, zero, strides, evaluate
-} from './tensor-poly.js';
-import { solveSystem } from './solve-system.js';
 import { bernsteinRoots01 } from './bernstein-roots.js';
 import { resI, resMAEI, maiG, maF_B3, maN_B3, maN_B2 } from './generated/index.js';
 
@@ -48,57 +42,13 @@ interface HausdorffDistanceOneSidedDirect {
     readonly pB: number[];
     /** the candidate type that attained the maximum */
     readonly kind: Kind;
-    /**
-     * only for `method === 'subdivision'`: `true` if a subdivision solve hit its
-     * box cap (degenerate input such as overlapping curves)
-     */
-    readonly capped: boolean;
 }
-
-/**
- * How the candidate systems are solved: via resultants and other pieces
- * precomputed by `experiments/hausdorff/gen-resultants.py` (`'resultant'`, the
- * default) or by Bernstein subdivision (`'subdivision'`, slower, kept as a
- * reference).
- */
-type Method = 'resultant' | 'subdivision';
-
-type Vec = [TPoly, TPoly];
-
 
 /** Power basis coefficients in *ascending* order. */
 function asc(ps: number[][]): [number[], number[]] {
     const [x, y] = toPowerBasis(ps);
     return [x.slice().reverse(), y.slice().reverse()];
 }
-
-const curve = (ps: number[][], v: number, nv: number): Vec => {
-    const [x, y] = asc(ps);
-    return [univariate(x, v, nv), univariate(y, v, nv)];
-};
-const point = (p: number[], nv: number): Vec => [constant(p[0], nv), constant(p[1], nv)];
-const dot = (a: Vec, b: Vec) => add(mul(a[0], b[0]), mul(a[1], b[1]));
-const cross = (a: Vec, b: Vec) => sub(mul(a[0], b[1]), mul(a[1], b[0]));
-const vsub = (a: Vec, b: Vec): Vec => [sub(a[0], b[0]), sub(a[1], b[1])];
-const deriv = (a: Vec, v: number): Vec => [derivative(a[0], v), derivative(a[1], v)];
-
-
-/** `(A(t) - B(s))·B′(s) = A·V′ - (V·V)′/2` (`s` is variable `sv`) */
-function footpointEq(A: Vec, V: Vec, sv: number): TPoly {
-    return sub(dot(A, deriv(V, sv)), scale(derivative(dot(V, V), sv), 0.5));
-}
-
-
-/** Ascending coefficients of `|B(s)|²` (univariate). */
-function squaredNormCoeffs(ps: number[][]): number[] {
-    const [x, y] = asc(ps);
-    const r = new Array<number>(2*x.length - 1).fill(0);
-    for (let i=0; i<x.length; i++) {
-        for (let j=0; j<x.length; j++) { r[i+j] += x[i]*x[j] + y[i]*y[j]; }
-    }
-    return r;
-}
-
 
 /**
  * `S[Q](s) = ((Q(s) - Q(0))/s - Q′(s))/s`, i.e. `Σ (1-k)·qₖ·s^(k-2)` (`k ≥ 2`)
@@ -107,92 +57,6 @@ function sOp(q: number[]): number[] {
     const r: number[] = [];
     for (let k=2; k<q.length; k++) { r.push((1 - k)*q[k]); }
     return r.length ? r : [0];
-}
-
-
-/** Divides `N(s1,s2)` (`N[i][j]` the coefficient of `s1^i s2^j`) by `(s1 - s2)`. */
-function divideByDiff(N: number[][]): number[][] {
-    const m = N.length - 1;
-    const W = N[0].length + m;
-    const pad = (r: number[]) => [...r, ...new Array<number>(W - r.length).fill(0)];
-    const shift = (r: number[]) => [0, ...r.slice(0, W - 1)];
-    const q: number[][] = new Array(m);
-    q[m-1] = pad(N[m]);
-    for (let i=m-1; i>=1; i--) {
-        const c = pad(N[i]);
-        q[i-1] = c.map((x, j) => x + shift(q[i])[j]);
-    }
-    return q;
-}
-
-
-/**
- * `U[s^k](s1,s2) = ( (s1^k - s2^k)/(s1 - s2) - k(s1^(k-1) + s2^(k-1))/2 ) / (s1 - s2)²`
- */
-function uMonomial(k: number): number[][] {
-    if (k < 3) { return [[0]]; }
-    const N = Array.from({ length: k + 1 }, () => new Array<number>(k + 1).fill(0));
-    for (let j=0; j<k; j++) { N[j][k-1-j] += 2; }   // numerator scaled by 2
-    N[k-1][0] -= k;
-    N[0][k-1] -= k;
-    return divideByDiff(divideByDiff(N)).map(r => r.map(x => x/2));
-}
-
-
-/**
- * `U[Q]` as a polynomial in variables `v1` (`s1`) and `v2` (`s2`) of `nv`
- * variables.
- */
-function uOp(q: number[], nv = 3, v1 = 1, v2 = 2): TPoly {
-    let r = zero(new Array<number>(nv).fill(0));
-    for (let k=3; k<q.length; k++) {
-        const U = uMonomial(k);
-        const deg = new Array<number>(nv).fill(0);
-        deg[v1] = U.length - 1; deg[v2] = U[0].length - 1;
-        const p = zero(deg);
-        const st = strides(p.deg);
-        U.forEach((row, i) => row.forEach((x, j) => { p.c[i*st[v1] + j*st[v2]] = x; }));
-        r = add(r, scale(p, q[k]));
-    }
-    return r;
-}
-
-
-/** Divides `p(s1,s2)` (2 variables) by `(s1 - s2)` (exactly, if divisible). */
-function divideByDiff2(p: TPoly): TPoly {
-    const [d1, d2] = p.deg;
-    if (d1 === 0) { return zero([0, max(0, d2 - 1)]); }
-    const N = Array.from({ length: d1 + 1 }, (_, i) =>
-        Array.from({ length: d2 + 1 }, (_, j) => p.c[i*(d2 + 1) + j]));
-    const Q = divideByDiff(N);
-    const r = zero([Q.length - 1, Q[0].length - 1]);
-    Q.forEach((row, i) => row.forEach((x, j) => { r.c[i*Q[0].length + j] = x; }));
-    return r;
-}
-
-
-/**
- * Returns the implicit form `f(x,y)` of the bezier curve `A`, homogenized and
- * evaluated at `(X/W, Y/W)`, i.e. `W^n f(X/W, Y/W)` for polynomials `X`, `Y`, `W`.
- */
-function implicitAt(A: number[][], X: TPoly, Y: TPoly, W: TPoly): TPoly {
-    const k = (c: number, ...fs: TPoly[]) => scale(fs.reduce(mul), c);
-    if (A.length === 4) {
-        const { vₓₓₓ, vₓₓᵧ, vₓᵧᵧ, vᵧᵧᵧ, vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = getImplicitForm3(A);
-        return [
-            k(vₓₓₓ, X, X, X), k(vₓₓᵧ, X, X, Y), k(vₓᵧᵧ, X, Y, Y), k(vᵧᵧᵧ, Y, Y, Y),
-            k(vₓₓ, X, X, W), k(vₓᵧ, X, Y, W), k(vᵧᵧ, Y, Y, W),
-            k(vₓ, X, W, W), k(vᵧ, Y, W, W), k(v, W, W, W)
-        ].reduce(add);
-    }
-    if (A.length === 3) {
-        const { vₓₓ, vₓᵧ, vᵧᵧ, vₓ, vᵧ, v } = getImplicitForm2(A);
-        return [
-            k(vₓₓ, X, X), k(vₓᵧ, X, Y), k(vᵧᵧ, Y, Y), k(vₓ, X, W), k(vᵧ, Y, W), k(v, W, W)
-        ].reduce(add);
-    }
-    const { vₓ, vᵧ, v } = getImplicitForm1(A);
-    return [k(vₓ, X), k(vᵧ, Y), k(v, W)].reduce(add);
 }
 
 
@@ -212,27 +76,6 @@ function normalize(A: number[][], B: number[][]): { An: number[][]; Bn: number[]
         return [(X*wx + Y*wy)/d, (Y*wx - X*wy)/d];
     };
     return { An: A.map(f), Bn: B.map(f) };
-}
-
-
-/**
- * Returns `p(s1, c - s1)` (ascending coefficients in `s1`) for a polynomial
- * `p` in the 2 variables `s1`, `s2`.
- */
-function substituteSum(p: TPoly, c: number): number[] {
-    const [d1, d2] = p.deg;
-    const r = new Array<number>(d1 + d2 + 1).fill(0);
-    // (c - s1)^j, ascending
-    let pow = [1];
-    for (let j=0; j<=d2; j++) {
-        for (let i=0; i<=d1; i++) {
-            const a = p.c[i*(d2 + 1) + j];
-            if (a === 0) { continue; }
-            pow.forEach((x, k) => { r[i + k] += a*x; });
-        }
-        pow = [...pow.map(x => c*x), 0].map((x, k) => x - (k > 0 ? pow[k-1] : 0));
-    }
-    return r;
 }
 
 
@@ -653,7 +496,7 @@ function twoVarTs(kind: 'I' | 'MAEI', A: number[][], B: number[][]): number[] {
     const table = kind === 'I' ? resI : resMAEI;
     const { nax, nay, nbx, nby, ax, ay, bx, by } = prep(A, B);
     const coeffs = table[`${A.length - 1}${B.length - 1}`](nax, nay, nbx, nby);
-    let deg = coeffs.length - 1;
+    const deg = coeffs.length - 1;
     // (`coeffs` descending; strip leading zeros)
     let lead = 0;
     while (lead < deg && coeffs[lead] === 0) { lead++; }
@@ -705,17 +548,7 @@ function twoVarTs(kind: 'I' | 'MAEI', A: number[][], B: number[][]): number[] {
                 ? min(1, max(0, t)) : t0);
         }
     }
-    void deg;
     return ts;
-}
-
-
-/**
- * The roots in `[lb,ub]` of a polynomial (descending coefficients) by
- * `flo-poly`'s (certified) `roots`, as plain numbers.
- */
-function rootsIn(p: number[], lb: number, ub: number): number[] {
-    return (roots(p, lb, ub) ?? []).map(r => r.t);
 }
 
 
@@ -795,14 +628,6 @@ function fastClosest(B: number[][], p: number[]): { d: number; t: number; p: num
 }
 
 
-/** Roots in `[0,1]` of a univariate (`nv = 1`) polynomial. */
-function roots01(p: TPoly): number[] {
-    const desc = Array.from(p.c).reverse();
-    if (desc.every(x => x === 0)) { return []; }
-    return rootsIn(desc, 0, 1);
-}
-
-
 /**
  * Returns the one-sided Hausdorff distance `h(A,B) = max_t min_s |A(t) - B(s)|`
  * (and where it is attained) directly, i.e. by evaluating `min_s |A(t) - B(s)|`
@@ -855,25 +680,12 @@ function roots01(p: TPoly): number[] {
  * @param A the curve from which the distance is measured, given as an array
  * of its control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
  * @param B the curve to which the distance is measured
- * @param method optional; defaults to `'resultant'`; see [[Method]]
  */
 function hausdorffDistanceOneSidedDirect(
         A: number[][],
-        B: number[][],
-        method: Method = 'resultant'): HausdorffDistanceOneSidedDirect {
-
-    /**
-     * The `t` values of the solutions of a 2x2 system `f = g = 0` in `(t,s)` by
-     * subdivision (`method === 'subdivision'`).
-     */
-    const solve2 = (f: TPoly, g: TPoly): number[] => {
-        const r = solveSystem([f, g]);
-        capped ||= r.capped;
-        return r.roots.map(x => x[0]);
-    };
+        B: number[][]): HausdorffDistanceOneSidedDirect {
 
     const cands: { t: number; kind: Kind; }[] = [];
-    let capped = false;
     const push = (ts: number[], kind: Kind) => {
         for (const t of ts) { cands.push({ t, kind }); }
     };
@@ -903,35 +715,17 @@ function hausdorffDistanceOneSidedDirect(
             push(roots01asc(e), 'MA-ends');
         }
 
-        if (B.length > 1 && !(A.length === 2 && B.length === 2) && method === 'resultant') {
+        if (B.length > 1 && !(A.length === 2 && B.length === 2)) {
             // I: (A - B)·B′ = 0 and A′ × B′ = 0
             push(twoVarTs('I', A, B), 'I');
-        } else if (B.length > 1 && !(A.length === 2 && B.length === 2)) {
-            // I: (A - B)·B′ = 0 and A′ × B′ = 0 (`t` = var 0, `s` = var 1)
-            const A2 = curve(A, 0, 2);
-            const V = curve(B, 1, 2);
-            const e1 = footpointEq(A2, V, 1);
-            const e2 = cross(deriv(A2, 0), deriv(V, 1));
-            push(solve2(e1, e2), 'I');
         }
 
         if (B.length > 2) {
             // MA-end-interior: |A - B(s)|² = |A - E|² and (A - B)·B′ = 0, with
             // the trivial solution `s = 0` divided out (E = B(0); repeat with
             // `B` reversed for `E = B(1)`)
-            for (const Bs of [B, reverse(B)]) {
-                if (method === 'resultant') {
-                    push(twoVarTs('MAEI', A, Bs), 'MA-end-interior');
-                    continue;
-                }
-                const A2 = curve(A, 0, 2);
-                const V = curve(Bs, 1, 2);
-                const [x, y] = asc(Bs);
-                const SV: Vec = [univariate(sOp(x), 1, 2), univariate(sOp(y), 1, 2)];
-                const SP = univariate(sOp(squaredNormCoeffs(Bs)), 1, 2);
-                const G = add(scale(dot(A2, SV), -2), SP);
-                const e1 = footpointEq(A2, V, 1);
-                push(solve2(e1, G), 'MA-end-interior');
+            for (const Bs of [B, B.toReversed()]) {
+                push(twoVarTs('MAEI', A, Bs), 'MA-end-interior');
             }
 
             // MA-interiors: two interior footpoints s1 ≠ s2 at equal distance.
@@ -941,58 +735,12 @@ function hausdorffDistanceOneSidedDirect(
             // (equal distance, `s1 = s2` divided out) leaves `F(s1,s2) = 0`,
             // and `t` is eliminated by requiring `(X,Y)` to lie on `A`
             // (its implicit form). A 2-variable system in `(s1,s2)` remains.
-            if (B.length === 4 && method === 'resultant' && maiG[`${A.length - 1}3`]) {
+            if (B.length === 4) {
                 // cubic: everything precomputed in `σ = s1 + s2`, `π = s1·s2`
                 push(maiTs(A, B), 'MA-interiors');
-            } else if (B.length === 3 && method === 'resultant' && maiG[`${A.length - 1}2`]) {
+            } else {
                 // quadratic: likewise; `F = 0` fixes `σ`, leaving `G` univariate in `π`
                 push(maiTsQuad(A, B), 'MA-interiors');
-            } else {
-                const V1 = curve(B, 0, 2);
-                const V2 = curve(B, 1, 2);
-                const d1 = deriv(V1, 0);
-                const d2 = deriv(V2, 1);
-                const h1 = dot(V1, d1);
-                const h2 = dot(V2, d2);
-                // all antisymmetric in (s1,s2), so (s1 - s2) is divided out
-                const D = divideByDiff2(cross(d1, d2));
-                const Nx = divideByDiff2(sub(mul(h1, d2[1]), mul(h2, d1[1])));
-                const Ny = divideByDiff2(sub(mul(d1[0], h2), mul(d2[0], h1)));
-                const [x, y] = asc(B);
-                const UV: Vec = [uOp(x, 2, 0, 1), uOp(y, 2, 0, 1)];
-                const UP = uOp(squaredNormCoeffs(B), 2, 0, 1);
-                // `D·(-2 (X,Y)·U[B] + U[|B|²])`; for a quadratic `U[B] = 0` and `D` drops out
-                const F = UV.every(p => p.c.every(c => c === 0))
-                    ? UP
-                    : add(scale(add(mul(Nx, UV[0]), mul(Ny, UV[1])), -2), mul(D, UP));
-                const G = implicitAt(A, Nx, Ny, D);
-                let roots: number[][];
-                if (B.length === 3) {
-                    // quadratic: `F = U[|B|²] = -p₃/2 - p₄(s1 + s2)`, i.e. the line
-                    // `s1 + s2 = c` (footpoints symmetric about the vertex), so
-                    // substituting `s2 = c - s1` leaves a univariate polynomial
-                    const p = squaredNormCoeffs(B);
-                    const c = -p[3]/(2*p[4]);
-                    const g = substituteSum(G, c);
-                    const lb = max(0, c - 1);
-                    const ub = min(1, c/2);   // `s1 ≤ s2` by symmetry
-                    roots = lb <= ub && g.some(x => x !== 0)
-                        ? rootsIn(g.slice().reverse(), lb, ub).map(s1 => [s1, c - s1])
-                        : [];
-                } else {
-                    // the system is symmetric in `s1` and `s2`, so only `s1 ≤ s2` is searched
-                    const r = solveSystem([F, G], (lo, hi) => lo[0] <= hi[1]);
-                    capped ||= r.capped;
-                    roots = r.roots;
-                }
-                const ts: number[] = [];
-                for (const s of roots) {
-                    const w = evaluate(D, s);
-                    if (w === 0) { continue; }
-                    const C = [evaluate(Nx, s)/w, evaluate(Ny, s)/w];
-                    ts.push(fastClosest(A, C).t);
-                }
-                push(ts, 'MA-interiors');
             }
         }
     }
@@ -1017,7 +765,7 @@ function hausdorffDistanceOneSidedDirect(
         if (best !== undefined && ub <= best.d) { break; }
         const cp = fastClosest(B, pA);
         if (best === undefined || cp.d > best.d) {
-            best = { d: cp.d, tA: t, pA, tB: cp.t, pB: cp.p, kind, capped };
+            best = { d: cp.d, tA: t, pA, tB: cp.t, pB: cp.p, kind };
         }
     }
 
@@ -1045,7 +793,7 @@ function hausdorffDistanceOneSidedDirect(
         }
     }
 
-    return { ...best!, capped };
+    return best!;
 }
 
 
@@ -1064,19 +812,17 @@ function hausdorffDistanceOneSidedDirect(
  * @param A a bezier curve given as an array of its control points, e.g.
  * `[[0,0],[1,1],[2,1],[2,0]]`
  * @param B another bezier curve
- * @param method optional; defaults to `'resultant'`; see [[Method]]
  */
 function hausdorffDistanceDirect(
         A: number[][],
-        B: number[][],
-        method: Method = 'resultant'): number {
+        B: number[][]): number {
 
     return max(
-        hausdorffDistanceOneSidedDirect(A, B, method).d,
-        hausdorffDistanceOneSidedDirect(B, A, method).d
+        hausdorffDistanceOneSidedDirect(A, B).d,
+        hausdorffDistanceOneSidedDirect(B, A).d
     );
 }
 
 
-export { hausdorffDistanceOneSidedDirect, hausdorffDistanceDirect, uOp, sOp }
-export type { HausdorffDistanceOneSidedDirect, Kind as HausdorffDirectKind, Method as HausdorffDirectMethod }
+export { hausdorffDistanceOneSidedDirect, hausdorffDistanceDirect }
+export type { HausdorffDistanceOneSidedDirect, Kind as HausdorffDirectKind }

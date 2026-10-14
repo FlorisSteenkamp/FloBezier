@@ -5,7 +5,7 @@ import { hausdorffDistanceOneSidedDirect } from '../../../src/simultaneous-prope
 /**
  * Pairs that were missed by earlier versions of the MA-interiors root finding
  * (cubic `B`), kept as regression cases (and for visual inspection in the
- * demo). The expected values are from the subdivision reference method.
+ * demo). The expected values are from the (since removed) subdivision reference method.
  */
 describe('regression cases (MA-interiors, cubic B)', function() {
     it('nearly parabolic B: s1 + s2 nearly constant along the medial axis', function() {
