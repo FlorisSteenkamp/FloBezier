@@ -1,4 +1,4 @@
-import { allRoots } from "flo-poly";
+import { roots } from "flo-poly";
 import { toPowerBasis_1stDerivative } from "../../to-power-basis/to-power-basis-1st-derivative/double/to-power-basis-1st-derivative.js";
 
 
@@ -44,7 +44,8 @@ function getSpeedStationaryPoints(
     while (qd.length > 0 && qd[0] === 0) { qd.shift(); }
     if (qd.length <= 1) { return []; }  // constant - no stationary points
 
-    return allRoots(qd, tS, tE)
+    return (roots(qd, tS, tE) ?? [])
+        .map(r => r.t)
         .filter(t => t > tS && t < tE)
         .sort((a,b) => a - b);
 }
