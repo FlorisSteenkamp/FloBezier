@@ -1,0 +1,989 @@
+"""
+Generates the precomputed resultants of the Hausdorff candidate systems as
+TypeScript, one file per resultant in `generated/`, plus `generated/index.ts`.
+
+* a resultant whose file already exists is NOT recomputed (delete the file, or
+  pass its name as an argument, to force regeneration), e.g.
+  `python gen-resultants.py` or `python gen-resultants.py resMAI_A2B3`
+* `generated/index.ts` is always rebuilt from the files present
+* `python gen-resultants.py --restyle` converts files in the old layout (one
+  expression per coefficient) to the current one without recomputing
+
+Conventions: curve `A(t)` has power basis coefficients `ax0..`, `ay0..`
+(ascending). Curve `B(s)` is assumed normalized by a similarity transform
+(applied to both curves at runtime) so that `B(0) = (0,0)` and `B′(0) = (1,0)`,
+i.e. `B(s) = (s + bx2 s² + bx3 s³, by2 s² + by3 s³)`.
+
+Kinds:
+* `I` - `(A - B)·B′ = 0`, `A′ × B′ = 0`; resultant w.r.t. `t`, a polynomial in `s`
+* `MAEI` - endpoint `B(0)` / interior footpoint: `(A - B)·B′ = 0` and
+  `-2 A·S[B] + S[|B|²] = 0` with `S[Q] = Σ (1-k) qₖ s^(k-2)`; resultant w.r.t.
+  `t`, a polynomial in `s`
+* `MAI` - two interior footpoints `s1 ≠ s2` (cubic `B` only): with
+  `(X,Y) = (Nx,Ny)/D` the intersection of the normals of `B` at `s1` and `s2`,
+  `F = -2 (Nx,Ny)·U[B] + D·U[|B|²] = 0` (depends on `B` only) and
+  `G = W^n f_A(Nx/D, Ny/D) = 0` where `f_A` is the implicit form of `A`, whose
+  coefficients are the symbols; `F` and `G` are symmetric in `s1`, `s2` and are
+  rewritten in `σ = s1 + s2`, `π = s1·s2`; resultant w.r.t. `π`, a polynomial
+  in `σ`. `maF_B3` gives `F(σ,π)` itself for back-substitution.
+"""
+import os, re, sys, time
+from math import lcm
+from sympy.polys.rings import ring
+from sympy import QQ
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import cse
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+OUT = os.path.join(HERE, 'generated')
+
+# implicit form coefficient names (as returned by getImplicitForm1/2/3)
+IMPLICIT = {
+    1: ['vₓ', 'vᵧ', 'v'],
+    2: ['vₓₓ', 'vₓᵧ', 'vᵧᵧ', 'vₓ', 'vᵧ', 'v'],
+    3: ['vₓₓₓ', 'vₓₓᵧ', 'vₓᵧᵧ', 'vᵧᵧᵧ', 'vₓₓ', 'vₓᵧ', 'vᵧᵧ', 'vₓ', 'vᵧ', 'v'],
+}
+# ascii symbol names for sympy (index into IMPLICIT)
+def vsym(n): return [f'v{i}' for i in range(len(IMPLICIT[n]))]
+
+
+def b_names(nB): return [f'bx{i}' for i in range(2, nB + 1)] + [f'by{i}' for i in range(2, nB + 1)]
+
+
+def b_curve(R, sym, s, nB):
+    xb = s + sum((sym[f'bx{i}']*s**i for i in range(2, nB + 1)), R.zero)
+    yb = R.zero + sum((sym[f'by{i}']*s**i for i in range(2, nB + 1)), R.zero)
+    return xb, yb
+
+
+# ---------------------------------------------------------------- I and MAEI
+def build_t_system(nA, nB, kind):
+    a_names = [f'ax{i}' for i in range(nA + 1)] + [f'ay{i}' for i in range(nA + 1)]
+    names = a_names + b_names(nB) + ['t', 's']
+    R, *g = ring(','.join(names), QQ)
+    sym = dict(zip(names, g))
+    t, s = sym['t'], sym['s']
+    xa = sum(sym[f'ax{i}']*t**i for i in range(nA + 1))
+    ya = sum(sym[f'ay{i}']*t**i for i in range(nA + 1))
+    xb, yb = b_curve(R, sym, s, nB)
+    dxb, dyb = xb.diff(s), yb.diff(s)
+    e1 = (xa - xb)*dxb + (ya - yb)*dyb
+    if kind == 'I':
+        e2 = xa.diff(t)*dyb - ya.diff(t)*dxb
+    else:
+        si = names.index('s')
+        def S(q):
+            out = R.zero
+            for mon, c in q.terms():
+                k = mon[si]
+                if k >= 2:
+                    m2 = list(mon); m2[si] = k - 2
+                    out += R({tuple(m2): c*(1 - k)})
+            return out
+        e2 = -2*(xa*S(xb) + ya*S(yb)) + S(xb*xb + yb*yb)
+    return R, names, e1, e2, 't', 's'
+
+
+# ---------------------------------------------------------------- MAI
+def symmetric_reduce(R, p, i1, i2, isg, ipi):
+    """Rewrites the symmetric `p(s1,s2)` (ring variables `i1`, `i2`) in terms of
+    `σ`, `π` (ring variables `isg`, `ipi`)."""
+    g = R.gens
+    s1, s2 = g[i1], g[i2]
+    q = R.zero
+    while p != 0:
+        # group by the (s1,s2) exponents
+        groups = {}
+        for mon, c in p.terms():
+            key = (mon[i1], mon[i2])
+            m2 = list(mon); m2[i1] = 0; m2[i2] = 0
+            groups[key] = groups.get(key, R.zero) + R({tuple(m2): c})
+        a, b = max(groups, key=lambda k: (k[0] + k[1], k[0]))
+        assert a >= b, 'not symmetric'
+        c = groups[(a, b)]
+        p -= c*(s1 + s2)**(a - b)*(s1*s2)**b
+        q += c*g[isg]**(a - b)*g[ipi]**b
+    return q
+
+
+def build_mai_nd(nB=3):
+    """`(R, names, [Nx, Ny, D])` rewritten in `σ`, `π` (see `build_mai`)"""
+    R, names, F, G, _, _ = build_mai(1, nB)
+    return R, names, _MAI_ND
+
+
+def build_mai(nA, nB=3):
+    vs = vsym(nA)
+    names = vs + b_names(nB) + ['s1', 's2', 'σ', 'π']
+    R, *g = ring(','.join(names), QQ)
+    sym = dict(zip(names, g))
+    s1, s2 = sym['s1'], sym['s2']
+    d12 = s1 - s2
+
+    def B(s): return b_curve(R, sym, s, nB)
+    x1, y1 = B(s1); x2, y2 = B(s2)
+    dx1, dy1 = x1.diff(s1), y1.diff(s1)
+    dx2, dy2 = x2.diff(s2), y2.diff(s2)
+    h1 = x1*dx1 + y1*dy1
+    h2 = x2*dx2 + y2*dy2
+    D = (dx1*dy2 - dy1*dx2).exquo(d12)
+    Nx = (h1*dy2 - h2*dy1).exquo(d12)
+    Ny = (dx1*h2 - dx2*h1).exquo(d12)
+
+    # U[Q] for Q = s^k
+    def U_mon(k):
+        if k < 3: return R.zero
+        num = sum((s1**j*s2**(k - 1 - j) for j in range(k)), R.zero)*2 - k*(s1**(k - 1) + s2**(k - 1))
+        return num.exquo(d12).exquo(d12)*QQ(1, 2)
+    def U(qs):   # qs: ascending coefficients (ring elements, s-free)
+        return sum((qs[k]*U_mon(k) for k in range(len(qs))), R.zero)
+
+    s = sym['s1']
+    xb, yb = B(s)
+    def asc(p):
+        cs = [R.zero]*(p.degree(s) + 1)
+        for mon, c in p.terms():
+            k = mon[names.index('s1')]
+            m2 = list(mon); m2[names.index('s1')] = 0
+            cs[k] += R({tuple(m2): c})
+        return cs
+    UVx, UVy = U(asc(xb)), U(asc(yb))
+    UP = U(asc(xb*xb + yb*yb))
+    F = -2*(Nx*UVx + Ny*UVy) + D*UP
+
+    v = [sym[n] for n in vs]
+    X, Y, W = Nx, Ny, D
+    if nA == 1:
+        G = v[0]*X + v[1]*Y + v[2]*W
+    elif nA == 2:
+        G = v[0]*X*X + v[1]*X*Y + v[2]*Y*Y + v[3]*X*W + v[4]*Y*W + v[5]*W*W
+    else:
+        G = (v[0]*X**3 + v[1]*X**2*Y + v[2]*X*Y**2 + v[3]*Y**3 +
+             (v[4]*X**2 + v[5]*X*Y + v[6]*Y**2)*W + (v[7]*X + v[8]*Y)*W**2 + v[9]*W**3)
+
+    i1, i2, isg, ipi = (names.index(n) for n in ['s1', 's2', 'σ', 'π'])
+    global _MAI_ND
+    _MAI_ND = [symmetric_reduce(R, p, i1, i2, isg, ipi) for p in (Nx, Ny, D)]
+    Fs = symmetric_reduce(R, F, i1, i2, isg, ipi)
+    Gs = symmetric_reduce(R, G, i1, i2, isg, ipi)
+    return R, names, Fs, Gs, 'π', 'σ'
+
+
+# ---------------------------------------------------------------- MAI factored
+def reduce_mod_quadratic(R, names, F, G, nA):
+    """
+    With `F = f₂π² + f₁π + f₀` and `G = Σ vₖ Gₖ` (linear in the implicit form
+    coefficients `vₖ`), reduces each `Gₖ` modulo `F` (fraction free:
+    `g ← f₂·g - c·π^(d-2)·F` until linear in `π`) to `f₂^eₖ·Gₖ ≡ aₖπ + bₖ`.
+    At runtime, with `e = max eₖ`, `a = Σ vₖf₂^(e-eₖ)aₖ` and similarly `b`,
+    `Res_π(F, G) ∝ f₂b² - f₁ab + f₀a²` (up to a power of `f₂`, i.e. only
+    spurious extra roots where `f₂(σ) = 0`).
+
+    Returns `(A, B, scales)` with `A[k]`, `B[k]` dicts `σ power -> ring element`
+    (polynomials in `B`'s coefficients only) and `scales[k] = eₖ`.
+    """
+    ipi, isg = names.index('π'), names.index('σ')
+    gens = R.gens
+    pi = gens[ipi]
+
+    def coeff(p, var_i, k):
+        out = R.zero
+        for mon, c in p.terms():
+            if mon[var_i] == k:
+                m2 = list(mon); m2[var_i] = 0
+                out += R({tuple(m2): c})
+        return out
+
+    def deg(p, var_i):
+        return max((mon[var_i] for mon in p.monoms()), default=0)
+
+    f2 = coeff(F, ipi, 2)
+    vs = [names.index(v) for v in vsym(nA)]
+    hs, scales = [], []
+    for vi in vs:
+        g = coeff(G, vi, 1)
+        sc = 0
+        while g != 0 and deg(g, ipi) >= 2:
+            d = deg(g, ipi)
+            g = f2*g - coeff(g, ipi, d)*pi**(d - 2)*F
+            sc += 1
+        hs.append(g); scales.append(sc)
+    A, B = [], []
+    for g in hs:
+        a, b = coeff(g, ipi, 1), coeff(g, ipi, 0)
+        A.append({k: coeff(a, isg, k) for k in range(deg(a, isg) + 1)})
+        B.append({k: coeff(b, isg, k) for k in range(deg(b, isg) + 1)})
+    return A, B, scales
+
+
+def emit_mai_ab(fn, names, A, B, nA, e):
+    """`[a, b, e]` with `a[k][i]` the coefficient of `σ^i` in `aₖ`, as a `Program`"""
+    def as_terms(p):
+        den = 1
+        for _, c in p.terms(): den = lcm(den, int(c.denominator))
+        assert den == 1
+        return [(int(c), {names[j]: x for j, x in enumerate(mon) if x}) for mon, c in p.terms()]
+    polys, shapes = [], {'a': [], 'b': []}
+    for which, L_ in (('a', A), ('b', B)):
+        for d in L_:
+            n = max(d) + 1 if d else 1
+            shapes[which].append(n)
+            for i in range(n):
+                polys.append(as_terms(d[i]) if i in d else [])
+    used = sorted({v for p in polys for _, m in p for v in m}, key=lambda n: names.index(n))
+    inputs = [(l.split()[1], l.split('=')[1].strip().rstrip(';')) for l in args_prelude(used)]
+    doc = ['/**',
+           f' * MA two interior footpoints, A of degree {nA} (implicit form coefficients `v`), B cubic:',
+           f' * returns `[a, b, e]` with `a[k][i]` (`b[k][i]`) the coefficient of `σ^i` in `aₖ` (`bₖ`)',
+           f' * where `f₂^eₖ·Gₖ ≡ aₖ·π + bₖ (mod F)`; with `e = max eₖ`, `a = Σ vₖf₂^(e-eₖ)aₖ` and',
+           f' * similarly `b`, the resultant is `(f₂b² - f₁ab + f₀a²)/f₂^e`',
+           ' */']
+    sig = f'function {fn}(bx: number[], by: number[]): [number[][], number[][], number[]] {{'
+    body = ['    const a: number[][] = [];',
+            '    const b: number[][] = [];',
+            '    let i = 0;',
+            f'    for (const n of [{", ".join(map(str, shapes["a"]))}]) {{ a.push(Array.from(o.subarray(i, i += n))); }}',
+            f'    for (const n of [{", ".join(map(str, shapes["b"]))}]) {{ b.push(Array.from(o.subarray(i, i += n))); }}',
+            f'    return [a, b, [{", ".join(str(x) for x in e)}]];']
+    return emit_program(fn, doc, sig, inputs, polys, body)
+
+
+def emit_mai_g(fn, names, G, nA, nB=3):
+    """
+    `g` with `g[j][i]` the coefficient of `σ^i π^j` of `G` (inputs: the implicit
+    form coefficients `v` of `A` and the normalized cubic `B`), as a `Program`
+    """
+    ipi, isg = names.index('π'), names.index('σ')
+    cells = {}
+    for mon, c in G.terms():
+        assert c.denominator == 1
+        key = (mon[ipi], mon[isg])
+        cells.setdefault(key, []).append(
+            (int(c), {names[j]: x for j, x in enumerate(mon) if x and j not in (ipi, isg)}))
+    dpi = max(k[0] for k in cells); dsg = max(k[1] for k in cells)
+    polys = [cells.get((j, i), []) for j in range(dpi + 1) for i in range(dsg + 1)]
+    vnames = vsym(nA)
+    bnames = b_names(nB)
+    inputs = [(v, f'v[{i}]') for i, v in enumerate(vnames)] + [(b, f'{b[:2]}[{b[2:]}]') for b in bnames]
+    doc = ['/**',
+           f' * MA two interior footpoints, A of degree {nA}, B of degree {nB}: `G(σ,π)` (the implicit form',
+           f' * of `A` at the intersection of the normals of `B` at `s1`, `s2`; `σ = s1 + s2`,',
+           f' * `π = s1·s2`) as `g[j][i]`, the coefficient of `σ^i π^j`',
+           ' */']
+    sig = f'function {fn}(v: number[], bx: number[], by: number[]): number[][] {{'
+    body = ['    const g: number[][] = [];',
+            f'    for (let j=0; j<{dpi + 1}; j++) {{ g.push(Array.from(o.subarray(j*{dsg + 1}, (j + 1)*{dsg + 1}))); }}',
+            '    return g;']
+    return emit_program(fn, doc, sig, inputs, polys, body)
+
+
+def emit_mai_nd(fn, names, nd, nB=3):
+    """`[Nx, Ny, D]`, each `c[i][j]` the coefficient of `σ^i π^j`"""
+    ipi, isg = names.index('π'), names.index('σ')
+    grids, shapes = [], []
+    for p in nd:
+        cells = {}
+        for mon, c in p.terms():
+            assert c.denominator == 1
+            cells.setdefault((mon[isg], mon[ipi]), []).append(
+                (int(c), {names[j]: x for j, x in enumerate(mon) if x and j not in (ipi, isg)}))
+        dsg = max(k[0] for k in cells); dpi = max(k[1] for k in cells)
+        shapes.append((dsg + 1, dpi + 1))
+        grids += [cells.get((i, j), []) for i in range(dsg + 1) for j in range(dpi + 1)]
+    bnames = b_names(nB)
+    inputs = [(b, f'{b[:2]}[{b[2:]}]') for b in bnames]
+    doc = ['/**',
+           f' * MA two interior footpoints, B of degree {nB}: the intersection of the normals of `B`',
+           ' * at `s1` and `s2` is `(Nx/D, Ny/D)`; returns `[Nx, Ny, D]` in terms of',
+           ' * `σ = s1 + s2`, `π = s1·s2`, each as `c[i][j]`, the coefficient of `σ^i π^j`',
+           ' */']
+    sig = f'function {fn}(bx: number[], by: number[]): number[][][] {{'
+    body = ['    const out: number[][][] = [];', '    let k = 0;']
+    for (r, c) in shapes:
+        body.append(f'    {{ const m: number[][] = []; for (let i=0; i<{r}; i++) {{ m.push(Array.from(o.subarray(k, k += {c}))); }} out.push(m); }}')
+    body.append('    return out;')
+    return emit_program(fn, doc, sig, inputs, grids, body)
+
+
+def B_zero(d):
+    return next(iter(d.values())).ring.zero if d else None
+
+
+# ---------------------------------------------------------------- resultants
+def coeffs_in(R, p, vi):
+    out = {}
+    for mon, c in p.terms():
+        k = mon[vi]
+        m2 = list(mon); m2[vi] = 0
+        out[k] = out.get(k, R.zero) + R({tuple(m2): c})
+    deg = max(out) if out else 0
+    return [out.get(k, R.zero) for k in range(deg + 1)]
+
+
+def resultant(R, f, g, vi):
+    """Sylvester determinant w.r.t. ring variable `vi` (exact Bareiss)"""
+    a = coeffs_in(R, f, vi); b = coeffs_in(R, g, vi)
+    m, n = len(a) - 1, len(b) - 1
+    N = m + n
+    M = [[R.zero]*N for _ in range(N)]
+    for i in range(n):
+        for j in range(m + 1): M[i][i + j] = a[m - j]
+    for i in range(m):
+        for j in range(n + 1): M[n + i][i + j] = b[n - j]
+    if N == 1: return M[0][0]
+    sign = 1; prev = R.one
+    for k in range(N - 1):
+        if M[k][k] == 0:
+            p = next(i for i in range(k + 1, N) if M[i][k] != 0)
+            M[k], M[p] = M[p], M[k]; sign = -sign
+        for i in range(k + 1, N):
+            for j in range(k + 1, N):
+                M[i][j] = (M[k][k]*M[i][j] - M[i][k]*M[k][j]).exquo(prev)
+        prev = M[k][k]
+        print(f'    step {k+1}/{N-1}: {len(prev.terms())} terms', flush=True)
+    return sign*M[N - 1][N - 1]
+
+
+# ---------------------------------------------------------------- TypeScript
+def ts_name(n):
+    return n   # all names are valid identifiers (incl. σ, π)
+
+
+def poly_ts(names, terms, skip):
+    """sum of terms as TypeScript; `terms` = [(monomial, int coefficient)]"""
+    parts = []
+    for i, (mon, c) in enumerate(terms):
+        fs = []
+        for j, e in enumerate(mon):
+            if j in skip or e == 0: continue
+            fs.append(names[j] if e == 1 else f'{names[j]}**{e}')
+        body = '*'.join(fs)
+        mag = abs(c)
+        txt = str(mag) if not body else (body if mag == 1 else f'{mag}*{body}')
+        if i == 0: parts.append(('-' if c < 0 else '') + txt)
+        else: parts.append((' - ' if c < 0 else ' + ') + txt)
+    out, cur = [], ''
+    for p in parts:
+        if len(cur) + len(p) > 100: out.append(cur); cur = ''
+        cur += p
+    out.append(cur)
+    return out
+
+
+def integerize(r):
+    den = 1
+    for _, c in r.terms(): den = lcm(den, int(c.denominator))
+    return [(mon, int(c*den)) for mon, c in r.terms()]
+
+
+def args_prelude(used, nA_implicit=None):
+    lines = []
+    for n in used:
+        if n.startswith('ax') or n.startswith('ay') or n.startswith('bx') or n.startswith('by'):
+            lines.append(f'    const {n} = {n[:2]}[{n[2:]}];')
+        elif n.startswith('v'):
+            i = int(n[1:])
+            lines.append(f'    const {n} = v[{i}];   // {IMPLICIT[nA_implicit][i]}')
+    return lines
+
+
+def emit_univariate(fn, names, r, var, eliminated, comment, sig, nA_implicit=None):
+    """a univariate (in `var`) resultant as a `Program`; coefficients descending"""
+    vi = names.index(var)
+    terms = integerize(r)
+    by_k = {}
+    for mon, c in terms:
+        assert all(mon[names.index(x)] == 0 for x in eliminated)
+        by_k.setdefault(mon[vi], []).append((c, {names[j]: x for j, x in enumerate(mon) if x and j != vi}))
+    deg = max(by_k) if by_k else 0
+    used = sorted({v for ts in by_k.values() for _, m in ts for v in m}, key=names.index)
+    inputs = [(l.split()[1], l.split('=')[1].split(';')[0].strip()) for l in args_prelude(used, nA_implicit)]
+    doc = ['/**', f' * {comment} (degree {deg} in `{var}`)',
+           f' * (returned coefficients in descending powers of `{var}`)', ' */']
+    return emit_program(fn, doc, f'function {fn}({sig}): number[] {{',
+                        inputs, [by_k.get(k, []) for k in range(deg, -1, -1)], ['    return Array.from(o);'])
+
+
+def statements(c, lines):
+    """
+    A coefficient as accumulating statements (one per wrapped line) - a single
+    huge `a + b + ...` expression overflows the JavaScript parser's stack.
+    """
+    out = [f'    let {c} = {lines[0]};']
+    for line in lines[1:]:
+        out.append(f'    {c} = {c}{line if line.startswith(" ") else " + " + line};')
+    return out
+
+
+def restyle(path):
+    """
+    Rewrites a generated univariate resultant file from the old layout (one
+    expression per coefficient inside `return [...]`) to the `statements`
+    layout - without recomputing anything.
+    """
+    src = open(path, encoding='utf-8').read().split('\n')
+    if '    return [' not in src:
+        return False
+    i = src.index('    return [')
+    j = src.index('    ];', i)
+    out, names, cur, first = [], [], None, True
+    for l in src[i+1:j]:
+        s = l.strip()
+        if s.startswith('0, //'):                   # `0, // σ^k`
+            var, k = s.split('// ')[1].split('^')
+            names.append(f'c{k}')
+            out += [f'    // {var}^{k}', f'    let c{k} = 0;']
+            continue
+        if s.startswith('//'):                      # `// σ^k`
+            var, k = s[3:].split('^')
+            cur = f'c{k}'; names.append(cur); first = True
+            out.append(f'    // {var}^{k}')
+            continue
+        expr = l[8:]
+        if expr.endswith(','): expr = expr[:-1]
+        out += statements(cur, [expr]) if first else [f'    {cur} = {cur}{expr if expr.startswith(" ") else " + " + expr};']
+        first = False
+    out.append('    return [' + ', '.join(names) + '];')
+    open(path, 'w', encoding='utf-8').write('\n'.join(src[:i] + out + src[j+1:]))
+    return True
+
+
+def emit_bivariate(fn, names, p, v1, v2, comment, sig):
+    """coefficients `c[i][j]` of `v1^i v2^j` (ascending)"""
+    i1, i2 = names.index(v1), names.index(v2)
+    terms = integerize(p)
+    grid = {}
+    for mon, c in terms:
+        grid.setdefault((mon[i1], mon[i2]), []).append((mon, c))
+    d1 = max(k[0] for k in grid); d2 = max(k[1] for k in grid)
+    used = sorted({names[j] for mon, _ in terms for j, e in enumerate(mon) if e and j not in (i1, i2)},
+                  key=names.index)
+    L = [f'// GENERATED by gen-resultants.py - do not edit', '',
+         f'/** {comment} (`c[i][j]` the coefficient of `{v1}^i {v2}^j`, {len(terms)} terms) */',
+         f'function {fn}({sig}): number[][] {{']
+    L += args_prelude(used)
+    # shared products (greedy CSE)
+    keys = [(i, j) for i in range(d1 + 1) for j in range(d2 + 1)]
+    polys = [[(c, {names[k]: e for k, e in enumerate(mon) if e and k not in (i1, i2)})
+              for mon, c in grid.get(key, [])] for key in keys]
+    temps, mons = cse.cse_products(polys)
+    naive, after = cse.mults_naive(polys), cse.mults_cse(temps, mons)
+    doc = next(k for k, l in enumerate(L) if l.startswith('/**'))
+    L[doc] = L[doc][:-3] + f'; multiplications: {naive} without sharing, {after} with {len(temps)} shared products */'
+    for name, a, b in temps:
+        L.append(f'    const {name} = {a}*{b};')
+    L.append('    return [')
+    cells = dict(zip(keys, mons))
+    for i in range(d1 + 1):
+        L.append('        [' + ', '.join(cse.poly_ts(cells[(i, j)]) for j in range(d2 + 1)) + '],')
+    L += ['    ];', '}', '', '', f'export {{ {fn} }}', '']
+    return '\n'.join(L)
+
+
+# ---------------------------------------------------------------- programs
+def flatten_program(nIn, pairs, terms_per_output):
+    """
+    Converts terms `(coef, [factor slots])` per output into the flattened form
+    (`Program2`): multi-factor products are folded into new shared products
+    (memoized), constant terms collected into `c0`. Returns
+    `(pairs, coef, fidx, ostart, c0)`.
+    """
+    pairs = list(pairs)
+    memo = {}
+    for k in range(len(pairs)//2):
+        a, b = pairs[2*k], pairs[2*k + 1]
+        memo[(min(a, b), max(a, b))] = nIn + k
+    def prod(a, b):
+        key = (min(a, b), max(a, b))
+        if key not in memo:
+            memo[key] = nIn + len(pairs)//2
+            pairs.extend(key)
+        return memo[key]
+    coef, fidx, ostart, c0 = [], [], [0], []
+    for terms in terms_per_output:
+        const = 0
+        for c, fs in terms:
+            if not fs: const += c; continue
+            fs = sorted(fs)
+            x = fs[0]
+            for f in fs[1:]: x = prod(x, f)
+            coef.append(c); fidx.append(x)
+        c0.append(const)
+        ostart.append(len(coef))
+    return pairs, coef, fidx, ostart, c0
+
+
+def program2_lines(nIn, pairs, coef, fidx, ostart, c0):
+    return ['const P: Program2 = {',
+            f'    nIn: {nIn},',
+            f'    pairs: {ts_array("Int32Array", pairs)},',
+            f'    coef: {ts_array("Float64Array", coef, 8)},',
+            f'    fidx: {ts_array("Int32Array", fidx)},',
+            f'    ostart: {ts_array("Int32Array", ostart)},',
+            f'    c0: {ts_array("Float64Array", c0, 8)}',
+            '};']
+
+
+STRAIGHT_MAX = 3000   # below this many multiplications emit straight-line code
+
+
+def read_program(src):
+    """`(nIn, pairs, terms_per_output)` from a generated program file (v1 or v2)"""
+    def arr(field):
+        m = re.search(field + r': new \w+\(\[(.*?)\]\)', src, re.S)
+        return [x for x in re.split(r'[\s,]+', m.group(1)) if x] if m else None
+    num = lambda c: int(c) if re.fullmatch(r'-?\d+', c) else float(c)
+    nIn = int(re.search(r'nIn: (\d+)', src).group(1))
+    pairs = [int(x) for x in arr('pairs') or []]
+    coef = [num(x) for x in arr('coef') or []]
+    fidx = [int(x) for x in arr('fidx') or []]
+    ostart = [int(x) for x in arr('ostart')]
+    fstart = arr('fstart')
+    c0 = arr('c0')
+    tpo = []
+    for o in range(len(ostart) - 1):
+        terms = []
+        if c0 is not None and num(c0[o]) != 0: terms.append((num(c0[o]), []))
+        for k in range(ostart[o], ostart[o + 1]):
+            fs = fidx[int(fstart[k]):int(fstart[k + 1])] if fstart is not None else [fidx[k]]
+            terms.append((coef[k], fs))
+        tpo.append(terms)
+    return nIn, pairs, tpo
+
+
+def straightline_lines(fn, inputs_src, pairs, tpo, nIn):
+    """the body of a straight-line function computing the outputs into `o`"""
+    name = lambda i: f'x{i}'
+    L = [f'    const {name(i)} = {s};' for i, s in enumerate(inputs_src)]
+    for k in range(len(pairs)//2):
+        L.append(f'    const {name(nIn + k)} = {name(pairs[2*k])}*{name(pairs[2*k + 1])};')
+    L.append(f'    const o = new Float64Array({len(tpo)});')
+    for oi, terms in enumerate(tpo):
+        parts = []
+        for i, (c, fs) in enumerate(terms):
+            body = '*'.join(name(f) for f in fs)
+            mag = abs(c)
+            txt = str(mag) if not body else (body if mag == 1 else f'{mag}*{body}')
+            parts.append((('-' if c < 0 else '') if i == 0 else (' - ' if c < 0 else ' + ')) + txt)
+        L.append(f'    o[{oi}] = ' + (''.join(parts) if parts else '0') + ';')
+    return L
+
+
+def to_straightline(name):
+    """Re-emits a small generated program file as straight-line code (no recomputation)."""
+    path = os.path.join(OUT, name + '.ts')
+    src = open(path, encoding='utf-8').read()
+    if 'const P: Program' not in src: return False
+    nIn, pairs, tpo = read_program(src)
+    mults = len(pairs)//2 + sum(max(0, len(fs) - 1) + (abs(c) != 1) for terms in tpo for c, fs in terms)
+    if mults > STRAIGHT_MAX: return False
+    m = re.search(r'    const o = evalProgram2?\(P, \[(.*?)\]\);', src)
+    inputs_src = [s.strip() for s in m.group(1).split(',')]
+    s = src.index('const P: Program')
+    e = src.index('};', s) + 2
+    head = (src[:s].replace("import { type Program, evalProgram } from '../eval-program.js';", '')
+                   .replace("import { type Program2, evalProgram2 } from '../eval-program.js';", ''))
+    rest = src[e:]
+    rest = rest.replace(m.group(0), '\n'.join(straightline_lines(name, inputs_src, pairs, tpo, nIn)))
+    open(path, 'w', encoding='utf-8').write(head.rstrip() + '\n\n\n' + rest.lstrip('\n'))
+    return True
+
+
+def repack(name):
+    """Converts a generated `Program` file to `Program2` (no recomputation)."""
+    path = os.path.join(OUT, name + '.ts')
+    src = open(path, encoding='utf-8').read()
+    if 'Program2' in src or 'const P: Program = {' not in src: return False
+    def arr(field):
+        m = re.search(field + r': new \w+\(\[(.*?)\]\)', src, re.S)
+        return [x for x in re.split(r'[\s,]+', m.group(1)) if x]
+    nIn = int(re.search(r'nIn: (\d+)', src).group(1))
+    pairs = [int(x) for x in arr('pairs')]
+    coef = [x for x in arr('coef')]
+    fstart = [int(x) for x in arr('fstart')]
+    fidx = [int(x) for x in arr('fidx')]
+    ostart = [int(x) for x in arr('ostart')]
+    terms_per_output = []
+    for o in range(len(ostart) - 1):
+        terms = []
+        for k in range(ostart[o], ostart[o + 1]):
+            c = coef[k]
+            c = int(c) if re.fullmatch(r'-?\d+', c) else float(c)
+            terms.append((c, fidx[fstart[k]:fstart[k + 1]]))
+        terms_per_output.append(terms)
+    P2 = program2_lines(nIn, *flatten_program(nIn, pairs, terms_per_output))
+    s = src.index('const P: Program = {')
+    e = src.index('};', s) + 2
+    src = src[:s] + '\n'.join(P2) + src[e:]
+    src = src.replace("import { type Program, evalProgram } from '../eval-program.js';",
+                      "import { type Program2, evalProgram2 } from '../eval-program.js';")
+    src = src.replace('evalProgram(P,', 'evalProgram2(P,')
+    open(path, 'w', encoding='utf-8').write(src)
+    return True
+
+def ts_array(kind, xs, per_line=24):
+    """a typed array literal, wrapped"""
+    xs = [str(x) for x in xs]
+    rows = [', '.join(xs[i:i + per_line]) for i in range(0, len(xs), per_line)]
+    return f'new {kind}([\n        ' + ',\n        '.join(rows) + '\n    ])'
+
+
+def emit_program(fn, doc, sig, inputs, polys, body):
+    """
+    Emits polynomials as a `Program` (data evaluated by `evalProgram`, see
+    eval-program.ts) after greedy CSE of products.
+
+    * `doc` - the doc comment lines (without the multiplication counts)
+    * `sig` - the function signature line (ending in `{`)
+    * `inputs` - `[(name, source expression)]`
+    * `polys` - the outputs, each a list of terms `(int c, {name: exponent})`
+    * `body` - lines using `o` (the Float64Array of outputs) to return the result
+    """
+    temps, mons = cse.cse_products_fast(polys)
+    naive, after = cse.mults_naive(polys), cse.mults_cse(temps, mons)
+    idx = {nm: i for i, (nm, _) in enumerate(inputs)}
+    for k, (tn, _, _) in enumerate(temps): idx[tn] = len(inputs) + k
+    pairs = [x for tn, a, b in temps for x in (idx[a], idx[b])]
+    terms_per_output = [[(c, [idx[a] for a in m for _ in range(m[a])]) for c, m in p] for p in mons]
+    flat = flatten_program(len(inputs), pairs, terms_per_output)
+    doc = doc[:-1] + [f' * ({sum(len(p) for p in polys)} terms; multiplications: {naive} without sharing,',
+                      f' * {after} with {len(temps)} shared products)', ' */']
+    L = ['// GENERATED by gen-resultants.py - do not edit', '',
+         "import { type Program2, evalProgram2 } from '../eval-program.js';", '', '']
+    L += program2_lines(len(inputs), *flat) + ['', '']
+    L += doc + [sig]
+    L.append('    const o = evalProgram2(P, [' + ', '.join(src for _, src in inputs) + ']);')
+    L += body + ['}', '', '', f'export {{ {fn} }}', '']
+    return '\n'.join(L)
+
+
+def program_from_generated(name):
+    """Re-emits an existing univariate resultant file as a `Program` (no recomputation)."""
+    path = os.path.join(OUT, name + '.ts')
+    doc, sig, prelude, coeffs = parse_generated(path)
+    doc = re.sub(r'; multiplications: [^*]*\*/$', ' */', doc)
+    inputs = [(l.split()[1], l.split('=')[1].strip().rstrip(';')) for l in prelude]
+    var = re.search(r'in `(\w+)`', doc).group(1)
+    doc_lines = ['/**', ' * ' + doc[4:-3].strip(),
+                 f' * (returned coefficients in descending powers of `{var}`)', ' */']
+    code = emit_program(name, doc_lines, sig, inputs, [t for _, t in coeffs], ['    return Array.from(o);'])
+    open(path, 'w', encoding='utf-8').write(code)
+    print(f'{name}: converted to a program')
+
+
+# ---------------------------------------------------------------- cases
+SIG_T = 'ax: number[], ay: number[], bx: number[], by: number[]'
+SIG_MAI = 'v: number[], bx: number[], by: number[]'
+SIG_F = 'bx: number[], by: number[]'
+
+def cases():
+    for nA in (1, 2, 3):
+        for nB in (1, 2, 3):
+            if not (nA == 1 and nB == 1):
+                yield f'resI_A{nA}B{nB}', ('t', nA, nB, 'I')
+    for nA in (1, 2, 3):
+        for nB in (2, 3):
+            yield f'resMAEI_A{nA}B{nB}', ('t', nA, nB, 'MAEI')
+    yield 'maF_B3', ('F',)
+    yield 'maN_B3', ('N', 3)
+    yield 'maN_B2', ('N', 2)
+    # MA two interior footpoints: factored form (see `reduce_mod_quadratic`);
+    # the expanded resultants (`'MAI'`, e.g. resMAI_A2B3) are kept in
+    # generated/expanded/ and are no longer generated by default
+    for nA in (1, 2, 3):
+        yield f'maiAB_A{nA}B3', ('MAIAB', nA)
+    # G itself (reduced modulo F pointwise at runtime): much smaller than maiAB
+    for nA in (1, 2, 3):
+        for nB in (2, 3):
+            yield f'maiG_A{nA}B{nB}', ('MAIG', nA, nB)
+
+
+def generate(name, spec):
+    T0 = time.time()
+    if spec[0] == 't':
+        _, nA, nB, kind = spec
+        R, names, f, g, elim, var = build_t_system(nA, nB, kind)
+        r = resultant(R, f, g, names.index(elim))
+        desc = ('type I' if kind == 'I' else 'MA endpoint/interior') + f', A of degree {nA}, B of degree {nB}'
+        code = emit_univariate(name, names, r, var, [elim], desc, SIG_T)
+    elif spec[0] == 'F':
+        R, names, F, _, _, _ = build_mai(1)
+        code = emit_bivariate(name, names, F, 'σ', 'π',
+            'MA two interior footpoints, cubic B: F(σ,π), σ = s1 + s2, π = s1·s2', SIG_F)
+    elif spec[0] == 'N':
+        _, nB = spec
+        R, names, nd = build_mai_nd(nB)
+        code = emit_mai_nd(name, names, nd, nB)
+    elif spec[0] == 'MAIG':
+        _, nA, nB = spec
+        R, names, F, G, _, _ = build_mai(nA, nB)
+        code = emit_mai_g(name, names, G, nA, nB)
+    elif spec[0] == 'MAIAB':
+        _, nA = spec
+        R, names, F, G, _, _ = build_mai(nA)
+        A_, B_, e = reduce_mod_quadratic(R, names, F, G, nA)
+        code = emit_mai_ab(name, names, A_, B_, nA, e)
+    else:
+        _, nA = spec
+        R, names, F, G, elim, var = build_mai(nA)
+        r = resultant(R, F, G, names.index(elim))
+        code = emit_univariate(name, names, r, var, [elim, 's1', 's2'],
+            f'MA two interior footpoints, A of degree {nA} (implicit form coefficients `v`), B cubic; σ = s1 + s2',
+            SIG_MAI, nA)
+    path = os.path.join(OUT, name + '.ts')
+    with open(path, 'w', encoding='utf-8') as fh:
+        fh.write(code)
+    print(f'{name}: {round(time.time() - T0, 1)}s', flush=True)
+
+
+def write_index():
+    present = sorted(f[:-3] for f in os.listdir(OUT) if f.endswith('.ts') and f != 'index.ts')
+    L = ['// GENERATED by gen-resultants.py - do not edit', '']
+    for n in present: L.append(f"import {{ {n} }} from './{n}.js';")
+    L.append('')
+    def table(prefix, sig, ret):
+        rows = [n for n in present if n.startswith(prefix + '_')]
+        L.append(f'const {prefix}: {{ [key: string]: ({sig}) => {ret} }} = {{')
+        for n in rows:
+            key = n.split('_')[1].replace('A', '').replace('B', '')
+            L.append(f"    '{key}': {n},")
+        L.append('};')
+    table('resI', SIG_T, 'number[]')
+    table('resMAEI', SIG_T, 'number[]')
+    table('resMAI', SIG_MAI, 'number[]')
+    table('maiAB', SIG_F, '[number[][], number[][], number[]]')
+    table('maiG', SIG_MAI, 'number[][]')
+    L.append('')
+    extra = ''.join(f', {n}' for n in ('maF_B3', 'maN_B3', 'maN_B2') if n in present)
+    L.append(f'export {{ resI, resMAEI, resMAI, maiAB, maiG{extra} }}')
+    L.append('')
+    with open(os.path.join(OUT, 'index.ts'), 'w', encoding='utf-8') as fh:
+        fh.write('\n'.join(L))
+
+
+CHUNK = 200   # max statements per function (larger functions stay unoptimized in V8)
+
+
+def split_large(path):
+    """
+    Moves coefficients with more than `CHUNK` statements into helper functions
+    of at most `CHUNK` statements each (layout only; nothing is recomputed).
+    """
+    src = open(path, encoding='utf-8').read().split('\n')
+    sig_i = next(i for i, l in enumerate(src) if l.startswith('function '))
+    m = re.match(r'function (\w+)\((.*)\): number\[\] \{', src[sig_i])
+    if not m: return False
+    fn, params = m.group(1), m.group(2)
+    args = ', '.join(p.split(':')[0].strip() for p in params.split(','))
+    end_i = next(i for i in range(sig_i, len(src)) if src[i] == '}')
+    body = src[sig_i + 1:end_i]
+    first_c = next(i for i, l in enumerate(body) if l.startswith('    // '))
+    prelude, rest = body[:first_c], body[first_c:]
+    # group statements by coefficient
+    coeffs, order = {}, []
+    for l in rest:
+        mm = re.match(r'    (?:let )?(c\d+) = ', l)
+        if mm:
+            c = mm.group(1)
+            if c not in coeffs: coeffs[c] = []; order.append(c)
+            coeffs[c].append(l)
+    if all(len(v) <= CHUNK for v in coeffs.values()): return False
+    helpers, main = [], []
+    for c in order:
+        ls = coeffs[c]
+        main.append(f'    // {c}')
+        if len(ls) <= CHUNK:
+            main += ls; continue
+        parts = []
+        for k in range(0, len(ls), CHUNK):
+            h = f'{fn}_{c}_{k // CHUNK}'
+            parts.append(f'{h}({args})')
+            stmts = [re.sub(rf'^    (let )?{c} = {c}', '    p = p', re.sub(rf'^    let {c} = ', '    p = ', s)) for s in ls[k:k + CHUNK]]
+            if not stmts[0].startswith('    p = p'):
+                stmts[0] = stmts[0].replace('    p = ', '    let p = ', 1)
+            else:
+                stmts[0] = stmts[0].replace('    p = p', '    let p = 0', 1)
+            helpers += [f'function {h}({params}): number {{'] + prelude + stmts + ['    return p;', '}', '']
+        main.append(f'    const {c} = ' + ' + '.join(parts) + ';')
+    ret = next(l for l in rest if l.strip().startswith('return '))
+    new = src[:sig_i] + helpers + [src[sig_i]] + prelude + main + [ret] + src[end_i:]
+    open(path, 'w', encoding='utf-8').write('\n'.join(new))
+    return True
+
+
+def power_tables(path):
+    """
+    Replaces `x**k` by precomputed `x_k` (`const x_k = x_(k-1)*x` at the top of
+    each function) - `**` with a variable base is a slow `Math.pow` call
+    (layout only; nothing is recomputed).
+    """
+    src = open(path, encoding='utf-8').read()
+    if '**' not in src: return False
+    out, i = [], 0
+    lines = src.split('\n')
+    while i < len(lines):
+        l = lines[i]
+        if not l.startswith('function '):
+            out.append(l); i += 1; continue
+        j = next(k for k in range(i, len(lines)) if lines[k] == '}')
+        body = lines[i + 1:j]
+        pows = {}
+        for b in body:
+            for name, e in re.findall(r'\b([a-z]\w*)\*\*(\d+)', b):
+                pows[name] = max(pows.get(name, 1), int(e))
+        # insert after the last `const x = x[..]` prelude line
+        last = max((k for k, b in enumerate(body) if re.match(r'    const \w+ = \w+\[\d+\];', b)), default=-1)
+        decl = []
+        for name, emax in pows.items():
+            for e in range(2, emax + 1):
+                prev = name if e == 2 else f'{name}_{e - 1}'
+                decl.append(f'    const {name}_{e} = {prev}*{name};')
+        body = [re.sub(r'\b([a-z]\w*)\*\*(\d+)', r'\1_\2', b) for b in body]
+        out += [l] + body[:last + 1] + decl + body[last + 1:] + ['}']
+        i = j + 1
+    open(path, 'w', encoding='utf-8').write('\n'.join(out))
+    return True
+
+
+def parse_generated(path):
+    """
+    Reads the terms back from a generated univariate resultant file (any of the
+    layouts above) - nothing is recomputed. Returns `(doc, signature, prelude,
+    coeffs)` with `coeffs` an ordered list of `(name, [(c, {var: exp})])`.
+    """
+    src = open(path, encoding='utf-8').read().split('\n')
+    fn = os.path.basename(path)[:-3]
+    doc = next(l for l in src if l.startswith('/**'))
+    sig = next(l for l in src if l.startswith(f'function {fn}('))
+    prelude = []
+    for l in src:
+        if re.match(r'    const \w+ = \w+\[\d+\];', l) and l not in prelude: prelude.append(l)
+    # which helper sums into which coefficient
+    helper_of = {}
+    for l in src:
+        m = re.match(r'    const (c\d+) = (.*);$', l)
+        if m and '(' in m.group(2):
+            for h in re.findall(r'(\w+)\(', m.group(2)): helper_of[h] = m.group(1)
+    coeffs, cur_fn = {}, None
+    def add_terms(c, expr):
+        lst = coeffs.setdefault(c, [])
+        for tok in expr.replace(' - ', ' -').replace(' + ', ' ').split():
+            sign, body = (tok[0] == '-'), tok.lstrip('-')
+            coef, mon = 1, {}
+            for f in body.split('*'):
+                if f.isdigit(): coef *= int(f); continue
+                mm = re.match(r'^(\w+?)_(\d+)$', f)
+                name, e = (mm.group(1), int(mm.group(2))) if mm else (f, 1)
+                mon[name] = mon.get(name, 0) + e
+            if coef == 0: continue
+            lst.append((-coef if sign else coef, mon))
+    for l in src:
+        m = re.match(r'function (\w+)\(', l)
+        if m: cur_fn = m.group(1); continue
+        m = re.match(r'    (?:let )?(c\d+|p) = (?:\1(?= |;))?(.*);$', l)
+        if not m: continue
+        target = m.group(1)
+        c = helper_of[cur_fn] if target == 'p' else target
+        if target != 'p' and '(' in m.group(2): continue   # sum of helper calls
+        coeffs.setdefault(c, [])
+        add_terms(c, m.group(2))
+    order = sorted(coeffs, key=lambda c: -int(c[1:]))
+    return doc, sig, prelude, [(c, coeffs[c]) for c in order]
+
+
+def cse_file(name):
+    """Rewrites generated file `name` with greedy CSE of products (no recomputation)."""
+    path = os.path.join(OUT, name + '.ts')
+    doc, sig, prelude, coeffs = parse_generated(path)
+    polys = [terms for _, terms in coeffs]
+    T0 = time.time()
+    temps, mons = cse.cse_products_fast(polys)
+    naive, after = cse.mults_naive(polys), cse.mults_cse(temps, mons)
+    doc = re.sub(r'; multiplications: [^*]*\*/$', ' */', doc)
+    doc = doc[:-3] + f'; multiplications: {naive} without sharing, {after} with {len(temps)} shared products */'
+    used = {v for _, m in polys_flat(polys) for v in m}
+    fn = os.path.basename(path)[:-3]
+    var = re.search(r'in `(\w+)`', doc).group(1)
+    # all inputs and temporaries live in one Float64Array `T` so that the code
+    # can be split into functions of at most CHUNK statements (V8 does not
+    # optimize huge functions) while still sharing the temporaries
+    inputs = [(l.split()[1], l.split('=')[1].strip().rstrip(';')) for l in prelude if l.split()[1] in used]
+    idx = {nm: i for i, (nm, _) in enumerate(inputs)}
+    for k, (tn, _, _) in enumerate(temps): idx[tn] = len(inputs) + k
+    ref = lambda a: f'T[{idx[a]}]'
+
+    def term(c, m):
+        fs = [ref(a) for a in sorted(m, key=lambda a: idx[a]) for _ in range(m[a])]
+        mag = abs(c)
+        body = '*'.join(fs)
+        return c, (str(mag) if not body else (body if mag == 1 else f'{mag}*{body}'))
+
+    helpers, main = [], [f'    const T = new Float64Array({len(idx)});']
+    main += [f'    T[{i}] = {src};   // {nm}' for i, (nm, src) in enumerate(inputs)]
+    tstmts = [f'    T[{idx[tn]}] = {ref(a)}*{ref(b)};' for tn, a, b in temps]
+    for k in range(0, len(tstmts), CHUNK):
+        h = f'{fn}_t{k // CHUNK}'
+        helpers += [f'function {h}(T: Float64Array): void {{'] + tstmts[k:k + CHUNK] + ['}', '']
+        main.append(f'    {h}(T);')
+    for (c, _), p in zip(coeffs, mons):
+        terms = [term(cc, m) for cc, m in p] or [(1, '0')]
+        parts = [(('-' if s < 0 else '') if i == 0 else (' - ' if s < 0 else ' + ')) + txt
+                 for i, (s, txt) in enumerate(terms)]
+        lines, cur = [], ''
+        for q in parts:
+            if len(cur) + len(q) > 100: lines.append(cur); cur = ''
+            cur += q
+        lines.append(cur)
+        calls = []
+        for k in range(0, len(lines), CHUNK):
+            h = f'{fn}_{c}_{k // CHUNK}'
+            helpers += ([f'function {h}(T: Float64Array): number {{'] + statements('p', lines[k:k + CHUNK])
+                        + ['    return p;', '}', ''])
+            calls.append(f'{h}(T)')
+        main.append(f'    const {c} = {" + ".join(calls)};   // {var}^{c[1:]}')
+    main.append('    return [' + ', '.join(c for c, _ in coeffs) + '];')
+    L = ['// GENERATED by gen-resultants.py - do not edit', ''] + helpers + ['', doc, sig] + main
+    L += ['}', '', '', f'export {{ {fn} }}', '']
+    open(path, 'w', encoding='utf-8').write('\n'.join(L))
+    print(f'{name}: {naive} -> {after} multiplications ({len(temps)} shared products), {round(time.time() - T0, 1)}s')
+
+
+def polys_flat(polys):
+    return [t for p in polys for t in p]
+
+
+def main():
+    os.makedirs(OUT, exist_ok=True)
+    if sys.argv[1:2] == ['--straight']:
+        for f in sorted(os.listdir(OUT)):
+            if f.endswith('.ts') and f != 'index.ts' and to_straightline(f[:-3]): print('straight-line', f)
+        return
+    if sys.argv[1:2] == ['--repack']:
+        for f in sorted(os.listdir(OUT)):
+            if f.endswith('.ts') and f != 'index.ts' and repack(f[:-3]): print('repacked', f)
+        return
+    if sys.argv[1:2] == ['--program']:
+        for name in sys.argv[2:]: program_from_generated(name)
+        return
+    if sys.argv[1:2] == ['--cse']:
+        for name in sys.argv[2:]: cse_file(name)
+        return
+    if sys.argv[1:] == ['--restyle']:
+        for f in sorted(os.listdir(OUT)):
+            if f.startswith('res') and restyle(os.path.join(OUT, f)): print('restyled', f)
+            if f.startswith('res') and split_large(os.path.join(OUT, f)): print('split', f)
+            if f.endswith('.ts') and f != 'index.ts' and power_tables(os.path.join(OUT, f)): print('powers', f)
+        return
+    force = set(sys.argv[1:])
+    for name, spec in cases():
+        if name not in force and os.path.exists(os.path.join(OUT, name + '.ts')):
+            print(f'{name}: exists - skipped')
+            continue
+        print(f'{name}: generating ...', flush=True)
+        generate(name, spec)
+    write_index()
+
+
+if __name__ == '__main__':
+    main()

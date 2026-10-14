@@ -1,0 +1,9 @@
+export { getCoeffsBez1Bez1 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez1-bez1.js';
+export { getCoeffsBez1Bez2 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez1-bez2.js';
+export { getCoeffsBez1Bez3 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez1-bez3.js';
+export { getCoeffsBez2Bez1 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez2-bez1.js';
+export { getCoeffsBez2Bez2 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez2-bez2.js';
+export { getCoeffsBez2Bez3 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez2-bez3.js';
+export { getCoeffsBez3Bez1 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez3-bez1.js';
+export { getCoeffsBez3Bez2 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez3-bez2.js';
+export { getCoeffsBez3Bez3 } from './intersection/bezier-bezier-intersection/get-coefficients/double/get-coeffs-bez3-bez3.js';

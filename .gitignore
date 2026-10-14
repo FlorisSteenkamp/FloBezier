@@ -4,14 +4,13 @@ npm-debug.log
 papers
 research/
 node_modules/
-experiments
 todo.txt
-experiments/
 experiments-new/
 notes.txt
 coverage/
 .vscode/
 quokka-test.ts
 *.py
-src/__pycache__/
+!experiments/**/*.py
+__pycache__/
 /copydocs.bat
