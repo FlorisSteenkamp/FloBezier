@@ -7,6 +7,9 @@ import type { HausdorffDistanceOneSidedExtra } from './hausdorff-distance-types.
  *
  * * this is the implementation backing `hausdorffDistanceOneSided`, which simply
  * returns the `.d` property of this function's result
+ * * the returned distance is the guaranteed *lower* bound of
+ * `hausdorffDistanceOneSidedBounds`; use that function to also get a
+ * guaranteed upper bound or to stop early on thresholds
  * * partially based off [Computing the Hausdorff distance between two sets of parametric curves](https://www.semanticscholar.org/paper/COMPUTING-THE-HAUSDORFF-DISTANCE-BETWEEN-TWO-SETS-Kim-McLean/d2bd6529c4b118e389e1db209d8f1bf7467f9016)
  *
  * @param A a bezier curve (the 'from' curve) given by an ordered array of its
