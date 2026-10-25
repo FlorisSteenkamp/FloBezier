@@ -110,6 +110,7 @@ export { unitNormal } from './local-properties-at-t/normal/double/unit-normal.js
 export { ddNormalAt0 } from './local-properties-at-t/normal/double-double/dd-normal-at-0.js';
 export { ddNormalAt1 } from './local-properties-at-t/normal/double-double/dd-normal-at-1.js';
 export { ddNormal } from './local-properties-at-t/normal/double-double/dd-normal.js';
+export { ddNormal2 } from './local-properties-at-t/normal/double-double/dd-normal2.js';
 export { eNormal } from './local-properties-at-t/normal/expansion/e-normal.js';
 export { bezierBezierIntersection } from './intersection/bezier-bezier-intersection/bezier-bezier-intersection.js';
 export { toCubic } from './transformation/degree-or-type/to-cubic.js';
@@ -157,12 +158,14 @@ export { evaluate } from './local-properties-at-t/evaluate/double/evaluate.js';
 export { lineToQuadratic } from './transformation/degree-or-type/line-to-quadratic.js';
 export { lineToCubic } from './transformation/degree-or-type/line-to-cubic.js';
 export { tangent } from './local-properties-at-t/tangent/double/tangent.js';
+export { tangent2 } from './local-properties-at-t/tangent/double/tangent2.js';
 export { unitTangent } from './local-properties-at-t/tangent/double/unit-tangent.js';
 export { evaluate1stDerivative } from './local-properties-at-t/evaluate-1st-derivative/double/evaluate-1st-derivative.js';
 export { evaluate1stDerivativeExact } from './local-properties-at-t/evaluate-1st-derivative/exact/evaluate-1st-derivative-exact.js';
 export { ddTangentAt0 } from './local-properties-at-t/tangent/double-double/dd-tangent-at-0.js';
 export { ddTangentAt1 } from './local-properties-at-t/tangent/double-double/dd-tangent-at-1.js';
 export { ddTangent } from './local-properties-at-t/tangent/double-double/dd-tangent.js';
+export { ddTangent2 } from './local-properties-at-t/tangent/double-double/dd-tangent2.js';
 export { tangentExact, eTangent } from './local-properties-at-t/tangent/exact/tangent-exact.js'
 export { evaluate2ndDerivative } from './local-properties-at-t/evaluate-2nd-derivative/double/evaluate-2nd-derivative.js';
 export { evaluate2ndDerivativeExact } from './local-properties-at-t/evaluate-2nd-derivative/exact/evaluate-2nd-derivative-exact.js'
