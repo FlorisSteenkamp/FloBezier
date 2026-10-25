@@ -22950,6 +22950,41 @@ function normal(ps, t) {
 }
 
 //# sourceMappingURL=normal.js.map
+;// ./node/local-properties-at-t/evaluate-1st-derivative/double/evaluate-1st-derivative.js
+
+
+function evaluate1stDerivative(ps, t) {
+    const [dPsX, dPsY] = toPowerBasis_1stDerivative(ps);
+    const f = (t) => [
+        Horner(dPsX, t),
+        Horner(dPsY, t)
+    ];
+    return t === undefined ? f : f(t);
+}
+
+//# sourceMappingURL=evaluate-1st-derivative.js.map
+;// ./node/local-properties-at-t/tangent/double/tangent.js
+
+/**
+ * Returns the tangent vector (not necessarily of unit length) of an
+ * order 0,1,2 or 3 bezier curve at a specific given parameter value `t`, i.e.
+ * returns the `[x,y]` value of the once differentiated (with respect to `t`)
+ * bezier curve's power basis when evaluated at `t`.
+ *
+ * * **alias**: [[evaluate1stDerivative]]
+ * * uses double precision calculations internally
+ * * **curried:** if `t` is omitted a function of `t` is returned instead (the
+ * power basis conversion is then only done once which is much faster if the
+ * tangent is to be evaluated at many `t` values for the same curve)
+ *
+ * @param ps a linear, quadratic or cubic bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param t the t parameter (may be omitted, see above)
+ *
+ * @doc mdx
+ */
+const tangent = evaluate1stDerivative;
+
+//# sourceMappingURL=tangent.js.map
 ;// ./node_modules/flo-vector2d/node/from-to.js
 /**
  * Returns the second 2-vector minus the first.
@@ -22961,45 +22996,23 @@ function from_to_fromTo(p, q) {
 }
 
 //# sourceMappingURL=from-to.js.map
-;// ./node/local-properties-at-t/normal/double/normal2.js
+;// ./node/local-properties-at-t/tangent/double/get-degenerate-direction.js
 
 
-
-/**
- * Returns a normal vector (not necessarily of unit length) of a bezier curve
- * at a specific given parameter value `t` by simply taking the `tangent` at
- * that point and rotating it by 90 degrees.
- *
- * * uses double precision calculations internally
- * * unlike [[normal]], if the tangent vanishes at `t` (e.g. at a cusp or
- * where control points coincide) a normal is still returned (based on the
- * direction the curve leaves the point in; or arrives at the point in if
- * `t === 1`); only if all control points coincide is `[0,0]` returned
- *
- * @param ps a linear, quadratic or cubic bezier curve given by its ordered
- * control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
- * @param t the parameter value where the normal should be evaluated
- *
- * @doc mdx
- */
-function normal2(ps, t) {
-    const n = normal(ps, t);
-    if (ps.length < 3 || n[0] !== 0 || n[1] !== 0) {
-        // Non-degenerate cases
-        return n;
-    }
-    // Degenerate cases - the tangent vanishes at `t`
-    const v = getDirection(ps, t);
-    return [-v[1], v[0]]; // tangent === [v[0], v[1]]
-}
 /**
  * Returns the direction the given curve leaves the point at `t` in (or arrives
  * in if `t === 1`) given that the tangent vanishes at `t`; returns `[0,0]` if
  * all control points coincide.
  *
+ * * uses double precision calculations internally
+ *
+ * @param ps a quadratic or cubic bezier curve given by its ordered control
+ * points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param t the parameter value where the tangent vanishes
+ *
  * @internal
  */
-function getDirection(ps, t) {
+function getDegenerateDirection(ps, t) {
     if (ps.length === 4) {
         const [p0, p1, p2, p3] = ps;
         if (t === 0) {
@@ -23011,7 +23024,7 @@ function getDirection(ps, t) {
             if (!pointsCoincide(p0, p3)) {
                 return from_to_fromTo(p0, p3);
             }
-            return [0, 0]; // All four points coincide. No normal possible.
+            return [0, 0]; // All four points coincide. No direction possible.
         }
         if (t === 1) {
             // Points 2 and 3 (necessarily) coincide; use the last point that
@@ -23022,10 +23035,10 @@ function getDirection(ps, t) {
             if (!pointsCoincide(p0, p3)) {
                 return from_to_fromTo(p0, p3);
             }
-            return [0, 0]; // All four points coincide. No normal possible.
+            return [0, 0]; // All four points coincide. No direction possible.
         }
         // An interior cusp is the only remaining cause of the degenerate
-        // normal. Split the curve at the cusp and use the direction from the
+        // tangent. Split the curve at the cusp and use the direction from the
         // cusp to the 3rd control point of the right piece (the 2nd control
         // point coincides with the cusp since the tangent vanishes there).
         const ps_ = fromTo(ps, t, 1);
@@ -23040,7 +23053,7 @@ function getDirection(ps, t) {
             return from_to_fromTo(p0, p2);
         }
         // An interior cusp is the only remaining cause of the degenerate
-        // normal (the control polygon 'folds back' on itself, e.g.
+        // tangent (the control polygon 'folds back' on itself, e.g.
         // `[[0,0],[1,0],[0,0]]`). Split the curve at the cusp and use the
         // direction from the cusp to the last control point of the right
         // piece (its 2nd control point coincides with the cusp).
@@ -23052,6 +23065,62 @@ function getDirection(ps, t) {
 /** @internal */
 function pointsCoincide(p, q) {
     return p[0] === q[0] && p[1] === q[1];
+}
+
+//# sourceMappingURL=get-degenerate-direction.js.map
+;// ./node/local-properties-at-t/tangent/double/tangent2.js
+
+
+/**
+ * Returns the tangent vector (not necessarily of unit length) of an
+ * order 0,1,2 or 3 bezier curve at a specific given parameter value `t`.
+ *
+ * * uses double precision calculations internally
+ * * unlike [[tangent]], if the tangent vanishes at `t` (e.g. at a cusp or
+ * where control points coincide) a tangent is still returned (based on the
+ * direction the curve leaves the point in; or arrives at the point in if
+ * `t === 1`); only if all control points coincide is `[0,0]` returned
+ *
+ * @param ps a linear, quadratic or cubic bezier curve given by its ordered
+ * control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param t the parameter value where the tangent should be evaluated
+ *
+ * @doc mdx
+ */
+function tangent2(ps, t) {
+    const v = tangent(ps, t);
+    if (ps.length < 3 || v[0] !== 0 || v[1] !== 0) {
+        // Non-degenerate cases
+        return v;
+    }
+    // Degenerate cases - the tangent vanishes at `t`
+    return getDegenerateDirection(ps, t);
+}
+
+//# sourceMappingURL=tangent2.js.map
+;// ./node/local-properties-at-t/normal/double/normal2.js
+
+/**
+ * Returns a normal vector (not necessarily of unit length) of a bezier curve
+ * at a specific given parameter value `t` by simply taking the `tangent` at
+ * that point and rotating it by 90 degrees.
+ *
+ * * uses double precision calculations internally
+ * * unlike [[normal]], if the tangent vanishes at `t` (e.g. at a cusp or
+ * where control points coincide) a normal is still returned (based on the
+ * direction the curve leaves the point in; or arrives at the point in if
+ * `t === 1`); only if all control points coincide is `[0,0]` returned
+ * * equals [[tangent2]] rotated by 90 degrees
+ *
+ * @param ps a linear, quadratic or cubic bezier curve given by its ordered
+ * control points, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param t the parameter value where the normal should be evaluated
+ *
+ * @doc mdx
+ */
+function normal2(ps, t) {
+    const v = tangent2(ps, t);
+    return [-v[1], v[0]];
 }
 
 //# sourceMappingURL=normal2.js.map
@@ -23267,6 +23336,134 @@ function ddNormal(ps, t) {
 }
 
 //# sourceMappingURL=dd-normal.js.map
+;// ./node/local-properties-at-t/tangent/double-double/dd-tangent.js
+
+
+/**
+ * Returns the tangent vector (in double-double precision not necessarily of
+ * unit length) of an order 0,1,2 or 3 bezier curve at a specific given
+ * parameter value `t`, i.e. returns the `[x,y]` value of the once
+ * differentiated (with respect to `t`) bezier curve's power basis when
+ * evaluated at `t`.
+ *
+ * @param ps a linear, quadratic or cubic bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param t the `t` parameter
+ *
+ * @doc mdx
+ */
+function ddTangent(ps, t) {
+    const [dX, dY] = toPowerBasis_1stDerivativeDd(ps);
+    return [
+        ddHorner(dX, t),
+        ddHorner(dY, t)
+    ];
+}
+
+//# sourceMappingURL=dd-tangent.js.map
+;// ./node/local-properties-at-t/tangent/double-double/dd-tangent2.js
+
+
+
+const dd_tangent2_td = twoDiff;
+/**
+ * Returns the tangent vector (in double-double precision not necessarily of
+ * unit length) of an order 0,1,2 or 3 bezier curve at a specific given
+ * parameter value `t`.
+ *
+ * * uses double-double precision calculations internally
+ * * unlike [[ddTangent]], if the tangent vanishes at `t` (e.g. at a cusp or
+ * where control points coincide) a tangent is still returned (based on the
+ * direction the curve leaves the point in; or arrives at the point in if
+ * `t === 1`); only if all control points coincide is `[0,0]` returned
+ * * at `t === 0` and `t === 1` degeneracy is decided by *exact* equality of
+ * the end control points and the fallback direction is calculated exactly;
+ * at an interior cusp the fallback direction is calculated in double
+ * precision only (by splitting the curve at `t`)
+ *
+ * @param ps a linear, quadratic or cubic bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param t the `t` parameter
+ *
+ * @doc mdx
+ */
+function ddTangent2(ps, t) {
+    const len = ps.length;
+    if (len < 3) {
+        return ddTangent(ps, t);
+    }
+    if (t === 0) {
+        if (!pointsCoincide(ps[0], ps[1])) {
+            return ddTangent(ps, t);
+        }
+        // Points 0 and 1 coincide; use the first point that does not
+        // coincide with point 0 (if any) for the direction.
+        const p0 = ps[0];
+        const q = len === 4 && pointsCoincide(p0, ps[2]) ? ps[3] : ps[2];
+        return dd_tangent2_fromTo(p0, q);
+    }
+    if (t === 1) {
+        if (!pointsCoincide(ps[len - 2], ps[len - 1])) {
+            return ddTangent(ps, t);
+        }
+        // The last 2 points coincide; use the last point that does not
+        // coincide with the last point (if any) for the direction.
+        const p = ps[len - 1];
+        const q = len === 4 && pointsCoincide(ps[1], p) ? ps[0] : ps[len - 3];
+        return dd_tangent2_fromTo(q, p);
+    }
+    const v = ddTangent(ps, t);
+    if (v[0][1] !== 0 || v[1][1] !== 0) {
+        // Non-degenerate cases
+        return v;
+    }
+    // An interior cusp - the tangent vanishes at `t`
+    const [x, y] = getDegenerateDirection(ps, t);
+    return [[0, x], [0, y]];
+}
+/**
+ * Returns the exact vector from `p` to `q` as a double-double vector.
+ *
+ * @internal
+ */
+function dd_tangent2_fromTo(p, q) {
+    return [
+        dd_tangent2_td(q[0], p[0]),
+        dd_tangent2_td(q[1], p[1])
+    ];
+}
+
+//# sourceMappingURL=dd-tangent2.js.map
+;// ./node/local-properties-at-t/normal/double-double/dd-normal2.js
+
+/**
+ * Returns a normal vector (not necessarily of unit length) of a bezier curve
+ * at a specific given parameter value `t` by simply taking the `tangent` at
+ * that point and rotating it by 90 degrees.
+ *
+ * * uses double-double precision calculations internally
+ * * unlike [[ddNormal]], if the tangent vanishes at `t` (e.g. at a cusp or
+ * where control points coincide) a normal is still returned (based on the
+ * direction the curve leaves the point in; or arrives at the point in if
+ * `t === 1`); only if all control points coincide is `[0,0]` returned
+ * * at `t === 0` and `t === 1` degeneracy is decided by *exact* equality of
+ * the end control points and the fallback direction is calculated exactly;
+ * at an interior cusp the fallback direction is calculated in double
+ * precision only (by splitting the curve at `t`)
+ * * equals [[ddTangent2]] rotated by 90 degrees
+ *
+ * @param ps a linear, quadratic or cubic bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
+ * @param t the `t` parameter
+ *
+ * @doc mdx
+ */
+function ddNormal2(ps, t) {
+    const [X, Y] = ddTangent2(ps, t);
+    return [
+        [-Y[0], -Y[1]],
+        X
+    ];
+}
+
+//# sourceMappingURL=dd-normal2.js.map
 ;// ./node/local-properties-at-t/evaluate-1st-derivative/exact/evaluate-1st-derivative-exact.js
 
 
@@ -26988,41 +27185,6 @@ function lineToQuadratic(ps) {
 }
 
 //# sourceMappingURL=line-to-quadratic.js.map
-;// ./node/local-properties-at-t/evaluate-1st-derivative/double/evaluate-1st-derivative.js
-
-
-function evaluate1stDerivative(ps, t) {
-    const [dPsX, dPsY] = toPowerBasis_1stDerivative(ps);
-    const f = (t) => [
-        Horner(dPsX, t),
-        Horner(dPsY, t)
-    ];
-    return t === undefined ? f : f(t);
-}
-
-//# sourceMappingURL=evaluate-1st-derivative.js.map
-;// ./node/local-properties-at-t/tangent/double/tangent.js
-
-/**
- * Returns the tangent vector (not necessarily of unit length) of an
- * order 0,1,2 or 3 bezier curve at a specific given parameter value `t`, i.e.
- * returns the `[x,y]` value of the once differentiated (with respect to `t`)
- * bezier curve's power basis when evaluated at `t`.
- *
- * * **alias**: [[evaluate1stDerivative]]
- * * uses double precision calculations internally
- * * **curried:** if `t` is omitted a function of `t` is returned instead (the
- * power basis conversion is then only done once which is much faster if the
- * tangent is to be evaluated at many `t` values for the same curve)
- *
- * @param ps a linear, quadratic or cubic bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
- * @param t the t parameter (may be omitted, see above)
- *
- * @doc mdx
- */
-const tangent = evaluate1stDerivative;
-
-//# sourceMappingURL=tangent.js.map
 ;// ./node/local-properties-at-t/tangent/double/unit-tangent.js
 
 /**
@@ -27048,30 +27210,6 @@ function unitTangent(ps, t) {
 }
 
 //# sourceMappingURL=unit-tangent.js.map
-;// ./node/local-properties-at-t/tangent/double-double/dd-tangent.js
-
-
-/**
- * Returns the tangent vector (in double-double precision not necessarily of
- * unit length) of an order 0,1,2 or 3 bezier curve at a specific given
- * parameter value `t`, i.e. returns the `[x,y]` value of the once
- * differentiated (with respect to `t`) bezier curve's power basis when
- * evaluated at `t`.
- *
- * @param ps a linear, quadratic or cubic bezier, e.g. `[[0,0],[1,1],[2,1],[2,0]]`
- * @param t the `t` parameter
- *
- * @doc mdx
- */
-function ddTangent(ps, t) {
-    const [dX, dY] = toPowerBasis_1stDerivativeDd(ps);
-    return [
-        ddHorner(dX, t),
-        ddHorner(dY, t)
-    ];
-}
-
-//# sourceMappingURL=dd-tangent.js.map
 ;// ./node/local-properties-at-t/evaluate-2nd-derivative/double/evaluate-2nd-derivative.js
 
 
@@ -31601,5 +31739,8 @@ function splitByDeviationFromStraightLine(ps, maxD) {
 
 
 
+
+
+
 //# sourceMappingURL=index.js.map
-export { areBoxesIntersecting, area_area as area, bezierBezierIntersection, bezierBezierIntersectionBoundless, bezierBezierIntersectionBoundlessBoth, bezierPieceToBezier, bezierSelfIntersection, calcQuadOffsetCurveXPoint, circleBezierIntersection, classification, classifications, classify, clone, closestPointOnBezier, closestPointOnBezierCertified, closestPointsBetweenBeziers, controlPointLinesLength, cubicFromAnglesAndSpeeds, cubicThroughPointGiven013, cubicToAnglesAndSpeeds, cubicToHybridQuadratic, cubicToQuadratic, curvature, curvatureND, curviness, ddCurvature, ddCurvatureND, ddGetCoeffsXFromY, ddGetCoeffsXFromY_WithRunningErr, ddGetCoeffsYFromX, ddGetCoeffsYFromX_WithRunningErr, ddGetImplicitForm1_WithRunningError, ddGetImplicitForm2_WithRunningError, ddGetImplicitForm3_WithRunningError, ddGetMedialPointCoeffs, ddGetMedialPointCoeffsBez0, ddGetMedialPointCoeffsBez1, ddGetMedialPointCoeffsBez2, ddGetMedialPointCoeffsBez2_SameCurve, ddGetMedialPointCoeffsBez3, ddGetMedialPointCoeffsBez3_SameCurve, ddNormal, ddNormalAt0, ddNormalAt1, ddRadiusOfCurvature, ddTangent, ddTangentAt0, ddTangentAt1, eCurvature, eGetCoeffsXFromY, eGetCoeffsYFromX, eGetImplicitForm1, eGetImplicitForm2, eGetImplicitForm3, eNormal, eTangent, eTangentAt0, eTangentAt1, elevateDegree, equal, evalDeCasteljau, evalDeCasteljauDd, evalDeCasteljauError, evalDeCasteljauWithErr, evalDeCasteljauWithErrDd, evaluate, evaluate1stDerivative, evaluate1stDerivativeExact, evaluate2ndDerivative, evaluate2ndDerivativeAt0, evaluate2ndDerivativeAt0Exact, evaluate2ndDerivativeAt1, evaluate2ndDerivativeAt1Exact, evaluate2ndDerivativeExact, evaluateExact, evaluateImplicit1, evaluateImplicit2, evaluateImplicit3, fitQuadsToCubic, fitQuadsToCubicHausdorff, flipAbout, flipHorizontally, flipVertically, fromPowerBasis, fromTo, fromToInclErrorBound, furthestPointOnBezier, generateArcFromCubics, generateArcFromQuads, generateCuspAtHalf3, generateQuarterCircle, generateSelfIntersecting, getAbsAreaBetween, getBendingEnergy, getBezierPieceLength, getBoundingBox, getBoundingBoxTight, getBoundingHull, getBounds, getCoeffsBezBez, getCoeffsXFromY, getCoeffsXFromY_WithRunningErr, getCoeffsYFromX, getCoeffsYFromX_WithRunningErr, getControlPointBox, getCubicSpeeds, getCurvatureExtrema, getCurvatureExtremaDd, getCurvatureExtremaE, getEndpointIntersections, getFootPointsOnBezierCertified, getFootPointsOnBezierPolysCertified, getFootpointPoly, getFootpointPolyDd, getFootpointPolyExact, getHodograph, getImplicitForm1, getImplicitForm1Dd, getImplicitForm1DdWithRunningError, getImplicitForm1ErrorCounters, getImplicitForm1Exact, getImplicitForm1WithRunningError, getImplicitForm2, getImplicitForm2Dd, getImplicitForm2DdWithRunningError, getImplicitForm2ErrorCounters, getImplicitForm2Exact, getImplicitForm2WithRunningError, getImplicitForm3, getImplicitForm3Dd, getImplicitForm3DdWithRunningError, getImplicitForm3ErrorCounters, getImplicitForm3Exact, getImplicitForm3WithRunningError, getInflections, getInterfaceRotation, getIntervalBox, getIntervalBoxDd, getMedialPointCoeffs, getMedialPointCoeffsBez0, getMedialPointCoeffsBez1, getMedialPointCoeffsBez2, getMedialPointCoeffsBez2_SameCurve, getMedialPointCoeffsBez3, getMedialPointCoeffsBez3_SameCurve, getMedialPoints, getTAtLength, getXBoundsTight, getYBoundsTight, hausdorffDistance, hausdorffDistanceExtra, hausdorffDistanceOneSided, hausdorffDistanceOneSidedBounds, hausdorffDistanceOneSidedExtra, intersectBoxes, isBezierPieceZeroLength, isCollinear, isCubicReallyLine, isCubicReallyQuad, isHorizontal, isPointOnBezierExtension, isQuadObtuse, isQuadReallyLine, isReallyPoint, isSelfOverlapping, isVertical, length_length as length, lineToCubic, lineToQuadratic, maxAbsCoordinate, normal, normal2, quadraticToCubic, quadraticToPolyline, radiusOfCurvature, reduceOrderIfPossible, reverse, rotate_rotate as rotate, rotate90, rotate90About, rotateAbout, rotateNeg90, rotateNeg90About, scale_scale as scale, setCubicSpeeds, splitByCurvature, splitByCurvatureAndLength, splitByDeviationFromStraightLine, splitByDeviationFromStraightLine_Cubic, splitByDeviationFromStraightLine_Quad, splitByLength, tFromXY, tangent, tangentAt0, tangentAt0Exact, tangentAt1, tangentAt1Exact, tangentExact, toCubic, toPowerBasis, toPowerBasis0Exact, toPowerBasis1DdWithRunningError, toPowerBasis1Exact, toPowerBasis2DdWithRunningError, toPowerBasis2Exact, toPowerBasis3DdWithRunningError, toPowerBasis3Exact, toPowerBasisDd, toPowerBasisDdWithRunningError, toPowerBasisErrorCounters, toPowerBasisExact, toPowerBasisWithRunningError, toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeDd, toPowerBasis_1stDerivativeErrorCounters, toPowerBasis_1stDerivativeExact, toPowerBasis_2ndDerivative, toPowerBasis_2ndDerivativeDd, toPowerBasis_2ndDerivativeExact, toPowerBasis_3rdDerivative, toPowerBasis_3rdDerivativeDd, toPowerBasis_3rdDerivativeExact, to_string_toString as toString, totalAbsoluteCurvature, totalCurvature, totalLength, transform, translate_translate as translate, unitNormal, unitTangent, γ, γγ, κ };
+export { areBoxesIntersecting, area_area as area, bezierBezierIntersection, bezierBezierIntersectionBoundless, bezierBezierIntersectionBoundlessBoth, bezierPieceToBezier, bezierSelfIntersection, calcQuadOffsetCurveXPoint, circleBezierIntersection, classification, classifications, classify, clone, closestPointOnBezier, closestPointOnBezierCertified, closestPointsBetweenBeziers, controlPointLinesLength, cubicFromAnglesAndSpeeds, cubicThroughPointGiven013, cubicToAnglesAndSpeeds, cubicToHybridQuadratic, cubicToQuadratic, curvature, curvatureND, curviness, ddCurvature, ddCurvatureND, ddGetCoeffsXFromY, ddGetCoeffsXFromY_WithRunningErr, ddGetCoeffsYFromX, ddGetCoeffsYFromX_WithRunningErr, ddGetImplicitForm1_WithRunningError, ddGetImplicitForm2_WithRunningError, ddGetImplicitForm3_WithRunningError, ddGetMedialPointCoeffs, ddGetMedialPointCoeffsBez0, ddGetMedialPointCoeffsBez1, ddGetMedialPointCoeffsBez2, ddGetMedialPointCoeffsBez2_SameCurve, ddGetMedialPointCoeffsBez3, ddGetMedialPointCoeffsBez3_SameCurve, ddNormal, ddNormal2, ddNormalAt0, ddNormalAt1, ddRadiusOfCurvature, ddTangent, ddTangent2, ddTangentAt0, ddTangentAt1, eCurvature, eGetCoeffsXFromY, eGetCoeffsYFromX, eGetImplicitForm1, eGetImplicitForm2, eGetImplicitForm3, eNormal, eTangent, eTangentAt0, eTangentAt1, elevateDegree, equal, evalDeCasteljau, evalDeCasteljauDd, evalDeCasteljauError, evalDeCasteljauWithErr, evalDeCasteljauWithErrDd, evaluate, evaluate1stDerivative, evaluate1stDerivativeExact, evaluate2ndDerivative, evaluate2ndDerivativeAt0, evaluate2ndDerivativeAt0Exact, evaluate2ndDerivativeAt1, evaluate2ndDerivativeAt1Exact, evaluate2ndDerivativeExact, evaluateExact, evaluateImplicit1, evaluateImplicit2, evaluateImplicit3, fitQuadsToCubic, fitQuadsToCubicHausdorff, flipAbout, flipHorizontally, flipVertically, fromPowerBasis, fromTo, fromToInclErrorBound, furthestPointOnBezier, generateArcFromCubics, generateArcFromQuads, generateCuspAtHalf3, generateQuarterCircle, generateSelfIntersecting, getAbsAreaBetween, getBendingEnergy, getBezierPieceLength, getBoundingBox, getBoundingBoxTight, getBoundingHull, getBounds, getCoeffsBezBez, getCoeffsXFromY, getCoeffsXFromY_WithRunningErr, getCoeffsYFromX, getCoeffsYFromX_WithRunningErr, getControlPointBox, getCubicSpeeds, getCurvatureExtrema, getCurvatureExtremaDd, getCurvatureExtremaE, getEndpointIntersections, getFootPointsOnBezierCertified, getFootPointsOnBezierPolysCertified, getFootpointPoly, getFootpointPolyDd, getFootpointPolyExact, getHodograph, getImplicitForm1, getImplicitForm1Dd, getImplicitForm1DdWithRunningError, getImplicitForm1ErrorCounters, getImplicitForm1Exact, getImplicitForm1WithRunningError, getImplicitForm2, getImplicitForm2Dd, getImplicitForm2DdWithRunningError, getImplicitForm2ErrorCounters, getImplicitForm2Exact, getImplicitForm2WithRunningError, getImplicitForm3, getImplicitForm3Dd, getImplicitForm3DdWithRunningError, getImplicitForm3ErrorCounters, getImplicitForm3Exact, getImplicitForm3WithRunningError, getInflections, getInterfaceRotation, getIntervalBox, getIntervalBoxDd, getMedialPointCoeffs, getMedialPointCoeffsBez0, getMedialPointCoeffsBez1, getMedialPointCoeffsBez2, getMedialPointCoeffsBez2_SameCurve, getMedialPointCoeffsBez3, getMedialPointCoeffsBez3_SameCurve, getMedialPoints, getTAtLength, getXBoundsTight, getYBoundsTight, hausdorffDistance, hausdorffDistanceExtra, hausdorffDistanceOneSided, hausdorffDistanceOneSidedBounds, hausdorffDistanceOneSidedExtra, intersectBoxes, isBezierPieceZeroLength, isCollinear, isCubicReallyLine, isCubicReallyQuad, isHorizontal, isPointOnBezierExtension, isQuadObtuse, isQuadReallyLine, isReallyPoint, isSelfOverlapping, isVertical, length_length as length, lineToCubic, lineToQuadratic, maxAbsCoordinate, normal, normal2, quadraticToCubic, quadraticToPolyline, radiusOfCurvature, reduceOrderIfPossible, reverse, rotate_rotate as rotate, rotate90, rotate90About, rotateAbout, rotateNeg90, rotateNeg90About, scale_scale as scale, setCubicSpeeds, splitByCurvature, splitByCurvatureAndLength, splitByDeviationFromStraightLine, splitByDeviationFromStraightLine_Cubic, splitByDeviationFromStraightLine_Quad, splitByLength, tFromXY, tangent, tangent2, tangentAt0, tangentAt0Exact, tangentAt1, tangentAt1Exact, tangentExact, toCubic, toPowerBasis, toPowerBasis0Exact, toPowerBasis1DdWithRunningError, toPowerBasis1Exact, toPowerBasis2DdWithRunningError, toPowerBasis2Exact, toPowerBasis3DdWithRunningError, toPowerBasis3Exact, toPowerBasisDd, toPowerBasisDdWithRunningError, toPowerBasisErrorCounters, toPowerBasisExact, toPowerBasisWithRunningError, toPowerBasis_1stDerivative, toPowerBasis_1stDerivativeDd, toPowerBasis_1stDerivativeErrorCounters, toPowerBasis_1stDerivativeExact, toPowerBasis_2ndDerivative, toPowerBasis_2ndDerivativeDd, toPowerBasis_2ndDerivativeExact, toPowerBasis_3rdDerivative, toPowerBasis_3rdDerivativeDd, toPowerBasis_3rdDerivativeExact, to_string_toString as toString, totalAbsoluteCurvature, totalCurvature, totalLength, transform, translate_translate as translate, unitNormal, unitTangent, γ, γγ, κ };
